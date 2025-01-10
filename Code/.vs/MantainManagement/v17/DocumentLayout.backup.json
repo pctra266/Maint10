@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\learning_university\\term5_sp25\\1_swp391\\project\\productsmaintainmanagement\\code\\web\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\learning_university\\term5_sp25\\1_swp391\\project\\productsmaintainmanagement\\code\\web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\learning_university\\term5_sp25\\1_swp391\\project\\productsmaintainmanagement\\code\\web\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\home\\login.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\learning_university\\term5_sp25\\1_swp391\\project\\productsmaintainmanagement\\code\\web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -26,7 +26,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 10,
+          "SelectedChildIndex": 11,
           "Children": [
             {
               "$type": "Bookmark",
@@ -88,20 +88,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "Login.cshtml",
               "DocumentMoniker": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\Views\\Home\\Login.cshtml",
               "RelativeDocumentMoniker": "Web\\Views\\Home\\Login.cshtml",
               "ToolTip": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\Views\\Home\\Login.cshtml",
               "RelativeToolTip": "Web\\Views\\Home\\Login.cshtml",
-              "ViewState": "AgIAACcAAAAAAAAAAAAAAD0AAAAfAAAAAAAAAA==",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAC0AAAA9AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2025-01-10T07:31:43.659Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Web\\Controllers\\HomeController.cs",
