@@ -8,7 +8,7 @@ namespace Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
+        private MaintainManagementContext context = new MaintainManagementContext();
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
@@ -30,8 +30,17 @@ namespace Web.Controllers
         }
 
         public IActionResult CheckAccount(Account model)
+
         {
-            return RedirectToAction("Index");
+            List<Account> accounts = context.Accounts.ToList();
+            foreach(Account account in accounts)
+            {
+                if(model.Password.Equals(account.Password) && model.UserName.Equals(account.UserName))
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return RedirectToAction("Login");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
