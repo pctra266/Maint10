@@ -37,6 +37,7 @@ namespace Web.Controllers
             {
                 if(model.Password.Equals(account.Password) && model.UserName.Equals(account.UserName))
                 {
+                    HttpContext.Session.SetString("Username","tra");
                     return RedirectToAction("Index");
                 }
             }

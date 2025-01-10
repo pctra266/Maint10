@@ -8,6 +8,9 @@ namespace Web
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            // add session
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession();
 
             var app = builder.Build();
 
@@ -23,12 +26,12 @@ namespace Web
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            
             app.UseAuthorization();
-
+            app.UseSession();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Account}/{action=CheckIsLogin}/{id?}");
 
             app.Run();
         }
