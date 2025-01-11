@@ -49,6 +49,11 @@ namespace Web.Controllers
             
         }
 
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
         private bool IsLogin()
         {
             string? CurrentSessionValue = HttpContext.Session.GetString("TheSession");
@@ -64,10 +69,24 @@ namespace Web.Controllers
                 if (model.Password.Equals(account.Password) && model.UserName.Equals(account.UserName))
                 {
                     HttpContext.Session.SetString("TheSession", "hasSession");
+                    HttpContext.Session.SetString("UserName", model.UserName);
+
                     return RedirectToAction("Index","Home");
                 }
             }
             return RedirectToAction("SignIn");
+        }
+        [HttpPost]
+        public IActionResult CheckPassword(string UserName, string OldPass, string NewPass)
+        {
+            if(OldPass != NewPass)
+            {
+                Account account = context.Accounts.FirstOrDefault(a => a.UserName == UserName);
+                account.Password = NewPass;
+                context.SaveChanges();
+                return RedirectToAction("Index","Home");
+            }
+            return RedirectToAction("ChangePassword");
         }
 
         public IActionResult LogOut()
