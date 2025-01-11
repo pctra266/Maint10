@@ -27,9 +27,12 @@
 
 						<div class="text-center mt-4">
 							<h1 class="h2">Welcome back!</h1>
-							<p class="lead">
-								Sign in to your account to continue
-							</p>
+							@if (TempData["SuccessMessage"] != null)
+							{
+								<div style="color: green; font-weight: bold;">
+									@TempData["SuccessMessage"]
+								</div>
+							}
 						</div>
 
 						<div class="card">

@@ -33,8 +33,14 @@ namespace Web.Controllers
         }
         public IActionResult CheckAccountAfterSignUp(Account account)
         {
+            if (FindAccountByUserName(account.UserName) != null)
+            {
+                ViewBag.ErrorMessage = "User name already exsit, try again";
+                return View("SignUp");
+            }
             
             CreateAccount(account);
+            TempData["SuccessMessage"] = "Sign Up successfully, sign in to continue";
             return RedirectToAction("SignIn");
         }
 
