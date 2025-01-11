@@ -14,15 +14,19 @@ namespace Web.Controllers
             _logger = logger;
         }
 
+        //In ra danh sach cac tai khoan
         public IActionResult Index()
         {
-            return View();
+            var accounts = context.Accounts.ToList();
+            return View(accounts);
         }
 
         public IActionResult Privacy()
         {
             return View();
         }
+
+
 
         
 

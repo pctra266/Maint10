@@ -4708,11 +4708,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\Web.csproj",
+      "projectUniqueName": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Web.csproj",
       "projectName": "Web",
-      "projectPath": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\Web.csproj",
+      "projectPath": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Web.csproj",
       "packagesPath": "C:\\Users\\ADMIN\\.nuget\\packages\\",
-      "outputPath": "D:\\learning_university\\Term5_SP25\\1_SWP391\\Project\\ProductsMaintainManagement\\Code\\Web\\obj\\",
+      "outputPath": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
