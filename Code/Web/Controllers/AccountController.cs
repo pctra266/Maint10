@@ -19,16 +19,25 @@ namespace Web.Controllers
 
         public IActionResult DoResetPassword(string UserName)
         {
-            Account account = context.Accounts.FirstOrDefault(x => x.UserName == UserName);
-            if (account == null)
+            if (FindAccountByUserName(UserName) == null)
             {
-                return RedirectToAction("ResetPassword");
+                ViewBag.ErrorMessage = "User name doesn't exsit, try again";
+                return View("ResetPassword");
             }
-            else
+            
+            
+                ChangePasswordByUserName(UserName, "123456");
+                TempData["SuccessMessage"] = "Reset password to 123456, sign in to continue";
+                return View("SignIn");
+            
+        }
+        public void ChangePasswordByUserName(string username, string password)
+        {
+            Account account = FindAccountByUserName(username);
+            if (account != null)
             {
-                account.Password = "123456";
+                account.Password = password;
                 context.SaveChanges();
-                return RedirectToAction("SignIn");
             }
         }
         public IActionResult CheckAccountAfterSignUp(Account account)
@@ -50,19 +59,7 @@ namespace Web.Controllers
 
         public Account FindAccountByUserName(string username)
         {
-            Account account = null;
-
-            List<Account> accounts = context.Accounts.ToList();
-            foreach ( Account acc in accounts)
-            {
-                if(acc.UserName == username)
-                {
-                    account = acc;
-                    break;
-                }
-            }
-
-            return account;
+            return context.Accounts.FirstOrDefault(x => x.UserName == username);
         }
         public void CreateAccount(Account newAcc)
         {
@@ -111,31 +108,56 @@ namespace Web.Controllers
         public IActionResult CheckAccount(Account model)
 
         {
-            List<Account> accounts = context.Accounts.ToList();
-            foreach (Account account in accounts)
+            if(checkExistAccount(model) != null)
             {
-                if (model.Password.Equals(account.Password) && model.UserName.Equals(account.UserName))
-                {
-                    HttpContext.Session.SetString("TheSession", "hasSession");
-                    HttpContext.Session.SetString("UserName", model.UserName);
+                HttpContext.Session.SetString("TheSession", "hasSession");
+                HttpContext.Session.SetString("UserName", model.UserName);
 
-                    return RedirectToAction("Index","Home");
-                }
+                return RedirectToAction("Index", "Home");
             }
+
+
             ViewBag.ErrorMessage = "Wrong User name or password, try again";
             return View("SignIn");
         }
         [HttpPost]
         public IActionResult CheckPassword(string UserName, string OldPass, string NewPass)
         {
-            if(OldPass != NewPass)
+            if(OldPass == NewPass) 
             {
-                Account account = context.Accounts.FirstOrDefault(a => a.UserName == UserName);
-                account.Password = NewPass;
-                context.SaveChanges();
-                return RedirectToAction("Index","Home");
+                ViewBag.ErrorMessage = "new password must different from old password";
+                return View("ChangePassword");
             }
-            return RedirectToAction("ChangePassword");
+            if(checkExistAccount(new Account(UserName,OldPass)) == null)
+            {
+                ViewBag.ErrorMessage = "Wrong old password";
+                return View("ChangePassword");
+            }
+
+            if(NewPass.Length < 6)
+            {
+                ViewBag.ErrorMessage = "Password must >= 6 character";
+                return View("ChangePassword");
+            }
+
+
+                ChangePasswordByUserName(UserName, NewPass);
+            ViewBag.SuccessMessage = "Change password successfully";
+                return View("ChangePassword"); 
+            
+        }
+
+        public Account checkExistAccount(Account account)
+        {
+            List<Account> accounts = context.Accounts.ToList();
+            foreach(Account acc in accounts)
+            {
+                if(acc.UserName == account.UserName && acc.Password == account.Password)
+                {
+                    return acc;
+                }
+            }
+            return null;
         }
 
         public IActionResult LogOut()
