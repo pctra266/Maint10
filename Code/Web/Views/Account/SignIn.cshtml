@@ -44,12 +44,6 @@
 											<label class="form-label">Password</label>
 											<input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" />
 										</div>
-										<div>
-											<div class="form-check align-items-center">
-												<input id="customControlInline" type="checkbox" class="form-check-input" value="remember-me" name="remember-me" checked>
-												<label class="form-check-label text-small" for="customcontrolinline">remember me</label>
-											</div>
-										</div>
 										<div class="d-grid gap-2 mt-3">
 											<button type="submit" class="btn btn-lg btn-primary">Sign in</button>
 										</div>
@@ -57,6 +51,11 @@
 								</div>
 							</div>
 						</div>
+						@if(ViewBag.ErrorMessage != null){
+							<div style="color:red" class="text-center mb-3">
+								@ViewBag.ErrorMessage
+							</div>
+						}
 						<div class="text-center mb-3">
 							Don't have an account? <a href="/Account/SignUp">Sign up</a>
 						</div>

@@ -33,8 +33,26 @@ namespace Web.Controllers
         }
         public IActionResult CheckAccountAfterSignUp(Account account)
         {
+            
             CreateAccount(account);
             return RedirectToAction("SignIn");
+        }
+
+        public Account FindAccountByUserName(string username)
+        {
+            Account account = null;
+
+            List<Account> accounts = context.Accounts.ToList();
+            foreach ( Account acc in accounts)
+            {
+                if(acc.UserName == username)
+                {
+                    account = acc;
+                    break;
+                }
+            }
+
+            return account;
         }
         public void CreateAccount(Account newAcc)
         {
@@ -94,7 +112,8 @@ namespace Web.Controllers
                     return RedirectToAction("Index","Home");
                 }
             }
-            return RedirectToAction("SignIn");
+            ViewBag.ErrorMessage = "Wrong User name or password, try again";
+            return View("SignIn");
         }
         [HttpPost]
         public IActionResult CheckPassword(string UserName, string OldPass, string NewPass)
