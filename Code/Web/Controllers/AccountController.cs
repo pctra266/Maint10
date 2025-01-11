@@ -11,6 +11,26 @@ namespace Web.Controllers
         {
             return View();
         }
+
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        public IActionResult DoResetPassword(string UserName)
+        {
+            Account account = context.Accounts.FirstOrDefault(x => x.UserName == UserName);
+            if (account == null)
+            {
+                return RedirectToAction("ResetPassword");
+            }
+            else
+            {
+                account.Password = "123456";
+                context.SaveChanges();
+                return RedirectToAction("SignIn");
+            }
+        }
         public IActionResult CheckAccountAfterSignUp(Account account)
         {
             CreateAccount(account);
