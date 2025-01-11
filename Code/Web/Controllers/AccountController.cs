@@ -69,5 +69,11 @@ namespace Web.Controllers
             }
             return RedirectToAction("SignIn");
         }
+
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Remove("TheSession");
+            return RedirectToAction("CheckIsLogin");
+        }
     }
 }
