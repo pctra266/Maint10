@@ -7,38 +7,45 @@ namespace Web.Controllers
     public class AccountController : Controller
     {
         private MaintainManagementContext context = new MaintainManagementContext();
+        // sign in part 
+        public IActionResult SignIn()
+        {
+            if (IsLogin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return View();
+            }
+        }
+        public IActionResult CheckIsLogin()
+        {
+            if (IsLogin())
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            else
+            {
+                return RedirectToAction("SignIn");
+            }
+        }
+        public IActionResult CheckAccount(Account model)
+        {
+            if (checkExistAccount(model) != null)
+            {
+                HttpContext.Session.SetString("TheSession", "hasSession");
+                HttpContext.Session.SetString("UserName", model.UserName);
+                return RedirectToAction("Index", "Home");
+            }
+            ViewBag.ErrorMessage = "Wrong User name or password, try again";
+            return View("SignIn");
+        }
+
+        // sign up part
         public IActionResult SignUp()
         {
             return View();
-        }
-
-        public IActionResult ResetPassword()
-        {
-            return View();
-        }
-
-        public IActionResult DoResetPassword(string UserName)
-        {
-            if (FindAccountByUserName(UserName) == null)
-            {
-                ViewBag.ErrorMessage = "User name doesn't exsit, try again";
-                return View("ResetPassword");
-            }
-            
-            
-                ChangePasswordByUserName(UserName, "123456");
-                TempData["SuccessMessage"] = "Reset password to 123456, sign in to continue";
-                return View("SignIn");
-            
-        }
-        public void ChangePasswordByUserName(string username, string password)
-        {
-            Account account = FindAccountByUserName(username);
-            if (account != null)
-            {
-                account.Password = password;
-                context.SaveChanges();
-            }
         }
         public IActionResult CheckAccountAfterSignUp(Account account)
         {
@@ -47,7 +54,7 @@ namespace Web.Controllers
                 ViewBag.ErrorMessage = "User name already exsit, try again";
                 return View("SignUp");
             }
-            if(account.Password.Length < 6)
+            if (account.Password.Length < 6)
             {
                 ViewBag.ErrorMessage = "Password must >= 6 character";
                 return View("SignUp");
@@ -57,6 +64,66 @@ namespace Web.Controllers
             return RedirectToAction("SignIn");
         }
 
+        // log out part
+        public IActionResult LogOut()
+        {
+            HttpContext.Session.Remove("TheSession");
+            return RedirectToAction("CheckIsLogin");
+        }
+        // change password part
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult CheckPassword(string UserName, string OldPass, string NewPass)
+        {
+            if (OldPass == NewPass)
+            {
+                ViewBag.ErrorMessage = "new password must different from old password";
+                return View("ChangePassword");
+            }
+            if (checkExistAccount(new Account(UserName, OldPass)) == null)
+            {
+                ViewBag.ErrorMessage = "Wrong old password";
+                return View("ChangePassword");
+            }
+
+            if (NewPass.Length < 6)
+            {
+                ViewBag.ErrorMessage = "Password must >= 6 character";
+                return View("ChangePassword");
+            }
+            ChangePasswordByUserName(UserName, NewPass);
+            ViewBag.SuccessMessage = "Change password successfully";
+            return View("ChangePassword");
+        }
+        // reset password part
+        public IActionResult ResetPassword()
+        {
+            return View();
+        }
+        public IActionResult DoResetPassword(string UserName)
+        {
+            if (FindAccountByUserName(UserName) == null)
+            {
+                ViewBag.ErrorMessage = "User name doesn't exsit, try again";
+                return View("ResetPassword");
+            }
+                ChangePasswordByUserName(UserName, "123456");
+                TempData["SuccessMessage"] = "Reset password to 123456, sign in to continue";
+                return View("SignIn");
+        }
+        // other support method part
+        public void ChangePasswordByUserName(string username, string password)
+        {
+            Account account = FindAccountByUserName(username);
+            if (account != null)
+            {
+                account.Password = password;
+                context.SaveChanges();
+            }
+        }
         public Account FindAccountByUserName(string username)
         {
             return context.Accounts.FirstOrDefault(x => x.UserName == username);
@@ -66,87 +133,11 @@ namespace Web.Controllers
             context.Accounts.Add(newAcc);
             context.SaveChanges();
         }
-
-        public IActionResult SignIn()
-        {
-            if (IsLogin())
-            {
-                return RedirectToAction("Index", "Home");
-               
-            }
-            else
-            {
-                return View();
-            }
-            
-        }
-
-        public IActionResult CheckIsLogin()
-        {
-            if (IsLogin()) {
-                return RedirectToAction("Index", "Home");
-                
-            }
-            else
-            {
-                return RedirectToAction("SignIn");
-            }
-            
-        }
-
-        public IActionResult ChangePassword()
-        {
-            return View();
-        }
-
         private bool IsLogin()
         {
             string? CurrentSessionValue = HttpContext.Session.GetString("TheSession");
             return !String.IsNullOrEmpty(CurrentSessionValue);
         }
-
-        public IActionResult CheckAccount(Account model)
-
-        {
-            if(checkExistAccount(model) != null)
-            {
-                HttpContext.Session.SetString("TheSession", "hasSession");
-                HttpContext.Session.SetString("UserName", model.UserName);
-
-                return RedirectToAction("Index", "Home");
-            }
-
-
-            ViewBag.ErrorMessage = "Wrong User name or password, try again";
-            return View("SignIn");
-        }
-        [HttpPost]
-        public IActionResult CheckPassword(string UserName, string OldPass, string NewPass)
-        {
-            if(OldPass == NewPass) 
-            {
-                ViewBag.ErrorMessage = "new password must different from old password";
-                return View("ChangePassword");
-            }
-            if(checkExistAccount(new Account(UserName,OldPass)) == null)
-            {
-                ViewBag.ErrorMessage = "Wrong old password";
-                return View("ChangePassword");
-            }
-
-            if(NewPass.Length < 6)
-            {
-                ViewBag.ErrorMessage = "Password must >= 6 character";
-                return View("ChangePassword");
-            }
-
-
-                ChangePasswordByUserName(UserName, NewPass);
-            ViewBag.SuccessMessage = "Change password successfully";
-                return View("ChangePassword"); 
-            
-        }
-
         public Account checkExistAccount(Account account)
         {
             List<Account> accounts = context.Accounts.ToList();
@@ -158,12 +149,6 @@ namespace Web.Controllers
                 }
             }
             return null;
-        }
-
-        public IActionResult LogOut()
-        {
-            HttpContext.Session.Remove("TheSession");
-            return RedirectToAction("CheckIsLogin");
         }
     }
 }
