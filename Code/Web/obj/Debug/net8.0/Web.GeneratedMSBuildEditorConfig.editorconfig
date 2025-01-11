@@ -28,20 +28,16 @@ build_property._RazorSourceGeneratorDebug =
 build_property.EffectiveAnalysisLevelStyle = 8.0
 build_property.EnableCodeStyleSeverity = 
 
-[D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Account/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxJbmRleC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
 [D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Account/SignIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduSW4uY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+[D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Account/SignUp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxTaWduVXAuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Home/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxMb2dpbi5jc2h0bWw=
+[D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [D:/learning_university/Term5_SP25/1_SWP391/Project/ProductsMaintainManagement/Code/Web/Views/Home/Privacy.cshtml]

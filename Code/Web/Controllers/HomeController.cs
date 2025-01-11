@@ -24,25 +24,7 @@ namespace Web.Controllers
             return View();
         }
 
-        public IActionResult Login()
-        {
-            return View();
-        }
-
-        public IActionResult CheckAccount(Account model)
-
-        {
-            List<Account> accounts = context.Accounts.ToList();
-            foreach(Account account in accounts)
-            {
-                if(model.Password.Equals(account.Password) && model.UserName.Equals(account.UserName))
-                {
-                    HttpContext.Session.SetString("Username","tra");
-                    return RedirectToAction("Index");
-                }
-            }
-            return RedirectToAction("Login");
-        }
+        
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
