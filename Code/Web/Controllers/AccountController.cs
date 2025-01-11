@@ -38,7 +38,11 @@ namespace Web.Controllers
                 ViewBag.ErrorMessage = "User name already exsit, try again";
                 return View("SignUp");
             }
-            
+            if(account.Password.Length < 6)
+            {
+                ViewBag.ErrorMessage = "Password must >= 6 character";
+                return View("SignUp");
+            }
             CreateAccount(account);
             TempData["SuccessMessage"] = "Sign Up successfully, sign in to continue";
             return RedirectToAction("SignIn");
