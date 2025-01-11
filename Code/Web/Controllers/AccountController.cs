@@ -115,6 +115,24 @@ namespace Web.Controllers
                 return View("SignIn");
         }
         // other support method part
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Yêu cầu token phải hợp lệ
+        public IActionResult DeleteAccount(string username)
+        {
+            var account = FindAccountByUserName(username);
+            if (account != null)
+            {
+                context.Accounts.Remove(account);
+                context.SaveChanges();
+                TempData["SuccessMessage"] = "Account deleted successfully.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Account not found.";
+            }
+            return RedirectToAction("Index", "Home");
+        }
         public void ChangePasswordByUserName(string username, string password)
         {
             Account account = FindAccountByUserName(username);
