@@ -30,6 +30,10 @@ namespace Web.Controllers
                 return RedirectToAction("SignIn");
             }
         }
+        public IActionResult AddAccount()
+        {
+            return View();
+        }
         public IActionResult CheckAccount(Account model)
         {
             if (checkExistAccount(model) != null)
@@ -131,6 +135,26 @@ namespace Web.Controllers
             {
                 TempData["ErrorMessage"] = "Account not found.";
             }
+            return RedirectToAction("Index", "Home");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult AddAccount(Account account)
+        {
+            if (FindAccountByUserName(account.UserName) != null)
+            {
+                ViewBag.ErrorMessage = "User name already exists, please choose another one.";
+                return View();
+            }
+
+            if (string.IsNullOrEmpty(account.Password) || account.Password.Length < 6)
+            {
+                ViewBag.ErrorMessage = "Password must be at least 6 characters long.";
+                return View();
+            }
+
+            CreateAccount(account);
+            TempData["SuccessMessage"] = "Account added successfully.";
             return RedirectToAction("Index", "Home");
         }
         public void ChangePasswordByUserName(string username, string password)

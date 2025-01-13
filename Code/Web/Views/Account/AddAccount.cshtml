@@ -1,0 +1,25 @@
+﻿@model Web.Models2.Account
+
+<h2>Add New Account</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form method="post" asp-action="AddAccount" asp-controller="Account">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="UserName">User Name</label>
+        <input type="text" class="form-control" id="UserName" name="UserName" required />
+    </div>
+    <div class="form-group">
+        <label for="Password">Password</label>
+        <input type="password" class="form-control" id="Password" name="Password" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Add Account</button>
+</form>
+
+<a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back to Home</a>
