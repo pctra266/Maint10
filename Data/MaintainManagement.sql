@@ -23,8 +23,3 @@ CREATE TABLE Account (
     [Password] NVARCHAR(50)
 );
 
-INSERT INTO Account (UserName, [Password]) 
-VALUES 
-('pctra266', 'trapham'),
-('user1', '123'),
-('user2', '456');
