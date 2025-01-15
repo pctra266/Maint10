@@ -16,6 +16,7 @@
                 <td>@account.Password</td>
                 <td>
                     <form method="post" asp-action="DeleteAccount" asp-controller="Account">
+                        @* Kiem tra token xac nhan hanh dong, tang tinh bao mat *@
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="username" value="@account.UserName" />
                         <button type="submit" class="btn btn-danger">Delete</button>
