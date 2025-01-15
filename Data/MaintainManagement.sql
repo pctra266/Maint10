@@ -57,6 +57,7 @@ CREATE TABLE ComponentRequestResponsible (
 CREATE TABLE ComponentRequest (
     ComponentRequestID int IDENTITY(1,1) not null primary key,
 	[Date] DateTime DEFAULT GETDATE(),
+	Status NVARCHAR(20),
 	Note nvarchar(max)
 );
 
@@ -107,6 +108,7 @@ CREATE TABLE WarrantyCardDetail (
     WarrantyCardDetailID int IDENTITY(1,1) not null primary key,
 	WarrantyCardCode NVARCHAR(10) references WarrantyCard(WarrantyCardCode),
 	ProductComponentsID int references ProductComponents(ProductComponentsID),
+	Status NVARCHAR(20),
 	Quantity int
 );
 
