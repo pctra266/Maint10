@@ -1,4 +1,4 @@
-USE [master]
+﻿USE [master]
 GO
 
 /*******************************************************************************
@@ -6,127 +6,160 @@ GO
 ********************************************************************************/
 IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'MaintainManagement')
 BEGIN
-	ALTER DATABASE MaintainManagement SET OFFLINE WITH ROLLBACK IMMEDIATE;
-	ALTER DATABASE MaintainManagement SET ONLINE;
-	DROP DATABASE MaintainManagement;
+    ALTER DATABASE MaintainManagement SET OFFLINE WITH ROLLBACK IMMEDIATE;
+    ALTER DATABASE MaintainManagement SET ONLINE;
+    DROP DATABASE MaintainManagement;
 END
 
-
 GO
-Create database MaintainManagement
+CREATE DATABASE MaintainManagement
 GO
 USE MaintainManagement
 GO
 
+-- Staff Table
 CREATE TABLE Staff (
-    StaffID int IDENTITY(1,1) not null primary key,
-	UsernameS NVARCHAR(50),
-	PasswordS NVARCHAR(50),
-    [Role] NVARCHAR(20),
+    StaffID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    UsernameS NVARCHAR(50) UNIQUE,
+    PasswordS NVARCHAR(50),
+    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
     [Name] NVARCHAR(100),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
-    [Address] NVARCHAR(255)
+    [Address] NVARCHAR(255),
+    Image NVARCHAR(MAX) 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
-);
-
+-- StaffLog Table
 CREATE TABLE StaffLog (
-    StaffLogID int IDENTITY(1,1) not null primary key,
-	StaffID int references Staff(StaffID),
-    StartDate datetime,
-	EndDate datetime,
-	[Role] NVARCHAR(20)
+    StaffLogID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    StaffID INT NOT NULL REFERENCES Staff(StaffID),
+    StartDate DATETIME NOT NULL,
+    EndDate DATETIME,
+    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
 );
 
+-- Customer Table
 CREATE TABLE Customer (
-    CustomerID int IDENTITY(1,1) not null primary key,
-	UsernameC NVARCHAR(50),
-	PasswordC NVARCHAR(50),
+    CustomerID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    UsernameC NVARCHAR(50) UNIQUE,
+    PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
-    [Address] NVARCHAR(255)
-);
+    [Address] NVARCHAR(255),
+    Image NVARCHAR(MAX) 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
-CREATE TABLE ComponentRequestResponsible (
-    ComponentRequestResponsibleID int IDENTITY(1,1) not null primary key,
-	StaffID int references Staff(StaffID),
-	[Action] NVARCHAR(10)
-);
-
-CREATE TABLE ComponentRequest (
-    ComponentRequestID int IDENTITY(1,1) not null primary key,
-	[Date] DateTime DEFAULT GETDATE(),
-	Status NVARCHAR(20),
-	Note nvarchar(max)
-);
-
+-- Component Table
 CREATE TABLE Component (
-    ComponentID int IDENTITY(1,1) not null primary key,
-	ComponentName nvarchar(20),
-	Quantity int,
-	Price float
-);
+    ComponentID int IDENTITY(1,1) NOT NULL PRIMARY KEY ,
+    ComponentName NVARCHAR(100),
+    Quantity int,
+    Price FLOAT,
+    Image NVARCHAR(MAX) 
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
-CREATE TABLE ComponentRequestDetail (
-    ComponentRequestDetailID int IDENTITY(1,1) not null primary key,
-	ComponentID int references Component(ComponentID),
-	ComponentRequestID int references ComponentRequest(ComponentRequestID),
-	Quantity int
-);
+-- Product Table
 CREATE TABLE Product (
-    ProductID int IDENTITY(1,1) not null primary key,
-	ProductName NVARCHAR(100) NOT NULL, 
-	Quantity int,
-	WarrantyDate DATETIME NOT NULL
-);
+    ProductID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ProductName NVARCHAR(100) NOT NULL, 
+    Quantity int,
+    WarrantyDate int NOT NULL,
+    Image NVARCHAR(MAX)
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
+-- ProductComponents Table
 CREATE TABLE ProductComponents (
-    ProductComponentsID int IDENTITY(1,1) not null primary key,
-	ProductID int references Product(ProductID),
-	ComponentID int references Component(ComponentID),
-	Quantity int
+    ProductComponentsID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ProductID INT NOT NULL REFERENCES Product(ProductID),
+    ComponentID INT NOT NULL REFERENCES Component(ComponentID),
+    Quantity INT NOT NULL CHECK (Quantity >= 1) --Component in a product if equal to 0, it should not be in this table
 );
 
+-- ProductDetail Table
 CREATE TABLE ProductDetail (
-    CODE int IDENTITY(1,1) not null primary key,
-	CustomerID int references Customer(CustomerID),
-	ProductID int references Product(ProductID),
-	ProductCode  NVARCHAR(50) NOT NULL UNIQUE,
-	PurchaseDate DATETIME NOT NULL, 
+    ProductDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
+    ProductID INT NOT NULL REFERENCES Product(ProductID),
+    ProductCode NVARCHAR(50) NOT NULL UNIQUE,
+    PurchaseDate DATETIME NOT NULL
 );
 
+-- WarrantyCard Table
 CREATE TABLE WarrantyCard (
-    WarrantyCardCode NVARCHAR(10) NOT NULL primary key,
-	CODE int references ProductDetail(CODE),
-	IssueDescription NVARCHAR(MAX), 
-	WarrantyStatus NVARCHAR(50) NOT NULL,
-	CreatedDate DATETIME DEFAULT GETDATE(), 
+    WarrantyCardID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
+    ProductDetailID INT NOT NULL REFERENCES ProductDetail(ProductDetailID),
+    IssueDescription NVARCHAR(MAX),
+    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'completed', 'cancel')),
+    CreatedDate DATETIME DEFAULT GETDATE()
 );
 
+-- ComponentRequest Table
+CREATE TABLE ComponentRequest (
+    ComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    [Date] DATETIME DEFAULT GETDATE(),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('waiting', 'approved', 'cancel')),
+    Note NVARCHAR(MAX)
+);
+
+-- ComponentRequestDetail Table
+CREATE TABLE ComponentRequestDetail (
+    ComponentRequestDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ComponentID INT NOT NULL REFERENCES Component(ComponentID),
+    ComponentRequestID INT NOT NULL REFERENCES ComponentRequest(ComponentRequestID),
+    Quantity INT NOT NULL CHECK (Quantity >= 0)
+);
+
+-- ComponentRequestResponsible Table
+CREATE TABLE ComponentRequestResponsible (
+    ComponentRequestResponsibleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    StaffID INT NOT NULL REFERENCES Staff(StaffID),
+    ComponentRequestID INT NOT NULL REFERENCES ComponentRequest(ComponentRequestID),
+    [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel'))
+);
+
+-- WarrantyCardDetail Table
 CREATE TABLE WarrantyCardDetail (
-    WarrantyCardDetailID int IDENTITY(1,1) not null primary key,
-	WarrantyCardCode NVARCHAR(10) references WarrantyCard(WarrantyCardCode),
-	ProductComponentsID int references ProductComponents(ProductComponentsID),
-	Status NVARCHAR(20),
-	Quantity int
+    WarrantyCardDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    ProductComponentsID INT NOT NULL REFERENCES ProductComponents(ProductComponentsID),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('under_warranty', 'repaired', 'replace')),
+    Price FLOAT NOT NULL CHECK (Price >= 0),
+    Quantity INT NOT NULL CHECK (Quantity >= 0)
 );
 
+-- WarrantyCardProcess Table
 CREATE TABLE WarrantyCardProcess (
-    WarrantyCardProcessID int IDENTITY(1,1) not null primary key,
-	WarrantyCardCode NVARCHAR(10) references WarrantyCard(WarrantyCardCode),
-	HandlerID int references Staff(StaffID),
-	[Action] NVARCHAR(20),
-	ActionDate DATETIME DEFAULT GETDATE(),
-	Note nvarchar(max)
+    WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    HandlerID INT NOT NULL REFERENCES Staff(StaffID),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
+    ActionDate DATETIME DEFAULT GETDATE(),
+    Note NVARCHAR(MAX)
 );
 
+-- Payment Table
 CREATE TABLE Payment (
-    PaymentID int IDENTITY(1,1) not null primary key,
-	WarrantyCardCode NVARCHAR(10) references WarrantyCard(WarrantyCardCode),
-	PaymentDate DATE,
-	PaymentMethod NVARCHAR(20),
-	Amount FLOAT,
-	Status NVARCHAR(20)
+    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    PaymentDate DATE NOT NULL,
+    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
+    Amount FLOAT NOT NULL CHECK (Amount >= 0),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail'))
 );
+
+-- Feedback Table
+CREATE TABLE Feedback (
+    FeedbackID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    Note NVARCHAR(MAX)
+);
+-- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
+CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
+CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
+CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyStatus ON WarrantyCard(WarrantyStatus);
 
