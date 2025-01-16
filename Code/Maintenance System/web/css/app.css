@@ -3191,7 +3191,7 @@ textarea.form-control-lg {
 .form-control.is-valid:focus,
 .was-validated .form-control:valid:focus {
     border-color: var(--bs-form-valid-border-color);
-    box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)
+    /*box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)*/
 }
 
 .form-select.is-valid,
@@ -3202,7 +3202,7 @@ textarea.form-control-lg {
 .form-select.is-valid:focus,
 .was-validated .form-select:valid:focus {
     border-color: var(--bs-form-valid-border-color);
-    box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)
+    /*box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)*/
 }
 
 .form-check-input.is-valid,
@@ -3217,7 +3217,7 @@ textarea.form-control-lg {
 
 .form-check-input.is-valid:focus,
 .was-validated .form-check-input:valid:focus {
-    box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)
+    /*box-shadow: 0 0 0 .2rem rgba(var(--bs-success-rgb), .25)*/
 }
 
 .form-check-input.is-valid~.form-check-label,
@@ -3275,7 +3275,7 @@ textarea.form-control-lg {
 .form-control.is-invalid:focus,
 .was-validated .form-control:invalid:focus {
     border-color: var(--bs-form-invalid-border-color);
-    box-shadow: 0 0 0 .2rem rgba(var(--bs-danger-rgb), .25)
+    /*box-shadow: 0 0 0 .2rem rgba(var(--bs-danger-rgb), .25)*/
 }
 
 .form-select.is-invalid,
@@ -3286,7 +3286,7 @@ textarea.form-control-lg {
 .form-select.is-invalid:focus,
 .was-validated .form-select:invalid:focus {
     border-color: var(--bs-form-invalid-border-color);
-    box-shadow: 0 0 0 .2rem rgba(var(--bs-danger-rgb), .25)
+    /*box-shadow: 0 0 0 .2rem rgba(var(--bs-danger-rgb), .25)*/
 }
 
 .form-check-input.is-invalid,
@@ -3325,7 +3325,7 @@ textarea.form-control-lg {
 .btn {
     --bs-btn-padding-x: 0.85rem;
     --bs-btn-padding-y: 0.3rem;
-    --bs-btn-font-family: ;
+    /*--bs-btn-font-family: ;*/
     --bs-btn-font-size: 0.875rem;
     --bs-btn-font-weight: 400;
     --bs-btn-line-height: 1.5;
@@ -4120,7 +4120,7 @@ fieldset:disabled .btn {
     --bs-dropdown-color: #dee2e6;
     --bs-dropdown-bg: #343a40;
     --bs-dropdown-border-color: var(--bs-border-color-translucent);
-    --bs-dropdown-box-shadow: ;
+    /*--bs-dropdown-box-shadow: ;*/
     --bs-dropdown-link-color: #dee2e6;
     --bs-dropdown-link-hover-color: #fff;
     --bs-dropdown-divider-bg: var(--bs-border-color-translucent);
@@ -4250,7 +4250,7 @@ fieldset:disabled .btn {
 .nav {
     --bs-nav-link-padding-x: 1rem;
     --bs-nav-link-padding-y: 0.5rem;
-    --bs-nav-link-font-weight: ;
+    /*--bs-nav-link-font-weight: ;*/
     --bs-nav-link-color: var(--bs-link-color);
     --bs-nav-link-hover-color: var(--bs-link-hover-color);
     --bs-nav-link-disabled-color: var(--bs-secondary-color);
@@ -4471,7 +4471,7 @@ fieldset:disabled .btn {
 .navbar-nav {
     --bs-nav-link-padding-x: 0;
     --bs-nav-link-padding-y: 0.5rem;
-    --bs-nav-link-font-weight: ;
+    /*--bs-nav-link-font-weight: ;*/
     --bs-nav-link-color: var(--bs-navbar-color);
     --bs-nav-link-hover-color: var(--bs-navbar-hover-color);
     --bs-nav-link-disabled-color: var(--bs-navbar-disabled-color);
@@ -4909,18 +4909,18 @@ fieldset:disabled .btn {
     --bs-card-spacer-x: 1.25rem;
     --bs-card-title-spacer-y: 0.5rem;
     --bs-card-title-color: #939ba2;
-    --bs-card-subtitle-color: ;
+    /*--bs-card-subtitle-color: ;*/
     --bs-card-border-width: 0;
     --bs-card-border-color: transparent;
     --bs-card-border-radius: 0.25rem;
-    --bs-card-box-shadow: ;
+    /*--bs-card-box-shadow: ;*/
     --bs-card-inner-border-radius: 0.25rem;
     --bs-card-cap-padding-y: 1rem;
     --bs-card-cap-padding-x: 1.25rem;
     --bs-card-cap-bg: #fff;
-    --bs-card-cap-color: ;
-    --bs-card-height: ;
-    --bs-card-color: ;
+    /*--bs-card-cap-color: ;*/
+    /*--bs-card-height: ;*/
+    /*--bs-card-color: ;*/
     --bs-card-bg: #fff;
     --bs-card-img-overlay-padding: 1rem;
     --bs-card-group-margin: 12px;
