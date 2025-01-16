@@ -3,6 +3,30 @@
   "WorkspaceRootPath": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\home\\index.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\shared\\_layout.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\shared\\_validationscriptspartial.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\shared\\error.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\_viewimports.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\views\\_viewstart.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|d:\\swp_productsmaintainmanagement\\productsmaintainmanagement\\code\\web\\models2\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{703E8964-AF75-468C-86DC-6F9F98F558B9}|Web\\Web.csproj|solutionrelative:web\\models2\\account.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -18,7 +42,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 1,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -26,12 +50,90 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "_ValidationScriptsPartial.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "RelativeToolTip": "Web\\Views\\Shared\\_ValidationScriptsPartial.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:53.726Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Error.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\Error.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\Shared\\Error.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\Error.cshtml",
+              "RelativeToolTip": "Web\\Views\\Shared\\Error.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:51.621Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "_ViewImports.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\_ViewImports.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\_ViewImports.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\_ViewImports.cshtml",
+              "RelativeToolTip": "Web\\Views\\_ViewImports.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:49.633Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "_ViewStart.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\_ViewStart.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\_ViewStart.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\_ViewStart.cshtml",
+              "RelativeToolTip": "Web\\Views\\_ViewStart.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:48.194Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Index.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Home\\Index.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\Home\\Index.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Home\\Index.cshtml",
+              "RelativeToolTip": "Web\\Views\\Home\\Index.cshtml",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAABYAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:14.302Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "_Layout.cshtml",
+              "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeDocumentMoniker": "Web\\Views\\Shared\\_Layout.cshtml",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Views\\Shared\\_Layout.cshtml",
+              "RelativeToolTip": "Web\\Views\\Shared\\_Layout.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAABJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-01-15T18:29:09.103Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
               "Title": "Account.cs",
               "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Models2\\Account.cs",
               "RelativeDocumentMoniker": "Web\\Models2\\Account.cs",
-              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Models2\\Account.cs*",
-              "RelativeToolTip": "Web\\Models2\\Account.cs*",
+              "ToolTip": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Models2\\Account.cs",
+              "RelativeToolTip": "Web\\Models2\\Account.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-01-15T17:56:09.95Z",
@@ -39,7 +141,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 7,
               "Title": "HomeController.cs",
               "DocumentMoniker": "D:\\SWP_ProductsMaintainManagement\\ProductsMaintainManagement\\Code\\Web\\Controllers\\HomeController.cs",
               "RelativeDocumentMoniker": "Web\\Controllers\\HomeController.cs",
@@ -47,8 +149,7 @@
               "RelativeToolTip": "Web\\Controllers\\HomeController.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-01-15T17:55:59.578Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-01-15T17:55:59.578Z"
             }
           ]
         }
