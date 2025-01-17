@@ -1,2 +1,41 @@
-/Code/Maintenance System/nbproject/private/
-/Code/Maintenance System/build/
+# NetBeans specific
+nbproject/private/
+nbproject/BuildArtifacts.xml
+nbproject/genfiles.properties
+nbproject/project.properties.bak
+
+# Build and distribution directories
+build/
+dist/
+
+# Temporary files
+temp/
+
+# Tomcat specific
+*.log
+*.out
+work/
+logs/
+
+# IDE specific files
+.idea/
+*.iml
+out/
+.project
+.classpath
+.settings/
+
+# Sensitive files
+*.key
+*.pem
+*.p12
+*.jks
+*.properties
+*.db
+
+# System specific files
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp
