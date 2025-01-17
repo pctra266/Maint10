@@ -33,8 +33,8 @@
                     <td>${o.customerID}</td>
                     <td>${o.warrantyCardID}</td>
                     <td>${o.note}</td>
-                    <td><a href="#">Delete</a></td>
-                    <td><a href="#">Update</a></td>
+                    <td><a href="DeleteFeedback?feedbackID=${o.feedbackID}">Delete</a></td>
+                    <td><a href="UpdateFeedback?feedbackID=${o.feedbackID}">Detail</a></td>
                 </tr>
             </c:forEach>
             </tbody>

@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
+
 import Model.Feedback;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -14,33 +15,96 @@ import java.sql.ResultSet;
  * @author Tra Pham
  */
 public class FeedbackDAO {
-    
+
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-    
- public ArrayList<Feedback> getAllFeedback(){
+
+    public ArrayList<Feedback> getAllFeedback() {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select * from Feedback";
-        try{
+        try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
-            while(rs.next()){
-                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), 
+            while (rs.next()) {
+                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"),
                         rs.getInt("WarrantyCardID"), rs.getString("Note")));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
         }
-        
+
         return list;
     }
- 
+
+    public void deleteFeedbackById(String feedbackId) {
+        String query = "delete from Feedback where FeedbackID = ?";
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, feedbackId);
+            ps.executeUpdate();
+        } catch (Exception e) {
+        }
+    }
+
+    public Feedback getFeedbackById(String feedbackId) {
+        String query = "select * from Feedback where FeedbackID = ?";
+
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, feedbackId);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                return new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"),
+                        rs.getInt("WarrantyCardID"), rs.getString("Note"));
+            }
+        } catch (Exception e) {
+        }
+        return null;
+    }
+
+    public void updateFeedback(String feedbackId, String note) {
+        String query = "update Feedback\n"
+                + "set Note = ?\n"
+                + "where FeedbackID = ?";
+
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, note);
+            ps.setString(2, feedbackId);
+            ps.executeQuery();
+
+        } catch (Exception e) {
+        }
+    }
+
+    public void createFeedback(String customerId, String warrantyCardId, String note) {
+        String query = "INSERT INTO Feedback (CustomerID, WarrantyCardID, Note)\n"
+                + "VALUES\n"
+                + "(?, ?, ?)";
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, customerId);
+            ps.setString(2, warrantyCardId);
+            ps.setString(3, note);
+            ps.executeQuery();
+
+        } catch (Exception e) {
+        }
+    }
+
     public static void main(String[] args) {
         FeedbackDAO dao = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = dao.getAllFeedback();
-        for (Feedback feedback : listFeedback) {
-            System.out.println(feedback);
-        }
+        dao.deleteFeedbackById("3");
+        Feedback f = dao.getFeedbackById("5");
+        System.out.println(f);
+//        ArrayList<Feedback> listFeedback = dao.getAllFeedback();
+//        for (Feedback feedback : listFeedback) {
+//            System.out.println(feedback);
+//        }
     }
 }
