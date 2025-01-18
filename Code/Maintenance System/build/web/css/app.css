@@ -20,6 +20,7 @@
     --bs-green: #1cbb8c;
     --bs-teal: #20c997;
     --bs-cyan: #17a2b8;
+    --bs-black: #000;
     --bs-white: #fff;
     --bs-gray: #6c757d;
     --bs-gray-dark: #343a40;
@@ -17030,7 +17031,7 @@ body[data-sidebar-layout=compact][data-sidebar-position=right] .sidebar.collapse
 
 table.dataTable tbody>tr.selected,
 table.dataTable.table-striped>tbody>tr.odd.selected {
-    --bs-table-accent-bg: $primary;
+    --bs-table-accent-bg: primary;
     background-color: #3b7ddd
 }
 
