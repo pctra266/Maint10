@@ -1,0 +1,221 @@
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
+body {
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+*,
+::before,
+::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  font-size: 1.6rem;
+  font-family: "Market Sans", Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+}
+
+input,
+button,
+textarea,
+select {
+  padding: 0;
+  font-family: inherit;
+  outline: none;
+  border: none;
+  background: transparent;
+  color: inherit;
+}
+*{
+    height: auto;
+    width: auto;
+}
+
+.add__signin{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+}
+.add__signin-info{
+    line-height: 32px;
+    font-size: 30px;
+    padding-bottom: 8px;
+}
+
+.add__signin-input{
+    margin-top: 14px;
+    border-radius: 10px;
+    width: 355px;
+    border: 2px solid #8f8f8f;
+    position: relative;
+}
+.add__input{
+    font-weight: 600;
+    width: 100%;
+    padding-inline-start: 16px;
+    padding-inline-end: 16px;
+    padding-bottom: 2px;
+    padding-top: 20px;
+
+}
+.add__input:focus + .add__input-label,
+.add__input.has-content + .add__input-label{
+    transform: scale(0.75) translateY(-24px) translateX(-16px);
+}
+
+.add__input-label{
+    text-align: left;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 10px;
+    transition: transform .3s ease, bottom .3s ease;
+
+}
+.add__signin-next{
+  padding: 15px 0;
+}
+.add__signin-next button{
+  width: 355px;
+  height: 50px;
+  background-color: #3665f3;
+  border-radius: 25px;
+  font-size: 16px;
+  color: white;
+}
+
