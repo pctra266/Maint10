@@ -14,11 +14,15 @@
     </servlet-mapping>
     <servlet-mapping>
     <servlet-name>ComponentAction</servlet-name>
-    <url-pattern>/ComponentWarehouse/Edit</url-pattern>
+    <url-pattern>/ComponentWarehouse/Detail</url-pattern>
 </servlet-mapping>
 
 <servlet-mapping>
     <servlet-name>ComponentAction</servlet-name>
     <url-pattern>/ComponentWarehouse/Delete</url-pattern>
+</servlet-mapping>
+<servlet-mapping>
+    <servlet-name>ComponentAction</servlet-name>
+    <url-pattern>/ComponentWarehouse/Edit</url-pattern>
 </servlet-mapping>
 </web-app>

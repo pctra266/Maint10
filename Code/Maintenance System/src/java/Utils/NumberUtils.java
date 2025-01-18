@@ -12,7 +12,14 @@ public class NumberUtils {
      */
     public static Integer tryParseInt(String str) {
         try {
-            return Integer.parseInt(str);
+            return Integer.valueOf(str);
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+    public static Double tryParseDouble(String str) {
+        try {
+            return Double.valueOf(str);
         } catch (NumberFormatException e) {
             return null;
         }

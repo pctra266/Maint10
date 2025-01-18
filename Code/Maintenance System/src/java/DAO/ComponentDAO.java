@@ -106,7 +106,7 @@ public class ComponentDAO extends DBContext {
         return null; // Trả về null nếu không tìm thấy component    }
     }
 
-    public void deleteComponent(int componentID) {
+    public void delete(int componentID) {
     String deleteProductComponentsSQL = "DELETE FROM ProductComponents WHERE ComponentID = ?";
     String deleteComponentSQL = "DELETE FROM Component WHERE ComponentID = ?";
 
@@ -125,9 +125,51 @@ public class ComponentDAO extends DBContext {
         e.printStackTrace();
     }
 }
+     
+    public void save(Component component) {
+        String query = "INSERT INTO Component (ComponentName, Quantity, Price, Image) VALUES (?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, component.getComponentName());
+            statement.setInt(2, component.getQuantity());
+            statement.setDouble(3, component.getPrice());
+            statement.setString(4, component.getImage());
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Component component) {
+    String query;
+    if (component.getImage() != null) {
+        query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ?, Image = ? WHERE ComponentID = ?";
+    } else {
+        query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ? WHERE ComponentID = ?";
+    }
+
+    try (PreparedStatement statement = connection.prepareStatement(query)) {
+
+        statement.setString(1, component.getComponentName());
+        statement.setInt(2, component.getQuantity());
+        statement.setDouble(3, component.getPrice());
+
+        if (component.getImage() != null) {
+            statement.setString(4, component.getImage());
+            statement.setInt(5, component.getComponentID());
+        } else {
+            statement.setInt(4, component.getComponentID());
+        }
+
+        statement.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
+
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        d.deleteComponent(1);
+        d.delete(1);
     }
 }
