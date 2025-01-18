@@ -155,9 +155,25 @@ CREATE TABLE Payment (
 CREATE TABLE Feedback (
     FeedbackID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
-    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
-    Note NVARCHAR(MAX)
+    WarrantyCardID INT REFERENCES WarrantyCard(WarrantyCardID),
+    Note NVARCHAR(MAX),
+	DateCreated DATETIME NOT NULL,
+	IsDeleted BIT DEFAULT 0 NOT NULL,
+	ImageURL NVARCHAR(500),
+	VideoURL NVARCHAR(500)
 );
+-- FeedbackLog Table
+CREATE TABLE FeedbackLog (
+    FeedbackLogID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,      
+    FeedbackID INT NOT NULL REFERENCES Feedback(FeedbackID),                      
+    [Action] NVARCHAR(50) NOT NULL CHECK ([Action] IN ('update', 'delete')),                  
+    OldFeedbackText NVARCHAR(1000),       
+    NewFeedbackText NVARCHAR(1000),       
+    ModifiedBy INT NOT NULL REFERENCES Staff(StaffID),                      
+    DateModified DATETIME                
+);
+
+
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
