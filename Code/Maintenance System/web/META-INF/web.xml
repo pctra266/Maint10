@@ -29,4 +29,12 @@
     <servlet-name>ComponentAction</servlet-name>
     <url-pattern>/ComponentWarehouse/Add</url-pattern>
 </servlet-mapping>
+    <servlet>
+        <servlet-name>ManageProduct</servlet-name>
+        <servlet-class>Controller.ManageProduct</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ManageProduct</servlet-name>
+        <url-pattern>/product</url-pattern>
+    </servlet-mapping>
 </web-app>
