@@ -1,4 +1,5 @@
 # NetBeans specific
+Code/Maintenance System/nbproject/private/private.xml
 src/java/DAO/DBContext.java
 nbproject/private/
 nbproject/BuildArtifacts.xml
