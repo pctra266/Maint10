@@ -191,6 +191,6 @@ public Component getLast() {
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        d.getLast();
+        System.out.println(d.getAllComponents());
     }
 }
