@@ -58,7 +58,7 @@ public class FeedbackLogDAO {
 
         }
     }
-    public void createUpdateFeedbackLog(Feedback feedback,String staffId) {
+    public void createUpdateFeedbackLog(Feedback feedback,String staffId, String newNote) {
         String query = "INSERT INTO FeedbackLog (FeedbackID, [Action], OldFeedbackText, NewFeedbackText, ModifiedBy, DateModified)\n"
                 + "VALUES\n"
                 + "  (?, 'update', ?, ?, ?, GETDATE())";
@@ -67,7 +67,7 @@ public class FeedbackLogDAO {
             ps = conn.prepareStatement(query);
             ps.setString(1, String.valueOf(feedback.getFeedbackID()));
             ps.setString(2, String.valueOf(feedback.getNote()));
-            ps.setString(3, "");
+            ps.setString(3, newNote);
             ps.setString(4, staffId);
             ps.executeUpdate();
         } catch (Exception e) {

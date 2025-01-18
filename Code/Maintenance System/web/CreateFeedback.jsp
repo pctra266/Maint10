@@ -29,6 +29,14 @@
                         <td><input name="note" type="text"></td>
                     </tr>
                     <tr>
+                        <td>Image: </td>
+                        <td><input name="imageURL" type="url"></td>
+                    </tr>
+                    <tr>
+                        <td>Video: </td>
+                        <td><input name="videoURL" type="text"></td>
+                    </tr>
+                    <tr>
                         <td><button type="submit"> Submit </button></td>
                     </tr>
                 </tbody>

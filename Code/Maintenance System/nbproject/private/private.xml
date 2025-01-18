@@ -3,13 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/CreateFeedback.java</file>
             <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/FeedbackDAO.java</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/ViewListFeedback.java</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Feedback.java</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/DeleteFeedback.java</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/web/ViewListFeedback.jsp</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/UpdateFeedback.java</file>
+            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/FeedbackLog.java</file>
         </group>
     </open-files>
 </project-private>

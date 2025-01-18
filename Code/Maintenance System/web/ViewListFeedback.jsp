@@ -68,7 +68,9 @@
                     <td>${o.newFeedbackText}</td>
                     <td>${o.modifiedBy}</td>
                     <td>${o.dateModified}</td>
+                    <c:if test="${o.action=='delete'}">
                     <td><a href="UndoFeedback?feedbackLogID=${o.feedbackLogID}">Undo</a></td>
+                    </c:if>
                 </tr>
                 </c:forEach>
             </tbody>

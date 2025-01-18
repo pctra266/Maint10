@@ -52,11 +52,11 @@
                 </tr>
                  <tr>
                     <td>Image : </td>
-                    <td><input type="text" value="${feedbackUpdate.imageURL}"></td>
+                    <td><input type="text" readonly="" value="${feedbackUpdate.imageURL}"></td>
                 </tr>
                  <tr>
                     <td>Video : </td>
-                    <td><input type="text" value="${feedbackUpdate.videoURL}"></td>
+                    <td><input type="text" readonly="" value="${feedbackUpdate.videoURL}"></td>
                 </tr>
                 <tr>
                     <td> <button type="submit" > Save Change</button> </td>
