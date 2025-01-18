@@ -2,6 +2,29 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/includes/navbar-top.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/includes/footer.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/js/settings.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/Utils/NumberUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/DAO/DBContext.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/META-INF/web.xml</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/js/fullcalendar.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/Payment.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/img/photos/unsplash-3.jpg</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/DAO/PaymentDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/js/app.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/Model/Component.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/Controller/Home.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/LoginForm.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/Component/ComponentDetail.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/img/photos/unsplash-1.jpg</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/Component/ComponentWarehouse.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/includes/navbar-left.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(component)/Code/Maintenance%20System/web/index.html</file>
+        </group>
     </open-files>
 </project-private>
