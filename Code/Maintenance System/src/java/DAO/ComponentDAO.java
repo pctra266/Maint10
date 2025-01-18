@@ -126,7 +126,7 @@ public class ComponentDAO extends DBContext {
     }
 }
      
-    public void save(Component component) {
+    public void add(Component component) {
         String query = "INSERT INTO Component (ComponentName, Quantity, Price, Image) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, component.getComponentName());
@@ -165,11 +165,32 @@ public class ComponentDAO extends DBContext {
         e.printStackTrace();
     }
 }
+    
+
+public Component getLast() {
+    String query = "SELECT TOP 1 * FROM Component ORDER BY ComponentID DESC ";
+    try (PreparedStatement statement = connection.prepareStatement(query);
+         ResultSet resultSet = statement.executeQuery()) {
+
+        if (resultSet.next()) {
+            Component component = new Component();
+            component.setComponentID(resultSet.getInt("ComponentID"));
+            component.setComponentName(resultSet.getString("ComponentName"));
+            component.setQuantity(resultSet.getInt("Quantity"));
+            component.setPrice(resultSet.getDouble("Price"));
+            component.setImage(resultSet.getString("Image"));
+            return component;
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return null;
+}
 
 
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        d.delete(1);
+        d.getLast();
     }
 }

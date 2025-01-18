@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author ADMIN
@@ -14,6 +16,8 @@ public class Component {
     private int quantity;          // Số lượng
     private double price;          // Giá
     private String image;          // Thông tin hoặc đường dẫn hình ảnh
+    private List<Product> listProduct;
+
 
     // Constructor mặc định
     public Component() {
@@ -67,6 +71,13 @@ public class Component {
 
     public void setImage(String image) {
         this.image = image;
+    }
+        public List<Product> getListProduct() {
+        return listProduct;
+    }
+
+    public void setListProduct(List<Product> listProduct) {
+        this.listProduct = listProduct;
     }
 
     // Override phương thức toString để hiển thị thông tin

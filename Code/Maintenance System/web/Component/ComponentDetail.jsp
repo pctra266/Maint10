@@ -30,6 +30,8 @@
             <div class="main">
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
+                    <h2>Component Detail</h2>
+
                     <form class="row"action="ComponentWarehouse/Edit">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
@@ -50,7 +52,7 @@
                                 <div class="col-md-12">
                                     <button class="btn btn-primary" type="submit">Save</button>
                                 </div>
-<!--                                Alert khi du lieu truyen sang sever sai-->
+                                <!--                                Alert khi du lieu truyen sang sever sai-->
                                 <c:if test="${not empty nameAlert}">
                                     <div class="alert alert-danger alert-dismissible" role="alert">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -72,6 +74,22 @@
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         <div class="alert-message">
                                             <strong>${priceAlert}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty Added}">
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${Added}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty Updated}">
+                                    <div class="alert alert-success alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${Updated}</strong>
                                         </div>
                                     </div>
                                 </c:if>

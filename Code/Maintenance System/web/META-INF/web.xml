@@ -25,4 +25,8 @@
     <servlet-name>ComponentAction</servlet-name>
     <url-pattern>/ComponentWarehouse/Edit</url-pattern>
 </servlet-mapping>
+<servlet-mapping>
+    <servlet-name>ComponentAction</servlet-name>
+    <url-pattern>/ComponentWarehouse/Add</url-pattern>
+</servlet-mapping>
 </web-app>

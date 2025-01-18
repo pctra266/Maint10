@@ -36,7 +36,7 @@
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Component Warehouse</h2>
-                    
+                    <a href="ComponentWarehouse/Add" class="btn btn-success"><i class="fas fa-add"></i></a>
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -83,18 +83,20 @@
                     </table
 
                     <!-- Phân trang -->
-                    <div class="btn-group me-2" role="group" aria-label="First group">
-                        <!-- Nút "Trước" -->
-                        <a href="?page=${currentPage - 1}" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''}">&lt;</a>
+                   <div class="text-center">
+    <div class="btn-group me-2" role="group" style="margin-top:1rem"aria-label="First group">
+        <!-- Nút "Trước" -->
+        <a href="?page=${currentPage - 1}" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''}">&lt;</a>
 
-                        <!-- Các số trang -->
-                        <c:forEach var="i" begin="1" end="${totalPages}">
-                            <a href="?page=${i}" class="btn btn-primary ${i == currentPage ? 'active' : ''}">${i}</a>
-                        </c:forEach>
+        <!-- Các số trang -->
+        <c:forEach var="i" begin="1" end="${totalPages}">
+            <a href="?page=${i}" class="btn btn-primary ${i == currentPage ? 'active' : ''}">${i}</a>
+        </c:forEach>
 
-                        <!-- Nút "Sau" -->
-                        <a href="?page=${currentPage + 1}" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''}">&gt;</a>
-                    </div>
+        <!-- Nút "Sau" -->
+        <a href="?page=${currentPage + 1}" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''}">&gt;</a>
+    </div>
+</div>
 
                 </main>
                 <jsp:include page="../includes/footer.jsp" />
