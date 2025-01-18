@@ -24,7 +24,7 @@ VALUES
 ('Battery MacBook Pro', 50, 130.00, NULL),
 ('Display MacBook Pro', 40, 180.00, NULL);
 -- Cập nhật bảng Product
-INSERT INTO Product (ProductName, Quantity, WarrantyDate, Image)
+INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image)
 VALUES
 ('Laptop Lenovo ThinkPad X1', 30, 12, NULL),
 ('Laptop Dell XPS 13', 40, 24, NULL),

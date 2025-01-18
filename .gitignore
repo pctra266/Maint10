@@ -1,4 +1,5 @@
 # NetBeans specific
+src\java\DAO\DBContext.java
 nbproject/private/
 nbproject/BuildArtifacts.xml
 nbproject/genfiles.properties
