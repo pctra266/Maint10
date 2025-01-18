@@ -7,8 +7,6 @@ package Controller;
 
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
-import Model.Feedback;
-import Model.FeedbackLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,14 +14,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 
 /**
  *
  * @author Tra Pham
  */
-@WebServlet(name="ViewListFeedback", urlPatterns={"/ViewListFeedback"})
-public class ViewListFeedback extends HttpServlet {
+@WebServlet(name="UndoFeedback", urlPatterns={"/UndoFeedback"})
+public class UndoFeedback extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +37,10 @@ public class ViewListFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewListFeedback</title>");  
+            out.println("<title>Servlet UndoFeedback</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewListFeedback at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet UndoFeedback at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,15 +57,16 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback();
-        request.setAttribute("listFeedback", listFeedback);
-        //===========feedbacklog==================
-        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
-        request.setAttribute("listFeedbackLog", listFeedbackLog);
-
-        request.getRequestDispatcher("ViewListFeedback.jsp").forward(request, response);
+        String feedbackLogID = request.getParameter("feedbackLogID");
+         FeedbackDAO daoFeedback = new FeedbackDAO();
+         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        String feedbackIdneedActive = String.valueOf(daoFeedbackLog.getFeedbackLogById(feedbackLogID).getFeedbackID());
+        daoFeedback.activeFeedbackById(feedbackIdneedActive);
+        daoFeedbackLog.deleteFeedbackLogById(feedbackLogID);
+        
+       
+        
+        response.sendRedirect("ViewListFeedback");
     } 
 
     /** 

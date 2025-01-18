@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.FeedbackDAO;
+import DAO.FeedbackLogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -57,8 +58,12 @@ public class DeleteFeedback extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String feedbackID = request.getParameter("feedbackID");
-        FeedbackDAO dao = new FeedbackDAO();
-        dao.deleteFeedbackById(feedbackID);
+        String staffId = "1";
+        FeedbackDAO daoFeedback = new FeedbackDAO();
+        daoFeedback.inActiveFeedbackById(feedbackID);
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackID), staffId);
+        
         request.getRequestDispatcher("ViewListFeedback").forward(request, response);
     } 
 

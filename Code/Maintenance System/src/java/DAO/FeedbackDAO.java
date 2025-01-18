@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 
 /**
  *
@@ -22,16 +23,28 @@ public class FeedbackDAO {
 
     public ArrayList<Feedback> getAllFeedback() {
         ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select * from Feedback";
+        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, "
+                + "pr.ProductName,w.IssueDescription,\n"
+                + "w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
+                + "from Feedback f \n"
+                + "left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
+                + "left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
+                + "left join Product pr on p.ProductID = pr.ProductID\n"
+                + "left join Customer c on f.CustomerID = c.CustomerID";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
             while (rs.next()) {
-                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"),
-                        rs.getInt("WarrantyCardID"), rs.getString("Note")));
+                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
+                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
+                        rs.getString("VideoURL"), rs.getString("ProductName"),
+                        rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
+                        rs.getDate("DateCreated"), rs.getBoolean("IsDeleted")));
+
             }
         } catch (Exception e) {
+
         }
 
         return list;
@@ -49,7 +62,14 @@ public class FeedbackDAO {
     }
 
     public Feedback getFeedbackById(String feedbackId) {
-        String query = "select * from Feedback where FeedbackID = ?";
+        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,\n"
+                + "w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
+                + "from Feedback f \n"
+                + "left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
+                + "left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
+                + "left join Product pr on p.ProductID = pr.ProductID\n"
+                + "left join Customer c on f.CustomerID = c.CustomerID\n"
+                + "where f.FeedbackID = ?";
 
         try {
             conn = new DBContext().connection;
@@ -57,8 +77,11 @@ public class FeedbackDAO {
             ps.setString(1, feedbackId);
             rs = ps.executeQuery();
             while (rs.next()) {
-                return new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"),
-                        rs.getInt("WarrantyCardID"), rs.getString("Note"));
+                return new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
+                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
+                        rs.getString("VideoURL"), rs.getString("ProductName"),
+                        rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
+                        rs.getDate("DateCreated"), rs.getBoolean("IsDeleted"));
             }
         } catch (Exception e) {
         }
@@ -96,15 +119,44 @@ public class FeedbackDAO {
         } catch (Exception e) {
         }
     }
+    
+    public void inActiveFeedbackById(String feedbackId){
+        String query = "update Feedback\n"
+                + "set IsDeleted = 1\n"
+                + "where FeedbackID = ?";
+
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, feedbackId);
+            ps.executeQuery();
+
+        } catch (Exception e) {
+        }
+    }
+    public void activeFeedbackById(String feedbackId){
+        String query = "update Feedback\n"
+                + "set IsDeleted = 0\n"
+                + "where FeedbackID = ?";
+
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, feedbackId);
+            ps.executeQuery();
+
+        } catch (Exception e) {
+        }
+    }
 
     public static void main(String[] args) {
         FeedbackDAO dao = new FeedbackDAO();
-        dao.deleteFeedbackById("3");
-        Feedback f = dao.getFeedbackById("5");
-        System.out.println(f);
-//        ArrayList<Feedback> listFeedback = dao.getAllFeedback();
-//        for (Feedback feedback : listFeedback) {
-//            System.out.println(feedback);
-//        }
+//        dao.deleteFeedbackById("3");
+//        Feedback f = dao.getFeedbackById("5");
+//        System.out.println(f);
+        ArrayList<Feedback> listFeedback = dao.getAllFeedback();
+        for (Feedback feedback : listFeedback) {
+            System.out.println(feedback);
+        }
     }
 }
