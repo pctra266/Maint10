@@ -64,7 +64,7 @@ public class UpdateFeedback extends HttpServlet {
         FeedbackDAO dao = new FeedbackDAO();
         Feedback feedbackUpdate = dao.getFeedbackById(feedbackID);
         request.setAttribute("feedbackUpdate", feedbackUpdate);
-        request.getRequestDispatcher("UpdateFeedback.jsp").forward(request, response);
+        request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
     }
 
     /**

@@ -25,7 +25,17 @@
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <style>
+            .btn-pagination {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+            }
 
+        </style>
     </head>
 
     <body>
@@ -85,18 +95,48 @@
 
                     <!-- Phân trang -->
                     <div class="text-center">
-                        <div class="btn-group me-2" role="group" style="margin-top:1rem"aria-label="First group">
+                        <div class="btn-group me-2" role="group" style="margin-top:1rem" aria-label="First group">
+                            <!-- Nút "Đầu" -->
+                            <a href="?page=1" style="margin-right:5px" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''} btn-pagination"><<</a>
+
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''}">&lt;</a>
+                            <a href="?page=${currentPage - 1}" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <a href="?page=${i}" class="btn btn-primary ${i == currentPage ? 'active' : ''}">${i}</a>
+                            <c:set var="totalPagesToShow" value="6" />
+                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
+                            <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
+
+                            <!-- Điều chỉnh startPage và endPage nếu cần -->
+                            <c:if test="${startPage < 1}">
+                                <c:set var="startPage" value="1" />
+                                <c:set var="endPage" value="${totalPagesToShow}" />
+                            </c:if>
+                            <c:if test="${endPage > totalPages}">
+                                <c:set var="endPage" value="${totalPages}" />
+                                <c:set var="startPage" value="${endPage - totalPagesToShow + 1}" />
+                            </c:if>
+
+                            <c:forEach var="i" begin="${startPage}" end="${endPage}">
+                                <a href="?page=${i}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''}">&gt;</a>
+                            <a href="?page=${currentPage + 1}" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+
+                            <!-- Nút "Cuối" -->
+                            <a href="?page=${totalPages}" style="margin-left:5px" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''} btn-pagination">>></a>
                         </div>
+
+                        <!-- Ô nhập trang -->
+
+                        <div class="text-center"style="margin-top: 1rem;">
+                            <form class="row align-items-center justify-content-center" action="" method="get">
+                                <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
+                                <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
+                            </form>
+                        </div>
+                        
                     </div>
 
                 </main>

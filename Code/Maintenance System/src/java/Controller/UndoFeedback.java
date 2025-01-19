@@ -66,7 +66,7 @@ public class UndoFeedback extends HttpServlet {
         
        
         
-        response.sendRedirect("ViewListFeedback");
+        response.sendRedirect("ViewFeedbackLog");
     } 
 
     /** 

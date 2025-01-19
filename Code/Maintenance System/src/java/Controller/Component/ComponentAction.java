@@ -157,7 +157,7 @@ public class ComponentAction extends HttpServlet {
         return null; // Trả về null nếu không có tên file
     }
         String fileName = originalFileName;
-//   String fileName = System.currentTimeMillis() + "_" + originalFileName;
+//    String fileName = System.currentTimeMillis() + "_" + originalFileName;
     String filePath = uploadPath + File.separator + fileName;
 
     try {

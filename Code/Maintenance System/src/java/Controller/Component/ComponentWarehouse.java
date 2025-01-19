@@ -23,7 +23,7 @@ import java.util.List;
 @WebServlet(name = "ComponentWarehouse", urlPatterns = {"/ComponentWarehouse"})
 public class ComponentWarehouse extends HttpServlet {
     private final ComponentDAO componentDAO = new ComponentDAO();
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 2;
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
