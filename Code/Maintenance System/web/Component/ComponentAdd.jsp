@@ -31,29 +31,29 @@
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Component Add</h2>
-                    <form class="row"action="ComponentWarehouse/Add">
+                    <form class="row" action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
                                 <div class="col-md-10">
                                     <label for="validationDefault02" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="Name"id="validationDefault02" value="${name}" required>
+                                    <input type="text" class="form-control" name="Name" id="validationDefault02" value="${name}" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="validationDefault03" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="Quantity"id="validationDefault03" value="${quantity}" min="0" required>
+                                    <input type="number" class="form-control" name="Quantity" id="validationDefault03" value="${quantity}" min="0" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="validationDefault05" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="Price" id="validationDefault04" value="${price}" step="0.01" min="0" required>
-                                </div> 
+                                </div>
                                 <div class="col-md-12" style="margin-bottom: 1rem">
                                     <button class="btn btn-success" type="submit">Add</button>
                                 </div>
-
                             </div>
-                            <!--                                Alert khi du lieu truyen sang sever sai-->
+
+                            <!-- Hiển thị cảnh báo lỗi -->
                             <c:if test="${not empty nameAlert}">
-                                <div class="col-md-10 alert alert-primary  alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${nameAlert}</strong>
@@ -61,7 +61,7 @@
                                 </div>
                             </c:if>
                             <c:if test="${not empty quantityAlert}">
-                                <div class="col-md-10 alert alert-primary  alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${quantityAlert}</strong>
@@ -69,21 +69,22 @@
                                 </div>
                             </c:if>
                             <c:if test="${not empty priceAlert}">
-                                <div class="col-md-10 alert alert-primary  alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${priceAlert}</strong>
                                     </div>
                                 </div>
-                            </c:if>    
+                            </c:if>
                         </div>
 
+                        <!-- Upload file ảnh -->
                         <div class="col-md-4 row">
-                            <img src="${component.image}" id="currentImage"alt="${component.componentName}" style="max-width: 100%; height: auto;">
+                            <img src="${component.image}" id="currentImage" alt="${component.componentName}" style="max-width: 100%; height: auto;">
                             <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
                         </div>
-
                     </form>
+
                 </main>
 
                 <jsp:include page="../includes/footer.jsp" />
@@ -94,18 +95,17 @@
         <script src="js/app.js"></script>
         <script>
                                 // Hàm để xem trước ảnh khi người dùng chọn tệp mới
-                                function previewImage(event) {
-                                    const file = event.target.files[0];
-                                    if (file) {
+            <script>
+        function previewImage(event) {
                                         const reader = new FileReader();
-                                        reader.onload = function (e) {
-                                            const imgElement = document.getElementById('currentImage');
-                                            imgElement.src = e.target.result;
-                                        };
-                                        reader.readAsDataURL(file);
-                                    }
-                                }
+                                reader.onload = function () {
+                                const output = document.getElementById('currentImage');
+                                output.src = reader.result;
+                                };
+                                reader.readAsDataURL(event.target.files[0]);
+        }
         </script>
-    </body>
+    </script>
+</body>
 
 </html>

@@ -32,7 +32,7 @@
                 <main class="content">
                     <h2>Component Detail</h2>
 
-                    <form class="row"action="ComponentWarehouse/Edit">
+                    <form class="row"action="ComponentWarehouse/Edit"  method="POST" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
                                 <input type="hidden" class="form-control" name="ID" id="validationDefault01" value="${component.componentID}" required>
@@ -102,7 +102,6 @@
                         </div>
 
                     </form>
-
                 </main>
 
                 <jsp:include page="../includes/footer.jsp" />
