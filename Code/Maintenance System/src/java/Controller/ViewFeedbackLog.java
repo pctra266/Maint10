@@ -5,6 +5,8 @@
 
 package Controller;
 
+import DAO.FeedbackLogDAO;
+import Model.FeedbackLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -12,13 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  *
- * @author ADMIN
+ * @author Tra Pham
  */
-@WebServlet(name="Home", urlPatterns={"/Home"})
-public class Home extends HttpServlet {
+@WebServlet(name="ViewFeedbackLog", urlPatterns={"/ViewFeedbackLog"})
+public class ViewFeedbackLog extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -29,7 +32,19 @@ public class Home extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.sendRedirect("index.html");
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ViewFeedbackLog</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet ViewFeedbackLog at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -43,7 +58,11 @@ public class Home extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
+        request.setAttribute("listFeedbackLog", listFeedbackLog);
+        request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
+        
     } 
 
     /** 
@@ -56,7 +75,12 @@ public class Home extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String action  = request.getParameter("action");
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(action);
+        request.setAttribute("listFeedbackLog", listFeedbackLog);
+        request.setAttribute("action", action);
+        request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
     }
 
     /** 
