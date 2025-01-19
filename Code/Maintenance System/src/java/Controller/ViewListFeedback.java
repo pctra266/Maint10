@@ -60,16 +60,13 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
         FeedbackDAO daoFeedback = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = daoFeedback.pagingFeedback(1);
-        
-        //===========feedbacklog==================
-        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
-        request.setAttribute("listFeedbackLog", listFeedbackLog);
+        String customerName = request.getParameter("customerName");
+        String imageAndVideo = request.getParameter("imageAndVideo");
+        request.setAttribute("customerName", customerName);
+        request.setAttribute("imageAndVideo", imageAndVideo);
         //======phan trang
-        int totalPages = daoFeedback.getTotalFeedback();
+        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
         int endPage = totalPages/7;
         if(totalPages % 7 !=0){
             endPage  ++;
@@ -82,9 +79,8 @@ public class ViewListFeedback extends HttpServlet {
         } catch (Exception e) {
             
         }
-        if(indexStr != null && !indexStr.trim().isEmpty()){
-            listFeedback = daoFeedback.pagingFeedback(index);
-        }
+        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
+
         //======end phan trang
         request.setAttribute("listFeedback", listFeedback);
         request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
@@ -100,14 +96,14 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        FeedbackDAO daoFeedback = new FeedbackDAO();
+        
         String customerName = request.getParameter("customerName");
         String imageAndVideo = request.getParameter("imageAndVideo");
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo);
         request.setAttribute("customerName", customerName);
         request.setAttribute("imageAndVideo", imageAndVideo);
         //phan trang
-        int totalPages = daoFeedback.getTotalFeedback();
+        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
         int endPage = totalPages/7;
         if(totalPages % 7 !=0){
             endPage  ++;
@@ -120,9 +116,7 @@ public class ViewListFeedback extends HttpServlet {
         } catch (Exception e) {
             
         }
-        if(indexStr != null && !indexStr.trim().isEmpty()){
-            listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
-        }
+        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
         request.setAttribute("listFeedback", listFeedback);
         request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
     }

@@ -32,7 +32,7 @@ public class FeedbackDAO {
                 + "                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
                 + "                left join Product pr on p.ProductID = pr.ProductID\n"
                 + "                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "                 where 1 = 1";
+                + "                 where f.IsDeleted = 0";
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
         }
@@ -76,7 +76,7 @@ public class FeedbackDAO {
                 + "                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
                 + "                left join Product pr on p.ProductID = pr.ProductID\n"
                 + "                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "                 where 1 = 1";
+                + "                 where f.IsDeleted = 0 ";
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
         }
@@ -87,17 +87,17 @@ public class FeedbackDAO {
                 query += " and (f.VideoURL is not null or f.ImageURL is not null )";
             }
         }
-            query += "order by DateCreated asc\n" +
-                    "offset ? rows  fetch next 7 rows only;";
+            query += " order by DateCreated asc\n" +
+                    " offset ? rows  fetch next 7 rows only;";
 
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
-            int count = 0;
+            int count = 1;
             if (customerName != null && !customerName.trim().isEmpty()) {
                 ps.setString(count++, "%" + customerName.trim() + "%");
             }
-            ps.setInt(count++, index);
+            ps.setInt(count++, (index-1)*7);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
@@ -214,12 +214,30 @@ public class FeedbackDAO {
         }
     }
 
-    public int getTotalFeedback() {
-        String query = "select count(*) from Feedback";
-
+    public int getTotalFeedback(String customerName, String hasImageAndVideo) {
+        String query = "select count(*) from Feedback f\n" +
+"                              left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n" +
+"                                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n" +
+"                               left join Product pr on p.ProductID = pr.ProductID\n" +
+"                                left join Customer c on f.CustomerID = c.CustomerID\n" +
+"                                 where f.IsDeleted = 0";
+        if (customerName != null && !customerName.trim().isEmpty()) {
+            query += " and c.Name like ?";
+        }
+        if (hasImageAndVideo != null && !hasImageAndVideo.trim().isEmpty()) {
+            if (hasImageAndVideo.equalsIgnoreCase("empty")) {
+                query += " and (f.VideoURL is null and f.ImageURL is null)";
+            } else {
+                query += " and (f.VideoURL is not null or f.ImageURL is not null )";
+            }
+        }
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
+            int count = 1;
+            if (customerName != null && !customerName.trim().isEmpty()) {
+                ps.setString(count++, "%" + customerName.trim() + "%");
+            }
             rs = ps.executeQuery();
             while (rs.next()) {
                 return rs.getInt(1);
@@ -269,9 +287,12 @@ public class FeedbackDAO {
 //        for (Feedback feedback : listFeedback) {
 //            System.out.println(feedback);
 //        }
-        ArrayList<Feedback> list = dao.pagingFeedback(2);
-        for (Feedback feedback : list) {
-            System.out.println(feedback);
-        }
+        ArrayList<Feedback> list = dao.getAllFeedback("2","",1);
+//        ArrayList<Feedback> list = dao.getAllFeedback("","");
+//        ArrayList<Feedback> list = dao.pagingFeedback(1);
+//        for (Feedback feedback : list) {
+//            System.out.println(feedback);
+//        }
+        System.out.println(dao.getTotalFeedback("2", ""));
     }
 }

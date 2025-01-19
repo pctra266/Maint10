@@ -41,6 +41,32 @@ public class FeedbackLogDAO {
 
         return list;
     }
+    public ArrayList<FeedbackLog> getAllFeedbackLog(String action) {
+        ArrayList<FeedbackLog> list = new ArrayList<>();
+        String query = "select * from FeedbackLog where 1=1";
+        if (action != null && !action.trim().isEmpty()) {
+            if (action.equalsIgnoreCase("update")) {
+                query += " and Action like 'update'";
+            } else {
+                query += " and Action like 'delete'";
+            }
+        }
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new FeedbackLog(rs.getInt("FeedbackLogID"), rs.getInt("FeedbackID"),
+                        rs.getString("Action"), rs.getString("OldFeedbackText"),
+                        rs.getString("NewFeedbackText"), rs.getInt("ModifiedBy"),
+                        rs.getDate("DateModified")));
+            }
+        } catch (Exception e) {
+
+        }
+
+        return list;
+    }
 
     public void createDeleteFeedbackLog(Feedback feedback,String staffId) {
         String query = "INSERT INTO FeedbackLog (FeedbackID, [Action], OldFeedbackText, NewFeedbackText, ModifiedBy, DateModified)\n"
@@ -106,7 +132,7 @@ public class FeedbackLogDAO {
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog();
+        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update");
         for (FeedbackLog feedbackLog : list) {
             System.out.println(feedbackLog);
         }

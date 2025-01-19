@@ -21,7 +21,19 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-        <h1>History</h1>
+                    
+        <h1 class="text-center">History</h1>
+        <form class="" action="ViewFeedbackLog" method="post">
+                        <div class="card-body" style="width: 500px">
+                            <select style="margin-top: 15px" class="form-select" name="action">
+                                <option value="">Action </option>
+                                <option ${(action=='update')?"selected":""} value="update">Update</option>
+                                <option ${(action=='delete')?"selected":""} value="delete">Delete</option>
+                            </select>
+                            <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                            </div>
+                    </form>
+        
         <table class="table table-hover my-0">
             <thead>
                 <tr>
