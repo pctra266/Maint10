@@ -106,11 +106,11 @@ public class FeedbackLogDAO {
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-//        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog();
-//        for (FeedbackLog feedbackLog : list) {
-//            System.out.println(feedbackLog);
-//        }
-            FeedbackLog f = dao.getFeedbackLogById("16");
-            System.out.println(f);
+        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog();
+        for (FeedbackLog feedbackLog : list) {
+            System.out.println(feedbackLog);
+        }
+//            FeedbackLog f = dao.getFeedbackLogById("16");
+//            System.out.println(f);
     }
 }

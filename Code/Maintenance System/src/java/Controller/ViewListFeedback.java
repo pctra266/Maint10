@@ -68,7 +68,7 @@ public class ViewListFeedback extends HttpServlet {
         ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
         request.setAttribute("listFeedbackLog", listFeedbackLog);
 
-        request.getRequestDispatcher("ViewListFeedback.jsp").forward(request, response);
+        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
     } 
 
     /** 
@@ -81,7 +81,9 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String customerName = request.getParameter("customerName");
+        FeedbackDAO daoFeedback = new FeedbackDAO();
+        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback();
     }
 
     /** 

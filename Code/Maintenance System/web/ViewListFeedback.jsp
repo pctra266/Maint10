@@ -10,11 +10,26 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>List Feedback</title>
+
+        <link href="css/light.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
+    
+     
     <body>
-        <h1>Feedback List</h1>
-        <table border="1">
+        <div class="wrapper">
+            <jsp:include page="/includes/navbar-left.jsp" />
+
+            <div class="main">
+                <jsp:include page="/includes/navbar-top.jsp" />
+                <main class="content">
+                    <h1 class="text-center">Feedback List</h1>
+                    <form action="ViewListFeedback" method="post">
+                    <input type="search" name="customerName">
+                    <button type="submit">Search</button>
+                    </form>
+        <table class="table table-hover my-0">
             <thead>
                 <tr>
                     <th>ID</th>
@@ -43,38 +58,15 @@
             </c:forEach>
             </tbody>
         </table>
-        <h2>============================================================================================================</h2>
-        <h1>History</h1>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Feedback Log ID</th>
-                    <th>Feedback ID</th>
-                    <th>Action</th>
-                    <th>Old Feedback Text</th>
-                    <th>New Feedback Text</th>
-                    <th>Modified By</th>
-                    <th>Date Modified</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${listFeedbackLog}" var="o">
-                <tr>
-                    <td>${o.feedbackLogID}</td>
-                    <td>${o.feedbackID}</td>
-                    <td>${o.action}</td>
-                    <td>${o.oldFeedbackText}</td>
-                    <td>${o.newFeedbackText}</td>
-                    <td>${o.modifiedBy}</td>
-                    <td>${o.dateModified}</td>
-                    <c:if test="${o.action=='delete'}">
-                    <td><a href="UndoFeedback?feedbackLogID=${o.feedbackLogID}">Undo</a></td>
-                    </c:if>
-                </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                <a href="ViewFeedbackLog">History</a>
+                </main>
+                <jsp:include page="/includes/footer.jsp" />
 
+            </div>
+
+        </div>
+
+        <script src="js/app.js"></script>
+        
     </body>
 </html>
