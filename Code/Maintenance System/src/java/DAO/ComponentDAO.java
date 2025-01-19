@@ -186,11 +186,74 @@ public Component getLast() {
     }
     return null;
 }
+public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
+    List<Component> components = new ArrayList<>();
+    String sql = "SELECT * FROM Component WHERE "
+               + "ComponentName LIKE ? OR "
+               + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
+               + "CAST(Price AS NVARCHAR) LIKE ? "
+               + "ORDER BY ComponentID "
+               + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
+    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+        
+        String searchKeyword = "%" + keyword + "%";
+        for (int i = 1; i <= 3; i++) {
+            statement.setString(i, searchKeyword);
+        }
+        
+        int offset = (page - 1) * pageSize;
+        statement.setInt(4, offset);
+        statement.setInt(5, pageSize);
 
+        ResultSet resultSet = statement.executeQuery();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("ComponentID");
+            String name = resultSet.getString("ComponentName");
+            int quantity = resultSet.getInt("Quantity");
+            float price = resultSet.getFloat("Price");
+            String image = resultSet.getString("Image");
+
+            Component component = new Component(id, name, quantity, price, image);
+            components.add(component);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return components;
+}
+
+    public int getTotalSearchComponents(String keyword) {
+    String query = "SELECT COUNT(*) FROM Component WHERE "
+            + "ComponentName LIKE ? OR "
+            + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
+            + "CAST(Price AS NVARCHAR) LIKE ? ";
+
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+        String searchKeyword = "%" + keyword + "%";
+        
+        // Thiết lập các tham số cho PreparedStatement
+        for (int i = 1; i <= 3; i++) {
+            preparedStatement.setString(i, searchKeyword);
+        }
+
+        // Thực hiện truy vấn
+        ResultSet resultSet = preparedStatement.executeQuery();
+        
+        // Lấy kết quả
+        if (resultSet.next()) {
+            return resultSet.getInt(1); // Lấy giá trị đếm
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0; // Trả về 0 nếu có lỗi hoặc không tìm thấy
+}
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        System.out.println(d.getAllComponents());
+        System.out.println(d.searchComponentsByPage("fdgfdg", 1, 5).toString());
+        System.out.println(d.getTotalSearchComponents("fdgfdg"));
     }
 }

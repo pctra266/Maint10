@@ -48,7 +48,29 @@
                     <h2>Component Warehouse</h2>
                     <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                         <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
-                    </form>                    <table class="table table-hover my-0">
+                    </form>    
+                    <form action="ComponentWarehouse" method="get" class="row align-items-center">
+                        <input type="hidden" name="page" value="${currentPage}">
+                        <div class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <option value="5" ${size==5?"selected":""}>5</option>
+                                    <option value="7" ${size==7?"selected":""}>7</option>
+                                    <option value="10" ${size==10?"selected":""}>10</option>
+                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                </select> 
+ 
+                                entries
+                            </label>
+                        </div>
+                        <div class="col-sm-6 col-md-6 text-end">
+                            <div class="col-md-3 input-group d-flex justify-content-end">
+                                <input type="search" style="flex: 0.5 1 auto"name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-hover my-0">
                         <thead>
                             <tr>
                                 <th>#</th>
@@ -96,49 +118,49 @@
                     <!-- Phân trang -->
                     <div class="text-center">
                         <div class="btn-group me-2" role="group" style="margin-top:1rem" aria-label="First group">
+                            <c:if test="${page > totalPages}">
+                                <c:set var="page" value="totalPages" />
+                            </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1" style="margin-right:5px" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''} btn-pagination"><<</a>
+                            <a href="?page=1&page-size=${size}&search=${search}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}" class="btn btn-primary ${currentPage == 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
-                            <c:set var="totalPagesToShow" value="6" />
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
                             <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
 
                             <!-- Điều chỉnh startPage và endPage nếu cần -->
                             <c:if test="${startPage < 1}">
                                 <c:set var="startPage" value="1" />
-                                <c:set var="endPage" value="${totalPagesToShow}" />
+                                <c:set var="endPage" value="${totalPagesToShow>totalPages?totalPages:totalPagesToShow}" />
                             </c:if>
                             <c:if test="${endPage > totalPages}">
                                 <c:set var="endPage" value="${totalPages}" />
-                                <c:set var="startPage" value="${endPage - totalPagesToShow + 1}" />
+                                <c:set var="startPage" value="${endPage - totalPagesToShow + 1>0?endPage - totalPagesToShow + 1:1}" />
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="?page=${i}&page-size=${size}&search=${search}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}" style="margin-left:5px" class="btn btn-primary ${currentPage == totalPages ? 'disabled' : ''} btn-pagination">>></a>
+                            <a href="?page=${totalPages}&page-size=${size}&search=${search}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
-
-                        <div class="text-center"style="margin-top: 1rem;">
+                        <div class="text-center" style="margin-top: 1rem;">
                             <form class="row align-items-center justify-content-center" action="" method="get">
                                 <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
+                                <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>
-                        
                     </div>
-
                 </main>
                 <jsp:include page="../includes/footer.jsp" />
 
