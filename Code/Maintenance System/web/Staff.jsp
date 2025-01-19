@@ -47,7 +47,7 @@
         <div class="sidebar">
             <div class="sidebar-menu">
                 <span class="fas fa-clipboard-list">
-                    <p>Overview</p>
+                    <p> Overview</p>
                 </span>
             </div>
             <div class="sidebar-menu">
