@@ -65,7 +65,7 @@ CREATE TABLE Product (
     ProductID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
     ProductName NVARCHAR(100) NOT NULL, 
     Quantity int,
-    WarrantyDate int NOT NULL,
+    WarrantyPeriod int NOT NULL,
     Image NVARCHAR(MAX)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 

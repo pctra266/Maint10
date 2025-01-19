@@ -24,13 +24,34 @@ VALUES
 ('Battery MacBook Pro', 50, 130.00, NULL),
 ('Display MacBook Pro', 40, 180.00, NULL);
 -- Cập nhật bảng Product
-INSERT INTO Product (ProductName, Quantity, WarrantyDate, Image)
+INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image)
 VALUES
 ('Laptop Lenovo ThinkPad X1', 30, 12, NULL),
 ('Laptop Dell XPS 13', 40, 24, NULL),
 ('iPhone 12', 50, 6, NULL),
 ('Samsung Galaxy S20', 60, 3, NULL);
 
+
+INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image) VALUES
+('Samsung Galaxy S23', 100, 24, NULL),
+('Apple iPhone 14', 150, 24, NULL),
+('Sony WH-1000XM5', 200, 12, NULL),
+('Dell XPS 13', 80, 36, NULL),
+('Microsoft Surface Pro 9', 60, 36, NULL),
+('Apple MacBook Air M2', 120, 24, NULL),
+('Bose QuietComfort 45', 140, 12, NULL),
+('HP Spectre x360', 90, 24, NULL),
+('LG OLED C2', 50, 36, NULL),
+('Sony PlayStation 5', 180, 12, NULL),
+('Samsung QLED 8K TV', 70, 36, NULL),
+('Apple iPad Pro 11"', 160, 24, NULL),
+('Fitbit Charge 5', 200, 12, NULL),
+('GoPro Hero 11', 50, 24, NULL),
+('Nintendo Switch OLED', 90, 12, NULL),
+('Apple AirPods Pro 2', 150, 24, NULL),
+('OnePlus 10 Pro', 100, 18, NULL),
+('Microsoft Xbox Series X', 120, 12, NULL),
+('Huawei Mate 50 Pro', 60, 36, NULL);
 -- Cập nhật bảng ProductComponents với các linh kiện chi tiết
 -- Laptop Lenovo ThinkPad X1
 INSERT INTO ProductComponents (ProductID, ComponentID, Quantity)
