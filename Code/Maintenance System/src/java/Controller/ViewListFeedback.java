@@ -60,14 +60,33 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        
         FeedbackDAO daoFeedback = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback();
-        request.setAttribute("listFeedback", listFeedback);
+        ArrayList<Feedback> listFeedback = daoFeedback.pagingFeedback(1);
+        
         //===========feedbacklog==================
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
         request.setAttribute("listFeedbackLog", listFeedbackLog);
-
+        //======phan trang
+        int totalPages = daoFeedback.getTotalFeedback();
+        int endPage = totalPages/7;
+        if(totalPages % 7 !=0){
+            endPage  ++;
+        }
+        request.setAttribute("endPage", endPage);
+        String indexStr  = request.getParameter("index");
+        int index = 1;
+        try {
+            index = Integer.parseInt(indexStr);
+        } catch (Exception e) {
+            
+        }
+        if(indexStr != null && !indexStr.trim().isEmpty()){
+            listFeedback = daoFeedback.pagingFeedback(index);
+        }
+        //======end phan trang
+        request.setAttribute("listFeedback", listFeedback);
         request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
     } 
 
@@ -82,8 +101,30 @@ public class ViewListFeedback extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         String customerName = request.getParameter("customerName");
+        String imageAndVideo = request.getParameter("imageAndVideo");
         FeedbackDAO daoFeedback = new FeedbackDAO();
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback();
+        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo);
+        request.setAttribute("customerName", customerName);
+        request.setAttribute("imageAndVideo", imageAndVideo);
+        //phan trang
+        int totalPages = daoFeedback.getTotalFeedback();
+        int endPage = totalPages/7;
+        if(totalPages % 7 !=0){
+            endPage  ++;
+        }
+        request.setAttribute("endPage", endPage);
+        String indexStr  = request.getParameter("index");
+        int index = 1;
+        try {
+            index = Integer.parseInt(indexStr);
+        } catch (Exception e) {
+            
+        }
+        if(indexStr != null && !indexStr.trim().isEmpty()){
+            listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
+        }
+        request.setAttribute("listFeedback", listFeedback);
+        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
     }
 
     /** 
