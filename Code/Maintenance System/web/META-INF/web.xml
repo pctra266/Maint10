@@ -53,6 +53,18 @@
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <servlet-class>ControllerAccount.ForgotPasswordServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddProductServlet</servlet-name>
+        <servlet-class>Controller.AddProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <servlet-class>Controller.UpdateProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductServlet</servlet-name>
+        <servlet-class>Controller.DeleteProductServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -106,11 +118,11 @@
         <url-pattern>/ComponentWarehouse/Add</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>ManageProduct</servlet-name>
-        <servlet-class>Controller.ManageProduct</servlet-class>
+        <servlet-name>ViewListProduct</servlet-name>
+        <servlet-class>Controller.ViewListProduct</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ManageProduct</servlet-name>
+        <servlet-name>ViewListProduct</servlet-name>
         <url-pattern>/product</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -132,5 +144,17 @@
     <servlet-mapping>
         <servlet-name>ForgotPasswordServlet</servlet-name>
         <url-pattern>/forgotpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProductServlet</servlet-name>
+        <url-pattern>/addproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <url-pattern>/updateproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductServlet</servlet-name>
+        <url-pattern>/deleteproduct</url-pattern>
     </servlet-mapping>
 </web-app>
