@@ -9,7 +9,7 @@ package Model;
  * @author ADMIN
  */
 public class Staff {
-    String staffId;
+    int staffId;
     String useNameS;
     String passwordS;
     String role;
@@ -18,7 +18,7 @@ public class Staff {
     String phone;
     String address;
 
-    public Staff(String staffId, String useNameS, String passwordS, String role, String name, String email, String phone, String address) {
+    public Staff(int staffId, String useNameS, String passwordS, String role, String name, String email, String phone, String address) {
         this.staffId = staffId;
         this.useNameS = useNameS;
         this.passwordS = passwordS;
@@ -32,11 +32,11 @@ public class Staff {
     public Staff() {
     }
 
-    public String getStaffId() {
+    public int getStaffId() {
         return staffId;
     }
 
-    public void setStaffId(String staffId) {
+    public void setStaffId(int staffId) {
         this.staffId = staffId;
     }
 
