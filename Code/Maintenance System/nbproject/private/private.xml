@@ -2,13 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-<<<<<<< HEAD
         <group>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/light.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/FeedbackLogDAO.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/FeedbackDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/ViewListFeedback.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/product.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/DBContext.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
@@ -18,21 +16,20 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentAdd.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/viewFeedbackLog.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentWarehouse.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentSearch.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/index.html</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/LoginForm.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentDetail.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/UndoFeedback.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/META-INF/web.xml</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/UpdateFeedback.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/js/datatables.js</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/ViewFeedbackLog.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/UpdateFeedback.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/staff.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Utils/NumberUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/home.jsp</file>
         </group>
-=======
-        <group/>
->>>>>>> 1fa411381e09b4a0370c5297e593b18fe073b335
     </open-files>
 </project-private>

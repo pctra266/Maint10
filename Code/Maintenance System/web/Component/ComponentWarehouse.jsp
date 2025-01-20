@@ -45,42 +45,58 @@
             <div class="main">
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
-                     <h2>Component Warehouse</h2>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
-            <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
-        </form>
-        <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
-        </form>
-    </div>
-    <form action="ComponentWarehouse" method="get" class="row align-items-center">
-        <input type="hidden" name="page" value="${currentPage}">
-        <div class="col-sm-6 col-md-6">
-            <label>Show 
-                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                    <option value="5" ${size==5?"selected":""}>5</option>
-                    <option value="7" ${size==7?"selected":""}>7</option>
-                    <option value="10" ${size==10?"selected":""}>10</option>
-                    <option value="15" ${size==15?"selected":""}>15</option>
-                </select> 
-                entries
-            </label>
-        </div>
-        <div class="col-sm-6 col-md-6 text-end">
-            <div class="col-md-3 input-group d-flex justify-content-end">
-                <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </div>
-    </form>
+                    <h2>Component Warehouse</h2>
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
+                        </form>
+                        <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
+                        </form>
+                    </div>
+                    <form action="ComponentWarehouse" method="get" class="row align-items-center">
+                        <input type="hidden" name="page" value="${currentPage}">
+                                                <input type="hidden" name="sort" value="${sort}">
+                        <input type="hidden" name="order" value="${order}">
+
+                        <div class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <option value="5" ${size==5?"selected":""}>5</option>
+                                    <option value="7" ${size==7?"selected":""}>7</option>
+                                    <option value="10" ${size==10?"selected":""}>10</option>
+                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                </select> 
+                                entries
+                            </label>
+                        </div>
+                        <div class="col-sm-6 col-md-6 text-end">
+                            <div class="col-md-3 input-group d-flex justify-content-end">
+                                <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Name</th>
-                                <th>Quantity</th>
-                                <th>Unit Price</th>
+                                <th>
+                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=name&order=${sort eq 'name' and order eq 'asc' ? 'desc' : 'asc'}">
+                                        <i class="align-middle fas fa-fw ${sort eq 'name' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
+                                    </a>Name
+                                </th>
+                                <th>
+                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=quantity&order=${sort eq 'quantity' and order eq 'asc' ? 'desc' : 'asc'}">
+                                        <i class="align-middle fas fa-fw ${sort eq 'quantity' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
+                                    </a>Quantity
+                                </th>
+                                <th>
+                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=price&order=${sort eq 'price' and order eq 'asc' ? 'desc' : 'asc'}">
+                                        <i class="align-middle fas fa-fw ${sort eq 'price' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
+                                    </a>Unit Price
+                                </th>
+
                                 <th>Action</th>
                             </tr>
                         </thead>
