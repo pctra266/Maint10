@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
     <servlet>
-
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
     </servlet>
@@ -24,6 +23,10 @@
     <servlet>
         <servlet-name>updateStaffController</servlet-name>
         <servlet-class>Controller.updateStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ComponentSearch</servlet-name>
+        <servlet-class>Controller.Component.ComponentSearch</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -48,9 +51,8 @@
     <servlet-mapping>
         <servlet-name>updateStaffController</servlet-name>
         <url-pattern>/updateStaffController</url-pattern>
-        
-        </servlet-mapping>
-        <servlet>
+    </servlet-mapping>
+    <servlet>
         <servlet-name>ComponentWarehouse</servlet-name>
         <servlet-class>Controller.Component.ComponentWarehouse</servlet-class>
     </servlet>
@@ -66,7 +68,6 @@
         <servlet-name>ComponentAction</servlet-name>
         <url-pattern>/ComponentWarehouse/Detail</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>ComponentAction</servlet-name>
         <url-pattern>/ComponentWarehouse/Delete</url-pattern>
@@ -86,6 +87,9 @@
     <servlet-mapping>
         <servlet-name>ManageProduct</servlet-name>
         <url-pattern>/product</url-pattern>
-        
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ComponentSearch</servlet-name>
+        <url-pattern>/ComponentWarehouse/Search</url-pattern>
     </servlet-mapping>
 </web-app>

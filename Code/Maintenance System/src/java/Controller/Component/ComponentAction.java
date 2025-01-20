@@ -203,6 +203,7 @@ public class ComponentAction extends HttpServlet {
                 // Sửa component
                 handleEditComponent(request, response, component);
             }
+
             default ->
                 response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
         }

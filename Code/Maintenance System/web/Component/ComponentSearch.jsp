@@ -15,6 +15,7 @@
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
         <meta name="author" content="AdminKit">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+        <base href="${pageContext.request.contextPath}/">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
@@ -45,35 +46,29 @@
             <div class="main">
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
-                     <h2>Component Warehouse</h2>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
-            <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
-        </form>
-        <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
-            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
-        </form>
-    </div>
-    <form action="ComponentWarehouse" method="get" class="row align-items-center">
-        <input type="hidden" name="page" value="${currentPage}">
-        <div class="col-sm-6 col-md-6">
-            <label>Show 
-                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                    <option value="5" ${size==5?"selected":""}>5</option>
-                    <option value="7" ${size==7?"selected":""}>7</option>
-                    <option value="10" ${size==10?"selected":""}>10</option>
-                    <option value="15" ${size==15?"selected":""}>15</option>
-                </select> 
-                entries
-            </label>
-        </div>
-        <div class="col-sm-6 col-md-6 text-end">
-            <div class="col-md-3 input-group d-flex justify-content-end">
-                <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
-                <button type="submit" class="btn btn-primary">Search</button>
-            </div>
-        </div>
-    </form>
+                    <h2>Advanced Search</h2>
+            
+                    <form action="ComponentWarehouse/Search" method="get" class="row align-items-center">
+                        <input type="hidden" name="page" value="${currentPage}">
+                        <div class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <option value="5" ${size==5?"selected":""}>5</option>
+                                    <option value="7" ${size==7?"selected":""}>7</option>
+                                    <option value="10" ${size==10?"selected":""}>10</option>
+                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                </select> 
+ 
+                                entries
+                            </label>
+                        </div>
+                        <div class="col-sm-6 col-md-6 text-end">
+                            <div class="col-md-3 input-group d-flex justify-content-end">
+                                <input type="search" style="flex: 0.5 1 auto"name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                        </div>
+                    </form>
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -126,10 +121,10 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1$&page-size=${size}&search=${search}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="ComponentWarehouse/Search?page=1$&page-size=${size}&search=${search}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="ComponentWarehouse/Search?page=${currentPage - 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
@@ -146,14 +141,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="ComponentWarehouse/Search?page=${i}&page-size=${size}&search=${search}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="ComponentWarehouse/Search?page=${currentPage + 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="ComponentWarehouse/Search?page=${totalPages}&page-size=${size}&search=${search}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
