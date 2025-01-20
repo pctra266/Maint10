@@ -69,7 +69,7 @@ public class ComponentWarehouse extends HttpServlet {
         } else {
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
         }
-        int totalComponents = components.size();
+        int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents():componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
@@ -81,6 +81,7 @@ public class ComponentWarehouse extends HttpServlet {
         // Lấy danh sách Component cho trang hiện tại
 
         // Đặt các thuộc tính cho request
+        request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);
         request.setAttribute("size", pageSize);

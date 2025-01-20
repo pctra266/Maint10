@@ -56,9 +56,8 @@
                     </div>
                     <form action="ComponentWarehouse" method="get" class="row align-items-center">
                         <input type="hidden" name="page" value="${currentPage}">
-                                                <input type="hidden" name="sort" value="${sort}">
+                        <input type="hidden" name="sort" value="${sort}">
                         <input type="hidden" name="order" value="${order}">
-
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -181,6 +180,7 @@
                             </form>
                         </div>
                     </div>
+                                ${totalPages}size${size}total:${totalComponents}
                 </main>
                 <jsp:include page="../includes/footer.jsp" />
 

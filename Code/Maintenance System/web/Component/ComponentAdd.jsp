@@ -93,7 +93,7 @@
         </div>
 
         <script src="js/app.js"></script>
-        <script>
+        
                                 // Hàm để xem trước ảnh khi người dùng chọn tệp mới
             <script>
         function previewImage(event) {
