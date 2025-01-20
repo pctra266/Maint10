@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author sonNH
  */
-public class ManageProduct extends HttpServlet {
+public class ViewListProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
