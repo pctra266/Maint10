@@ -16136,11 +16136,11 @@ screen and (-ms-high-contrast:active) {
 
 .sidebar,
 body[data-theme=dark] .sidebar {
-    background: #222e3c
+    background: #3b7ddd
 }
 
 body[data-theme=light] .sidebar {
-    background: #fff
+    background: #3b7ddd
 }
 
 body[data-theme=colored] .sidebar {
@@ -16156,11 +16156,11 @@ body[data-theme=colored] .sidebar {
 
 .sidebar-content,
 body[data-theme=dark] .sidebar-content {
-    background: #222e3c
+    background: #3b7ddd
 }
 
 body[data-theme=light] .sidebar-content {
-    background: #fff
+    background: #3b7ddd
 }
 
 body[data-theme=colored] .sidebar-content {
@@ -16176,7 +16176,7 @@ body[data-theme=colored] .sidebar-content {
 
 .sidebar-link,
 a.sidebar-link {
-    background: #222e3c;
+    background: #3b7ddd;
     border-left: 3px solid transparent;
     color: rgba(233, 236, 239, .5);
     cursor: pointer;
@@ -16266,7 +16266,7 @@ body[data-theme=colored] a.sidebar-link svg {
 }
 
 .sidebar-link:hover {
-    background: #222e3c;
+    background: #3b7ddd;
     border-left-color: transparent
 }
 
