@@ -48,7 +48,7 @@ public class ComponentWarehouse extends HttpServlet {
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         List<Component> components = new ArrayList<>();
-        if (order != null && sort != null & (order.equals("asc") || order.equals("desc"))) {
+        if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
             if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
                 String sortSQL;
                 switch (sort) {
@@ -65,6 +65,10 @@ public class ComponentWarehouse extends HttpServlet {
                 }
                 components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
                         : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
+                request.setAttribute("check1",1);
+            }
+            else{
+                            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
             }
         } else {
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
@@ -78,7 +82,6 @@ public class ComponentWarehouse extends HttpServlet {
         if (page < 1) {
             page = 1;
         }
-        // Lấy danh sách Component cho trang hiện tại
 
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);

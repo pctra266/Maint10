@@ -72,7 +72,9 @@
                         <div class="col-sm-6 col-md-6 text-end">
                             <div class="col-md-3 input-group d-flex justify-content-end">
                                 <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
-                                <button type="submit" class="btn btn-primary">Search</button>
+                                <button type="submit" class="btn btn-primary">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -141,10 +143,10 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1$&page-size=${size}&search=${search}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
@@ -161,14 +163,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
@@ -180,10 +182,8 @@
                             </form>
                         </div>
                     </div>
-                                ${totalPages}size${size}total:${totalComponents}
                 </main>
                 <jsp:include page="../includes/footer.jsp" />
-
             </div>
 
         </div>
