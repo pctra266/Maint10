@@ -98,7 +98,7 @@
                                     </a>Unit Price
                                 </th>
 
-                                <th>Action</th>
+                                <th>Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
