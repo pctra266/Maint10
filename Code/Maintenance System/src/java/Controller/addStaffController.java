@@ -44,7 +44,7 @@ public class addStaffController extends HttpServlet {
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
         StaffDAO dao = new StaffDAO();
-        boolean add = dao.addStaff(usename, password, role, name, email, phone, address);
+        //boolean add = dao.addStaff(usename, password, role, name, email, phone, address);
         List<Staff> list = dao.getAllOrder();        
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);
