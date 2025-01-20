@@ -83,7 +83,7 @@ public class ViewListFeedback extends HttpServlet {
 
         //======end phan trang
         request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+        request.getRequestDispatcher("ViewListFeedback.jsp").forward(request, response);
     } 
 
     /** 
