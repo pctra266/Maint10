@@ -24,7 +24,7 @@ public class StaffDAO extends DBContext{
             stm = connection.prepareStatement(sql);            
             rs = stm.executeQuery();
             while (rs.next()) {
-                String staffId = rs.getString("staffId");
+                int staffId = rs.getInt("staffId");
                 String userNameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
                 String role = rs.getString("role");
@@ -92,7 +92,7 @@ public class StaffDAO extends DBContext{
             stm.setString(1, id);
             rs = stm.executeQuery();
             while (rs.next()){
-                String staffId = rs.getString("staffId");
+                int staffId = rs.getInt("staffId");
                 String userNameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
                 String role = rs.getString("role");
