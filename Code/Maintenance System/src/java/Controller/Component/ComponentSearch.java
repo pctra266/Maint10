@@ -10,19 +10,16 @@ import Utils.NumberUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name = "ComponentWarehouse", urlPatterns = {"/ComponentWarehouse"})
-public class ComponentWarehouse extends HttpServlet {
+public class ComponentSearch extends HttpServlet {
 
     private final ComponentDAO componentDAO = new ComponentDAO();
     private static final int PAGE_SIZE = 5;
@@ -43,34 +40,12 @@ public class ComponentWarehouse extends HttpServlet {
         int page = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
-        String sort = request.getParameter("sort");
-        String order = request.getParameter("order");
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
-        List<Component> components = new ArrayList<>();
-        if (order != null && sort != null & (order.equals("asc") || order.equals("desc"))) {
-            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
-                String sortSQL;
-                switch (sort) {
-                    case "quantity":
-                        sortSQL = "Quantity";
-                        break;
 
-                    case "name":
-                        sortSQL = "ComponentName";
-                        break;
-                    default:
-                        sortSQL = "Price";
-                        break;
-                }
-                components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
-                        : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
-            }
-        } else {
-            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
-        }
-        int totalComponents = components.size();
+        int totalComponents = (paraSearch == null || paraSearch.isBlank()) ? componentDAO.getTotalComponents() : componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
+
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
             page = totalPages;
@@ -79,6 +54,7 @@ public class ComponentWarehouse extends HttpServlet {
             page = 1;
         }
         // Lấy danh sách Component cho trang hiện tại
+        List<Component> components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
 
         // Đặt các thuộc tính cho request
         request.setAttribute("search", paraSearch);
@@ -87,10 +63,10 @@ public class ComponentWarehouse extends HttpServlet {
         request.setAttribute("components", components);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-        request.setAttribute("sort", sort);
-        request.setAttribute("order", order);
+
         // Chuyển tiếp đến trang JSP để hiển thị
-        request.getRequestDispatcher("Component/ComponentWarehouse.jsp").forward(request, response);
+        request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

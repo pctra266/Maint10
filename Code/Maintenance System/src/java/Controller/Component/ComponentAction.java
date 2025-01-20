@@ -24,9 +24,9 @@ import java.io.File;
  */
 @WebServlet(name = "ComponentAction", urlPatterns = {"/ComponentWarehouse/Detail", "/ComponentWarehouse/Delete", "/ComponentWarehouse/Edit", "/ComponentWarehouse/Add"})
 @MultipartConfig(
-    fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-    maxFileSize = 1024 * 1024 * 10,      // 10MB
-    maxRequestSize = 1024 * 1024 * 50    // 50MB
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class ComponentAction extends HttpServlet {
 
@@ -35,15 +35,19 @@ public class ComponentAction extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getServletPath();
-
-        // Xử lý thêm mới component
-        if (action.equals("/ComponentWarehouse/Add")) {
+        try {
+           if (action.equals("/ComponentWarehouse/Add")) {
             handleAddComponent(request, response);
         } else if (action.startsWith("/ComponentWarehouse")) {
             handleComponentActions(request, response, action);
         } else {
             response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
+        }  
+        } catch (ServletException | IOException e) {
+            response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
         }
+        // Xử lý thêm mới component
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -96,19 +100,26 @@ public class ComponentAction extends HttpServlet {
         boolean canAdd = true;
 
         // Kiểm tra dữ liệu đầu vào
-        if (newName == null || newName.isBlank()) {
+        if (newName == null) {
+            canAdd = false;
+        } else if (newName.isBlank()) {
             request.setAttribute("nameAlert", "Name must not be empty!");
             canAdd = false;
         } else {
             request.setAttribute("name", newName);
         }
-        if (newQuantity == null || newQuantity < 0) {
+        if (newQuantity == null) {
+            canAdd = false;
+        } else if (newQuantity < 0) {
             request.setAttribute("quantityAlert", "Quantity must be an integer greater than or equal to 0");
             canAdd = false;
         } else {
             request.setAttribute("quantity", newQuantity);
         }
-        if (newPrice == null || newPrice < 0) {
+
+        if (newPrice == null) {
+            canAdd = false;
+        } else if (newPrice < 0) {
             request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
             canAdd = false;
         } else {
@@ -139,37 +150,37 @@ public class ComponentAction extends HttpServlet {
 
 // Lưu ảnh vào thư mục /img/Component
     private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
-    if (imagePart == null || imagePart.getSize() == 0) {
-        return null;
-    }
+        if (imagePart == null || imagePart.getSize() == 0) {
+            return null;
+        }
 
-    // Đường dẫn tuyệt đối đến thư mục img/Component
-    String uploadPath = request.getServletContext().getRealPath("/img/Component");
-    System.out.println("Upload Path: " + uploadPath); // Kiểm tra đường dẫn
-    File uploadDir = new File(uploadPath);
-    if (!uploadDir.exists()) {
-        uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
-    }
+        // Đường dẫn tuyệt đối đến thư mục img/Component
+        String uploadPath = request.getServletContext().getRealPath("/img/Component");
+        System.out.println("Upload Path: " + uploadPath); // Kiểm tra đường dẫn
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+        }
 
-    // Tạo tên file duy nhất
-    String originalFileName = imagePart.getSubmittedFileName();
-    if (originalFileName == null || originalFileName.isEmpty()) {
-        return null; // Trả về null nếu không có tên file
-    }
+        // Tạo tên file duy nhất
+        String originalFileName = imagePart.getSubmittedFileName();
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            return null; // Trả về null nếu không có tên file
+        }
         String fileName = originalFileName;
 //    String fileName = System.currentTimeMillis() + "_" + originalFileName;
-    String filePath = uploadPath + File.separator + fileName;
+        String filePath = uploadPath + File.separator + fileName;
 
-    try {
-        imagePart.write(filePath); // Ghi file lên server
-    } catch (IOException e) {
-        e.printStackTrace(); // In ra lỗi nếu có
-        return null; // Trả về null nếu có lỗi
+        try {
+            imagePart.write(filePath); // Ghi file lên server
+        } catch (IOException e) {
+            e.printStackTrace(); // In ra lỗi nếu có
+            return null; // Trả về null nếu có lỗi
+        }
+
+        // Trả về đường dẫn tương đối để lưu vào database
+        return "img/Component/" + fileName; // Chỉ cần đường dẫn tương đối
     }
-
-    // Trả về đường dẫn tương đối để lưu vào database
-    return "img/Component/" + fileName; // Chỉ cần đường dẫn tương đối
-}
 
     private void handleComponentActions(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         String componentID = request.getParameter("ID");
@@ -203,6 +214,7 @@ public class ComponentAction extends HttpServlet {
                 // Sửa component
                 handleEditComponent(request, response, component);
             }
+
             default ->
                 response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
         }
@@ -254,5 +266,4 @@ public class ComponentAction extends HttpServlet {
         request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
     }
 
-  
 }

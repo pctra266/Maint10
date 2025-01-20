@@ -107,25 +107,23 @@ public class ComponentDAO extends DBContext {
     }
 
     public void delete(int componentID) {
-    String deleteProductComponentsSQL = "DELETE FROM ProductComponents WHERE ComponentID = ?";
-    String deleteComponentSQL = "DELETE FROM Component WHERE ComponentID = ?";
+        String deleteProductComponentsSQL = "DELETE FROM ProductComponents WHERE ComponentID = ?";
+        String deleteComponentSQL = "DELETE FROM Component WHERE ComponentID = ?";
 
-    try (
-        PreparedStatement deleteProductComponentsStmt = connection.prepareStatement(deleteProductComponentsSQL);
-        PreparedStatement deleteComponentStmt = connection.prepareStatement(deleteComponentSQL)
-    ) {
-        // Xóa các bản ghi trong ProductComponents liên quan đến ComponentID
-        deleteProductComponentsStmt.setInt(1, componentID);
-        deleteProductComponentsStmt.executeUpdate();
+        try (
+                PreparedStatement deleteProductComponentsStmt = connection.prepareStatement(deleteProductComponentsSQL); PreparedStatement deleteComponentStmt = connection.prepareStatement(deleteComponentSQL)) {
+            // Xóa các bản ghi trong ProductComponents liên quan đến ComponentID
+            deleteProductComponentsStmt.setInt(1, componentID);
+            deleteProductComponentsStmt.executeUpdate();
 
-        // Xóa bản ghi trong Component
-        deleteComponentStmt.setInt(1, componentID);
-        deleteComponentStmt.executeUpdate();
-    } catch (SQLException e) {
-        e.printStackTrace();
+            // Xóa bản ghi trong Component
+            deleteComponentStmt.setInt(1, componentID);
+            deleteComponentStmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-}
-     
+
     public void add(Component component) {
         String query = "INSERT INTO Component (ComponentName, Quantity, Price, Image) VALUES (?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -140,120 +138,172 @@ public class ComponentDAO extends DBContext {
     }
 
     public void update(Component component) {
-    String query;
-    if (component.getImage() != null) {
-        query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ?, Image = ? WHERE ComponentID = ?";
-    } else {
-        query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ? WHERE ComponentID = ?";
-    }
-
-    try (PreparedStatement statement = connection.prepareStatement(query)) {
-
-        statement.setString(1, component.getComponentName());
-        statement.setInt(2, component.getQuantity());
-        statement.setDouble(3, component.getPrice());
-
+        String query;
         if (component.getImage() != null) {
-            statement.setString(4, component.getImage());
-            statement.setInt(5, component.getComponentID());
+            query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ?, Image = ? WHERE ComponentID = ?";
         } else {
-            statement.setInt(4, component.getComponentID());
+            query = "UPDATE Component SET ComponentName = ?, Quantity = ?, Price = ? WHERE ComponentID = ?";
         }
 
-        statement.executeUpdate();
-    } catch (SQLException e) {
-        e.printStackTrace();
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+
+            statement.setString(1, component.getComponentName());
+            statement.setInt(2, component.getQuantity());
+            statement.setDouble(3, component.getPrice());
+
+            if (component.getImage() != null) {
+                statement.setString(4, component.getImage());
+                statement.setInt(5, component.getComponentID());
+            } else {
+                statement.setInt(4, component.getComponentID());
+            }
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-}
-    
 
-public Component getLast() {
-    String query = "SELECT TOP 1 * FROM Component ORDER BY ComponentID DESC ";
-    try (PreparedStatement statement = connection.prepareStatement(query);
-         ResultSet resultSet = statement.executeQuery()) {
+    public Component getLast() {
+        String query = "SELECT TOP 1 * FROM Component ORDER BY ComponentID DESC ";
+        try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
-        if (resultSet.next()) {
-            Component component = new Component();
-            component.setComponentID(resultSet.getInt("ComponentID"));
-            component.setComponentName(resultSet.getString("ComponentName"));
-            component.setQuantity(resultSet.getInt("Quantity"));
-            component.setPrice(resultSet.getDouble("Price"));
-            component.setImage(resultSet.getString("Image"));
-            return component;
+            if (resultSet.next()) {
+                Component component = new Component();
+                component.setComponentID(resultSet.getInt("ComponentID"));
+                component.setComponentName(resultSet.getString("ComponentName"));
+                component.setQuantity(resultSet.getInt("Quantity"));
+                component.setPrice(resultSet.getDouble("Price"));
+                component.setImage(resultSet.getString("Image"));
+                return component;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return null;
     }
-    return null;
-}
-public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
-    List<Component> components = new ArrayList<>();
-    String sql = "SELECT * FROM Component WHERE "
-               + "ComponentName LIKE ? OR "
-               + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
-               + "CAST(Price AS NVARCHAR) LIKE ? "
-               + "ORDER BY ComponentID "
-               + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
-    try (PreparedStatement statement = connection.prepareStatement(sql)) {
-        
-        String searchKeyword = "%" + keyword + "%";
-        for (int i = 1; i <= 3; i++) {
-            statement.setString(i, searchKeyword);
+    public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
+        List<Component> components = new ArrayList<>();
+        String sql = "SELECT * FROM Component WHERE "
+                + "ComponentName LIKE ? OR "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(Price AS NVARCHAR) LIKE ? "
+                + "ORDER BY ComponentID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement statement = connection.prepareStatement(sql)) {
+
+            String searchKeyword = "%" + keyword + "%";
+            for (int i = 1; i <= 3; i++) {
+                statement.setString(i, searchKeyword);
+            }
+
+            int offset = (page - 1) * pageSize;
+            statement.setInt(4, offset);
+            statement.setInt(5, pageSize);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                int id = resultSet.getInt("ComponentID");
+                String name = resultSet.getString("ComponentName");
+                int quantity = resultSet.getInt("Quantity");
+                float price = resultSet.getFloat("Price");
+                String image = resultSet.getString("Image");
+
+                Component component = new Component(id, name, quantity, price, image);
+                components.add(component);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        
-        int offset = (page - 1) * pageSize;
-        statement.setInt(4, offset);
-        statement.setInt(5, pageSize);
-
-        ResultSet resultSet = statement.executeQuery();
-
-        while (resultSet.next()) {
-            int id = resultSet.getInt("ComponentID");
-            String name = resultSet.getString("ComponentName");
-            int quantity = resultSet.getInt("Quantity");
-            float price = resultSet.getFloat("Price");
-            String image = resultSet.getString("Image");
-
-            Component component = new Component(id, name, quantity, price, image);
-            components.add(component);
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return components;
     }
-    return components;
-}
 
     public int getTotalSearchComponents(String keyword) {
-    String query = "SELECT COUNT(*) FROM Component WHERE "
-            + "ComponentName LIKE ? OR "
-            + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
-            + "CAST(Price AS NVARCHAR) LIKE ? ";
+        String query = "SELECT COUNT(*) FROM Component WHERE "
+                + "ComponentName LIKE ? OR "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(Price AS NVARCHAR) LIKE ? ";
 
-    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-        String searchKeyword = "%" + keyword + "%";
-        
-        // Thiết lập các tham số cho PreparedStatement
-        for (int i = 1; i <= 3; i++) {
-            preparedStatement.setString(i, searchKeyword);
-        }
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            String searchKeyword = "%" + keyword + "%";
 
-        // Thực hiện truy vấn
-        ResultSet resultSet = preparedStatement.executeQuery();
-        
-        // Lấy kết quả
-        if (resultSet.next()) {
-            return resultSet.getInt(1); // Lấy giá trị đếm
+            // Thiết lập các tham số cho PreparedStatement
+            for (int i = 1; i <= 3; i++) {
+                preparedStatement.setString(i, searchKeyword);
+            }
+
+            // Thực hiện truy vấn
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            // Lấy kết quả
+            if (resultSet.next()) {
+                return resultSet.getInt(1); // Lấy giá trị đếm
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return 0; // Trả về 0 nếu có lỗi hoặc không tìm thấy
     }
-    return 0; // Trả về 0 nếu có lỗi hoặc không tìm thấy
-}
+
+    public List<Component> getComponentsByPageSorted(int page, int pageSize, String sort, String order) {
+        String query = "SELECT * FROM Component ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Component> components = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, (page - 1) * pageSize);
+            ps.setInt(2, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                components.add(new Component(
+                        rs.getInt("componentID"),
+                        rs.getString("componentName"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("price"),
+                        rs.getString("image")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
+
+    public List<Component> searchComponentsByPageSorted(String search, int page, int pageSize, String sort, String order) {
+        String query = "SELECT * FROM Component WHERE "
+                + "ComponentName LIKE ? OR "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(Price AS NVARCHAR) LIKE ? ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Component> components = new ArrayList<>();
+        try (
+                PreparedStatement ps = connection.prepareStatement(query)) {
+            String searchKeyword = "%" + search + "%";
+              for (int i = 1; i <= 3; i++) {
+                ps.setString(i, searchKeyword);
+            }
+            ps.setInt(4, (page - 1) * pageSize);
+            ps.setInt(5, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                components.add(new Component(
+                        rs.getInt("componentID"),
+                        rs.getString("componentName"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("price"),
+                        rs.getString("image")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        System.out.println(d.searchComponentsByPage("fdgfdg", 1, 5).toString());
-        System.out.println(d.getTotalSearchComponents("fdgfdg"));
+        System.out.println(d.searchComponentsByPageSorted("M", 1, 15, "ComponentName", "asc"));
+        System.out.println(d.getComponentsByPageSorted(1, 15, "Price", "asc"));
+        System.out.println("");
     }
 }

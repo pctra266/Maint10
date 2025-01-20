@@ -53,7 +53,7 @@
 
                             <!-- Hiển thị cảnh báo lỗi -->
                             <c:if test="${not empty nameAlert}">
-                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${nameAlert}</strong>
@@ -61,7 +61,7 @@
                                 </div>
                             </c:if>
                             <c:if test="${not empty quantityAlert}">
-                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${quantityAlert}</strong>
@@ -69,7 +69,7 @@
                                 </div>
                             </c:if>
                             <c:if test="${not empty priceAlert}">
-                                <div class="col-md-10 alert alert-primary alert-dismissible" role="alert">
+                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     <div class="alert-message">
                                         <strong>${priceAlert}</strong>
