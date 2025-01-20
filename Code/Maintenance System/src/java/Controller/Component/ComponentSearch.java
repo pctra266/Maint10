@@ -13,6 +13,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -35,17 +36,43 @@ public class ComponentSearch extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String pageParam = request.getParameter("page");
+         String pageParam = request.getParameter("page");
         String paraSearch = request.getParameter("search");
         int page = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        List<Component> components = new ArrayList<>();
+        if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
+            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
+                String sortSQL;
+                switch (sort) {
+                    case "quantity":
+                        sortSQL = "Quantity";
+                        break;
 
-        int totalComponents = (paraSearch == null || paraSearch.isBlank()) ? componentDAO.getTotalComponents() : componentDAO.getTotalSearchComponents(paraSearch);
+                    case "name":
+                        sortSQL = "ComponentName";
+                        break;
+                    default:
+                        sortSQL = "Price";
+                        break;
+                }
+                components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
+                        : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
+                request.setAttribute("check1",1);
+            }
+            else{
+                            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
+            }
+        } else {
+            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
+        }
+        int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents():componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
-
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
             page = totalPages;
@@ -53,19 +80,19 @@ public class ComponentSearch extends HttpServlet {
         if (page < 1) {
             page = 1;
         }
-        // Lấy danh sách Component cho trang hiện tại
-        List<Component> components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
 
         // Đặt các thuộc tính cho request
+        request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);
         request.setAttribute("size", pageSize);
         request.setAttribute("components", components);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
-
+        request.setAttribute("sort", sort);
+        request.setAttribute("order", order);
         // Chuyển tiếp đến trang JSP để hiển thị
-        request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
+    request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
 
     }
 

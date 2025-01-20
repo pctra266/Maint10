@@ -34,6 +34,12 @@
                 justify-content: center;
                 text-align: center;
             }
+            .btn-sort {
+                background: none;
+                border: none;
+                padding: 0;
+                cursor: pointer;
+            }
 
         </style>
     </head>
@@ -83,19 +89,51 @@
                             <tr>
                                 <th>#</th>
                                 <th>
-                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=name&order=${sort eq 'name' and order eq 'asc' ? 'desc' : 'asc'}">
-                                        <i class="align-middle fas fa-fw ${sort eq 'name' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
-                                    </a>Name
+                                    <form action="ComponentWarehouse" method="get">
+                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="search" value="${search}" />
+                                        <input type="hidden" name="sort" value="name" />
+                                        <input type="hidden" name="order" value="${sort eq 'name' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <button type="submit" class="btn-sort">
+                                            <i class="align-middle fas fa-fw
+                                               ${sort eq 'name' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        Name
+                                    </form>
                                 </th>
+
                                 <th>
-                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=quantity&order=${sort eq 'quantity' and order eq 'asc' ? 'desc' : 'asc'}">
-                                        <i class="align-middle fas fa-fw ${sort eq 'quantity' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
-                                    </a>Quantity
+                                    <form action="ComponentWarehouse" method="get">
+                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="search" value="${search}" />
+                                        <input type="hidden" name="sort" value="quantity" />
+                                        <input type="hidden" name="order" value="${sort eq 'quantity' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <button type="submit" class="btn-sort">
+                                            <i class="align-middle fas fa-fw
+                                               ${sort eq 'quantity' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        Quantity
+                                    </form>
                                 </th>
+
                                 <th>
-                                    <a href="?page=${currentPage}&page-size=${size}&search=${search}&sort=price&order=${sort eq 'price' and order eq 'asc' ? 'desc' : 'asc'}">
-                                        <i class="align-middle fas fa-fw ${sort eq 'price' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}"></i>
-                                    </a>Unit Price
+                                    <form action="ComponentWarehouse" method="get">
+                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="search" value="${search}" />
+                                        <input type="hidden" name="sort" value="price" />
+                                        <input type="hidden" name="order" value="${sort eq 'price' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <button type="submit" class="btn-sort">
+                                            <i class="align-middle fas fa-fw
+                                               ${sort eq 'price' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        Unit Price
+                                    </form>
                                 </th>
 
                                 <th>Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
