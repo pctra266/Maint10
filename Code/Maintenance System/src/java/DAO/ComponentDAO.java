@@ -299,11 +299,93 @@ public class ComponentDAO extends DBContext {
         }
         return components;
     }
+    public int getTotalSearchComponentsByFields(String searchName, String searchQuantity, String searchPrice) {
+        String query = "SELECT COUNT (*) FROM Component WHERE "
+                + "ComponentName LIKE ? AND "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
+                + "CAST(Price AS NVARCHAR) LIKE ? ";
+        List<Component> components = new ArrayList<>();
+        try (
+                PreparedStatement ps = connection.prepareStatement(query)) {
+           
+                ps.setString(1, "%"+searchName+"%");
+                ps.setString(2, "%"+searchQuantity+"%");
+                ps.setString(3, "%"+searchPrice+"%");
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Lấy giá trị đếm
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    public List<Component> searchComponentsByFieldsPage(String searchName, String searchQuantity, String searchPrice, int page, int pageSize) {
+        String query = "SELECT * FROM Component WHERE "
+                + "ComponentName LIKE ? AND "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
+                + "CAST(Price AS NVARCHAR) LIKE ? " 
+                + "ORDER BY ComponentID"
+                + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Component> components = new ArrayList<>();
+        try (
+                PreparedStatement ps = connection.prepareStatement(query)) {
+           
+                ps.setString(1, "%"+searchName+"%");
+                ps.setString(2, "%"+searchQuantity+"%");
+                ps.setString(3, "%"+searchPrice+"%");
+            
+            ps.setInt(4, (page - 1) * pageSize);
+            ps.setInt(5, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                components.add(new Component(
+                        rs.getInt("componentID"),
+                        rs.getString("componentName"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("price"),
+                        rs.getString("image")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
+    public List<Component> searchComponentsByFieldsPageSorted(String searchName, String searchQuantity, String searchPrice, int page, int pageSize, String sort, String order) {
+        String query = "SELECT * FROM Component WHERE "
+                + "ComponentName LIKE ? AND "
+                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
+                + "CAST(Price AS NVARCHAR) LIKE ? ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        List<Component> components = new ArrayList<>();
+        try (
+                PreparedStatement ps = connection.prepareStatement(query)) {
+           
+                ps.setString(1, "%"+searchName+"%");
+                ps.setString(2, "%"+searchQuantity+"%");
+                ps.setString(3, "%"+searchPrice+"%");
+            
+            ps.setInt(4, (page - 1) * pageSize);
+            ps.setInt(5, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                components.add(new Component(
+                        rs.getInt("componentID"),
+                        rs.getString("componentName"),
+                        rs.getInt("quantity"),
+                        rs.getDouble("price"),
+                        rs.getString("image")
+                ));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
 
     public static void main(String arg[]) {
         ComponentDAO d = new ComponentDAO();
-        System.out.println(d.searchComponentsByPageSorted("M", 1, 15, "ComponentName", "asc"));
-        System.out.println(d.getComponentsByPageSorted(1, 15, "Price", "asc"));
-        System.out.println("");
+        System.out.println(d.searchComponentsByFieldsPageSorted("MA", "ss", "", 1, 5,"Quantity","asc"));
     }
 }

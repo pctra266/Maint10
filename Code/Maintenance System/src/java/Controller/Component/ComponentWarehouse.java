@@ -40,7 +40,7 @@ public class ComponentWarehouse extends HttpServlet {
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
         String paraSearch = request.getParameter("search");
-        int page = (pageParam != null) ? Integer.parseInt(pageParam) : 1;
+        int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
@@ -48,31 +48,6 @@ public class ComponentWarehouse extends HttpServlet {
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         List<Component> components = new ArrayList<>();
-        if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
-            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
-                String sortSQL;
-                switch (sort) {
-                    case "quantity":
-                        sortSQL = "Quantity";
-                        break;
-
-                    case "name":
-                        sortSQL = "ComponentName";
-                        break;
-                    default:
-                        sortSQL = "Price";
-                        break;
-                }
-                components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
-                        : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
-                request.setAttribute("check1",1);
-            }
-            else{
-                            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
-            }
-        } else {
-            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
-        }
         int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents():componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
@@ -82,6 +57,28 @@ public class ComponentWarehouse extends HttpServlet {
         if (page < 1) {
             page = 1;
         }
+        if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
+            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
+                String sortSQL;
+                sortSQL = switch (sort) {
+                    case "quantity" -> "Quantity";
+                    case "name" -> "ComponentName";
+                    default -> "Price";
+                };
+                components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
+                        : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
+                request.setAttribute("c3",3);
+            }
+            else{
+                            request.setAttribute("c2", "2");
+
+                            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
+            }
+        } else {
+            request.setAttribute("c1", "1");
+            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
+        }
+        
 
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);
