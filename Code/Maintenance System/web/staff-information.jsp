@@ -45,7 +45,8 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="usename"
-                            placeholder="${staff.name}"
+
+                            value="${staff.getUseNameS()}"
                             required
                         />
                         
@@ -60,7 +61,8 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="password"
-                            placeholder="${staff.passwordS}"
+
+                            value="${staff.getPasswordS()}"
                             required
                         />
                         
@@ -70,15 +72,22 @@
                         <label for="password" class="add__input-label"
                             >Role</label
                         ><br>
-                        <input
+                        <select
                             id="role"
                             type="role"
                             class="add__input"
                             oninput="checkInput(this)"
                             name="role"
-                            placeholder="${staff.getRole()}"
                             required
-                        />
+                            >
+                            <option value="option1"></option>
+                            <option value="Admin">Admin</option>
+                            <option value="Technician">Technician</option>
+                            <option value="Inventory Manager">Inventory Manager</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Repair Contractor">Repair Contractor</option>
+                            <option value="Customer Service Agen">Customer Service Agent</option>
+                        </select>
                         
                     </div>
                     <div class="add__signin-input">
@@ -91,7 +100,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="name"
-                            placeholder="${staff.getName()}"
+                            value="${staff.getName()}"
                             required
                         />
                         
@@ -106,7 +115,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="email"
-                            placeholder="${staff.getEmail()}"
+                            value="${staff.getEmail()}"
                             required
                         />
                         
@@ -121,7 +130,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="phone"
-                            placeholder="${staff.getPhone()}"
+                            value="${staff.getPhone()}"
                             required
                         />
                         
@@ -136,7 +145,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="address"
-                            placeholder="${staff.getAddress()}"
+                            value="${staff.getAddress()}"
                             required
                         />
                         
@@ -150,15 +159,13 @@
                     </form>
                     <div class="add__signin-next">
                         
-                        <form action="seeMoreController" method="post">
+                        <form action="StaffController" method="get">
                             <button type="submit">Cancle</button>
                         </form>
+                        
                     </div>
                     
-                    <div class="add__signin-next">
-                        
-                        <button type="submit">Delete</button>
-                    </div>
+                    
                 
             
         </div>

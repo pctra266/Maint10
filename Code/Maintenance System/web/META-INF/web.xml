@@ -38,6 +38,13 @@
         <servlet-class>Controller.Component.ComponentSearch</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>deletedStaffController</servlet-name>
+        <servlet-class>Controller.deletedStaffController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>searchStaff</servlet-name>
+        <servlet-class>Controller.searchStaff</servlet-class>
+
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>ControllerAccount.LoginServlet</servlet-class>
     </servlet>
@@ -134,6 +141,12 @@
         <url-pattern>/ComponentWarehouse/Search</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>deletedStaffController</servlet-name>
+        <url-pattern>/deletedStaffController</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>searchStaff</servlet-name>
+        <url-pattern>/searchStaff</url-pattern>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>

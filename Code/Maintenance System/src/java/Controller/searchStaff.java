@@ -19,7 +19,8 @@ import java.util.List;
  *
  * @author ADMIN
  */
-public class updateStaffController extends HttpServlet {
+public class searchStaff extends HttpServlet {
+  
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -45,21 +46,10 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
-        String usename = request.getParameter("usename");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String image = request.getParameter("image");
-
-//        PrintWriter out = response.getWriter();
-//        out.print(staffId);
+        String search = request.getParameter("search");
+        String searchname = request.getParameter("searchname");
         StaffDAO dao = new StaffDAO();
-        boolean uppdate = dao.updateStaff(staffId, usename, password, role, name, email, phone, address,image);
-
+        boolean add = dao.searchStaff(search, searchname);
         List<Staff> list = dao.getAllOrder();        
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);

@@ -43,8 +43,11 @@ public class addStaffController extends HttpServlet {
         String email = request.getParameter("email");
         String phone = request.getParameter("phone");
         String address = request.getParameter("address");
+        String image = request.getParameter("image");
+
         StaffDAO dao = new StaffDAO();
-        //boolean add = dao.addStaff(usename, password, role, name, email, phone, address);
+        boolean add = dao.addStaff(usename, password, role, name, email, phone, address,image);
+
         List<Staff> list = dao.getAllOrder();        
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);

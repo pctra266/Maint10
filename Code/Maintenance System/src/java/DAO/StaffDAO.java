@@ -118,8 +118,7 @@ public class StaffDAO extends DBContext{
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
-                String image = rs.getString("image");
-
+                String image = rs.getString("image");              
                 list.add(new Staff(staffId, userNameS, passwordS, role, name, email, phone, address, image));
             }
         } catch (SQLException e) {
@@ -127,6 +126,7 @@ public class StaffDAO extends DBContext{
         }
         return list;
     }
+
 
     public boolean addStaff(String useNameS, String passworldS, String role, String name, String email, String phone, String address, String image) {
         PreparedStatement stm = null;
@@ -142,7 +142,6 @@ public class StaffDAO extends DBContext{
             stm.setString(6, phone);
             stm.setString(7, address);
             stm.setString(8, image);
-
             rs = stm.executeQuery();
 
         } catch (SQLException e) {
@@ -165,9 +164,23 @@ public class StaffDAO extends DBContext{
             stm.setString(6, phone);
             stm.setString(7, address);
             stm.setString(8, image);
-            stm.setString(9, staffId);
-
+            stm.setString(9, staffId);            
             rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
+    public boolean searchStaff(String search,String searchname){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Staff WHERE [?] LIKE '%?%'";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, search);
+            stm.setString(2, searchname);
+                          rs = stm.executeQuery();
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -194,6 +207,7 @@ public class StaffDAO extends DBContext{
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 String image = rs.getString("image");
+                staff = new Staff(staffId, userNameS, passwordS, role, name, email, phone, address,image);
                 staff = new Staff(staffId, userNameS, passwordS, role, name, email, phone, address, image);
             }
         } catch (Exception e) {
@@ -201,7 +215,20 @@ public class StaffDAO extends DBContext{
         }
         return staff;
     }
-
+    public boolean deleteStaff(String staffId){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "DELETE FROM Staff WHERE StaffID=?;";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, staffId);          
+            rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
     public static void main(String[] args) {
         StaffDAO dao = new StaffDAO();
         List<Staff> list = dao.getAllOrder();

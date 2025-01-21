@@ -10,6 +10,7 @@ package Model;
  */
 public class Staff {
 
+
     private int staffID;
     private String usernameS;
     private String passwordS;
@@ -18,10 +19,11 @@ public class Staff {
     private String email;
     private String phone;
     private String address;
-    private String image;
+    private String imgage;
 
     public Staff() {
     }
+
 
     public Staff(int staffID, String usernameS, String passwordS, String role, String name, String email, String phone, String address, String image) {
         this.staffID = staffID;
@@ -32,12 +34,13 @@ public class Staff {
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.image = image;
+        this.imgage = imgage;
     }
 
     public int getStaffID() {
+        this.imgage = imgage;
         return staffID;
-    }
+    }   
 
     public void setStaffID(int staffID) {
         this.staffID = staffID;
@@ -99,11 +102,21 @@ public class Staff {
         this.address = address;
     }
 
+    public String getImgage() {
+        return imgage;
+    }
+
+    public void setImgage(String imgage) {
+        this.imgage = imgage;
+    }
+
+    
+    
     public String getImage() {
-        return image;
+        return imgage;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.imgage = imgage;
     }
 }

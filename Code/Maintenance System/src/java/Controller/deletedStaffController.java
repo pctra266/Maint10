@@ -19,8 +19,7 @@ import java.util.List;
  *
  * @author ADMIN
  */
-public class updateStaffController extends HttpServlet {
-
+public class deletedStaffController extends HttpServlet {
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
      * Handles the HTTP <code>GET</code> method.
@@ -32,7 +31,12 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        String staffId = request.getParameter("staffId");
+        StaffDAO dao = new StaffDAO();
+        boolean delete = dao.deleteStaff(staffId);
+        List<Staff> list = dao.getAllOrder();
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("Staff.jsp").forward(request, response);
     } 
 
     /** 
@@ -45,24 +49,7 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
-        String usename = request.getParameter("usename");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String image = request.getParameter("image");
-
-//        PrintWriter out = response.getWriter();
-//        out.print(staffId);
-        StaffDAO dao = new StaffDAO();
-        boolean uppdate = dao.updateStaff(staffId, usename, password, role, name, email, phone, address,image);
-
-        List<Staff> list = dao.getAllOrder();        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("Staff.jsp").forward(request, response);
+        
     }
 
     /** 
