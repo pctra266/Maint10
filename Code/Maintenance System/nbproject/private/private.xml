@@ -3,6 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/light.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/footer.jsp</file>
@@ -39,6 +40,10 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Utils/NumberUtils.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/staff.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/navbar-top.jsp</file>
+=======
+            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/web/css/light.css</file>
+            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
+>>>>>>> a2b68d1a56c4238514fe7db62ef3bbb21e52751e
         </group>
     </open-files>
 </project-private>
