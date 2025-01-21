@@ -4,7 +4,7 @@
         <filter-name>LoginFilter</filter-name>
         <filter-class>Filter.LoginFilter</filter-class>
     </filter>
-<!--    <filter-mapping>
+    <!--    <filter-mapping>
         <filter-name>LoginFilter</filter-name>
 
         <url-pattern>/*</url-pattern>
@@ -64,6 +64,10 @@
     <servlet>
         <servlet-name>DeleteProductServlet</servlet-name>
         <servlet-class>Controller.DeleteProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>ControllerCustomer.CustomerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -156,5 +160,9 @@
     <servlet-mapping>
         <servlet-name>DeleteProductServlet</servlet-name>
         <url-pattern>/deleteproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>/customer</url-pattern>
     </servlet-mapping>
 </web-app>
