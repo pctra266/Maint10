@@ -17,8 +17,12 @@ public class Staff {
     String email;
     String phone;
     String address;
+    String imgage;
 
-    public Staff(int staffId, String useNameS, String passwordS, String role, String name, String email, String phone, String address) {
+    public Staff() {
+    }
+
+    public Staff(int staffId, String useNameS, String passwordS, String role, String name, String email, String phone, String address, String imgage) {
         this.staffId = staffId;
         this.useNameS = useNameS;
         this.passwordS = passwordS;
@@ -27,9 +31,7 @@ public class Staff {
         this.email = email;
         this.phone = phone;
         this.address = address;
-    }
-
-    public Staff() {
+        this.imgage = imgage;
     }
 
     public int getStaffId() {
@@ -95,6 +97,16 @@ public class Staff {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getImgage() {
+        return imgage;
+    }
+
+    public void setImgage(String imgage) {
+        this.imgage = imgage;
+    }
+
+    
     
     
 }

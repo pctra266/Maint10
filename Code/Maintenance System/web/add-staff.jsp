@@ -48,14 +48,22 @@
                     </div>
                     
                     <div class="add__signin-input">
-                        <input
+                        <select
                             id="role"
                             type="role"
                             class="add__input"
                             oninput="checkInput(this)"
                             name="role"
                             required
-                        />
+                            >
+                            <option value="option1"></option>
+                            <option value="Admin">Admin</option>
+                            <option value="Technician">Technician</option>
+                            <option value="Inventory Manager">Inventory Manager</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Repair Contractor">Repair Contractor</option>
+                            <option value="Customer Service Agen">Customer Service Agent</option>
+                        </select>
                         <label for="password" class="add__input-label"
                             >Role</label
                         >

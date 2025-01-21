@@ -32,17 +32,19 @@ public class StaffDAO extends DBContext{
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
-                list.add(new Staff(staffId, userNameS, passwordS, role, name, email, phone, address));
+                String image = rs.getString("image");
+               
+                list.add(new Staff(staffId, userNameS, passwordS, role, name, email, phone, address,image));
             }
         } catch (SQLException e) {
             System.out.println(e);
         }
         return list;
     }
-    public boolean addStaff(String useNameS, String passworldS, String role, String name, String email, String phone, String address){
+    public boolean addStaff(String useNameS, String passworldS, String role, String name, String email, String phone, String address,String image){
         PreparedStatement stm =null ;
         ResultSet rs = null;
-        String sql = "INSERT INTO Staff (UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address]) VALUES (?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Staff (UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address],Image) VALUES (?,?,?,?,?,?,?,?)";
         try {
             stm = connection.prepareStatement(sql);   
             stm.setString(1, useNameS);
@@ -52,6 +54,7 @@ public class StaffDAO extends DBContext{
             stm.setString(5, email);
             stm.setString(6, phone);
             stm.setString(7, address);
+            stm.setString(8, image);
             
             rs = stm.executeQuery();
             
@@ -60,10 +63,10 @@ public class StaffDAO extends DBContext{
         }
         return true;
     }
-    public boolean updateStaff(String staffId, String useNameS, String passworldS, String role, String name, String email, String phone, String address){
+    public boolean updateStaff(String staffId, String useNameS, String passworldS, String role, String name, String email, String phone, String address, String image){
         PreparedStatement stm =null ;
         ResultSet rs = null;
-        String sql = "UPDATE Staff SET UsernameS = ?, PasswordS = ?, Role = ?, Name = ?, Email = ?, Phone = ?, Address = ? WHERE StaffID = ?;";
+        String sql = "UPDATE Staff SET UsernameS = ?, PasswordS = ?, Role = ?, Name = ?, Email = ?, Phone = ?, Address = ? ,Image = ? WHERE StaffID = ?;";
         try {
             stm = connection.prepareStatement(sql);   
             stm.setString(1, useNameS);
@@ -73,7 +76,24 @@ public class StaffDAO extends DBContext{
             stm.setString(5, email);
             stm.setString(6, phone);
             stm.setString(7, address);
-            stm.setString(8, staffId);
+            stm.setString(8, image);
+            stm.setString(9, staffId);
+            
+            rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
+    public boolean searchStaff(String search,String searchname){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM Staff WHERE [?] LIKE '%?%'";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, search);
+            stm.setString(2, searchname);
             
             rs = stm.executeQuery();
             
@@ -100,14 +120,28 @@ public class StaffDAO extends DBContext{
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
-                staff = new Staff(staffId, userNameS, passwordS, role, name, email, phone, address);
+                String image = rs.getString("image");
+                staff = new Staff(staffId, userNameS, passwordS, role, name, email, phone, address,image);
             }
         } catch (Exception e) {
             System.out.println(e);
         }
         return staff;
     }
-    
+    public boolean deleteStaff(String staffId){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "DELETE FROM Staff WHERE StaffID=?;";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, staffId);          
+            rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
     public static void main(String[] args) {
         StaffDAO dao = new StaffDAO();
         List<Staff> list = dao.getAllOrder();
