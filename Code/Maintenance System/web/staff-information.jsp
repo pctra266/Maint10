@@ -24,12 +24,12 @@
                             >Staff ID</label
                         ><br>
                         <input
-                            id="staffId"
-                            type="staffId"
+                            id="staffID"
+                            type="staffID"
                             class="add__input"
                             oninput="checkInput(this)"
-                            name="staffId"
-                            value="${staff.getStaffId()}"
+                            name="staffID"
+                            value="${staff.staffID}"
                             required
                         />
                         
@@ -45,7 +45,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="usename"
-                            placeholder="${staff.getUseNameS()}"
+                            placeholder="${staff.name}"
                             required
                         />
                         
@@ -60,7 +60,7 @@
                             class="add__input"
                             oninput="checkInput(this)"
                             name="password"
-                            placeholder="${staff.getPasswordS()}"
+                            placeholder="${staff.passwordS}"
                             required
                         />
                         

@@ -63,7 +63,6 @@ public class StaffDAO extends DBContext{
             ps.executeUpdate();
 
         } catch (SQLException e) {
-
         }
     }
 
