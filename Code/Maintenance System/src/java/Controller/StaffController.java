@@ -30,7 +30,7 @@ public class StaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         StaffDAO dao =  new StaffDAO();
+        StaffDAO dao =  new StaffDAO();
         List<Staff> list = dao.getAllOrder();
         request.setAttribute("list", list);
         
