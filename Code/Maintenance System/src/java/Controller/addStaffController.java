@@ -47,6 +47,7 @@ public class addStaffController extends HttpServlet {
 
         StaffDAO dao = new StaffDAO();
         boolean add = dao.addStaff(usename, password, role, name, email, phone, address,image);
+
         List<Staff> list = dao.getAllOrder();        
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);

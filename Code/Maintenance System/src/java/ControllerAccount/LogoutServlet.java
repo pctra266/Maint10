@@ -3,23 +3,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package ControllerAccount;
 
-import DAO.StaffDAO;
-import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author ADMIN
+ * @author PC
  */
-public class updateStaffController extends HttpServlet {
+public class LogoutServlet extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet LogoutServlet</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -32,7 +54,10 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        HttpSession session = request.getSession();
+        session.removeAttribute("accStaff");
+        session.removeAttribute("accCus");
+        response.sendRedirect("HomePage.jsp");
     } 
 
     /** 
@@ -45,24 +70,7 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
-        String usename = request.getParameter("usename");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String image = request.getParameter("image");
-
-//        PrintWriter out = response.getWriter();
-//        out.print(staffId);
-        StaffDAO dao = new StaffDAO();
-        boolean uppdate = dao.updateStaff(staffId, usename, password, role, name, email, phone, address,image);
-
-        List<Staff> list = dao.getAllOrder();        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("Staff.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /** 

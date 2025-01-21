@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+    <filter>
+        <filter-name>LoginFilter</filter-name>
+        <filter-class>Filter.LoginFilter</filter-class>
+    </filter>
+    <!--    <filter-mapping>
+        <filter-name>LoginFilter</filter-name>
+
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -35,6 +44,37 @@
     <servlet>
         <servlet-name>searchStaff</servlet-name>
         <servlet-class>Controller.searchStaff</servlet-class>
+
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>ControllerAccount.LoginServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <servlet-class>ControllerAccount.ChangePasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>ControllerAccount.LogoutServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <servlet-class>ControllerAccount.ForgotPasswordServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddProductServlet</servlet-name>
+        <servlet-class>Controller.AddProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <servlet-class>Controller.UpdateProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteProductServlet</servlet-name>
+        <servlet-class>Controller.DeleteProductServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CustomerServlet</servlet-name>
+        <servlet-class>ControllerCustomer.CustomerServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -89,11 +129,11 @@
         <url-pattern>/ComponentWarehouse/Add</url-pattern>
     </servlet-mapping>
     <servlet>
-        <servlet-name>ManageProduct</servlet-name>
-        <servlet-class>Controller.ManageProduct</servlet-class>
+        <servlet-name>ViewListProduct</servlet-name>
+        <servlet-class>Controller.ViewListProduct</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>ManageProduct</servlet-name>
+        <servlet-name>ViewListProduct</servlet-name>
         <url-pattern>/product</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
@@ -107,5 +147,35 @@
     <servlet-mapping>
         <servlet-name>searchStaff</servlet-name>
         <url-pattern>/searchStaff</url-pattern>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangePasswordServlet</servlet-name>
+        <url-pattern>/changepassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ForgotPasswordServlet</servlet-name>
+        <url-pattern>/forgotpassword</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProductServlet</servlet-name>
+        <url-pattern>/addproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProductServlet</servlet-name>
+        <url-pattern>/updateproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteProductServlet</servlet-name>
+        <url-pattern>/deleteproduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CustomerServlet</servlet-name>
+        <url-pattern>/customer</url-pattern>
     </servlet-mapping>
 </web-app>

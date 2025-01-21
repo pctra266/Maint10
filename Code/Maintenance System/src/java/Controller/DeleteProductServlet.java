@@ -5,21 +5,43 @@
 
 package Controller;
 
-import DAO.StaffDAO;
-import Model.Staff;
+import DAO.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
- * @author ADMIN
+ * @author sonNH
  */
-public class updateStaffController extends HttpServlet {
+public class DeleteProductServlet extends HttpServlet {
+   
+    /** 
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet deleteProductServlet</title>");  
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet deleteProductServlet at " + request.getContextPath () + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
+    } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /** 
@@ -32,8 +54,16 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
-    } 
+        int productId = Integer.parseInt(request.getParameter("productId"));
+
+        ProductDAO productDAO = new ProductDAO();
+        boolean isDeleted = productDAO.setQuantityToZero(productId);
+
+        if (isDeleted) {
+            response.sendRedirect("product");
+        } else {
+            response.getWriter().write("Failed to delete product.");
+        }    } 
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -45,24 +75,7 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
-        String usename = request.getParameter("usename");
-        String password = request.getParameter("password");
-        String role = request.getParameter("role");
-        String name = request.getParameter("name");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String image = request.getParameter("image");
-
-//        PrintWriter out = response.getWriter();
-//        out.print(staffId);
-        StaffDAO dao = new StaffDAO();
-        boolean uppdate = dao.updateStaff(staffId, usename, password, role, name, email, phone, address,image);
-
-        List<Staff> list = dao.getAllOrder();        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("Staff.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /** 

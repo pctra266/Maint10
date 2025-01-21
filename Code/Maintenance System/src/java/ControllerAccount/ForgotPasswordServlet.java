@@ -3,27 +3,26 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package ControllerAccount;
 
-import DAO.FeedbackDAO;
-import DAO.FeedbackLogDAO;
-import Model.Feedback;
-import Model.FeedbackLog;
+import DAO.CustomerDAO;
+import DAO.StaffDAO;
+import Email.Email;
+import Model.Customer;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import java.security.SecureRandom;
 
 /**
  *
- * @author Tra Pham
+ * @author PC
  */
-@WebServlet(name="ViewListFeedback", urlPatterns={"/ViewListFeedback"})
-public class ViewListFeedback extends HttpServlet {
+public class ForgotPasswordServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +39,10 @@ public class ViewListFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewListFeedback</title>");  
+            out.println("<title>Servlet ForgotPasswordServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewListFeedback at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ForgotPasswordServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,30 +59,7 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        String customerName = request.getParameter("customerName");
-        String imageAndVideo = request.getParameter("imageAndVideo");
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("imageAndVideo", imageAndVideo);
-        //======phan trang
-        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
-        int endPage = totalPages/7;
-        if(totalPages % 7 !=0){
-            endPage  ++;
-        }
-        request.setAttribute("endPage", endPage);
-        String indexStr  = request.getParameter("index");
-        int index = 1;
-        try {
-            index = Integer.parseInt(indexStr);
-        } catch (Exception e) {
-            
-        }
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
-
-        //======end phan trang
-        request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -96,29 +72,45 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
+       Email emailSend = new Email();
+        String email = request.getParameter("email");
+        StaffDAO staffDao = new StaffDAO();
+        CustomerDAO customerDao = new CustomerDAO();
+
+        Staff staff = staffDao.getStaffByEmail(email);
+        Customer customer = customerDao.getCustomerByEmail(email);
+        if (staff == null && customer == null) {
+            request.setAttribute("error", "Email not exitst!");
+            request.getRequestDispatcher("ForgotPasswordForm.jsp").forward(request, response);
+            return;
+        }
+        String randomPassword = randomPassword(8);
+        if (staff != null) {
+            staff.setPasswordS(randomPassword);
+            staffDao.changePassword(staff);
+        } else if (customer != null) {
+            customer.setPasswordC(randomPassword);
+            customerDao.changePassword(customer);
+        }
+
+        emailSend.sendEmail(email, "Password Reset Request",
+                "Hello,\n\nYour new password is: " + randomPassword + "\n\nPlease change it after logging in.");
+
         
-        String customerName = request.getParameter("customerName");
-        String imageAndVideo = request.getParameter("imageAndVideo");
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("imageAndVideo", imageAndVideo);
-        //phan trang
-        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
-        int endPage = totalPages/7;
-        if(totalPages % 7 !=0){
-            endPage  ++;
+        request.setAttribute("message", "A new password has been sent to your email.");
+        request.getRequestDispatcher("ForgotPasswordForm.jsp").forward(request, response);
         }
-        request.setAttribute("endPage", endPage);
-        String indexStr  = request.getParameter("index");
-        int index = 1;
-        try {
-            index = Integer.parseInt(indexStr);
-        } catch (Exception e) {
-            
+        private String randomPassword(int length) {
+        String character = "0123456789";
+        StringBuilder password = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(character.length());
+            password.append(character.charAt(index));
         }
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
-        request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+        return password.toString();
+
+    
     }
 
     /** 

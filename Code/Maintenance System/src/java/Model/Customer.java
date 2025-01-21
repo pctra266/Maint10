@@ -8,66 +8,53 @@ package Model;
  *
  * @author PC
  */
-public class Staff {
+public class Customer {
 
-
-    private int staffID;
-    private String usernameS;
-    private String passwordS;
-    private String role;
+    private int customerID;
+    private String usernameC;
+    private String passwordC;
     private String name;
     private String email;
     private String phone;
     private String address;
     private String image;
 
-    public Staff() {
+    public Customer() {
     }
 
-
-    public Staff(int staffID, String usernameS, String passwordS, String role, String name, String email, String phone, String address, String image) {
-        this.staffID = staffID;
-        this.usernameS = usernameS;
-        this.passwordS = passwordS;
-        this.role = role;
+    public Customer(int customerID, String usernameC, String passwordC, String name, String email, String phone, String address, String image) {
+        this.customerID = customerID;
+        this.usernameC = usernameC;
+        this.passwordC = passwordC;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.imgage = imgage;
-    }
-
-    public int getStaffId() {
-        return staffId;
         this.image = image;
-    }   
-
-    public void setStaffID(int staffID) {
-        this.staffID = staffID;
     }
 
-    public String getUsernameS() {
-        return usernameS;
+    public int getCustomerID() {
+        return customerID;
     }
 
-    public void setUsernameS(String usernameS) {
-        this.usernameS = usernameS;
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
-    public String getPasswordS() {
-        return passwordS;
+    public String getUsernameC() {
+        return usernameC;
     }
 
-    public void setPasswordS(String passwordS) {
-        this.passwordS = passwordS;
+    public void setUsernameC(String usernameC) {
+        this.usernameC = usernameC;
     }
 
-    public String getRole() {
-        return role;
+    public String getPasswordC() {
+        return passwordC;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setPasswordC(String passwordC) {
+        this.passwordC = passwordC;
     }
 
     public String getName() {
@@ -102,16 +89,6 @@ public class Staff {
         this.address = address;
     }
 
-    public String getImgage() {
-        return imgage;
-    }
-
-    public void setImgage(String imgage) {
-        this.imgage = imgage;
-    }
-
-    
-    
     public String getImage() {
         return image;
     }

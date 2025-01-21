@@ -3,27 +3,25 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package ControllerAccount;
 
-import DAO.FeedbackDAO;
-import DAO.FeedbackLogDAO;
-import Model.Feedback;
-import Model.FeedbackLog;
+import DAO.CustomerDAO;
+import DAO.StaffDAO;
+import Model.Customer;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author Tra Pham
+ * @author PC
  */
-@WebServlet(name="ViewListFeedback", urlPatterns={"/ViewListFeedback"})
-public class ViewListFeedback extends HttpServlet {
+public class ChangePasswordServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -40,10 +38,10 @@ public class ViewListFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ViewListFeedback</title>");  
+            out.println("<title>Servlet ChangePasswordServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ViewListFeedback at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ChangePasswordServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,30 +58,7 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        String customerName = request.getParameter("customerName");
-        String imageAndVideo = request.getParameter("imageAndVideo");
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("imageAndVideo", imageAndVideo);
-        //======phan trang
-        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
-        int endPage = totalPages/7;
-        if(totalPages % 7 !=0){
-            endPage  ++;
-        }
-        request.setAttribute("endPage", endPage);
-        String indexStr  = request.getParameter("index");
-        int index = 1;
-        try {
-            index = Integer.parseInt(indexStr);
-        } catch (Exception e) {
-            
-        }
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
-
-        //======end phan trang
-        request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+        processRequest(request, response);
     } 
 
     /** 
@@ -96,29 +71,43 @@ public class ViewListFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        
-        String customerName = request.getParameter("customerName");
-        String imageAndVideo = request.getParameter("imageAndVideo");
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("imageAndVideo", imageAndVideo);
-        //phan trang
-        int totalPages = daoFeedback.getTotalFeedback(customerName,imageAndVideo);
-        int endPage = totalPages/7;
-        if(totalPages % 7 !=0){
-            endPage  ++;
+       CustomerDAO customerDao = new CustomerDAO();
+        StaffDAO staffDao = new StaffDAO();
+        HttpSession session = request.getSession();
+        String oldpassword = request.getParameter("oldpassword");
+        String newpassword = request.getParameter("newpassword");
+        String confirmpassword = request.getParameter("confirmpassword");
+
+        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
+            request.setAttribute("error", "The confirm password is not the same as the new password");
+            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+            return;
         }
-        request.setAttribute("endPage", endPage);
-        String indexStr  = request.getParameter("index");
-        int index = 1;
-        try {
-            index = Integer.parseInt(indexStr);
-        } catch (Exception e) {
+
+        Staff staff = (Staff) session.getAttribute("accStaff");
+        Customer customer = (Customer) session.getAttribute("accCus");
+        // change password staff
+        if (staff != null) {
+            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), newpassword, staff.getRole(),
+                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(),staff.getImage());
+
+            staffDao.changePassword(updatedStaffPassword);
+
+            request.setAttribute("message", "Password changed successfully!");
+            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+        }
+        // change password customer
+        if (customer != null) {
+            Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), newpassword,
+                    customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(),customer.getImage());
+
+            customerDao.changePassword(updatedCustomerPassword); 
+
             
+            request.setAttribute("message", "Password changed successfully!");
+            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+
         }
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,imageAndVideo,index);
-        request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
     }
 
     /** 

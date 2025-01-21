@@ -1,4 +1,3 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,42 +28,38 @@
                         <div class="d-table-cell align-middle">
 
                             <div class="text-center mt-4">
-                                <h1 class="h2">Welcome back!</h1>
-                                <p class="lead">
-                                    Sign in to your account to continue
-                                </p>
+                                <h1 class="h2">Change Password</h1>
+                                
                             </div>
 
                             <div class="card">
                                 <div class="card-body">
                                     <div class="m-sm-3">
-                                        <c:set var="cookie" value="pageContext.cookies"/>
-                                        <form action="login" method="post">
+                                        <form action="changepassword" method="post">
+                                             
                                             <div class="mb-3">
-                                                <label class="form-label">Username</label>
-                                                <input class="form-control form-control-lg"  name="username" placeholder="Enter your username" value="${cookie.cusername.value}" />
+                                                <label class="form-label">Old password</label>
+                                                <input class="form-control form-control-lg"  type ="password" name="oldpassword" placeholder="Enter your oldpassword" />
                                             </div>
                                             <div class="mb-3">
-                                                <label class="form-label">Password</label>
-                                                <input class="form-control form-control-lg" type="password" name="password" placeholder="Enter your password" value="${cookie.cpassword.value}" />
+                                                <label class="form-label">New password</label>
+                                                <input class="form-control form-control-lg" type="password" name="newpassword" placeholder="Enter your new password" />
                                             </div>
-                                            <div>
-                                                <div class="form-check align-items-center">
-                                                    <input id="customControlInline" type="checkbox" class="form-check-input" value="${cookie.crememberme.value}" name="remember-me" >
-                                                    <label class="form-check-label text-small" for="customControlInline">Remember me</label>
-                                                </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Comfirm password</label>
+                                                <input class="form-control form-control-lg" type="password" name="confirmpassword" placeholder="Enter your confirm password" />
                                             </div>
+                                            <a style="color: greenyellow">${requestScope.message}</a>
                                             <div class="d-grid gap-2 mt-3">
-                                                <button type="submit" class="btn btn-lg btn-primary">Sign in</button>
+                                                <button type="submit" class="btn btn-lg btn-primary">Change Password</button>
                                             </div>
-                                            <a style="color: red">${requestScope.error}</a>
+                                            <a href="HomePage.jsp">Back</a>
+
                                         </form>
                                     </div>
                                 </div>
                             </div>
-                            <div class="text-center mb-3">
-                                 <a href="ForgotPasswordForm.jsp"> Forgot password? </a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
