@@ -180,7 +180,7 @@ public class StaffDAO extends DBContext{
         try {
             stm = connection.prepareStatement(sql);   
             stm.setString(1, search);
-            stm.setString(2, searchname;
+            stm.setString(2, searchname);
                           rs = stm.executeQuery();
 
         } catch (SQLException e) {

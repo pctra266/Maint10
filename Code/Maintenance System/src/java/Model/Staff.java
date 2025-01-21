@@ -19,7 +19,7 @@ public class Staff {
     private String email;
     private String phone;
     private String address;
-    private String image;
+    private String imgage;
 
     public Staff() {
     }
@@ -37,9 +37,9 @@ public class Staff {
         this.imgage = imgage;
     }
 
-    public int getStaffId() {
-        return staffId;
-        this.image = image;
+    public int getStaffID() {
+        this.imgage = imgage;
+        return staffID;
     }   
 
     public void setStaffID(int staffID) {
@@ -113,10 +113,10 @@ public class Staff {
     
     
     public String getImage() {
-        return image;
+        return imgage;
     }
 
     public void setImage(String image) {
-        this.image = image;
+        this.imgage = imgage;
     }
 }
