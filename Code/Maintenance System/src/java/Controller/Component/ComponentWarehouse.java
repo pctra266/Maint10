@@ -58,24 +58,22 @@ public class ComponentWarehouse extends HttpServlet {
             page = 1;
         }
         if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
-            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")) {
+            //xac nhan cac tham so de sort truyen vao la dung
+            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")|| sort.equals("code")) {
                 String sortSQL;
                 sortSQL = switch (sort) {
                     case "quantity" -> "Quantity";
                     case "name" -> "ComponentName";
+                    case "code" -> "ComponentCode";
                     default -> "Price";
                 };
                 components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
                         : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
-                request.setAttribute("c3",3);
             }
             else{
-                            request.setAttribute("c2", "2");
-
                             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
             }
         } else {
-            request.setAttribute("c1", "1");
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
         }
         

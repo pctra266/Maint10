@@ -38,8 +38,12 @@
                                 <input type="hidden" class="form-control" name="ID" id="validationDefault01" value="${component.componentID}" required>
 
                                 <div class="col-md-10">
-                                    <label for="validationDefault02" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="Name"id="validationDefault02" value="${component.componentName}" required>
+                                    <label for="validationDefault01" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="Name"id="validationDefault01" value="${component.componentName}" required>
+                                </div>
+                                <div class="col-md-10">
+                                    <label for="validationDefault02" class="form-label">Code</label>
+                                    <input type="text" class="form-control" name="Code"id="validationDefault02" value="${component.componentCode}" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="validationDefault03" class="form-label">Quantity</label>
@@ -53,6 +57,14 @@
                                     <button class="btn btn-primary" type="submit">Save</button>
                                 </div>
                                 <!--                                Alert khi du lieu truyen sang sever sai-->
+                                <c:if test="${not empty codeAlert}">
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${codeAlert}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
                                 <c:if test="${not empty nameAlert}">
                                     <div class="alert alert-danger alert-dismissible" role="alert">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -77,19 +89,27 @@
                                         </div>
                                     </div>
                                 </c:if>
-                                <c:if test="${not empty Added}">
+                                <c:if test="${not empty addAlert1}">
                                     <div class="alert alert-success alert-dismissible" role="alert">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         <div class="alert-message">
-                                            <strong>${Added}</strong>
+                                            <strong>${addAlert1}</strong>
                                         </div>
                                     </div>
                                 </c:if>
-                                <c:if test="${not empty Updated}">
+                                <c:if test="${not empty updateAlert1}">
                                     <div class="alert alert-success alert-dismissible" role="alert">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                         <div class="alert-message">
-                                            <strong>${Updated}</strong>
+                                            <strong>${updateAlert1}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
+                                <c:if test="${not empty updateAlert0}">
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${updateAlert0}</strong>
                                         </div>
                                     </div>
                                 </c:if>

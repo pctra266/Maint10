@@ -36,18 +36,18 @@ public class ComponentAction extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getServletPath();
         try {
-           if (action.equals("/ComponentWarehouse/Add")) {
-            handleAddComponent(request, response);
-        } else if (action.startsWith("/ComponentWarehouse")) {
-            handleComponentActions(request, response, action);
-        } else {
-            response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
-        }  
+            if (action.equals("/ComponentWarehouse/Add")) {
+                handleAddComponent(request, response);
+            } else if (action.startsWith("/ComponentWarehouse")) {
+                handleComponentActions(request, response, action);
+            } else {
+                response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
+            }
         } catch (ServletException | IOException e) {
             response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
         }
         // Xử lý thêm mới component
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -93,6 +93,7 @@ public class ComponentAction extends HttpServlet {
     private void handleAddComponent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String newName = request.getParameter("Name");
+        String newCode = request.getParameter("Code");
         Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
         Part imagePart = request.getPart("newImage");
@@ -107,6 +108,14 @@ public class ComponentAction extends HttpServlet {
             canAdd = false;
         } else {
             request.setAttribute("name", newName);
+        }
+        if (newCode == null) {
+            canAdd = false;
+        } else if (newCode.isBlank()) {
+            request.setAttribute("codeAlert", "Code must not be empty!");
+            canAdd = false;
+        } else {
+            request.setAttribute("code", newCode);
         }
         if (newQuantity == null) {
             canAdd = false;
@@ -131,19 +140,24 @@ public class ComponentAction extends HttpServlet {
             String imagePath = saveImage(imagePart, request); // Lưu ảnh
             Component component = new Component();
             component.setComponentName(newName);
+            component.setComponentCode(newCode);
             component.setPrice(newPrice);
             component.setQuantity(newQuantity);
             if (imagePath != null) {
                 component.setImage(imagePath);
             }
 
-            componentDAO.add(component);
+            boolean add = componentDAO.add(component);
             Component addedComponent = componentDAO.getLast();
-
-            request.setAttribute("Added", "Added to warehouse");
+            if(add){
+            request.setAttribute("addAlert1", "Added to warehouse");
             request.setAttribute("component", addedComponent);
-            request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
-        } else {
+            request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);   
+            }
+            else {
+                request.setAttribute("addAlert0", "Fail add to warehouse"); 
+            }
+          } else {
             request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
         }
     }
@@ -225,6 +239,7 @@ public class ComponentAction extends HttpServlet {
         String newName = request.getParameter("Name");
         Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
+        String newCode = request.getParameter("Code");
         Part imagePart = request.getPart("newImage");
 
         boolean canUpdate = true;
@@ -232,6 +247,10 @@ public class ComponentAction extends HttpServlet {
         // Kiểm tra dữ liệu đầu vào
         if (newName == null || newName.isBlank()) {
             request.setAttribute("nameAlert", "Name must not be empty!");
+            canUpdate = false;
+        }
+        if (newCode == null || newCode.isBlank()) {
+            request.setAttribute("codeAlert", "Code must not be empty!");
             canUpdate = false;
         }
         if (newQuantity == null || newQuantity < 0) {
@@ -245,6 +264,7 @@ public class ComponentAction extends HttpServlet {
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
+            component.setComponentCode(newCode);
             component.setComponentName(newName);
             component.setQuantity(newQuantity);
             component.setPrice(newPrice);
@@ -255,8 +275,12 @@ public class ComponentAction extends HttpServlet {
                 component.setImage(imagePath);
             }
 
-            componentDAO.update(component);
-            request.setAttribute("Updated", "Component updated successfully.");
+            boolean update = componentDAO.update(component);
+            if (update) {
+                request.setAttribute("updateAlert1", "Component updated successfully.");
+            } else {
+                request.setAttribute("updateAlert0", "Fail to edit");
+            }
         } else {
             request.setAttribute("component", component);
         }

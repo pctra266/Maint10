@@ -1,29 +1,27 @@
 ﻿
--- Thêm dữ liệu vào bảng Component với tên chi tiết linh kiện
-INSERT INTO Component (ComponentName, Quantity, Price, Image)
+INSERT INTO Component (ComponentCode, ComponentName, Quantity, Price, Image)
 VALUES
 -- Các mainboard cho máy tính
-('Mainboard ASUS B760M-K Prime D4', 50, 120.00, NULL),
-('Mainboard MSI Z490-A PRO', 40, 150.00, NULL),
-('Mainboard Gigabyte B450M DS3H', 30, 90.00, NULL),
-('Mainboard ASUS ROG Strix Z590-E', 25, 250.00, NULL),
+('MB-ASUS-B760M', 'Mainboard ASUS B760M-K Prime D4', 50, 120.00, NULL),
+('MB-MSI-Z490', 'Mainboard MSI Z490-A PRO', 40, 150.00, NULL),
+('MB-GIG-B450M', 'Mainboard Gigabyte B450M DS3H', 30, 90.00, NULL),
+('MB-ASUS-Z590', 'Mainboard ASUS ROG Strix Z590-E', 25, 250.00, NULL),
 -- Các mainboard cho laptop
-('Mainboard Lenovo ThinkPad X1', 60, 180.00, NULL),
-('Mainboard Dell XPS 13', 70, 200.00, NULL),
+('MB-LEN-X1', 'Mainboard Lenovo ThinkPad X1', 60, 180.00, NULL),
+('MB-DELL-XPS13', 'Mainboard Dell XPS 13', 70, 200.00, NULL),
 -- Các linh kiện khác cho máy tính
-('Processor Intel Core i7-10700K', 100, 350.00, NULL),
-('RAM Corsair Vengeance 16GB DDR4', 200, 80.00, NULL),
-('Graphics Card NVIDIA RTX 3060', 50, 450.00, NULL),
-('SSD Samsung 970 Evo 1TB', 75, 120.00, NULL),
+('CPU-I7-10700K', 'Processor Intel Core i7-10700K', 100, 350.00, NULL),
+('RAM-COR-16GB', 'RAM Corsair Vengeance 16GB DDR4', 200, 80.00, NULL),
+('GPU-RTX-3060', 'Graphics Card NVIDIA RTX 3060', 50, 450.00, NULL),
+('SSD-SAM-970', 'SSD Samsung 970 Evo 1TB', 75, 120.00, NULL),
 -- Các linh kiện cho điện thoại
-('Battery iPhone 12', 150, 50.00, NULL),
-('Battery Samsung Galaxy S20', 100, 45.00, NULL),
-('Display iPhone 12', 120, 120.00, NULL),
-('Camera iPhone 13 Pro', 80, 200.00, NULL),
+('BAT-IPH-12', 'Battery iPhone 12', 150, 50.00, NULL),
+('BAT-SAM-S20', 'Battery Samsung Galaxy S20', 100, 45.00, NULL),
+('DISP-IPH-12', 'Display iPhone 12', 120, 120.00, NULL),
+('CAM-IPH-13P', 'Camera iPhone 13 Pro', 80, 200.00, NULL),
 -- Các linh kiện cho các thiết bị khác
-('Battery MacBook Pro', 50, 130.00, NULL),
-('Display MacBook Pro', 40, 180.00, NULL);
--- Cập nhật bảng Product
+('BAT-MAC-PRO', 'Battery MacBook Pro', 50, 130.00, NULL),
+('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL);
 INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image)
 VALUES
 ('Laptop Lenovo ThinkPad X1', 30, 12, NULL),

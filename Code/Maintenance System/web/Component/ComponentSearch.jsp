@@ -59,6 +59,7 @@
                                         <input type="hidden" name="sort" value="${sort}" />
                                         <input type="hidden" name="order" value="${order}" />
                                         <div class="col-md-3 input-group d-flex justify-content-end">
+                                        <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Code" name="searchCode" value="${searchCode}" />
                                         <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Name" name="searchName" value="${searchName}" />
                                         <input type="number" min="0" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Quantity"  name="searchQuantity" value="${searchQuantity}" />
                                         <input type="number" min="0" step="0.01"style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Price"  name="searchPrice" value="${searchPrice}" />
@@ -82,6 +83,21 @@
                         <thead>
                             <tr>
                                 <th>#</th>
+                                 <th>
+                                    <form action="ComponentWarehouse/Search" method="get">
+                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="search" value="${search}" />
+                                        <input type="hidden" name="sort" value="code" />
+                                        <input type="hidden" name="order" value="${sort eq 'code' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <button type="submit" class="btn-sort">
+                                            <i class="align-middle fas fa-fw
+                                               ${sort eq 'code' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        Code
+                                    </form>
+                                </th>
                                 <th>
                                     <form action="ComponentWarehouse/Search" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
@@ -144,6 +160,7 @@
                         <c:forEach var="component" items="${components}" varStatus="status">
                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
                                 <td>${status.index+1+(currentPage-1)*size}</td>
+                                <td>${component.componentCode}</td>
                                 <td>${component.componentName}</td>
                                 <td>${component.quantity}</td>
                                 <td>${component.price}</td>

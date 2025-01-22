@@ -35,8 +35,12 @@
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
                                 <div class="col-md-10">
-                                    <label for="validationDefault02" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="Name" id="validationDefault02" value="${name}" required>
+                                    <label for="validationDefault01" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="Name" id="validationDefault01" value="${name}" required>
+                                </div>
+                                   <div class="col-md-10">
+                                    <label for="validationDefault02" class="form-label">Code</label>
+                                    <input type="text" class="form-control" name="Code"id="validationDefault02" value="${component.componentCode}" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="validationDefault03" class="form-label">Quantity</label>
@@ -60,6 +64,22 @@
                                     </div>
                                 </div>
                             </c:if>
+                            <c:if test="${not empty addAlert0}">
+                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message">
+                                        <strong>${addAlert0}</strong>
+                                    </div>
+                                </div>
+                            </c:if>
+                                                   <c:if test="${not empty codeAlert}">
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${codeAlert}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
                             <c:if test="${not empty quantityAlert}">
                                 <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

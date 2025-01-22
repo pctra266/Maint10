@@ -41,8 +41,9 @@ public class Component {
     }
 
     // Constructor đầy đủ
-    public Component(int componentID, String componentName, int quantity, double price, String image) {
+    public Component(int componentID, String code, String componentName, int quantity, double price, String image) {
         this.componentID = componentID;
+        this.componentCode=code;
         this.componentName = componentName;
         this.quantity = quantity;
         this.price = price;
