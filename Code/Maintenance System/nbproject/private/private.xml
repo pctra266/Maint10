@@ -2,18 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
-        <group name="perfume-shop-main">
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/ViewListFeedback.java</file>
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/StaffDAO.java</file>
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/web/Staff.jsp</file>
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/web/add-staff.jsp</file>
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/addStaffController.java</file>
-            <file>file:/F:/ProductsMaintainManagement-main/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/searchStaff.java</file>
-
-
         <group>
-<<<<<<< HEAD
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/light.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/footer.jsp</file>
@@ -58,9 +47,6 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/staff.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/navbar-top.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/ControllerAccount/ForgotPasswordServlet.java</file>
-=======
-
->>>>>>> 45cefca17fd723a6c492a1cdd36ee9ad88060531
         </group>
     </open-files>
 </project-private>

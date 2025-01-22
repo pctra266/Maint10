@@ -207,7 +207,7 @@ public class ComponentAction extends HttpServlet {
             }
             case "/ComponentWarehouse/Delete" -> {
                 // Xóa component
-                componentDAO.delete(id);
+                boolean check = componentDAO.delete(id);
                 response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
             }
             case "/ComponentWarehouse/Edit" -> {

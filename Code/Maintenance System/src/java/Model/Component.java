@@ -12,11 +12,28 @@ import java.util.List;
  */
 public class Component {
         private int componentID;       // ID của thành phần
+        private String componentCode;
     private String componentName;  // Tên thành phần
     private int quantity;          // Số lượng
+    private boolean status;
+
+    public String getComponentCode() {
+        return componentCode;
+    }
+
+    public void setComponentCode(String componentCode) {
+        this.componentCode = componentCode;
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(boolean status) {
+        this.status = status;
+    }
     private double price;          // Giá
     private String image;          // Thông tin hoặc đường dẫn hình ảnh
-    private List<Product> listProduct;
 
 
     // Constructor mặc định
@@ -72,22 +89,17 @@ public class Component {
     public void setImage(String image) {
         this.image = image;
     }
-        public List<Product> getListProduct() {
-        return listProduct;
-    }
-
-    public void setListProduct(List<Product> listProduct) {
-        this.listProduct = listProduct;
-    }
 
     // Override phương thức toString để hiển thị thông tin
     @Override
     public String toString() {
         return "Component{" +
                 "componentID=" + componentID +
+                ",componentCode=" +componentCode+
                 ", componentName='" + componentName + '\'' +
                 ", quantity=" + quantity +
                 ", price=" + price +
+                ",status=" +status+
                 ", image='" + image + '\'' +
                 '}';
     }

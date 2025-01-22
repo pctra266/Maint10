@@ -54,11 +54,16 @@ CREATE TABLE Customer (
 -- Component Table
 CREATE TABLE Component (
     ComponentID int IDENTITY(1,1) NOT NULL PRIMARY KEY ,
+	ComponentCode Nvarchar(20) null,
     ComponentName NVARCHAR(100),
     Quantity int,
+	[Status] bit default 1,
     Price FLOAT,
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+-- Tạo chỉ mục chỉ áp dụng ràng buộc unique khi ComponentCode không phải NULL
+CREATE UNIQUE INDEX UX_ComponentCode ON Component(ComponentCode)
+WHERE ComponentCode IS NOT NULL;
 
 -- Product Table
 CREATE TABLE Product (
