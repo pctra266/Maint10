@@ -87,8 +87,8 @@
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
-                                <th>#</th>
-                                <th>
+                                <th style="width:3%">#</th>
+                                <th style="width:15%">
                                     <form action="ComponentWarehouse" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
                                         <input type="hidden" name="page-size" value="${size}" />
@@ -103,7 +103,7 @@
                                         Code
                                     </form>
                                 </th>
-                                <th>
+                                <th style="width:35%">
                                     <form action="ComponentWarehouse" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
                                         <input type="hidden" name="page-size" value="${size}" />
@@ -119,7 +119,7 @@
                                     </form>
                                 </th>
 
-                                <th>
+                                <th style="width:15%">
                                     <form action="ComponentWarehouse" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
                                         <input type="hidden" name="page-size" value="${size}" />
@@ -135,7 +135,7 @@
                                     </form>
                                 </th>
 
-                                <th>
+                                <th style="width:15%">
                                     <form action="ComponentWarehouse" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
                                         <input type="hidden" name="page-size" value="${size}" />
@@ -151,7 +151,7 @@
                                     </form>
                                 </th>
 
-                                <th>Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
@@ -246,6 +246,14 @@
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>
+                                <c:if test="${not empty deleteStatus}">
+                                    <div class="alert alert-warning alert-dismissible" role="alert">
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                        <div class="alert-message">
+                                            <strong>${deleteStatus}</strong>
+                                        </div>
+                                    </div>
+                                </c:if>
                     </div>
                 </main>
                 <jsp:include page="../includes/footer.jsp" />

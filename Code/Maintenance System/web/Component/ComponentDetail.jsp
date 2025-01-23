@@ -53,6 +53,33 @@
                                     <label for="validationDefault05" class="form-label">Price</label>
                                     <input type="number" class="form-control" name="Price" id="validationDefault04" value="${component.price}" step="0.01" min="0" required>
                                 </div> 
+                                <div class="col-md-10">
+                                    <label for="validationDefault06" class="form-label">Products</label>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:45%">Name</th>
+                                                <th style="width:40%">Code</th>
+                                                    <th class="d-none d-md-table-cell" style="width:25%">Action</th>
+                                                </tr>
+                                            </thead>
+                                        <c:forEach items="${list}" var="p">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        ${p.productName}
+                                                    </td>
+                                                    <td>
+                                                        ProductCode
+                                                    </td>
+                                                    <td>
+                                                        Action
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </c:forEach>
+                                    </table>
+                                </div> 
                                 <div class="col-md-12">
                                     <button class="btn btn-primary" type="submit">Save</button>
                                 </div>

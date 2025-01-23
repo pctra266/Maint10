@@ -218,6 +218,7 @@ public class ComponentAction extends HttpServlet {
         switch (action) {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
+                request.setAttribute("list", componentDAO.getProductsByComponentId(id));
                 request.setAttribute("component", component);
                 request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
             }
@@ -234,12 +235,14 @@ public class ComponentAction extends HttpServlet {
 
                 // Xóa component
                 boolean check = componentDAO.delete(id);
-                response.sendRedirect(request.getContextPath()
+                String redirect = request.getContextPath()
                         + "/ComponentWarehouse?page=" + page
                         + "&page-size=" + pageSize
                         + "&search=" + URLEncoder.encode(paraSearch, "UTF-8")
                         + "&sort=" + sort
-                        + "&order=" + order);
+                        + "&order=" + order;
+                redirect+=check?"&delete=1":"delete=0";
+                response.sendRedirect(redirect);
             }
             case "/ComponentWarehouse/Edit" -> {
                 // Sửa component
@@ -303,6 +306,7 @@ public class ComponentAction extends HttpServlet {
         }
 
         // Trả về trang chi tiết Component
+        request.setAttribute("list", componentDAO.getProductsByComponentId(component.getComponentID()));
         request.setAttribute("component", component);
         request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
     }

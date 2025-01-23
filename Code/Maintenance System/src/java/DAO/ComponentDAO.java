@@ -424,7 +424,7 @@ public boolean add(Component component) {
         return components;
     }
     
-      private List<Product> getProductsByComponentId(int componentId) throws SQLException {
+      public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
         String sql = "SELECT p.* FROM Product p " +
                      "JOIN ProductComponents pc ON p.ProductID = pc.ProductID " +
@@ -474,6 +474,6 @@ public boolean add(Component component) {
         System.out.println(d.getTotalComponents());
         System.out.println(d.getComponentsByPage(page, pageSize));
         System.out.println(d.getAllComponents());
-        System.out.println(d.getProductsByComponentId(1));
+        System.out.println(d.getProductsByComponentId(3));
     }
 }

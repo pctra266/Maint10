@@ -46,9 +46,16 @@ public class ComponentWarehouse extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
         Integer pageSize;
+        String delete = request.getParameter("delete");
+        String deleteStatus;
+        if (delete != null) {
+            deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
+            request.setAttribute("deleteStatus", deleteStatus);
+        }
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+      //--------------------------------------------------------------------------
         List<Component> components = new ArrayList<>();
-        int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents():componentDAO.getTotalSearchComponents(paraSearch);
+        int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents() : componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
@@ -59,24 +66,26 @@ public class ComponentWarehouse extends HttpServlet {
         }
         if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
             //xac nhan cac tham so de sort truyen vao la dung
-            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price")|| sort.equals("code")) {
+            if (sort.equals("quantity") || sort.equals("name") || sort.equals("price") || sort.equals("code")) {
                 String sortSQL;
                 sortSQL = switch (sort) {
-                    case "quantity" -> "Quantity";
-                    case "name" -> "ComponentName";
-                    case "code" -> "ComponentCode";
-                    default -> "Price";
+                    case "quantity" ->
+                        "Quantity";
+                    case "name" ->
+                        "ComponentName";
+                    case "code" ->
+                        "ComponentCode";
+                    default ->
+                        "Price";
                 };
                 components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPageSorted(page, pageSize, sortSQL, order)
                         : componentDAO.searchComponentsByPageSorted(paraSearch, page, pageSize, sortSQL, order);
-            }
-            else{
-                            components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
+            } else {
+                components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
             }
         } else {
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
         }
-        
 
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);
