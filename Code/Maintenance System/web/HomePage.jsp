@@ -35,7 +35,8 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                 
+                         ${check}
+
                     
                     
                     

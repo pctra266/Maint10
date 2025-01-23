@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.net.URLEncoder;
 
 /**
  *
@@ -31,6 +32,7 @@ import java.io.File;
 public class ComponentAction extends HttpServlet {
 
     private final ComponentDAO componentDAO = new ComponentDAO();
+    private static final int PAGE_SIZE = 5;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -149,15 +151,15 @@ public class ComponentAction extends HttpServlet {
 
             boolean add = componentDAO.add(component);
             Component addedComponent = componentDAO.getLast();
-            if(add){
-            request.setAttribute("addAlert1", "Added to warehouse");
-            request.setAttribute("component", addedComponent);
-            request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);   
+            if (add) {
+                request.setAttribute("addAlert1", "Added to warehouse");
+                request.setAttribute("component", addedComponent);
+                request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
+            } else {
+                request.setAttribute("addAlert0", "Fail add to warehouse");
+                request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
             }
-            else {
-                request.setAttribute("addAlert0", "Fail add to warehouse"); 
-            }
-          } else {
+        } else {
             request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
         }
     }
@@ -220,9 +222,24 @@ public class ComponentAction extends HttpServlet {
                 request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
             }
             case "/ComponentWarehouse/Delete" -> {
+                String pageParam = request.getParameter("page");
+                String paraSearch = request.getParameter("search");
+                int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+                // Lấy page-size từ request, mặc định là PAGE_SIZE
+                String pageSizeParam = request.getParameter("page-size");
+                String sort = request.getParameter("sort");
+                String order = request.getParameter("order");
+                Integer pageSize;
+                pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+
                 // Xóa component
                 boolean check = componentDAO.delete(id);
-                response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
+                response.sendRedirect(request.getContextPath()
+                        + "/ComponentWarehouse?page=" + page
+                        + "&page-size=" + pageSize
+                        + "&search=" + URLEncoder.encode(paraSearch, "UTF-8")
+                        + "&sort=" + sort
+                        + "&order=" + order);
             }
             case "/ComponentWarehouse/Edit" -> {
                 // Sửa component

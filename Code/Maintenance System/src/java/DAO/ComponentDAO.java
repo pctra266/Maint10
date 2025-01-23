@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.Component;
+import Model.Product;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
@@ -422,8 +423,35 @@ public boolean add(Component component) {
         }
         return components;
     }
+    
+      private List<Product> getProductsByComponentId(int componentId) throws SQLException {
+        List<Product> productList = new ArrayList<>();
+        String sql = "SELECT p.* FROM Product p " +
+                     "JOIN ProductComponents pc ON p.ProductID = pc.ProductID " +
+                     "WHERE pc.ComponentID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, componentId);
+            ResultSet rs = ps.executeQuery();
+                while (rs.next()) {
+                    Product product = new Product(
+                        rs.getInt("ProductID"),
+                        rs.getString("ProductName"),
+                        rs.getInt("Quantity"),
+                        rs.getInt("WarrantyPeriod"),
+                        rs.getString("Image")
+                    );
+                    productList.add(product);
+                }
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return productList;
+    }
 
-    public static void main(String arg[]) {
+
+
+    public static void main(String arg[]) throws SQLException {
         ComponentDAO d = new ComponentDAO();
         String searchCode = "";
         String searchName = "MA";
@@ -446,6 +474,6 @@ public boolean add(Component component) {
         System.out.println(d.getTotalComponents());
         System.out.println(d.getComponentsByPage(page, pageSize));
         System.out.println(d.getAllComponents());
-
+        System.out.println(d.getProductsByComponentId(1));
     }
 }

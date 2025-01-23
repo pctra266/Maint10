@@ -75,4 +75,10 @@ public class Product {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" + "productId=" + productId + ", productName=" + productName + ", quantity=" + quantity + ", warrantyPeriod=" + warrantyPeriod + ", image=" + image + '}';
+    }
+    
 }
