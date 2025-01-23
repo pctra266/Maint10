@@ -128,7 +128,7 @@
                 <main class="content">
 
                     <h1>Add New Product</h1>
-                    <form action="addproduct" method="post">
+                    <form action="addP" method="post">
                         <label for="name">Product Name:</label>
                         <input type="text" id="name" name="productName" required><br><br>
 
@@ -145,8 +145,7 @@
                         <!-- Added Back Button -->
                         <a href="product" class="back-button">Back</a>
                     </form>
-
-
+                    
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

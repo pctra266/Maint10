@@ -85,7 +85,7 @@ public class UpdateProductServlet extends HttpServlet {
 //        out.println(imagePath);
         Product updatedProduct = new Product(productId, productName, quantity, warrantyPeriod, imagePath);
         productDAO.updateProduct(updatedProduct);
-        request.getRequestDispatcher("product").forward(request, response);
+        response.sendRedirect("viewP");
     }
 
     /**

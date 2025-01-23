@@ -307,7 +307,7 @@
 
                     <h1 style="text-align: center;">Product List</h1>
 
-                    <form action="product" method="get" style="text-align: center; margin-bottom: 20px;">
+                    <form action="viewP" method="get" style="text-align: center; margin-bottom: 20px;">
                         <input 
                             type="text" 
                             name="keyword" 
@@ -327,8 +327,7 @@
                             value="${param.warrantyPeriod}" 
                             style="width: 120px; padding: 8px;">
                         <button type="submit" style="padding: 8px 16px;">Search</button>
-                        <a href="product" class="btn-all">All Products</a>
-                        <!-- Nút Add được đặt cạnh nút tìm kiếm -->
+                        <a href="viewP" class="btn-all">All Products</a>
                         <a href="addProduct.jsp" class="btn-add">Add</a>
                     </form>
 
@@ -372,7 +371,7 @@
 
                     <div style="text-align: center; margin-top: 20px;">
                         <c:forEach begin="1" end="${totalPageCount}" var="index">
-                            <a href="product?index=${index}&keyword=${param.keyword}&quantity=${param.quantity}&warrantyPeriod=${param.warrantyPeriod}" style="margin: 0 5px;">${index}</a>
+                            <a href="viewP?index=${index}&keyword=${param.keyword}&quantity=${param.quantity}&warrantyPeriod=${param.warrantyPeriod}" style="margin: 0 5px;">${index}</a>
                         </c:forEach>
                     </div>
 

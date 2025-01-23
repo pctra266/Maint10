@@ -16,17 +16,12 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
         <style>
-            /* General page styles */
             body {
                 font-family: 'Inter', sans-serif;
                 margin: 0;
                 padding: 0;
                 background-color: #f4f7fc;
             }
-
-            /* Wrapper for the page content */
-         
-            /* Main content styling */
             .main {
                 flex-grow: 1;
                 background-color: #fff;
@@ -34,8 +29,6 @@
                 border-radius: 8px;
                 transition: all 0.3s ease;
             }
-
-            /* Title */
             h1 {
                 font-size: 28px;
                 font-weight: 600;
@@ -43,23 +36,17 @@
                 margin-bottom: 20px;
                 text-align: center;
             }
-
-            /* Form styles */
             form {
                 display: flex;
                 flex-direction: column;
                 max-width: 600px;
                 margin: 0 auto;
             }
-
-            /* Label styling */
             label {
                 font-size: 16px;
                 font-weight: 500;
                 color: #555;
             }
-
-            /* Input fields */
             input[type="text"], input[type="number"] {
                 padding: 12px;
                 font-size: 16px;
@@ -68,13 +55,10 @@
                 box-sizing: border-box;
                 transition: all 0.3s ease;
             }
-
             input[type="text"]:focus, input[type="number"]:focus {
                 border-color: #007bff;
                 outline: none;
             }
-
-            /* Submit button */
             button[type="submit"] {
                 padding: 12px 20px;
                 font-size: 16px;
@@ -85,27 +69,21 @@
                 cursor: pointer;
                 transition: background-color 0.3s ease;
             }
-
             button[type="submit"]:hover {
                 background-color: #0056b3;
             }
-
-            /* Spacing for form elements */
             form input, form label {
                 margin-bottom: 10px;
             }
-
         </style>
     </head>
-
-
     <body>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
-
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
-                <main class="content">
+                <main class="content"
+                      
                     <h1>Update Product</h1>
                     <form action="updateproduct" method="post">
                         <input type="hidden" name="productId" value="${param.productId}">
@@ -128,13 +106,7 @@
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
-
         </div>
-
-
         <script src="js/app.js"></script>
-
     </body>
-
-
 </html>

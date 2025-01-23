@@ -1,6 +1,6 @@
 /*
-     * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-     * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 package Controller;
 
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * @author sonNH
  */
-public class ViewListProduct extends HttpServlet {
+public class ViewProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class ViewListProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet ManageProduct</title>");
+            out.println("<title>Servlet ViewProduct</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet ManageProduct at " + request.getContextPath() + "</h1>");
+            out.println("<h1>hello ViewProduct at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -59,7 +59,6 @@ public class ViewListProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO productDAO = new ProductDAO();
-
         int pageSize = 5;
         int pageIndex = 1;
         String pageIndexStr = request.getParameter("index");

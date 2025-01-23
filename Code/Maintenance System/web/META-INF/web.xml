@@ -44,7 +44,8 @@
     <servlet>
         <servlet-name>searchStaff</servlet-name>
         <servlet-class>Controller.searchStaff</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>ControllerAccount.LoginServlet</servlet-class>
     </servlet>
@@ -76,6 +77,16 @@
         <servlet-name>CustomerServlet</servlet-name>
         <servlet-class>ControllerCustomer.CustomerServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AddProduct</servlet-name>
+        <servlet-class>Controller.AddProduct</servlet-class>
+    </servlet>
+    
+    <servlet>
+        <servlet-name>ViewProduct</servlet-name>
+        <servlet-class>Controller.ViewProduct</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -128,14 +139,7 @@
         <servlet-name>ComponentAction</servlet-name>
         <url-pattern>/ComponentWarehouse/Add</url-pattern>
     </servlet-mapping>
-    <servlet>
-        <servlet-name>ViewListProduct</servlet-name>
-        <servlet-class>Controller.ViewListProduct</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>ViewListProduct</servlet-name>
-        <url-pattern>/product</url-pattern>
-    </servlet-mapping>
+   
     <servlet-mapping>
         <servlet-name>ComponentSearch</servlet-name>
         <url-pattern>/ComponentWarehouse/Search</url-pattern>
@@ -147,6 +151,8 @@
     <servlet-mapping>
         <servlet-name>searchStaff</servlet-name>
         <url-pattern>/searchStaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/login</url-pattern>
     </servlet-mapping>
@@ -177,5 +183,13 @@
     <servlet-mapping>
         <servlet-name>CustomerServlet</servlet-name>
         <url-pattern>/customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddProduct</servlet-name>
+        <url-pattern>/addP</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewProduct</servlet-name>
+        <url-pattern>/viewP</url-pattern>
     </servlet-mapping>
 </web-app>
