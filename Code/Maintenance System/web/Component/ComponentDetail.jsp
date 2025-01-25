@@ -31,59 +31,7 @@
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Component Detail</h2>
-
-                    <form class="row"action="ComponentWarehouse/Edit"  method="POST" enctype="multipart/form-data">
-                        <div class="col-md-8">
-                            <div class="col-md-12 row g-3">
-                                <input type="hidden" class="form-control" name="ID" id="validationDefault01" value="${component.componentID}" required>
-
-                                <div class="col-md-10">
-                                    <label for="validationDefault01" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="Name"id="validationDefault01" value="${component.componentName}" required>
-                                </div>
-                                <div class="col-md-10">
-                                    <label for="validationDefault02" class="form-label">Code</label>
-                                    <input type="text" class="form-control" name="Code"id="validationDefault02" value="${component.componentCode}" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="validationDefault03" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="Quantity"id="validationDefault03" value="${component.quantity}" min="0" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="validationDefault05" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="Price" id="validationDefault04" value="${component.price}" step="0.01" min="0" required>
-                                </div> 
-                                <div class="col-md-10">
-                                    <label for="validationDefault06" class="form-label">Products</label>
-                                    <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th style="width:45%">Name</th>
-                                                <th style="width:40%">Code</th>
-                                                    <th class="d-none d-md-table-cell" style="width:25%">Action</th>
-                                                </tr>
-                                            </thead>
-                                        <c:forEach items="${list}" var="p">
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        ${p.productName}
-                                                    </td>
-                                                    <td>
-                                                        ProductCode
-                                                    </td>
-                                                    <td>
-                                                        Action
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </c:forEach>
-                                    </table>
-                                </div> 
-                                <div class="col-md-12">
-                                    <button class="btn btn-primary" type="submit">Save</button>
-                                </div>
-                                <!--                                Alert khi du lieu truyen sang sever sai-->
+  <!--                                Alert khi du lieu truyen sang sever sai-->
                                 <c:if test="${not empty codeAlert}">
                                     <div class="alert alert-danger alert-dismissible" role="alert">
                                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -140,6 +88,77 @@
                                         </div>
                                     </div>
                                 </c:if>
+                    <form class="row"action="ComponentWarehouse/Edit"  method="POST" enctype="multipart/form-data">
+                        <div class="col-md-8">
+                            <div class="col-md-12 row g-3">
+                                <input type="hidden" class="form-control" name="ID" id="validationDefault01" value="${component.componentID}" required>
+
+                                <div class="col-md-10">
+                                    <label for="Name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="Name"id="Name" value="${component.componentName}" required>
+                                </div>
+                                <div class="col-md-10">
+                                    <label for="Code" class="form-label">Code</label>
+                                    <input type="text" class="form-control" name="Code"id="Code" value="${component.componentCode}" required>
+                                </div>
+                                 <div class="col-md-3">
+                                    <label for="Type" class="form-label">Type</label>
+                                    <select name="Type" class="form-select form-select-md" id="Type" required style="flex: 1 1 auto;">
+                                        <option value disabled selected>Choose</option>
+                                        <c:forEach var="t" items="${typeList}">
+                                            <option value="${t}" ${t eq component.type ? "selected" : ""}>${t}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="Brand" class="form-label">Brand</label>
+                                    <select name="Brand" class="form-select form-select-md" id="Brand" required style="flex: 1 1 auto;">
+                                        <option value disabled selected>Choose</option>
+                                        <c:forEach var="b" items="${brandList}">
+                                            <option value="${b}" ${b eq component.brand ? "selected" : ""}>${b}</option>
+                                        </c:forEach>
+                                    </select>                              
+                                </div>
+                                <div class="col-md-6"></div>
+                                <div class="col-md-3">
+                                    <label for="Quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" name="Quantity"id="Quantity" value="${component.quantity}" min="0" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="Price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="Price" id="Price" value="${component.price}" step="0.01" min="0" required>
+                                </div> 
+                                <div class="col-md-10">
+                                    <label for="validationDefault06" class="form-label">Products</label>
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th style="width:45%">Name</th>
+                                                <th style="width:40%">Code</th>
+                                                    <th class="d-none d-md-table-cell" style="width:25%">Action</th>
+                                                </tr>
+                                            </thead>
+                                        <c:forEach items="${list}" var="p">
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        ${p.productName}
+                                                    </td>
+                                                    <td>
+                                                        ProductCode
+                                                    </td>
+                                                    <td>
+                                                        Action
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </c:forEach>
+                                    </table>
+                                </div> 
+                                <div class="col-md-12">
+                                    <button class="btn btn-primary" type="submit">Save</button>
+                                </div>
+                              
                             </div>
                         </div>
 

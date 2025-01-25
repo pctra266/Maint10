@@ -208,7 +208,7 @@ public class ComponentDAO extends DBContext {
     public boolean update(Component component) {
         String query;
         if (component.getImage() != null) {
-            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, Image = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
+            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ?, Image = ? WHERE ComponentID = ?";
         } else {
             query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
         }
@@ -627,7 +627,7 @@ public class ComponentDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Return -1 if the brand is not found
+        return null; 
     }
 
     public Integer getTypeID(String typeName) {
@@ -642,7 +642,7 @@ public class ComponentDAO extends DBContext {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Return -1 if the type is not found
+        return null; 
     }
 
     public static void main(String arg[]) throws SQLException {
@@ -672,5 +672,7 @@ public class ComponentDAO extends DBContext {
         System.out.println(d.getComponentsByPage(page, pageSize));
         System.out.println(d.getAllComponents());
         System.out.println(d.getProductsByComponentId(3));
+        Component component  = new Component(1, "", "", 11, true, "Display", "Apple", 2222, null);
+        System.out.println(d.update(component));
     }
 }

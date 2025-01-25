@@ -96,6 +96,8 @@ public class ComponentAction extends HttpServlet {
             throws ServletException, IOException {
         String newName = request.getParameter("Name");
         String newCode = request.getParameter("Code");
+        String newBrand = request.getParameter("Brand");
+        String newType = request.getParameter("Type");
         Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
         Part imagePart = request.getPart("newImage");
@@ -103,6 +105,8 @@ public class ComponentAction extends HttpServlet {
         boolean canAdd = true;
 
         // Kiểm tra dữ liệu đầu vào
+        request.setAttribute("brandList", componentDAO.getListBrand());
+        request.setAttribute("typeList", componentDAO.getListType());
         if (newName == null) {
             canAdd = false;
         } else if (newName.isBlank()) {
@@ -118,6 +122,16 @@ public class ComponentAction extends HttpServlet {
             canAdd = false;
         } else {
             request.setAttribute("code", newCode);
+        }
+        if (componentDAO.getTypeID(newType) == null) {
+            canAdd = false;
+        } else {
+            request.setAttribute("type", newType);
+        }
+        if (componentDAO.getBrandID(newBrand) == null) {
+            canAdd = false;
+        } else {
+            request.setAttribute("brand", newBrand);
         }
         if (newQuantity == null) {
             canAdd = false;
@@ -138,17 +152,19 @@ public class ComponentAction extends HttpServlet {
         }
 
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
+        // Khong hop le thi tra lai trang Add
         if (canAdd) {
             String imagePath = saveImage(imagePart, request); // Lưu ảnh
             Component component = new Component();
             component.setComponentName(newName);
             component.setComponentCode(newCode);
+            component.setType(newType);
+            component.setBrand(newBrand);
             component.setPrice(newPrice);
             component.setQuantity(newQuantity);
             if (imagePath != null) {
                 component.setImage(imagePath);
             }
-
             boolean add = componentDAO.add(component);
             Component addedComponent = componentDAO.getLast();
             if (add) {
@@ -162,6 +178,79 @@ public class ComponentAction extends HttpServlet {
         } else {
             request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
         }
+    }
+
+    private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
+            throws ServletException, IOException {
+        String newName = request.getParameter("Name");
+        Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
+        Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
+        String newBrand = request.getParameter("Brand");
+        String newType = request.getParameter("Type");
+        String newCode = request.getParameter("Code");
+        Part imagePart = request.getPart("newImage");
+
+        boolean canUpdate = true;
+        request.setAttribute("brandList", componentDAO.getListBrand());
+        request.setAttribute("typeList", componentDAO.getListType());
+
+        // Kiểm tra dữ liệu đầu vào
+        if (newName == null || newName.isBlank()) {
+            request.setAttribute("nameAlert", "Name must not be empty!");
+            canUpdate = false;
+        }
+        if (newCode == null || newCode.isBlank()) {
+            request.setAttribute("codeAlert", "Code must not be empty!");
+            canUpdate = false;
+        }
+        if (componentDAO.getTypeID(newType) == null) {
+            canUpdate = false;
+        } else {
+            request.setAttribute("type", newType);
+        }
+        if (componentDAO.getBrandID(newBrand) == null) {
+            canUpdate = false;
+        } else {
+            request.setAttribute("brand", newBrand);
+        }
+        if (newQuantity == null || newQuantity < 0) {
+            request.setAttribute("quantityAlert", "Quantity must be an integer greater than or equal to 0");
+            canUpdate = false;
+        }
+        if (newPrice == null || newPrice < 0) {
+            request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
+            canUpdate = false;
+        }
+
+        // Nếu có thể cập nhật, thực hiện cập nhật
+        if (canUpdate) {
+            component.setComponentCode(newCode);
+            component.setComponentName(newName);
+            component.setType(newType);
+            component.setBrand(newBrand);
+            component.setQuantity(newQuantity);
+            component.setPrice(newPrice);
+
+            // Lưu ảnh mới nếu có
+            String imagePath = saveImage(imagePart, request);
+            if (imagePath != null) {
+                component.setImage(imagePath);
+            }
+
+            boolean update = componentDAO.update(component);
+            if (update) {
+                request.setAttribute("updateAlert1", "Component updated successfully.");
+            } else {
+                request.setAttribute("updateAlert0", "Fail to edit");
+            }
+        } else {
+            request.setAttribute("component", component);
+        }
+
+        // Trả về trang chi tiết Component
+        request.setAttribute("list", componentDAO.getProductsByComponentId(component.getComponentID()));
+        request.setAttribute("component", component);
+        request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
     }
 
 // Lưu ảnh vào thư mục /img/Component
@@ -219,6 +308,8 @@ public class ComponentAction extends HttpServlet {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
                 request.setAttribute("list", componentDAO.getProductsByComponentId(id));
+                request.setAttribute("typeList", componentDAO.getListType());
+                request.setAttribute("brandList", componentDAO.getListBrand());
                 request.setAttribute("component", component);
                 request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
             }
@@ -241,7 +332,7 @@ public class ComponentAction extends HttpServlet {
                         + "&search=" + URLEncoder.encode(paraSearch, "UTF-8")
                         + "&sort=" + sort
                         + "&order=" + order;
-                redirect+=check?"&delete=1":"delete=0";
+                redirect += check ? "&delete=1" : "delete=0";
                 response.sendRedirect(redirect);
             }
             case "/ComponentWarehouse/Edit" -> {
@@ -252,63 +343,6 @@ public class ComponentAction extends HttpServlet {
             default ->
                 response.sendRedirect(request.getContextPath() + "/ComponentWarehouse");
         }
-    }
-
-    private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
-            throws ServletException, IOException {
-        String newName = request.getParameter("Name");
-        Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
-        Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
-        String newCode = request.getParameter("Code");
-        Part imagePart = request.getPart("newImage");
-
-        boolean canUpdate = true;
-
-        // Kiểm tra dữ liệu đầu vào
-        if (newName == null || newName.isBlank()) {
-            request.setAttribute("nameAlert", "Name must not be empty!");
-            canUpdate = false;
-        }
-        if (newCode == null || newCode.isBlank()) {
-            request.setAttribute("codeAlert", "Code must not be empty!");
-            canUpdate = false;
-        }
-        if (newQuantity == null || newQuantity < 0) {
-            request.setAttribute("quantityAlert", "Quantity must be an integer greater than or equal to 0");
-            canUpdate = false;
-        }
-        if (newPrice == null || newPrice < 0) {
-            request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
-            canUpdate = false;
-        }
-
-        // Nếu có thể cập nhật, thực hiện cập nhật
-        if (canUpdate) {
-            component.setComponentCode(newCode);
-            component.setComponentName(newName);
-            component.setQuantity(newQuantity);
-            component.setPrice(newPrice);
-
-            // Lưu ảnh mới nếu có
-            String imagePath = saveImage(imagePart, request);
-            if (imagePath != null) {
-                component.setImage(imagePath);
-            }
-
-            boolean update = componentDAO.update(component);
-            if (update) {
-                request.setAttribute("updateAlert1", "Component updated successfully.");
-            } else {
-                request.setAttribute("updateAlert0", "Fail to edit");
-            }
-        } else {
-            request.setAttribute("component", component);
-        }
-
-        // Trả về trang chi tiết Component
-        request.setAttribute("list", componentDAO.getProductsByComponentId(component.getComponentID()));
-        request.setAttribute("component", component);
-        request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
     }
 
 }
