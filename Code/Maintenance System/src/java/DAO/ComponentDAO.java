@@ -17,20 +17,58 @@ import java.sql.*;
  */
 public class ComponentDAO extends DBContext {
 
-    public List<Component> getAllComponents() {
-        List<Component> components = new ArrayList<>();
-        String query = "SELECT ComponentID, ComponentCode, ComponentName, Quantity, Price, Image FROM Component where Status=1";
+    public List<String> getListType() {
+        List<String> typeList = new ArrayList<>();
+        String query = "SELECT TypeName FROM ComponentType";
 
-        try (Statement statement = connection.createStatement(); ResultSet resultSet = statement.executeQuery(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
             while (resultSet.next()) {
+                String typeName = resultSet.getString("TypeName");
+                typeList.add(typeName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return typeList; // Chuyển đổi List thành Array
+    }
+
+    public List<String> getListBrand() {
+        List<String> brandList = new ArrayList<>();
+        String query = "SELECT BrandName FROM ComponentBrand";
+
+        try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                String brandName = resultSet.getString("BrandName");
+                brandList.add(brandName);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return brandList; // Chuyển đổi List thành Array
+    }
+
+    public List<Component> getAllComponents() {
+        List<Component> components = new ArrayList<>();
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, c.Image "
+                + "FROM Component c "
+                + "JOIN ComponentBrand cb ON c.BrandID = cb.BrandID "
+                + "JOIN ComponentType ct ON c.TypeID = ct.TypeID "
+                + "WHERE c.Status = 1";
+
+        try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
                 Component component = new Component();
-                component.setComponentID(resultSet.getInt("ComponentID"));
-                component.setComponentName(resultSet.getString("ComponentName"));
-                component.setComponentCode(resultSet.getString("ComponentCode"));
-                component.setQuantity(resultSet.getInt("Quantity"));
-                component.setPrice(resultSet.getDouble("Price"));
-                component.setImage(resultSet.getString("Image"));
+                component.setComponentID(rs.getInt("ComponentID"));
+                component.setComponentCode(rs.getString("ComponentCode"));
+                component.setComponentName(rs.getString("ComponentName"));
+                component.setBrand(rs.getString("BrandName"));
+                component.setType(rs.getString("TypeName"));
+                component.setQuantity(rs.getInt("Quantity"));
+                component.setPrice(rs.getDouble("Price"));
+                component.setImage(rs.getString("Image"));
 
                 components.add(component);
             }
@@ -43,13 +81,16 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getComponentsByPage(int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT ComponentID, ComponentCode, ComponentName, Quantity, Price, Image "
-                + "FROM Component where Status=1 "
-                + "ORDER BY ComponentID "
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 "
+                + "ORDER BY c.ComponentID "
                 + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-
             int offset = (page - 1) * pageSize;
             statement.setInt(1, offset);
             statement.setInt(2, pageSize);
@@ -63,6 +104,8 @@ public class ComponentDAO extends DBContext {
                     component.setQuantity(resultSet.getInt("Quantity"));
                     component.setPrice(resultSet.getDouble("Price"));
                     component.setImage(resultSet.getString("Image"));
+                    component.setBrand(resultSet.getString("BrandName")); // Set the brand name
+                    component.setType(resultSet.getString("TypeName"));   // Set the type name
 
                     components.add(component);
                 }
@@ -89,7 +132,13 @@ public class ComponentDAO extends DBContext {
     }
 
     public Component getComponentByID(int componentID) {
-        String sql = "SELECT * FROM [dbo].[Component] WHERE Status=1 AND componentID = ?";
+        String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM [dbo].[Component] c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND c.ComponentID = ?";
+
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, componentID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -101,13 +150,15 @@ public class ComponentDAO extends DBContext {
                     component.setQuantity(rs.getInt("Quantity"));
                     component.setPrice(rs.getDouble("Price"));
                     component.setImage(rs.getString("Image"));
+                    component.setBrand(rs.getString("BrandName")); // Set the brand name
+                    component.setType(rs.getString("TypeName"));   // Set the type name
                     return component;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy component    }
+        return null; // Return null if the component is not found
     }
 
     public boolean delete(int componentID) {
@@ -126,63 +177,78 @@ public class ComponentDAO extends DBContext {
         return false; // Trả về false nếu có lỗi
     }
 
-public boolean add(Component component) { 
-    String query = "INSERT INTO Component (ComponentName, ComponentCode, Quantity, Price, Image) VALUES (?, ?, ?, ?, ?)";
+    public boolean add(Component component) {
+        String query = "INSERT INTO Component (ComponentName, ComponentCode, Quantity, Price, Image, BrandID, TypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
-    try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, component.getComponentName());
-        statement.setString(2, component.getComponentCode());
-        statement.setInt(3, component.getQuantity());
-        statement.setDouble(4, component.getPrice());
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, component.getComponentName());
+            statement.setString(2, component.getComponentCode());
+            statement.setInt(3, component.getQuantity());
+            statement.setDouble(4, component.getPrice());
 
-        if (component.getImage() != null && !component.getImage().isEmpty()) {
-            statement.setString(5, component.getImage());
-        } else {
-            statement.setNull(5, java.sql.Types.NVARCHAR);
+            if (component.getImage() != null && !component.getImage().isEmpty()) {
+                statement.setString(5, component.getImage());
+            } else {
+                statement.setNull(5, java.sql.Types.NVARCHAR);
+            }
+
+            // Set the BrandID and TypeID
+            statement.setInt(6, getBrandID(component.getBrand())); // Assuming you have a method to get BrandID
+            statement.setInt(7, getTypeID(component.getType()));   // Assuming you have a method to get TypeID
+
+            int rowsInserted = statement.executeUpdate();
+            return rowsInserted > 0; // Return true if the insert was successful
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if an error occurs
         }
-        int rowsInserted = statement.executeUpdate();
-        return rowsInserted > 0; // Trả về true nếu thêm thành công
-
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false; // Trả về false nếu có lỗi xảy ra
-    }
-}
-
-
-   public boolean update(Component component) { 
-    String query;
-    if (component.getImage() != null) {
-        query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, Image = ? WHERE ComponentID = ?";
-    } else {
-        query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ? WHERE ComponentID = ?";
     }
 
-    try (PreparedStatement statement = connection.prepareStatement(query)) {
-        // Set giá trị chung
-        statement.setString(1, component.getComponentCode());
-        statement.setString(2, component.getComponentName());
-        statement.setInt(3, component.getQuantity());
-        statement.setDouble(4, component.getPrice());
-
+    public boolean update(Component component) {
+        String query;
         if (component.getImage() != null) {
-            statement.setString(5, component.getImage()); // Đặt giá trị cho Image
-            statement.setInt(6, component.getComponentID()); // Đặt giá trị cho ComponentID
+            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, Image = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
         } else {
-            statement.setInt(5, component.getComponentID()); // Đặt giá trị cho ComponentID
+            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
         }
 
-        int rowsAffected = statement.executeUpdate();
-        return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            // Set common values
+            statement.setString(1, component.getComponentCode());
+            statement.setString(2, component.getComponentName());
+            statement.setInt(3, component.getQuantity());
+            statement.setDouble(4, component.getPrice());
 
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false; // Trả về false nếu có lỗi xảy ra
+            // Set BrandID and TypeID
+            statement.setInt(5, getBrandID(component.getBrand())); // Assuming you have a method to get BrandID
+            statement.setInt(6, getTypeID(component.getType()));   // Assuming you have a method to get TypeID
+
+            if (component.getImage() != null) {
+                statement.setString(7, component.getImage()); // Set value for Image
+                statement.setInt(8, component.getComponentID()); // Set value for ComponentID
+            } else {
+                statement.setInt(7, component.getComponentID()); // Set value for ComponentID
+            }
+
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected > 0; // Return true if the update was successful
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // Return false if an error occurs
+        }
     }
-}
 
     public Component getLast() {
-        String query = "SELECT TOP 1 * FROM Component where Status=1 ORDER BY ComponentID DESC ";
+        String query = "SELECT TOP 1 c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 "
+                + "ORDER BY c.ComponentID DESC";
+
         try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
             if (resultSet.next()) {
@@ -193,27 +259,32 @@ public boolean add(Component component) {
                 component.setQuantity(resultSet.getInt("Quantity"));
                 component.setPrice(resultSet.getDouble("Price"));
                 component.setImage(resultSet.getString("Image"));
+                component.setBrand(resultSet.getString("BrandName")); // Set the brand name
+                component.setType(resultSet.getString("TypeName"));   // Set the type name
                 return component;
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        return null; // Return null if no component is found
     }
 
     public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String sql = "SELECT * FROM Component WHERE "
-                + "Status = 1 AND "
-                + "(ComponentCode LIKE ? OR "
-                + "ComponentName LIKE ? OR "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
-                + "CAST(Price AS NVARCHAR) LIKE ? )"
-                + "ORDER BY ComponentID "
+        String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "(c.ComponentCode LIKE ? OR "
+                + "c.ComponentName LIKE ? OR "
+                + "CAST(c.Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(c.Price AS NVARCHAR) LIKE ?) "
+                + "ORDER BY c.ComponentID "
                 + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-
             String searchKeyword = "%" + keyword + "%";
             for (int i = 1; i <= 4; i++) {
                 statement.setString(i, searchKeyword);
@@ -229,12 +300,13 @@ public boolean add(Component component) {
                 int id = resultSet.getInt("ComponentID");
                 String name = resultSet.getString("ComponentName");
                 String code = resultSet.getString("ComponentCode");
-
                 int quantity = resultSet.getInt("Quantity");
-                float price = resultSet.getFloat("Price");
+                double price = resultSet.getDouble("Price");
                 String image = resultSet.getString("Image");
+                String brand = resultSet.getString("BrandName"); // Get the brand name
+                String type = resultSet.getString("TypeName");   // Get the type name
 
-                Component component = new Component(id, code, name, quantity, price, image);
+                Component component = new Component(id, code, name, quantity, true, type, brand, price, image);
                 components.add(component);
             }
         } catch (SQLException e) {
@@ -244,50 +316,64 @@ public boolean add(Component component) {
     }
 
     public int getTotalSearchComponents(String keyword) {
-        String query = "SELECT COUNT(*) FROM Component "
-                + "WHERE Status=1 AND "
-                + "(ComponentCode LIKE ? OR "
-                + "ComponentName LIKE ? OR "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
-                + "CAST(Price AS NVARCHAR) LIKE ? )";
+        String query = "SELECT COUNT(*) FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "(c.ComponentCode LIKE ? OR "
+                + "c.ComponentName LIKE ? OR "
+                + "CAST(c.Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(c.Price AS NVARCHAR) LIKE ?)";
 
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             String searchKeyword = "%" + keyword + "%";
 
-            // Thiết lập các tham số cho PreparedStatement
+            // Set parameters for PreparedStatement
             for (int i = 1; i <= 4; i++) {
                 preparedStatement.setString(i, searchKeyword);
             }
 
-            // Thực hiện truy vấn
+            // Execute the query
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            // Lấy kết quả
+            // Get the result
             if (resultSet.next()) {
-                return resultSet.getInt(1); // Lấy giá trị đếm
+                return resultSet.getInt(1); // Get the count value
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0; // Trả về 0 nếu có lỗi hoặc không tìm thấy
+        return 0; // Return 0 if there is an error or no results found
     }
 
     public List<Component> getComponentsByPageSorted(int page, int pageSize, String sort, String order) {
-        String query = "SELECT * FROM Component WHERE Status=1 ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 "
+                + "ORDER BY " + sort + " " + order + " "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
         List<Component> components = new ArrayList<>();
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, (page - 1) * pageSize);
             ps.setInt(2, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                components.add(new Component(
-                        rs.getInt("componentID"),
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
                         rs.getString("ComponentCode"),
-                        rs.getString("componentName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("price"),
-                        rs.getString("image")
-                ));
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -296,15 +382,21 @@ public boolean add(Component component) {
     }
 
     public List<Component> searchComponentsByPageSorted(String search, int page, int pageSize, String sort, String order) {
-        String query = "SELECT * FROM Component "
-                + "WHERE Status=1 AND "
-                + "(ComponentName LIKE ? OR "
-                + "ComponentCode LIKE ? OR "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? OR "
-                + "CAST(Price AS NVARCHAR) LIKE ?) ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "(c.ComponentName LIKE ? OR "
+                + "c.ComponentCode LIKE ? OR "
+                + "CAST(c.Quantity AS NVARCHAR) LIKE ? OR "
+                + "CAST(c.Price AS NVARCHAR) LIKE ?) "
+                + "ORDER BY " + sort + " " + order + " "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
         List<Component> components = new ArrayList<>();
-        try (
-                PreparedStatement ps = connection.prepareStatement(query)) {
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             String searchKeyword = "%" + search + "%";
             for (int i = 1; i <= 4; i++) {
                 ps.setString(i, searchKeyword);
@@ -313,14 +405,18 @@ public boolean add(Component component) {
             ps.setInt(6, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                components.add(new Component(
-                        rs.getInt("componentID"),
-                        rs.getString("componentCode"),
-                        rs.getString("componentName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("price"),
-                        rs.getString("image")
-                ));
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
+                        rs.getString("ComponentCode"),
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -328,61 +424,100 @@ public boolean add(Component component) {
         return components;
     }
 
-    public int getTotalSearchComponentsByFields(String searchCode, String searchName, String searchQuantity, String searchPrice) {
-        String query = "SELECT COUNT (*) FROM Component WHERE "
-                + "Status=1 AND "
-                + "(ComponentCode LIKE ? AND "
-                + "ComponentName LIKE ? AND "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
-                + "CAST(Price AS NVARCHAR) LIKE ? )";
-        List<Component> components = new ArrayList<>();
-        try (
-                PreparedStatement ps = connection.prepareStatement(query)) {
+    public int getTotalSearchComponentsByFields(String searchCode, String searchName, String searchQuantity, String searchPrice, Integer typeId, Integer brandId) {
+    StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Component c "
+                 + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                 + "WHERE c.Status = 1 AND "
+                 + "c.ComponentCode LIKE ? AND "
+                 + "c.ComponentName LIKE ? AND "
+                 + "c.Quantity LIKE ? AND "
+                 + "c.Price LIKE ?");
 
-            ps.setString(1, "%" + searchCode + "%");
-            ps.setString(2, "%" + searchName + "%");
-            ps.setString(3, "%" + searchQuantity + "%");
-            ps.setString(4, "%" + searchPrice + "%");
-
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                return rs.getInt(1); // Lấy giá trị đếm
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
+    if (typeId != null) {
+        query.append(" AND c.TypeID = ?");
+    }
+    if (brandId != null) {
+        query.append(" AND c.BrandID = ?");
     }
 
-    public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, String searchQuantity, String searchPrice, int page, int pageSize) {
-        String query = "SELECT * FROM Component WHERE "
-                + "Status=1 AND "
-                + "ComponentCode LIKE ? AND "
-                + "ComponentName LIKE ? AND "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
-                + "CAST(Price AS NVARCHAR) LIKE ? "
-                + "ORDER BY ComponentID"
-                + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        List<Component> components = new ArrayList<>();
-        try (
-                PreparedStatement ps = connection.prepareStatement(query)) {
+    try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+        ps.setString(1, "%" + searchCode + "%");
+        ps.setString(2, "%" + searchName + "%");
+        ps.setString(3, "%" + searchQuantity + "%");
+        ps.setString(4, "%" + searchPrice + "%");
 
+        int index = 5;
+        if (typeId != null) {
+            ps.setInt(index++, typeId);
+        }
+        if (brandId != null) {
+            ps.setInt(index++, brandId);
+        }
+
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1); // Get the count value
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+    public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, String searchQuantity, String searchPrice, int page, int pageSize, Integer typeId, Integer brandId) {
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "c.ComponentCode LIKE ? AND "
+                + "c.ComponentName LIKE ? AND "
+                + "CAST(c.Quantity AS NVARCHAR) LIKE ? AND "
+                + "CAST(c.Price AS NVARCHAR) LIKE ?");
+
+        if (typeId != null) {
+            query.append(" AND c.TypeID = ?");
+        }
+        if (brandId != null) {
+            query.append(" AND c.BrandID = ?");
+        }
+
+        query.append(" ORDER BY c.ComponentID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        List<Component> components = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
             ps.setString(1, "%" + searchCode + "%");
             ps.setString(2, "%" + searchName + "%");
             ps.setString(3, "%" + searchQuantity + "%");
             ps.setString(4, "%" + searchPrice + "%");
-            ps.setInt(5, (page - 1) * pageSize);
-            ps.setInt(6, pageSize);
+
+            int index = 5;
+            if (typeId != null) {
+                ps.setInt(index++, typeId);
+            }
+            if (brandId != null) {
+                ps.setInt(index++, brandId);
+            }
+
+            ps.setInt(index++, (page - 1) * pageSize);
+            ps.setInt(index++, pageSize);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                components.add(new Component(
-                        rs.getInt("componentID"),
-                        rs.getString("componentCode"),
-                        rs.getString("componentName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("price"),
-                        rs.getString("image")
-                ));
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
+                        rs.getString("ComponentCode"),
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -390,66 +525,125 @@ public boolean add(Component component) {
         return components;
     }
 
-    public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, String searchQuantity, String searchPrice, int page, int pageSize, String sort, String order) {
-        String query = "SELECT * FROM Component WHERE "
-                + "Status=1 AND "
-                + "ComponentCode LIKE ? AND "
-                + "ComponentName LIKE ? AND "
-                + "CAST(Quantity AS NVARCHAR) LIKE ? AND "
-                + "CAST(Price AS NVARCHAR) LIKE ? ORDER BY " + sort + " " + order + " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        List<Component> components = new ArrayList<>();
-        try (
-                PreparedStatement ps = connection.prepareStatement(query)) {
+    public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, String searchQuantity, String searchPrice, int page, int pageSize, String sort, String order, Integer typeId, Integer brandId) {
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "c.ComponentCode LIKE ? AND "
+                + "c.ComponentName LIKE ? AND "
+                + "CAST(c.Quantity AS NVARCHAR) LIKE ? AND "
+                + "CAST(c.Price AS NVARCHAR) LIKE ?");
 
+        if (typeId != null) {
+            query.append(" AND c.TypeID = ?");
+        }
+        if (brandId != null) {
+            query.append(" AND c.BrandID = ?");
+        }
+
+        query.append(" ORDER BY " + sort + " " + order + " "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+
+        List<Component> components = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
             ps.setString(1, "%" + searchCode + "%");
             ps.setString(2, "%" + searchName + "%");
             ps.setString(3, "%" + searchQuantity + "%");
             ps.setString(4, "%" + searchPrice + "%");
-            ps.setInt(5, (page - 1) * pageSize);
-            ps.setInt(6, pageSize);
+
+            int index = 5;
+            if (typeId != null) {
+                ps.setInt(index++, typeId);
+            }
+            if (brandId != null) {
+                ps.setInt(index++, brandId);
+            }
+
+            ps.setInt(index++, (page - 1) * pageSize);
+            ps.setInt(index++, pageSize);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                components.add(new Component(
-                        rs.getInt("componentID"),
-                        rs.getString("componentCode"),
-                        rs.getString("componentName"),
-                        rs.getInt("quantity"),
-                        rs.getDouble("price"),
-                        rs.getString("image")
-                ));
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
+                        rs.getString("ComponentCode"),
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return components;
     }
-    
-      public List<Product> getProductsByComponentId(int componentId) {
+
+    public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT p.* FROM Product p " +
-                     "JOIN ProductComponents pc ON p.ProductID = pc.ProductID " +
-                     "WHERE pc.ComponentID = ?";
+        String sql = "SELECT p.*, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName "
+                + "FROM Product p "
+                + "JOIN ProductComponents pc ON p.ProductID = pc.ProductID "
+                + "JOIN Component c ON pc.ComponentID = c.ComponentID "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE pc.ComponentID = ?";
+
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, componentId);
             ResultSet rs = ps.executeQuery();
-                while (rs.next()) {
-                    Product product = new Product(
+            while (rs.next()) {
+                Product product = new Product(
                         rs.getInt("ProductID"),
                         rs.getString("ProductName"),
                         rs.getInt("Quantity"),
                         rs.getInt("WarrantyPeriod"),
                         rs.getString("Image")
-                    );
-                    productList.add(product);
-                }
-            
+                );
+                productList.add(product);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return productList;
     }
 
+    public Integer getBrandID(String brandName) {
+        String query = "SELECT BrandID FROM ComponentBrand WHERE BrandName = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, brandName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("BrandID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return -1 if the brand is not found
+    }
 
+    public Integer getTypeID(String typeName) {
+        String query = "SELECT TypeID FROM ComponentType WHERE TypeName = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(query)) {
+            stmt.setString(1, typeName);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("TypeID");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Return -1 if the type is not found
+    }
 
     public static void main(String arg[]) throws SQLException {
         ComponentDAO d = new ComponentDAO();
@@ -462,10 +656,13 @@ public boolean add(Component component) {
         String sort = "Quantity";
         String order = "asc";
         String search = "MA";
-        System.out.println(d.searchComponentsByFieldsPageSorted(searchCode,"MA", "", "", 1, 5, "ComponentCode", "asc"));
-        System.out.println(d.searchComponentsByFieldsPage(searchCode,"MA", "", "", 1, 5));
-        System.out.println(d.getTotalSearchComponentsByFields(searchCode,searchName, searchQuantity, searchPrice));
+        System.out.println(d.getBrandID("Apple"));
+        System.out.println(d.searchComponentsByFieldsPage(searchCode, searchName, searchQuantity, searchPrice, page, pageSize, null, 10));
+        System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, searchQuantity, searchPrice, page, pageSize, sort, order, 1, 1));
+        System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName, searchQuantity, searchPrice, 1, 1));
+        System.out.println("-----");
         System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
+        System.out.println("-------------");
         System.out.println(d.getComponentsByPageSorted(page, pageSize, sort, order));
         System.out.println(d.getTotalSearchComponents(search));
         System.out.println(d.searchComponentsByPage(search, page, pageSize));

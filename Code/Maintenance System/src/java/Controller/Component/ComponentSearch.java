@@ -46,10 +46,14 @@ public class ComponentSearch extends HttpServlet {
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        String type = request.getParameter("searchType");
+        Integer typeID = componentDAO.getTypeID(type);
+        String brand = request.getParameter("searchBrand");
+        Integer brandID = componentDAO.getBrandID(brand);
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         List<Component> components = new ArrayList<>();
-        int totalComponents = componentDAO.getTotalSearchComponentsByFields(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice);
+        int totalComponents = componentDAO.getTotalSearchComponentsByFields(paraSearchCode, paraSearchName, paraSearchQuantity, paraSearchPrice, typeID, brandID);
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
@@ -72,16 +76,18 @@ public class ComponentSearch extends HttpServlet {
                     default ->
                         "Price";
                 };
-                components = componentDAO.searchComponentsByFieldsPageSorted(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize, sortSQL, order);
+                components = componentDAO.searchComponentsByFieldsPageSorted(paraSearchCode, paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize, sortSQL, order, typeID, brandID);
             } else {
-                components = componentDAO.searchComponentsByFieldsPage(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize);
+                components = componentDAO.searchComponentsByFieldsPage(paraSearchCode, paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize,typeID,brandID);
             }
         } else {
-            components = componentDAO.searchComponentsByFieldsPage(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize);
+            components = componentDAO.searchComponentsByFieldsPage(paraSearchCode, paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize,typeID,brandID);
         }
-
+        
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);
+        request.setAttribute("typeList", componentDAO.getListType());
+        request.setAttribute("brandList", componentDAO.getListBrand());
         request.setAttribute("searchName", paraSearchName);
         request.setAttribute("searchQuantity", paraSearchQuantity);
         request.setAttribute("searchPrice", paraSearchPrice);
@@ -93,6 +99,8 @@ public class ComponentSearch extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("sort", sort);
         request.setAttribute("order", order);
+        request.setAttribute("searchType", type);
+        request.setAttribute("searchBrand", brand);
         // Chuyển tiếp đến trang JSP để hiển thị
         request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
 

@@ -36,11 +36,11 @@
                 text-align: center;
             }
             .btn-sort {
-    background: none;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-}
+                background: none;
+                border: none;
+                padding: 0;
+                cursor: pointer;
+            }
 
         </style>
     </head>
@@ -53,21 +53,34 @@
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Advanced Search</h2>
-
                     <form action="ComponentWarehouse/Search" method="get" class="row align-items-center">
-                          <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="sort" value="${sort}" />
-                                        <input type="hidden" name="order" value="${order}" />
-                                        <div class="col-md-3 input-group d-flex justify-content-end">
-                                        <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Code" name="searchCode" value="${searchCode}" />
-                                        <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Name" name="searchName" value="${searchName}" />
-                                        <input type="number" min="0" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Quantity"  name="searchQuantity" value="${searchQuantity}" />
-                                        <input type="number" min="0" step="0.01"style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Price"  name="searchPrice" value="${searchPrice}" />
-                                        <button type="submit" class="btn btn-primary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                                </button>
-                                        </div>
-                                        <div class="col-sm-6 col-md-6">
+                        <input type="hidden" name="page" value="${currentPage}" />
+                        <input type="hidden" name="sort" value="${sort}" />
+                        <input type="hidden" name="order" value="${order}" />
+                        <div class="col-md-3 input-group d-flex justify-content-end">
+                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Code" name="searchCode" value="${searchCode}" />
+                            <select name="searchType" class="form-select form-select-md" style="flex: 1 1 auto;">
+                                <option value="">Type</option>
+                                <c:forEach var="type" items="${typeList}">
+                                    <option value="${type}" ${searchType eq type ? "selected" : ""}>${type}</option>
+                                </c:forEach>
+                            </select>
+
+                            <!-- Thêm trường chọn cho Brand -->
+                            <select name="searchBrand" class="form-select form-select-md" style="flex: 1 1 auto;">
+                                <option value="">Brand</option>
+                                <c:forEach var="brand" items="${brandList}">
+                                    <option value="${brand}" ${searchBrand eq brand ? "selected" : ""}>${brand}</option>
+                                </c:forEach>
+                            </select>
+                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Name" name="searchName" value="${searchName}" />
+                            <input type="number" min="0" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Quantity"  name="searchQuantity" value="${searchQuantity}" />
+                            <input type="number" min="0" step="0.01"style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Price"  name="searchPrice" value="${searchPrice}" />
+                            <button type="submit" class="btn btn-primary">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            </button>
+                        </div>
+                        <div class="col-sm-6 col-md-6 mt-2">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <option value="5" ${size==5?"selected":""}>5</option>
@@ -83,7 +96,7 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                 <th>
+                                <th>
                                     <form action="ComponentWarehouse/Search" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
                                         <input type="hidden" name="page-size" value="${size}" />
@@ -98,6 +111,8 @@
                                         Code
                                     </form>
                                 </th>
+                                <th>Type</th>
+                                <th>Brand</th>
                                 <th>
                                     <form action="ComponentWarehouse/Search" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
@@ -153,14 +168,16 @@
                                 </th>
 
 
-                        <th>Action<a href="ComponentWarehouse/Search?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
-                        </tr>
+                                <th>Action<a href="ComponentWarehouse/Search?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
+                            </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
                         <c:forEach var="component" items="${components}" varStatus="status">
                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
                                 <td>${status.index+1+(currentPage-1)*size}</td>
                                 <td>${component.componentCode}</td>
+                                <td>${component.type}</td>
+                                <td>${component.brand}</td>
                                 <td>${component.componentName}</td>
                                 <td>${component.quantity}</td>
                                 <td>${component.price}</td>
@@ -199,13 +216,13 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="ComponentWarehouse/Search?page=1&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="ComponentWarehouse/Search?page=1&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="ComponentWarehouse/Search?page=${currentPage - 1}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="ComponentWarehouse/Search?page=${currentPage - 1}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
-                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
+                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
                             <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
 
                             <!-- Điều chỉnh startPage và endPage nếu cần -->
@@ -219,14 +236,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="ComponentWarehouse/Search?page=${i}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="ComponentWarehouse/Search?page=${i}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="ComponentWarehouse/Search?page=${currentPage + 1}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="ComponentWarehouse/Search?page=${currentPage + 1}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="ComponentWarehouse/Search?page=${totalPages}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="ComponentWarehouse/Search?page=${totalPages}&page-size=${size}&searchName=${searchName}&searchQuantity=${searchQuantity}&searchPrice=${searchPrice}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
