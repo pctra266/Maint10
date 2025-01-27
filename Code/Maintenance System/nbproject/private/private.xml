@@ -11,7 +11,6 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/product.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/ViewListFeedback.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/staff-information.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/DBContext.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/newjsp.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/all-staff.jsp</file>
@@ -23,8 +22,8 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentAdd.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/viewFeedbackLog.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentSearch.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Component/ComponentWarehouse.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/ViewProduct.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/LoginForm.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/index.html</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Filter/LoginFilter.java</file>
@@ -36,18 +35,18 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/UndoFeedback.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/META-INF/web.xml</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/Product.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/HomePage.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Email/Email.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/UpdateFeedback.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/StaffDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/range-slider.css</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/js/datatables.js</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/Staff.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/js/range-slider.js</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Utils/NumberUtils.java</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/css/staff.css</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/navbar-top.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/ControllerAccount/ForgotPasswordServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/DeleteProductServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/AddProduct.java</file>
         </group>
     </open-files>
 </project-private>

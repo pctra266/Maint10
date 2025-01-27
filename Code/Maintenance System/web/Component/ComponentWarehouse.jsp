@@ -160,7 +160,7 @@
                                     </form>
                                 </th>
                                
-                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
@@ -197,7 +197,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-3">
-                    <p class="mb-0">If you delete this component, it will be removed from all products that contain it. Are you sure?</p>
+                    <p class="mb-0">Confirm your action. Really want to delete?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

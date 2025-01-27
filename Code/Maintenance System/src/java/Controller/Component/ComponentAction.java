@@ -323,17 +323,47 @@ public class ComponentAction extends HttpServlet {
                 String order = request.getParameter("order");
                 Integer pageSize;
                 pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+                paraSearch = (paraSearch == null || paraSearch.isBlank()) ? "" : paraSearch;
+                // Neu co nhieu para hon thi dang o advance, xu ly tra ve trang advance
+                String paraSearchCode = request.getParameter("searchCode");
+                String paraSearchName = request.getParameter("searchName");
+                String paraSearchQuantityMin = request.getParameter("searchQuantityMin");
+                String paraSearchQuantityMax = request.getParameter("searchQuantityMax");
+                String paraSearchPriceMin = request.getParameter("searchPriceMin");
+                String paraSearchPriceMax = request.getParameter("searchPriceMax");
+                String type = request.getParameter("searchType");
+                String brand = request.getParameter("searchBrand");
 
                 // Xóa component
                 boolean check = componentDAO.delete(id);
-                String redirect = request.getContextPath()
-                        + "/ComponentWarehouse?page=" + page
-                        + "&page-size=" + pageSize
-                        + "&search=" + URLEncoder.encode(paraSearch, "UTF-8")
-                        + "&sort=" + sort
-                        + "&order=" + order;
-                redirect += check ? "&delete=1" : "delete=0";
-                response.sendRedirect(redirect);
+                StringBuilder redirect = new StringBuilder();
+                if (paraSearchCode == null || paraSearchName == null || paraSearchQuantityMin == null || paraSearchQuantityMax == null || paraSearchPriceMax == null || paraSearchPriceMin == null) {
+                    redirect.append(request.getContextPath())
+                            .append("/ComponentWarehouse?page=")
+                            .append(page).append("&page-size=")
+                            .append(pageSize).append("&search=")
+                            .append(paraSearch).append("&sort=")
+                            .append(sort).append("&order=")
+                            .append(order);
+                    redirect.append(check ? "&delete=1" : "delete=0");
+                } else {
+                    redirect.append(request.getContextPath());
+                    redirect.append("/ComponentWarehouse/Search?page=").append(page);
+                    redirect.append("&page-size=").append(pageSize);
+                    redirect.append("&searchCode=").append(paraSearchCode);
+                    redirect.append("&searchName=").append(paraSearchName);
+                    redirect.append("&sort=").append(sort);
+                    redirect.append("&order=").append(order);
+                    redirect.append("&searchType=").append(type);
+                    redirect.append("&searchBrand=").append(brand);
+                    redirect.append("&searchQuantityMin=").append(paraSearchQuantityMin);
+                    redirect.append("&searchQuantityMax=").append(paraSearchQuantityMax);
+                    redirect.append("&searchPriceMin=").append(paraSearchPriceMin);
+                    redirect.append("&searchPriceMax=").append(paraSearchPriceMax);
+                    redirect.append(check ? "&delete=1" : "delete=0");
+                }
+
+                response.sendRedirect(redirect.toString());
             }
             case "/ComponentWarehouse/Edit" -> {
                 // Sửa component

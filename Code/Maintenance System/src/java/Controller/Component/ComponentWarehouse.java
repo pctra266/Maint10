@@ -46,12 +46,6 @@ public class ComponentWarehouse extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
         Integer pageSize;
-        String delete = request.getParameter("delete");
-        String deleteStatus;
-        if (delete != null) {
-            deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
-            request.setAttribute("deleteStatus", deleteStatus);
-        }
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
       //--------------------------------------------------------------------------
         List<Component> components = new ArrayList<>();
@@ -86,7 +80,12 @@ public class ComponentWarehouse extends HttpServlet {
         } else {
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
         }
-
+        String delete = request.getParameter("delete");
+        String deleteStatus;
+        if (delete != null) {
+            deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
+            request.setAttribute("deleteStatus", deleteStatus);
+        }
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("search", paraSearch);
