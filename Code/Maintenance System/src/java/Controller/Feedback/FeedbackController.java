@@ -175,8 +175,7 @@ public class FeedbackController extends HttpServlet {
                 String noteCreate = request.getParameter("note");
                 String customerId = request.getParameter("customerId");
                 String warrantyCardId = request.getParameter("warrantyCardId");
-                FeedbackDAO dao = new FeedbackDAO();
-                dao.createFeedback("2", "7", noteCreate);
+                daoFeedback.createFeedback("2", "7", noteCreate);
                 System.out.println(noteCreate);
                 // tam thoi ve trang view list de kiem tra sau nay sua
                 response.sendRedirect("feedback");
