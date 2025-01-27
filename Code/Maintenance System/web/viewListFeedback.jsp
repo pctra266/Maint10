@@ -25,7 +25,7 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center ">Feedback List</h1>
-                    <form class="" action="ViewListFeedback" method="post">
+                    <form class="" action="feedback" method="post">
                         <div class="card-body" style="width: 500px">
                                 <input class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
                             <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
@@ -57,7 +57,7 @@
                                         <td>${o.dateCreated}</td>
                                         <td>${o.note}</td>
                                         <td>${(o.videoURL!=null || o.imageURL != null)?"Attached":"Empty"}</td>
-                                        <td><a href="DeleteFeedback?feedbackID=${o.feedbackID}">Delete</a></td>
+                                        <td><a href="feedback?feedbackID=${o.feedbackID}&action=deleteFeedback">Delete</a></td>
                                         <td><a href="UpdateFeedback?feedbackID=${o.feedbackID}">Detail</a></td>
                                 </tr>
                             </c:forEach>
@@ -65,7 +65,7 @@
                     </table>
                     <div class="text-center">
                         <c:forEach begin="1" end="${endPage}" var="i">
-                            <a href="ViewListFeedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}">${i}</a>
+                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}">${i}</a>
                         </c:forEach>
                     </div> 
                     <a href="ViewFeedbackLog">History</a>

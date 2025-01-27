@@ -64,7 +64,7 @@
                 </c:forEach>
             </tbody>
         </table>
-        <a href="ViewListFeedback">Back</a>
+        <a href="feedback">Back</a>
         </main>
                 <jsp:include page="/includes/footer.jsp" />
 

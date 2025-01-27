@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.Feedback;
 
 import DAO.FeedbackDAO;
+import DAO.FeedbackLogDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,8 +19,8 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Tra Pham
  */
-@WebServlet(name="CreateFeedback", urlPatterns={"/CreateFeedback"})
-public class CreateFeedback extends HttpServlet {
+@WebServlet(name="UndoFeedback", urlPatterns={"/UndoFeedback"})
+public class UndoFeedback extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -36,10 +37,10 @@ public class CreateFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet CreateFeedback</title>");  
+            out.println("<title>Servlet UndoFeedback</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet CreateFeedback at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet UndoFeedback at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -56,7 +57,16 @@ public class CreateFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.sendRedirect("CreateFeedback.jsp");
+        String feedbackLogID = request.getParameter("feedbackLogID");
+         FeedbackDAO daoFeedback = new FeedbackDAO();
+         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        String feedbackIdneedActive = String.valueOf(daoFeedbackLog.getFeedbackLogById(feedbackLogID).getFeedbackID());
+        daoFeedback.activeFeedbackById(feedbackIdneedActive);
+        daoFeedbackLog.deleteFeedbackLogById(feedbackLogID);
+        
+       
+        
+        response.sendRedirect("ViewFeedbackLog");
     } 
 
     /** 
@@ -69,14 +79,7 @@ public class CreateFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String note = request.getParameter("note");
-        String customerId = request.getParameter("customerId");
-        String warrantyCardId = request.getParameter("warrantyCardId");
-        FeedbackDAO dao = new FeedbackDAO();
-        dao.createFeedback("2", "7", note);
-        System.out.println(note);
-        // tam thoi ve trang view list de kiem tra sau nay sua
-        response.sendRedirect("ViewListFeedback");
+        processRequest(request, response);
     }
 
     /** 

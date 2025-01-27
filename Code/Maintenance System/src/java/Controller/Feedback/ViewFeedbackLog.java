@@ -3,10 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.Feedback;
 
-import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
+import Model.FeedbackLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,13 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  *
  * @author Tra Pham
  */
-@WebServlet(name="DeleteFeedback", urlPatterns={"/DeleteFeedback"})
-public class DeleteFeedback extends HttpServlet {
+@WebServlet(name="ViewFeedbackLog", urlPatterns={"/ViewFeedbackLog"})
+public class ViewFeedbackLog extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -37,10 +38,10 @@ public class DeleteFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet DeleteFeedback</title>");  
+            out.println("<title>Servlet ViewFeedbackLog</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet DeleteFeedback at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ViewFeedbackLog at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,14 +58,11 @@ public class DeleteFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String feedbackID = request.getParameter("feedbackID");
-        String staffId = "1";
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        daoFeedback.inActiveFeedbackById(feedbackID);
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-        daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackID), staffId);
+        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
+        request.setAttribute("listFeedbackLog", listFeedbackLog);
+        request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
         
-        request.getRequestDispatcher("ViewListFeedback").forward(request, response);
     } 
 
     /** 
@@ -77,7 +75,12 @@ public class DeleteFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        String action  = request.getParameter("action");
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(action);
+        request.setAttribute("listFeedbackLog", listFeedbackLog);
+        request.setAttribute("action", action);
+        request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
     }
 
     /** 
