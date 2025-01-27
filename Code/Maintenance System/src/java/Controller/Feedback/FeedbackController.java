@@ -87,7 +87,7 @@ public class FeedbackController extends HttpServlet {
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
-                    
+
                 }
                 ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index);
 
@@ -96,18 +96,23 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "deleteFeedback":
-                System.out.println("vao delete feedback");
-                String feedbackID = request.getParameter("feedbackID");
+                String feedbackIdDelete = request.getParameter("feedbackID");
                 String staffId = "1";
-                daoFeedback.inActiveFeedbackById(feedbackID);
-                daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackID), staffId);
+                daoFeedback.inActiveFeedbackById(feedbackIdDelete);
+                daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
                 // chuyen sang view action
                 response.sendRedirect("feedback");
+                break;
+            case "updateFeedback":
+                String feedbackIdUpdate = request.getParameter("feedbackID");
+                Feedback feedbackUpdate = daoFeedback.getFeedbackById(feedbackIdUpdate);
+                request.setAttribute("feedbackUpdate", feedbackUpdate);
+                request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
                 break;
             default:
                 break;
         }
-        
+
     }
 
     /**
@@ -123,29 +128,63 @@ public class FeedbackController extends HttpServlet {
             throws ServletException, IOException {
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-        
-        String customerName = request.getParameter("customerName");
-        String imageAndVideo = request.getParameter("imageAndVideo");
-        request.setAttribute("customerName", customerName);
-        request.setAttribute("imageAndVideo", imageAndVideo);
-        //phan trang
-        int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
-        int endPage = totalPages / 7;
-        if (totalPages % 7 != 0) {
-            endPage++;
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "viewListFeedback";
         }
-        request.setAttribute("endPage", endPage);
-        String indexStr = request.getParameter("index");
-        int index = 1;
-        try {
-            index = Integer.parseInt(indexStr);
-        } catch (Exception e) {
-            
+        switch (action) {
+            case "viewListFeedback":
+                String customerName = request.getParameter("customerName");
+                String imageAndVideo = request.getParameter("imageAndVideo");
+                request.setAttribute("customerName", customerName);
+                request.setAttribute("imageAndVideo", imageAndVideo);
+                //phan trang
+                int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
+                int endPage = totalPages / 7;
+                if (totalPages % 7 != 0) {
+                    endPage++;
+                }
+                request.setAttribute("endPage", endPage);
+                String indexStr = request.getParameter("index");
+                int index = 1;
+                try {
+                    index = Integer.parseInt(indexStr);
+                } catch (Exception e) {
+
+                }
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index);
+                request.setAttribute("listFeedback", listFeedback);
+                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+                break;
+            case "updateFeedback":
+
+                String note = request.getParameter("note");
+                String feedbackId = request.getParameter("feedbackId");
+                String staffId = "1";
+                //save history change to feedback log
+                // neu note giong nhu cu thi khong doi
+                Feedback oldFeedback = daoFeedback.getFeedbackById(feedbackId);
+                if (!note.trim().endsWith(oldFeedback.getNote())) {
+                    daoFeedbackLog.createUpdateFeedbackLog(oldFeedback, staffId, note);
+                }
+                //
+                daoFeedback.updateFeedback(feedbackId, note);
+                response.sendRedirect("feedback");
+                break;
+            case "createFeedback":
+                String noteCreate = request.getParameter("note");
+                String customerId = request.getParameter("customerId");
+                String warrantyCardId = request.getParameter("warrantyCardId");
+                FeedbackDAO dao = new FeedbackDAO();
+                dao.createFeedback("2", "7", noteCreate);
+                System.out.println(noteCreate);
+                // tam thoi ve trang view list de kiem tra sau nay sua
+                response.sendRedirect("feedback");
+                break;
+            default:
+                break;
         }
-        ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index);
-        request.setAttribute("listFeedback", listFeedback);
-        request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
-        
+
     }
 
     /**

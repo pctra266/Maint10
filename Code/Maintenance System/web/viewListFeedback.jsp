@@ -58,7 +58,7 @@
                                         <td>${o.note}</td>
                                         <td>${(o.videoURL!=null || o.imageURL != null)?"Attached":"Empty"}</td>
                                         <td><a href="feedback?feedbackID=${o.feedbackID}&action=deleteFeedback">Delete</a></td>
-                                        <td><a href="UpdateFeedback?feedbackID=${o.feedbackID}">Detail</a></td>
+                                        <td><a href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -68,7 +68,7 @@
                             <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}">${i}</a>
                         </c:forEach>
                     </div> 
-                    <a href="ViewFeedbackLog">History</a>
+                    <a href="feedbacklog">History</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

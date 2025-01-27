@@ -22,7 +22,8 @@
                 <main class="content">
         <h1>History</h1>
         <h1>Detail Feedback</h1>
-        <form action="UpdateFeedback" method="post">
+        <form action="feedback" method="post">
+        <input type="hidden" name="action" value="updateFeedback">
         <table >
             <tbody>
                 <tr>
