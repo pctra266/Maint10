@@ -30,48 +30,49 @@
             <div class="main">
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h2>Component Add</h2>
-                      <!-- Hiển thị cảnh báo lỗi -->
-                            <c:if test="${not empty nameAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${nameAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty addAlert0}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${addAlert0}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty codeAlert}">
-                                <div class="alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${codeAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty quantityAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${quantityAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty priceAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${priceAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
+                    <!-- Hiển thị cảnh báo lỗi -->
+                    <c:if test="${not empty nameAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${nameAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty addAlert0}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${addAlert0}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty codeAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${codeAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty quantityAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${quantityAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty priceAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${priceAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
                     <form class="row" action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
@@ -117,7 +118,7 @@
                                 </div>
                             </div>
 
-                          
+
                         </div>
 
                         <!-- Upload file ảnh -->
