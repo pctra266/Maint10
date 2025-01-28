@@ -87,7 +87,6 @@ public class FeedbackController extends HttpServlet {
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
-                
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
@@ -165,8 +164,8 @@ public class FeedbackController extends HttpServlet {
                 
                 if(endPage < index){
                     index = endPage;
-                request.setAttribute("index", index);
                 }
+                request.setAttribute("index", index);
                 ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
