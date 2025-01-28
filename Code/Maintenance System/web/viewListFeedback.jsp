@@ -25,17 +25,35 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center ">Feedback List</h1>
-                    <form class="" action="feedback" method="post">
-                        <div class="card-body" style="width: 500px">
-                                <input class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
-                            <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
-                                <option value="">Image & Video </option>
-                                <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
-                                <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
-                            </select>
-                            <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                    <div class="row" style="justify-content: space-between" >
+                        <div class="col-md-6" style="width: 500px">
+                            <form class="" action="feedback" method="post">
+                                    <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
+                                    <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
+                                        <option value="">Image & Video </option>
+                                        <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
+                                        <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
+                                    </select>
+                                    <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                            </form>
+                        </div >
+                        <div class="col-md-6" style="width: 500px">
+                            <div>
+                                <select style="margin-top: 15px" class="form-select">
+                                    <option>Sort By</option>
+                                    <option>Customer Name</option>
+                                    <option>Create Date</option>
+                                </select>
                             </div>
-                    </form>
+                            <div>
+                                <select style="margin-top: 15px" class="form-select">
+                                    <option>Sort Order</option>
+                                    <option>Ascending</option>
+                                    <option>Descending</option>
+                                </select>
+                            </div>
+                        </div>        
+                    </div>        
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -52,13 +70,13 @@
 
                             <c:forEach items="${listFeedback}" var="o">
                                 <tr>
-                                        <td>${o.feedbackID}</td>
-                                        <td>${o.customerName}</td>
-                                        <td>${o.dateCreated}</td>
-                                        <td>${o.note}</td>
-                                        <td>${(o.videoURL!=null || o.imageURL != null)?"Attached":"Empty"}</td>
-                                        <td><a href="feedback?feedbackID=${o.feedbackID}&action=deleteFeedback">Delete</a></td>
-                                        <td><a href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail</a></td>
+                                    <td>${o.feedbackID}</td>
+                                    <td>${o.customerName}</td>
+                                    <td>${o.dateCreated}</td>
+                                    <td>${o.note}</td>
+                                    <td>${(o.videoURL!=null || o.imageURL != null)?"Attached":"Empty"}</td>
+                                    <td><a href="feedback?feedbackID=${o.feedbackID}&action=deleteFeedback">Delete</a></td>
+                                    <td><a href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
