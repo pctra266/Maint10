@@ -87,14 +87,14 @@ public class FeedbackController extends HttpServlet {
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
-                request.setAttribute("index", indexStr);
+                
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
 
                 }
-                
+                request.setAttribute("index", index);
                 ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
 
                 //======end phan trang

@@ -24,36 +24,36 @@
                     <h1 class="text-center ">Feedback List</h1>
                     <form class="" action="feedback" method="post">
                         <input type="hidden" name="index" value="${index}">
-                    <div class="row" style="justify-content: space-between" >
-                        <div class="col-md-6" style="width: 500px">
-                            
-                                    <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
-                                    <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
-                                        <option value="">Image & Video </option>
-                                        <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
-                                        <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
+                        <div class="row" style="justify-content: space-between" >
+                            <div class="col-md-6" style="width: 500px">
+
+                                <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
+                                <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
+                                    <option value="">Image & Video </option>
+                                    <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
+                                    <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
+                                </select>
+                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+
+                            </div >
+                            <div class="col-md-6" style="width: 500px">
+                                <div>
+                                    <select  onchange="checkSort()" name="column" id="column" style="margin-top: 15px" class="form-select">
+                                        <option value="">Sort By</option>
+                                        <option ${(column=='CustomerName')?"selected":""} value="CustomerName">Customer Name</option>
+                                        <option ${(column=='DateCreated')?"selected":""} value="DateCreated">Create Date</option>
                                     </select>
-                                    <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
-                           
-                        </div >
-                        <div class="col-md-6" style="width: 500px">
-                            <div>
-                                <select  onchange="checkSort()" name="column" id="column" style="margin-top: 15px" class="form-select">
-                                    <option value="">Sort By</option>
-                                    <option ${(column=='CustomerName')?"selected":""} value="CustomerName">Customer Name</option>
-                                    <option ${(column=='DateCreated')?"selected":""} value="DateCreated">Create Date</option>
-                                </select>
-                            </div>
-                            <div>
-                                <select onchange="checkSort()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
-                                    <option value="">Sort Order</option>
-                                    <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
-                                    <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
-                                </select>
-                            </div>
-                        </div>        
-                    </div> 
-                        </form>         
+                                </div>
+                                <div>
+                                    <select onchange="checkSort()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
+                                        <option value="">Sort Order</option>
+                                        <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
+                                        <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
+                                    </select>
+                                </div>
+                            </div>        
+                        </div> 
+                    </form>         
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -81,9 +81,11 @@
                         </tbody>
                     </table>
                     <div class="text-center">
-                        <c:forEach begin="1" end="${endPage}" var="i">
-                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}&column=${column}&sortOrder=${sortOrder}">${i}</a>
-                        </c:forEach>
+                        <ul class="pagination pagination-lg text-center" style="display: flex; justify-content: center; margin-top: 15px">
+                            <c:forEach begin="1" end="${endPage}" var="i">
+                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}&column=${column}&sortOrder=${sortOrder}">${i}</a></li>
+                                </c:forEach>
+                        </ul>
                     </div> 
                     <a href="feedbacklog">History</a>
                 </main>
@@ -92,11 +94,11 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-            function checkSort(){
-                var column = document.getElementById('column').value;
-                var sortOrder = document.getElementById('sortOrder').value;
-                window.location.href = 'feedback?index=${index}&column='+column+'&sortOrder='+sortOrder+'&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
-            }
+                                        function checkSort() {
+                                            var column = document.getElementById('column').value;
+                                            var sortOrder = document.getElementById('sortOrder').value;
+                                            window.location.href = 'feedback?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
+                                        }
         </script>
     </body>
 </html>
