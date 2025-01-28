@@ -82,8 +82,7 @@
                     </table>
                     <div class="text-center">
                         <c:forEach begin="1" end="${endPage}" var="i">
-                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}
-                               &column=${column}&sortOrder=${sortOrder}">${i}</a>
+                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}&column=${column}&sortOrder=${sortOrder}">${i}</a>
                         </c:forEach>
                     </div> 
                     <a href="feedbacklog">History</a>
