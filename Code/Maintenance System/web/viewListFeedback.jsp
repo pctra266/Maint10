@@ -15,19 +15,18 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
-
-
     <body>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
-
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center ">Feedback List</h1>
+                    <form class="" action="feedback" method="post">
+                        <input type="hidden" name="index" value="${index}">
                     <div class="row" style="justify-content: space-between" >
                         <div class="col-md-6" style="width: 500px">
-                            <form class="" action="feedback" method="post">
+                            
                                     <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
                                     <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
                                         <option value="">Image & Video </option>
@@ -35,25 +34,26 @@
                                         <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
                                     </select>
                                     <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
-                            </form>
+                           
                         </div >
                         <div class="col-md-6" style="width: 500px">
                             <div>
-                                <select style="margin-top: 15px" class="form-select">
-                                    <option>Sort By</option>
-                                    <option>Customer Name</option>
-                                    <option>Create Date</option>
+                                <select  onchange="checkSort()" name="column" id="column" style="margin-top: 15px" class="form-select">
+                                    <option value="">Sort By</option>
+                                    <option ${(column=='CustomerName')?"selected":""} value="CustomerName">Customer Name</option>
+                                    <option ${(column=='DateCreated')?"selected":""} value="DateCreated">Create Date</option>
                                 </select>
                             </div>
                             <div>
-                                <select style="margin-top: 15px" class="form-select">
-                                    <option>Sort Order</option>
-                                    <option>Ascending</option>
-                                    <option>Descending</option>
+                                <select onchange="checkSort()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
+                                    <option value="">Sort Order</option>
+                                    <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
+                                    <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
                                 </select>
                             </div>
                         </div>        
-                    </div>        
+                    </div> 
+                        </form>         
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -67,7 +67,6 @@
                             </tr>
                         </thead>
                         <tbody>
-
                             <c:forEach items="${listFeedback}" var="o">
                                 <tr>
                                     <td>${o.feedbackID}</td>
@@ -83,20 +82,22 @@
                     </table>
                     <div class="text-center">
                         <c:forEach begin="1" end="${endPage}" var="i">
-                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}">${i}</a>
+                            <a href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}
+                               &column=${column}&sortOrder=${sortOrder}">${i}</a>
                         </c:forEach>
                     </div> 
                     <a href="feedbacklog">History</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
-
         </div>
-
-
         <script src="js/app.js"></script>
-
+        <script>
+            function checkSort(){
+                var column = document.getElementById('column').value;
+                var sortOrder = document.getElementById('sortOrder').value;
+                window.location.href = 'feedback?index=${index}&column='+column+'&sortOrder='+sortOrder+'&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
+            }
+        </script>
     </body>
-
-
 </html>

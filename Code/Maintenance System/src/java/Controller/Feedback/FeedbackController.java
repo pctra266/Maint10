@@ -73,8 +73,12 @@ public class FeedbackController extends HttpServlet {
             case "viewFeedback":
                 String customerName = request.getParameter("customerName");
                 String imageAndVideo = request.getParameter("imageAndVideo");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
                 //======phan trang
                 int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
                 int endPage = totalPages / 7;
@@ -83,13 +87,15 @@ public class FeedbackController extends HttpServlet {
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
+                request.setAttribute("index", indexStr);
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
 
                 }
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index);
+                
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
 
                 //======end phan trang
                 request.setAttribute("listFeedback", listFeedback);
@@ -136,8 +142,12 @@ public class FeedbackController extends HttpServlet {
             case "viewListFeedback":
                 String customerName = request.getParameter("customerName");
                 String imageAndVideo = request.getParameter("imageAndVideo");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
                 //phan trang
                 int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
                 int endPage = totalPages / 7;
@@ -146,13 +156,14 @@ public class FeedbackController extends HttpServlet {
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
+                request.setAttribute("index", indexStr);
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
 
                 }
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
