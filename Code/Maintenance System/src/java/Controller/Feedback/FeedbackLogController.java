@@ -2,11 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.Feedback;
 
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
-import Model.Feedback;
+import Model.FeedbackLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -14,13 +14,14 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 
 /**
  *
  * @author Tra Pham
  */
-@WebServlet(name = "UpdateFeedback", urlPatterns = {"/UpdateFeedback"})
-public class UpdateFeedback extends HttpServlet {
+@WebServlet(name = "FeedbackLogController", urlPatterns = {"/feedbacklog"})
+public class FeedbackLogController extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +40,10 @@ public class UpdateFeedback extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateFeedback</title>");
+            out.println("<title>Servlet FeedbackLogController</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateFeedback at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet FeedbackLogController at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,11 +61,30 @@ public class UpdateFeedback extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String feedbackID = request.getParameter("feedbackID");
-        FeedbackDAO dao = new FeedbackDAO();
-        Feedback feedbackUpdate = dao.getFeedbackById(feedbackID);
-        request.setAttribute("feedbackUpdate", feedbackUpdate);
-        request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
+        FeedbackDAO daoFeedback = new FeedbackDAO();
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "viewListFeedbackLog";
+        }
+        switch (action) {
+            case "viewListFeedbackLog":
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
+                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
+                break;
+
+            case "undoFeedback":
+                String feedbackLogID = request.getParameter("feedbackLogID");
+                String feedbackIdneedActive = String.valueOf(daoFeedbackLog.getFeedbackLogById(feedbackLogID).getFeedbackID());
+                daoFeedback.activeFeedbackById(feedbackIdneedActive);
+                daoFeedbackLog.deleteFeedbackLogById(feedbackLogID);
+                response.sendRedirect("feedbacklog");
+                break;
+            default:
+                break;
+        }
+
     }
 
     /**
@@ -78,21 +98,24 @@ public class UpdateFeedback extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        FeedbackDAO daoFeedback = new FeedbackDAO();
-        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-
-        String note = request.getParameter("note");
-        String feedbackId = request.getParameter("feedbackId");
-        String staffId = "1";
-        //save history change to feedback log
-        // neu note giong nhu cu thi khong doi
-        Feedback oldFeedback = daoFeedback.getFeedbackById(feedbackId);
-        if (!note.trim().endsWith(oldFeedback.getNote())) {
-            daoFeedbackLog.createUpdateFeedbackLog(oldFeedback, staffId, note);
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "viewListFeedbackLog";
         }
-        //
-        daoFeedback.updateFeedback(feedbackId, note);
-        response.sendRedirect("ViewListFeedback");
+        switch (action) {
+            case "viewListFeedbackLog":
+                String actionOfLog = request.getParameter("actionOfLog");
+                FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog);
+                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                request.setAttribute("actionOfLog", actionOfLog);
+                request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
+                break;
+            case "undoFeedback":
+                break;
+            default:
+                break;
+        }
 
     }
 

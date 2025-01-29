@@ -24,7 +24,7 @@ public class FeedbackLogDAO {
 
     public ArrayList<FeedbackLog> getAllFeedbackLog() {
         ArrayList<FeedbackLog> list = new ArrayList<>();
-        String query = "select * from FeedbackLog";
+        String query = "select * from FeedbackLog order by DateModified desc";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
@@ -51,6 +51,7 @@ public class FeedbackLogDAO {
                 query += " and Action like 'delete'";
             }
         }
+        query += " order by DateModified desc";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);

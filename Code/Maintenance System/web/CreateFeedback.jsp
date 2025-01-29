@@ -13,7 +13,8 @@
     </head>
     <body>
         <h1>Create Feedback</h1>
-        <form action="CreateFeedback" method="post">
+        <form action="feedback" method="post">
+            <input type="hidden" name="action" value="createFeedback">
             <table >
                 <tbody>
                     <tr>

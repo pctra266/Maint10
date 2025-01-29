@@ -23,12 +23,12 @@
                 <main class="content">
                     
         <h1 class="text-center">History</h1>
-        <form class="" action="ViewFeedbackLog" method="post">
+        <form class="" action="feedbacklog" method="post">
                         <div class="card-body" style="width: 500px">
-                            <select style="margin-top: 15px" class="form-select" name="action">
+                            <select style="margin-top: 15px" class="form-select" name="actionOfLog">
                                 <option value="">Action </option>
-                                <option ${(action=='update')?"selected":""} value="update">Update</option>
-                                <option ${(action=='delete')?"selected":""} value="delete">Delete</option>
+                                <option ${(actionOfLog=='update')?"selected":""} value="update">Update</option>
+                                <option ${(actionOfLog=='delete')?"selected":""} value="delete">Delete</option>
                             </select>
                             <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
                             </div>
@@ -58,13 +58,13 @@
                     <td>${o.modifiedBy}</td>
                     <td>${o.dateModified}</td>
                     <c:if test="${o.action=='delete'}">
-                    <td><a href="UndoFeedback?feedbackLogID=${o.feedbackLogID}">Undo</a></td>
+                    <td><a href="feedbacklog?feedbackLogID=${o.feedbackLogID}&action=undoFeedback">Undo</a></td>
                     </c:if>
                 </tr>
                 </c:forEach>
             </tbody>
         </table>
-        <a href="ViewListFeedback">Back</a>
+        <a href="feedback">Back</a>
         </main>
                 <jsp:include page="/includes/footer.jsp" />
 

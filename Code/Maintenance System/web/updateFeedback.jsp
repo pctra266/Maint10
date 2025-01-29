@@ -10,7 +10,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Feedback Detail</title>
-         <link href="css/light.css" rel="stylesheet">
+        <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
     <body>
@@ -20,60 +20,78 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-        <h1>History</h1>
-        <h1>Detail Feedback</h1>
-        <form action="UpdateFeedback" method="post">
-        <table >
-            <tbody>
-                <tr>
-                    <td>Feedback ID: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.feedbackID}" name="feedbackId"></td>
-                </tr>
-                <tr>
-                    <td><input type="hidden" value="${feedbackUpdate.customerID}"></td>
-                </tr>
-                <tr>
-                    <td>Customer Name: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.customerName}"></td>
-                </tr>
-                <tr>
-                    <td>Create Date: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.dateCreated}"></td>
-                </tr>
-                <tr>
-                    <td>Product Name: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.productName}"></td>
-                </tr>
-                <tr>
-                    <td>Issue Description: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.issueDescription}"></td>
-                </tr>
-                <tr>
-                    <td>Warranty Status: </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.warrantyStatus}"></td>
-                </tr>
-                <tr>
-                    <td><input type="hidden"  value="${feedbackUpdate.warrantyCardID}"></td>
-                </tr>
-                <tr>
-                    <td>Note : </td>
-                    <td><textarea name="note">${feedbackUpdate.note}</textarea></td>
-                </tr>
-                 <tr>
-                    <td>Image : </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.imageURL}"></td>
-                </tr>
-                 <tr>
-                    <td>Video : </td>
-                    <td><input type="text" readonly="" value="${feedbackUpdate.videoURL}"></td>
-                </tr>
-                <tr>
-                    <td> <button type="submit" > Save Change</button> </td>
-                </tr>
-            </tbody>
-            
-        </table>
-         </form>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="text-center">Feedback Detail</h1>
+                        </div>
+
+                        <div class="card-body">
+                            <form action="feedback" method="post">
+
+                                <input type="hidden" name="action" value="updateFeedback">
+                                <!-- hidden field -->
+                                    
+                                <div>
+                                    <input type="hidden" value="${feedbackUpdate.customerID}">
+                                </div>
+                                 <div>
+                                    <input type="hidden"  value="${feedbackUpdate.warrantyCardID}">
+                                </div>
+                                <!-- end hidden field -->
+                                <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Feedback ID: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.feedbackID}" name="feedbackId">
+                                </div>
+                            
+
+                                <div  class="mb-3 col-md-6">
+                                    <label class="form-label">Customer Name: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.customerName}">
+                                </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Create Date: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.dateCreated}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.productName}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Issue Description: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.issueDescription}">
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Warranty Status: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.warrantyStatus}">
+                                </div>
+                               
+                                <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Image : </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.imageURL}">
+                                </div>
+
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Video : </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.videoURL}">
+                                </div>
+                                </div>
+                                 <div class="mb-3">
+                                    <label class="form-label">Note : </label>
+                                    <textarea class="form-control" name="note">${feedbackUpdate.note}</textarea>
+                                </div>
+                                <button class="btn btn-primary" type="submit" > Save Change</button> 
+
+                            </form>
+                        </div><!-- end card body -->               
+                    </div><!-- end class card -->
+
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
 
