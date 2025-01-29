@@ -30,72 +30,95 @@
             <div class="main">
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h2>Component Add</h2>
+                    <!-- Hiển thị cảnh báo lỗi -->
+                    <c:if test="${not empty nameAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${nameAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty addAlert0}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${addAlert0}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty codeAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${codeAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty quantityAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${quantityAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty priceAlert}">
+                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${priceAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
                     <form class="row" action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
                                 <div class="col-md-10">
-                                    <label for="validationDefault01" class="form-label">Name</label>
-                                    <input type="text" class="form-control" name="Name" id="validationDefault01" value="${name}" required>
+                                    <label for="Name" class="form-label">Name</label>
+                                    <input type="text" class="form-control" name="Name" id="Name" value="${name}" required>
                                 </div>
-                                   <div class="col-md-10">
-                                    <label for="validationDefault02" class="form-label">Code</label>
-                                    <input type="text" class="form-control" name="Code"id="validationDefault02" value="${component.componentCode}" required>
-                                </div>
-                                <div class="col-md-3">
-                                    <label for="validationDefault03" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="Quantity" id="validationDefault03" value="${quantity}" min="0" required>
+                                <div class="col-md-10">
+                                    <label for="Code" class="form-label">Code</label>
+                                    <input type="text" class="form-control" name="Code"id="Code" value="${code}" required>
                                 </div>
                                 <div class="col-md-3">
-                                    <label for="validationDefault05" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="Price" id="validationDefault04" value="${price}" step="0.01" min="0" required>
+                                    <label for="Type" class="form-label">Type</label>
+                                    <select name="Type" class="form-select form-select-md" id="Type" required style="flex: 1 1 auto;">
+                                        <option value disabled selected>Choose</option>
+                                        <c:forEach var="t" items="${typeList}">
+                                            <option value="${t}" ${t eq type ? "selected" : ""}>${t}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="Brand" class="form-label">Brand</label>
+                                    <select name="Brand" class="form-select form-select-md" id="Brand" required style="flex: 1 1 auto;">
+                                        <option value disabled selected>Choose</option>
+                                        <c:forEach var="b" items="${brandList}">
+                                            <option value="${b}" ${b eq brand ? "selected" : ""}>${b}</option>
+                                        </c:forEach>
+                                    </select>                              
+                                </div>
+
+                                <div class="col-md-6">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="Quantity" class="form-label">Quantity</label>
+                                    <input type="number" class="form-control" name="Quantity" id="Quantity" value="${quantity}" min="0" required>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="Price" class="form-label">Price</label>
+                                    <input type="number" class="form-control" name="Price" id="Price" value="${price}" step="0.01" min="0" required>
                                 </div>
                                 <div class="col-md-12" style="margin-bottom: 1rem">
                                     <button class="btn btn-success" type="submit">Add</button>
                                 </div>
                             </div>
 
-                            <!-- Hiển thị cảnh báo lỗi -->
-                            <c:if test="${not empty nameAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${nameAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty addAlert0}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${addAlert0}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                                                   <c:if test="${not empty codeAlert}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${codeAlert}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                            <c:if test="${not empty quantityAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${quantityAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
-                            <c:if test="${not empty priceAlert}">
-                                <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                    <div class="alert-message">
-                                        <strong>${priceAlert}</strong>
-                                    </div>
-                                </div>
-                            </c:if>
+
                         </div>
 
                         <!-- Upload file ảnh -->
@@ -113,17 +136,17 @@
         </div>
 
         <script src="js/app.js"></script>
-        
-                                // Hàm để xem trước ảnh khi người dùng chọn tệp mới
-            <script>
-        function previewImage(event) {
-                                        const reader = new FileReader();
-                                reader.onload = function () {
-                                const output = document.getElementById('currentImage');
-                                output.src = reader.result;
-                                };
-                                reader.readAsDataURL(event.target.files[0]);
-        }
+
+        // Hàm để xem trước ảnh khi người dùng chọn tệp mới
+        <script>
+                                function previewImage(event) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        const output = document.getElementById('currentImage');
+                                        output.src = reader.result;
+                                    };
+                                    reader.readAsDataURL(event.target.files[0]);
+                                }
         </script>
     </script>
 </body>

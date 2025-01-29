@@ -88,9 +88,11 @@
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
-                                <th style="width:15%">
+                                <th style="width:13%">
                                     <form action="ComponentWarehouse" method="get">
                                         <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="type" value="${type}" />
+                                        <input type="hidden" name="brand" value="${brand}" />
                                         <input type="hidden" name="page-size" value="${size}" />
                                         <input type="hidden" name="search" value="${search}" />
                                         <input type="hidden" name="sort" value="code" />
@@ -103,9 +105,16 @@
                                         Code
                                     </form>
                                 </th>
-                                <th style="width:35%">
+                                <th>
+                                    Type
+                                </th>
+                                <th>
+                                    Brand
+                                </th>
+
+                                <th style="width:30%">
                                     <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
                                         <input type="hidden" name="page-size" value="${size}" />
                                         <input type="hidden" name="search" value="${search}" />
                                         <input type="hidden" name="sort" value="name" />
@@ -121,7 +130,7 @@
 
                                 <th style="width:15%">
                                     <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
                                         <input type="hidden" name="page-size" value="${size}" />
                                         <input type="hidden" name="search" value="${search}" />
                                         <input type="hidden" name="sort" value="quantity" />
@@ -137,7 +146,7 @@
 
                                 <th style="width:15%">
                                     <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
+                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
                                         <input type="hidden" name="page-size" value="${size}" />
                                         <input type="hidden" name="search" value="${search}" />
                                         <input type="hidden" name="sort" value="price" />
@@ -150,8 +159,8 @@
                                         Unit Price
                                     </form>
                                 </th>
-
-                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}&search=${search}"><i class="fa fa-refresh ms-2"></i></a></th>
+                               
+                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
@@ -159,6 +168,8 @@
     <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
         <td>${status.index + 1 + (currentPage - 1) * size}</td>
         <td>${component.componentCode}</td>
+        <td>${component.type}</td>
+        <td>${component.brand}</td>
         <td>${component.componentName}</td>
         <td>${component.quantity}</td>
         <td>${component.price}</td>
@@ -186,7 +197,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body m-3">
-                    <p class="mb-0">If you delete this component, it will be removed from all products that contain it. Are you sure?</p>
+                    <p class="mb-0">Confirm your action. Really want to delete?</p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -214,7 +225,7 @@
                             <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
-                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)}" />
+                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
                             <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
 
                             <!-- Điều chỉnh startPage và endPage nếu cần -->

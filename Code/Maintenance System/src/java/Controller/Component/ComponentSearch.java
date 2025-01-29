@@ -38,18 +38,28 @@ public class ComponentSearch extends HttpServlet {
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
         String paraSearchCode = request.getParameter("searchCode") != null ? request.getParameter("searchCode") : "";
-        String paraSearchQuantity = request.getParameter("searchQuantity") != null ? request.getParameter("searchQuantity") : "";
-        String paraSearchPrice = request.getParameter("searchPrice") != null ? request.getParameter("searchPrice") : "";
         String paraSearchName = request.getParameter("searchName") != null ? request.getParameter("searchName") : "";
         int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        String type = request.getParameter("searchType");
+        Integer typeID = componentDAO.getTypeID(type);
+        String brand = request.getParameter("searchBrand");
+        Integer brandID = componentDAO.getBrandID(brand);
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        String paraSearchQuantityMin = request.getParameter("searchQuantityMin");
+        Integer searchQuantityMin = NumberUtils.tryParseInt(paraSearchQuantityMin) != null ? NumberUtils.tryParseInt(paraSearchQuantityMin) : componentDAO.getQuantityMin();
+        String paraSearchQuantityMax = request.getParameter("searchQuantityMax");
+        Integer searchQuantityMax = NumberUtils.tryParseInt(paraSearchQuantityMax) != null ? NumberUtils.tryParseInt(paraSearchQuantityMax) : componentDAO.getQuantityMax();
+        String paraSearchPriceMin = request.getParameter("searchPriceMin");
+        Double searchPriceMin = NumberUtils.tryParseDouble(paraSearchPriceMin) != null ? NumberUtils.tryParseDouble(paraSearchPriceMin) : componentDAO.getPriceMin();
+        String paraSearchPriceMax = request.getParameter("searchPriceMax");
+        Double searchPriceMax = NumberUtils.tryParseDouble(paraSearchPriceMax) != null ? NumberUtils.tryParseDouble(paraSearchPriceMax) : componentDAO.getPriceMax();
         List<Component> components = new ArrayList<>();
-        int totalComponents = componentDAO.getTotalSearchComponentsByFields(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice);
+        int totalComponents = componentDAO.getTotalSearchComponentsByFields(paraSearchCode, paraSearchName, typeID, brandID, searchQuantityMin, searchQuantityMax, searchPriceMin, searchPriceMax);
         // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalComponents / pageSize);
         if (page > totalPages) {
@@ -72,19 +82,34 @@ public class ComponentSearch extends HttpServlet {
                     default ->
                         "Price";
                 };
-                components = componentDAO.searchComponentsByFieldsPageSorted(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize, sortSQL, order);
+                components = componentDAO.searchComponentsByFieldsPageSorted(paraSearchCode, paraSearchName, page, pageSize, sortSQL, order, typeID, brandID, searchQuantityMin, searchQuantityMax, searchPriceMin, searchPriceMax);
             } else {
-                components = componentDAO.searchComponentsByFieldsPage(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize);
+                
+                components = componentDAO.searchComponentsByFieldsPage(paraSearchCode, paraSearchName, page, pageSize, typeID, brandID, searchQuantityMin, searchQuantityMax, searchPriceMin, searchPriceMax);
             }
         } else {
-            components = componentDAO.searchComponentsByFieldsPage(paraSearchCode,paraSearchName, paraSearchQuantity, paraSearchPrice, page, pageSize);
+            
+            components = componentDAO.searchComponentsByFieldsPage(paraSearchCode, paraSearchName, page, pageSize, typeID, brandID, searchQuantityMin, searchQuantityMax, searchPriceMin, searchPriceMax);
         }
-
+        String delete = request.getParameter("delete");
+        String deleteStatus;
+        if (delete != null) {
+            deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
+            request.setAttribute("deleteStatus", deleteStatus);
+        }
         // Đặt các thuộc tính cho request
+        request.setAttribute("searchQuantityMin", searchQuantityMin);
+        request.setAttribute("searchQuantityMax", searchQuantityMax);
+        request.setAttribute("quantityMin", componentDAO.getQuantityMin());
+        request.setAttribute("quantityMax", componentDAO.getQuantityMax());
+        request.setAttribute("searchPriceMin", searchPriceMin);
+        request.setAttribute("searchPriceMax", searchPriceMax);
+        request.setAttribute("priceMin", componentDAO.getPriceMin());
+        request.setAttribute("priceMax", componentDAO.getPriceMax());
         request.setAttribute("totalComponents", totalComponents);
+        request.setAttribute("typeList", componentDAO.getListType());
+        request.setAttribute("brandList", componentDAO.getListBrand());
         request.setAttribute("searchName", paraSearchName);
-        request.setAttribute("searchQuantity", paraSearchQuantity);
-        request.setAttribute("searchPrice", paraSearchPrice);
         request.setAttribute("searchCode", paraSearchCode);
         request.setAttribute("totalPagesToShow", 5);
         request.setAttribute("size", pageSize);
@@ -93,6 +118,8 @@ public class ComponentSearch extends HttpServlet {
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("sort", sort);
         request.setAttribute("order", order);
+        request.setAttribute("searchType", type);
+        request.setAttribute("searchBrand", brand);
         // Chuyển tiếp đến trang JSP để hiển thị
         request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
 

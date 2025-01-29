@@ -1,0 +1,84 @@
+
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Jan 27, 2025, 12:23:23 PM
+    Author     : ADMIN
+*/
+
+::selection{
+  color: #fff;
+  background: #3b7ddd;
+}
+.price-input{
+  width: 100%;
+  display: flex;
+  margin: 30px 0 35px;
+}
+.price-input .field{
+  display: flex;
+  width: 100%;
+  height: 45px;
+  align-items: center;
+}
+.field input{
+  width: 100%;
+  height: 100%;
+  outline: none;
+  font-size: 19px;
+  margin-left: 12px;
+  border-radius: 5px;
+  text-align: center;
+  border: 1px solid #999;
+  -moz-appearance: none;
+}
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+}
+.price-input .separator{
+  width: 20%;
+  display: flex;
+  font-size: 29px;
+  align-items: center;
+  justify-content: center;
+}
+.slider{
+  height: 5px;
+  position: relative;
+  background: #ddd;
+  border-radius: 5px;
+}
+.slider .progress{
+  height: 100%;
+  left: 25%;
+  right: 25%;
+  position: absolute;
+  border-radius: 5px;
+  background: #3b7ddd;
+}
+.range-input{
+  position: relative;
+}
+.range-input input{
+  position: absolute;
+  width: 100%;
+  height: 5px;
+  top: -5px;
+  background: none;
+  pointer-events: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+input[type="range"]::-webkit-slider-thumb{
+  height: 17px;
+  width: 17px;
+  border-radius: 50%;
+  background: #3b7ddd;
+  pointer-events: auto;
+  -webkit-appearance: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.05);
+}
+
