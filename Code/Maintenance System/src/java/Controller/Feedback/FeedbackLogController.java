@@ -69,7 +69,21 @@ public class FeedbackLogController extends HttpServlet {
         }
         switch (action) {
             case "viewListFeedbackLog":
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
+                String indexStr = request.getParameter("index");
+                int index = 1;
+                try {
+                    index = Integer.parseInt(indexStr);
+                } catch (Exception e) {
+                }
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog();
+                int endPage = totalPage /7;
+                if(totalPage %7 != 0 ){
+                    endPage ++;
+                }
+                request.setAttribute("index", index);
+                request.setAttribute("endPage", endPage);
+                
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog("",index);
                 request.setAttribute("listFeedbackLog", listFeedbackLog);
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;

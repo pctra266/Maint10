@@ -68,6 +68,37 @@ public class FeedbackLogDAO {
 
         return list;
     }
+    public ArrayList<FeedbackLog> getAllFeedbackLog(String action, int index) {
+        ArrayList<FeedbackLog> list = new ArrayList<>();
+        String query = "select * from FeedbackLog where 1=1";
+        if (action != null && !action.trim().isEmpty()) {
+            if (action.equalsIgnoreCase("update")) {
+                query += " and Action like 'update'";
+            } else {
+                query += " and Action like 'delete'";
+            }
+        }
+        query += " order by DateModified asc";
+        
+            query += " offset ? rows  fetch next 7 rows only;";
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count =1;
+                ps.setInt(count++, (index -1)* 7);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                list.add(new FeedbackLog(rs.getInt("FeedbackLogID"), rs.getInt("FeedbackID"),
+                        rs.getString("Action"), rs.getString("OldFeedbackText"),
+                        rs.getString("NewFeedbackText"), rs.getInt("ModifiedBy"),
+                        rs.getDate("DateModified")));
+            }
+        } catch (Exception e) {
+
+        }
+
+        return list;
+    }
 
     public void createDeleteFeedbackLog(Feedback feedback,String staffId) {
         String query = "INSERT INTO FeedbackLog (FeedbackID, [Action], OldFeedbackText, NewFeedbackText, ModifiedBy, DateModified)\n"
@@ -130,13 +161,28 @@ public class FeedbackLogDAO {
         }
         return null;
     }
+    
+    public int getTotalFeedbackLog(){
+         String query = "select count(*)  from FeedbackLog";
+         try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+         return 0;
+    }
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update");
+        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("",1);
         for (FeedbackLog feedbackLog : list) {
             System.out.println(feedbackLog);
         }
+//        System.out.println(dao.getTotalFeedbackLog());
 //            FeedbackLog f = dao.getFeedbackLogById("16");
 //            System.out.println(f);
     }
