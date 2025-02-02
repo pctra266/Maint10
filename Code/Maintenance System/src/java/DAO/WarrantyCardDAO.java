@@ -1,17 +1,19 @@
 package DAO;
 
+import Model.ProductDetail;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import model.WarrantyCard;
 import java.sql.*;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 /**
  *
  * @author ADMIN
@@ -71,6 +73,39 @@ public class WarrantyCardDAO extends DBContext {
             return false;
         }
     }
+
+    public ProductDetail getProductDetailByCode(String code) {
+    String sql = "SELECT pd.ProductDetailID, pd.ProductCode, pd.PurchaseDate, c.UsernameC, c.Name, c.Email, c.Phone, c.Address, p.ProductName, p.WarrantyPeriod "
+               + "FROM ProductDetail pd "
+               + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
+               + "JOIN Product p ON pd.ProductID = p.ProductID "
+               + "WHERE pd.ProductCode = ?";
+    
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setNString(1, code);
+        ResultSet rs = ps.executeQuery();
+        
+        if (rs.next()) {
+            ProductDetail productDetail = new ProductDetail(
+                rs.getInt("ProductDetailID"),
+                rs.getString("ProductCode"),
+                rs.getDate("PurchaseDate"),
+                rs.getString("UsernameC"),
+                rs.getString("Name"),
+                rs.getString("Email"),
+                rs.getString("Phone"),
+                rs.getString("Address"),
+                rs.getString("ProductName"),
+                rs.getInt("WarrantyPeriod")
+            );
+            return productDetail; // Trả về đối tượng ProductDetail
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    }
+    
+    return null; // Trả về null nếu không tìm thấy kết quả
+}
 
     private String generateWarrantyCardCode() {
         String warrantyCode;

@@ -5,6 +5,8 @@
 
 package Controller.WarrantyCard;
 
+import DAO.WarrantyCardDAO;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +21,8 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name="AddWarrantyCard", urlPatterns={"/WarrantyCard/Add"})
 public class AddWarrantyCard extends HttpServlet {
-   
+       private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -29,6 +32,15 @@ public class AddWarrantyCard extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        String productCode = request.getParameter("ProductCode");
+        ProductDetail pd = warrantyCardDAO.getProductDetailByCode(productCode);
+        if(pd==null) {
+            request.setAttribute("NotFoundProduct", "No product has this code!");
+        }
+        else{
+            request.setAttribute("pd", pd);
+        }
+        request.setAttribute("ProductCode", productCode);
         request.getRequestDispatcher("WarrantyCardCreate.jsp").forward(request, response);
     } 
 
