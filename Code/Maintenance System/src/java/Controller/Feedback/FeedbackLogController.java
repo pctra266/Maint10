@@ -70,12 +70,14 @@ public class FeedbackLogController extends HttpServlet {
         switch (action) {
             case "viewListFeedbackLog":
                 String indexStr = request.getParameter("index");
+                String actionOfLog = request.getParameter("actionOfLog");
+                request.setAttribute("actionOfLog", actionOfLog);
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
                 }
-                int totalPage = daoFeedbackLog.getTotalFeedbackLog();
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog);
                 int endPage = totalPage /7;
                 if(totalPage %7 != 0 ){
                     endPage ++;
@@ -83,7 +85,7 @@ public class FeedbackLogController extends HttpServlet {
                 request.setAttribute("index", index);
                 request.setAttribute("endPage", endPage);
                 
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog("",index);
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,index);
                 request.setAttribute("listFeedbackLog", listFeedbackLog);
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;
@@ -112,17 +114,36 @@ public class FeedbackLogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewListFeedbackLog";
         }
         switch (action) {
             case "viewListFeedbackLog":
+                String indexStr = request.getParameter("index");
                 String actionOfLog = request.getParameter("actionOfLog");
-                FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog);
-                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                int index = 1;
+                try {
+                    index = Integer.parseInt(indexStr);
+                } catch (Exception e) {
+                }
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog);
+                int endPage = totalPage /7;
+                if(totalPage %7 != 0 ){
+                    endPage ++;
+                }
+                if(endPage < index){
+                    index = endPage;
+                }
+                request.setAttribute("index", index);
+                request.setAttribute("endPage", endPage);
+                
+                
                 request.setAttribute("actionOfLog", actionOfLog);
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,index);
+                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;
             case "undoFeedback":

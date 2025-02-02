@@ -162,8 +162,15 @@ public class FeedbackLogDAO {
         return null;
     }
     
-    public int getTotalFeedbackLog(){
-         String query = "select count(*)  from FeedbackLog";
+    public int getTotalFeedbackLog(String actionOfLog){
+         String query = "select count(*)  from FeedbackLog where 1=1";
+          if (actionOfLog != null && !actionOfLog.trim().isEmpty()) {
+            if (actionOfLog.equalsIgnoreCase("update")) {
+                query += " and Action like 'update'";
+            } else {
+                query += " and Action like 'delete'";
+            }
+        }
          try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
@@ -178,7 +185,7 @@ public class FeedbackLogDAO {
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("",1);
+        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("delete",1);
         for (FeedbackLog feedbackLog : list) {
             System.out.println(feedbackLog);
         }

@@ -24,6 +24,7 @@
 
                     <h1 class="text-center">History</h1>
                     <form class="" action="feedbacklog" method="post">
+                        <input type="hidden" name="index" value="${index}">
                         <div class="card-body" style="width: 500px">
                             <select style="margin-top: 15px" class="form-select" name="actionOfLog">
                                 <option value="">Action </option>
@@ -67,7 +68,7 @@
                     <div class="text-center">
                         <ul class="pagination pagination-lg" style="display: flex; justify-content: center; margin-top: 15px">
                             <c:forEach begin="1" end="${endPage}" var="i">
-                                 <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedbacklog?index=${i}">${i}</a></li>
+                                 <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedbacklog?index=${i}&actionOfLog=${actionOfLog}">${i}</a></li>
                                 </c:forEach>
                         </ul>
 
