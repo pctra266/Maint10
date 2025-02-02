@@ -170,13 +170,13 @@ public class ComponentAction extends HttpServlet {
             if (add) {
                 request.setAttribute("addAlert1", "Added to warehouse");
                 request.setAttribute("component", addedComponent);
-                request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
             } else {
                 request.setAttribute("addAlert0", "Fail add to warehouse");
-                request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/Component/ComponentAdd.jsp").forward(request, response);
             }
         } else {
-            request.getRequestDispatcher("/Component/ComponentAdd.jsp").forward(request, response);
+            request.getRequestDispatcher("/views/Component/ComponentAdd.jsp").forward(request, response);
         }
     }
 
@@ -250,7 +250,7 @@ public class ComponentAction extends HttpServlet {
         // Trả về trang chi tiết Component
         request.setAttribute("list", componentDAO.getProductsByComponentId(component.getComponentID()));
         request.setAttribute("component", component);
-        request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
     }
 
 // Lưu ảnh vào thư mục /img/Component
@@ -311,7 +311,7 @@ public class ComponentAction extends HttpServlet {
                 request.setAttribute("typeList", componentDAO.getListType());
                 request.setAttribute("brandList", componentDAO.getListBrand());
                 request.setAttribute("component", component);
-                request.getRequestDispatcher("/Component/ComponentDetail.jsp").forward(request, response);
+                request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
             }
             case "/ComponentWarehouse/Delete" -> {
                 String pageParam = request.getParameter("page");

@@ -97,7 +97,7 @@ public class ComponentWarehouse extends HttpServlet {
         request.setAttribute("sort", sort);
         request.setAttribute("order", order);
         // Chuyển tiếp đến trang JSP để hiển thị
-        request.getRequestDispatcher("Component/ComponentWarehouse.jsp").forward(request, response);
+        request.getRequestDispatcher("views/Component/ComponentWarehouse.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

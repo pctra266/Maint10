@@ -42,7 +42,7 @@ public class WarrantyCardList extends HttpServlet {
         }
         List<WarrantyCard> cards = warrantyCardDAO.getAllWarrantyCards();
         request.setAttribute("cardList", cards);
-        request.getRequestDispatcher("WarrantyCard/WarrantyCardList.jsp").forward(request, response);
+        request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

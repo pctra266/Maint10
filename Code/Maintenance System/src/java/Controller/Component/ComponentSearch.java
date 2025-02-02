@@ -121,7 +121,7 @@ public class ComponentSearch extends HttpServlet {
         request.setAttribute("searchType", type);
         request.setAttribute("searchBrand", brand);
         // Chuyển tiếp đến trang JSP để hiển thị
-        request.getRequestDispatcher("/Component/ComponentSearch.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/Component/ComponentSearch.jsp").forward(request, response);
 
     }
 

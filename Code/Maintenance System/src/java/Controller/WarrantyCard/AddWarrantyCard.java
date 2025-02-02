@@ -45,14 +45,14 @@ public class AddWarrantyCard extends HttpServlet {
             }
         }
         ProductDetail pd = warrantyCardDAO.getProductDetailByCode(productCode);
-        if (pd == null) {
+        if (pd == null && productCode!=null) {
             request.setAttribute("NotFoundProduct", "No product has this code!");
         } else {
             request.setAttribute("pd", pd);
         }
 
         request.setAttribute("ProductCode", productCode);
-        request.getRequestDispatcher("WarrantyCardCreate.jsp").forward(request, response);
+        request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardCreate.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

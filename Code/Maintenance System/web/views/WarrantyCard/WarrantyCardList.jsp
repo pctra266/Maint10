@@ -46,10 +46,10 @@
 
     <body>
         <div class="wrapper">
-            <jsp:include page="../includes/navbar-left.jsp" />
+            <jsp:include page="../../includes/navbar-left.jsp" />
 
             <div class="main">
-                <jsp:include page="../includes/navbar-top.jsp" />
+                <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Warranty Card</h2>
                     <c:if test="${not empty createStatus}">
@@ -227,7 +227,7 @@
                         </c:if>
                     </div>
                 </main>
-                <jsp:include page="../includes/footer.jsp" />
+                <jsp:include page="../../includes/footer.jsp" />
             </div>
 
         </div>

@@ -15,6 +15,7 @@
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
         <meta name="author" content="AdminKit">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+        <base href="${pageContext.request.contextPath}/">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
@@ -46,10 +47,11 @@
 
     <body>
         <div class="wrapper">
-            <jsp:include page="../includes/navbar-left.jsp" />
+            <jsp:include page="../../includes/navbar-left.jsp" />
 
             <div class="main">
-                <jsp:include page="../includes/navbar-top.jsp" />
+                
+                <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Component Warehouse</h2>
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -160,7 +162,7 @@
                                     </form>
                                 </th>
                                
-                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="ComponentWarehouse?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
@@ -219,10 +221,10 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="ComponentWarehouse?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="ComponentWarehouse?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
@@ -239,14 +241,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="ComponentWarehouse?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="ComponentWarehouse?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="ComponentWarehouse?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
@@ -267,7 +269,7 @@
                                 </c:if>
                     </div>
                 </main>
-                <jsp:include page="../includes/footer.jsp" />
+                <jsp:include page="../../includes/footer.jsp" />
             </div>
 
         </div>
