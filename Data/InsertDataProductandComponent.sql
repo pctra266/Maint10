@@ -47,7 +47,7 @@ VALUES
 ('CAM-IPH-13P', 'Camera iPhone 13 Pro', 80, 200.00, NULL, 10, 8),
 -- Các linh kiện cho các thiết bị khác
 ('BAT-MAC-PRO', 'Battery MacBook Pro', 50, 130.00, NULL, 10, 6),
-('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL, 10, 7);
+('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL, 10, 7),
 -- Các linh kiện mới cho máy tính
 ('MB-ASUS-ROG', 'Mainboard ASUS ROG Strix B550-F', 40, 200.00, NULL, 1, 1),
 ('CPU-AMD-RYZEN', 'Processor AMD Ryzen 5 5600X', 80, 300.00, NULL, 6, 2),
