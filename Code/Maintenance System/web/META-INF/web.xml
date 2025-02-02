@@ -67,11 +67,11 @@
     </servlet>
     <servlet>
         <servlet-name>UpdateProductServlet</servlet-name>
-        <servlet-class>Controller.UpdateProductServlet</servlet-class>
+        <servlet-class>Controller.Product.UpdateProductServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DeleteProductServlet</servlet-name>
-        <servlet-class>Controller.DeleteProductServlet</servlet-class>
+        <servlet-class>Controller.Product.DeleteProductServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>CustomerServlet</servlet-name>
@@ -79,14 +79,12 @@
     </servlet>
     <servlet>
         <servlet-name>AddProduct</servlet-name>
-        <servlet-class>Controller.AddProduct</servlet-class>
+        <servlet-class>Controller.Product.AddProduct</servlet-class>
     </servlet>
-    
     <servlet>
         <servlet-name>ViewProduct</servlet-name>
-        <servlet-class>Controller.ViewProduct</servlet-class>
+        <servlet-class>Controller.Product.ViewProduct</servlet-class>
     </servlet>
-    
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -139,7 +137,6 @@
         <servlet-name>ComponentAction</servlet-name>
         <url-pattern>/ComponentWarehouse/Add</url-pattern>
     </servlet-mapping>
-   
     <servlet-mapping>
         <servlet-name>ComponentSearch</servlet-name>
         <url-pattern>/ComponentWarehouse/Search</url-pattern>
@@ -190,6 +187,6 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ViewProduct</servlet-name>
-        <url-pattern>/viewP</url-pattern>
+        <url-pattern>/viewProduct</url-pattern>
     </servlet-mapping>
 </web-app>

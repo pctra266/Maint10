@@ -57,23 +57,23 @@ public class ComponentDAO extends DBContext {
         return getQuantityMinMax("max");
     }
 
-     private int getQuantityMinMax(String order) {
-    int price = 0;
-    String orderBy = order.equalsIgnoreCase("min") ? "ASC" : "DESC";
+    private int getQuantityMinMax(String order) {
+        int price = 0;
+        String orderBy = order.equalsIgnoreCase("min") ? "ASC" : "DESC";
 
-    String query = "SELECT TOP 1 Quantity FROM [dbo].[Component] ORDER BY Quantity " + orderBy;
+        String query = "SELECT TOP 1 Quantity FROM [dbo].[Component] ORDER BY Quantity " + orderBy;
 
-    try (PreparedStatement ps = connection.prepareStatement(query);
-         ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
-        if (rs.next()) {
-            price = rs.getInt(1);
+            if (rs.next()) {
+                price = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Ghi log lỗi để dễ dàng kiểm tra
         }
-    } catch (SQLException e) {
-        e.printStackTrace(); // Ghi log lỗi để dễ dàng kiểm tra
+        return price;
     }
-    return price;
-}
+
     public double getPriceMin() {
         return getPriceMinMax("min");
     }
@@ -82,24 +82,22 @@ public class ComponentDAO extends DBContext {
         return getPriceMinMax("max");
     }
 
-   private double getPriceMinMax(String order) {
-    double price = 0;
-    String orderBy = order.equalsIgnoreCase("min") ? "ASC" : "DESC";
+    private double getPriceMinMax(String order) {
+        double price = 0;
+        String orderBy = order.equalsIgnoreCase("min") ? "ASC" : "DESC";
 
-    String query = "SELECT TOP 1 Price FROM [dbo].[Component] ORDER BY Price " + orderBy;
+        String query = "SELECT TOP 1 Price FROM [dbo].[Component] ORDER BY Price " + orderBy;
 
-    try (PreparedStatement ps = connection.prepareStatement(query);
-         ResultSet rs = ps.executeQuery()) {
+        try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
-        if (rs.next()) {
-            price = rs.getDouble(1);
+            if (rs.next()) {
+                price = rs.getDouble(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); // Ghi log lỗi để dễ dàng kiểm tra
         }
-    } catch (SQLException e) {
-        e.printStackTrace(); // Ghi log lỗi để dễ dàng kiểm tra
+        return price;
     }
-    return price;
-}
-
 
     public List<Component> getAllComponents() {
         List<Component> components = new ArrayList<>();
@@ -475,233 +473,234 @@ public class ComponentDAO extends DBContext {
         }
         return components;
     }
-public int getTotalSearchComponentsByFields(String searchCode, String searchName, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-    StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Component c "
-            + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
-            + "JOIN ComponentType t ON c.TypeID = t.TypeID "
-            + "WHERE c.Status = 1 AND "
-            + "c.ComponentCode LIKE ? AND "
-            + "c.ComponentName LIKE ? ");
 
-    List<Object> parameters = new ArrayList<>();
-    parameters.add("%" + searchCode + "%");
-    parameters.add("%" + searchName + "%");
+    public int getTotalSearchComponentsByFields(String searchCode, String searchName, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
+        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "c.ComponentCode LIKE ? AND "
+                + "c.ComponentName LIKE ? ");
 
-    // Điều kiện cho Quantity
-    if (minQuantity != null && maxQuantity != null) {
-        query.append(" AND c.Quantity BETWEEN ? AND ?");
-        parameters.add(minQuantity);
-        parameters.add(maxQuantity);
-    } else if (minQuantity != null) {
-        query.append(" AND c.Quantity >= ?");
-        parameters.add(minQuantity);
-    } else if (maxQuantity != null) {
-        query.append(" AND c.Quantity <= ?");
-        parameters.add(maxQuantity);
-    }
+        List<Object> parameters = new ArrayList<>();
+        parameters.add("%" + searchCode + "%");
+        parameters.add("%" + searchName + "%");
 
-    // Điều kiện cho Price
-    if (minPrice != null && maxPrice != null) {
-        query.append(" AND c.Price BETWEEN ? AND ?");
-        parameters.add(minPrice);
-        parameters.add(maxPrice);
-    } else if (minPrice != null) {
-        query.append(" AND c.Price >= ?");
-        parameters.add(minPrice);
-    } else if (maxPrice != null) {
-        query.append(" AND c.Price <= ?");
-        parameters.add(maxPrice);
-    }
-
-    // Điều kiện cho TypeID và BrandID
-    if (typeId != null) {
-        query.append(" AND c.TypeID = ?");
-        parameters.add(typeId);
-    }
-    if (brandId != null) {
-        query.append(" AND c.BrandID = ?");
-        parameters.add(brandId);
-    }
-
-    try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
-        for (int i = 0; i < parameters.size(); i++) {
-            ps.setObject(i + 1, parameters.get(i));
+        // Điều kiện cho Quantity
+        if (minQuantity != null && maxQuantity != null) {
+            query.append(" AND c.Quantity BETWEEN ? AND ?");
+            parameters.add(minQuantity);
+            parameters.add(maxQuantity);
+        } else if (minQuantity != null) {
+            query.append(" AND c.Quantity >= ?");
+            parameters.add(minQuantity);
+        } else if (maxQuantity != null) {
+            query.append(" AND c.Quantity <= ?");
+            parameters.add(maxQuantity);
         }
 
-        ResultSet rs = ps.executeQuery();
-        if (rs.next()) {
-            return rs.getInt(1); // Lấy giá trị count
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return 0;
-}
-
-
-  public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, int page, int pageSize, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-    StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
-            + "b.BrandName, t.TypeName "
-            + "FROM Component c "
-            + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
-            + "JOIN ComponentType t ON c.TypeID = t.TypeID "
-            + "WHERE c.Status = 1 AND "
-            + "c.ComponentCode LIKE ? AND "
-            + "c.ComponentName LIKE ? ");
-
-    List<Object> parameters = new ArrayList<>();
-    parameters.add("%" + searchCode + "%");
-    parameters.add("%" + searchName + "%");
-
-    // Điều kiện cho Quantity
-    if (minQuantity != null && maxQuantity != null) {
-        query.append(" AND c.Quantity BETWEEN ? AND ?");
-        parameters.add(minQuantity);
-        parameters.add(maxQuantity);
-    } else if (minQuantity != null) {
-        query.append(" AND c.Quantity >= ?");
-        parameters.add(minQuantity);
-    } else if (maxQuantity != null) {
-        query.append(" AND c.Quantity <= ?");
-        parameters.add(maxQuantity);
-    }
-
-    // Điều kiện cho Price
-    if (minPrice != null && maxPrice != null) {
-        query.append(" AND c.Price BETWEEN ? AND ?");
-        parameters.add(minPrice);
-        parameters.add(maxPrice);
-    } else if (minPrice != null) {
-        query.append(" AND c.Price >= ?");
-        parameters.add(minPrice);
-    } else if (maxPrice != null) {
-        query.append(" AND c.Price <= ?");
-        parameters.add(maxPrice);
-    }
-
-    // Điều kiện cho TypeID và BrandID
-    if (typeId != null) {
-        query.append(" AND c.TypeID = ?");
-        parameters.add(typeId);
-    }
-    if (brandId != null) {
-        query.append(" AND c.BrandID = ?");
-        parameters.add(brandId);
-    }
-
-    query.append(" ORDER BY c.ComponentID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
-    parameters.add((page - 1) * pageSize);
-    parameters.add(pageSize);
-
-    List<Component> components = new ArrayList<>();
-    try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
-        for (int i = 0; i < parameters.size(); i++) {
-            ps.setObject(i + 1, parameters.get(i));
+        // Điều kiện cho Price
+        if (minPrice != null && maxPrice != null) {
+            query.append(" AND c.Price BETWEEN ? AND ?");
+            parameters.add(minPrice);
+            parameters.add(maxPrice);
+        } else if (minPrice != null) {
+            query.append(" AND c.Price >= ?");
+            parameters.add(minPrice);
+        } else if (maxPrice != null) {
+            query.append(" AND c.Price <= ?");
+            parameters.add(maxPrice);
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Component component = new Component(
-                    rs.getInt("ComponentID"),
-                    rs.getString("ComponentCode"),
-                    rs.getString("ComponentName"),
-                    rs.getInt("Quantity"),
-                    true, // Assuming status is true since we are filtering by Status = 1
-                    rs.getString("TypeName"), // Set the type name
-                    rs.getString("BrandName"), // Set the brand name
-                    rs.getDouble("Price"),
-                    rs.getString("Image")
-            );
-            components.add(component);
+        // Điều kiện cho TypeID và BrandID
+        if (typeId != null) {
+            query.append(" AND c.TypeID = ?");
+            parameters.add(typeId);
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-    return components;
-}
-
- public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, int page, int pageSize, String sort, String order, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-    StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
-            + "b.BrandName, t.TypeName "
-            + "FROM Component c "
-            + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
-            + "JOIN ComponentType t ON c.TypeID = t.TypeID "
-            + "WHERE c.Status = 1 AND "
-            + "c.ComponentCode LIKE ? AND "
-            + "c.ComponentName LIKE ? ");
-
-    List<Object> parameters = new ArrayList<>();
-    parameters.add("%" + searchCode + "%");
-    parameters.add("%" + searchName + "%");
-
-    // Điều kiện cho Quantity
-    if (minQuantity != null && maxQuantity != null) {
-        query.append(" AND c.Quantity BETWEEN ? AND ?");
-        parameters.add(minQuantity);
-        parameters.add(maxQuantity);
-    } else if (minQuantity != null) {
-        query.append(" AND c.Quantity >= ?");
-        parameters.add(minQuantity);
-    } else if (maxQuantity != null) {
-        query.append(" AND c.Quantity <= ?");
-        parameters.add(maxQuantity);
-    }
-
-    // Điều kiện cho Price
-    if (minPrice != null && maxPrice != null) {
-        query.append(" AND c.Price BETWEEN ? AND ?");
-        parameters.add(minPrice);
-        parameters.add(maxPrice);
-    } else if (minPrice != null) {
-        query.append(" AND c.Price >= ?");
-        parameters.add(minPrice);
-    } else if (maxPrice != null) {
-        query.append(" AND c.Price <= ?");
-        parameters.add(maxPrice);
-    }
-
-    // Điều kiện cho TypeID và BrandID
-    if (typeId != null) {
-        query.append(" AND c.TypeID = ?");
-        parameters.add(typeId);
-    }
-    if (brandId != null) {
-        query.append(" AND c.BrandID = ?");
-        parameters.add(brandId);
-    }
-
-    // Thêm điều kiện sắp xếp
-    query.append(" ORDER BY " + sort + " " + order + " "
-            + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
-    parameters.add((page - 1) * pageSize);
-    parameters.add(pageSize);
-
-    List<Component> components = new ArrayList<>();
-    try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
-        for (int i = 0; i < parameters.size(); i++) {
-            ps.setObject(i + 1, parameters.get(i));
+        if (brandId != null) {
+            query.append(" AND c.BrandID = ?");
+            parameters.add(brandId);
         }
 
-        ResultSet rs = ps.executeQuery();
-        while (rs.next()) {
-            Component component = new Component(
-                    rs.getInt("ComponentID"),
-                    rs.getString("ComponentCode"),
-                    rs.getString("ComponentName"),
-                    rs.getInt("Quantity"),
-                    true, // Assuming status is true since we are filtering by Status = 1
-                    rs.getString("TypeName"), // Set the type name
-                    rs.getString("BrandName"), // Set the brand name
-                    rs.getDouble("Price"),
-                    rs.getString("Image")
-            );
-            components.add(component);
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                ps.setObject(i + 1, parameters.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1); // Lấy giá trị count
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return 0;
     }
-    return components;
-}
+
+    public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, int page, int pageSize, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "c.ComponentCode LIKE ? AND "
+                + "c.ComponentName LIKE ? ");
+
+        List<Object> parameters = new ArrayList<>();
+        parameters.add("%" + searchCode + "%");
+        parameters.add("%" + searchName + "%");
+
+        // Điều kiện cho Quantity
+        if (minQuantity != null && maxQuantity != null) {
+            query.append(" AND c.Quantity BETWEEN ? AND ?");
+            parameters.add(minQuantity);
+            parameters.add(maxQuantity);
+        } else if (minQuantity != null) {
+            query.append(" AND c.Quantity >= ?");
+            parameters.add(minQuantity);
+        } else if (maxQuantity != null) {
+            query.append(" AND c.Quantity <= ?");
+            parameters.add(maxQuantity);
+        }
+
+        // Điều kiện cho Price
+        if (minPrice != null && maxPrice != null) {
+            query.append(" AND c.Price BETWEEN ? AND ?");
+            parameters.add(minPrice);
+            parameters.add(maxPrice);
+        } else if (minPrice != null) {
+            query.append(" AND c.Price >= ?");
+            parameters.add(minPrice);
+        } else if (maxPrice != null) {
+            query.append(" AND c.Price <= ?");
+            parameters.add(maxPrice);
+        }
+
+        // Điều kiện cho TypeID và BrandID
+        if (typeId != null) {
+            query.append(" AND c.TypeID = ?");
+            parameters.add(typeId);
+        }
+        if (brandId != null) {
+            query.append(" AND c.BrandID = ?");
+            parameters.add(brandId);
+        }
+
+        query.append(" ORDER BY c.ComponentID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        parameters.add((page - 1) * pageSize);
+        parameters.add(pageSize);
+
+        List<Component> components = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                ps.setObject(i + 1, parameters.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
+                        rs.getString("ComponentCode"),
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
+
+    public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, int page, int pageSize, String sort, String order, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+                + "b.BrandName, t.TypeName "
+                + "FROM Component c "
+                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "WHERE c.Status = 1 AND "
+                + "c.ComponentCode LIKE ? AND "
+                + "c.ComponentName LIKE ? ");
+
+        List<Object> parameters = new ArrayList<>();
+        parameters.add("%" + searchCode + "%");
+        parameters.add("%" + searchName + "%");
+
+        // Điều kiện cho Quantity
+        if (minQuantity != null && maxQuantity != null) {
+            query.append(" AND c.Quantity BETWEEN ? AND ?");
+            parameters.add(minQuantity);
+            parameters.add(maxQuantity);
+        } else if (minQuantity != null) {
+            query.append(" AND c.Quantity >= ?");
+            parameters.add(minQuantity);
+        } else if (maxQuantity != null) {
+            query.append(" AND c.Quantity <= ?");
+            parameters.add(maxQuantity);
+        }
+
+        // Điều kiện cho Price
+        if (minPrice != null && maxPrice != null) {
+            query.append(" AND c.Price BETWEEN ? AND ?");
+            parameters.add(minPrice);
+            parameters.add(maxPrice);
+        } else if (minPrice != null) {
+            query.append(" AND c.Price >= ?");
+            parameters.add(minPrice);
+        } else if (maxPrice != null) {
+            query.append(" AND c.Price <= ?");
+            parameters.add(maxPrice);
+        }
+
+        // Điều kiện cho TypeID và BrandID
+        if (typeId != null) {
+            query.append(" AND c.TypeID = ?");
+            parameters.add(typeId);
+        }
+        if (brandId != null) {
+            query.append(" AND c.BrandID = ?");
+            parameters.add(brandId);
+        }
+
+        // Thêm điều kiện sắp xếp
+        query.append(" ORDER BY " + sort + " " + order + " "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        parameters.add((page - 1) * pageSize);
+        parameters.add(pageSize);
+
+        List<Component> components = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
+            for (int i = 0; i < parameters.size(); i++) {
+                ps.setObject(i + 1, parameters.get(i));
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Component component = new Component(
+                        rs.getInt("ComponentID"),
+                        rs.getString("ComponentCode"),
+                        rs.getString("ComponentName"),
+                        rs.getInt("Quantity"),
+                        true, // Assuming status is true since we are filtering by Status = 1
+                        rs.getString("TypeName"), // Set the type name
+                        rs.getString("BrandName"), // Set the brand name
+                        rs.getDouble("Price"),
+                        rs.getString("Image")
+                );
+                components.add(component);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return components;
+    }
+
     public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
         String sql = "SELECT p.*, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName "
@@ -716,17 +715,20 @@ public int getTotalSearchComponentsByFields(String searchCode, String searchName
             ps.setInt(1, componentId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Product product = new Product(
-                        rs.getInt("ProductID"),
-                        rs.getString("ProductName"),
-                        rs.getInt("Quantity"),
-                        rs.getInt("WarrantyPeriod"),
-                        rs.getString("Image")
-                );
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setCode(rs.getString("Code"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setBrandId(rs.getInt("BrandID"));
+                product.setType(rs.getString("Type"));
+                product.setQuantity(rs.getInt("Quantity"));
+                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                product.setStatus(rs.getString("Status"));
+                product.setImage(rs.getString("Image"));
+
                 productList.add(product);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
         return productList;
     }
@@ -779,7 +781,7 @@ public int getTotalSearchComponentsByFields(String searchCode, String searchName
 //        System.out.println(d.getBrandID("Apple"));
         System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));
         System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, 1, 5, sort, order, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
-        System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName,  1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
+        System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
 //        System.out.println("-----");
 //        System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
 //        System.out.println("-------------");
@@ -794,10 +796,10 @@ public int getTotalSearchComponentsByFields(String searchCode, String searchName
 //        System.out.println(d.getProductsByComponentId(3));
 //        Component component = new Component(1, "", "", 11, true, "Display", "Apple", 2222, null);
 //        System.out.println(d.update(component));
-            System.out.println(d.getPriceMin());
-            System.out.println(d.getPriceMax());
-            System.out.println(d.getQuantityMax());
-            System.out.println(d.getQuantityMin());
+        System.out.println(d.getPriceMin());
+        System.out.println(d.getPriceMax());
+        System.out.println(d.getQuantityMax());
+        System.out.println(d.getQuantityMin());
     }
 
 }

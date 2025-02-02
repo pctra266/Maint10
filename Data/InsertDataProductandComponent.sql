@@ -47,7 +47,7 @@ VALUES
 ('CAM-IPH-13P', 'Camera iPhone 13 Pro', 80, 200.00, NULL, 10, 8),
 -- Các linh kiện cho các thiết bị khác
 ('BAT-MAC-PRO', 'Battery MacBook Pro', 50, 130.00, NULL, 10, 6),
-('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL, 10, 7);
+('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL, 10, 7),
 -- Các linh kiện mới cho máy tính
 ('MB-ASUS-ROG', 'Mainboard ASUS ROG Strix B550-F', 40, 200.00, NULL, 1, 1),
 ('CPU-AMD-RYZEN', 'Processor AMD Ryzen 5 5600X', 80, 300.00, NULL, 6, 2),
@@ -72,38 +72,47 @@ VALUES
 ('BAT-TOSHIBA-CR123A', 'Pin Toshiba CR123A', 90, 7.00, NULL, 9, 6),
 ('BAT-PHILIPS-9V', 'Pin Philips 9V', 80, 13.00, NULL, 10, 6);
 
-INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image)
-VALUES
-('Laptop Lenovo ThinkPad X1', 30, 12, NULL),
-('Laptop Dell XPS 13', 40, 24, NULL),
-('iPhone 12', 50, 6, NULL),
-('Samsung Galaxy S20', 60, 3, NULL);
 
-INSERT INTO Product (ProductName, Quantity, WarrantyPeriod, Image) VALUES
-('Samsung Galaxy S23', 100, 24, NULL),
-('Apple iPhone 14', 150, 24, NULL),
-('Sony WH-1000XM5', 200, 12, NULL),
-('Dell XPS 13', 80, 36, NULL),
-('Microsoft Surface Pro 9', 60, 36, NULL),
-('Apple MacBook Air M2', 120, 24, NULL),
-('Bose QuietComfort 45', 140, 12, NULL),
-('HP Spectre x360', 90, 24, NULL),
-('LG OLED C2', 50, 36, NULL),
-('Sony PlayStation 5', 180, 12, NULL),
-('Samsung QLED 8K TV', 70, 36, NULL),
-('Apple iPad Pro 11"', 160, 24, NULL),
-('Fitbit Charge 5', 200, 12, NULL),
-('GoPro Hero 11', 50, 24, NULL),
-('Nintendo Switch OLED', 90, 12, NULL),
-('Apple AirPods Pro 2', 150, 24, NULL),
-('OnePlus 10 Pro', 100, 18, NULL),
-('Microsoft Xbox Series X', 120, 12, NULL),
-('Huawei Mate 50 Pro', 60, 36, NULL),
-('Google Pixel 7', 80, 24, NULL),  -- New Product
-('Xiaomi Mi 11', 90, 24, NULL),     -- New Product
-('Oculus Quest 2', 70, 12, NULL),   -- New Product
-('Razer Blade 15', 50, 24, NULL),   -- New Product
-('Dell Alienware m15', 40, 36, NULL); -- New Product
+
+
+
+-- Thêm dữ liệu mới cho bảng Product
+INSERT INTO Product (Code, ProductName,              BrandID, [Type],           Quantity, WarrantyPeriod, [Status], Image)
+VALUES 
+    ('P001',  'Samsung Galaxy S23',        9,  'Smartphone',      100,  24, 'Active', NULL),
+    ('P002',  'Apple iPhone 14',           10, 'Smartphone',      150,  24, 'Active', NULL),
+    ('P003',  'Sony WH-1000XM5',           11, 'Headphones',      200,  12, 'Active', NULL),
+    ('P004',  'Dell XPS 13',               5,  'Laptop',          80,   36, 'Active', NULL),
+    ('P005',  'Microsoft Surface Pro 9',   12, 'Tablet',          60,   36, 'Active', NULL),
+    ('P006',  'Apple MacBook Air M2',      10, 'Laptop',          120,  24, 'Active', NULL),
+    ('P007',  'Bose QuietComfort 45',      13, 'Headphones',      140,  12, 'Active', NULL),
+    ('P008',  'HP Spectre x360',           5,  'Laptop',          90,   24, 'Active', NULL),
+    ('P009',  'LG OLED C2',                14, 'TV',              50,   36, 'Active', NULL),
+    ('P010',  'Sony PlayStation 5',        11, 'Gaming Console',  180,  12, 'Active', NULL),
+    ('P011',  'Samsung QLED 8K TV',        9,  'TV',              70,   36, 'Active', NULL),
+    ('P012',  'Apple iPad Pro 11"',        10, 'Tablet',          160,  24, 'Active', NULL),
+    ('P013',  'Fitbit Charge 5',           15, 'Wearable',        200,  12, 'Active', NULL),
+    ('P014',  'GoPro Hero 11',             8,  'Camera',          50,   24, 'Active', NULL),
+    ('P015',  'Nintendo Switch OLED',      11, 'Gaming Console',  90,   12, 'Active', NULL),
+    ('P016',  'Apple AirPods Pro 2',       10, 'Earbuds',         150,  24, 'Active', NULL),
+    ('P017',  'OnePlus 10 Pro',            16, 'Smartphone',      100,  18, 'Active', NULL),
+    ('P018',  'Microsoft Xbox Series X',   12, 'Gaming Console',  120,  12, 'Active', NULL),
+    ('P019',  'Huawei Mate 50 Pro',        15, 'Smartphone',      60,   36, 'Active', NULL),
+    ('P020',  'Google Pixel 7',            16, 'Smartphone',      80,   24, 'Active', NULL),
+    ('P021',  'Xiaomi Mi 11',              16, 'Smartphone',      90,   24, 'Active', NULL),
+    ('P022',  'Oculus Quest 2',            12, 'VR Headset',      70,   12, 'Active', NULL),
+    ('P023',  'Razer Blade 15',            1,  'Laptop',          50,   24, 'Active', NULL),
+    ('P024',  'Dell Alienware m15',        5,  'Laptop',          40,   36, 'Active', NULL);
+
+
+
+
+
+
+
+
+
+
 -- Cập nhật bảng ProductComponents với các linh kiện chi tiết
 -- Laptop Dell XPS 13 
 INSERT INTO ProductComponents (ProductID, ComponentID, Quantity) 
@@ -257,6 +266,9 @@ VALUES
 (24, 2, 1),  -- Mainboard for Alienware
 (24, 6, 1),  -- Processor Intel Core i7-10700K
 (24,  7, 2);   -- RAM Corsair Vengeance 16GB DDR4
+
+
+
 -- Thêm dữ liệu vào bảng ProductDetail
 INSERT INTO ProductDetail (CustomerID, ProductID, ProductCode, PurchaseDate)
 VALUES
@@ -321,8 +333,5 @@ VALUES
 (7, 21, 'PDT067', '2024-12-01'),  -- Purchase for OnePlus 10 Pro
 (8, 22, 'PDT068', '2024-12-05'),  -- Purchase for Microsoft Xbox Series X
 (9, 23, 'PDT069', '2024-12-10'),  -- Purchase for Huawei Mate 50 Pro
-(6, 24, 'PDT070', '2024-12-15'),  -- Purchase for Google Pixel 7
-(1, 25, 'PDT071', '2024-12-20'),  -- Purchase for Xiaomi Mi 11
-(2, 26, 'PDT072', '2024-12-25'),  -- Purchase for Oculus Quest 2
-(3, 27, 'PDT073', '2025-01-01'),  -- Purchase for Razer Blade 15
-(4, 28, 'PDT074', '2025-01-05');  -- Purchase for Dell Alienware m15
+(6, 24, 'PDT070', '2024-12-15');  -- Purchase for Google Pixel 7
+
