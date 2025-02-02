@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 import java.util.Date;
 
@@ -6,12 +6,14 @@ public class WarrantyCard {
     private int warrantyCardID;
     private String warrantyCardCode;
     private int productDetailID;
+    private String productCode;
     private String issueDescription;
     private String warrantyStatus;
     private Date createdDate;
     private String productName;
     private String customerName;
     private String customerPhone;
+
 
     public int getWarrantyCardID() {
         return warrantyCardID;
@@ -84,10 +86,19 @@ public class WarrantyCard {
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
+    
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
 
     @Override
     public String toString() {
-        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", productName=" + productName + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
+        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", productName=" + productName + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
     }
+    
     
 }

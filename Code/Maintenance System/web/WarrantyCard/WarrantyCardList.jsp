@@ -21,7 +21,7 @@
 
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-        <title>Component Warehouse</title>
+        <title>Warranty Cards</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -52,15 +52,23 @@
                 <jsp:include page="../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Warranty Card</h2>
+                    <c:if test="${not empty createStatus}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${createStatus}</strong>
+                            </div>
+                        </div>
+                    </c:if>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
                         </form>
-                        <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
+                        <form action="WarrantyCard/Search" method="get" style="display: inline;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
                         </form>
                     </div>
-                    <form action="ComponentWarehouse" method="get" class="row align-items-center">
+                    <form action="WarrantyCard" method="get" class="row align-items-center">
                         <input type="hidden" name="page" value="${currentPage}">
                         <input type="hidden" name="sort" value="${sort}">
                         <input type="hidden" name="order" value="${order}">
@@ -89,128 +97,80 @@
                             <tr>
                                 <th style="width:3%">#</th>
                                 <th style="width:13%">
-                                    <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="type" value="${type}" />
-                                        <input type="hidden" name="brand" value="${brand}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="code" />
-                                        <input type="hidden" name="order" value="${sort eq 'code' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'code' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Code
-                                    </form>
+                                    Card Code
                                 </th>
                                 <th>
-                                    Type
+                                    Product Code
                                 </th>
                                 <th>
-                                    Brand
+                                    Product Name
                                 </th>
 
-                                <th style="width:30%">
-                                    <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="name" />
-                                        <input type="hidden" name="order" value="${sort eq 'name' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'name' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Name
-                                    </form>
+                                <th style="width:5%">
+
+                                    Status
+
                                 </th>
 
                                 <th style="width:15%">
-                                    <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="quantity" />
-                                        <input type="hidden" name="order" value="${sort eq 'quantity' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'quantity' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Quantity
-                                    </form>
+                                    Created Date
                                 </th>
 
                                 <th style="width:15%">
-                                    <form action="ComponentWarehouse" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                        <input type="hidden" name="type" value="${type}" />                                        <input type="hidden" name="brand" value="${brand}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="price" />
-                                        <input type="hidden" name="order" value="${sort eq 'price' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'price' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Unit Price
-                                    </form>
+                                    Issue
                                 </th>
-                               
+
                                 <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
-                        <!--                        varStatus để lấy trạng thái của vòng lặp-->
-                      <c:forEach var="component" items="${components}" varStatus="status">
-    <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-        <td>${status.index + 1 + (currentPage - 1) * size}</td>
-        <td>${component.componentCode}</td>
-        <td>${component.type}</td>
-        <td>${component.brand}</td>
-        <td>${component.componentName}</td>
-        <td>${component.quantity}</td>
-        <td>${component.price}</td>
-        <td class="table-action">
-            <a href="ComponentWarehouse/Detail?ID=${component.componentID}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                </svg>
-            </a>
-            <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-            </a>
-        </td>
-    </tr>
+                        <!--varStatus để lấy trạng thái của vòng lặp-->
+                        <c:forEach var="card" items="${cardList}" varStatus="status">
+                            <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
+                                <td>${status.index + 1 + (currentPage - 1) * size}</td>
+                                <td>${card.warrantyCardCode}</td>
+                                <td>${card.productCode}</td>
+                                <td>${card.productName}</td>
+                                <td>${card.warrantyStatus}</td>
+                                <td>${card.createdDate}</td>
+                                <td>${card.issueDescription}</td>
+                                <td class="table-action">
+                                    <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${card.warrantyCardID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
 
-    <!-- Modal for each component -->
-    <div class="modal fade" id="centeredModalPrimary_${component.componentID}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body m-3">
-                    <p class="mb-0">Confirm your action. Really want to delete?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="ComponentWarehouse/Delete?ID=${component.componentID}&page=${currentPage}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</c:forEach>
+                            <!-- Modal for each card -->
+                            <div class="modal fade" id="centeredModalPrimary_${card.warrantyCardID}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body m-3">
+                                            <p class="mb-0">Confirm your action. Really want to delete?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="WarrantyCard/Delete?ID=${card.warrantyCardID}&page=${currentPage}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                         <tbody>
 
                         </tbody>
-                    </table
+                    </table>
 
                     <!-- Phân trang -->
                     <div class="text-center">
@@ -257,14 +217,14 @@
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>
-                                <c:if test="${not empty deleteStatus}">
-                                    <div class="alert alert-warning alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${deleteStatus}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
+                        <c:if test="${not empty deleteStatus}">
+                            <div class="alert alert-warning alert-dismissible" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <div class="alert-message">
+                                    <strong>${deleteStatus}</strong>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </main>
                 <jsp:include page="../includes/footer.jsp" />

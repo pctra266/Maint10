@@ -125,5 +125,10 @@ public class ProductDetail {
         this.warrantyPeriod = warrantyPeriod;
     }
 
-
+    @Override
+    public String toString() {
+        return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + '}';
+    }
+    
+    
 }

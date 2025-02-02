@@ -32,15 +32,12 @@
                 <main class="content">
                     <a href="WarrantyCard" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h1 class="text-center text-primary" style="font-size: 4rem">Create Warranty Card</h1>
-                    <!-- Hiển thị cảnh báo lỗi -->
-
-
                     <div class="d-flex flex-column col justify-content-center align-items-center vh-50">
                         <form action="WarrantyCard/Add" method="GET" class="w-50 row">
                             <div class="row d-flex align-items-center ">
                                 <!-- Ô input -->
                                 <div class="col bg-primary bg-opacity-75 p-4 rounded-pill shadow"> <!-- Tăng padding -->
-                                    <input type="text" class="form-control w-100 border-0 text-white" style="font-size: 2rem; background-color: rgba(59,125,221,0)"  name="ProductCode" id="ProductCode" value="${ProductCode}" required style="font-size: 1.5rem;"> <!-- Tăng kích thước font chữ -->
+                                    <input type="text" class="form-control w-100 border-0 text-white" style="font-size: 2rem; background-color: rgba(59,125,221,0)"  name="productCode" id="ProductCode" value="${ProductCode}" required style="font-size: 1.5rem;"> <!-- Tăng kích thước font chữ -->
                                 </div>
                                 <!-- Nút tìm kiếm -->
                                 <div class="col-auto">
@@ -72,78 +69,92 @@
                     <c:if test="${not empty pd}">
                         <hr class=""> 
                         <h1 class="text-center text-primary" style="font-size: 4rem">Warranty Card</h1>
-                        <form action="WarrantyCard/Add" method="POST" class="row g-3">
+                        <c:if test="${not empty createFail}">
+                            <div class="d-flex justify-content-center">
+                                <div class="col-md-7 alert alert-danger alert-dismissible mt-4 text-center" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message">
+                                        <strong>${createFail}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
+                        <form action="WarrantyCard/Add" method="GET" class="row g-3">
                             <!-- ID ẩn -->
                             <input type="hidden" name="productDetailID" value="${pd.productDetailID}">
-
                             <!-- Mã sản phẩm -->
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label for="productCode" class="form-label">Product Code</label>
                                 <input type="text" class="form-control" name="productCode" id="productCode" 
-                                       value="${pd.productCode}" required>
+                                       value="${pd.productCode}" readonly="readonly" required>
                             </div>
 
                             <!-- Ngày mua (Định dạng yyyy-MM-dd) -->
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <label for="purchaseDate" class="form-label">Purchase Date</label>
                                 <input type="date" class="form-control" name="purchaseDate" id="purchaseDate"
-                                       value="<fmt:formatDate value='${pd.purchaseDate}' pattern='yyyy-MM-dd' />">
+                                       value="${pd.purchaseDate}" readonly="readonly">
                             </div>
-                            
+
                             <!-- Tên sản phẩm -->
                             <div class="col-md-6">
                                 <label for="productName" class="form-label">Product Name</label>
                                 <input type="text" class="form-control" name="productName" id="productName" 
-                                       value="${pd.productName}">
+                                       value="${pd.productName}" readonly="readonly">
                             </div>
-                            
+
                             <!-- Username -->
-                            <div class="col-md-6">
-                                <label for="usernameC" class="form-label">Username</label>
+                            <div class="col-md-3">
+                                <label for="usernameC" class="form-label">Name</label>
                                 <input type="text" class="form-control" name="usernameC" id="usernameC" 
-                                       value="${pd.usernameC}">
+                                       value="${pd.name}" readonly="readonly">
+                            </div>
+                            <!-- Thời gian bảo hành -->
+                            <div class="col-md-3">
+                                <label for="warrantyPeriod" class="form-label">Warranty Period (Months)</label>
+                                <input type="number" class="form-control" name="warrantyPeriod" id="warrantyPeriod" 
+                                       value="${pd.warrantyPeriod}" readonly="readonly">
+                            </div>
+
+
+                            <!-- Địa chỉ -->
+                            <div class="col-md-6">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" name="address" id="address" 
+                                       value="${pd.address}" readonly="readonly">
+                            </div>
+
+
+                            <!-- Số điện thoại -->
+                            <div class="col-md-3">
+                                <label for="phone" class="form-label">Phone</label>
+                                <input type="text" class="form-control" name="phone" id="phone" 
+                                       value="${pd.phone}" readonly="readonly">
                             </div>
 
                             <!-- Tên khách hàng -->
-                            <div class="col-md-6">
-                                <label for="name" class="form-label">Name</label>
+                            <div class="col-md-3">
+                                <label for="name" class="form-label">Username</label>
                                 <input type="text" class="form-control" name="name" id="name" 
-                                       value="${pd.name}" required>
+                                       value="${pd.usernameC}" readonly="readonly" required>
                             </div>
 
                             <!-- Email -->
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" id="email" 
-                                       value="${pd.email}">
+                                       value="${pd.email}" readonly="readonly">
+                            </div>
+                            <div class="col-md-12">
+                                <textarea class="form-control" placeholder="Descript issue" name= "issue" rows="2" style="height: 10rem;"></textarea>
                             </div>
 
-                            <!-- Số điện thoại -->
-                            <div class="col-md-6">
-                                <label for="phone" class="form-label">Phone</label>
-                                <input type="text" class="form-control" name="phone" id="phone" 
-                                       value="${pd.phone}">
-                            </div>
 
-                            <!-- Địa chỉ -->
-                            <div class="col-md-6">
-                                <label for="address" class="form-label">Address</label>
-                                <input type="text" class="form-control" name="address" id="address" 
-                                       value="${pd.address}">
-                            </div>
 
-                            
-
-                            <!-- Thời gian bảo hành -->
-                            <div class="col-md-6">
-                                <label for="warrantyPeriod" class="form-label">Warranty Period (Months)</label>
-                                <input type="number" class="form-control" name="warrantyPeriod" id="warrantyPeriod" 
-                                       value="${pd.warrantyPeriod}">
-                            </div>
 
                             <!-- Nút Submit -->
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary">Update</button>
+                                <button type="submit" class="btn btn-primary btn-pill p-3" style="font-size: 1.3rem">Create</button>
                             </div>
                         </form>
                     </c:if>

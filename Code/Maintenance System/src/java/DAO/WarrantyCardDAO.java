@@ -4,7 +4,7 @@ import Model.ProductDetail;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
-import model.WarrantyCard;
+import Model.WarrantyCard;
 import java.sql.*;
 import java.util.Random;
 import java.util.logging.Level;
@@ -21,17 +21,18 @@ import java.util.logging.Logger;
 public class WarrantyCardDAO extends DBContext {
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private static final int CODE_LENGTH = 12;
+    private static final int CODE_LENGTH = 10;
     private SecureRandom random = new SecureRandom();
 
     public List<WarrantyCard> getAllWarrantyCards() {
         List<WarrantyCard> warrantyCards = new ArrayList<>();
-        String query = "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, wc.ProductDetailID, wc.IssueDescription, "
+        String query = "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, pd.ProductCode, wc.ProductDetailID, wc.IssueDescription, "
                 + "wc.WarrantyStatus, wc.CreatedDate, p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone "
                 + "FROM WarrantyCard wc "
                 + "JOIN ProductDetail pd ON wc.ProductDetailID = pd.ProductDetailID "
                 + "JOIN Product p ON pd.ProductID = p.ProductID "
-                + "JOIN Customer c ON pd.CustomerID = c.CustomerID";
+                + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
+                + "Order by wc.WarrantyCardID desc ";
 
         try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
@@ -46,6 +47,7 @@ public class WarrantyCardDAO extends DBContext {
                 warrantyCard.setProductName(rs.getString("ProductName"));
                 warrantyCard.setCustomerName(rs.getString("CustomerName"));
                 warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
+                warrantyCard.setProductCode(rs.getString("ProductCode"));
 
                 warrantyCards.add(warrantyCard);
             }
@@ -56,15 +58,16 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCards;
     }
 
-    public boolean createWarrantyCard(String productCode) {
+    public boolean createWarrantyCard(String productCode, String issue) {
         String query = "INSERT INTO WarrantyCard (WarrantyCardCode, ProductDetailID, IssueDescription, WarrantyStatus, CreatedDate) "
-                + "SELECT ?, pd.ProductDetailID, '', 'fixing', GETDATE() "
+                + "SELECT ?, pd.ProductDetailID, ?, 'fixing', GETDATE() "
                 + "FROM ProductDetail pd WHERE pd.ProductCode = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             String warrantyCardCode = generateWarrantyCardCode(); // Tạo mã WarrantyCardCode
             ps.setString(1, warrantyCardCode);
-            ps.setString(2, productCode);
+            ps.setString(2,issue);
+            ps.setString(3, productCode);
 
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -141,5 +144,8 @@ public class WarrantyCardDAO extends DBContext {
 
         return false; // Không tìm thấy mã trùng
     }
-
+    public static void main(String[] args) {
+        WarrantyCardDAO d = new WarrantyCardDAO();
+        System.out.println(d.getAllWarrantyCards());
+    }
 }
