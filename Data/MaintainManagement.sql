@@ -76,12 +76,17 @@ CREATE TABLE Component (
 CREATE UNIQUE INDEX UX_ComponentCode ON Component(ComponentCode)
 WHERE ComponentCode IS NOT NULL;
 
--- Product Table
+
+-- Product Table (Updated)
 CREATE TABLE Product (
     ProductID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    ProductName NVARCHAR(100) NOT NULL, 
+    Code Nvarchar(20) null,
+    ProductName NVARCHAR(100) , 
+	 BrandID INT FOREIGN KEY REFERENCES ComponentBrand(BrandID),
+    [Type] nvarchar(100), 
     Quantity int,
     WarrantyPeriod int NOT NULL,
+    [Status] nvarchar(100), -- Thêm trạng thái của sản phẩm (1: Active, 0: Inactive)
     Image NVARCHAR(MAX)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 

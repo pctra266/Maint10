@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.Product;
 
 import DAO.ProductDAO;
 import Model.Product;
@@ -12,12 +12,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author sonNH
  */
-public class UpdateProductServlet extends HttpServlet {
+public class ViewProduct extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -36,10 +37,10 @@ public class UpdateProductServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet UpdateProductServlet</title>");
+            out.println("<title>Servlet ViewProduct</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet UpdateProductServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>hello ViewProduct at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,7 +58,55 @@ public class UpdateProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDAO productDAO = new ProductDAO();
+        List<Product> productList;
+        productList = productDAO.getAllProducts();
+//        int pageSize = 5;
+//        int pageIndex = 1;
+//        String pageIndexStr = request.getParameter("index");
+//
+//        if (pageIndexStr != null) {
+//            try {
+//                pageIndex = Integer.parseInt(pageIndexStr);
+//            } catch (NumberFormatException e) {
+//                pageIndex = 1;
+//            }
+//        }
+//
+//        List<Product> productList;
+//        String keyword = request.getParameter("keyword");
+//        String quantityStr = request.getParameter("quantity");
+//        String warrantyStr = request.getParameter("warrantyPeriod");
+//
+//        try {
+//            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+//            boolean hasQuantity = quantityStr != null && !quantityStr.trim().isEmpty();
+//            boolean hasWarranty = warrantyStr != null && !warrantyStr.trim().isEmpty();
+//
+//            int totalProductCount;
+//            if (hasKeyword || hasQuantity || hasWarranty) {
+//                Integer quantity = hasQuantity ? Integer.parseInt(quantityStr) : null;
+//                Integer warrantyPeriod = hasWarranty ? Integer.parseInt(warrantyStr) : null;
+//
+//                productList = productDAO.searchProductsWithPagination(keyword, quantity, warrantyPeriod, pageIndex, pageSize);
+//
+//                totalProductCount = productDAO.searchProducts(keyword, quantity, warrantyPeriod).size();
+//            } else {
+//                productList = productDAO.getProductsByPage(pageIndex, pageSize);
+//                totalProductCount = productDAO.getTotalProductCount();
+//            }
+//
+//            int totalPageCount = (int) Math.ceil((double) totalProductCount / pageSize);
+//
+        request.setAttribute("productList", productList);
+//            request.setAttribute("keyword", keyword);
+//            request.setAttribute("quantity", quantityStr);
+//            request.setAttribute("warrantyPeriod", warrantyStr);
+//            request.setAttribute("totalPageCount", totalPageCount);
+//            request.setAttribute("currentPage", pageIndex);
+        request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
+//        } catch (Exception e) {
+//        }
     }
 
     /**
@@ -71,21 +120,7 @@ public class UpdateProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO productDAO = new ProductDAO();
-        int productId = Integer.parseInt(request.getParameter("productId"));
-        String productName = request.getParameter("productName");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
-        String imagePath = request.getParameter("image");
-//        PrintWriter out = response.getWriter();
-//        out.println(productId);
-//        out.println(productName);
-//        out.println(quantity);
-//        out.println(warrantyPeriod);
-//        out.println(imagePath);
-        Product updatedProduct = new Product(productId, productName, quantity, warrantyPeriod, imagePath);
-        productDAO.updateProduct(updatedProduct);
-        response.sendRedirect("viewP");
+        processRequest(request, response);
     }
 
     /**

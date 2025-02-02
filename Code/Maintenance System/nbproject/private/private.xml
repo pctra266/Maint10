@@ -3,10 +3,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/newYearNewMe/ProductsMaintainManagement/Code/Maintenance%20System/web/updateFeedback.jsp</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/newYearNewMe/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/FeedbackLogDAO.java</file>
-            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/newYearNewMe/ProductsMaintainManagement/Code/Maintenance%20System/web/viewListFeedback.jsp</file>
-
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
         </group>
     </open-files>
 </project-private>

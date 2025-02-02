@@ -117,8 +117,6 @@
         </style>
 
     </head>
-
-
     <body>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
