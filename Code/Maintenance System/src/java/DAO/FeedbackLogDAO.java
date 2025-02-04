@@ -21,13 +21,24 @@ public class FeedbackLogDAO {
     Connection conn = null;
     PreparedStatement ps = null;
     ResultSet rs = null;
-
-    public ArrayList<FeedbackLog> getAllFeedbackLog() {
+    public ArrayList<FeedbackLog> getAllFeedbackLog(String action, int index) {
         ArrayList<FeedbackLog> list = new ArrayList<>();
-        String query = "select * from FeedbackLog order by DateModified desc";
+        String query = "select * from FeedbackLog where 1=1";
+        if (action != null && !action.trim().isEmpty()) {
+            if (action.equalsIgnoreCase("update")) {
+                query += " and Action like 'update'";
+            } else {
+                query += " and Action like 'delete'";
+            }
+        }
+        query += " order by DateModified desc";
+        
+            query += " offset ? rows  fetch next 7 rows only;";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
+            int count =1;
+                ps.setInt(count++, (index -1)* 7);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new FeedbackLog(rs.getInt("FeedbackLogID"), rs.getInt("FeedbackID"),
@@ -41,7 +52,7 @@ public class FeedbackLogDAO {
 
         return list;
     }
-    public ArrayList<FeedbackLog> getAllFeedbackLog(String action) {
+    public ArrayList<FeedbackLog> getAllFeedbackLog(String action, String feedbackID, String column, String sortOrder,int index) {
         ArrayList<FeedbackLog> list = new ArrayList<>();
         String query = "select * from FeedbackLog where 1=1";
         if (action != null && !action.trim().isEmpty()) {
@@ -51,10 +62,27 @@ public class FeedbackLogDAO {
                 query += " and Action like 'delete'";
             }
         }
-        query += " order by DateModified desc";
+        if(feedbackID != null && !feedbackID.trim().isEmpty()){
+            query += " and FeedbackID = ?";
+        }
+        if(column != null && !column.trim().isEmpty()){
+             query += " order by " + column + " ";
+            if(sortOrder != null && !sortOrder.trim().isEmpty()){
+                query += sortOrder;
+            }
+        }else{
+            query += " order by DateModified desc";
+        }
+            query += " offset ? rows  fetch next 7 rows only;";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
+            int count =1;
+            if(feedbackID != null && !feedbackID.trim().isEmpty()){
+            ps.setString(count++, feedbackID);
+        }
+            
+            ps.setInt(count++, (index -1)* 7);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new FeedbackLog(rs.getInt("FeedbackLogID"), rs.getInt("FeedbackID"),
@@ -130,13 +158,43 @@ public class FeedbackLogDAO {
         }
         return null;
     }
+    
+    public int getTotalFeedbackLog(String actionOfLog,String feedbackID){
+         String query = "select count(*)  from FeedbackLog where 1=1";
+          if (actionOfLog != null && !actionOfLog.trim().isEmpty()) {
+            if (actionOfLog.equalsIgnoreCase("update")) {
+                query += " and Action like 'update'";
+            } else {
+                query += " and Action like 'delete'";
+            }
+        }
+          if(feedbackID != null && !feedbackID.trim().isEmpty()){
+            query += " and FeedbackID = ?";
+        }
+         try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count =1;
+             if(feedbackID != null && !feedbackID.trim().isEmpty()){
+                 ps.setString(count++, feedbackID);
+             }
+            rs = ps.executeQuery();
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+        }
+         return 0;
+    }
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update");
-        for (FeedbackLog feedbackLog : list) {
-            System.out.println(feedbackLog);
-        }
+//        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update","6","DateModified","asc", 1);
+//        for (FeedbackLog feedbackLog : list) {
+//            System.out.println(feedbackLog);
+//        }
+        System.out.println(dao.getTotalFeedbackLog("update", "6"));
+//        System.out.println(dao.getTotalFeedbackLog());
 //            FeedbackLog f = dao.getFeedbackLogById("16");
 //            System.out.println(f);
     }
