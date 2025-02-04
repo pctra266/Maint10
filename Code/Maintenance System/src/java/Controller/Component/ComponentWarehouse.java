@@ -7,6 +7,7 @@ package Controller.Component;
 import DAO.ComponentDAO;
 import Model.Component;
 import Utils.NumberUtils;
+import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -39,7 +40,7 @@ public class ComponentWarehouse extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        String paraSearch = request.getParameter("search");
+        String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
@@ -56,6 +57,7 @@ public class ComponentWarehouse extends HttpServlet {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
+        
         if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
             //xac nhan cac tham so de sort truyen vao la dung
             if (sort.equals("quantity") || sort.equals("name") || sort.equals("price") || sort.equals("code")) {

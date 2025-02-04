@@ -214,6 +214,9 @@
                             <form class="row align-items-center justify-content-center" action="" method="get">
                                 <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
                                 <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
+                                <input type="hidden" name="sort" value="${sort}">
+                        <input type="hidden" name="order" value="${order}">
+                        <input type="hidden" name="search" value="${search}">
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>

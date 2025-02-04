@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import Model.WarrantyCard;
 import Utils.NumberUtils;
+import Utils.SearchUtils;
 import java.util.ArrayList;
 
 /**
@@ -40,7 +41,7 @@ public class WarrantyCardList extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        String paraSearch = request.getParameter("search");
+        String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search")) ;
         int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");

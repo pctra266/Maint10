@@ -141,7 +141,7 @@ public class WarrantyCardDAO extends DBContext {
                 + "JOIN ProductDetail pd ON wc.ProductDetailID = pd.ProductDetailID "
                 + "JOIN Product p ON pd.ProductID = p.ProductID "
                 + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
-                + "WHERE wc.WarrantyCardCode LIKE ? OR p.ProductName LIKE ? OR c.Name LIKE ? "
+                + "WHERE wc.WarrantyCardCode LIKE ? OR p.ProductName LIKE ? OR c.Name LIKE ? OR pd.ProductCode LIKE ? "
                 + "ORDER BY wc.CreatedDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
@@ -149,8 +149,9 @@ public class WarrantyCardDAO extends DBContext {
             ps.setString(1, searchPattern);
             ps.setString(2, searchPattern);
             ps.setString(3, searchPattern);
-            ps.setInt(4, (page - 1) * pageSize);
-            ps.setInt(5, pageSize);
+            ps.setString(4, searchPattern);
+            ps.setInt(5, (page - 1) * pageSize);
+            ps.setInt(6, pageSize);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -263,9 +264,7 @@ public class WarrantyCardDAO extends DBContext {
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(SearchUtils.isSimilar("phone", "pone"));
-        System.out.println(SearchUtils.soundex("R    obert"));
-        System.out.println(SearchUtils.isPhoneticallySimilar("Robert", "Rupert"));
+        System.out.println(d.searchCardsByPage("PDT", 1, 5));
     }
 
 }

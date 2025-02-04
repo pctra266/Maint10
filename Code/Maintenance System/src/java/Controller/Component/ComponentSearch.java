@@ -15,6 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
+import Utils.SearchUtils;
+
 
 /**
  *
@@ -37,8 +39,8 @@ public class ComponentSearch extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        String paraSearchCode = request.getParameter("searchCode") != null ? request.getParameter("searchCode") : "";
-        String paraSearchName = request.getParameter("searchName") != null ? request.getParameter("searchName") : "";
+        String paraSearchCode = SearchUtils.preprocessSearchQuery( request.getParameter("searchCode"));
+        String paraSearchName = SearchUtils.preprocessSearchQuery(request.getParameter("searchName"));
         int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
