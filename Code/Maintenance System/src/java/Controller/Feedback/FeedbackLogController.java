@@ -71,13 +71,21 @@ public class FeedbackLogController extends HttpServlet {
             case "viewListFeedbackLog":
                 String indexStr = request.getParameter("index");
                 String actionOfLog = request.getParameter("actionOfLog");
+                String feedbackID = request.getParameter("feedbackID");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
                 request.setAttribute("actionOfLog", actionOfLog);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("feedbackID", feedbackID);
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
                 }
-                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog);
+                //        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update","6","DateModified","asc", 1);
+
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
                 int endPage = totalPage /7;
                 if(totalPage %7 != 0 ){
                     endPage ++;
@@ -85,7 +93,7 @@ public class FeedbackLogController extends HttpServlet {
                 request.setAttribute("index", index);
                 request.setAttribute("endPage", endPage);
                 
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,index);
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,feedbackID,column,sortOrder,index);
                 request.setAttribute("listFeedbackLog", listFeedbackLog);
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;
@@ -123,12 +131,19 @@ public class FeedbackLogController extends HttpServlet {
             case "viewListFeedbackLog":
                 String indexStr = request.getParameter("index");
                 String actionOfLog = request.getParameter("actionOfLog");
+                String feedbackID = request.getParameter("feedbackID");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
+                request.setAttribute("actionOfLog", actionOfLog);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("feedbackID", feedbackID);
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
                 } catch (Exception e) {
                 }
-                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog);
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
                 int endPage = totalPage /7;
                 if(totalPage %7 != 0 ){
                     endPage ++;
@@ -141,7 +156,7 @@ public class FeedbackLogController extends HttpServlet {
                 
                 
                 request.setAttribute("actionOfLog", actionOfLog);
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,index);
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,feedbackID,column,sortOrder,index);
                 request.setAttribute("listFeedbackLog", listFeedbackLog);
                 
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
