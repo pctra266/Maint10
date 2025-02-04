@@ -15,6 +15,7 @@
         <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
         <meta name="author" content="AdminKit">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
+        <base href="${pageContext.request.contextPath}/">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
@@ -46,10 +47,11 @@
 
     <body>
         <div class="wrapper">
-            <jsp:include page="../includes/navbar-left.jsp" />
+            <jsp:include page="../../includes/navbar-left.jsp" />
 
             <div class="main">
-                <jsp:include page="../includes/navbar-top.jsp" />
+
+                <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Component Warehouse</h2>
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -159,54 +161,54 @@
                                         Unit Price
                                     </form>
                                 </th>
-                               
-                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
+
+                                <th style="width:8%">Action<a href="ComponentWarehouse?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
-                      <c:forEach var="component" items="${components}" varStatus="status">
-    <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-        <td>${status.index + 1 + (currentPage - 1) * size}</td>
-        <td>${component.componentCode}</td>
-        <td>${component.type}</td>
-        <td>${component.brand}</td>
-        <td>${component.componentName}</td>
-        <td>${component.quantity}</td>
-        <td>${component.price}</td>
-        <td class="table-action">
-            <a href="ComponentWarehouse/Detail?ID=${component.componentID}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
-                    <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                </svg>
-            </a>
-            <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                </svg>
-            </a>
-        </td>
-    </tr>
+                        <c:forEach var="component" items="${components}" varStatus="status">
+                            <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
+                                <td>${status.index + 1 + (currentPage - 1) * size}</td>
+                                <td>${component.componentCode}</td>
+                                <td>${component.type}</td>
+                                <td>${component.brand}</td>
+                                <td>${component.componentName}</td>
+                                <td>${component.quantity}</td>
+                                <td>${component.price}</td>
+                                <td class="table-action">
+                                    <a href="ComponentWarehouse/Detail?ID=${component.componentID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
 
-    <!-- Modal for each component -->
-    <div class="modal fade" id="centeredModalPrimary_${component.componentID}" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Delete Confirmation</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body m-3">
-                    <p class="mb-0">Confirm your action. Really want to delete?</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <a href="ComponentWarehouse/Delete?ID=${component.componentID}&page=${currentPage}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary">Delete</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</c:forEach>
+                            <!-- Modal for each component -->
+                            <div class="modal fade" id="centeredModalPrimary_${component.componentID}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body m-3">
+                                            <p class="mb-0">Confirm your action. Really want to delete?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="ComponentWarehouse/Delete?ID=${component.componentID}&page=${currentPage}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary">Delete</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
                         <tbody>
 
                         </tbody>
@@ -219,10 +221,10 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="ComponentWarehouse?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="ComponentWarehouse?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
@@ -239,14 +241,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="ComponentWarehouse?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="ComponentWarehouse?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="ComponentWarehouse?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
@@ -254,20 +256,24 @@
                             <form class="row align-items-center justify-content-center" action="" method="get">
                                 <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
                                 <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
+                                <input type="hidden" name="search" value="${search}" />
+                                <input type="hidden" name="sort" value="${sort}" />
+                                <input type="hidden" name="order" value="${order}" />
+
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>
-                                <c:if test="${not empty deleteStatus}">
-                                    <div class="alert alert-warning alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${deleteStatus}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
+                        <c:if test="${not empty deleteStatus}">
+                            <div class="alert alert-warning alert-dismissible" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <div class="alert-message">
+                                    <strong>${deleteStatus}</strong>
+                                </div>
+                            </div>
+                        </c:if>
                     </div>
                 </main>
-                <jsp:include page="../includes/footer.jsp" />
+                <jsp:include page="../../includes/footer.jsp" />
             </div>
 
         </div>

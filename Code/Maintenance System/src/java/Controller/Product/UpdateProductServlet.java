@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.Product;
 
 import DAO.ProductDAO;
+import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author sonNH
  */
-public class AddProduct extends HttpServlet {
+public class UpdateProductServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -35,10 +36,10 @@ public class AddProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddProduct</title>");
+            out.println("<title>Servlet UpdateProductServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddProduct at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet UpdateProductServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -70,19 +71,21 @@ public class AddProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO productDAO = new ProductDAO();
-        String productName = request.getParameter("productName");
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
-        String imagePath = request.getParameter("image");
-
-//        PrintWriter out = response.getWriter();
-//        out.println(productName);
-//        out.println(quantity);
-//        out.println(warrantyPeriod);
-//        out.println(imagePath);
-        productDAO.addProduct(productName, quantity, warrantyPeriod, imagePath);
-        response.sendRedirect("viewP");
+//        ProductDAO productDAO = new ProductDAO();
+//        int productId = Integer.parseInt(request.getParameter("productId"));
+//        String productName = request.getParameter("productName");
+//        int quantity = Integer.parseInt(request.getParameter("quantity"));
+//        int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
+//        String imagePath = request.getParameter("image");
+////        PrintWriter out = response.getWriter();
+////        out.println(productId);
+////        out.println(productName);
+////        out.println(quantity);
+////        out.println(warrantyPeriod);
+////        out.println(imagePath);
+//        Product updatedProduct = new Product(productId, productName, quantity, warrantyPeriod, imagePath);
+//        productDAO.updateProduct(updatedProduct);
+//        response.sendRedirect("viewP");
     }
 
     /**

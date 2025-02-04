@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package Controller;
+package Controller.Product;
 
 import DAO.ProductDAO;
 import Model.Product;
@@ -59,52 +59,54 @@ public class ViewProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO productDAO = new ProductDAO();
-        int pageSize = 5;
-        int pageIndex = 1;
-        String pageIndexStr = request.getParameter("index");
-
-        if (pageIndexStr != null) {
-            try {
-                pageIndex = Integer.parseInt(pageIndexStr);
-            } catch (NumberFormatException e) {
-                pageIndex = 1;
-            }
-        }
-
         List<Product> productList;
-        String keyword = request.getParameter("keyword");
-        String quantityStr = request.getParameter("quantity");
-        String warrantyStr = request.getParameter("warrantyPeriod");
-
-        try {
-            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
-            boolean hasQuantity = quantityStr != null && !quantityStr.trim().isEmpty();
-            boolean hasWarranty = warrantyStr != null && !warrantyStr.trim().isEmpty();
-
-            int totalProductCount;
-            if (hasKeyword || hasQuantity || hasWarranty) {
-                Integer quantity = hasQuantity ? Integer.parseInt(quantityStr) : null;
-                Integer warrantyPeriod = hasWarranty ? Integer.parseInt(warrantyStr) : null;
-
-                productList = productDAO.searchProductsWithPagination(keyword, quantity, warrantyPeriod, pageIndex, pageSize);
-
-                totalProductCount = productDAO.searchProducts(keyword, quantity, warrantyPeriod).size();
-            } else {
-                productList = productDAO.getProductsByPage(pageIndex, pageSize);
-                totalProductCount = productDAO.getTotalProductCount();
-            }
-
-            int totalPageCount = (int) Math.ceil((double) totalProductCount / pageSize);
-
-            request.setAttribute("productList", productList);
-            request.setAttribute("keyword", keyword);
-            request.setAttribute("quantity", quantityStr);
-            request.setAttribute("warrantyPeriod", warrantyStr);
-            request.setAttribute("totalPageCount", totalPageCount);
-            request.setAttribute("currentPage", pageIndex);
-            request.getRequestDispatcher("product.jsp").forward(request, response);
-        } catch (Exception e) {
-        }
+        productList = productDAO.getAllProducts();
+//        int pageSize = 5;
+//        int pageIndex = 1;
+//        String pageIndexStr = request.getParameter("index");
+//
+//        if (pageIndexStr != null) {
+//            try {
+//                pageIndex = Integer.parseInt(pageIndexStr);
+//            } catch (NumberFormatException e) {
+//                pageIndex = 1;
+//            }
+//        }
+//
+//        List<Product> productList;
+//        String keyword = request.getParameter("keyword");
+//        String quantityStr = request.getParameter("quantity");
+//        String warrantyStr = request.getParameter("warrantyPeriod");
+//
+//        try {
+//            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
+//            boolean hasQuantity = quantityStr != null && !quantityStr.trim().isEmpty();
+//            boolean hasWarranty = warrantyStr != null && !warrantyStr.trim().isEmpty();
+//
+//            int totalProductCount;
+//            if (hasKeyword || hasQuantity || hasWarranty) {
+//                Integer quantity = hasQuantity ? Integer.parseInt(quantityStr) : null;
+//                Integer warrantyPeriod = hasWarranty ? Integer.parseInt(warrantyStr) : null;
+//
+//                productList = productDAO.searchProductsWithPagination(keyword, quantity, warrantyPeriod, pageIndex, pageSize);
+//
+//                totalProductCount = productDAO.searchProducts(keyword, quantity, warrantyPeriod).size();
+//            } else {
+//                productList = productDAO.getProductsByPage(pageIndex, pageSize);
+//                totalProductCount = productDAO.getTotalProductCount();
+//            }
+//
+//            int totalPageCount = (int) Math.ceil((double) totalProductCount / pageSize);
+//
+        request.setAttribute("productList", productList);
+//            request.setAttribute("keyword", keyword);
+//            request.setAttribute("quantity", quantityStr);
+//            request.setAttribute("warrantyPeriod", warrantyStr);
+//            request.setAttribute("totalPageCount", totalPageCount);
+//            request.setAttribute("currentPage", pageIndex);
+        request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
+//        } catch (Exception e) {
+//        }
     }
 
     /**

@@ -26,9 +26,9 @@
 
     <body>
         <div class="wrapper">
-            <jsp:include page="../includes/navbar-left.jsp" />
+            <jsp:include page="../../includes/navbar-left.jsp" />
             <div class="main">
-                <jsp:include page="../includes/navbar-top.jsp" />
+                <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h2>Component Add</h2>
@@ -130,7 +130,7 @@
 
                 </main>
 
-                <jsp:include page="../includes/footer.jsp" />
+                <jsp:include page="../../includes/footer.jsp" />
             </div>
 
         </div>

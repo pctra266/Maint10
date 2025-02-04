@@ -2,50 +2,66 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
+package Controller.WarrantyCard;
 
-package Controller;
-
-import DAO.ProductDAO;
+import DAO.CustomerDAO;
+import DAO.WarrantyCardDAO;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author sonNH
+ * @author ADMIN
  */
-public class DeleteProductServlet extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+@WebServlet(name = "AddWarrantyCard", urlPatterns = {"/WarrantyCard/Add"})
+public class AddWarrantyCard extends HttpServlet {
+
+    private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
+
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet deleteProductServlet</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet deleteProductServlet at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            throws ServletException, IOException {
+        String productCode = request.getParameter("productCode");
+        String issue = request.getParameter("issue");
+        if (issue != null) {
+            if (warrantyCardDAO.createWarrantyCard(productCode, issue)) {
+                response.sendRedirect("../WarrantyCard?create=true");
+                return;
+            } else {
+                request.setAttribute("createFail", "Fail to create card");
+            }
         }
-    } 
+        ProductDetail pd = warrantyCardDAO.getProductDetailByCode(productCode);
+        if (pd == null && productCode!=null) {
+            request.setAttribute("NotFoundProduct", "No product has this code!");
+        } else {
+            request.setAttribute("pd", pd);
+            if(pd!=null)request.setAttribute("cusID", customerDAO.getCustomerByEmail(pd.getEmail()).getCustomerID());
+        }
+
+        request.setAttribute("ProductCode", productCode);
+        request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardCreate.jsp").forward(request, response);
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
+    /**
      * Handles the HTTP <code>GET</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -53,20 +69,13 @@ public class DeleteProductServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        int productId = Integer.parseInt(request.getParameter("productId"));
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
 
-        ProductDAO productDAO = new ProductDAO();
-        boolean isDeleted = productDAO.setQuantityToZero(productId);
-
-        if (isDeleted) {
-            response.sendRedirect("product");
-        } else {
-            response.getWriter().write("Failed to delete product.");
-        }    } 
-
-    /** 
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -74,12 +83,13 @@ public class DeleteProductServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override
