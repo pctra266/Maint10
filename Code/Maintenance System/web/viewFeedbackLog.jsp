@@ -27,7 +27,7 @@
                         <input type="hidden" name="index" value="${index}">
                         <div class="row" style="justify-content: space-between">
                         <div class="col-md-6" style="width: 500px">
-                            <input style="margin-top: 15px" class="form-control" type="search" name="FeedbackID" placeholder="Feedback ID"  value="${feedbackID}" >
+                            <input style="margin-top: 15px" class="form-control" type="search" name="feedbackID" placeholder="Feedback ID"  value="${feedbackID}" >
                             <select style="margin-top: 15px" class="form-select" name="actionOfLog">
                                 <option value="">Action </option>
                                 <option ${(actionOfLog=='update')?"selected":""} value="update">Update</option>
@@ -89,7 +89,7 @@
                     <div class="text-center">
                         <ul class="pagination pagination-lg" style="display: flex; justify-content: center; margin-top: 15px">
                             <c:forEach begin="1" end="${endPage}" var="i">
-                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedbacklog?index=${i}&actionOfLog=${actionOfLog}">${i}</a></li>
+                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedbacklog?index=${i}&actionOfLog=${actionOfLog}&feedbackID=${feedbackID}&column=${column}&sortOrder=${sortOrder}">${i}</a></li>
                                 </c:forEach>
                         </ul>
 
