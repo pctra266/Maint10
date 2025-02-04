@@ -14,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import Model.WarrantyCard;
+import Utils.NumberUtils;
 
 /**
  *
@@ -36,8 +37,12 @@ public class WarrantyCardList extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String pageParam = request.getParameter("page");
+        int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+        // Lấy page-size từ request, mặc định là PAGE_SIZE
+
         String createStatus = request.getParameter("create");
-        if (createStatus!=null&&createStatus.equals("true")) {
+        if (createStatus != null && createStatus.equals("true")) {
             request.setAttribute("createStatus", "Card created successfully");
         }
         List<WarrantyCard> cards = warrantyCardDAO.getAllWarrantyCards();

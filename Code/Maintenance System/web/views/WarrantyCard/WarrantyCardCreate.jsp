@@ -145,6 +145,9 @@
                                 <input type="email" class="form-control" name="email" id="email" 
                                        value="${pd.email}" readonly="readonly">
                             </div>
+                            <div class="col-md-2">
+                                       <a href="customer?action=update&id=${cusID}" class="btn btn-info d-flex justify-content-center align-items-center" style="height: 2.3rem; font-size: 0.8rem; width: 55%">Edit customer</a>
+                            </div>
                             <div class="col-md-12">
                                 <textarea class="form-control" placeholder="Descript issue" name= "issue" rows="2" style="height: 10rem;"></textarea>
                             </div>
@@ -154,7 +157,7 @@
 
                             <!-- Nút Submit -->
                             <div class="col-12 text-center">
-                                <button type="submit" class="btn btn-primary btn-pill p-3" style="font-size: 1.3rem">Create</button>
+                                <button type="submit" class="btn btn-primary rounded-3 p-3" style="font-size: 1.3rem">Create</button>
                             </div>
                         </form>
                     </c:if>

@@ -4,6 +4,7 @@
  */
 package Controller.WarrantyCard;
 
+import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
 import Model.ProductDetail;
 import java.io.IOException;
@@ -22,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class AddWarrantyCard extends HttpServlet {
 
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,6 +51,7 @@ public class AddWarrantyCard extends HttpServlet {
             request.setAttribute("NotFoundProduct", "No product has this code!");
         } else {
             request.setAttribute("pd", pd);
+            if(pd!=null)request.setAttribute("cusID", customerDAO.getCustomerByEmail(pd.getEmail()).getCustomerID());
         }
 
         request.setAttribute("ProductCode", productCode);
