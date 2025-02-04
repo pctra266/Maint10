@@ -47,7 +47,7 @@ public class ComponentWarehouse extends HttpServlet {
         String order = request.getParameter("order");
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
-      //--------------------------------------------------------------------------
+        //--------------------------------------------------------------------------
         List<Component> components = new ArrayList<>();
         int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents() : componentDAO.getTotalSearchComponents(paraSearch);
         // Tính tổng số trang
@@ -55,9 +55,7 @@ public class ComponentWarehouse extends HttpServlet {
         if (page > totalPages) {
             page = totalPages;
         }
-        if (page < 1) {
-            page = 1;
-        }
+        page = page < 1 ? 1 : page;
         if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
             //xac nhan cac tham so de sort truyen vao la dung
             if (sort.equals("quantity") || sort.equals("name") || sort.equals("price") || sort.equals("code")) {
@@ -80,6 +78,7 @@ public class ComponentWarehouse extends HttpServlet {
         } else {
             components = paraSearch == null || paraSearch.isBlank() ? componentDAO.getComponentsByPage(page, pageSize) : componentDAO.searchComponentsByPage(paraSearch, page, pageSize);
         }
+        //Lay thong bao tu viec delete
         String delete = request.getParameter("delete");
         String deleteStatus;
         if (delete != null) {
