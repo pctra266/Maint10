@@ -69,7 +69,31 @@ public class FeedbackLogController extends HttpServlet {
         }
         switch (action) {
             case "viewListFeedbackLog":
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog();
+                String indexStr = request.getParameter("index");
+                String actionOfLog = request.getParameter("actionOfLog");
+                String feedbackID = request.getParameter("feedbackID");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
+                request.setAttribute("actionOfLog", actionOfLog);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("feedbackID", feedbackID);
+                int index = 1;
+                try {
+                    index = Integer.parseInt(indexStr);
+                } catch (Exception e) {
+                }
+                //        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update","6","DateModified","asc", 1);
+
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
+                int endPage = totalPage /7;
+                if(totalPage %7 != 0 ){
+                    endPage ++;
+                }
+                request.setAttribute("index", index);
+                request.setAttribute("endPage", endPage);
+                
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,feedbackID,column,sortOrder,index);
                 request.setAttribute("listFeedbackLog", listFeedbackLog);
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;
@@ -98,17 +122,43 @@ public class FeedbackLogController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewListFeedbackLog";
         }
         switch (action) {
             case "viewListFeedbackLog":
+                String indexStr = request.getParameter("index");
                 String actionOfLog = request.getParameter("actionOfLog");
-                FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog);
-                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                String feedbackID = request.getParameter("feedbackID");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
                 request.setAttribute("actionOfLog", actionOfLog);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("feedbackID", feedbackID);
+                int index = 1;
+                try {
+                    index = Integer.parseInt(indexStr);
+                } catch (Exception e) {
+                }
+                int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
+                int endPage = totalPage /7;
+                if(totalPage %7 != 0 ){
+                    endPage ++;
+                }
+                if(endPage < index){
+                    index = endPage;
+                }
+                request.setAttribute("index", index);
+                request.setAttribute("endPage", endPage);
+                
+                
+                request.setAttribute("actionOfLog", actionOfLog);
+                ArrayList<FeedbackLog> listFeedbackLog = daoFeedbackLog.getAllFeedbackLog(actionOfLog,feedbackID,column,sortOrder,index);
+                request.setAttribute("listFeedbackLog", listFeedbackLog);
+                
                 request.getRequestDispatcher("viewFeedbackLog.jsp").forward(request, response);
                 break;
             case "undoFeedback":
