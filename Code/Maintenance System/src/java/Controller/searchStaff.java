@@ -33,7 +33,31 @@ public class searchStaff extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        
+        String search = request.getParameter("search");
+        String searchname = request.getParameter("searchname");
+        StaffDAO dao = new StaffDAO();
+        List<Staff> list ;
+        int pagesize=5;
+        int pageIndex = 1;
+        String pageIndexStr = request.getParameter("index");
+
+        if (pageIndexStr != null) {
+            try {
+                pageIndex = Integer.parseInt(pageIndexStr);
+            } catch (NumberFormatException e) {
+                pageIndex = 1;
+            }
+        }
+        int totalStaff;
+        list = dao.searchStaffWithPagination(search, searchname, pageIndex, pagesize);
+        totalStaff = dao.searchStaff(search, searchname).size();
+        int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+        request.setAttribute("totalPageCount", totalPageCount);
+        request.setAttribute("search", search);
+        request.setAttribute("searchname", searchname);
+        request.setAttribute("pageIndex", pageIndex);
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("Staff.jsp").forward(request, response);
     } 
 
     /** 
@@ -46,13 +70,7 @@ public class searchStaff extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String search = request.getParameter("search");
-        String searchname = request.getParameter("searchname");
-        StaffDAO dao = new StaffDAO();
-        boolean add = dao.searchStaff(search, searchname);
-        List<Staff> list = dao.getAllOrder();        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("Staff.jsp").forward(request, response);
+        
     }
 
     /** 

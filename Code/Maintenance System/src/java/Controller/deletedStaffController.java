@@ -31,9 +31,9 @@ public class deletedStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
+        String staffID = request.getParameter("staffID");
         StaffDAO dao = new StaffDAO();
-        boolean delete = dao.deleteStaff(staffId);
+        boolean delete = dao.deleteStaff(staffID);
         List<Staff> list = dao.getAllOrder();
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);

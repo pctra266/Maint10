@@ -6,7 +6,9 @@
 package Controller;
 
 import DAO.StaffDAO;
+import DAO.StaffLogDAO;
 import Model.Staff;
+import Model.StaffLog;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -45,10 +47,10 @@ public class seeMoreController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        StaffDAO dao = new StaffDAO();
-        List<Staff> listMore = dao.getAllOrder();        
-        request.setAttribute("listMore", listMore);
-        request.getRequestDispatcher("all-staff.jsp").forward(request, response);
+        StaffLogDAO dao = new StaffLogDAO();
+        List<StaffLog> list = dao.getAllOrder();        
+        request.setAttribute("list", list);
+        request.getRequestDispatcher("all-changeStaff.jsp").forward(request, response);
     }
 
     /** 

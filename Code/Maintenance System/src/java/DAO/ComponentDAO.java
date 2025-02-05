@@ -35,7 +35,7 @@ public class ComponentDAO extends DBContext {
 
     public List<String> getListBrand() {
         List<String> brandList = new ArrayList<>();
-        String query = "SELECT BrandName FROM ComponentBrand";
+        String query = "SELECT BrandName FROM Brand";
 
         try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
@@ -103,7 +103,7 @@ public class ComponentDAO extends DBContext {
         List<Component> components = new ArrayList<>();
         String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, c.Image "
                 + "FROM Component c "
-                + "JOIN ComponentBrand cb ON c.BrandID = cb.BrandID "
+                + "JOIN Brand cb ON c.BrandID = cb.BrandID "
                 + "JOIN ComponentType ct ON c.TypeID = ct.TypeID "
                 + "WHERE c.Status = 1";
 
@@ -134,7 +134,7 @@ public class ComponentDAO extends DBContext {
         String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 "
                 + "ORDER BY c.ComponentID "
@@ -185,7 +185,7 @@ public class ComponentDAO extends DBContext {
         String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM [dbo].[Component] c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND c.ComponentID = ?";
 
@@ -294,7 +294,7 @@ public class ComponentDAO extends DBContext {
         String query = "SELECT TOP 1 c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 "
                 + "ORDER BY c.ComponentID DESC";
@@ -324,7 +324,7 @@ public class ComponentDAO extends DBContext {
         String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "(c.ComponentCode LIKE ? OR "
@@ -367,7 +367,7 @@ public class ComponentDAO extends DBContext {
 
     public int getTotalSearchComponents(String keyword) {
         String query = "SELECT COUNT(*) FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "(c.ComponentCode LIKE ? OR "
@@ -400,7 +400,7 @@ public class ComponentDAO extends DBContext {
         String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 "
                 + "ORDER BY " + sort + " " + order + " "
@@ -435,7 +435,7 @@ public class ComponentDAO extends DBContext {
         String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "(c.ComponentName LIKE ? OR "
@@ -476,7 +476,7 @@ public class ComponentDAO extends DBContext {
 
     public int getTotalSearchComponentsByFields(String searchCode, String searchName, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
         StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "c.ComponentCode LIKE ? AND "
@@ -541,7 +541,7 @@ public class ComponentDAO extends DBContext {
         StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "c.ComponentCode LIKE ? AND "
@@ -622,7 +622,7 @@ public class ComponentDAO extends DBContext {
         StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE c.Status = 1 AND "
                 + "c.ComponentCode LIKE ? AND "
@@ -669,8 +669,7 @@ public class ComponentDAO extends DBContext {
         }
 
         // Thêm điều kiện sắp xếp
-        query.append(" ORDER BY " + sort + " " + order + " "
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        query.append(" ORDER BY ").append(sort).append(" ").append(order).append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
         parameters.add((page - 1) * pageSize);
         parameters.add(pageSize);
 
@@ -679,7 +678,6 @@ public class ComponentDAO extends DBContext {
             for (int i = 0; i < parameters.size(); i++) {
                 ps.setObject(i + 1, parameters.get(i));
             }
-
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Component component = new Component(
@@ -707,7 +705,7 @@ public class ComponentDAO extends DBContext {
                 + "FROM Product p "
                 + "JOIN ProductComponents pc ON p.ProductID = pc.ProductID "
                 + "JOIN Component c ON pc.ComponentID = c.ComponentID "
-                + "JOIN ComponentBrand b ON c.BrandID = b.BrandID "
+                + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
                 + "WHERE pc.ComponentID = ?";
 
@@ -734,7 +732,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public Integer getBrandID(String brandName) {
-        String query = "SELECT BrandID FROM ComponentBrand WHERE BrandName = ?";
+        String query = "SELECT BrandID FROM Brand WHERE BrandName = ?";
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setString(1, brandName);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -771,31 +769,31 @@ public class ComponentDAO extends DBContext {
         String searchPrice = "";
         int page = 1;
         int pageSize = 5;
-        String sort = "Code";
+        String sort = "ComponentCode";
         String order = "asc";
         String search = "MA";
         Double minPrice = d.getPriceMin();
         Double maxPrice = d.getPriceMax();
         Integer maxQuantity = d.getQuantityMax();
         Integer minQuantity = d.getQuantityMin();
-//        System.out.println(d.getBrandID("Apple"));
+        System.out.println(d.getBrandID("Apple"));
         System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));
         System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, 1, 5, sort, order, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
         System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
-//        System.out.println("-----");
-//        System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
-//        System.out.println("-------------");
-//        System.out.println(d.getComponentsByPageSorted(page, pageSize, sort, order));
-//        System.out.println(d.getTotalSearchComponents(search));
-//        System.out.println(d.searchComponentsByPage(search, page, pageSize));
-//        System.out.println(d.getLast());
-//        System.out.println(d.getComponentByID(2));
-//        System.out.println(d.getTotalComponents());
-//        System.out.println(d.getComponentsByPage(page, pageSize));
-//        System.out.println(d.getAllComponents());
-//        System.out.println(d.getProductsByComponentId(3));
-//        Component component = new Component(1, "", "", 11, true, "Display", "Apple", 2222, null);
-//        System.out.println(d.update(component));
+        System.out.println("-----");
+        System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
+        System.out.println("-------------");
+        System.out.println(d.getComponentsByPageSorted(page, pageSize, sort, order));
+        System.out.println(d.getTotalSearchComponents(search));
+        System.out.println(d.searchComponentsByPage(search, page, pageSize));
+        System.out.println(d.getLast());
+        System.out.println(d.getComponentByID(2));
+        System.out.println(d.getTotalComponents());
+        System.out.println(d.getComponentsByPage(page, pageSize));
+        System.out.println(d.getAllComponents());
+        System.out.println(d.getProductsByComponentId(3));
+        Component component = new Component(1, "", "", 11, true, "Display", "Apple", 2222, null);
+        System.out.println(d.update(component));
         System.out.println(d.getPriceMin());
         System.out.println(d.getPriceMax());
         System.out.println(d.getQuantityMax());

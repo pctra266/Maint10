@@ -33,7 +33,7 @@ public class ProductDAO extends DBContext {
                 + "FROM \n"
                 + "    Product p\n"
                 + "JOIN \n"
-                + "    ComponentBrand cb ON p.BrandID = cb.BrandID;";
+                + "    Brand cb ON p.BrandID = cb.BrandID;";
 
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
