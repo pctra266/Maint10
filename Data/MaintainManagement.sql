@@ -34,9 +34,16 @@ CREATE TABLE Staff (
 CREATE TABLE StaffLog (
     StaffLogID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     StaffID INT NOT NULL REFERENCES Staff(StaffID),
-    StartDate DATETIME NOT NULL,
-    EndDate DATETIME,
+    UsernameS NVARCHAR(50) ,
+    PasswordS NVARCHAR(50),
     [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
+    [Name] NVARCHAR(100),
+    Email NVARCHAR(100),
+    Phone NVARCHAR(20),
+    [Address] NVARCHAR(255),
+    Image NVARCHAR(MAX) ,
+    [Time] DATETIME,
+    [Status] NVARCHAR(100),
 );
 
 -- Customer Table
