@@ -1,48 +1,38 @@
-//package Utils;
-//
-//import com.google.api.client.http.FileContent;
-//import com.google.api.client.http.HttpTransport;
-//import com.google.api.client.http.javanet.NetHttpTransport;
-//import com.google.api.client.json.JsonFactory;
-//import com.google.api.client.json.jackson2.JacksonFactory;
-//import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
-//import com.google.api.services.drive.Drive;
-//import com.google.api.services.drive.DriveScopes;
-//import com.google.api.services.drive.model.File;
-//
-//import java.io.IOException;
-//import java.nio.file.Paths;
-//import java.util.Collections;
-//
-//public class GoogleDriveService {
-//    private static final String SERVICE_ACCOUNT_JSON = "C:/path/to/your/service-account.json";
-//    
-//    public static Drive getDriveService() throws IOException {
-//        HttpTransport httpTransport = new NetHttpTransport();
-//        JsonFactory jsonFactory = new JacksonFactory();
-//        
-//        GoogleCredential credential = GoogleCredential
-//                .fromStream(new java.io.FileInputStream(SERVICE_ACCOUNT_JSON))
-//                .createScoped(Collections.singleton(DriveScopes.DRIVE));
-//
-//        return new Drive.Builder(httpTransport, jsonFactory, credential)
-//                .setApplicationName("GoogleDriveUpload")
-//                .build();
-//    }
-//
-//    public static String uploadFile(String filePath, String mimeType) throws IOException {
-//        Drive driveService = getDriveService();
-//        
-//        File fileMetadata = new File();
-//        fileMetadata.setName(Paths.get(filePath).getFileName().toString());
-//
-//        java.io.File file = new java.io.File(filePath);
-//        FileContent mediaContent = new FileContent(mimeType, file);
-//
-//        File uploadedFile = driveService.files().create(fileMetadata, mediaContent)
-//                .setFields("id")
-//                .execute();
-//
-//        return uploadedFile.getId();
-//    }
-//}
+package Utils;
+
+import com.google.api.services.drive.Drive;
+import com.google.auth.oauth2.GoogleCredentials;
+import com.google.auth.http.HttpCredentialsAdapter;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.services.drive.DriveScopes;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Collections;
+
+public class GoogleDriveService {
+
+    // Đường dẫn đến file JSON của Service Account
+    private static final String SERVICE_ACCOUNT_KEY_PATH = "D:\\learning_university\\Term5_SP25\\1_SWP391\\newLife\\newYearNewMe\\ProductsMaintainManagement\\JSonKey\\service-account.json";
+
+    public static Drive getDriveService() throws IOException {
+        // Đọc thông tin từ Service Account JSON thông qua FileInputStream
+        FileInputStream serviceAccountStream = new FileInputStream(SERVICE_ACCOUNT_KEY_PATH);
+
+        GoogleCredentials credentials = GoogleCredentials
+                .fromStream(serviceAccountStream)
+                .createScoped(Collections.singleton(DriveScopes.DRIVE));
+
+        // Đảm bảo đóng luồng sau khi sử dụng
+        serviceAccountStream.close();
+
+        // Tạo Drive service và trả về
+        return new Drive.Builder(
+                new NetHttpTransport(),
+                JacksonFactory.getDefaultInstance(),
+                new HttpCredentialsAdapter(credentials)
+        ).setApplicationName("MyDriveApp").build();
+    }
+}
