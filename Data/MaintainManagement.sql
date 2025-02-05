@@ -33,7 +33,7 @@ CREATE TABLE Staff (
 -- StaffLog Table
 CREATE TABLE StaffLog (
     StaffLogID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    StaffID INT NOT NULL REFERENCES Staff(StaffID),
+    StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50) ,
     PasswordS NVARCHAR(50),
     [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
