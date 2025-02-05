@@ -1,10 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller.Product;
 
 import DAO.ProductDAO;
+import Model.Brand;
 import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,28 +9,15 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author sonNH
- */
 public class ViewProduct extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -46,91 +30,67 @@ public class ViewProduct extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO productDAO = new ProductDAO();
-        List<Product> productList;
-        productList = productDAO.getAllProducts();
-//        int pageSize = 5;
-//        int pageIndex = 1;
-//        String pageIndexStr = request.getParameter("index");
-//
-//        if (pageIndexStr != null) {
-//            try {
-//                pageIndex = Integer.parseInt(pageIndexStr);
-//            } catch (NumberFormatException e) {
-//                pageIndex = 1;
-//            }
-//        }
-//
-//        List<Product> productList;
-//        String keyword = request.getParameter("keyword");
-//        String quantityStr = request.getParameter("quantity");
-//        String warrantyStr = request.getParameter("warrantyPeriod");
-//
-//        try {
-//            boolean hasKeyword = keyword != null && !keyword.trim().isEmpty();
-//            boolean hasQuantity = quantityStr != null && !quantityStr.trim().isEmpty();
-//            boolean hasWarranty = warrantyStr != null && !warrantyStr.trim().isEmpty();
-//
-//            int totalProductCount;
-//            if (hasKeyword || hasQuantity || hasWarranty) {
-//                Integer quantity = hasQuantity ? Integer.parseInt(quantityStr) : null;
-//                Integer warrantyPeriod = hasWarranty ? Integer.parseInt(warrantyStr) : null;
-//
-//                productList = productDAO.searchProductsWithPagination(keyword, quantity, warrantyPeriod, pageIndex, pageSize);
-//
-//                totalProductCount = productDAO.searchProducts(keyword, quantity, warrantyPeriod).size();
-//            } else {
-//                productList = productDAO.getProductsByPage(pageIndex, pageSize);
-//                totalProductCount = productDAO.getTotalProductCount();
-//            }
-//
-//            int totalPageCount = (int) Math.ceil((double) totalProductCount / pageSize);
-//
+        List<Brand> listBrand = productDAO.getAllBrands();
+        List<String> productTypes = productDAO.getDistinctProductTypes();
+
+        String brandIdParam = request.getParameter("brandId");
+        String searchName = (request.getParameter("searchName") != null && !request.getParameter("searchName").isEmpty()) ? request.getParameter("searchName") : "";
+        String searchCode = (request.getParameter("searchCode") != null && !request.getParameter("searchCode").isEmpty()) ? request.getParameter("searchCode") : "";
+        String type = (request.getParameter("type") != null && !request.getParameter("type").isEmpty()) ? request.getParameter("type") : "all";
+        String sortQuantity = (request.getParameter("sortQuantity") != null && !request.getParameter("sortQuantity").isEmpty()) ? request.getParameter("sortQuantity") : "";
+        String sortWarranty = (request.getParameter("sortWarranty") != null && !request.getParameter("sortWarranty").isEmpty())
+                ? request.getParameter("sortWarranty") : "";
+
+        Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.parseInt(brandIdParam) : null;
+
+        int page = 1;
+        int recordsPerPage = 8;
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
+        }
+        int offset = (page - 1) * recordsPerPage;
+
+        // Lấy danh sách sản phẩm dựa trên các tham số tìm kiếm và phân trang
+        List<Product> productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
+
+//        PrintWriter out = response.getWriter();
+//        out.println(page);
+//        out.println(searchName);
+//        out.println(searchCode);
+        // out.println(productList.size());
+        // Tính tổng số sản phẩm
+        int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
+        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+
+        // Đưa các giá trị vào request để sử dụng trong JSP
         request.setAttribute("productList", productList);
-//            request.setAttribute("keyword", keyword);
-//            request.setAttribute("quantity", quantityStr);
-//            request.setAttribute("warrantyPeriod", warrantyStr);
-//            request.setAttribute("totalPageCount", totalPageCount);
-//            request.setAttribute("currentPage", pageIndex);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("searchName", searchName);
+        request.setAttribute("searchCode", searchCode);
+        request.setAttribute("brandID", brandId);
+        request.setAttribute("type", type);
+        request.setAttribute("sortQuantity", sortQuantity);
+        request.setAttribute("sortWarranty", sortWarranty);
+        request.setAttribute("listBrand", listBrand);
+        request.setAttribute("listType", productTypes);
+
+        // Forward đến trang JSP
         request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
-//        } catch (Exception e) {
-//        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
+    }
 }

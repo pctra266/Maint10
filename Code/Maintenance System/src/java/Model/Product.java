@@ -30,7 +30,7 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, String code, String productName, int brandId, String type, int quantity, int warrantyPeriod, String status, String image, String brandName) {
+    public Product(int productId, String code, String productName, int brandId, String type, int quantity, int warrantyPeriod, String status, String image) {
         this.productId = productId;
         this.code = code;
         this.productName = productName;
@@ -40,7 +40,6 @@ public class Product {
         this.warrantyPeriod = warrantyPeriod;
         this.status = status;
         this.image = image;
-        this.brandName = brandName;
     }
 
     public int getProductId() {

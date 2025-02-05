@@ -4,8 +4,16 @@
  */
 package DAO;
 
+import Model.Brand;
 import Model.Product;
 import Model.ProductDetail;
+import jakarta.servlet.http.Part;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -46,7 +54,6 @@ public class ProductDAO extends DBContext {
                 product.setType(rs.getString("Type"));
                 product.setQuantity(rs.getInt("Quantity"));
                 product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                product.setStatus(rs.getString("Status"));
                 product.setImage(rs.getString("Image"));
 
                 products.add(product);
@@ -80,17 +87,203 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public static void main(String[] args) {
-        ProductDAO productDAO = new ProductDAO();
-//        List<Product> products = productDAO.getAllProducts();
-//        for (Product p : products) {
-//            System.out.println(p.getBrandName());
-//        }
-        ArrayList<ProductDetail> list = productDAO.getListProductByCustomerID("1");
-        for (ProductDetail productDetail : list) {
-            System.out.println(productDetail);
+    public List<Brand> getAllBrands() {
+        List<Brand> brands = new ArrayList<>();
+        String sql = "SELECT * FROM Brand";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Brand brand = new Brand();
+                brand.setBrandId(rs.getInt("BrandID"));
+                brand.setBrandName(rs.getString("BrandName"));
+                brands.add(brand);
+            }
+        } catch (SQLException e) {
         }
-        
+        return brands;
+    }
+
+    public List<Product> searchProducts(String searchName, String searchCode, Integer brandId, String type, String sortQuantity, String sortWarranty, int offset, int limit) {
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT  p.ProductID, p.Code, p.ProductName, cb.BrandName, p.[Type], p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
+                + "FROM Product p JOIN Brand cb ON p.BrandID = cb.BrandID WHERE 1=1";
+
+        // Thêm các điều kiện tìm kiếm
+        if (searchName != null && !searchName.trim().isEmpty()) {
+            sql += " AND p.ProductName LIKE ?";
+        }
+        if (searchCode != null && !searchCode.trim().isEmpty()) {
+            sql += " AND p.Code LIKE ?";
+        }
+        if (brandId != null) {
+            sql += " AND p.BrandID = ?";
+        }
+        if (type != null && !type.equals("all")) {
+            sql += " AND p.[Type] LIKE ?";
+        }
+
+        // Thêm điều kiện sắp xếp
+        if (sortQuantity != null && !sortQuantity.isEmpty()) {
+            sql += " ORDER BY p.Quantity " + (sortQuantity.equals("asc") ? "ASC" : "DESC");
+        }
+        if (sortWarranty != null && !sortWarranty.isEmpty()) {
+            if (sortQuantity == null || sortQuantity.isEmpty()) {
+                sql += " ORDER BY p.WarrantyPeriod " + (sortWarranty.equals("asc") ? "ASC" : "DESC");
+            } else {
+                sql += ", p.WarrantyPeriod " + (sortWarranty.equals("asc") ? "ASC" : "DESC");
+            }
+        }
+        // Nếu không có điều kiện sắp xếp, sắp xếp theo ProductID
+        if (sortQuantity == null || sortQuantity.isEmpty()) {
+            if (sortWarranty == null || sortWarranty.isEmpty()) {
+                sql += " ORDER BY p.ProductID ASC";
+            }
+        }
+
+        // Thêm phân trang
+        sql += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+
+            // Thêm các tham số tìm kiếm vào PreparedStatement
+            if (searchName != null && !searchName.trim().isEmpty()) {
+                ps.setString(index++, "%" + searchName + "%");
+            }
+            if (searchCode != null && !searchCode.trim().isEmpty()) {
+                ps.setString(index++, "%" + searchCode + "%");
+            }
+            if (brandId != null) {
+                ps.setInt(index++, brandId);
+            }
+            if (type != null && !type.equals("all")) {
+                ps.setString(index++, type);
+            }
+
+            ps.setInt(index++, offset);
+            ps.setInt(index++, limit);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setProductId(rs.getInt("ProductID"));
+                product.setCode(rs.getString("Code"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setBrandName(rs.getString("BrandName"));
+                product.setType(rs.getString("Type"));
+                product.setQuantity(rs.getInt("Quantity"));
+                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                product.setImage(rs.getString("Image"));
+
+                products.add(product);
+            }
+        } catch (SQLException e) {
+        }
+        return products;
+    }
+
+    public List<String> getDistinctProductTypes() {
+        List<String> productTypes = new ArrayList<>();
+        String sql = "SELECT DISTINCT [Type] FROM Product ORDER BY [Type] ASC";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                productTypes.add(rs.getString("Type"));
+            }
+        } catch (SQLException e) {
+        }
+
+        return productTypes;
+    }
+
+    public int getTotalProducts(String searchName, String searchCode, Integer brandId, String type) {
+        String sql = "SELECT COUNT(*) FROM Product p WHERE 1=1";
+
+        if (searchName != null && !searchName.trim().isEmpty()) {
+            sql += " AND p.ProductName LIKE ?";
+        }
+        if (searchCode != null && !searchCode.trim().isEmpty()) {
+            sql += " AND p.Code LIKE ?";
+        }
+        if (brandId != null) {
+            sql += " AND p.BrandID = ?";
+        }
+        if (type != null && !type.equals("all")) {
+            sql += " AND p.[Type] LIKE ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            int index = 1;
+            if (searchName != null && !searchName.trim().isEmpty()) {
+                ps.setString(index++, "%" + searchName + "%");
+            }
+            if (searchCode != null && !searchCode.trim().isEmpty()) {
+                ps.setString(index++, "%" + searchCode + "%");
+            }
+            if (brandId != null) {
+                ps.setInt(index++, brandId);
+            }
+            if (type != null && !type.equals("all")) {
+                ps.setString(index++, type);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+        }
+        return 0;
+    }
+
+    public boolean updateProduct(Product product) {
+        String sql = "UPDATE product SET productName = ?, brandId = ?, type = ?, quantity = ?, warrantyPeriod = ?, image = ? WHERE productId = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, product.getProductName());
+            stmt.setInt(2, product.getBrandId());
+            stmt.setString(3, product.getType());
+            stmt.setInt(4, product.getQuantity());
+            stmt.setInt(5, product.getWarrantyPeriod());
+            stmt.setString(6, product.getImage());
+            stmt.setInt(7, product.getProductId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+        }
+        return false;
+    }
+
+    public Product getProductById(int productId) {
+        Product product = new Product();
+        String sql = "SELECT p.ProductID, p.Code, p.ProductName, p.BrandID, b.BrandName, p.[Type], p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
+                + "FROM Product p "
+                + "JOIN Brand b ON p.BrandID = b.BrandID "
+                + "WHERE p.ProductID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, productId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                product.setProductId(rs.getInt("ProductID"));
+                product.setCode(rs.getString("Code"));
+                product.setProductName(rs.getString("ProductName"));
+                product.setBrandId(rs.getInt("BrandId"));
+                product.setBrandName(rs.getString("BrandName"));
+                product.setType(rs.getString("Type"));
+                product.setQuantity(rs.getInt("Quantity"));
+                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                product.setImage(rs.getString("Image"));
+                product.setStatus(rs.getString("Status"));
+            }
+        } catch (SQLException e) {
+
+        }
+        return product;
+    }
+
+    public static void main(String[] args) {
+   
 
     }
 

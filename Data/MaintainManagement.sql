@@ -93,7 +93,7 @@ CREATE TABLE Product (
     [Type] nvarchar(100), 
     Quantity int,
     WarrantyPeriod int NOT NULL,
-    [Status] nvarchar(100), -- Thêm trạng thái của sản phẩm (1: Active, 0: Inactive)
+    [Status] nvarchar(100),
     Image NVARCHAR(MAX)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
