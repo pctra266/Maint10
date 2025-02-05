@@ -21,6 +21,7 @@ public class ProductDetail {
     private String address;
     private String productName;
     private int warrantyPeriod;
+    private int WarrantyCardID;
 
     // Constructor
     public ProductDetail(int productDetailID, String productCode, Date purchaseDate, 
@@ -40,6 +41,11 @@ public class ProductDetail {
     }
 
     public ProductDetail() {
+    }
+    
+    public ProductDetail(int WarrantyCardID, String productName) {
+        this.WarrantyCardID = WarrantyCardID;
+        this.productName = productName;
     }
     
     
@@ -124,6 +130,15 @@ public class ProductDetail {
     public void setWarrantyPeriod(int warrantyPeriod) {
         this.warrantyPeriod = warrantyPeriod;
     }
+
+    public int getWarrantyCardID() {
+        return WarrantyCardID;
+    }
+
+    public void setWarrantyCardID(int WarrantyCardID) {
+        this.WarrantyCardID = WarrantyCardID;
+    }
+    
 
     @Override
     public String toString() {
