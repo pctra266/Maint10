@@ -198,8 +198,9 @@ public class FeedbackController extends HttpServlet {
                 String warrantyCardId = request.getParameter("warrantyCardId");
                 String imageURL = "";
                 String videoURL = "";
-                daoFeedback.createFeedback("1", warrantyCardId, noteCreate);
-                response.sendRedirect("feedback/action=ccreateFeedback");
+                String customerId = "1";
+                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL,videoURL);
+                response.sendRedirect("feedback?action=createFeedback");
                 break;
             default:
                 break;

@@ -173,17 +173,38 @@ public class FeedbackDAO {
         }
     }
 
-    public void createFeedback(String customerId, String warrantyCardId, String note) {
-        String query = "INSERT INTO Feedback (CustomerID, WarrantyCardID, Note)\n"
-                + "VALUES\n"
-                + "(?, ?, ?)";
+    public void createFeedback(String customerId, String warrantyCardId, String note, String imageURL, String videoUrl) {
+        String query = "INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL) "
+                + "VALUES (?, ?, ?, GETDATE(), 0, ?, ?)";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
-            ps.setString(1, customerId);
-            ps.setString(2, warrantyCardId);
-            ps.setString(3, note);
-            ps.executeQuery();
+            int count = 1;
+            ps.setString(count++, customerId);
+            
+            if(warrantyCardId == null || warrantyCardId.trim().isEmpty()){
+                ps.setNull(count++, java.sql.Types.VARCHAR);
+            }else{
+                ps.setString(count++, warrantyCardId);
+            }
+            
+            if(note == null || note.trim().isEmpty()){
+                ps.setNull(count++, java.sql.Types.VARCHAR);
+            }else{
+                ps.setString(count++, note);
+            }
+            if(imageURL == null || imageURL.trim().isEmpty()){
+                ps.setNull(count++, java.sql.Types.VARCHAR);
+            }else{
+                ps.setString(count++, imageURL);
+            }
+            if(videoUrl == null || videoUrl.trim().isEmpty()){
+                ps.setNull(count++, java.sql.Types.VARCHAR);
+            }else{
+                ps.setString(count++, videoUrl);
+            }
+            
+            ps.executeUpdate();
 
         } catch (Exception e) {
         }
@@ -285,9 +306,10 @@ public class FeedbackDAO {
 
     public static void main(String[] args) {
         FeedbackDAO dao = new FeedbackDAO();
-        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
-        for (Feedback feedback : list) {
-            System.out.println(feedback);
-        }
+//        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
+//        for (Feedback feedback : list) {
+//            System.out.println(feedback);
+//        }
+            dao.createFeedback("1", "", "day la note nhe ", "", "");
     }
 }
