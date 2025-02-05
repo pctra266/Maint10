@@ -86,9 +86,10 @@
                                     <label class="form-label">Note : </label>
                                     <textarea class="form-control" name="note">${feedbackUpdate.note}</textarea>
                                 </div>
+                                <a class="btn btn-primary" href="feedback">Back</a>
                                 <button class="btn btn-primary" type="submit" > Save Change</button> 
-
                             </form>
+                                
                         </div><!-- end card body -->               
                     </div><!-- end class card -->
 

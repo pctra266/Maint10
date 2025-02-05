@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.Product;
+import Model.ProductDetail;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -47,20 +48,49 @@ public class ProductDAO extends DBContext {
                 product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
                 product.setStatus(rs.getString("Status"));
                 product.setImage(rs.getString("Image"));
-              
+
                 products.add(product);
             }
         } catch (SQLException e) {
         }
         return products;
     }
+//    get list product by customer 
+
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
+        ArrayList<ProductDetail> list = new ArrayList<>();
+        String query = "select p.ProductName, wc.WarrantyCardID \n"
+                + "from Customer c \n"
+                + "left join ProductDetail pd on c.CustomerID = pd.CustomerID\n"
+                + "join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID\n"
+                + "join Product p on pd.ProductID = p.ProductID\n"
+                + "where c.CustomerID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query);){
+            ps.setString(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+            ProductDetail productDetail = new ProductDetail();
+            productDetail.setProductName(rs.getString(1));
+            productDetail.setWarrantyCardID(rs.getInt(2));
+            list.add(productDetail);
+            }
+            
+        }catch (SQLException e) {
+        }
+        return list;
+    }
 
     public static void main(String[] args) {
         ProductDAO productDAO = new ProductDAO();
-       List<Product> products = productDAO.getAllProducts();
-        for (Product p : products) {
-            System.out.println(p.getBrandName());
+//        List<Product> products = productDAO.getAllProducts();
+//        for (Product p : products) {
+//            System.out.println(p.getBrandName());
+//        }
+        ArrayList<ProductDetail> list = productDAO.getListProductByCustomerID("1");
+        for (ProductDetail productDetail : list) {
+            System.out.println(productDetail);
         }
+        
 
     }
 
