@@ -6,6 +6,7 @@
 package Controller;
 
 import DAO.StaffDAO;
+import DAO.StaffLogDAO;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -45,7 +46,7 @@ public class updateStaffController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
+        String staffID = request.getParameter("staffID");
         String usename = request.getParameter("usename");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
@@ -57,10 +58,11 @@ public class updateStaffController extends HttpServlet {
 
 //        PrintWriter out = response.getWriter();
 //        out.print(staffId);
-        StaffDAO dao = new StaffDAO();
-        boolean uppdate = dao.updateStaff(staffId, usename, password, role, name, email, phone, address,image);
-
-        List<Staff> list = dao.getAllOrder();        
+        StaffDAO staff = new StaffDAO();
+        StaffLogDAO  stafflog = new StaffLogDAO();
+        boolean add = stafflog.addStaff(staffID, usename, password, role, name, email, phone, address, image);
+        boolean uppdate = staff.updateStaff(staffID, usename, password, role, name, email, phone, address,image);
+        List<Staff> list = staff.getAllOrder();        
         request.setAttribute("list", list);
         request.getRequestDispatcher("Staff.jsp").forward(request, response);
     }

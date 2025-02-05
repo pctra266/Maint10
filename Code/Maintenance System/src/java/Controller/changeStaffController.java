@@ -55,10 +55,9 @@ public class changeStaffController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String staffId = request.getParameter("staffId");
+        String staffID  = request.getParameter("staffID");
         StaffDAO dao = new StaffDAO();
-        Staff staff = dao.getInformationByID(staffId);
-        
+        Staff staff = dao.getInformationByID(staffID);
         request.setAttribute("staff", staff);
         request.getRequestDispatcher("staff-information.jsp").forward(request, response);
     } 
