@@ -1,4 +1,4 @@
-﻿INSERT INTO ComponentBrand (BrandName) VALUES
+﻿INSERT INTO Brand (BrandName) VALUES
 ('ASUS'),
 ('MSI'),
 ('Gigabyte'),

@@ -51,7 +51,7 @@ CREATE TABLE Customer (
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
 
-CREATE TABLE ComponentBrand (
+CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName NVARCHAR(50) NOT NULL UNIQUE
 );
@@ -65,7 +65,7 @@ CREATE TABLE Component (
     ComponentID int IDENTITY(1,1) NOT NULL PRIMARY KEY ,
 	ComponentCode Nvarchar(20) null,
     ComponentName NVARCHAR(100),
-	 BrandID INT FOREIGN KEY REFERENCES ComponentBrand(BrandID),
+	 BrandID INT FOREIGN KEY REFERENCES Brand(BrandID),
     TypeID INT FOREIGN KEY REFERENCES ComponentType(TypeID),
     Quantity int,
 	[Status] bit default 1,
@@ -82,7 +82,7 @@ CREATE TABLE Product (
     ProductID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
     Code Nvarchar(20) null,
     ProductName NVARCHAR(100) , 
-	 BrandID INT FOREIGN KEY REFERENCES ComponentBrand(BrandID),
+	 BrandID INT FOREIGN KEY REFERENCES Brand(BrandID),
     [Type] nvarchar(100), 
     Quantity int,
     WarrantyPeriod int NOT NULL,
