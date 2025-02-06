@@ -4,45 +4,64 @@
     Author     : Tra Pham
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Create Feedback</title>
+        <link href="css/light.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
     <body>
-        <h1>Create Feedback</h1>
-        <form action="feedback" method="post">
-            <input type="hidden" name="action" value="createFeedback">
-            <table >
-                <tbody>
-                    <tr>
-                        <td>Customer ID: </td>
-                        <td><input name="customerId" type="text" value="" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>Warranty Card ID: </td>
-                        <td><input name="warrantyCardId" type="text" value="" readonly=""></td>
-                    </tr>
-                    <tr>
-                        <td>Note: </td>
-                        <td><input name="note" type="text"></td>
-                    </tr>
-                    <tr>
-                        <td>Image: </td>
-                        <td><input name="imageURL" type="url"></td>
-                    </tr>
-                    <tr>
-                        <td>Video: </td>
-                        <td><input name="videoURL" type="text"></td>
-                    </tr>
-                    <tr>
-                        <td><button type="submit"> Submit </button></td>
-                    </tr>
-                </tbody>
-            </table>
-            
-        </form>
+        <div class="wrapper">
+            <jsp:include page="/includes/navbar-left.jsp" />
+            <div class="main">
+                <jsp:include page="/includes/navbar-top.jsp" />
+                <main class="content">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="text-center">Create Feedback</h1>
+                        </div>
+                         <div class="card-body">
+                        <form action="feedback" method="post">
+                            <input type="hidden" name="action" value="createFeedback">
+                            <div>
+                                <input name="customerId" type="hidden" value="1" >
+                            </div>
+                            <div>
+                                <label class="form-label">Product: </label>
+
+                                <select class="form-select" name="WarrantyCardID">
+                                    <option value=""></option>
+                                    <c:forEach items="${listProductByCustomerId}" var="o">
+                                        <option value="${o.warrantyCardID}">${o.productName}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label class="form-label">Image: </label>
+                                    <input class="form-control" name="imageURL" type="file">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Video: </label>
+                                    <input class="form-control" name="videoURL" type="file">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="form-label">Note: </label>
+                                <textarea class="form-control" name="note" required="" ></textarea>
+                            </div>
+                            <button class="btn btn-primary" type="submit"> Submit </button>
+                        </form>
+                         </div>
+                    </div>
+                </main>
+                <jsp:include page="/includes/footer.jsp" />
+            </div>
+        </div>
+        <script src="js/app.js"></script>
     </body>
 </html>

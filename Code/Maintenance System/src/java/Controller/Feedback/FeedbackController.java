@@ -6,8 +6,10 @@ package Controller.Feedback;
 
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
+import DAO.ProductDAO;
 import Model.Feedback;
 import Model.FeedbackLog;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -62,6 +64,7 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
@@ -113,6 +116,11 @@ public class FeedbackController extends HttpServlet {
                 Feedback feedbackUpdate = daoFeedback.getFeedbackById(feedbackIdUpdate);
                 request.setAttribute("feedbackUpdate", feedbackUpdate);
                 request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
+                break;
+            case "createFeedback":
+                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID("1");
+                request.setAttribute("listProductByCustomerId", listProductByCustomerId);
+                request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 break;
             default:
                 break;
@@ -178,7 +186,7 @@ public class FeedbackController extends HttpServlet {
                 //save history change to feedback log
                 // neu note giong nhu cu thi khong doi
                 Feedback oldFeedback = daoFeedback.getFeedbackById(feedbackId);
-                if (!note.trim().endsWith(oldFeedback.getNote())) {
+                if (!note.trim().equals(oldFeedback.getNote())) {
                     daoFeedbackLog.createUpdateFeedbackLog(oldFeedback, staffId, note);
                 }
                 //
@@ -187,12 +195,12 @@ public class FeedbackController extends HttpServlet {
                 break;
             case "createFeedback":
                 String noteCreate = request.getParameter("note");
-                String customerId = request.getParameter("customerId");
                 String warrantyCardId = request.getParameter("warrantyCardId");
-                daoFeedback.createFeedback("2", "7", noteCreate);
-                System.out.println(noteCreate);
-                // tam thoi ve trang view list de kiem tra sau nay sua
-                response.sendRedirect("feedback");
+                String imageURL = "";
+                String videoURL = "";
+                String customerId = "1";
+                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL,videoURL);
+                response.sendRedirect("feedback?action=createFeedback");
                 break;
             default:
                 break;

@@ -94,11 +94,11 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                                        function checkSort() {
-                                            var column = document.getElementById('column').value;
-                                            var sortOrder = document.getElementById('sortOrder').value;
-                                            window.location.href = 'feedback?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
-                                        }
+            function checkSort() {
+                var column = document.getElementById('column').value;
+                var sortOrder = document.getElementById('sortOrder').value;
+                window.location.href = 'feedback?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
+            }
         </script>
     </body>
 </html>
