@@ -72,17 +72,17 @@ public class ProductDAO extends DBContext {
                 + "join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID\n"
                 + "join Product p on pd.ProductID = p.ProductID\n"
                 + "where c.CustomerID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(query);){
+        try (PreparedStatement ps = connection.prepareStatement(query);) {
             ps.setString(1, customerID);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()){
-            ProductDetail productDetail = new ProductDetail();
-            productDetail.setProductName(rs.getString(1));
-            productDetail.setWarrantyCardID(rs.getInt(2));
-            list.add(productDetail);
+            while (rs.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setProductName(rs.getString(1));
+                productDetail.setWarrantyCardID(rs.getInt(2));
+                list.add(productDetail);
             }
-            
-        }catch (SQLException e) {
+
+        } catch (SQLException e) {
         }
         return list;
     }
@@ -282,9 +282,67 @@ public class ProductDAO extends DBContext {
         return product;
     }
 
-    public static void main(String[] args) {
-   
+    /**
+     * Get Product detail by customer ID
+     *
+     * @param customerID
+     * @return
+     */
+    public ArrayList<ProductDetail> getProductDetailByCustomerID(int customerID) {
+        ArrayList<ProductDetail> listProductDetail = new ArrayList<>();
+        String sql = "SELECT c.CustomerID,\n"
+                + "       c.UsernameC,\n"
+                + "	   c.Name,\n"
+                + "	   c.Email,\n"
+                + "	   c.Phone,\n"
+                + "	   c.Address,\n"
+                + "	   pd.ProductCode,\n"
+                + "	   p.ProductName,\n"
+                + "	   pd.PurchaseDate,\n"
+                + "	   p.WarrantyPeriod\n"
+                + "	   \n"
+                + "FROM [Product] p LEFT JOIN ProductDetail pd ON p.ProductID = pd.ProductID\n"
+                + "LEFT JOIN Customer c ON pd.CustomerID = c.CustomerID\n"
+                + "WHERE c.CustomerID =?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProductDetail pd = new ProductDetail();
+                pd.setCustomerID(rs.getInt("CustomerID"));
+                pd.setUsernameC(rs.getString("UsernameC"));
+                pd.setName(rs.getString("Name"));
+                pd.setEmail(rs.getString("Email"));
+                pd.setPhone(rs.getString("Phone"));
+                pd.setAddress(rs.getString("Address"));
+                pd.setProductCode(rs.getString("ProductCode"));
+                pd.setProductName(rs.getString("ProductName"));
+                pd.setPurchaseDate(rs.getDate("PurchaseDate"));
+                pd.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
 
+                listProductDetail.add(pd);
+
+            }
+        } catch (Exception e) {
+
+        }
+        return listProductDetail;
+
+    }
+
+    public static void main(String[] args) {
+        ProductDAO productDAO = new ProductDAO();
+        /*
+        List<Product> products = productDAO.getAllProducts();
+        for (Product p : products) {
+            System.out.println(p.getBrandName());
+        }
+         */
+        ArrayList<ProductDetail> d = productDAO.getProductDetailByCustomerID(2);
+        for (ProductDetail p : d) {
+            System.out.println(p.getPurchaseDate());
+        }
     }
 
 }

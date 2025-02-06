@@ -5,12 +5,17 @@
 
 package Controller;
 
+import DAO.ProductDAO;
+import Model.Customer;
+import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
 
 /**
  *
@@ -53,7 +58,17 @@ public class PurchaseProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+          HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+          response.sendRedirect("HomePage.jsp");
+            return;
+        } 
+        
+        ProductDAO productDao = new ProductDAO();
+        ArrayList<ProductDetail> listPurchaseProduct = productDao.getProductDetailByCustomerID(customer.getCustomerID());
+        request.setAttribute("listPurchaseProduct", listPurchaseProduct);
+        request.getRequestDispatcher("PurchaseProduct.jsp").forward(request, response);
     } 
 
     /** 
