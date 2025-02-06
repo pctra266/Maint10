@@ -211,11 +211,11 @@
                     </div>
                 </a>
             </li>
-            <c:if test="${not empty sessionScope.accStaff}">
+            <c:if test="${not empty sessionScope.staff}">
                 <!-- N?u ?ã ??ng nh?p là nhân viên -->
                 <li class="nav-item dropdown">
                     <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="${sessionScope.accStaff.name}">
+                        <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="${sessionScope.staff.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="pages-profile.html">Profile</a>
@@ -227,11 +227,11 @@
                 </li>
             </c:if>
 
-            <c:if test="${not empty sessionScope.accCus}">
+            <c:if test="${not empty sessionScope.customer}">
                 <!-- N?u ?ã ??ng nh?p là khách hàng -->
                 <li class="nav-item dropdown">
                     <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="${sessionScope.accCus.name}">
+                        <img src="${sessionScope.customer.image}" class="avatar img-fluid rounded" alt="${sessionScope.customer.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="pages-profile.html">Profile</a>
@@ -245,7 +245,7 @@
             </c:if>
 
             
-            <c:if test="${empty sessionScope.accStaff and empty sessionScope.accCus}">
+            <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
                 <a href="LoginForm.jsp">Login</a>
             </c:if>
             <a>
