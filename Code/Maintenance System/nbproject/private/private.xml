@@ -2,10 +2,17 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group name="perfume-shop-main">
+    <group name="perfume-shop-main">
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/StaffDAO.java</file>
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/deletedStaffController.java</file>
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/web/Staff.jsp</file>
+        <group>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/web/includes/navbar-left.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Product.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder/version_1%20-%20Copy/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Brand.java</file>
         </group>
     </open-files>
 </project-private>
