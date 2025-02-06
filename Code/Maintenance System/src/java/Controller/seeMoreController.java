@@ -35,6 +35,48 @@ public class seeMoreController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        StaffLogDAO dao = new StaffLogDAO();
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "viewAll";
+        }
+        switch(action){
+            case "viewAll":
+                String search = request.getParameter("search");
+                String searchname = request.getParameter("searchname");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
+                String page_size = request.getParameter("page_size");
+                List<StaffLog> list ;
+                int pagesize=Integer.parseInt(page_size);
+                int pageIndex = 1;
+                String pageIndexStr = request.getParameter("index");
+
+                if (pageIndexStr != null) {
+                    try {
+                        pageIndex = Integer.parseInt(pageIndexStr);
+                    } catch (NumberFormatException e) {
+                        pageIndex = 1;
+                    }
+                }
+                int totalStaff;
+                list = dao.getAllFeedback(searchname, search, pageIndex, pagesize, column, sortOrder);
+                totalStaff = dao.getAllFeedback(searchname, search, column, sortOrder).size();
+                int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                request.setAttribute("totalPageCount", totalPageCount);
+                request.setAttribute("search", search);
+                request.setAttribute("searchname", searchname);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("pageIndex", pageIndex);
+                request.setAttribute("page_size", page_size);
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("all-changeStaff.jsp").forward(request, response);
+                break;
+                
+            default:
+                break;
+        }   
     } 
 
     /** 
@@ -48,9 +90,45 @@ public class seeMoreController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffLogDAO dao = new StaffLogDAO();
-        List<StaffLog> list = dao.getAllOrder();        
-        request.setAttribute("list", list);
-        request.getRequestDispatcher("all-changeStaff.jsp").forward(request, response);
+        String action = request.getParameter("action");
+        if (action == null) {
+            action = "viewAll";
+        }
+        switch(action){
+            case "viewAll":
+                String search = request.getParameter("search");
+                String searchname = request.getParameter("searchname");
+                String column = request.getParameter("column");
+                String sortOrder = request.getParameter("sortOrder");
+                List<StaffLog> list ;
+                int pagesize=5;
+                int pageIndex = 1;
+                String pageIndexStr = request.getParameter("index");
+
+                if (pageIndexStr != null) {
+                    try {
+                        pageIndex = Integer.parseInt(pageIndexStr);
+                    } catch (NumberFormatException e) {
+                        pageIndex = 1;
+                    }
+                }
+                int totalStaff;
+                list = dao.getAllFeedback(searchname, search, pageIndex, pagesize, column, sortOrder);
+                totalStaff = dao.getAllFeedback(searchname, search, column, sortOrder).size();
+                int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                request.setAttribute("totalPageCount", totalPageCount);
+                request.setAttribute("search", search);
+                request.setAttribute("searchname", searchname);
+                request.setAttribute("column", column);
+                request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("pageIndex", pageIndex);
+                request.setAttribute("list", list);
+                request.getRequestDispatcher("all-changeStaff.jsp").forward(request, response);
+                break;
+                
+            default:
+                break;
+        }      
     }
 
     /** 

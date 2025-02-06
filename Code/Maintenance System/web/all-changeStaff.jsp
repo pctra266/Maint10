@@ -25,7 +25,51 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center ">History of staff</h1>                   
-                        <h2>All staff</h2>                          
+                    <h2>All staff</h2>  
+                    <form class="" action="seeMoreController" method="get">
+                        <div class="col-md-6" style="width: 500px">
+                            <input class="form-control" type="searchname" name="searchname" placeholder="Search"  value="${param.searchname}" style="margin-bottom:5px">
+                            <select
+                            id="search"
+                            type="search"
+                            class="add__input"
+                            oninput="checkInput(this)"
+                            name="search"
+                            required
+                            >
+                            <option></option>
+                            <option value="Name" ${param.search == 'Name' ? 'selected' : ''}>Name</option>
+                            <option value="Role"${param.search == 'Role' ? 'selected' : ''}>Role</option>
+                            </select>
+                            <button class="btn btn-primary" style="margin: 2px; color: white;background-color: #007bff" type="submit">Search</button>        
+                                                                                                               
+                        </div> 
+                        <div class="col-md-6" style="width: 500px">
+                            <div>
+                                <select onchange="this.form.submit()" name="column" id="column" class="form-select">
+                                    <option value="">Sort By</option>
+                                    <option ${(column=='Name')?"selected":""} value="Name">Name</option>
+                                    <option ${(column=='Role')?"selected":""} value="Role">Role</option>
+                                </select>
+                            </div>
+                            <div>
+                                    <select onchange="this.form.submit()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
+                                    <option value="">Sort Order</option>
+                                    <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
+                                    <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
+                                </select>
+                            </div>
+                        </div>
+                                <label>Show 
+                                <select name="page_size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <option value="5" ${page_size==5?"selected":""}>5</option>
+                                    <option value="7" ${page_size==7?"selected":""}>7</option>
+                                    <option value="10" ${page_size==10?"selected":""}>10</option>
+                                    <option value="15" ${page_size==15?"selected":""}>15</option>
+                                </select> 
+                                entries
+                            </label>
+                    </form>    
                     <table class="table table-hover my-0">                       
                         <thead>
                             <tr>
@@ -70,7 +114,7 @@
                     </table>
                     <div style="text-align: center; margin-top: 20px;">
                         <c:forEach begin="1" end="${totalPageCount}" var="index">
-                            <a href="searchStaff?index=${index}&searchname=${param.searchname}&search=${param.search}" style="margin: 0 5px;">${index}</a>
+                            <a href="seeMoreController?index=${index}&searchname=${param.searchname}&search=${param.search}&column=${param.column}&sortOrder=${param.sortOrder}&page_size=${param.page_size}" style="margin: 0 5px;">${index}</a>
                         </c:forEach>
                     </div>           
                      

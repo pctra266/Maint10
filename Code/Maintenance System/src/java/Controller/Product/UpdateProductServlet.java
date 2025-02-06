@@ -5,6 +5,7 @@
 package Controller.Product;
 
 import DAO.ProductDAO;
+import Model.Brand;
 import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,13 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Part;
+import java.nio.file.Paths;
+import java.sql.SQLException;
+import java.util.Collection;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -57,7 +65,19 @@ public class UpdateProductServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        ProductDAO p = new ProductDAO();
+        PrintWriter out = response.getWriter();
+
+        Product product;
+        List<String> productTypes = p.getDistinctProductTypes();
+        List<Brand> listBrand = p.getAllBrands();
+        int productId = Integer.parseInt(request.getParameter("id"));
+        product = p.getProductById(productId);
+        request.setAttribute("product", product);
+        request.setAttribute("listBrand", listBrand);
+        request.setAttribute("listType", productTypes);
+
+        request.getRequestDispatcher("Product/updateProduct1.jsp").forward(request, response);
     }
 
     /**
@@ -71,21 +91,36 @@ public class UpdateProductServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        ProductDAO productDAO = new ProductDAO();
-//        int productId = Integer.parseInt(request.getParameter("productId"));
-//        String productName = request.getParameter("productName");
-//        int quantity = Integer.parseInt(request.getParameter("quantity"));
-//        int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
-//        String imagePath = request.getParameter("image");
-////        PrintWriter out = response.getWriter();
-////        out.println(productId);
-////        out.println(productName);
-////        out.println(quantity);
-////        out.println(warrantyPeriod);
-////        out.println(imagePath);
-//        Product updatedProduct = new Product(productId, productName, quantity, warrantyPeriod, imagePath);
-//        productDAO.updateProduct(updatedProduct);
-//        response.sendRedirect("viewP");
+        ProductDAO p = new ProductDAO();
+        PrintWriter out = response.getWriter();
+        String productIdParam = request.getParameter("pid");
+        String productName = request.getParameter("productName");
+        String brandIdParam = request.getParameter("brandId");
+        String productCodeParam = request.getParameter("productCode");
+        String productTypeParam = request.getParameter("type");
+        String quantityParam = request.getParameter("quantity");
+        String warrantyParam = request.getParameter("warrantyPeriod");
+        String status = request.getParameter("status");
+        String image = request.getParameter("image");
+
+//        out.println(productIdParam);
+//        out.println(productName);
+//        out.println(productCodeParam);
+//        out.println(brandIdParam);
+//        out.println(productTypeParam);
+//        out.println(quantityParam);
+//        out.println(warrantyParam);
+//        out.println(status);
+
+        Product updatedProduct = new Product(Integer.parseInt(productIdParam), productCodeParam, productName, Integer.parseInt(brandIdParam), productTypeParam, Integer.parseInt(quantityParam), Integer.parseInt(warrantyParam),status,image);
+
+        boolean success = p.updateProduct(updatedProduct);
+        if (success) {
+            response.sendRedirect("viewProduct"); 
+        } else {
+            request.setAttribute("errorMessage", "Failed to update product");
+            request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response); // Nếu không thành công, quay lại trang chỉnh sửa
+        }
     }
 
     /**
