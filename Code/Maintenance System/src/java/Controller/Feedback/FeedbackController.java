@@ -4,6 +4,7 @@
  */
 package Controller.Feedback;
 
+import Utils.SearchUtils;
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
 import DAO.ProductDAO;
@@ -74,7 +75,8 @@ public class FeedbackController extends HttpServlet {
         System.out.println("Action hien tai la: " + action);
         switch (action) {
             case "viewFeedback":
-                String customerName = request.getParameter("customerName");
+                
+                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
@@ -153,7 +155,7 @@ public class FeedbackController extends HttpServlet {
         }
         switch (action) {
             case "viewListFeedback":
-                String customerName = request.getParameter("customerName");
+                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");

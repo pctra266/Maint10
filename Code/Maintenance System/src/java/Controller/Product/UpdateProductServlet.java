@@ -105,18 +105,18 @@ public class UpdateProductServlet extends HttpServlet {
 
 //        out.println(productIdParam);
 //        out.println(productName);
-//        out.println(productCodeParam);
+  //      out.println(productCodeParam);
 //        out.println(brandIdParam);
 //        out.println(productTypeParam);
 //        out.println(quantityParam);
 //        out.println(warrantyParam);
 //        out.println(status);
 
-        Product updatedProduct = new Product(Integer.parseInt(productIdParam), productCodeParam, productName, Integer.parseInt(brandIdParam), productTypeParam, Integer.parseInt(quantityParam), Integer.parseInt(warrantyParam),status,image);
+        Product updatedProduct = new Product(Integer.parseInt(productIdParam), productCodeParam, productName, Integer.parseInt(brandIdParam), productTypeParam, Integer.parseInt(quantityParam), Integer.parseInt(warrantyParam), status, image);
 
         boolean success = p.updateProduct(updatedProduct);
         if (success) {
-            response.sendRedirect("viewProduct"); 
+            response.sendRedirect("viewProduct");
         } else {
             request.setAttribute("errorMessage", "Failed to update product");
             request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response); // Nếu không thành công, quay lại trang chỉnh sửa

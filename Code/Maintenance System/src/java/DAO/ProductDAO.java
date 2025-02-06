@@ -216,16 +216,17 @@ public class ProductDAO extends DBContext {
     }
 
     public boolean updateProduct(Product product) {
-        String sql = "UPDATE product SET productName = ?, brandId = ?, type = ?, quantity = ?, warrantyPeriod = ?, image = ? WHERE productId = ?";
+        String sql = "UPDATE product SET productName = ?,Code = ? ,brandId = ?, type = ?, quantity = ?, warrantyPeriod = ?, image = ? WHERE productId = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, product.getProductName());
-            stmt.setInt(2, product.getBrandId());
-            stmt.setString(3, product.getType());
-            stmt.setInt(4, product.getQuantity());
-            stmt.setInt(5, product.getWarrantyPeriod());
-            stmt.setString(6, product.getImage());
-            stmt.setInt(7, product.getProductId());
+            stmt.setString(2, product.getCode());
+            stmt.setInt(3, product.getBrandId());
+            stmt.setString(4, product.getType());
+            stmt.setInt(5, product.getQuantity());
+            stmt.setInt(6, product.getWarrantyPeriod());
+            stmt.setString(7, product.getImage());
+            stmt.setInt(8, product.getProductId());
 
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
