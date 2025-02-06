@@ -86,12 +86,17 @@
         <servlet-class>Controller.Product.ViewProduct</servlet-class>
     </servlet>
     <servlet>
+
         <servlet-name>YourWarrantyCard</servlet-name>
         <servlet-class>Controller.WarrantyCard.YourWarrantyCard</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>PurchaseProduct</servlet-name>
         <servlet-class>Controller.PurchaseProduct</servlet-class>
+
+        <servlet-name>Image</servlet-name>
+        <servlet-class>Controller.Product.Image</servlet-class>
+
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -198,11 +203,16 @@
         <url-pattern>/viewProduct</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+
         <servlet-name>YourWarrantyCard</servlet-name>
         <url-pattern>/yourwarrantycard</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>PurchaseProduct</servlet-name>
         <url-pattern>/purchaseproduct</url-pattern>
+
+        <servlet-name>Image</servlet-name>
+        <url-pattern>/image</url-pattern>
+
     </servlet-mapping>
 </web-app>

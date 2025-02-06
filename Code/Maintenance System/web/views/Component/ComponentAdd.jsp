@@ -137,7 +137,7 @@
 
         <script src="js/app.js"></script>
 
-        // Hàm để xem trước ảnh khi người dùng chọn tệp mới
+<!--        // Hàm để xem trước ảnh khi người dùng chọn tệp mới-->
         <script>
                                 function previewImage(event) {
                                     const reader = new FileReader();
