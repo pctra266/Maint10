@@ -22,7 +22,7 @@
                     <!-- Search Form -->
                     <form action="customer" method="get" style="text-align: center; margin-bottom: 20px;">
                         <input type="hidden" name="action" value="search" />
-                        <input type="text" name="text" placeholder="Search by name" value="${textSearch}" />
+                        <input type="text" name="text" placeholder="Search by name" value="${searchQuery}" />
                         <button type="submit">Search</button>
                     </form>
 

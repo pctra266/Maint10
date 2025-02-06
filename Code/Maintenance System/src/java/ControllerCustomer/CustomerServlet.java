@@ -7,6 +7,7 @@ package ControllerCustomer;
 
 import DAO.CustomerDAO;
 import Model.Customer;
+import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -89,7 +90,8 @@ public class CustomerServlet extends HttpServlet {
 
             case "search":
 
-                String searchQuery = request.getParameter("text");
+                String searchQuery = SearchUtils.normalizeString(request.getParameter("text"));
+              
                 ArrayList<Customer> searchResult;
                 if (searchQuery != null && !searchQuery.trim().isEmpty()) {
                     searchResult = customerDao.searchCustomerByName(searchQuery);
@@ -99,6 +101,7 @@ public class CustomerServlet extends HttpServlet {
                 } else {
                     searchResult = customerDao.getAllCustomer();
                 }
+                request.setAttribute("searchQuery", searchQuery);
                 request.setAttribute("listCustomer", searchResult);
                 request.getRequestDispatcher("Customer.jsp").forward(request, response);
                 break;
