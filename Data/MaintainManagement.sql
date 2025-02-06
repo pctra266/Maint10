@@ -52,6 +52,7 @@ CREATE TABLE Customer (
     UsernameC NVARCHAR(50) UNIQUE,
     PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
+	Gender NVARCHAR(10),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
@@ -206,4 +207,3 @@ CREATE TABLE FeedbackLog (
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyStatus ON WarrantyCard(WarrantyStatus);
-
