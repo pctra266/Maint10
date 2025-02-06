@@ -53,11 +53,11 @@ public class ComponentSearch extends HttpServlet {
         Integer pageSize;
         pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         String paraSearchQuantityMin = request.getParameter("searchQuantityMin");
-        Integer searchQuantityMin = NumberUtils.tryParseInt(paraSearchQuantityMin) != null ? NumberUtils.tryParseInt(paraSearchQuantityMin) : componentDAO.getQuantityMin();
+        Integer searchQuantityMin = NumberUtils.tryParseInt(paraSearchQuantityMin) != null ? NumberUtils.tryParseInt(paraSearchQuantityMin) : 0;
         String paraSearchQuantityMax = request.getParameter("searchQuantityMax");
         Integer searchQuantityMax = NumberUtils.tryParseInt(paraSearchQuantityMax) != null ? NumberUtils.tryParseInt(paraSearchQuantityMax) : componentDAO.getQuantityMax();
         String paraSearchPriceMin = request.getParameter("searchPriceMin");
-        Double searchPriceMin = NumberUtils.tryParseDouble(paraSearchPriceMin) != null ? NumberUtils.tryParseDouble(paraSearchPriceMin) : componentDAO.getPriceMin();
+        Double searchPriceMin = NumberUtils.tryParseDouble(paraSearchPriceMin) != null ? NumberUtils.tryParseDouble(paraSearchPriceMin) : 0;
         String paraSearchPriceMax = request.getParameter("searchPriceMax");
         Double searchPriceMax = NumberUtils.tryParseDouble(paraSearchPriceMax) != null ? NumberUtils.tryParseDouble(paraSearchPriceMax) : componentDAO.getPriceMax();
         List<Component> components = new ArrayList<>();

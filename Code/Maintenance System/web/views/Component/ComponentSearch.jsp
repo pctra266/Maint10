@@ -81,29 +81,29 @@
                             </button>
                         </div>
                         <div class="row">
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="slider-container" data-type="quantity">
                                     <div class="price-input">
                                         <div class="field">
                                             <span>Quantity</span>
-                                            <input type="number" class="input-min" name="searchQuantityMin" value="${searchQuantityMin}">
+                                            <input type="number" class="input-min" name="searchQuantityMin" value="${searchQuantityMin}" step="1">
                                         </div>
                                         <div class="separator">-</div>
                                         <div class="field">
-                                            <input type="number" class="input-max" name="searchQuantityMax" value="${searchQuantityMax}">
+                                            <input type="number" class="input-max" name="searchQuantityMax" value="${searchQuantityMax}" step="1">
                                         </div>
                                     </div>
                                     <div class="slider">
                                         <div class="progress"></div>
                                     </div>
                                     <div class="range-input">
-                                        <input type="range" class="range-min" min="${quantityMin}" max="${quantityMax}" value="${searchQuantityMin}" step="5">
-                                        <input type="range" class="range-max" min="${quantityMin}" max="${quantityMax}" value="${searchQuantityMax}" step="5">
+                                        <input type="range" class="range-min" min="0" max="${quantityMax}" value="${searchQuantityMin}" step="1">
+                                        <input type="range" class="range-max" min="0" max="${quantityMax}" value="${searchQuantityMax}" step="1">
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-md-5">
+                            <div class="col-md-6">
                                 <div class="slider-container" data-type="price">
                                     <div class="price-input">
                                         <div class="field">
@@ -119,8 +119,8 @@
                                         <div class="progress"></div>
                                     </div>
                                     <div class="range-input">
-                                        <input type="range" class="range-min" min="${priceMin}" max="${priceMax}" value="${searchPriceMin}" step="0.01">
-                                        <input type="range" class="range-max" min="${priceMin}" max="${priceMax}" value="${searchPriceMax}" step="0.01">
+                                        <input type="range" class="range-min" min="0" max="${priceMax}" value="${searchPriceMin}" step="0.01">
+                                        <input type="range" class="range-max" min="0" max="${priceMax}" value="${searchPriceMax}" step="0.01">
                                     </div>
                                 </div>
                             </div>

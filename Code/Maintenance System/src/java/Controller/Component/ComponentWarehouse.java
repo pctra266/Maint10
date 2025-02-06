@@ -7,6 +7,7 @@ package Controller.Component;
 import DAO.ComponentDAO;
 import Model.Component;
 import Utils.NumberUtils;
+import Utils.Pagination;
 import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -91,6 +92,7 @@ public class ComponentWarehouse extends HttpServlet {
         request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);
+        request.setAttribute("listSize", Pagination.listPageSize(totalComponents));
         request.setAttribute("size", pageSize);
         request.setAttribute("components", components);
         request.setAttribute("currentPage", page);

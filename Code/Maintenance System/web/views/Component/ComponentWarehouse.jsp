@@ -69,10 +69,9 @@
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <option value="5" ${size==5?"selected":""}>5</option>
-                                    <option value="7" ${size==7?"selected":""}>7</option>
-                                    <option value="10" ${size==10?"selected":""}>10</option>
-                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                    <c:forEach items="${listSize}" var="s">
+                                    <option value="${s}" ${size==s?"selected":""}>${s}</option>
+                                    </c:forEach>
                                 </select> 
                                 entries
                             </label>
