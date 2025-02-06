@@ -74,12 +74,12 @@
                                 <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Image : </label>
-                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.imageURL}">
+                                    <a class="form-control"  href="${feedbackUpdate.imageURL}">${feedbackUpdate.imageURL}</a>
                                 </div>
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Video : </label>
-                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.videoURL}">
+                                    <a class="form-control" href="${feedbackUpdate.videoURL}">${feedbackUpdate.videoURL}</a>
                                 </div>
                                 </div>
                                  <div class="mb-3">

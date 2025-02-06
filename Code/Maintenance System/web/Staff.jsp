@@ -27,38 +27,45 @@
                     <h1 class="text-center ">Staff List</h1>
                     <form class="" action="searchStaff" method="get">
                         <h2>All Orders</h2>
-                        <div class="card-body" style="width: 500px">
-                            <input class="form-control" type="searchname" name="searchname" placeholder="Search"  value="${param.searchname}" style="margin-bottom:5px">
-                            <select
-                            id="search"
-                            type="search"
-                            class="add__input"
-                            oninput="checkInput(this)"
-                            name="search"
-                            required
+                        <div class="row" style="justify-content: space-between ;margin-bottom: 15px ">
+                            <div class="col-md-6" style="width: 500px">
+                                <input class="form-control" type="searchname" name="searchname" placeholder="Search"  value="${param.searchname}" style="margin-bottom:5px">
+                                <select
+                                id="search"
+                                type="search"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="search"
+                                required
+
+                                >
+                                <option value="option1"></option>
+                                <option value="Name" ${param.search == 'Name' ? 'selected' : ''}>Name</option>
+                                <option value="Role"${param.search == 'Role' ? 'selected' : ''}>Role</option>
+
+                                </select>
+                                <button class="btn btn-primary" style="margin: 2px; color: white;background-color: #007bff" type="submit">Search</button>        
+                                <a href="./StaffController" style=" padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border: none; border-radius: 4px; margin-left: 10px;">
+                                    All Staff                                
+                                </a>                                                      
+                            </div>
                             
-                            >
-                            <option value="option1"></option>
-                            <option value="Name" ${param.search == 'Name' ? 'selected' : ''}>Name</option>
-                            <option value="Role"${param.search == 'Role' ? 'selected' : ''}>Role</option>
-                            
-                            </select>
-                            <button class="btn btn-primary" style="margin: 2px; color: white;background-color: #007bff" type="submit">Search</button>        
-                            <a href="./StaffController" style=" padding: 8px 16px; background-color: #007bff; color: white; text-decoration: none; border: none; border-radius: 4px; margin-left: 10px;">
-                                All Staff                                
-                            </a>                                                      
                         </div>
                             
                     </form>
                             
                     <table class="table table-hover my-0">
-                        <div class="detail-header">
+                        <div class="row" style="justify-content: space-between ;margin-bottom: 15px ">
+                            <div class="col-md-6" style="width: 500px"> 
                                 <a href="add-staff.jsp" style="text-decoration: none;color: white">
                                     <button type="submit" style="margin: 2px; color: white;background-color: #007bff">Add more</button>
                                 </a>
+                            </div>
+                            <div class="col-md-6" style="width: 500px">
                                 <form action="seeMoreController" method="post">
                                     <button type="submit" style="margin: 2px; color: white;background-color: #007bff"">History</button>
                                 </form>
+                            </div>
                         </div>
                         <thead>
                             <tr>

@@ -147,10 +147,11 @@
                                                         ${p.productName}
                                                     </td>
                                                     <td>
-                                                        ProductCode
+                                                        ${p.code}
                                                     </td>
                                                     <td>
-                                                        Action
+                                                        <a href="">Delete</a>
+                                                        <a href="">View</a>
                                                     </td>
                                                 </tr>
                                             </tbody>
