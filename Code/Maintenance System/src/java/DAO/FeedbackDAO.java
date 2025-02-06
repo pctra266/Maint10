@@ -21,50 +21,6 @@ public class FeedbackDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
        // paging and searching
-    public ArrayList<Feedback> getAllFeedback(String customerName, String hasImageAndVideo, int index) {
-        ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, \n"
-                + "                pr.ProductName,w.IssueDescription,\n"
-                + "                w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
-                + "                from Feedback f \n"
-                + "               left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
-                + "                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
-                + "                left join Product pr on p.ProductID = pr.ProductID\n"
-                + "                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "                 where f.IsDeleted = 0 ";
-        if (customerName != null && !customerName.trim().isEmpty()) {
-            query += " and c.Name like ?";
-        }
-        if (hasImageAndVideo != null && !hasImageAndVideo.trim().isEmpty()) {
-            if (hasImageAndVideo.equalsIgnoreCase("empty")) {
-                query += " and (f.VideoURL is null and f.ImageURL is null)";
-            } else {
-                query += " and (f.VideoURL is not null or f.ImageURL is not null )";
-            }
-        }
-            query += " order by DateCreated asc\n" +
-                    " offset ? rows  fetch next 7 rows only;";
-
-        try {
-            conn = new DBContext().connection;
-            ps = conn.prepareStatement(query);
-            int count = 1;
-            if (customerName != null && !customerName.trim().isEmpty()) {
-                ps.setString(count++, "%" + customerName.trim() + "%");
-            }
-            ps.setInt(count++, (index-1)*7);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
-                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
-                        rs.getString("VideoURL"), rs.getString("ProductName"),
-                        rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
-                        rs.getDate("DateCreated"), rs.getBoolean("IsDeleted")));
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
     public ArrayList<Feedback> getAllFeedback(String customerName, String hasImageAndVideo, int index, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, \n"
@@ -219,7 +175,7 @@ public class FeedbackDAO {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             ps.setString(1, feedbackId);
-            ps.executeQuery();
+            ps.executeUpdate();
 
         } catch (Exception e) {
         }
@@ -234,7 +190,7 @@ public class FeedbackDAO {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             ps.setString(1, feedbackId);
-            ps.executeQuery();
+            ps.executeUpdate();
 
         } catch (Exception e) {
         }
@@ -274,42 +230,13 @@ public class FeedbackDAO {
         return 0;
     }
 
-    public ArrayList<Feedback> pagingFeedback(int index) {
-        ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, \n"
-                + "                pr.ProductName,w.IssueDescription,\n"
-                + "                w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
-                + "                from Feedback f \n"
-                + "               left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
-                + "                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
-                + "                left join Product pr on p.ProductID = pr.ProductID\n"
-                + "                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "order by DateCreated asc\n"
-                + "offset ? rows  fetch next 7 rows only;\n"
-                + "select count(*) from Feedback";
-        try {
-            conn = new DBContext().connection;
-            ps = conn.prepareStatement(query);
-            ps.setInt(1, (index-1) *7);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
-                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
-                        rs.getString("VideoURL"), rs.getString("ProductName"),
-                        rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
-                        rs.getDate("DateCreated"), rs.getBoolean("IsDeleted"))) ;
-            }
-        } catch (Exception e) {
-        }
-        return list;
-    }
 
     public static void main(String[] args) {
         FeedbackDAO dao = new FeedbackDAO();
-//        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
-//        for (Feedback feedback : list) {
-//            System.out.println(feedback);
-//        }
-            dao.createFeedback("1", "", "day la note nhe ", "", "");
+        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
+        for (Feedback feedback : list) {
+            System.out.println(feedback);
+        }
+//            dao.createFeedback("1", "", "day la note nhe ", "", "");
     }
 }

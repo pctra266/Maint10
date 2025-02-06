@@ -93,8 +93,14 @@ public class FeedbackController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if(index == 0){
+                        index = 1;
+                    }
                 } catch (Exception e) {
 
+                }
+                  if(endPage < index && endPage != 0){
+                    index = endPage;
                 }
                 request.setAttribute("index", index);
                 ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
@@ -167,10 +173,13 @@ public class FeedbackController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if(index == 0){
+                        index = 1;
+                    }
                 } catch (Exception e) {
                 }
                 
-                if(endPage < index){
+                if(endPage < index && endPage != 0){
                     index = endPage;
                 }
                 request.setAttribute("index", index);
