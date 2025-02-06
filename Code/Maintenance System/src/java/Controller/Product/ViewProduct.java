@@ -66,7 +66,6 @@ public class ViewProduct extends HttpServlet {
         int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
         int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
-        // Đưa các giá trị vào request để sử dụng trong JSP
         request.setAttribute("productList", productList);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
@@ -79,7 +78,6 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("listBrand", listBrand);
         request.setAttribute("listType", productTypes);
 
-        // Forward đến trang JSP
         request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
     }
 

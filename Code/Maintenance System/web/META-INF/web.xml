@@ -9,8 +9,6 @@
 
         <url-pattern>/*</url-pattern>
     </filter-mapping>-->
-
-
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -86,6 +84,10 @@
     <servlet>
         <servlet-name>ViewProduct</servlet-name>
         <servlet-class>Controller.Product.ViewProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Image</servlet-name>
+        <servlet-class>Controller.Product.Image</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -190,5 +192,9 @@
     <servlet-mapping>
         <servlet-name>ViewProduct</servlet-name>
         <url-pattern>/viewProduct</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Image</servlet-name>
+        <url-pattern>/image</url-pattern>
     </servlet-mapping>
 </web-app>

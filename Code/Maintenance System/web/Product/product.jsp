@@ -7,9 +7,198 @@
         <title>Product List</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
+            /* Base Styles */
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f5f5f5;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
 
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .main {
+                flex: 1;
+                padding: 20px;
+                background-color: #ffffff;
+            }
+
+            h1 {
+                font-size: 2rem;
+                color: #444;
+                margin-bottom: 20px;
+            }
+
+            button, select, input {
+                font-family: 'Inter', sans-serif;
+                font-size: 1rem;
+                padding: 10px;
+                margin: 5px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                background-color: #fff;
+                color: #333;
+                transition: all 0.3s ease;
+            }
+
+            button:hover, select:hover, input:hover {
+                background-color: #f4f4f4;
+                cursor: pointer;
+            }
+
+            button.search {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            button.search:hover {
+                background-color: #45a049;
+            }
+
+            button.add-product {
+                background-color: #008CBA;
+                color: white;
+            }
+
+            button.add-product:hover {
+                background-color: #007bb5;
+            }
+
+            /* Table Styles */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            table th, table td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+
+            table th {
+                background-color: #f2f2f2;
+                color: #333;
+                font-weight: bold;
+            }
+
+            table tr:hover {
+                background-color: #f9f9f9;
+            }
+
+            table img {
+                max-width: 80px;
+                height: auto;
+            }
+
+            /* Action Buttons */
+            a.btn-update, a.btn-delete {
+                text-decoration: none;
+                color: #fff;
+                padding: 6px 12px;
+                border-radius: 4px;
+                display: inline-block;
+                transition: background-color 0.3s ease;
+            }
+
+            a.btn-update {
+                background-color: #4CAF50;
+            }
+
+            a.btn-update:hover {
+                background-color: #45a049;
+            }
+
+            a.btn-delete {
+                background-color: #f44336;
+            }
+
+            a.btn-delete:hover {
+                background-color: #d32f2f;
+            }
+
+            /* Select and Input Styles */
+            select, input[type="text"] {
+                width: 200px;
+            }
+
+            select option {
+                padding: 10px;
+            }
+
+            /* Pagination Styles */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .pagination a {
+                padding: 10px 15px;
+                margin: 0 5px;
+                background-color: #f0f0f0;
+                color: #333;
+                border-radius: 4px;
+                text-decoration: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .pagination a:hover {
+                background-color: #e0e0e0;
+            }
+
+            .pagination a.active {
+                background-color: #4CAF50;
+                color: white;
+            }
+
+            .pagination a:focus {
+                outline: none;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .wrapper {
+                    flex-direction: column;
+                }
+
+                .main {
+                    padding: 10px;
+                }
+
+                table {
+                    font-size: 0.9rem;
+                }
+
+                button, select, input {
+                    width: 100%;
+                    margin: 10px 0;
+                }
+
+                .pagination a {
+                    font-size: 0.9rem;
+                    padding: 8px 12px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                h1 {
+                    font-size: 1.5rem;
+                }
+
+                .pagination a {
+                    font-size: 0.8rem;
+                    padding: 6px 10px;
+                }
+            }
 
 
         </style>
@@ -27,7 +216,7 @@
                         <button class="search" type="submit">All Product</button>
                     </form>
 
-                    <form action="addProduct">
+                    <form action="addP">
                         <button class="add-product" type="submit">Add Product</button>
                     </form>
 
@@ -93,9 +282,14 @@
                                         </c:if>
                                     </td>
                                     <td>
-                                        <a href="updateproduct?id=${product.productId}" class="btn-update">Update</a>
-                                        <a href="deleteproduct?id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">Delete</a>
+                                        <a href="updateproduct?id=${product.productId}" class="btn-update">
+                                            <i class="fas fa-edit"></i> Update
+                                        </a>
+                                        <a href="deleteproduct?id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </a>
                                     </td>
+
                                 </tr>
                             </c:forEach>
                         </tbody>

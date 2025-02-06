@@ -11,111 +11,152 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>List Feedback</title>
+        <title>Add Product</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
-            /* Main Content Styling */
-            .content {
-                padding: 25px;
-                background-color: #fff;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-                max-width: 600px;
-                margin: 50px auto;
-            }
-
-            /* Title Styling */
-            h1 {
-                font-size: 1.8rem;
-                text-align: center;
-                margin-bottom: 25px;
-                color: #333;
-            }
-
-            /* Form Styling */
-            form {
-                display: flex;
-                flex-direction: column;
-                gap: 15px;
-                padding: 10px;
+            /* Base Styles */
+            body {
+                font-family: 'Inter', sans-serif;
                 background-color: #f9f9f9;
+                color: #333;
+                margin: 0;
+                padding: 0;
+            }
+
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            .main {
+                flex: 1;
+                padding: 40px 20px;
+                background-color: #ffffff;
+            }
+
+            h2 {
+                font-size: 2rem;
+                color: #444;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .form-container {
+                max-width: 600px;
+                margin: auto;
+                padding: 30px;
+                background: #fff;
                 border-radius: 8px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+                box-sizing: border-box;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
             }
 
             label {
                 font-size: 1rem;
+                font-weight: bold;
+                margin-bottom: 8px;
+                display: inline-block;
                 color: #555;
             }
 
-            input[type="text"],
-            input[type="number"] {
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                font-size: 1rem;
+            input, select {
                 width: 100%;
+                padding: 12px;
+                margin-top: 8px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 1rem;
                 box-sizing: border-box;
+                background-color: #f9f9f9;
+                transition: border-color 0.3s ease;
             }
 
-            input[type="text"]:focus,
-            input[type="number"]:focus {
+            input:focus, select:focus {
                 border-color: #007bff;
                 outline: none;
             }
 
-            /* Button Styling */
-            button[type="submit"] {
-                padding: 8px 16px;
-                background-color: #007bff;
-                color: #fff;
-                font-size: 1rem;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
+            input[type="number"] {
+                -moz-appearance: textfield;
             }
 
-            button[type="submit"]:hover {
+            button {
+                background-color: #007bff;
+                color: white;
+                padding: 12px;
+                border: none;
+                width: 100%;
+                cursor: pointer;
+                border-radius: 6px;
+                font-size: 1rem;
+                transition: background-color 0.3s ease;
+                margin-top: 20px;
+            }
+
+            button:hover {
                 background-color: #0056b3;
             }
 
-            /* Back Button Styling */
-            .back-button {
-                padding: 8px 16px;
-                background-color: #ccc;
+            /* Back Button */
+            form > button.add-product {
+                background-color: #e2e2e2;
                 color: #333;
-                font-size: 1rem;
-                text-decoration: none;
-                border-radius: 4px;
-                display: inline-block;
-                margin-top: 10px;
+                padding: 10px;
                 text-align: center;
+                display: block;
                 width: 100%;
-                box-sizing: border-box;
-                cursor: pointer;
+                border-radius: 6px;
+                font-size: 1rem;
                 transition: background-color 0.3s ease;
             }
 
-            .back-button:hover {
-                background-color: #999;
+            form > button.add-product:hover {
+                background-color: #ccc;
             }
 
-            /* Responsive Styling */
-            @media (max-width: 600px) {
-                .content {
+            /* File Input */
+            input[type="file"] {
+                background-color: #fff;
+                padding: 10px;
+                border-radius: 6px;
+                border: 1px solid #ccc;
+                cursor: pointer;
+            }
+
+            /* Form Section Spacing */
+            form + form {
+                margin-top: 30px;
+            }
+
+            /* Responsive Design */
+            @media (max-width: 768px) {
+                .form-container {
+                    width: 100%;
                     padding: 20px;
-                    margin: 20px;
                 }
 
-                form {
+                h2 {
+                    font-size: 1.8rem;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .form-container {
                     padding: 15px;
                 }
-            }
-        </style>
 
+                button {
+                    padding: 10px;
+                }
+            }
+
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -124,26 +165,65 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    <div class="form-container">
+                        <h2>Add Product</h2>
 
-                    <h1>Add New Product</h1>
-                    <form action="addP" method="post">
-                        <label for="name">Product Name:</label>
-                        <input type="text" id="name" name="productName" required><br><br>
+                        <form action="viewProduct">
+                            <button class="add-product" type="submit">Back</button>
+                        </form>
+                        <form action="addP" method="post">
+                            <div class="form-group">
+                                <label for="code">Product Code:</label>
+                                <input type="text" id="code" name="code" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="name">Product Name:</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
 
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" required><br><br>
+                            <div class="form-group">
+                                <label for="brand">Brand:</label>
+                                <select id="brand" name="brandId">
+                                    <option value="">Select Brand</option>
+                                    <c:forEach var="p" items="${listBrand}">
+                                        <option value="${p.brandId}">
+                                            ${p.brandName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
 
-                        <label for="warranty">Warranty Period (years):</label>
-                        <input type="number" id="warranty" name="warrantyPeriod" required><br><br>
+                            <div class="form-group">
+                                <label for="type">Type:</label>
+                                <input type="text" id="type" name="type" required>
+                            </div>
 
-                        <label for="image">Image:</label>
-                        <input type="text" id="image" name="image"><br><br>
+                            <div class="form-group">
+                                <label for="quantity">Quantity:</label>
+                                <input type="number" id="quantity" name="quantity" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="warranty">Warranty Period (months):</label>
+                                <input type="number" id="warranty" name="warrantyPeriod" min="1" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select id="status" name="status">
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="submit-btn">Add Product</button>
+                        </form>
 
-                        <button type="submit">Add Product</button>
-                        <!-- Added Back Button -->
-                        <a href="product" class="back-button">Back</a>
-                    </form>
-                    
+                        <form action="image"method="post" enctype="multipart/form-data">
+                            <div class="form-group" >
+                                <label for="image">Product Image:</label>
+                                <input type="file" id="image" name="image" accept=".jpg,.png">
+                            </div>
+                            <button type="submit" class="submit-btn">Save</button>
+                        </form>
+                    </div>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

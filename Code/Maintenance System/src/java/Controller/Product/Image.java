@@ -4,23 +4,28 @@
  */
 package Controller.Product;
 
-import DAO.ProductDAO;
-import Model.Brand;
-import Model.Product;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
  * @author sonNH
  */
-public class AddProduct extends HttpServlet {
+@MultipartConfig(
+        fileSizeThreshold = 2 * 1024 * 1024, // 2MB
+        maxFileSize = 10 * 1024 * 1024, // 10MB
+        maxRequestSize = 50 * 1024 * 1024 // 50MB
+)
+public class Image extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -39,10 +44,10 @@ public class AddProduct extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet AddProduct</title>");
+            out.println("<title>Servlet Image</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet AddProduct at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Image at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -60,13 +65,7 @@ public class AddProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO productDAO = new ProductDAO();
-        List<Brand> listBrand = productDAO.getAllBrands();
-        List<String> productTypes = productDAO.getDistinctProductTypes();
-
-        request.setAttribute("listBrand", listBrand);
-        request.setAttribute("listType", productTypes);
-        request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -80,27 +79,19 @@ public class AddProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String code = request.getParameter("code");
-        String name = request.getParameter("name");
-        String brandId = request.getParameter("brandId");
-        String type = request.getParameter("type");
-        String quantity = request.getParameter("quantity");
-        String warrantyPeriod = request.getParameter("warrantyPeriod");
-        String status = request.getParameter("status");
-        String imagePath = request.getParameter("image");
-
-        PrintWriter out = response.getWriter();
-
-        Product product = new Product(code, name, Integer.parseInt(brandId), type, Integer.parseInt(quantity), Integer.parseInt(warrantyPeriod), status, imagePath);
-        ProductDAO productDAO = new ProductDAO();
-
-        boolean success = productDAO.addProduct(product);
-        if (success) {
-            response.sendRedirect("viewProduct"); // Redirect to product list page
-        } else {
-            request.setAttribute("errorMessage", "Failed to add product. Try again.");
-            doGet(request, response);
+        String uploadFolder = request.getServletContext().getRealPath("/uploads");
+        Path uploadPath = Paths.get(uploadFolder);
+        if (!Files.exists(uploadPath)) {
+            Files.createDirectory(uploadPath);
         }
+        Part imagePart = request.getPart("avatar");
+        String imageFilename = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+        if (!imageFilename.equals("")) {
+            imagePart.write(Paths.get(uploadPath.toString(), imageFilename).toString());
+        }
+        
+        
+
     }
 
     /**
