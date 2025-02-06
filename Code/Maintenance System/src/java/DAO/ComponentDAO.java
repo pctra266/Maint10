@@ -776,6 +776,7 @@ public class ComponentDAO extends DBContext {
         Double maxPrice = d.getPriceMax();
         Integer maxQuantity = d.getQuantityMax();
         Integer minQuantity = d.getQuantityMin();
+        System.out.println(d.getListType());
         System.out.println(d.getBrandID("Apple"));
         System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));
         System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, 1, 5, sort, order, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
