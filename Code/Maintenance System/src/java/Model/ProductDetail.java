@@ -14,6 +14,7 @@ public class ProductDetail {
     private int productDetailID;
     private String productCode;
     private Date purchaseDate;
+     private int customerID;
     private String usernameC;
     private String name;
     private String email;
@@ -47,10 +48,7 @@ public class ProductDetail {
         this.WarrantyCardID = WarrantyCardID;
         this.productName = productName;
     }
-    
-    
 
-    // Getters and Setters
     public int getProductDetailID() {
         return productDetailID;
     }
@@ -73,6 +71,14 @@ public class ProductDetail {
 
     public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
     }
 
     public String getUsernameC() {
@@ -138,6 +144,10 @@ public class ProductDetail {
     public void setWarrantyCardID(int WarrantyCardID) {
         this.WarrantyCardID = WarrantyCardID;
     }
+    
+    
+
+    
     
 
     @Override

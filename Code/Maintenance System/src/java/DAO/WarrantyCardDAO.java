@@ -262,9 +262,70 @@ public class WarrantyCardDAO extends DBContext {
         return false; // Không tìm thấy mã trùng
     }
 
+    /**
+     * Get warranty card by customer ID
+     *
+     * @param customerID
+     * @return
+     */
+    public ArrayList<WarrantyCard> getWarrantyCardByCustomerID(int customerID) {
+
+        ArrayList<WarrantyCard> listWarrantyCard = new ArrayList<>();
+        String sql = "SELECT\n"
+                + "w.WarrantyCardID,\n"
+                + "w.WarrantyCardCode,\n"
+                + "pd.ProductDetailID,\n"
+                + "pd.ProductCode,\n"
+                + "w.IssueDescription,\n"
+                + "w.WarrantyStatus,\n"
+                + "w.CreatedDate,\n"
+                + "p.ProductName,\n"
+                + "c.CustomerID,\n"
+                + "c.Name,\n"
+                + "c.Phone\n"
+                + "\n"
+                + "FROM WarrantyCard w LEFT JOIN ProductDetail pd ON w.ProductDetailID = pd.ProductDetailID\n"
+                + "                    LEFT JOIN Customer c ON c.CustomerID = pd.CustomerID\n"
+                + "					LEFT JOIN Product p ON p.ProductID = pd.ProductID\n"
+                + "WHERE c.CustomerID =?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                WarrantyCard warrantyCard = new WarrantyCard();
+                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
+                warrantyCard.setProductDetailID(rs.getInt("ProductDetailID"));
+                warrantyCard.setProductCode(rs.getString("ProductCode"));
+
+                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                warrantyCard.setCreatedDate(rs.getDate("CreatedDate"));
+                warrantyCard.setProductName(rs.getString("ProductName"));
+                warrantyCard.setCustomerID(rs.getInt("CustomerID"));
+                warrantyCard.setCustomerName(rs.getString("Name"));
+                warrantyCard.setCustomerPhone(rs.getString("Phone"));
+
+                listWarrantyCard.add(warrantyCard);
+
+            }
+        } catch (SQLException e) {
+
+        }
+        return listWarrantyCard;
+
+    }
+
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(d.searchCardsByPage("PDT", 1, 5));
+        //  System.out.println(d.searchCardsByPage("PDT", 1, 5));
+        ArrayList<WarrantyCard> wr = d.getWarrantyCardByCustomerID(18);
+        for (WarrantyCard w : wr) {
+            System.out.println(w.getCustomerName());
+        }
     }
 
 }
+
+

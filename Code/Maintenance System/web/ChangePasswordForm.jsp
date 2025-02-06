@@ -41,6 +41,7 @@
                                                 <label class="form-label">Old password</label>
                                                 <input class="form-control form-control-lg"  type ="password" name="oldpassword" placeholder="Enter your oldpassword" />
                                             </div>
+                                            
                                             <div class="mb-3">
                                                 <label class="form-label">New password</label>
                                                 <input class="form-control form-control-lg" type="password" name="newpassword" placeholder="Enter your new password" />
@@ -50,6 +51,7 @@
                                                 <input class="form-control form-control-lg" type="password" name="confirmpassword" placeholder="Enter your confirm password" />
                                             </div>
                                             <a style="color: greenyellow">${requestScope.message}</a>
+                                            <a style="color: red">${requestScope.error}</a>
                                             <div class="d-grid gap-2 mt-3">
                                                 <button type="submit" class="btn btn-lg btn-primary">Change Password</button>
                                             </div>

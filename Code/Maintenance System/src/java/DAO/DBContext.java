@@ -18,11 +18,12 @@ public class DBContext {
 
         try {
             String user = "sa";
-<<<<<<< HEAD
-            String pass = "123";
-=======
+
             String pass = "123456";
->>>>>>> d9f7c03f5a3f12cd9b9d773fbdaab22ade21ba55
+
+
+            
+
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=MaintainManagement;encrypt=true;trustServerCertificate=true";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);
