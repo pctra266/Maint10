@@ -113,7 +113,7 @@ public class LoginFilter implements Filter {
         HttpSession session = req.getSession(false);
         String uri = req.getServletPath();
 
-        if (session == null || (session.getAttribute("accStaff") == null && session.getAttribute("accCus") == null)) {
+        if (session == null || (session.getAttribute("staff") == null && session.getAttribute("customer") == null)) {
 
             if (!uri.contains("login") && !uri.contains("forgotpassword") && !uri.contains("LoginForm.jsp")
                     && !uri.contains("ForgotPasswordForm.jsp") && !uri.contains("HomePage.jsp")

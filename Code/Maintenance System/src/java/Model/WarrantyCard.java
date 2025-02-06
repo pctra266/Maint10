@@ -11,9 +11,9 @@ public class WarrantyCard {
     private String warrantyStatus;
     private Date createdDate;
     private String productName;
+    private int customerID;
     private String customerName;
     private String customerPhone;
-
 
     public int getWarrantyCardID() {
         return warrantyCardID;
@@ -37,6 +37,14 @@ public class WarrantyCard {
 
     public void setProductDetailID(int productDetailID) {
         this.productDetailID = productDetailID;
+    }
+
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
     }
 
     public String getIssueDescription() {
@@ -71,6 +79,14 @@ public class WarrantyCard {
         this.productName = productName;
     }
 
+    public int getCustomerID() {
+        return customerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        this.customerID = customerID;
+    }
+
     public String getCustomerName() {
         return customerName;
     }
@@ -87,14 +103,10 @@ public class WarrantyCard {
         this.customerPhone = customerPhone;
     }
     
-    public String getProductCode() {
-        return productCode;
-    }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
-    }
-
+    
+   
+    
     @Override
     public String toString() {
         return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", productName=" + productName + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';

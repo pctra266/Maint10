@@ -33,6 +33,18 @@ public class Customer {
         this.image = image;
     }
 
+    public Customer(String usernameC, String passwordC, String name, String email, String phone, String address, String image) {
+        this.usernameC = usernameC;
+        this.passwordC = passwordC;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.image = image;
+    }
+    
+    
+
     public int getCustomerID() {
         return customerID;
     }
