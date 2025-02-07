@@ -8,6 +8,7 @@ import Utils.SearchUtils;
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
 import DAO.ProductDAO;
+import Model.Customer;
 import Model.Feedback;
 import Model.FeedbackLog;
 import Model.ProductDetail;
@@ -18,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 /**
@@ -68,13 +70,20 @@ public class FeedbackController extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        
+        HttpSession session = request.getSession();
+        Customer currentCustomer = null;
+        try {
+            currentCustomer = (Customer)session.getAttribute("customer");
+        } catch (Exception e) {
+        }
+        
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewFeedback";
         }
         switch (action) {
             case "viewFeedback":
-                
                 String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
@@ -113,6 +122,16 @@ public class FeedbackController extends HttpServlet {
                 //======end phan trang
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+                break;
+            case "viewListFeedbackByCustomerId":
+                String customerId = "1";
+                if(currentCustomer != null){
+                    customerId = String.valueOf(currentCustomer.getCustomerID());
+                }
+                System.out.println("Customer ID hien tai la : " + customerId);
+                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId);
+                request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
+                request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
             case "deleteFeedback":
                 String feedbackIdDelete = request.getParameter("feedbackID");
