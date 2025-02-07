@@ -23,7 +23,7 @@ public class FeedbackDAO {
        // paging and searching
     public ArrayList<Feedback> getAllFeedback(String customerName, String hasImageAndVideo, int index, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, \n"
+        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, \n"
                 + "                pr.ProductName,w.IssueDescription,\n"
                 + "                w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
                 + "                from Feedback f \n"
@@ -62,7 +62,8 @@ public class FeedbackDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
-                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
+                        rs.getString("Note"), rs.getString("CustomerName"),rs.getString("CustomerEmail"), 
+                        rs.getString("CustomerPhoneNumber") ,rs.getString("ImageURL"),
                         rs.getString("VideoURL"), rs.getString("ProductName"),
                         rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
                         rs.getDate("DateCreated"), rs.getBoolean("IsDeleted")));
@@ -87,7 +88,7 @@ public class FeedbackDAO {
     }
 
     public Feedback getFeedbackById(String feedbackId) {
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,\n"
+        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,\n"
                 + "w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
                 + "from Feedback f \n"
                 + "left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
@@ -103,7 +104,7 @@ public class FeedbackDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 return new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
-                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("ImageURL"),
+                        rs.getString("Note"), rs.getString("CustomerName"),rs.getString("CustomerEmail"), rs.getString("CustomerPhoneNumber"),rs.getString("ImageURL"),
                         rs.getString("VideoURL"), rs.getString("ProductName"),
                         rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
                         rs.getDate("DateCreated"), rs.getBoolean("IsDeleted"));
@@ -233,10 +234,12 @@ public class FeedbackDAO {
 
     public static void main(String[] args) {
         FeedbackDAO dao = new FeedbackDAO();
-        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
-        for (Feedback feedback : list) {
-            System.out.println(feedback);
-        }
+//        ArrayList<Feedback> list = dao.getAllFeedback("", "", 1,"CustomerName","");
+//        for (Feedback feedback : list) {
+//            System.out.println(feedback);
+//        }
+        Feedback f = dao.getFeedbackById("1");
+        System.out.println(f);
 //            dao.createFeedback("1", "", "day la note nhe ", "", "");
     }
 }

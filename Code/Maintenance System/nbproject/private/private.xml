@@ -3,14 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/web/META-INF/context.xml</file>
+            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/XongPhase1/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Filter/LoginFilter.java</file>
+            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/XongPhase1/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Encryption.java</file>
         </group>
         <group>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Customer.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Encryption.java</file>
+            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/XongPhase1/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
+            <file>file:/D:/learning_university/Term5_SP25/1_SWP391/newLife/XongPhase1/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/ChangePasswordServlet.java</file>
         </group>
     </open-files>
 </project-private>

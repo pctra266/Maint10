@@ -7,6 +7,9 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <web-module-libraries>
                 <library dirs="200">
+                    <file>${file.reference.jakarta.persistence-api-3.1.0.jar}</file>
+                </library>
+                <library dirs="200">
                     <file>${file.reference.jakarta.servlet.jsp.jstl-2.0.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -23,6 +26,14 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
+                    <file>${file.reference.jakarta.mail-2.0.1.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
+                    <file>${file.reference.jakarta.activation-2.0.1.jar-1}</file>
+                    <path-in-war>WEB-INF/lib</path-in-war>
+                </library>
+                <library dirs="200">
                     <file>${file.reference.google-api-client-2.7.2.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
@@ -31,11 +42,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.google-auth-library-credentials-1.31.0.jar}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.google-auth-library-oauth2-http-1.31.0.jar}</file>
+                    <file>${file.reference.google-oauth-client-1.37.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -47,11 +54,11 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.google-oauth-client-1.37.0.jar}</file>
+                    <file>${file.reference.google-auth-library-oauth2-http-1.31.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.gson-2.10.1.jar}</file>
+                    <file>${file.reference.google-auth-library-credentials-1.31.0.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
@@ -59,11 +66,7 @@
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.jakarta.activation-2.0.1.jar-1}</file>
-                    <path-in-war>WEB-INF/lib</path-in-war>
-                </library>
-                <library dirs="200">
-                    <file>${file.reference.jakarta.mail-2.0.1.jar-1}</file>
+                    <file>${file.reference.gson-2.10.1.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
