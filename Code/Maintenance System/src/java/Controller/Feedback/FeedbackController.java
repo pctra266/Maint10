@@ -9,6 +9,7 @@ import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
 import DAO.ProductDAO;
 import Model.Customer;
+import Model.Staff;
 import Model.Feedback;
 import Model.FeedbackLog;
 import Model.ProductDetail;
@@ -70,14 +71,31 @@ public class FeedbackController extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
-        
+        // session to get customer and customerId
         HttpSession session = request.getSession();
         Customer currentCustomer = null;
+        Staff currentStaff = null;
         try {
-            currentCustomer = (Customer)session.getAttribute("customer");
+            currentCustomer = (Customer) session.getAttribute("customer");
         } catch (Exception e) {
         }
+        String customerId = "1";
+        if (currentCustomer != null) {
+            customerId = String.valueOf(currentCustomer.getCustomerID());
+        }
         
+        try {
+            currentStaff = (Staff) session.getAttribute("staff");
+        } catch (Exception e) {
+        }
+        String staffId = "1";
+        if (currentStaff != null) {
+            staffId = String.valueOf(currentStaff.getStaffID());
+        }
+        
+        System.out.println("Customer ID hien tai la : " + customerId);
+        System.out.println("Staff ID hien tai la : " + staffId);
+        // end session customer
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewFeedback";
@@ -97,7 +115,7 @@ public class FeedbackController extends HttpServlet {
                 request.setAttribute("customerEmail", customerEmail);
                 request.setAttribute("customerPhone", customerPhone);
                 //======phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName,customerEmail,customerPhone, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
@@ -107,39 +125,38 @@ public class FeedbackController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
-                    if(index == 0){
+                    if (index == 0) {
                         index = 1;
                     }
                 } catch (Exception e) {
 
                 }
-                  if(endPage < index && endPage != 0){
+                if (endPage < index && endPage != 0) {
                     index = endPage;
                 }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,customerEmail,customerPhone, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
 
                 //======end phan trang
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "viewListFeedbackByCustomerId":
-                String customerId = "1";
-                if(currentCustomer != null){
-                    customerId = String.valueOf(currentCustomer.getCustomerID());
-                }
-                System.out.println("Customer ID hien tai la : " + customerId);
                 ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId);
                 request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
             case "deleteFeedback":
                 String feedbackIdDelete = request.getParameter("feedbackID");
-                String staffId = "1";
                 daoFeedback.inActiveFeedbackById(feedbackIdDelete);
                 daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
                 // chuyen sang view action
                 response.sendRedirect("feedback");
+                break;
+            case "deleteFeedbackFromCustomer":
+                String feedbackIdDeleteFromCustomer = request.getParameter("feedbackIdDeleteFromCustomer");
+                daoFeedback.deleteFeedbackById(feedbackIdDeleteFromCustomer);
+                request.getRequestDispatcher("feedback?action=viewListFeedbackByCustomerId").forward(request, response);
                 break;
             case "updateFeedback":
                 String feedbackIdUpdate = request.getParameter("feedbackID");
@@ -148,7 +165,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
                 break;
             case "createFeedback":
-                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID("1");
+                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductByCustomerId", listProductByCustomerId);
                 request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 break;
@@ -172,6 +189,17 @@ public class FeedbackController extends HttpServlet {
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        Customer currentCustomer = null;
+        try {
+            currentCustomer = (Customer) session.getAttribute("customer");
+        } catch (Exception e) {
+        }
+        String customerId = "1";
+        if (currentCustomer != null) {
+            customerId = String.valueOf(currentCustomer.getCustomerID());
+        }
+        System.out.println("Customer ID hien tai la : " + customerId);
         if (action == null) {
             action = "viewListFeedback";
         }
@@ -190,28 +218,28 @@ public class FeedbackController extends HttpServlet {
                 request.setAttribute("customerEmail", customerEmail);
                 request.setAttribute("customerPhone", customerPhone);
                 //phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName,customerEmail,customerPhone, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
-                
+
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
-                    if(index == 0){
+                    if (index == 0) {
                         index = 1;
                     }
                 } catch (Exception e) {
                 }
-                
-                if(endPage < index && endPage != 0){
+
+                if (endPage < index && endPage != 0) {
                     index = endPage;
                 }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,customerEmail,customerPhone, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
@@ -235,8 +263,7 @@ public class FeedbackController extends HttpServlet {
                 String warrantyCardId = request.getParameter("warrantyCardId");
                 String imageURL = "";
                 String videoURL = "";
-                String customerId = "1";
-                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL,videoURL);
+                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
                 response.sendRedirect("feedback?action=createFeedback");
                 break;
             default:

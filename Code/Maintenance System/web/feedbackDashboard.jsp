@@ -40,14 +40,15 @@
                                     <td>${o.note}</td>
                                     <td>${(o.imageURL != null)?o.imageURL:""}</td>
                                     <td>${(o.videoURL != null)?o.imageURL:""}</td>
-                                    <td><a href="#">Delete</a></td>
+                                    <td><a href="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}">Delete</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                         
                         </table>
+                        
                     </div>
-                    <a href="#">Deleted Feedback</a>
+                    <a href="feedback?action=deletefeedback">Deleted Feedback</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
