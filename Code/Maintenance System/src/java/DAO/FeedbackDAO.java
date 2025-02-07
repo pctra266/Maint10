@@ -21,7 +21,7 @@ public class FeedbackDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
        // paging and searching
-    public ArrayList<Feedback> getAllFeedback(String customerName, String hasImageAndVideo, int index, String column, String sortOrder) {
+    public ArrayList<Feedback> getAllFeedback(String customerName,String customerEmail, String customerPhone ,String hasImageAndVideo, int index, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, \n"
                 + "                pr.ProductName,w.IssueDescription,\n"
@@ -34,6 +34,12 @@ public class FeedbackDAO {
                 + "                 where f.IsDeleted = 0 ";
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
+        }
+        if (customerEmail != null && !customerEmail.trim().isEmpty()) {
+            query += " and c.Email like ?";
+        }
+        if (customerPhone != null && !customerPhone.trim().isEmpty()) {
+            query += " and c.Phone like ?";
         }
         if (hasImageAndVideo != null && !hasImageAndVideo.trim().isEmpty()) {
             if (hasImageAndVideo.equalsIgnoreCase("empty")) {
@@ -57,6 +63,12 @@ public class FeedbackDAO {
             int count = 1;
             if (customerName != null && !customerName.trim().isEmpty()) {
                 ps.setString(count++, "%" + customerName.trim() + "%");
+            }
+            if (customerEmail != null && !customerEmail.trim().isEmpty()) {
+                ps.setString(count++, customerEmail);
+            }
+            if (customerPhone != null && !customerPhone.trim().isEmpty()) {
+                ps.setString(count++, customerPhone);
             }
             ps.setInt(count++, (index-1)*7);
             rs = ps.executeQuery();
@@ -197,7 +209,7 @@ public class FeedbackDAO {
         }
     }
 
-    public int getTotalFeedback(String customerName, String hasImageAndVideo) {
+    public int getTotalFeedback(String customerName, String customerEmail, String customerPhone ,String hasImageAndVideo) {
         String query = "select count(*) from Feedback f\n" +
 "                              left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n" +
 "                                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n" +
@@ -206,6 +218,12 @@ public class FeedbackDAO {
 "                                 where f.IsDeleted = 0";
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
+        }
+        if (customerEmail != null && !customerEmail.trim().isEmpty()) {
+            query += " and c.Email like ?";
+        }
+        if (customerPhone != null && !customerPhone.trim().isEmpty()) {
+            query += " and c.Phone like ?";
         }
         if (hasImageAndVideo != null && !hasImageAndVideo.trim().isEmpty()) {
             if (hasImageAndVideo.equalsIgnoreCase("empty")) {
@@ -220,6 +238,12 @@ public class FeedbackDAO {
             int count = 1;
             if (customerName != null && !customerName.trim().isEmpty()) {
                 ps.setString(count++, "%" + customerName.trim() + "%");
+            }
+            if (customerEmail != null && !customerEmail.trim().isEmpty()) {
+                ps.setString(count++, customerEmail);
+            }
+            if (customerPhone != null && !customerPhone.trim().isEmpty()) {
+                ps.setString(count++, customerPhone);
             }
             rs = ps.executeQuery();
             while (rs.next()) {

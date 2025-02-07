@@ -72,7 +72,6 @@ public class FeedbackController extends HttpServlet {
         if (action == null) {
             action = "viewFeedback";
         }
-        System.out.println("Action hien tai la: " + action);
         switch (action) {
             case "viewFeedback":
                 
@@ -80,12 +79,16 @@ public class FeedbackController extends HttpServlet {
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
+                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
                 request.setAttribute("column", column);
                 request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("customerEmail", customerEmail);
+                request.setAttribute("customerPhone", customerPhone);
                 //======phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName,customerEmail,customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
@@ -105,7 +108,7 @@ public class FeedbackController extends HttpServlet {
                     index = endPage;
                 }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,customerEmail,customerPhone, imageAndVideo, index, column, sortOrder);
 
                 //======end phan trang
                 request.setAttribute("listFeedback", listFeedback);
@@ -159,12 +162,16 @@ public class FeedbackController extends HttpServlet {
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
+                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
                 request.setAttribute("column", column);
                 request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("customerEmail", customerEmail);
+                request.setAttribute("customerPhone", customerPhone);
                 //phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName,customerEmail,customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
@@ -185,7 +192,7 @@ public class FeedbackController extends HttpServlet {
                     index = endPage;
                 }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName,customerEmail,customerPhone, imageAndVideo, index, column, sortOrder);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
