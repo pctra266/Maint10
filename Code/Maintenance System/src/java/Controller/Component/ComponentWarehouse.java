@@ -89,6 +89,7 @@ public class ComponentWarehouse extends HttpServlet {
             request.setAttribute("deleteStatus", deleteStatus);
         }
         // Đặt các thuộc tính cho request
+        request.setAttribute("tt",        request.getParameter("t"));
         request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);

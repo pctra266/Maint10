@@ -138,107 +138,107 @@ public class CustomerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-         CustomerDAO customerDao = new CustomerDAO();
-        String action = request.getParameter("action");
-
-        switch (action != null ? action : "") {
-
-            case "update":
-                // Lay thong tin tu form
-                String id = request.getParameter("customerId");
-                try {
-                    int customerId = Integer.parseInt(id);
-                    String username = request.getParameter("username");
-                    String password = request.getParameter("password");
-                    String customerName = request.getParameter("name");
-                    String customerEmail = request.getParameter("email");
-                    String customerPhone = request.getParameter("phone");
-                    String customerAddress = request.getParameter("address");
-                    // Cap nhat file 
-                    Customer customer = customerDao.getCustomerByID(customerId);
-                    Part filePart = request.getPart("image");
-                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                    String customerImage;
-
-                    if (fileName == null || fileName.isEmpty()) {
-                        customerImage = customer.getImage();
-
-                    } else {
-
-                        String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
-                        File uploadDir = new File(uploadPath);
-                        if (!uploadDir.exists()) {
-                            uploadDir.mkdirs();
-                        }
-                        filePart.write(uploadPath + File.separator + fileName);
-                        customerImage = "img/avatar/" + fileName;
-                    }
-
-                    // update
-                    Customer updateCustomer = new Customer(customerId, username, password, customerName, customerEmail, customerPhone, customerAddress, customerImage);
-                    customerDao.updateCustomer(updateCustomer);
-                    request.setAttribute("mess", "Update sucessfully!");
-                    request.setAttribute("customer", updateCustomer);
-
-                    request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
-
-                } catch (IOException | ServletException | NumberFormatException e) {
-
-                    request.setAttribute("error", "An error occurred while updating the customer: " + e.getMessage());
-                    request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
-                }
-
-                break;
-
-            case "add":
-                String username = request.getParameter("username");
-                String password = request.getParameter("password");
-                String customerName = request.getParameter("name");
-                String customerEmail = request.getParameter("email");
-                String customerPhone = request.getParameter("phone");
-                String customerAddress = request.getParameter("address");
-               
-                // check exist
-                if (customerDao.getCustomerByUsername(username) != null) {
-                    request.setAttribute("error", "Username is exits!Please choose another username");
-                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
-                    return;
-                }
-                if (customerDao.getCustomerByEmail(customerEmail) != null) {
-                    request.setAttribute("error", "Email is exits!Please choose another email");
-                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
-                    return;
-                }
-                if (customerDao.getCustomerByPhone(customerPhone) != null) {
-                    request.setAttribute("error", "Phone number is exits!Please choose another Phone number");
-                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
-                    return;
-                }
-                // up file img
-
-                Part filePart = request.getPart("image");
-                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
-                String   customerImage;
-                String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
-                File uploadDir = new File(uploadPath);
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                filePart.write(uploadPath + File.separator + fileName);
-                customerImage = "img/avatar/" + fileName;
-                // Encrytion Password
-                
-                // add 
-                Customer customer = new Customer(username, password, customerName, customerEmail, customerPhone, customerAddress, customerImage);
-                customerDao.addCustomer(customer);
-                response.sendRedirect("customer");
-                break;
-            default:
-                ArrayList<Customer> listCustomer = customerDao.getAllCustomer();
-                request.setAttribute("listCustomer", listCustomer);
-                request.getRequestDispatcher("Customer.jsp").forward(request, response);
-                break;
-        }
+//         CustomerDAO customerDao = new CustomerDAO();
+//        String action = request.getParameter("action");
+//
+//        switch (action != null ? action : "") {
+//
+//            case "update":
+//                // Lay thong tin tu form
+//                String id = request.getParameter("customerId");
+//                try {
+//                    int customerId = Integer.parseInt(id);
+//                    String username = request.getParameter("username");
+//                    String password = request.getParameter("password");
+//                    String customerName = request.getParameter("name");
+//                    String customerEmail = request.getParameter("email");
+//                    String customerPhone = request.getParameter("phone");
+//                    String customerAddress = request.getParameter("address");
+//                    // Cap nhat file 
+//                    Customer customer = customerDao.getCustomerByID(customerId);
+//                    Part filePart = request.getPart("image");
+//                    String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+//                    String customerImage;
+//
+//                    if (fileName == null || fileName.isEmpty()) {
+//                        customerImage = customer.getImage();
+//
+//                    } else {
+//
+//                        String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
+//                        File uploadDir = new File(uploadPath);
+//                        if (!uploadDir.exists()) {
+//                            uploadDir.mkdirs();
+//                        }
+//                        filePart.write(uploadPath + File.separator + fileName);
+//                        customerImage = "img/avatar/" + fileName;
+//                    }
+//
+//                    // update
+//                    Customer updateCustomer = new Customer(customerId, username, password, customerName, customerEmail, customerPhone, customerAddress, customerImage);
+//                    customerDao.updateCustomer(updateCustomer);
+//                    request.setAttribute("mess", "Update sucessfully!");
+//                    request.setAttribute("customer", updateCustomer);
+//
+//                    request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+//
+//                } catch (IOException | ServletException | NumberFormatException e) {
+//
+//                    request.setAttribute("error", "An error occurred while updating the customer: " + e.getMessage());
+//                    request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+//                }
+//
+//                break;
+//
+//            case "add":
+//                String username = request.getParameter("username");
+//                String password = request.getParameter("password");
+//                String customerName = request.getParameter("name");
+//                String customerEmail = request.getParameter("email");
+//                String customerPhone = request.getParameter("phone");
+//                String customerAddress = request.getParameter("address");
+//               
+//                // check exist
+//                if (customerDao.getCustomerByUsername(username) != null) {
+//                    request.setAttribute("error", "Username is exits!Please choose another username");
+//                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+//                    return;
+//                }
+//                if (customerDao.getCustomerByEmail(customerEmail) != null) {
+//                    request.setAttribute("error", "Email is exits!Please choose another email");
+//                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+//                    return;
+//                }
+//                if (customerDao.getCustomerByPhone(customerPhone) != null) {
+//                    request.setAttribute("error", "Phone number is exits!Please choose another Phone number");
+//                    request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+//                    return;
+//                }
+//                // up file img
+//
+//                Part filePart = request.getPart("image");
+//                String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
+//                String   customerImage;
+//                String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
+//                File uploadDir = new File(uploadPath);
+//                if (!uploadDir.exists()) {
+//                    uploadDir.mkdirs();
+//                }
+//                filePart.write(uploadPath + File.separator + fileName);
+//                customerImage = "img/avatar/" + fileName;
+//                // Encrytion Password
+//                
+//                // add 
+//                Customer customer = new Customer(username, password, customerName, customerEmail, customerPhone, customerAddress, customerImage);
+//                customerDao.addCustomer(customer);
+//                response.sendRedirect("customer");
+//                break;
+//            default:
+//                ArrayList<Customer> listCustomer = customerDao.getAllCustomer();
+//                request.setAttribute("listCustomer", listCustomer);
+//                request.getRequestDispatcher("Customer.jsp").forward(request, response);
+//                break;
+//        }
     }
 
     /** 
