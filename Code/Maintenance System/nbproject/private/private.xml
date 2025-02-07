@@ -3,39 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Home.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardCreate.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/ProductDetail.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/StaffLogDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/DBContext.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/includes/navbar-left.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/seeMoreController.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/Staff.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/CustomerDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/ControllerAccount/LoginServlet.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/META-INF/web.xml</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/Product.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/StaffDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/WarrantyCard/AddWarrantyCard.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardList.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/deletedStaffController.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardList.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Utils/SearchUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/StaffLog.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement%20(main)/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
-        </group>
-        <group>
             <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
             <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
             <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/web/META-INF/context.xml</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
+            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Customer.java</file>
+            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Encryption.java</file>
         </group>
     </open-files>
 </project-private>
