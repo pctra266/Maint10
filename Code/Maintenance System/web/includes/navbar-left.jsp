@@ -302,17 +302,5 @@
                                 </li>
                             </ul>
 
-                            <div class="sidebar-cta">
-                                <div class="sidebar-cta-content">
-                                    <strong class="d-inline-block mb-2">Weekly Sales Report</strong>
-                                    <div class="mb-3 text-sm">
-                                        Your weekly sales report is ready for download!
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <a href="https://adminkit.io/" class="btn btn-outline-primary" target="_blank">Download</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 1320px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 472px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
 </nav>
