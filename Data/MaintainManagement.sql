@@ -121,8 +121,13 @@ CREATE TABLE WarrantyCard (
     WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
     ProductDetailID INT NOT NULL REFERENCES ProductDetail(ProductDetailID),
     IssueDescription NVARCHAR(MAX),
-    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'completed', 'cancel')),
-    CreatedDate DATETIME DEFAULT GETDATE()
+    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'done', 'completed', 'cancel')),
+	[ReturnDate] DATETIME, --Ngay du kien
+	DoneDate DATETIME, -- Ngay sua xong
+	CompleteDate DATETIME, --Ngay tra may
+	CancelDate DATETIME, --Ngay huy card
+    CreatedDate DATETIME DEFAULT GETDATE(),
+	[Image] NVARCHAR(MAX)
 );
 
 -- ComponentRequest Table

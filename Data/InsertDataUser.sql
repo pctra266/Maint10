@@ -24,50 +24,6 @@ VALUES
 ('repair_contractor4', '8qZHe/AetEyne9jfDSciHoot6Y4=', 'Repair Contractor', 'Repair Contractor 4', 'repair4@example.com', '0123456808', '123 Repair Rd', NULL);
 
 
--- them data vao staff log
-INSERT INTO StaffLog (StaffID, StartDate, EndDate, [Role])
-VALUES
-(1, '2024-01-01 08:00:00', '2024-01-10 17:00:00', 'Technician'),
-(2, '2024-01-02 09:00:00', '2024-01-15 18:00:00', 'Inventory Manager'),
-(3, '2024-01-03 10:00:00', '2024-01-12 14:00:00', 'Customer Service Agent'),
-(4, '2024-01-04 08:00:00', '2024-01-20 17:00:00', 'Repair Contractor'),
-(5, '2024-01-05 08:30:00', '2024-01-22 18:00:00', 'Technician'),
-(6, '2024-01-06 09:00:00', '2024-01-25 17:30:00', 'Admin'),
-(7, '2024-01-07 10:00:00', '2024-01-10 16:00:00', 'Inventory Manager'),
-(8, '2024-01-08 08:00:00', '2024-01-18 17:30:00', 'Customer Service Agent'),
-(9, '2024-01-09 09:00:00', '2024-01-19 18:00:00', 'Repair Contractor'),
-(10, '2024-01-10 08:00:00', '2024-01-23 16:30:00', 'Technician'),
-(11, '2024-01-11 08:00:00', '2024-01-25 17:00:00', 'Admin'),
-(12, '2024-01-12 09:00:00', '2024-01-22 17:00:00', 'Inventory Manager'),
-(13, '2024-01-13 08:30:00', '2024-01-24 18:00:00', 'Customer Service Agent'),
-(14, '2024-01-14 08:00:00', '2024-01-26 16:00:00', 'Technician'),
-(15, '2024-01-15 09:00:00', '2024-01-28 17:00:00', 'Repair Contractor'),
-(16, '2024-01-16 08:00:00', '2024-01-29 17:30:00', 'Admin'),
-(17, '2024-01-17 09:00:00', '2024-01-30 16:30:00', 'Inventory Manager'),
-(18, '2024-01-18 08:30:00', '2024-02-01 17:00:00', 'Customer Service Agent'),
-(19, '2024-01-19 08:00:00', '2024-02-02 18:00:00', 'Technician'),
-(20, '2024-01-20 09:00:00', '2024-02-03 17:30:00', 'Repair Contractor'),
-(1, '2024-01-10 17:00:00', NULL, 'Admin'),
-(2, '2024-01-15 18:00:00', NULL, 'Technician'),
-(3, '2024-01-12 14:00:00', NULL, 'Inventory Manager'),
-(4, '2024-01-20 17:00:00', NULL, 'Customer Service Agent'),
-(5, '2024-01-22 18:00:00', NULL, 'Repair Contractor'),
-(6, '2024-01-25 17:30:00', NULL, 'Admin'),
-(7, '2024-01-10 16:00:00', NULL, 'Technician'),
-(8, '2024-01-18 17:30:00', NULL, 'Inventory Manager'),
-(9, '2024-01-19 18:00:00', NULL, 'Customer Service Agent'),
-(10, '2024-01-23 16:30:00', NULL, 'Repair Contractor'),
-(11, '2024-01-25 17:00:00', NULL, 'Admin'),
-(12, '2024-01-22 17:00:00', NULL, 'Technician'),
-(13, '2024-01-24 18:00:00', NULL, 'Inventory Manager'),
-(14, '2024-01-26 16:00:00', NULL, 'Customer Service Agent'),
-(15, '2024-01-28 17:00:00', NULL, 'Repair Contractor'),
-(16, '2024-01-29 17:30:00', NULL, 'Admin'),
-(17, '2024-01-30 16:30:00', NULL, 'Technician'),
-(18, '2024-02-01 17:00:00', NULL, 'Inventory Manager'),
-(19, '2024-02-02 18:00:00', NULL, 'Customer Service Agent'),
-(20, '2024-02-03 17:30:00', NULL, 'Repair Contractor');
-
 -- them data vao customer
 INSERT INTO Customer (UsernameC, PasswordC, [Name], Gender, Email, Phone, [Address], Image)
 VALUES
