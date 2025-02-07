@@ -70,7 +70,7 @@
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${listSize}" var="s">
-                                    <option value="${s}" ${size==s?"selected":""}>${s}</option>
+                                        <option value="${s}" ${size==s?"selected":""}>${s}</option>
                                     </c:forEach>
                                 </select> 
                                 entries
@@ -271,6 +271,7 @@
                             </div>
                         </c:if>
                     </div>
+
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />
             </div>
@@ -278,6 +279,7 @@
         </div>
 
         <script src="js/app.js"></script>
+                <script src="js/format-input.js"></script>
 
     </body>
 
