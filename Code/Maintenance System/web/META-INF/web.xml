@@ -93,7 +93,8 @@
     <servlet>
         <servlet-name>PurchaseProduct</servlet-name>
         <servlet-class>Controller.PurchaseProduct</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>Image</servlet-name>
         <servlet-class>Controller.Product.Image</servlet-class>
 
@@ -210,7 +211,8 @@
     <servlet-mapping>
         <servlet-name>PurchaseProduct</servlet-name>
         <url-pattern>/purchaseproduct</url-pattern>
-
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>Image</servlet-name>
         <url-pattern>/image</url-pattern>
 

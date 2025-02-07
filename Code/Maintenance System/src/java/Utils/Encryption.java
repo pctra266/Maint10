@@ -4,10 +4,13 @@
  */
 package Utils;
 
+
+import com.google.api.client.util.Base64;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import org.apache.tomcat.util.codec.binary.Base64;
+
+
 
 
 
