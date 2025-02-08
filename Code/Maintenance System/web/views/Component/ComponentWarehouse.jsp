@@ -164,6 +164,7 @@
                                 <th style="width:8%">Action<a href="ComponentWarehouse?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
+                         <tbody>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
                         <c:forEach var="component" items="${components}" varStatus="status">
                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
@@ -208,7 +209,7 @@
                                 </div>
                             </div>
                         </c:forEach>
-                        <tbody>
+                       
 
                         </tbody>
                     </table

@@ -42,35 +42,40 @@ public class WarrantyCardList extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search")) ;
+        String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         Integer pageSize;
         pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        String status = request.getParameter("status");
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
         //--------------------------------------------------------------------------
         List<WarrantyCard> cards = new ArrayList<>();
-        int totalCards = paraSearch == null || paraSearch.isBlank() ? warrantyCardDAO.getTotalCards() : warrantyCardDAO.getTotalSearchCards(paraSearch);
+        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status);
         int totalPages = (int) Math.ceil((double) totalCards / pageSize);
         if (page > totalPages) {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        cards = paraSearch == null || paraSearch.isBlank() ? warrantyCardDAO.getCardsByPage(page, pageSize) : warrantyCardDAO.searchCardsByPage(paraSearch, page, pageSize);
+        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order);
 
         String createStatus = request.getParameter("create");
         if (createStatus != null && createStatus.equals("true")) {
             request.setAttribute("createStatus", "Card created successfully");
         }
-        request.setAttribute(paraSearch, page);
+        request.setAttribute("order", order);
+        request.setAttribute("sort", sort);
+        request.setAttribute("status", status);
         request.setAttribute("cardList", cards);
-         request.setAttribute("totalComponents", totalCards);
-         request.setAttribute("listSize", Pagination.listPageSize(totalCards));
+        request.setAttribute("totalCards", totalCards);
+        request.setAttribute("listSize", Pagination.listPageSize(totalCards));
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);
         request.setAttribute("size", pageSize);
-         request.setAttribute("currentPage", page);
-          request.setAttribute("totalPages", totalPages);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
         request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);
     }
 
