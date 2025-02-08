@@ -13,6 +13,60 @@
             <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
             <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
             <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/AddWarrantyCard.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/ChangePasswordServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Customer.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/SearchUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardCreate.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Pagination.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/format-input.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FormatUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/GoogleDriveService.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/settings.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FileUploadToDrive.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/range-slider.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/fullcalendar.js</file>
+        </group>
+        <group>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardList.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/ChangePasswordServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Customer.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardList.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Pagination.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/AddWarrantyCard.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/SearchUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardCreate.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/format-input.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/GoogleDriveService.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/CustomerDAO.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/settings.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FileUploadToDrive.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/range-slider.js</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/YourWarrantyCard.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/ProductsMaintainManagement/Code/Maintenance%20System/web/js/fullcalendar.js</file>
         </group>
     </open-files>
 </project-private>

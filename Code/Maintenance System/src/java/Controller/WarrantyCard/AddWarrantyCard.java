@@ -7,19 +7,29 @@ package Controller.WarrantyCard;
 import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
 import Model.ProductDetail;
+import Utils.FormatUtils;
+import Utils.OtherUtils;
 import java.io.IOException;
+import java.util.Date;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.annotation.MultipartConfig;
+import jakarta.servlet.http.Part;
 
 /**
  *
  * @author ADMIN
  */
 @WebServlet(name = "AddWarrantyCard", urlPatterns = {"/WarrantyCard/Add"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class AddWarrantyCard extends HttpServlet {
 
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
@@ -38,8 +48,11 @@ public class AddWarrantyCard extends HttpServlet {
             throws ServletException, IOException {
         String productCode = request.getParameter("productCode");
         String issue = request.getParameter("issue");
+        Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
+        Part imagePart = request.getPart("newImage");
+        String image = OtherUtils.saveImage(imagePart, request, "img/warranty-card");
         if (issue != null) {
-            if (warrantyCardDAO.createWarrantyCard(productCode, issue)) {
+            if (warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image)) {
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
             } else {
@@ -47,11 +60,13 @@ public class AddWarrantyCard extends HttpServlet {
             }
         }
         ProductDetail pd = warrantyCardDAO.getProductDetailByCode(productCode);
-        if (pd == null && productCode!=null) {
+        if (pd == null && productCode != null) {
             request.setAttribute("NotFoundProduct", "No product has this code!");
         } else {
             request.setAttribute("pd", pd);
-            if(pd!=null)request.setAttribute("cusID", customerDAO.getCustomerByEmail(pd.getEmail()).getCustomerID());
+            if (pd != null) {
+                request.setAttribute("cusID", customerDAO.getCustomerByEmail(pd.getEmail()).getCustomerID());
+            }
         }
 
         request.setAttribute("ProductCode", productCode);

@@ -6,7 +6,7 @@ package Controller.Component;
 
 import DAO.ComponentDAO;
 import Model.Component;
-import Utils.NumberUtils;
+import Utils.FormatUtils;
 import Utils.Pagination;
 import Utils.SearchUtils;
 import java.io.IOException;
@@ -42,13 +42,13 @@ public class ComponentWarehouse extends HttpServlet {
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
-        int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
         Integer pageSize;
-        pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         //--------------------------------------------------------------------------
         List<Component> components = new ArrayList<>();
         int totalComponents = paraSearch == null || paraSearch.isBlank() ? componentDAO.getTotalComponents() : componentDAO.getTotalSearchComponents(paraSearch);

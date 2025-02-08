@@ -8,7 +8,6 @@ import DAO.ComponentDAO;
 import Model.Component;
 import Utils.*;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +16,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.File;
-import java.net.URLEncoder;
 
 /**
  *
@@ -98,8 +96,8 @@ public class ComponentAction extends HttpServlet {
         String newCode = request.getParameter("Code");
         String newBrand = request.getParameter("Brand");
         String newType = request.getParameter("Type");
-        Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
-        Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
+        Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
+        Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
         Part imagePart = request.getPart("newImage");
 
         boolean canAdd = true;
@@ -119,6 +117,9 @@ public class ComponentAction extends HttpServlet {
             canAdd = false;
         } else if (newCode.isBlank()) {
             request.setAttribute("codeAlert", "Code must not be empty!");
+            canAdd = false;
+        } else if (componentDAO.isComponentCodeExist(newCode)) {
+            request.setAttribute("codeAlert", "Code existed, choose another!");
             canAdd = false;
         } else {
             request.setAttribute("code", newCode);
@@ -154,10 +155,10 @@ public class ComponentAction extends HttpServlet {
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
         // Khong hop le thi tra lai trang Add
         if (canAdd) {
-            String imagePath = saveImage(imagePart, request); // Lưu ảnh
+            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
             Component component = new Component();
-            component.setComponentName(newName);
-            component.setComponentCode(newCode);
+            component.setComponentName(newName.trim());
+            component.setComponentCode(newCode.trim());
             component.setType(newType);
             component.setBrand(newBrand);
             component.setPrice(newPrice);
@@ -183,8 +184,8 @@ public class ComponentAction extends HttpServlet {
     private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
             throws ServletException, IOException {
         String newName = request.getParameter("Name");
-        Integer newQuantity = NumberUtils.tryParseInt(request.getParameter("Quantity"));
-        Double newPrice = NumberUtils.tryParseDouble(request.getParameter("Price"));
+        Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
+        Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
         String newBrand = request.getParameter("Brand");
         String newType = request.getParameter("Type");
         String newCode = request.getParameter("Code");
@@ -201,6 +202,10 @@ public class ComponentAction extends HttpServlet {
         }
         if (newCode == null || newCode.isBlank()) {
             request.setAttribute("codeAlert", "Code must not be empty!");
+            canUpdate = false;
+        } else if (componentDAO.isComponentCodeExist(newCode)
+                && !newCode.trim().equals(component.getComponentCode())) {
+            request.setAttribute("codeAlert", "Code exists, choose another!");
             canUpdate = false;
         }
         if (componentDAO.getTypeID(newType) == null) {
@@ -224,15 +229,15 @@ public class ComponentAction extends HttpServlet {
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
-            component.setComponentCode(newCode);
-            component.setComponentName(newName);
+            component.setComponentCode(newCode.trim());
+            component.setComponentName(newName.trim());
             component.setType(newType);
             component.setBrand(newBrand);
             component.setQuantity(newQuantity);
             component.setPrice(newPrice);
 
             // Lưu ảnh mới nếu có
-            String imagePath = saveImage(imagePart, request);
+            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component/");
             if (imagePath != null) {
                 component.setImage(imagePath);
             }
@@ -254,42 +259,9 @@ public class ComponentAction extends HttpServlet {
     }
 
 // Lưu ảnh vào thư mục /img/Component
-    private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
-        if (imagePart == null || imagePart.getSize() == 0) {
-            return null;
-        }
-
-        // Đường dẫn tuyệt đối đến thư mục img/Component
-        String uploadPath = request.getServletContext().getRealPath("/img/Component");
-        System.out.println("Upload Path: " + uploadPath); // Kiểm tra đường dẫn
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
-        }
-
-        // Tạo tên file duy nhất
-        String originalFileName = imagePart.getSubmittedFileName();
-        if (originalFileName == null || originalFileName.isEmpty()) {
-            return null; // Trả về null nếu không có tên file
-        }
-        String fileName = originalFileName;
-//    String fileName = System.currentTimeMillis() + "_" + originalFileName;
-        String filePath = uploadPath + File.separator + fileName;
-
-        try {
-            imagePart.write(filePath); // Ghi file lên server
-        } catch (IOException e) {
-            e.printStackTrace(); // In ra lỗi nếu có
-            return null; // Trả về null nếu có lỗi
-        }
-
-        // Trả về đường dẫn tương đối để lưu vào database
-        return "img/Component/" + fileName; // Chỉ cần đường dẫn tương đối
-    }
-
     private void handleComponentActions(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         String componentID = request.getParameter("ID");
-        Integer id = NumberUtils.tryParseInt(componentID);
+        Integer id = FormatUtils.tryParseInt(componentID);
 
         // Kiểm tra nếu không có ID hợp lệ
         if (id == null) {
@@ -316,13 +288,13 @@ public class ComponentAction extends HttpServlet {
             case "/ComponentWarehouse/Delete" -> {
                 String pageParam = request.getParameter("page");
                 String paraSearch = request.getParameter("search");
-                int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+                int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
                 // Lấy page-size từ request, mặc định là PAGE_SIZE
                 String pageSizeParam = request.getParameter("page-size");
                 String sort = request.getParameter("sort");
                 String order = request.getParameter("order");
                 Integer pageSize;
-                pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+                pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
                 paraSearch = (paraSearch == null || paraSearch.isBlank()) ? "" : paraSearch;
                 // Neu co nhieu para hon thi dang o advance, xu ly tra ve trang advance
                 String paraSearchCode = request.getParameter("searchCode");

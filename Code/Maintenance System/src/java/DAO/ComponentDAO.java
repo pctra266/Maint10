@@ -760,6 +760,19 @@ public class ComponentDAO extends DBContext {
         }
         return null;
     }
+    
+  public boolean isComponentCodeExist(String code) {
+    String sql = "SELECT ComponentCode FROM Component WHERE ComponentCode = ?";
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setString(1, code.trim());
+        try (ResultSet rs = ps.executeQuery()) {  // Dùng executeQuery()
+            return rs.next();  // Nếu có dữ liệu thì trả về true
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return false;  // Trả về false nếu có lỗi hoặc không tìm thấy
+}
 
     public static void main(String arg[]) throws SQLException {
         ComponentDAO d = new ComponentDAO();
@@ -776,6 +789,7 @@ public class ComponentDAO extends DBContext {
         Double maxPrice = d.getPriceMax();
         Integer maxQuantity = d.getQuantityMax();
         Integer minQuantity = d.getQuantityMin();
+        System.out.println(d.isComponentCodeExist("MB-LEN-X12"));
         System.out.println(d.getListType());
         System.out.println(d.getBrandID("Apple"));
         System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));

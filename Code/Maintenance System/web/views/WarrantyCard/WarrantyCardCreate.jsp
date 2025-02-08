@@ -33,7 +33,7 @@
                     <a href="WarrantyCard" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h1 class="text-center text-primary" style="font-size: 4rem">Create Warranty Card</h1>
                     <div class="d-flex flex-column col justify-content-center align-items-center vh-50">
-                        <form action="WarrantyCard/Add" method="GET" class="w-50 row">
+                        <form action="WarrantyCard/Add" method="POST" class="w-50 row" enctype="multipart/form-data">
                             <div class="row d-flex align-items-center ">
                                 <!-- Ô input -->
                                 <div class="col bg-primary bg-opacity-75 p-4 rounded-pill shadow"> <!-- Tăng padding -->
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                         </c:if>
-                        <form action="WarrantyCard/Add" method="GET" class="row g-3">
+                        <form action="WarrantyCard/Add" method="POST" class="row g-3" enctype="multipart/form-data">
                             <!-- ID ẩn -->
                             <input type="hidden" name="productDetailID" value="${pd.productDetailID}">
                             <!-- Mã sản phẩm -->
@@ -146,19 +146,30 @@
                                        value="${pd.email}" readonly="readonly">
                             </div>
                             <div class="col-md-2">
-                                       <a href="customer?action=update&id=${cusID}" class="btn btn-info d-flex justify-content-center align-items-center" style="height: 2.3rem; font-size: 0.8rem; width: 55%">Edit customer</a>
+                                <a href="customer?action=update&id=${cusID}" class="btn btn-info d-flex justify-content-center align-items-center" style="height: 2.3rem; font-size: 0.8rem; width: 55%">Edit customer</a>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="returnDate" class="form-label">Return Date</label>
+                                <input type="date" class="form-control" name="returnDate" id="returnDate">
+                            </div>
+                            <div class="col-md-10">
+                            </div>
+                            <div class="col-md-5">
                                 <textarea class="form-control" placeholder="Descript issue" name= "issue" rows="2" style="height: 10rem;"></textarea>
                             </div>
-
-
+                            <div class="col-md-7 d-flex justify-content-center align-items-center row">
+                                <img src="" id="currentImage"alt="Issue Picture" style="max-width: 100%; height: auto;">
+                                <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
+                            </div>
 
 
                             <!-- Nút Submit -->
-                            <div class="col-12 text-center">
+                            <div class="col-12 text-center ">
                                 <button type="submit" class="btn btn-primary rounded-3 p-3" style="font-size: 1.3rem">Create</button>
                             </div>
+
                         </form>
                     </c:if>
 
@@ -174,6 +185,16 @@
 
 
         <script src="js/app.js"></script>
+        <script>
+                                    function previewImage(event) {
+                                        const reader = new FileReader();
+                                        reader.onload = function () {
+                                            const output = document.getElementById('currentImage');
+                                            output.src = reader.result;
+                                        };
+                                        reader.readAsDataURL(event.target.files[0]);
+                                    }
+        </script>
     </body>
 
 </html>

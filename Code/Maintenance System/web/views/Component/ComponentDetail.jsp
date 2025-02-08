@@ -30,66 +30,66 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                                        <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
 
                     <h2>Component Detail</h2>
-  <!--                                Alert khi du lieu truyen sang sever sai-->
-                                <c:if test="${not empty codeAlert}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${codeAlert}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty nameAlert}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${nameAlert}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty quantityAlert}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${quantityAlert}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty priceAlert}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${priceAlert}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty addAlert1}">
-                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${addAlert1}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty updateAlert1}">
-                                    <div class="alert alert-success alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${updateAlert1}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
-                                <c:if test="${not empty updateAlert0}">
-                                    <div class="alert alert-danger alert-dismissible" role="alert">
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        <div class="alert-message">
-                                            <strong>${updateAlert0}</strong>
-                                        </div>
-                                    </div>
-                                </c:if>
+                    <!--                                Alert khi du lieu truyen sang sever sai-->
+                    <c:if test="${not empty codeAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${codeAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty nameAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${nameAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty quantityAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${quantityAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty priceAlert}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${priceAlert}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty addAlert1}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${addAlert1}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty updateAlert1}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${updateAlert1}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty updateAlert0}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${updateAlert0}</strong>
+                            </div>
+                        </div>
+                    </c:if>
                     <form class="row"action="ComponentWarehouse/Edit"  method="POST" enctype="multipart/form-data">
                         <div class="col-md-8">
                             <div class="col-md-12 row g-3">
@@ -103,7 +103,7 @@
                                     <label for="Code" class="form-label">Code</label>
                                     <input type="text" class="form-control" name="Code"id="Code" value="${component.componentCode}" required>
                                 </div>
-                                 <div class="col-md-3">
+                                <div class="col-md-3">
                                     <label for="Type" class="form-label">Type</label>
                                     <select name="Type" class="form-select form-select-md" id="Type" required style="flex: 1 1 auto;">
                                         <option value disabled selected>Choose</option>
@@ -124,11 +124,11 @@
                                 <div class="col-md-6"></div>
                                 <div class="col-md-3">
                                     <label for="Quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="Quantity"id="Quantity" value="${component.quantity}" min="0" required>
+                                    <input type="text" class="form-control format-int" name="Quantity"id="Quantity" value="${component.quantity}" min="0" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="Price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="Price" id="Price" value="${component.price}" step="0.01" min="0" required>
+                                    <input type="text" class="form-control format-float" name="Price" id="Price" value="${component.price}" step="0.01" min="0" required>
                                 </div> 
                                 <div class="col-md-10">
                                     <label for="validationDefault06" class="form-label">Products</label>
@@ -137,9 +137,9 @@
                                             <tr>
                                                 <th style="width:45%">Name</th>
                                                 <th style="width:40%">Code</th>
-                                                    <th class="d-none d-md-table-cell" style="width:25%">Action</th>
-                                                </tr>
-                                            </thead>
+                                                <th class="d-none d-md-table-cell" style="width:25%">Action</th>
+                                            </tr>
+                                        </thead>
                                         <c:forEach items="${list}" var="p">
                                             <tbody>
                                                 <tr>
@@ -161,7 +161,7 @@
                                 <div class="col-md-12">
                                     <button class="btn btn-primary" type="submit">Save</button>
                                 </div>
-                              
+
                             </div>
                         </div>
 
@@ -171,6 +171,7 @@
                         </div>
 
                     </form>
+                            
                 </main>
 
                 <jsp:include page="../../includes/footer.jsp" />
@@ -179,19 +180,16 @@
         </div>
 
         <script src="js/app.js"></script>
+        <script src="js/format-input.js"></script>
         <script>
-                                // Hàm để xem trước ảnh khi người dùng chọn tệp mới
-                                function previewImage(event) {
-                                    const file = event.target.files[0];
-                                    if (file) {
+                                    function previewImage(event) {
                                         const reader = new FileReader();
-                                        reader.onload = function (e) {
-                                            const imgElement = document.getElementById('currentImage');
-                                            imgElement.src = e.target.result;
+                                        reader.onload = function () {
+                                            const output = document.getElementById('currentImage');
+                                            output.src = reader.result;
                                         };
-                                        reader.readAsDataURL(file);
+                                        reader.readAsDataURL(event.target.files[0]);
                                     }
-                                }
         </script>
     </body>
 

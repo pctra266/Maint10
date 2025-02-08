@@ -6,7 +6,7 @@ package Controller.Component;
 
 import DAO.ComponentDAO;
 import Model.Component;
-import Utils.NumberUtils;
+import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -41,7 +41,7 @@ public class ComponentSearch extends HttpServlet {
         String pageParam = request.getParameter("page");
         String paraSearchCode = SearchUtils.preprocessSearchQuery( request.getParameter("searchCode"));
         String paraSearchName = SearchUtils.preprocessSearchQuery(request.getParameter("searchName"));
-        int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
@@ -51,15 +51,15 @@ public class ComponentSearch extends HttpServlet {
         String brand = request.getParameter("searchBrand");
         Integer brandID = componentDAO.getBrandID(brand);
         Integer pageSize;
-        pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         String paraSearchQuantityMin = request.getParameter("searchQuantityMin");
-        Integer searchQuantityMin = NumberUtils.tryParseInt(paraSearchQuantityMin) != null ? NumberUtils.tryParseInt(paraSearchQuantityMin) : 0;
+        Integer searchQuantityMin = (FormatUtils.tryParseInt(paraSearchQuantityMin) != null&&FormatUtils.tryParseInt(paraSearchQuantityMin)<componentDAO.getQuantityMax()) ? FormatUtils.tryParseInt(paraSearchQuantityMin) : 0;
         String paraSearchQuantityMax = request.getParameter("searchQuantityMax");
-        Integer searchQuantityMax = NumberUtils.tryParseInt(paraSearchQuantityMax) != null ? NumberUtils.tryParseInt(paraSearchQuantityMax) : componentDAO.getQuantityMax();
+        Integer searchQuantityMax = (FormatUtils.tryParseInt(paraSearchQuantityMax) != null && FormatUtils.tryParseInt(paraSearchQuantityMax)<componentDAO.getQuantityMax() )? FormatUtils.tryParseInt(paraSearchQuantityMax) : componentDAO.getQuantityMax();
         String paraSearchPriceMin = request.getParameter("searchPriceMin");
-        Double searchPriceMin = NumberUtils.tryParseDouble(paraSearchPriceMin) != null ? NumberUtils.tryParseDouble(paraSearchPriceMin) : 0;
+        Double searchPriceMin = (FormatUtils.tryParseDouble(paraSearchPriceMin) != null&&FormatUtils.tryParseDouble(paraSearchPriceMin) <componentDAO.getPriceMax()) ? FormatUtils.tryParseDouble(paraSearchPriceMin) : 0;
         String paraSearchPriceMax = request.getParameter("searchPriceMax");
-        Double searchPriceMax = NumberUtils.tryParseDouble(paraSearchPriceMax) != null ? NumberUtils.tryParseDouble(paraSearchPriceMax) : componentDAO.getPriceMax();
+        Double searchPriceMax = (FormatUtils.tryParseDouble(paraSearchPriceMax) != null && FormatUtils.tryParseDouble(paraSearchPriceMax)<componentDAO.getPriceMax()) ? FormatUtils.tryParseDouble(paraSearchPriceMax) : componentDAO.getPriceMax();
         List<Component> components = new ArrayList<>();
         int totalComponents = componentDAO.getTotalSearchComponentsByFields(paraSearchCode, paraSearchName, typeID, brandID, searchQuantityMin, searchQuantityMax, searchPriceMin, searchPriceMax);
         // Tính tổng số trang

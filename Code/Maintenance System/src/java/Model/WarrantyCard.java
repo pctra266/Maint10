@@ -10,6 +10,11 @@ public class WarrantyCard {
     private String issueDescription;
     private String warrantyStatus;
     private Date createdDate;
+    private Date returnDate; //Ngay du kien
+    private Date donedDate;     //Ngay sua xong
+    private Date completedDate; //Ngay tra may
+    private Date canceldDate;  //Ngay huy?
+    private String image;
     private String productName;
     private int customerID;
     private String customerName;
@@ -18,6 +23,48 @@ public class WarrantyCard {
     public int getWarrantyCardID() {
         return warrantyCardID;
     }
+
+    public Date getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(Date returndDate) {
+        this.returnDate = returndDate;
+    }
+
+    public Date getDonedDate() {
+        return donedDate;
+    }
+
+    public void setDonedDate(Date donedDate) {
+        this.donedDate = donedDate;
+    }
+
+    public Date getCompletedDate() {
+        return completedDate;
+    }
+
+    public void setCompletedDate(Date completedDate) {
+        this.completedDate = completedDate;
+    }
+
+    public Date getCanceldDate() {
+        return canceldDate;
+    }
+
+    public void setCanceldDate(Date canceldDate) {
+        this.canceldDate = canceldDate;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+    
+    
 
     public void setWarrantyCardID(int warrantyCardID) {
         this.warrantyCardID = warrantyCardID;
@@ -102,15 +149,15 @@ public class WarrantyCard {
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
+
+    @Override
+    public String toString() {
+        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returndDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
+    }
     
 
     
    
     
-    @Override
-    public String toString() {
-        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", productName=" + productName + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
-    }
-    
-    
+
 }

@@ -51,6 +51,18 @@
                                     <input class="form-control" type="text" readonly="" value="${feedbackUpdate.customerName}">
                                 </div>
                                 </div>
+                                <div class="row">
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label">Phone Number: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.customerPhoneNumber}" >
+                                </div>
+                            
+
+                                <div  class="mb-3 col-md-6">
+                                    <label class="form-label">Customer Email: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.customerEmail}">
+                                </div>
+                                </div>
                                 <div class="mb-3">
                                     <label class="form-label">Create Date: </label>
                                     <input class="form-control" type="text" readonly="" value="${feedbackUpdate.dateCreated}">
@@ -74,7 +86,7 @@
                                 <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Image : </label>
-                                    <a class="form-control"  href="${feedbackUpdate.imageURL}">${feedbackUpdate.imageURL}</a>
+                                    <img src="${feedbackUpdate.imageURL}" alt="" style="max-width: 100%; height: auto;">
                                 </div>
 
                                 <div class="mb-3 col-md-6">
