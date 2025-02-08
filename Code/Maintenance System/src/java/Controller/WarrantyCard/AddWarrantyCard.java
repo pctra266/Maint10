@@ -30,7 +30,7 @@ import jakarta.servlet.http.Part;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
-public class WarrantyCardAdd extends HttpServlet {
+public class AddWarrantyCard extends HttpServlet {
 
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();

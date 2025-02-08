@@ -72,7 +72,6 @@
                         <input type="hidden" name="page" value="${currentPage}">
                         <input type="hidden" name="sort" value="${sort}">
                         <input type="hidden" name="order" value="${order}">
-                        <input type="hidden" name="status" value="${status}" />
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -96,7 +95,7 @@
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
-                                <th style="width:9%">
+                                <th style="width:13%">
                                     Card Code
                                 </th>
                                 <th>
@@ -106,59 +105,17 @@
                                     Product Name
                                 </th>
 
-                                <th style="width:6%">
-                                    <form action="WarrantyCard" method="get" class="d-flex">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                  
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="${sort}" />
-                                        <input type="hidden" name="order" value="${order}" />
-                                        <select name="status" class="form-select form-select-sm d-inline-block custom-select" 
-                                                style="width: auto; padding-right:1px ; border: none; background: transparent; font: inherit; transform: translate(-0.38rem, 0.18rem)" 
-                                                onchange="this.form.submit()">
-                                            <option disabled selected>Status</option>
-                                            <option value="fixing" ${status=="fixing"?"selected":""}>Fixing</option>
-                                            <option value="done" ${status=="done"?"selected":""}>Done</option>
-                                            <option value="completed" ${status=="completed"?"selected":""}>Completed</option>
-                                            <option value="cancel" ${status=="cancel"?"selected":""}>Cancel</option>
-                                        </select> 
-                                        <i class="align-middle me-2 fas fa-fw fa-angle-down" style="transform: translate(-0.1rem, 0.7rem)"></i>
-                                    </form>
+                                <th style="width:5%">
+
+                                    Status
+
                                 </th>
 
                                 <th style="width:10%">
-                                    <form action="WarrantyCard" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                  
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="status" value="${status}" />
-                                        <input type="hidden" name="sort" value="createdDate" />
-                                        <input type="hidden" name="order" value="${sort eq 'createdDate' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'createdDate' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Created Date
-                                    </form>
-
+                                    Created Date
                                 </th>
                                 <th style="width:10%">
-                                    <form action="WarrantyCard" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                        
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="status" value="${status}" />
-                                        <input type="hidden" name="sort" value="returnDate" />
-                                        <input type="hidden" name="order" value="${sort eq 'returnDate' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <button type="submit" class="btn-sort">
-                                            <i class="align-middle fas fa-fw
-                                               ${sort eq 'returnDate' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
-                                            </i>
-                                        </button>
-                                        Return Date
-                                    </form>
-
+                                    Return Date
                                 </th>
                                 <th style="width:15%">
                                     Image
@@ -171,37 +128,34 @@
                                 <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
+                        <!--varStatus để lấy trạng thái của vòng lặp-->
+                        <c:forEach var="card" items="${cardList}" varStatus="status">
+                            <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
+                                <td>${status.index + 1 + (currentPage - 1) * size}</td>
+                                <td>${card.warrantyCardCode}</td>
+                                <td>${card.productCode}</td>
+                                <td>${card.productName}</td>
+                                <td>${card.warrantyStatus}</td>
+                                <td>${card.createdDate}</td>
+                                <td>${card.returnDate}</td>
+                                <td><img src="${card.image}" width="100%" height="auto" alt="alt"/></td>
+                                <td>${card.issueDescription}</td>
+                                <td class="table-action">
+                                    <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
+                                        <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                                        </svg>
+                                    </a>
+                                    <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${card.warrantyCardID}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                        <polyline points="3 6 5 6 21 6"></polyline>
+                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                        </svg>
+                                    </a>
+                                </td>
+                            </tr>
 
-                        <tbody>
-
-                            <!--varStatus để lấy trạng thái của vòng lặp-->
-                            <c:forEach var="card" items="${cardList}" varStatus="status">
-                                <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-                                    <td>${status.index + 1 + (currentPage - 1) * size}</td>
-                                    <td>${card.warrantyCardCode}</td>
-                                    <td>${card.productCode}</td>
-                                    <td>${card.productName}</td>
-                                    <td>${card.warrantyStatus}</td>
-                                    <td>${card.createdDate}</td>
-                                    <td>${card.returnDate}</td>
-                                    <td><img src="${card.image}" width="100%" height="auto" alt="alt"/></td>
-                                    <td>${card.issueDescription}</td>
-                                    <td class="table-action">
-                                        <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle">
-                                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
-                                            </svg>
-                                        </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${card.warrantyCardID}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
-
-                                <!-- Modal for each card -->
+                            <!-- Modal for each card -->
                             <div class="modal fade" id="centeredModalPrimary_${card.warrantyCardID}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -220,17 +174,10 @@
                                 </div>
                             </div>
                         </c:forEach>
+                        <tbody>
 
                         </tbody>
                     </table>
-                    <c:if test="${totalCards==0}">
-                        <div class="alert alert-primary alert-dismissible" role="alert">
-                            <div class="alert-message text-center">
-                                <strong style="font-size:1.6rem">No suitable card in the filter</strong>
-                            </div>
-                        </div>
-
-                    </c:if>
 
                     <!-- Phân trang -->
                     <div class="text-center">
@@ -239,10 +186,10 @@
                                 <c:set var="page" value="totalPages" />
                             </c:if>
                             <!-- Nút "Đầu" -->
-                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
 
                             <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
+                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
 
                             <!-- Các số trang -->
                             <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
@@ -259,14 +206,14 @@
                             </c:if>
 
                             <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
+                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
                             </c:forEach>
 
                             <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
+                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
 
                             <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
                         </div>
 
                         <!-- Ô nhập trang -->
@@ -275,8 +222,8 @@
                                 <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
                                 <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
                                 <input type="hidden" name="sort" value="${sort}">
-                                <input type="hidden" name="order" value="${order}">
-                                <input type="hidden" name="search" value="${search}">
+                        <input type="hidden" name="order" value="${order}">
+                        <input type="hidden" name="search" value="${search}">
                                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
                             </form>
                         </div>
