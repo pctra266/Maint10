@@ -11,6 +11,11 @@
 
         <style>
             /* Base Styles */
+
+            .gom{
+                display: flex;
+            }
+
             body {
                 font-family: 'Inter', sans-serif;
                 background-color: #f5f5f5;
@@ -199,8 +204,6 @@
                     padding: 6px 10px;
                 }
             }
-
-
         </style>
     </head>
 
@@ -212,46 +215,59 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
 
-                    <form action="viewProduct">
-                        <button class="search" type="submit">All Product</button>
-                    </form>
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-danger">
+                            ${errorMessage}
+                        </div>
+                    </c:if>
 
-                    <form action="addP">
-                        <button class="add-product" type="submit">Add Product</button>
-                    </form>
 
-                    <select id="sortQuantity">
-                        <option value="">Sort by Quantity</option>
-                        <option value="asc" ${sortQuantity == 'asc' ? 'selected' : ''}>Ascending</option>
-                        <option value="desc" ${sortQuantity == 'desc' ? 'selected' : ''}>Descending</option>
-                    </select>
-
-                    <select id="sortWarranty">
-                        <option value="">Sort by Warranty</option>
-                        <option value="asc" ${sortWarranty == 'asc' ? 'selected' : ''}>Ascending</option>
-                        <option value="desc" ${sortWarranty == 'desc' ? 'selected' : ''}>Descending</option>
-                    </select>
-                    <form method="get" action="viewProduct">
-                        <input type="text" name="searchCode" placeholder="Search by Code" value="${searchCode}">
-                        <input type="text" name="searchName" placeholder="Search by Name" value="${searchName}">
-
-                        <select name="brandId">
-                            <option value="">Select Brand</option>
-                            <c:forEach var="p" items="${listBrand}">
-                                <option value="${p.brandId}"${brandID == p.brandId ? 'selected' : ''}>
-                                    ${p.brandName}
-                                </option>
-                            </c:forEach>
+                    <div class="gom">
+                        <select id="sortQuantity">
+                            <option value="">Sort by Quantity</option>
+                            <option value="asc" ${sortQuantity == 'asc' ? 'selected' : ''}>Ascending</option>
+                            <option value="desc" ${sortQuantity == 'desc' ? 'selected' : ''}>Descending</option>
                         </select>
 
-                        <select name="type">
-                            <option value="all">All Types</option>
-                            <c:forEach var="t" items="${listType}">
-                                <option value="${t}" ${type == t ? 'selected' : ''}>${t}</option>
-                            </c:forEach>
+                        <select id="sortWarranty">
+                            <option value="">Sort by Warranty</option>
+                            <option value="asc" ${sortWarranty == 'asc' ? 'selected' : ''}>Ascending</option>
+                            <option value="desc" ${sortWarranty == 'desc' ? 'selected' : ''}>Descending</option>
                         </select>
-                        <button class="search" type="submit">Search</button>
-                    </form>
+
+                        <form method="get" action="viewProduct">
+
+                            <input type="text" id="searchCode" name="searchCode" oninput="validateCode()" placeholder="Search by Code" value="${searchCode}">
+
+                            <input type="text" name="searchName" placeholder="Search by Name" value="${searchName}">
+
+                            <select name="brandId">
+                                <option value="">Select Brand</option>
+                                <c:forEach var="p" items="${listBrand}">
+                                    <option value="${p.brandId}"${brandID == p.brandId ? 'selected' : ''}>
+                                        ${p.brandName}
+                                    </option>
+                                </c:forEach>
+                            </select>
+
+                            <select name="type">
+                                <option value="all">All Types</option>
+                                <c:forEach var="t" items="${listType}">
+                                    <option value="${t}" ${type == t ? 'selected' : ''}>${t}</option>
+                                </c:forEach>
+                            </select>
+
+                            <button class="search" type="submit">Search</button>
+                        </form>
+
+                        <form action="viewProduct">
+                            <button class="search" type="submit">All Product</button>
+                        </form>
+
+                        <form action="addP">
+                            <button class="add-product" type="submit">Add Product</button>
+                        </form>
+                    </div>
 
                     <h1>Product List</h1>
                     <table>
@@ -289,7 +305,6 @@
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </a>
                                     </td>
-
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -319,9 +334,7 @@
                                 Last
                             </a>
                         </c:if>
-
                     </div>
-
 
                     <script>
                         document.getElementById("sortQuantity").addEventListener("change", function () {
@@ -337,6 +350,17 @@
                             url.searchParams.delete("sortQuantity");
                             window.location.href = url;
                         });
+
+                        function validateCode() {
+                            let input = document.getElementById("searchCode");
+                            let value = input.value;
+
+                            // Chỉ cho phép nhập chữ và số (không có dấu cách hoặc ký tự đặc biệt)
+                            if (!/^[a-zA-Z0-9]*$/.test(value)) {
+                                alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
+                                input.value = value.replace(/[^a-zA-Z0-9]/g, ""); // Xóa ký tự không hợp lệ
+                            }
+                        }
                     </script>
 
                 </main>

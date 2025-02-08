@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/web/META-INF/context.xml</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/ChangePasswordServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/DBContext.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
         </group>
         <group>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/CustomerServlet.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Customer.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/Encryption.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/New%20folder%20(2)/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
         </group>
     </open-files>
 </project-private>
