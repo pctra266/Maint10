@@ -181,6 +181,16 @@
 
         <script src="js/app.js"></script>
         <script src="js/format-input.js"></script>
+        <script>
+                                    function previewImage(event) {
+                                        const reader = new FileReader();
+                                        reader.onload = function () {
+                                            const output = document.getElementById('currentImage');
+                                            output.src = reader.result;
+                                        };
+                                        reader.readAsDataURL(event.target.files[0]);
+                                    }
+        </script>
     </body>
 
 </html>

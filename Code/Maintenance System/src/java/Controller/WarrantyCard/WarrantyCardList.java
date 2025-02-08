@@ -15,7 +15,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import Model.WarrantyCard;
-import Utils.NumberUtils;
+import Utils.FormatUtils;
+import Utils.Pagination;
 import Utils.SearchUtils;
 import java.util.ArrayList;
 
@@ -42,11 +43,11 @@ public class WarrantyCardList extends HttpServlet {
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search")) ;
-        int page = (NumberUtils.tryParseInt(pageParam) != null) ? NumberUtils.tryParseInt(pageParam) : 1;
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         Integer pageSize;
-        pageSize = (NumberUtils.tryParseInt(pageSizeParam) != null) ? NumberUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
         //--------------------------------------------------------------------------
         List<WarrantyCard> cards = new ArrayList<>();
         int totalCards = paraSearch == null || paraSearch.isBlank() ? warrantyCardDAO.getTotalCards() : warrantyCardDAO.getTotalSearchCards(paraSearch);
@@ -61,9 +62,10 @@ public class WarrantyCardList extends HttpServlet {
         if (createStatus != null && createStatus.equals("true")) {
             request.setAttribute("createStatus", "Card created successfully");
         }
-
+        request.setAttribute(paraSearch, page);
         request.setAttribute("cardList", cards);
          request.setAttribute("totalComponents", totalCards);
+         request.setAttribute("listSize", Pagination.listPageSize(totalCards));
         request.setAttribute("search", paraSearch);
         request.setAttribute("totalPagesToShow", 5);
         request.setAttribute("size", pageSize);

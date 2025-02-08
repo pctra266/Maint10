@@ -75,10 +75,9 @@
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <option value="5" ${size==5?"selected":""}>5</option>
-                                    <option value="7" ${size==7?"selected":""}>7</option>
-                                    <option value="10" ${size==10?"selected":""}>10</option>
-                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                    <c:forEach items="${listSize}" var="s">
+                                        <option value="${s}" ${size==s?"selected":""}>${s}</option>
+                                    </c:forEach>
                                 </select> 
                                 entries
                             </label>
@@ -112,8 +111,14 @@
 
                                 </th>
 
-                                <th style="width:15%">
+                                <th style="width:10%">
                                     Created Date
+                                </th>
+                                <th style="width:10%">
+                                    Return Date
+                                </th>
+                                <th style="width:15%">
+                                    Image
                                 </th>
 
                                 <th style="width:15%">
@@ -132,6 +137,8 @@
                                 <td>${card.productName}</td>
                                 <td>${card.warrantyStatus}</td>
                                 <td>${card.createdDate}</td>
+                                <td>${card.returnDate}</td>
+                                <td><img src="${card.image}" width="100%" height="auto" alt="alt"/></td>
                                 <td>${card.issueDescription}</td>
                                 <td class="table-action">
                                     <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}">
