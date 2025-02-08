@@ -118,6 +118,9 @@ public class ComponentAction extends HttpServlet {
         } else if (newCode.isBlank()) {
             request.setAttribute("codeAlert", "Code must not be empty!");
             canAdd = false;
+        } else if (componentDAO.isComponentCodeExist(newCode)) {
+            request.setAttribute("codeAlert", "Code existed, choose another!");
+            canAdd = false;
         } else {
             request.setAttribute("code", newCode);
         }
@@ -154,8 +157,8 @@ public class ComponentAction extends HttpServlet {
         if (canAdd) {
             String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
             Component component = new Component();
-            component.setComponentName(newName);
-            component.setComponentCode(newCode);
+            component.setComponentName(newName.trim());
+            component.setComponentCode(newCode.trim());
             component.setType(newType);
             component.setBrand(newBrand);
             component.setPrice(newPrice);
@@ -200,6 +203,10 @@ public class ComponentAction extends HttpServlet {
         if (newCode == null || newCode.isBlank()) {
             request.setAttribute("codeAlert", "Code must not be empty!");
             canUpdate = false;
+        } else if (componentDAO.isComponentCodeExist(newCode)
+                && !newCode.trim().equals(component.getComponentCode())) {
+            request.setAttribute("codeAlert", "Code exists, choose another!");
+            canUpdate = false;
         }
         if (componentDAO.getTypeID(newType) == null) {
             canUpdate = false;
@@ -222,8 +229,8 @@ public class ComponentAction extends HttpServlet {
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
-            component.setComponentCode(newCode);
-            component.setComponentName(newName);
+            component.setComponentCode(newCode.trim());
+            component.setComponentName(newName.trim());
             component.setType(newType);
             component.setBrand(newBrand);
             component.setQuantity(newQuantity);
@@ -252,7 +259,6 @@ public class ComponentAction extends HttpServlet {
     }
 
 // Lưu ảnh vào thư mục /img/Component
-
     private void handleComponentActions(HttpServletRequest request, HttpServletResponse response, String action) throws IOException, ServletException {
         String componentID = request.getParameter("ID");
         Integer id = FormatUtils.tryParseInt(componentID);

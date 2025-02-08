@@ -335,7 +335,6 @@ public class WarrantyCardDAO extends DBContext {
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        Date returnDate = new Date(2, 0, 1); // or any specific date you want to set
     }
 
 }
