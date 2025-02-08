@@ -46,19 +46,32 @@ public class ViewProduct extends HttpServlet {
 
         Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.parseInt(brandIdParam) : null;
 
-        // 🔹 Xử lý: Loại bỏ khoảng trắng thừa giữa các từ
-        searchName = searchName.replaceAll("\\s+", " "); // Chỉ giữ 1 dấu cách giữa các từ
+        // 🔹 Chuẩn hóa input: Xóa khoảng trắng thừa
+        searchName = searchName.replaceAll("\\s+", " ");
 
-        // 🔹 Kiểm tra định dạng (chỉ cho phép chữ cái, số, và dấu cách)
+        // 🔹 Kiểm tra định dạng nhập vào
         if (!searchName.matches("^[a-zA-Z0-9 ]*$")) {
             errorMessage = "Tên sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
         } else if (!searchCode.matches("^[a-zA-Z0-9 ]*$")) {
             errorMessage = "Mã sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
         }
 
+        List<Product> productList;
+        int totalPages = 1;
+
         if (errorMessage != null) {
-            // 🔹 Gửi thông báo lỗi sang JSP nếu có lỗi
-            request.setAttribute("errorMessage", errorMessage);
+            // 🔹 Nếu có lỗi, lấy danh sách sản phẩm từ đầu mà không áp dụng bộ lọc tìm kiếm
+            int page = 1;
+            int recordsPerPage = 8;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int offset = (page - 1) * recordsPerPage;
+
+            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
+            productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
+            int totalRecords = productDAO.getTotalProducts(null, null, null, null);
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         } else {
             int page = 1;
             int recordsPerPage = 8;
@@ -68,16 +81,20 @@ public class ViewProduct extends HttpServlet {
             int offset = (page - 1) * recordsPerPage;
 
             // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
-            List<Product> productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
+            productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
             int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
-            int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-
-            request.setAttribute("productList", productList);
-            request.setAttribute("currentPage", page);
-            request.setAttribute("totalPages", totalPages);
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         }
 
-        // 🔹 Truyền lại dữ liệu nhập để hiển thị trên giao diện
+        if (productList.isEmpty()) {
+            errorMessage = "Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.";
+        }
+
+        // 🔹 Truyền lại dữ liệu vào JSP
+        request.setAttribute("errorMessage", errorMessage);
+        request.setAttribute("productList", productList);
+        request.setAttribute("currentPage", 1);
+        request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchName", searchName);
         request.setAttribute("searchCode", searchCode);
         request.setAttribute("brandID", brandId);
