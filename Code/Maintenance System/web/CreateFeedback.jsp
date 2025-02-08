@@ -25,10 +25,10 @@
                             <h1 class="text-center">Create Feedback</h1>
                         </div>
                          <div class="card-body">
-                        <form action="feedback" method="post">
+                             <form action="feedback" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="createFeedback">
                             <div>
-                                <input name="customerId" type="hidden" value="1" >
+                                <input style="display: none" name="customerId" type="text" value="1" >
                             </div>
                             <div>
                                 <label class="form-label">Product: </label>
@@ -43,7 +43,8 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label class="form-label">Image: </label>
-                                    <input class="form-control" name="imageURL" type="file">
+                                    <img src="" id="currentImage" alt="" style="max-width: 100%; height: auto;">
+                                    <input class="form-control" name="imageURL" type="file" onchange="previewImage(event)">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Video: </label>
@@ -63,5 +64,15 @@
             </div>
         </div>
         <script src="js/app.js"></script>
+         <script>
+            function previewImage(event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    const output = document.getElementById('currentImage');
+                    output.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            }
+        </script>
     </body>
 </html>

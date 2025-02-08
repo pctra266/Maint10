@@ -16,11 +16,14 @@ import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +31,11 @@ import java.util.ArrayList;
  * @author Tra Pham
  */
 @WebServlet(name = "FeedbackController", urlPatterns = {"/feedback"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class FeedbackController extends HttpServlet {
 
     /**
@@ -261,17 +269,55 @@ public class FeedbackController extends HttpServlet {
             case "createFeedback":
                 String noteCreate = request.getParameter("note");
                 String warrantyCardId = request.getParameter("warrantyCardId");
+                Part imagePart = request.getPart("imageURL");
                 String imageURL = "";
+                if(imagePart != null){
+                    String imagePath = saveImage(imagePart, request);
+                    imageURL = imagePath;
+                }
+                System.out.println("image path la : " + imagePart);
                 String videoURL = "";
                 daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
-                response.sendRedirect("feedback?action=createFeedback");
+                response.sendRedirect("feedback?action=viewListFeedbackByCustomerId");
                 break;
             default:
                 break;
         }
 
     }
+// Lưu ảnh vào thư mục /img/Component
+    private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
+        if (imagePart == null || imagePart.getSize() == 0) {
+            return null;
+        }
 
+        // Đường dẫn tuyệt đối đến thư mục img/Component
+        String uploadPath = request.getServletContext().getRealPath("/img/Feedback");
+        System.out.println("Upload Path: " + uploadPath); // Kiểm tra đường dẫn
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+        }
+
+        // Tạo tên file duy nhất
+        String originalFileName = imagePart.getSubmittedFileName();
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            return null; // Trả về null nếu không có tên file
+        }
+        String fileName = originalFileName;
+//    String fileName = System.currentTimeMillis() + "_" + originalFileName;
+        String filePath = uploadPath + File.separator + fileName;
+
+        try {
+            imagePart.write(filePath); // Ghi file lên server
+        } catch (IOException e) {
+            e.printStackTrace(); // In ra lỗi nếu có
+            return null; // Trả về null nếu có lỗi
+        }
+
+        // Trả về đường dẫn tương đối để lưu vào database
+        return "img/Feedback/" + fileName; // Chỉ cần đường dẫn tương đối
+    }
     /**
      * Returns a short description of the servlet.
      *
