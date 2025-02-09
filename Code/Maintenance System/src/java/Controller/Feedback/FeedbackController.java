@@ -270,13 +270,18 @@ public class FeedbackController extends HttpServlet {
                 String noteCreate = request.getParameter("note");
                 String warrantyCardId = request.getParameter("warrantyCardId");
                 Part imagePart = request.getPart("imageURL");
+                Part videoPart = request.getPart("videoURL");
                 String imageURL = "";
                 if(imagePart != null){
-                    String imagePath = saveImage(imagePart, request);
+                    String imagePath = saveMedia(imagePart, request);
                     imageURL = imagePath;
                 }
                 System.out.println("image path la : " + imagePart);
                 String videoURL = "";
+                if(videoPart != null){
+                    String videoPath = saveMedia(videoPart, request);
+                    videoURL = videoPath;
+                }
                 daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
                 response.sendRedirect("feedback?action=viewListFeedbackByCustomerId");
                 break;
@@ -286,37 +291,45 @@ public class FeedbackController extends HttpServlet {
 
     }
 // Lưu ảnh vào thư mục /img/Component
-    private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
-        if (imagePart == null || imagePart.getSize() == 0) {
+    private String saveMedia(Part mediaPart, HttpServletRequest request) throws IOException {
+        if (mediaPart == null || mediaPart.getSize() == 0) {
             return null;
         }
-
-        // Đường dẫn tuyệt đối đến thư mục img/Component
-        String uploadPath = request.getServletContext().getRealPath("/img/Feedback");
-        System.out.println("Upload Path: " + uploadPath); // Kiểm tra đường dẫn
+        
+        String contentType = mediaPart.getContentType();
+        String folder = "";
+        if (contentType.startsWith("image/")) {
+            folder = "img/Feedback/";
+        } else if (contentType.startsWith("video/")) {
+            folder = "video/Feedback/";
+        } else {
+            return null; // Không phải ảnh hoặc video
+        }
+        
+        // Đường dẫn tuyệt đối
+        String uploadPath = request.getServletContext().getRealPath("/" + folder);
         File uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
-            uploadDir.mkdirs(); // Tạo thư mục nếu chưa tồn tại
+            uploadDir.mkdirs();
         }
 
-        // Tạo tên file duy nhất
-        String originalFileName = imagePart.getSubmittedFileName();
+        // Xử lý tên file
+        String originalFileName = mediaPart.getSubmittedFileName();
         if (originalFileName == null || originalFileName.isEmpty()) {
-            return null; // Trả về null nếu không có tên file
+            return null;
         }
-        String fileName = originalFileName;
-//    String fileName = System.currentTimeMillis() + "_" + originalFileName;
+        
+        String fileName = System.currentTimeMillis() + "_" + originalFileName;
         String filePath = uploadPath + File.separator + fileName;
 
         try {
-            imagePart.write(filePath); // Ghi file lên server
+            mediaPart.write(filePath);
         } catch (IOException e) {
-            e.printStackTrace(); // In ra lỗi nếu có
-            return null; // Trả về null nếu có lỗi
+            e.printStackTrace();
+            return null;
         }
 
-        // Trả về đường dẫn tương đối để lưu vào database
-        return "img/Feedback/" + fileName; // Chỉ cần đường dẫn tương đối
+        return folder + fileName;
     }
     /**
      * Returns a short description of the servlet.

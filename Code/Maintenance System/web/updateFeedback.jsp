@@ -91,7 +91,7 @@
 
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label">Video : </label>
-                                    <a class="form-control" href="${feedbackUpdate.videoURL}">${feedbackUpdate.videoURL}</a>
+                                    <video src="${feedbackUpdate.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video>
                                 </div>
                                 </div>
                                  <div class="mb-3">

@@ -44,11 +44,12 @@
                                 <div class="col-md-6">
                                     <label class="form-label">Image: </label>
                                     <img src="" id="currentImage" alt="" style="max-width: 100%; height: auto;">
-                                    <input class="form-control" name="imageURL" type="file" onchange="previewImage(event)">
+                                    <input class="form-control" accept="image/*" name="imageURL" type="file" onchange="previewImage(event)">
                                 </div>
                                 <div class="col-md-6">
                                     <label class="form-label">Video: </label>
-                                    <input class="form-control" name="videoURL" type="file">
+                                    <video src="" id="currentVideo" style="max-width: 100%; height: auto;" controls="" ></video>
+                                    <input class="form-control"  accept="video/*" name="videoURL" type="file" onchange="previewVideo(event)">
                                 </div>
                             </div>
                             <div>
@@ -66,12 +67,34 @@
         <script src="js/app.js"></script>
          <script>
             function previewImage(event) {
-                const reader = new FileReader();
-                reader.onload = function () {
-                    const output = document.getElementById('currentImage');
-                    output.src = reader.result;
-                };
-                reader.readAsDataURL(event.target.files[0]);
+                    const file = event.target.files[0];
+                    if (!file) return; 
+
+                    if (!file.type.startsWith("image/")) {
+                        alert("Vui lòng chọn một tệp hình ảnh!");
+                        event.target.value = "";
+                        return;
+                    }else{
+                        const img = document.getElementById("currentImage");
+                        img.src = URL.createObjectURL(file); 
+                    }
+
+                    
+            }
+            function previewVideo(event) {
+                const file = event.target.files[0];
+                if (!file) return; 
+
+                if (!file.type.startsWith("video/")) {
+                    alert("Vui lòng chọn một tệp video!");
+                    event.target.value = "";
+                    return;
+                }
+
+                const video = document.getElementById("currentVideo");
+                video.src = URL.createObjectURL(file); 
+//                video.load(); // Nạp lại video để hiển thị
+//                video.play(); // (Tùy chọn) Tự động phát video
             }
         </script>
     </body>

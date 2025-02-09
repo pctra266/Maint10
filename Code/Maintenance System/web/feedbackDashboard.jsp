@@ -40,7 +40,7 @@
                                     <td>${o.note}</td>
                                     
                                     <td><img src="${o.imageURL}" alt="" style="max-width: 100%; height: auto;"></td>
-                                    <td>${(o.imageURL != null)?o.videoURL:""}</td>
+                                    <td><video src="${o.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video></td>
                                     <td><a href="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}">Delete</a></td>
                                 </tr>
                             </c:forEach>
