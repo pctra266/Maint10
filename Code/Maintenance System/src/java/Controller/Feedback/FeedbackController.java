@@ -194,6 +194,7 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
@@ -267,11 +268,13 @@ public class FeedbackController extends HttpServlet {
                 response.sendRedirect("feedback");
                 break;
             case "createFeedback":
-                String noteCreate = request.getParameter("note");
+                String noteCreate = SearchUtils.preprocessSearchQuery(request.getParameter("note"));
                 String warrantyCardId = request.getParameter("warrantyCardId");
                 Part imagePart = request.getPart("imageURL");
                 Part videoPart = request.getPart("videoURL");
+                String mess = "";
                 String imageURL = "";
+                boolean valid = true;
                 if(imagePart != null){
                     String imagePath = saveMedia(imagePart, request);
                     imageURL = imagePath;
@@ -282,8 +285,24 @@ public class FeedbackController extends HttpServlet {
                     String videoPath = saveMedia(videoPart, request);
                     videoURL = videoPath;
                 }
-                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
-                response.sendRedirect("feedback?action=viewListFeedbackByCustomerId");
+                
+                // valid
+                if(noteCreate == null || noteCreate.trim().isEmpty()){
+                    valid = false;
+                }
+                
+               
+                if(valid){
+                    daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
+                    mess = "Create successfully";
+                    response.sendRedirect("feedback?action=viewListFeedbackByCustomerId&mess="+mess);
+                }else{
+                    ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
+                    request.setAttribute("listProductByCustomerId", listProductByCustomerId);
+                    mess = "You need fill feedback note";
+                    request.setAttribute("mess", mess);
+                    request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
+                }
                 break;
             default:
                 break;

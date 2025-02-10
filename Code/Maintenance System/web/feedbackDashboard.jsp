@@ -20,6 +20,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    <div class="alert-success">${param.mess}</div>
                     <h1 class="text-center">List Feedback</h1>
                     <div><a class="btn btn-success" href="feedback?action=createFeedback"> Create Feedback</a></div>
                     <div>

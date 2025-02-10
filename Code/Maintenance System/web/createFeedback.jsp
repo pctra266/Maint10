@@ -24,6 +24,9 @@
                         <div class="card-header">
                             <h1 class="text-center">Create Feedback</h1>
                         </div>
+                        <div class="alert-danger">
+                            ${mess}
+                        </div>
                          <div class="card-body">
                              <form action="feedback" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="createFeedback">
