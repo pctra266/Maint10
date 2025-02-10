@@ -52,6 +52,7 @@ CREATE TABLE Customer (
     UsernameC NVARCHAR(50) UNIQUE,
     PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
+	Gender NVARCHAR(10),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
@@ -120,8 +121,13 @@ CREATE TABLE WarrantyCard (
     WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
     ProductDetailID INT NOT NULL REFERENCES ProductDetail(ProductDetailID),
     IssueDescription NVARCHAR(MAX),
-    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'completed', 'cancel')),
-    CreatedDate DATETIME DEFAULT GETDATE()
+    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'done', 'completed', 'cancel')),
+	[ReturnDate] DATETIME, --Ngay du kien
+	DoneDate DATETIME, -- Ngay sua xong
+	CompleteDate DATETIME, --Ngay tra may
+	CancelDate DATETIME, --Ngay huy card
+    CreatedDate DATETIME DEFAULT GETDATE(),
+	[Image] NVARCHAR(MAX)
 );
 
 -- ComponentRequest Table
@@ -206,4 +212,3 @@ CREATE TABLE FeedbackLog (
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyStatus ON WarrantyCard(WarrantyStatus);
-

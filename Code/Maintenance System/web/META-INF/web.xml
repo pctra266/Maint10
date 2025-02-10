@@ -9,8 +9,6 @@
 
         <url-pattern>/*</url-pattern>
     </filter-mapping>-->
-
-
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -87,6 +85,16 @@
         <servlet-name>ViewProduct</servlet-name>
         <servlet-class>Controller.Product.ViewProduct</servlet-class>
     </servlet>
+    <servlet>
+
+        <servlet-name>YourWarrantyCard</servlet-name>
+        <servlet-class>Controller.WarrantyCard.YourWarrantyCard</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>PurchaseProduct</servlet-name>
+        <servlet-class>Controller.PurchaseProduct</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -191,4 +199,14 @@
         <servlet-name>ViewProduct</servlet-name>
         <url-pattern>/viewProduct</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+
+        <servlet-name>YourWarrantyCard</servlet-name>
+        <url-pattern>/yourwarrantycard</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PurchaseProduct</servlet-name>
+        <url-pattern>/purchaseproduct</url-pattern>
+    </servlet-mapping>
+
 </web-app>

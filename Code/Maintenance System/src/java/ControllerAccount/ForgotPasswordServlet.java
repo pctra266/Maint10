@@ -10,6 +10,7 @@ import DAO.StaffDAO;
 import Email.Email;
 import Model.Customer;
 import Model.Staff;
+import Utils.Encryption;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -85,11 +86,12 @@ public class ForgotPasswordServlet extends HttpServlet {
             return;
         }
         String randomPassword = randomPassword(8);
+        String encryptionPassword = Encryption.EncryptionPassword(randomPassword);
         if (staff != null) {
-            staff.setPasswordS(randomPassword);
+            staff.setPasswordS(encryptionPassword );
             staffDao.changePassword(staff);
         } else if (customer != null) {
-            customer.setPasswordC(randomPassword);
+            customer.setPasswordC(encryptionPassword );
             customerDao.changePassword(customer);
         }
 

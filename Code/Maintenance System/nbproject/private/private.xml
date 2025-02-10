@@ -8,6 +8,21 @@
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/StaffDAO.java</file>
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/web/Staff.jsp</file>
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/web/add-staff.jsp</file>
+        <group>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/CustomerDAO.java</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/Customer.jsp</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/SortCustomer.jsp</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/CustomerDAO.java</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/Customer.jsp</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/SortCustomer.jsp</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/Customer.jsp</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/UpdateCustomerForm.jsp</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/CustomerSearch.jsp</file>
+            <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/SortCustomer.jsp</file>
         </group>
     </open-files>
 </project-private>

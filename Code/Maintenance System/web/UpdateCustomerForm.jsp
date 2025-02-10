@@ -1,3 +1,4 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -30,56 +31,101 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="m-sm-3">
-                                    <form action="customer?action=update" method="post">
-                                        
-                                          <!-- Customer ID (hidden for security) -->
+
+                                 
+                                    <c:if test="${not empty requestScope.error}">
+                                        <div class="alert alert-danger" role="alert">
+                                            ${requestScope.error}
+                                        </div>
+                                    </c:if>
+
+                                   
+                                    <c:if test="${not empty requestScope.mess}">
+                                        <div class="alert alert-success" role="alert">
+                                            ${requestScope.mess}
+                                        </div>
+                                    </c:if>
+
+                                
+                                    <form action="customer?action=update" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="customerId" value="${customer.customerID}" />
-                                        <input type="hidden" name="username" value ="${customer.usernameC}"  />
-                                        <input type="hidden" name="password" value ="${customer.passwordC}" />
-                                        
+                                        <input type="hidden" name="username" value="${customer.usernameC}" />
+                                        <input type="hidden" name="password" value="${customer.passwordC}" />
+
+                                  
                                         <div class="mb-3">
                                             <label class="form-label">Name</label>
-                                            <input class="form-control form-control-lg" name="name" placeholder="Enter customer's name" value="${customer.name}" />
-                                        </div>
-
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Email</label>
-                                            <input class="form-control form-control-lg" type="email" name="email" placeholder="Enter customer's email" value="${customer.email}" />
-                                        </div>
-
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Phone</label>
-                                            <input class="form-control form-control-lg" type="text" name="phone" placeholder="Enter customer's phone number" value="${customer.phone}" />
-                                        </div>
-
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Address</label>
-                                            <input class="form-control form-control-lg" name="address" placeholder="Enter customer's address" value="${customer.address}" />
+                                            <input class="form-control form-control-lg" name="name"
+                                                placeholder="Enter customer's name" 
+                                                value="${customer.name != null ? customer.name : ''}" />
                                         </div>
 
                                       
                                         <div class="mb-3">
-                                            <label class="form-label">Image</label>
-                                            <input class="form-control form-control-lg" type="text" name="image" />
+                                            <label class="form-label">Email</label>
+                                            <input class="form-control form-control-lg" type="email" name="email"
+                                                placeholder="Enter customer's email" 
+                                                value="${customer.email != null ? customer.email : ''}" />
                                         </div>
 
                                        
-                                  
+                                        <div class="mb-3">
+                                            <label class="form-label">Gender</label>
+                                            <div>
+                                                <input type="radio" id="male" name="gender" value="Male"
+                                                    <c:if test="${customer.gender == 'Male'}">checked</c:if> />
+                                                <label for="male">Male</label>
 
-                                        
+                                                <input type="radio" id="female" name="gender" value="Female"
+                                                    <c:if test="${customer.gender == 'Female'}">checked</c:if> />
+                                                <label for="female">Female</label>
+                                            </div>
+                                        </div>
+
+                                     
+                                        <div class="mb-3">
+                                            <label class="form-label">Phone</label>
+                                            <input class="form-control form-control-lg" type="text" name="phone"
+                                                placeholder="Enter customer's phone number" 
+                                                value="${customer.phone != null ? customer.phone : ''}" />
+                                        </div>
+
+                                      
+                                        <div class="mb-3">
+                                            <label class="form-label">Address</label>
+                                            <input class="form-control form-control-lg" name="address"
+                                                placeholder="Enter customer's address" 
+                                                value="${customer.address != null ? customer.address : ''}" />
+                                        </div>
+
+                                       
+                                        <div class="mb-3">
+                                            <label class="form-label">Current Image</label><br>
+                                            <c:if test="${not empty customer.image}">
+                                                <img src="${customer.image}" alt="Customer Image"
+                                                    style="width: 150px; height: auto; border-radius: 8px;">
+                                            </c:if>
+                                            <c:if test="${empty customer.image}">
+                                                <p>No image available</p>
+                                            </c:if>
+                                        </div>
+
+                                      
+                                        <div class="mb-3">
+                                            <label class="form-label">Upload New Image</label>
+                                            <input class="form-control form-control-lg" type="file" name="image" />
+                                        </div>
+
+                                      
                                         <div class="d-grid gap-2 mt-3">
                                             <button type="submit" class="btn btn-lg btn-primary">Update</button>
                                         </div>
-
-                                        
-                                        <a style="color: red">${requestScope.error}</a>
                                     </form>
                                 </div>
                             </div>
                         </div>
+
+                       
                         <div class="text-center mb-3">
                             <a href="customer">Back to Customer List</a>
                         </div>
@@ -90,7 +136,6 @@
     </main>
 
     <script src="js/app.js"></script>
-
 </body>
 
 </html>

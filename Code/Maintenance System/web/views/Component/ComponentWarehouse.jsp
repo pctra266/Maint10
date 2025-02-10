@@ -69,10 +69,9 @@
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <option value="5" ${size==5?"selected":""}>5</option>
-                                    <option value="7" ${size==7?"selected":""}>7</option>
-                                    <option value="10" ${size==10?"selected":""}>10</option>
-                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                    <c:forEach items="${listSize}" var="s">
+                                        <option value="${s}" ${size==s?"selected":""}>${s}</option>
+                                    </c:forEach>
                                 </select> 
                                 entries
                             </label>
@@ -165,6 +164,7 @@
                                 <th style="width:8%">Action<a href="ComponentWarehouse?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
+                         <tbody>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
                         <c:forEach var="component" items="${components}" varStatus="status">
                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                         </c:forEach>
-                        <tbody>
+                       
 
                         </tbody>
                     </table
@@ -272,6 +272,7 @@
                             </div>
                         </c:if>
                     </div>
+
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />
             </div>
@@ -279,6 +280,7 @@
         </div>
 
         <script src="js/app.js"></script>
+                <script src="js/format-input.js"></script>
 
     </body>
 

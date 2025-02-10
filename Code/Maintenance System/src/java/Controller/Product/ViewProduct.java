@@ -9,7 +9,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ViewProduct extends HttpServlet {
@@ -36,39 +35,65 @@ public class ViewProduct extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         List<Brand> listBrand = productDAO.getAllBrands();
         List<String> productTypes = productDAO.getDistinctProductTypes();
+        String errorMessage = null;
 
         String brandIdParam = request.getParameter("brandId");
-        String searchName = (request.getParameter("searchName") != null && !request.getParameter("searchName").isEmpty()) ? request.getParameter("searchName") : "";
-        String searchCode = (request.getParameter("searchCode") != null && !request.getParameter("searchCode").isEmpty()) ? request.getParameter("searchCode") : "";
-        String type = (request.getParameter("type") != null && !request.getParameter("type").isEmpty()) ? request.getParameter("type") : "all";
-        String sortQuantity = (request.getParameter("sortQuantity") != null && !request.getParameter("sortQuantity").isEmpty()) ? request.getParameter("sortQuantity") : "";
-        String sortWarranty = (request.getParameter("sortWarranty") != null && !request.getParameter("sortWarranty").isEmpty())
-                ? request.getParameter("sortWarranty") : "";
+        String searchName = request.getParameter("searchName") != null ? request.getParameter("searchName").trim() : "";
+        String searchCode = request.getParameter("searchCode") != null ? request.getParameter("searchCode").trim() : "";
+        String type = request.getParameter("type") != null ? request.getParameter("type").trim() : "all";
+        String sortQuantity = request.getParameter("sortQuantity") != null ? request.getParameter("sortQuantity").trim() : "";
+        String sortWarranty = request.getParameter("sortWarranty") != null ? request.getParameter("sortWarranty").trim() : "";
 
         Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.parseInt(brandIdParam) : null;
 
-        int page = 1;
-        int recordsPerPage = 8;
-        if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+        // 🔹 Chuẩn hóa input: Xóa khoảng trắng thừa
+        searchName = searchName.replaceAll("\\s+", " ");
+
+        // 🔹 Kiểm tra định dạng nhập vào
+        if (!searchName.matches("^[a-zA-Z0-9 ]*$")) {
+            errorMessage = "Tên sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
+        } else if (!searchCode.matches("^[a-zA-Z0-9 ]*$")) {
+            errorMessage = "Mã sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
         }
-        int offset = (page - 1) * recordsPerPage;
 
-        // Lấy danh sách sản phẩm dựa trên các tham số tìm kiếm và phân trang
-        List<Product> productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
+        List<Product> productList;
+        int totalPages = 1;
 
-//        PrintWriter out = response.getWriter();
-//        out.println(page);
-//        out.println(searchName);
-//        out.println(searchCode);
-        // out.println(productList.size());
-        // Tính tổng số sản phẩm
-        int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
-        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        if (errorMessage != null) {
+            // 🔹 Nếu có lỗi, lấy danh sách sản phẩm từ đầu mà không áp dụng bộ lọc tìm kiếm
+            int page = 1;
+            int recordsPerPage = 8;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int offset = (page - 1) * recordsPerPage;
 
-        // Đưa các giá trị vào request để sử dụng trong JSP
+            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
+            productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
+            int totalRecords = productDAO.getTotalProducts(null, null, null, null);
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        } else {
+            int page = 1;
+            int recordsPerPage = 8;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int offset = (page - 1) * recordsPerPage;
+
+            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
+            productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
+            int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        }
+
+        if (productList.isEmpty()) {
+            errorMessage = "Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.";
+        }
+
+        // 🔹 Truyền lại dữ liệu vào JSP
+        request.setAttribute("errorMessage", errorMessage);
         request.setAttribute("productList", productList);
-        request.setAttribute("currentPage", page);
+        request.setAttribute("currentPage", 1);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchName", searchName);
         request.setAttribute("searchCode", searchCode);
@@ -79,7 +104,6 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("listBrand", listBrand);
         request.setAttribute("listType", productTypes);
 
-        // Forward đến trang JSP
         request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
     }
 

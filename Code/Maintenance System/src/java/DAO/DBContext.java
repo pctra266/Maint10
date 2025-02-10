@@ -10,15 +10,14 @@ import java.util.logging.Logger;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 public class DBContext {
-    protected Connection connection;
-    public DBContext()
-    {
 
+    protected Connection connection;
+
+    public DBContext() {
         try {
             String user = "sa";
-            String pass = "Dk123qaz";
+            String pass = "123456";
             String url = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=MaintainManagement;encrypt=true;trustServerCertificate=true";
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
             connection = DriverManager.getConnection(url, user, pass);

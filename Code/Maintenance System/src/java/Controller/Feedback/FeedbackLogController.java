@@ -81,14 +81,22 @@ public class FeedbackLogController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if(index == 0){
+                        index = 1;
+                    }
                 } catch (Exception e) {
                 }
-                //        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update","6","DateModified","asc", 1);
+                
+                
+                
 
                 int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
                 int endPage = totalPage /7;
                 if(totalPage %7 != 0 ){
                     endPage ++;
+                }
+                if(endPage < index && endPage != 0){
+                    index = endPage;
                 }
                 request.setAttribute("index", index);
                 request.setAttribute("endPage", endPage);
@@ -141,14 +149,19 @@ public class FeedbackLogController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if(index == 0){
+                        index = 1;
+                    }
                 } catch (Exception e) {
                 }
+                
+                
                 int totalPage = daoFeedbackLog.getTotalFeedbackLog(actionOfLog,feedbackID);
                 int endPage = totalPage /7;
                 if(totalPage %7 != 0 ){
                     endPage ++;
                 }
-                if(endPage < index){
+                if(endPage < index && endPage != 0){
                     index = endPage;
                 }
                 request.setAttribute("index", index);

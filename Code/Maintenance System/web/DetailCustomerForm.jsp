@@ -7,68 +7,62 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-    <meta name="author" content="AdminKit">
-    <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
-
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-
-    <link rel="canonical" href="https://demo-basic.adminkit.io/" />
-
+    <meta name="description" content="Customer Detail Page">
     <title>Customer Detail</title>
 
-    <link href="css/light.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-    <div class="wrapper">
-        <jsp:include page="/includes/navbar-left.jsp" />
+    <div class="container mt-4">
+        <!-- Back Button -->
+        <a href="customer" class="btn btn-primary mb-3">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
 
-        <div class="main">
-            <jsp:include page="/includes/navbar-top.jsp" />
-            <main class="content">
+        <div class="card shadow-lg p-4">
+            <h2 class="text-center text-primary mb-4">Customer Detail</h2>
 
-                <h2>Customer Detail</h2>
+            <div class="row">
+                <!-- Customer Info -->
+                <div class="col-md-8">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Customer ID</label>
+                            <input type="text" class="form-control" value="${customer.customerID}" disabled>
+                        </div>
 
-                <!-- Customer Details Table -->
-                <table border="1">
-                    <tr>
-                        <th>ID</th>
-                        <td>${customer.customerID}</td>
-                    </tr>
-                    <tr>
-                        <th>Name</th>
-                        <td>${customer.name}</td>
-                    </tr>
-                    <tr>
-                        <th>Image</th>
-                        <td><img src="${customer.image}" alt="Customer Image" width="200" height="200" /></td>
-                    </tr>
-                    <tr>
-                        <th>Address</th>
-                        <td>${customer.address}</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>${customer.email}</td>
-                    </tr>
-                    <tr>
-                        <th>Phone</th>
-                        <td>${customer.phone}</td>
-                    </tr>
-                </table>
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" value="${customer.name}" disabled>
+                        </div>
 
-                <br>
-                <a href="customer">Back to List</a>
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-control" value="${customer.email}" disabled>
+                        </div>
 
-            </main>
-            <jsp:include page="/includes/footer.jsp" />
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" value="${customer.phone}" disabled>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" rows="2" disabled>${customer.address}</textarea>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Customer Image -->
+                <div class="col-md-4 text-center">
+                    <img src="${customer.image}" alt="Customer Image" class="img-fluid border rounded shadow-sm mb-3" width="200">
+                </div>
+            </div>
         </div>
     </div>
 
-    <script src="js/app.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

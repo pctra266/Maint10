@@ -28,6 +28,8 @@
                             <div class="col-md-6" style="width: 500px">
 
                                 <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
+                                <input style="margin-top: 15px" class="form-control" type="search" name="customerEmail" placeholder="Customer Email"  value="${customerEmail}" >
+                                <input style="margin-top: 15px" class="form-control" type="search" name="customerPhone" placeholder="Customer Phone Number"  value="${customerPhone}" >
                                 <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
                                     <option value="">Image & Video </option>
                                     <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
@@ -83,7 +85,7 @@
                     <div class="text-center">
                         <ul class="pagination pagination-lg text-center" style="display: flex; justify-content: center; margin-top: 15px">
                             <c:forEach begin="1" end="${endPage}" var="i">
-                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedback?index=${i}&customerName=${customerName}&imageAndVideo=${imageAndVideo}&column=${column}&sortOrder=${sortOrder}">${i}</a></li>
+                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedback?index=${i}&customerName=${customerName}&customerEmail=${customerEmail}&customerPhone=${customerPhone}&imageAndVideo=${imageAndVideo}&column=${column}&sortOrder=${sortOrder}">${i}</a></li>
                                 </c:forEach>
                         </ul>
                     </div> 
@@ -97,7 +99,7 @@
             function checkSort() {
                 var column = document.getElementById('column').value;
                 var sortOrder = document.getElementById('sortOrder').value;
-                window.location.href = 'feedback?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&customerName=${customerName}&imageAndVideo=${imageAndVideo}';
+                window.location.href = 'feedback?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&customerName=${customerName}&customerEmail=${customerEmail}&customerPhone=${customerPhone}&imageAndVideo=${imageAndVideo}';
             }
         </script>
     </body>

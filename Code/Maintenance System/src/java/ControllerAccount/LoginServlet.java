@@ -8,6 +8,7 @@ import DAO.CustomerDAO;
 import DAO.StaffDAO;
 import Model.Customer;
 import Model.Staff;
+import Utils.Encryption;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -87,9 +88,9 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("LoginForm.jsp").forward(request, response);
             return;
         }
-
-        Staff staff = staffDao.getStaffByUsenamePassword(username, password);
-        Customer customer = customerDao.getCustomerByUsenamePassword(username, password);
+        String encryptionPassword = Encryption.EncryptionPassword(password);
+        Staff staff = staffDao.getStaffByUsenamePassword(username, encryptionPassword);
+        Customer customer = customerDao.getCustomerByUsenamePassword(username, encryptionPassword);
 
         if (staff == null && customer == null) {
             request.setAttribute("error", "Username or Password is incorrect!");
@@ -98,20 +99,20 @@ public class LoginServlet extends HttpServlet {
         }
 
         if (staff != null) {
-            session.setAttribute("accStaff", staff);
-            saveCookies(response, username, password, rememberme);
+            session.setAttribute("staff", staff);
+            saveCookies(response, username, encryptionPassword, rememberme);
             response.sendRedirect("HomePage.jsp");
         } else if (customer != null) {
-            session.setAttribute("accCus", customer);
-            saveCookies(response, username, password, rememberme);
+            session.setAttribute("customer", customer);
+            saveCookies(response, username, encryptionPassword, rememberme);
             response.sendRedirect("HomePage.jsp");
         }
 
     }
 
-    private void saveCookies(HttpServletResponse response, String username, String password, String rememberme) {
+    private void saveCookies(HttpServletResponse response, String username, String encryptionPassword, String rememberme) {
         Cookie cusername = new Cookie("cusername", username);
-        Cookie cpassword = new Cookie("cpassword", password);
+        Cookie cpassword = new Cookie("cpassword", encryptionPassword);
         Cookie crememberme = new Cookie("crememberme", rememberme);
 
         if (rememberme != null) {
@@ -128,6 +129,7 @@ public class LoginServlet extends HttpServlet {
         response.addCookie(cpassword);
         response.addCookie(crememberme);
     }
+    
 
     /**
      * Returns a short description of the servlet.

@@ -4,19 +4,26 @@
  */
 package Controller.Feedback;
 
+import Utils.SearchUtils;
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
 import DAO.ProductDAO;
+import Model.Customer;
+import Model.Staff;
 import Model.Feedback;
 import Model.FeedbackLog;
 import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +31,11 @@ import java.util.ArrayList;
  * @author Tra Pham
  */
 @WebServlet(name = "FeedbackController", urlPatterns = {"/feedback"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50 // 50MB
+)
 public class FeedbackController extends HttpServlet {
 
     /**
@@ -67,23 +79,51 @@ public class FeedbackController extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
+        // session to get customer and customerId
+        HttpSession session = request.getSession();
+        Customer currentCustomer = null;
+        Staff currentStaff = null;
+        try {
+            currentCustomer = (Customer) session.getAttribute("customer");
+        } catch (Exception e) {
+        }
+        String customerId = "1";
+        if (currentCustomer != null) {
+            customerId = String.valueOf(currentCustomer.getCustomerID());
+        }
+        
+        try {
+            currentStaff = (Staff) session.getAttribute("staff");
+        } catch (Exception e) {
+        }
+        String staffId = "1";
+        if (currentStaff != null) {
+            staffId = String.valueOf(currentStaff.getStaffID());
+        }
+        
+        System.out.println("Customer ID hien tai la : " + customerId);
+        System.out.println("Staff ID hien tai la : " + staffId);
+        // end session customer
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewFeedback";
         }
-        System.out.println("Action hien tai la: " + action);
         switch (action) {
             case "viewFeedback":
-                String customerName = request.getParameter("customerName");
+                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
+                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
                 request.setAttribute("column", column);
                 request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("customerEmail", customerEmail);
+                request.setAttribute("customerPhone", customerPhone);
                 //======phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
@@ -93,23 +133,38 @@ public class FeedbackController extends HttpServlet {
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if (index == 0) {
+                        index = 1;
+                    }
                 } catch (Exception e) {
 
                 }
+                if (endPage < index && endPage != 0) {
+                    index = endPage;
+                }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
 
                 //======end phan trang
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
+            case "viewListFeedbackByCustomerId":
+                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId);
+                request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
+                request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
+                break;
             case "deleteFeedback":
                 String feedbackIdDelete = request.getParameter("feedbackID");
-                String staffId = "1";
                 daoFeedback.inActiveFeedbackById(feedbackIdDelete);
                 daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
                 // chuyen sang view action
                 response.sendRedirect("feedback");
+                break;
+            case "deleteFeedbackFromCustomer":
+                String feedbackIdDeleteFromCustomer = request.getParameter("feedbackIdDeleteFromCustomer");
+                daoFeedback.deleteFeedbackById(feedbackIdDeleteFromCustomer);
+                request.getRequestDispatcher("feedback?action=viewListFeedbackByCustomerId").forward(request, response);
                 break;
             case "updateFeedback":
                 String feedbackIdUpdate = request.getParameter("feedbackID");
@@ -118,7 +173,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
                 break;
             case "createFeedback":
-                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID("1");
+                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductByCustomerId", listProductByCustomerId);
                 request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 break;
@@ -139,42 +194,61 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+        Customer currentCustomer = null;
+        try {
+            currentCustomer = (Customer) session.getAttribute("customer");
+        } catch (Exception e) {
+        }
+        String customerId = "1";
+        if (currentCustomer != null) {
+            customerId = String.valueOf(currentCustomer.getCustomerID());
+        }
+        System.out.println("Customer ID hien tai la : " + customerId);
         if (action == null) {
             action = "viewListFeedback";
         }
         switch (action) {
             case "viewListFeedback":
-                String customerName = request.getParameter("customerName");
+                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
                 String imageAndVideo = request.getParameter("imageAndVideo");
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
+                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
                 request.setAttribute("customerName", customerName);
                 request.setAttribute("imageAndVideo", imageAndVideo);
                 request.setAttribute("column", column);
                 request.setAttribute("sortOrder", sortOrder);
+                request.setAttribute("customerEmail", customerEmail);
+                request.setAttribute("customerPhone", customerPhone);
                 //phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, imageAndVideo);
+                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
                 int endPage = totalPages / 7;
                 if (totalPages % 7 != 0) {
                     endPage++;
                 }
                 request.setAttribute("endPage", endPage);
                 String indexStr = request.getParameter("index");
-                
+
                 int index = 1;
                 try {
                     index = Integer.parseInt(indexStr);
+                    if (index == 0) {
+                        index = 1;
+                    }
                 } catch (Exception e) {
                 }
-                
-                if(endPage < index){
+
+                if (endPage < index && endPage != 0) {
                     index = endPage;
                 }
                 request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, imageAndVideo, index, column, sortOrder);
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
@@ -194,20 +268,88 @@ public class FeedbackController extends HttpServlet {
                 response.sendRedirect("feedback");
                 break;
             case "createFeedback":
-                String noteCreate = request.getParameter("note");
+                String noteCreate = SearchUtils.preprocessSearchQuery(request.getParameter("note"));
                 String warrantyCardId = request.getParameter("warrantyCardId");
+                Part imagePart = request.getPart("imageURL");
+                Part videoPart = request.getPart("videoURL");
+                String mess = "";
                 String imageURL = "";
+                boolean valid = true;
+                if(imagePart != null){
+                    String imagePath = saveMedia(imagePart, request);
+                    imageURL = imagePath;
+                }
+                System.out.println("image path la : " + imagePart);
                 String videoURL = "";
-                String customerId = "1";
-                daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL,videoURL);
-                response.sendRedirect("feedback?action=createFeedback");
+                if(videoPart != null){
+                    String videoPath = saveMedia(videoPart, request);
+                    videoURL = videoPath;
+                }
+                
+                // valid
+                if(noteCreate == null || noteCreate.trim().isEmpty()){
+                    valid = false;
+                }
+                
+               
+                if(valid){
+                    daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
+                    mess = "Create successfully";
+                    response.sendRedirect("feedback?action=viewListFeedbackByCustomerId&mess="+mess);
+                }else{
+                    ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
+                    request.setAttribute("listProductByCustomerId", listProductByCustomerId);
+                    mess = "You need fill feedback note";
+                    request.setAttribute("mess", mess);
+                    request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
+                }
                 break;
             default:
                 break;
         }
 
     }
+// Lưu ảnh vào thư mục /img/Component
+    private String saveMedia(Part mediaPart, HttpServletRequest request) throws IOException {
+        if (mediaPart == null || mediaPart.getSize() == 0) {
+            return null;
+        }
+        
+        String contentType = mediaPart.getContentType();
+        String folder = "";
+        if (contentType.startsWith("image/")) {
+            folder = "img/Feedback/";
+        } else if (contentType.startsWith("video/")) {
+            folder = "video/Feedback/";
+        } else {
+            return null; // Không phải ảnh hoặc video
+        }
+        
+        // Đường dẫn tuyệt đối
+        String uploadPath = request.getServletContext().getRealPath("/" + folder);
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs();
+        }
 
+        // Xử lý tên file
+        String originalFileName = mediaPart.getSubmittedFileName();
+        if (originalFileName == null || originalFileName.isEmpty()) {
+            return null;
+        }
+        
+        String fileName = System.currentTimeMillis() + "_" + originalFileName;
+        String filePath = uploadPath + File.separator + fileName;
+
+        try {
+            mediaPart.write(filePath);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return folder + fileName;
+    }
     /**
      * Returns a short description of the servlet.
      *

@@ -107,11 +107,11 @@
                                 </div>
                                 <div class="col-md-3">
                                     <label for="Quantity" class="form-label">Quantity</label>
-                                    <input type="number" class="form-control" name="Quantity" id="Quantity" value="${quantity}" min="0" required>
+                                    <input type="text" class="form-control format-int" name="Quantity" id="Quantity" value="${quantity}" min="0" required>
                                 </div>
                                 <div class="col-md-3">
                                     <label for="Price" class="form-label">Price</label>
-                                    <input type="number" class="form-control" name="Price" id="Price" value="${price}" step="0.01" min="0" required>
+                                    <input type="text" class="form-control format-float" name="Price" id="Price" value="${price}" step="0.01" min="0" required>
                                 </div>
                                 <div class="col-md-12" style="margin-bottom: 1rem">
                                     <button class="btn btn-success" type="submit">Add</button>
@@ -136,8 +136,10 @@
         </div>
 
         <script src="js/app.js"></script>
+                        <script src="js/format-input.js"></script>
 
-        // Hàm để xem trước ảnh khi người dùng chọn tệp mới
+
+<!--        // Hàm để xem trước ảnh khi người dùng chọn tệp mới-->
         <script>
                                 function previewImage(event) {
                                     const reader = new FileReader();

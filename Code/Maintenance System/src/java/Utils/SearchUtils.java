@@ -14,6 +14,10 @@ public class SearchUtils {
         if(input==null) return "";
         return input.trim().replaceAll("\\s+", " ").toLowerCase();
     }
+    public static String normalizeString2(String input) {
+        if(input==null) return "";
+        return input.trim().replaceAll("\\s+", "").toLowerCase();
+    }
 
     // Loại bỏ dấu tiếng Việt (nếu có)
     public static String removeAccents(String input) {
@@ -27,7 +31,11 @@ public class SearchUtils {
         if(query==null) return "";
         return removeAccents(normalizeString(query));
     }
-
+    public static String searchValidateNonSapce(String query) {
+        if(query==null) return "";
+        return removeAccents(normalizeString2(query));
+    }
+    
     //Advance, kho su dung
     public static int levenshteinDistance(String s1, String s2) {
         int[][] dp = new int[s1.length() + 1][s2.length() + 1];

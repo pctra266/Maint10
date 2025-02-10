@@ -9,6 +9,7 @@ import DAO.CustomerDAO;
 import DAO.StaffDAO;
 import Model.Customer;
 import Model.Staff;
+import Utils.Encryption;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -71,12 +72,56 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-       CustomerDAO customerDao = new CustomerDAO();
-        StaffDAO staffDao = new StaffDAO();
-        HttpSession session = request.getSession();
-        String oldpassword = request.getParameter("oldpassword");
-        String newpassword = request.getParameter("newpassword");
-        String confirmpassword = request.getParameter("confirmpassword");
+//       CustomerDAO customerDao = new CustomerDAO();
+//        StaffDAO staffDao = new StaffDAO();
+//        HttpSession session = request.getSession();
+//        String oldpassword = request.getParameter("oldpassword");
+//        String newpassword = request.getParameter("newpassword");
+//        String confirmpassword = request.getParameter("confirmpassword");
+//
+//        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
+//            request.setAttribute("error", "Confirm password not the same new password");
+//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+//            return;
+//        }
+//
+//        String encryptionPassword = Encryption.EncryptionPassword(newpassword);
+//
+//        Staff staff = (Staff) session.getAttribute("staff");
+//        Customer customer = (Customer) session.getAttribute("customer");
+//
+//        if (staff != null) {
+//            String currentPassword = staff.getPasswordS();
+//            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
+//            if (!currentPassword.equals(oldPasswordEncryption)) {
+//                request.setAttribute("error", "Old password is incorrect!");
+//                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+//                return;
+//            }
+//            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), encryptionPassword, staff.getRole(),
+//                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.getImgage());
+//
+//            staffDao.changePassword(updatedStaffPassword);
+//            request.setAttribute("message", "Change password succesfuly!");
+//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+//           
+//        }
+//
+//        if (customer != null) {
+//            String currentPassword = customer.getPasswordC();
+//            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
+//            if (!currentPassword.equals(oldPasswordEncryption)) {
+//                request.setAttribute("error", "Old password is incorrect!");
+//                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+//                return;
+//            }
+//            Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), encryptionPassword,
+//                    customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.getImage());
+//
+//            customerDao.changePassword(updatedCustomerPassword);
+//            request.setAttribute("message", "Change password succesfuly!");
+//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+//        }
 
         if (!newpassword.equalsIgnoreCase(confirmpassword)) {
             request.setAttribute("error", "The confirm password is not the same as the new password");

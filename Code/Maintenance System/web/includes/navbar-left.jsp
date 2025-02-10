@@ -13,15 +13,16 @@
                                 </svg>
                             </a>
 
-                            <c:if test="${not empty sessionScope.accStaff}">
+                            <c:if test="${not empty sessionScope.staff}">
+                                <!-- N?u là nhân viên, hi?n th? thông tin nhân viên -->
                                 <div class="sidebar-user">
                                     <div class="d-flex justify-content-center">
                                         <div class="flex-shrink-0">
-                                            <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="${sessionScope.accStaff.name}" />
+                                            <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="${sessionScope.staff.name}" />
                                         </div>
                                         <div class="flex-grow-1 ps-2">
                                             <a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                                ${sessionScope.accStaff.name}
+                                                ${sessionScope.staff.name}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-start">
                                                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -38,16 +39,16 @@
                                 </div>
                             </c:if>
 
-                            <c:if test="${not empty sessionScope.accCus}">
+                            <c:if test="${not empty sessionScope.customer}">
                                 <!-- N?u là khách hàng, hi?n th? thông tin khách hàng -->
                                 <div class="sidebar-user">
                                     <div class="d-flex justify-content-center">
                                         <div class="flex-shrink-0">
-                                            <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="${sessionScope.accCus.name}" />
+                                            <img src="${sessionScope.customer.image}" class="avatar img-fluid rounded me-1" alt="${sessionScope.customer.name}" />
                                         </div>
                                         <div class="flex-grow-1 ps-2">
                                             <a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                                                ${sessionScope.accCus.name}
+                                                ${sessionScope.customer.name}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-start">
                                                 <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
@@ -64,7 +65,8 @@
                                 </div>
                             </c:if>
 
-                            <c:if test="${empty sessionScope.accStaff and empty sessionScope.accCus}">
+                            <!-- N?u ch?a ??ng nh?p, hi?n th? liên k?t ??ng nh?p -->
+                            <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
                                 <button><a href="LoginForm.jsp">Login</a></button>
                             </c:if>
 
@@ -98,91 +100,55 @@
                                 </li>
 
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="/feedback">
+                                    <a class="sidebar-link" href="pages-profile.html">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user align-middle"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> <span class="align-middle">Profile</span>
                                     </a>
                                 </li>
-                              
 
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="ComponentWarehouse">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Component
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Component</span>
                                     </a>
                                 </li>
-
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="viewProduct">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Product
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Product</span>
                                     </a>
                                 </li>
-
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="StaffController">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Staff
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Staff</span>
                                     </a>
                                 </li>
-
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="feedback">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Feedback list
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Feedback list(Admin)</span>
                                     </a>
                                 </li>
-
                                 <li class="sidebar-item">
-                                    <a class="sidebar-link" href="feedback?action=createFeedback">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Create Feedback</span>
+                                    <a class="sidebar-link" href="feedback?action=viewListFeedbackByCustomerId">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Feedback (Customer)</span>
                                     </a>
                                 </li>
-                                  
-                                <li class="sidebar-item">
-                                    <a class="sidebar-link" href="customer">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle">
-                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
-                                        <line x1="1" y1="10" x2="23" y2="10"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Customer
-                                        </span>
-                                    </a>
-                                </li>
-
                                 <li class="sidebar-item">
                                     <a class="sidebar-link" href="WarrantyCard">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list align-middle">
-                                        <line x1="8" y1="6" x2="21" y2="6"></line>
-                                        <line x1="8" y1="12" x2="21" y2="12"></line>
-                                        <line x1="8" y1="18" x2="21" y2="18"></line>
-                                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
-                                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
-                                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
-                                        </svg> 
-                                        <span class="align-middle">
-                                            Warranty Card
-                                        </span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">WarrantyCard</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="customer">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Customer</span>
+                                    </a>
+                                </li>
+                                 <li class="sidebar-item">
+                                    <a class="sidebar-link" href="yourwarrantycard">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-credit-card align-middle"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg> <span class="align-middle">Your Warranty Card</span>
+                                    </a>
+                                </li>
+                                <li class="sidebar-item">
+                                    <a class="sidebar-link" href="purchaseproduct">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list align-middle"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg> <span class="align-middle">Purchase Product</span>
+
                                     </a>
                                 </li>
 
@@ -341,17 +307,5 @@
                                 </li>
                             </ul>
 
-                            <div class="sidebar-cta">
-                                <div class="sidebar-cta-content">
-                                    <strong class="d-inline-block mb-2">Weekly Sales Report</strong>
-                                    <div class="mb-3 text-sm">
-                                        Your weekly sales report is ready for download!
-                                    </div>
-
-                                    <div class="d-grid">
-                                        <a href="https://adminkit.io/" class="btn btn-outline-primary" target="_blank">Download</a>
-                                    </div>
-                                </div>
-                            </div>
                         </div></div></div></div><div class="simplebar-placeholder" style="width: auto; height: 1320px;"></div></div><div class="simplebar-track simplebar-horizontal" style="visibility: hidden;"><div class="simplebar-scrollbar" style="width: 0px; display: none;"></div></div><div class="simplebar-track simplebar-vertical" style="visibility: visible;"><div class="simplebar-scrollbar" style="height: 472px; transform: translate3d(0px, 0px, 0px); display: block;"></div></div></div>
 </nav>

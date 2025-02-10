@@ -12,7 +12,7 @@ import java.util.Date;
  */
 public class Feedback {
     private int FeedbackID, CustomerID, WarrantyCardID;
-    private String Note, CustomerName, ImageURL, VideoURL, ProductName, IssueDescription, WarrantyStatus;
+    private String Note, CustomerName,CustomerEmail, CustomerPhoneNumber ,ImageURL, VideoURL, ProductName, IssueDescription, WarrantyStatus;
     private Date DateCreated;
     private boolean IsDeleted;
     
@@ -20,13 +20,7 @@ public class Feedback {
     public Feedback() {
     }
 
-    public Feedback(int FeedbackID, int CustomerID, int WarrantyCardID, String Note) {
-        this.FeedbackID = FeedbackID;
-        this.CustomerID = CustomerID;
-        this.WarrantyCardID = WarrantyCardID;
-        this.Note = Note;
-    }
-
+    
     public Feedback(int FeedbackID, int CustomerID, int WarrantyCardID, String Note, String CustomerName, String ImageURL, String VideoURL, String ProductName, String IssueDescription, String WarrantyStatus, Date DateCreated, boolean IsDeleted) {
         this.FeedbackID = FeedbackID;
         this.CustomerID = CustomerID;
@@ -41,6 +35,25 @@ public class Feedback {
         this.DateCreated = DateCreated;
         this.IsDeleted = IsDeleted;
     }
+
+    public Feedback(int FeedbackID, int CustomerID, int WarrantyCardID, String Note, String CustomerName, String CustomerEmail, String CustomerPhoneNumber, String ImageURL, String VideoURL, String ProductName, String IssueDescription, String WarrantyStatus, Date DateCreated, boolean IsDeleted) {
+        this.FeedbackID = FeedbackID;
+        this.CustomerID = CustomerID;
+        this.WarrantyCardID = WarrantyCardID;
+        this.Note = Note;
+        this.CustomerName = CustomerName;
+        this.CustomerEmail = CustomerEmail;
+        this.CustomerPhoneNumber = CustomerPhoneNumber;
+        this.ImageURL = ImageURL;
+        this.VideoURL = VideoURL;
+        this.ProductName = ProductName;
+        this.IssueDescription = IssueDescription;
+        this.WarrantyStatus = WarrantyStatus;
+        this.DateCreated = DateCreated;
+        this.IsDeleted = IsDeleted;
+    }
+    
+    
     
     
 
@@ -141,11 +154,26 @@ public class Feedback {
         this.Note = Note;
     }
 
-    @Override
-    public String toString() {
-        return "Feedback{" + "FeedbackID=" + FeedbackID + ", CustomerID=" + CustomerID + ", WarrantyCardID=" + WarrantyCardID + ", Note=" + Note + ", CustomerName=" + CustomerName + ", ImageURL=" + ImageURL + ", VideoURL=" + VideoURL + ", ProductName=" + ProductName + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", DateCreated=" + DateCreated + ", IsDeleted=" + IsDeleted + '}';
+    public String getCustomerEmail() {
+        return CustomerEmail;
     }
 
+    public void setCustomerEmail(String CustomerEmail) {
+        this.CustomerEmail = CustomerEmail;
+    }
+
+    public String getCustomerPhoneNumber() {
+        return CustomerPhoneNumber;
+    }
+
+    public void setCustomerPhoneNumber(String CustomerPhoneNumber) {
+        this.CustomerPhoneNumber = CustomerPhoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "Feedback{" + "FeedbackID=" + FeedbackID + ", CustomerID=" + CustomerID + ", WarrantyCardID=" + WarrantyCardID + ", Note=" + Note + ", CustomerName=" + CustomerName + ", CustomerEmail=" + CustomerEmail + ", CustomerPhoneNumber=" + CustomerPhoneNumber + ", ImageURL=" + ImageURL + ", VideoURL=" + VideoURL + ", ProductName=" + ProductName + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", DateCreated=" + DateCreated + ", IsDeleted=" + IsDeleted + '}';
+    }
     
     
 }
