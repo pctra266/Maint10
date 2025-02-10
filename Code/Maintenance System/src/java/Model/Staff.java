@@ -25,7 +25,7 @@ public class Staff {
     }
 
 
-    public Staff(int staffID, String usernameS, String passwordS, String role, String name, String email, String phone, String address, String image) {
+    public Staff(int staffID, String usernameS, String passwordS, String role, String name, String email, String phone, String address, String imgage) {
         this.staffID = staffID;
         this.usernameS = usernameS;
         this.passwordS = passwordS;
@@ -112,11 +112,5 @@ public class Staff {
 
     
     
-    public String getImage() {
-        return imgage;
-    }
-
-    public void setImage(String image) {
-        this.imgage = imgage;
-    }
+    
 }

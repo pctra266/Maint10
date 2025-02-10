@@ -119,6 +119,9 @@ public class StaffDAO extends DBContext{
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 String image = rs.getString("image");
+                if (image == null || image.isEmpty()) {
+                    image = "default-image.png"; // Đặt ảnh mặc định nếu không có ảnh trong DB
+                }
                 list.add(new Staff(staffID, userNameS, passwordS, role, name, email, phone, address,image));
             }
         } catch (SQLException e) {
@@ -171,117 +174,108 @@ public class StaffDAO extends DBContext{
         }
         return true;
     }
-    public List<Staff> searchStaff(String search,String searchname){
+    
+    public ArrayList<Staff> getAllStaff(String searchname, String search, int pageIndex, int pageSize, String column, String sortOrder) {
+        ArrayList<Staff> list = new ArrayList<>();
+        String sql = "select *from Staff";
         PreparedStatement stm =null ;
-        ResultSet rs = null;
-        List<Staff> list = new ArrayList();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Staff ");
-        if(search.equals("Name")){
-            sql.append("WHERE Role LIKE ?");
-        }else{
-            sql.append("WHERE Role LIKE ?");
+        ResultSet rs = null;        
+        if (searchname != null && !searchname.trim().isEmpty()) {
+            if(search.equals("Name")){
+                sql +=" WHERE Name LIKE ?";
+            }else{
+                sql+=" WHERE Role LIKE ?";
+            }
         }
-        
+        if(column != null && !column.trim().isEmpty() ){
+            sql += " order by "+ column+" ";
+            if(sortOrder != null && !sortOrder.trim().isEmpty()){
+                sql += sortOrder;
+            }
+        }else{
+            sql += " order by StaffID " ;  
+            if(sortOrder != null && !sortOrder.trim().isEmpty()){
+                sql += sortOrder;
+            }
+        }
+            sql += " offset ? rows  fetch next ? rows only;";
+        try {           
+            stm = connection.prepareStatement(sql);
+            int count = 1;
+            if (searchname != null && !searchname.trim().isEmpty()) {
+                stm.setString(count++, "%" + searchname.trim() + "%");
+            }
+            int startIndex = (pageIndex - 1) * pageSize;
+            stm.setInt(count++, startIndex);
+            stm.setInt(count++, pageSize);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                int staffID = rs.getInt("staffID");
+                String usernameS = rs.getString("usernameS");
+                String passwordS = rs.getString("passwordS");
+                String role = rs.getString("role");
+                String name = rs.getString("name");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                String address = rs.getString("address");
+                String image = rs.getString("image");               
+                list.add(new Staff( staffID, usernameS, passwordS, role, name, email, phone, address, image));
+                
+            }
+        } catch (Exception e) {
 
-        try {
-            stm = connection.prepareStatement(sql.toString());   
-            stm.setString(1, "%"+searchname.trim()+"%");     
+        }
+
+        return list;
+    }
+    public ArrayList<Staff> getAllStaff(String searchname, String search, String column, String sortOrder) {
+        ArrayList<Staff> list = new ArrayList<>();
+        String sql = "select *from Staff ";
+        PreparedStatement stm =null ;
+        ResultSet rs = null;        
+        if (searchname != null && !searchname.trim().isEmpty()) {
+            if(search.equals("Name")){
+                sql +=" WHERE Name LIKE ? ";
+            }else{
+                sql+=" WHERE Role LIKE ? ";
+            }
+        }
+        if(column != null && !column.trim().isEmpty() ){
+            sql += " order by "+ column+" ";
+            if(sortOrder != null && !sortOrder.trim().isEmpty()){
+                sql += sortOrder;
+            }
+        }else{
+            sql += " order by StaffID " ;           
+        }
+            
+        try {           
+            stm = connection.prepareStatement(sql);
+            int count = 1;
+            if (searchname != null && !searchname.trim().isEmpty()) {
+                stm.setString(count++, "%" + searchname.trim() + "%");
+            }
             
             rs = stm.executeQuery();
             while (rs.next()) {
                 int staffID = rs.getInt("staffID");
-                String userNameS = rs.getString("usernameS");
+                String usernameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
                 String role = rs.getString("role");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
-                String image = rs.getString("image");
-                list.add(new Staff(staffID, userNameS, passwordS, role, name, email, phone, address,image));
+                String image = rs.getString("image");               
+                list.add(new Staff( staffID, usernameS, passwordS, role, name, email, phone, address, image));
+                
             }
-        } catch (SQLException e) {
-            System.out.println(e);
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stm != null) stm.close();
-            } catch (SQLException e) {
-                System.out.println("Lỗi đóng kết nối: " + e.getMessage());
-            }
+        } catch (Exception e) {
+
         }
+
         return list;
     }
-    public List<Staff> searchStaffWithPagination(String search,String searchname,int pageIndex, int pageSize){
-        PreparedStatement stm =null ;
-        ResultSet rs = null;
-        List<Staff> list = new ArrayList();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Staff ");
-        if(search.equals("Name")){
-            sql.append("WHERE Name LIKE ?");
-        }else{
-            sql.append("WHERE Role LIKE ?");
-        }
-        sql.append(" ORDER BY StaffID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
-
-        try {
-            stm = connection.prepareStatement(sql.toString());   
-            stm.setString(1, "%"+searchname.trim()+"%");     
-            int startIndex = (pageIndex - 1) * pageSize;
-            stm.setInt(2, startIndex);
-            stm.setInt(3, pageSize);
-            rs = stm.executeQuery();
-            while (rs.next()) {
-                int staffID = rs.getInt("staffID");
-                String userNameS = rs.getString("usernameS");
-                String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String phone = rs.getString("phone");
-                String address = rs.getString("address");
-                String image = rs.getString("image");
-                list.add(new Staff(staffID, userNameS, passwordS, role, name, email, phone, address,image));
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        } finally {
-            try {
-                if (rs != null) rs.close();
-                if (stm != null) stm.close();
-            } catch (SQLException e) {
-                System.out.println("Lỗi đóng kết nối: " + e.getMessage());
-            }
-        }
-        return list;
-    }
-    public List<Staff> getStaffByPage(int pageIndex, int pageSize) {
-        List<Staff> list = new ArrayList<>();
-        String sql = "SELECT * FROM StaffORDER BY StaffID OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            int startIndex = (pageIndex - 1) * pageSize;
-            ps.setInt(1, startIndex);
-            ps.setInt(2, pageSize);
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    int staffID = rs.getInt("staffID");
-                String userNameS = rs.getString("usernameS");
-                String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
-                String name = rs.getString("name");
-                String email = rs.getString("email");
-                String phone = rs.getString("phone");
-                String address = rs.getString("address");
-                String image = rs.getString("image");
-                list.add(new Staff(staffID, userNameS, passwordS, role, name, email, phone, address,image));
-                }
-            }
-        } catch (SQLException e) {
-        }
-        return list;
-    }
-
     public Staff getInformationByID(String id){
         Staff staff = new Staff();
         PreparedStatement stm;
@@ -301,6 +295,9 @@ public class StaffDAO extends DBContext{
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 String image = rs.getString("image");
+                if (image == null || image.isEmpty()) {
+                    image = "default-image.jpg"; // Đặt ảnh mặc định nếu không có ảnh trong DB
+                }
                 staff = new Staff(staffID, userNameS, passwordS, role, name, email, phone, address,image);
             }
         } catch (Exception e) {
@@ -321,6 +318,31 @@ public class StaffDAO extends DBContext{
             System.out.println(e);
         }
         return true;
+    }
+    public boolean isPhoneExists(String phone) {
+        String query = "SELECT Phone FROM Staff WHERE Phone = ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, phone);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    public boolean isUpdatePhoneExists(String phone, String staffID) {
+        String query = "SELECT Phone FROM Staff WHERE Phone = ? AND StaffID <> ?";
+        try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+            pstmt.setString(1, phone);
+            pstmt.setString(2, staffID);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                return rs.next(); 
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     public static void main(String[] args) {
         StaffDAO dao = new StaffDAO();

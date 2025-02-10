@@ -89,7 +89,7 @@ public class ChangePasswordServlet extends HttpServlet {
         // change password staff
         if (staff != null) {
             Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), newpassword, staff.getRole(),
-                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(),staff.getImage());
+                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(),staff.getImgage());
 
             staffDao.changePassword(updatedStaffPassword);
 

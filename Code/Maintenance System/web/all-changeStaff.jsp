@@ -46,7 +46,7 @@
                         </div> 
                         <div class="col-md-6" style="width: 500px">
                             <div>
-                                <select onchange="this.form.submit()" name="column" id="column" class="form-select">
+                                <select onchange="this.form.submit;()" name="column" id="column" class="form-select">
                                     <option value="">Sort By</option>
                                     <option ${(column=='Name')?"selected":""} value="Name">Name</option>
                                     <option ${(column=='Role')?"selected":""} value="Role">Role</option>

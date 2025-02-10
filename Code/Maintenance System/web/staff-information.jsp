@@ -12,13 +12,123 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Document</title>
         <link rel="stylesheet" href="./css/add-staff.css" />
+        <style>
+            body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f7f6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: auto;
+}
+
+.add {
+    margin-top: 100px;
+    width: 90%;
+    max-width: 450px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: auto;
+}
+
+.add__signin-input {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.add__input {
+    width: 90%;
+    padding: 4px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 16px;
+    background-color: white;
+}
+
+.add__input-label {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    font-size: 12px;
+    color: #666;
+    transition: 0.3s;
+    background: white;
+    padding: 0 5px;
+}
+
+.add__input:focus + .add__input-label,
+.add__input.has-content + .add__input-label {
+    top: -10px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+button {
+    background: #007bff;
+    color: white;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.image-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-box {
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f8f8f8;
+}
+
+.image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+.alert {
+    background-color: #ffcccc; /* Màu nền đỏ nhạt */
+    color: #d8000c; /* Màu chữ đỏ đậm */
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+        </style> 
+         
     </head>
     <body>
         <div class="add">
             
             <div class="add__signin">
                 <div class="add__signin-info">Information</div>
-                <form action="updateStaffController" method="post">    
+                <c:if test="${not empty errorMessage}">
+                    <div class="alert">${errorMessage}</div>
+                </c:if>
+                <form action="StaffController" method="post" enctype="multipart/form-data">    
+                    <input type="hidden" name="action" value="Update">
                     <div class="add__signin-input">
                             <label for="password" class="add__input-label"
                                 >Staff ID</label
@@ -30,7 +140,7 @@
                                 oninput="checkInput(this)"
                                 name="staffID"
                                 value="${staff.getStaffID()}"
-                                required
+                                readonly
                             />
 
                         </div>
@@ -147,6 +257,15 @@
                             />
 
                         </div>
+                        
+                        <div class="image-upload-container">
+                            <div class="image-box">
+                                <img src="${staff.getImgage()}" id="currentImage" alt="Profile Image">
+                            </div>
+                            <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
+                        </div>    
+                           
+                        
                         <div class="add__signin-next">                      
                                 <button type="submit">Change</button>                      
                         </div>
@@ -169,6 +288,14 @@
                         input.classList.remove("has-content");
                     }
                 }   
+                function previewImage(event) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        const output = document.getElementById('currentImage');
+                                        output.src = reader.result;
+                                    };
+                                    reader.readAsDataURL(event.target.files[0]);
+                }
         </script>
     </body>
 </html>

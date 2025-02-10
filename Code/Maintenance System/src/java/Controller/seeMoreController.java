@@ -47,8 +47,16 @@ public class seeMoreController extends HttpServlet {
                 String column = request.getParameter("column");
                 String sortOrder = request.getParameter("sortOrder");
                 String page_size = request.getParameter("page_size");
+                int pagesize = 5; 
+
+                if (page_size != null && !page_size.isEmpty()) {
+                    try {
+                        pagesize = Integer.parseInt(page_size);
+                    } catch (NumberFormatException e) {
+                        pagesize = 5; 
+                    }
+                }
                 List<StaffLog> list ;
-                int pagesize=Integer.parseInt(page_size);
                 int pageIndex = 1;
                 String pageIndexStr = request.getParameter("index");
 
