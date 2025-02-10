@@ -42,7 +42,7 @@
                                     
                                     <td><img src="${o.imageURL}" alt="" style="max-width: 100%; height: auto;"></td>
                                     <td><video src="${o.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video></td>
-                                    <td><a href="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}">Delete</a></td>
+                                    <td><a href="#" data-url="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}" onclick="doDelete(event)">Delete</td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -50,11 +50,22 @@
                         </table>
                         
                     </div>
-                    <a href="feedback?action=deletefeedback">Deleted Feedback</a>
+                    <!--<a href="feedback?action=deletefeedback">Deleted Feedback</a>-->
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
+            <script>
+                function doDelete(event) {
+                        event.preventDefault();
+
+                        const url = event.currentTarget.getAttribute('data-url');
+
+                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
+                            window.location.href = url;
+                        }
+                    }
+            </script>
         <script src="js/app.js"></script>
        
     </body>
