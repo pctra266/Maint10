@@ -30,6 +30,7 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
+
                     <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h2>Component Add</h2>
                     <!-- Hiển thị cảnh báo lỗi -->
@@ -136,10 +137,10 @@
         </div>
 
         <script src="js/app.js"></script>
-                        <script src="js/format-input.js"></script>
+        <script src="js/format-input.js"></script>
 
 
-<!--        // Hàm để xem trước ảnh khi người dùng chọn tệp mới-->
+        <!--        // Hàm để xem trước ảnh khi người dùng chọn tệp mới-->
         <script>
                                 function previewImage(event) {
                                     const reader = new FileReader();

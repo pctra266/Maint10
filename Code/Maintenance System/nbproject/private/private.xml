@@ -9,6 +9,7 @@
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/web/Staff.jsp</file>
             <file>file:/F:/Clone/ProductsMaintainManagement/Code/Maintenance%20System/web/add-staff.jsp</file>
         <group>
+<<<<<<< Updated upstream
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/CustomerDAO.java</file>
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/Customer.jsp</file>
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/SortCustomer.jsp</file>
@@ -23,6 +24,19 @@
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/UpdateCustomerForm.jsp</file>
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/CustomerSearch.jsp</file>
             <file>file:/C:/Users/PC/Desktop/SWPMSA/ProductsMaintainManagement/Code/Maintenance%20System/web/SortCustomer.jsp</file>
+=======
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/HomePage.jsp</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddImage.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
+>>>>>>> Stashed changes
         </group>
     </open-files>
 </project-private>

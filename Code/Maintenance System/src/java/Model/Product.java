@@ -56,7 +56,6 @@ public class Product {
     }
     
     public Product(String code, String productName, int brandId, String type, int quantity, int warrantyPeriod, String status, String image) {
-        this.productId = productId;
         this.code = code;
         this.productName = productName;
         this.brandId = brandId;
@@ -65,7 +64,6 @@ public class Product {
         this.warrantyPeriod = warrantyPeriod;
         this.status = status;
         this.image = image;
-        this.brandName = brandName;
     }
 
     public int getProductId() {

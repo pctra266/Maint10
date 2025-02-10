@@ -67,7 +67,6 @@ public class ViewProduct extends HttpServlet {
                 page = Integer.parseInt(request.getParameter("page"));
             }
             int offset = (page - 1) * recordsPerPage;
-
             // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
             productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
             int totalRecords = productDAO.getTotalProducts(null, null, null, null);
@@ -79,7 +78,6 @@ public class ViewProduct extends HttpServlet {
                 page = Integer.parseInt(request.getParameter("page"));
             }
             int offset = (page - 1) * recordsPerPage;
-
             // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
             productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
             int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
@@ -88,6 +86,16 @@ public class ViewProduct extends HttpServlet {
 
         if (productList.isEmpty()) {
             errorMessage = "Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.";
+            int page = 1;
+            int recordsPerPage = 8;
+            if (request.getParameter("page") != null) {
+                page = Integer.parseInt(request.getParameter("page"));
+            }
+            int offset = (page - 1) * recordsPerPage;
+            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
+            productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
+            int totalRecords = productDAO.getTotalProducts(null, null, null, null);
+            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         }
 
         // 🔹 Truyền lại dữ liệu vào JSP

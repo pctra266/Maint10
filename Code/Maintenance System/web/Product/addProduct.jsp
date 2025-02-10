@@ -40,7 +40,7 @@
                 font-size: 2rem;
                 color: #444;
                 text-align: center;
-                margin-bottom: 20px;
+                margin-bottom: 0px;
             }
 
             .form-container {
@@ -54,7 +54,7 @@
             }
 
             .form-group {
-                margin-bottom: 20px;
+                margin-bottom: 10px;
             }
 
             label {
@@ -105,8 +105,8 @@
 
             /* Back Button */
             form > button.add-product {
-                background-color: #e2e2e2;
-                color: #333;
+                background-color: #3B7DDD;
+                color: white;
                 padding: 10px;
                 text-align: center;
                 display: block;
@@ -117,7 +117,7 @@
             }
 
             form > button.add-product:hover {
-                background-color: #ccc;
+                background-color: green;
             }
 
             /* File Input */
@@ -168,66 +168,197 @@
                     <div class="form-container">
                         <h2>Add Product</h2>
 
-                        <form action="viewProduct">
-                            <button class="add-product" type="submit">Back</button>
-                        </form>
-                        <form action="addP" method="post">
+                        <c:if test="${not empty errorMessage}">
+                            <div style="color: red; text-align: center; margin-bottom: 10px;">
+                                ${errorMessage}
+                            </div>
+                        </c:if>
+
+                        <form action="addP" method="post" enctype="multipart/form-data">
+                            <!-- Nhập code -->
                             <div class="form-group">
                                 <label for="code">Product Code:</label>
-                                <input type="text" id="code" name="code" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="name">Product Name:</label>
-                                <input type="text" id="name" name="name" required>
+                                <input type="text" id="code" name="code" value="${code}" required>
                             </div>
 
+                            <!-- Nhập name -->
+                            <div class="form-group">
+                                <label for="name">Product Name:</label>
+                                <input type="text" id="name" name="name" value="${name}" required>
+                            </div>
+
+                            <!-- Chọn brand -->
                             <div class="form-group">
                                 <label for="brand">Brand:</label>
                                 <select id="brand" name="brandId">
                                     <option value="">Select Brand</option>
                                     <c:forEach var="p" items="${listBrand}">
-                                        <option value="${p.brandId}">
+                                        <option value="${p.brandId}" ${p.brandId == brandId ? 'selected' : ''}>
                                             ${p.brandName}
                                         </option>
                                     </c:forEach>
                                 </select>
                             </div>
 
+                            <!-- Nhập type -->
                             <div class="form-group">
                                 <label for="type">Type:</label>
-                                <input type="text" id="type" name="type" required>
+                                <input type="text" id="type" name="type" value="${type}" required>
                             </div>
 
+                            <!-- Nhập quantity -->
                             <div class="form-group">
                                 <label for="quantity">Quantity:</label>
-                                <input type="number" id="quantity" name="quantity" min="1" required>
+                                <input type="number" id="quantity" name="quantity" value="${quantity}" min="1" required>
                             </div>
+
+                            <!-- Nhập warranty -->
                             <div class="form-group">
                                 <label for="warranty">Warranty Period (months):</label>
-                                <input type="number" id="warranty" name="warrantyPeriod" min="1" required>
+                                <input type="number" id="warranty" name="warrantyPeriod" value="${warrantyPeriod}" min="1" required>
                             </div>
+
+                            <!-- Chọn status -->
+                            <input type="hidden" name="status" value="Active">
+
+
+                            <!-- Chọn image -->
                             <div class="form-group">
-                                <label for="status">Status:</label>
-                                <select id="status" name="status">
-                                    <option value="Active">Active</option>
-                                    <option value="Inactive">Inactive</option>
-                                </select>
+                                <label for="newImage">Product Image:</label>
+                                <img id="currentImage" alt="No Image" style="max-width: 100%; height: auto;">
+                                <input type="file" name="image" id="newImage" accept="image/*" onchange="previewImage(event)">
                             </div>
+
                             <button type="submit" class="submit-btn">Add Product</button>
                         </form>
 
-                        <form action="image"method="post" enctype="multipart/form-data">
-                            <div class="form-group" >
-                                <label for="image">Product Image:</label>
-                                <input type="file" id="image" name="image" accept=".jpg,.png">
-                            </div>
-                            <button type="submit" class="submit-btn">Save</button>
+                        <form action="viewProduct">
+                            <button class="add-product" type="submit">Back</button>
                         </form>
+
                     </div>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
+
+        <script>
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        let form = document.querySelector("form[action='addP']"); // Chọn form thêm sản phẩm
+                                        let codeInput = document.getElementById("code");
+                                        let nameInput = document.getElementById("name");
+                                        let brandInput = document.getElementById("brand");
+                                        let typeInput = document.getElementById("type");
+                                        let quantityInput = document.getElementById("quantity");
+                                        let warrantyInput = document.getElementById("warranty");
+                                        let statusInput = document.getElementById("status");
+                                        let imageInput = document.getElementById("newImage");
+
+                                        // Hàm hiển thị lỗi
+                                        function showError(input, message) {
+                                            let errorSpan = input.parentNode.querySelector(".error-message");
+                                            if (!errorSpan) {
+                                                errorSpan = document.createElement("span");
+                                                errorSpan.className = "error-message";
+                                                errorSpan.style.color = "red";
+                                                errorSpan.style.fontSize = "14px";
+                                                input.parentNode.appendChild(errorSpan);
+                                            }
+                                            errorSpan.innerText = message;
+                                        }
+
+                                        // Hàm xoá lỗi
+                                        function clearError(input) {
+                                            let errorSpan = input.parentNode.querySelector(".error-message");
+                                            if (errorSpan) {
+                                                errorSpan.remove();
+                                            }
+                                        }
+
+                                        // Kiểm tra chỉ nhập chữ cái và số cho Product Code
+                                        codeInput.addEventListener("input", function () {
+                                            let validValue = this.value.replace(/[^a-zA-Z0-9]/g, ''); // Chỉ giữ lại chữ cái và số
+                                            if (this.value !== validValue) {
+                                                this.value = validValue;
+                                                showError(codeInput, "Only letters and numbers are allowed!");
+                                            } else {
+                                                clearError(codeInput);
+                                            }
+                                        });
+
+                                        // Kiểm tra Product Name: chỉ cho phép chữ cái, số và 1 dấu cách giữa các từ
+                                        nameInput.addEventListener("input", function () {
+                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, ''); // Chỉ cho phép chữ cái, số và khoảng trắng
+                                            validValue = validValue.replace(/\s+/g, ' '); // Chỉ cho phép 1 khoảng trắng giữa các từ
+
+                                            if (this.value !== validValue) {
+                                                this.value = validValue;
+                                                showError(nameInput, "Only letters, numbers, and single spaces between words are allowed!");
+                                            } else {
+                                                clearError(nameInput);
+                                            }
+                                        });
+
+                                        // Kiểm tra khi nhấn submit
+                                        form.addEventListener("submit", function (event) {
+                                            let isValid = true;
+
+                                            if (codeInput.value.trim() === "") {
+                                                showError(codeInput, "Product Code is required!");
+                                                isValid = false;
+                                            }
+
+                                            if (nameInput.value.trim() === "") {
+                                                showError(nameInput, "Product Name is required!");
+                                                isValid = false;
+                                            }
+
+                                            if (brandInput.value === "") {
+                                                showError(brandInput, "Please select a Brand!");
+                                                isValid = false;
+                                            }
+
+                                            if (typeInput.value.trim() === "") {
+                                                showError(typeInput, "Product Type is required!");
+                                                isValid = false;
+                                            }
+
+                                            if (quantityInput.value.trim() === "" || quantityInput.value <= 0) {
+                                                showError(quantityInput, "Quantity must be at least 1!");
+                                                isValid = false;
+                                            }
+
+                                            if (warrantyInput.value.trim() === "" || warrantyInput.value <= 0) {
+                                                showError(warrantyInput, "Warranty Period must be at least 1 month!");
+                                                isValid = false;
+                                            }
+
+                                            if (statusInput.value === "") {
+                                                showError(statusInput, "Please select a Status!");
+                                                isValid = false;
+                                            }
+
+                                            if (imageInput.files.length === 0) {
+                                                showError(imageInput, "Please upload a Product Image!");
+                                                isValid = false;
+                                            }
+
+                                            if (!isValid) {
+                                                event.preventDefault(); // Ngăn không cho form gửi đi nếu có lỗi
+                                            }
+                                        });
+                                    });
+
+                                    function previewImage(event) {
+                                        const reader = new FileReader();
+                                        reader.onload = function () {
+                                            const output = document.getElementById('currentImage');
+                                            output.src = reader.result;
+                                        };
+                                        reader.readAsDataURL(event.target.files[0]);
+                                    }
+        </script>
+
     </body>
 </html>

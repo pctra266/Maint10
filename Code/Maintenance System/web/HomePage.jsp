@@ -31,7 +31,6 @@
     <body>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
-
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">

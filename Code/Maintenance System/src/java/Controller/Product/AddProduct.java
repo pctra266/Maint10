@@ -7,9 +7,11 @@ package Controller.Product;
 import DAO.ProductDAO;
 import Model.Brand;
 import Model.Product;
+import Utils.OtherUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,6 +22,11 @@ import java.util.List;
  *
  * @author sonNH
  */
+@MultipartConfig(
+        fileSizeThreshold = 2 * 1024 * 1024, // 2MB
+        maxFileSize = 10 * 1024 * 1024, // 10MB
+        maxRequestSize = 50 * 1024 * 1024 // 50MB
+)
 public class AddProduct extends HttpServlet {
 
     /**
@@ -80,6 +87,8 @@ public class AddProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        ProductDAO productDAO = new ProductDAO();
+
         String code = request.getParameter("code");
         String name = request.getParameter("name");
         String brandId = request.getParameter("brandId");
@@ -87,18 +96,34 @@ public class AddProduct extends HttpServlet {
         String quantity = request.getParameter("quantity");
         String warrantyPeriod = request.getParameter("warrantyPeriod");
         String status = request.getParameter("status");
-        String imagePath = request.getParameter("image");
+        Part imagePart = request.getPart("image");
 
-        PrintWriter out = response.getWriter();
+        // Kiểm tra xem mã sản phẩm đã tồn tại chưa
+        if (productDAO.isProductCodeExists(code)) {
+            request.setAttribute("errorMessage", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
+            request.setAttribute("code", code);
+            request.setAttribute("name", name);
+            request.setAttribute("brandId", brandId);
+            request.setAttribute("type", type);
+            request.setAttribute("quantity", quantity);
+            request.setAttribute("warrantyPeriod", warrantyPeriod);
+            request.setAttribute("status", status);
 
-        Product product = new Product(code, name, Integer.parseInt(brandId), type, Integer.parseInt(quantity), Integer.parseInt(warrantyPeriod), status, imagePath);
-        ProductDAO productDAO = new ProductDAO();
+            doGet(request, response); // Quay lại form nhập với thông báo lỗi
+            return;
+        }
+
+        // Lưu ảnh và tiếp tục thêm sản phẩm nếu không bị trùng mã
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
+        Product product = new Product(code, name, Integer.parseInt(brandId), type,
+                Integer.parseInt(quantity), Integer.parseInt(warrantyPeriod),
+                status, imagePath);
 
         boolean success = productDAO.addProduct(product);
         if (success) {
-            response.sendRedirect("viewProduct"); // Redirect to product list page
+            response.sendRedirect("viewProduct");
         } else {
-            request.setAttribute("errorMessage", "Failed to add product. Try again.");
+            request.setAttribute("errorMessage", "Thêm sản phẩm thất bại. Vui lòng thử lại.");
             doGet(request, response);
         }
     }

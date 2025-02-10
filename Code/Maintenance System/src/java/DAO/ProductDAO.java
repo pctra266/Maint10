@@ -79,12 +79,13 @@ public class ProductDAO extends DBContext {
 
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
-        String query = "select p.ProductName, wc.WarrantyCardID \n"
-                + "from Customer c \n"
-                + "left join ProductDetail pd on c.CustomerID = pd.CustomerID\n"
-                + "join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID\n"
-                + "join Product p on pd.ProductID = p.ProductID\n"
-                + "where c.CustomerID = ?";
+        String query = """
+                       select p.ProductName, wc.WarrantyCardID 
+                       from Customer c 
+                       left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                       join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
+                       join Product p on pd.ProductID = p.ProductID
+                       where c.CustomerID = ?""";
         try (PreparedStatement ps = connection.prepareStatement(query);) {
             ps.setString(1, customerID);
             ResultSet rs = ps.executeQuery();
@@ -288,20 +289,21 @@ public class ProductDAO extends DBContext {
 
     public ArrayList<ProductDetail> getProductDetailByCustomerID(int customerID) {
         ArrayList<ProductDetail> listProductDetail = new ArrayList<>();
-        String sql = "SELECT c.CustomerID,\n"
-                + "       c.UsernameC,\n"
-                + "	   c.Name,\n"
-                + "	   c.Email,\n"
-                + "	   c.Phone,\n"
-                + "	   c.Address,\n"
-                + "	   pd.ProductCode,\n"
-                + "	   p.ProductName,\n"
-                + "	   pd.PurchaseDate,\n"
-                + "	   p.WarrantyPeriod\n"
-                + "	   \n"
-                + "FROM [Product] p LEFT JOIN ProductDetail pd ON p.ProductID = pd.ProductID\n"
-                + "LEFT JOIN Customer c ON pd.CustomerID = c.CustomerID\n"
-                + "WHERE c.CustomerID =?";
+        String sql = """
+                     SELECT c.CustomerID,
+                            c.UsernameC,
+                     \t   c.Name,
+                     \t   c.Email,
+                     \t   c.Phone,
+                     \t   c.Address,
+                     \t   pd.ProductCode,
+                     \t   p.ProductName,
+                     \t   pd.PurchaseDate,
+                     \t   p.WarrantyPeriod
+                     \t   
+                     FROM [Product] p LEFT JOIN ProductDetail pd ON p.ProductID = pd.ProductID
+                     LEFT JOIN Customer c ON pd.CustomerID = c.CustomerID
+                     WHERE c.CustomerID =?""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, customerID);
@@ -350,6 +352,19 @@ public class ProductDAO extends DBContext {
             stmt.setInt(1, productId);
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
+        } catch (SQLException e) {
+        }
+        return false;
+    }
+
+    public boolean isProductCodeExists(String code) {
+        String query = "SELECT COUNT(*) FROM Product WHERE Code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setString(1, code);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; 
+            }
         } catch (SQLException e) {
         }
         return false;

@@ -7,24 +7,26 @@ package Controller.Product;
 import DAO.ProductDAO;
 import Model.Brand;
 import Model.Product;
+import Utils.OtherUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.nio.file.Paths;
-import java.sql.SQLException;
-import java.util.Collection;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
  * @author sonNH
  */
+@MultipartConfig(
+        fileSizeThreshold = 2 * 1024 * 1024, // 2MB
+        maxFileSize = 10 * 1024 * 1024, // 10MB
+        maxRequestSize = 50 * 1024 * 1024 // 50MB
+)
 public class UpdateProductServlet extends HttpServlet {
 
     /**
@@ -101,25 +103,34 @@ public class UpdateProductServlet extends HttpServlet {
         String quantityParam = request.getParameter("quantity");
         String warrantyParam = request.getParameter("warrantyPeriod");
         String status = request.getParameter("status");
-        String image = request.getParameter("image");
+
+        Part imagePart = request.getPart("image");
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
 
 //        out.println(productIdParam);
 //        out.println(productName);
-  //      out.println(productCodeParam);
+//        out.println(productCodeParam);
 //        out.println(brandIdParam);
 //        out.println(productTypeParam);
 //        out.println(quantityParam);
 //        out.println(warrantyParam);
 //        out.println(status);
-
-        Product updatedProduct = new Product(Integer.parseInt(productIdParam), productCodeParam, productName, Integer.parseInt(brandIdParam), productTypeParam, Integer.parseInt(quantityParam), Integer.parseInt(warrantyParam), status, image);
+        Product updatedProduct = new Product(Integer.parseInt(productIdParam), 
+                productCodeParam, 
+                productName, 
+                Integer.parseInt(brandIdParam), 
+                productTypeParam, 
+                Integer.parseInt(quantityParam), 
+                Integer.parseInt(warrantyParam), 
+                status, 
+                imagePath);
 
         boolean success = p.updateProduct(updatedProduct);
         if (success) {
             response.sendRedirect("viewProduct");
         } else {
             request.setAttribute("errorMessage", "Failed to update product");
-            request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response); // Nếu không thành công, quay lại trang chỉnh sửa
+            request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
         }
     }
 
