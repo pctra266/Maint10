@@ -30,9 +30,6 @@ VALUES
 ('WC119', 19, 'Software crashes frequently', 'completed', '2025-01-28'),
 ('WC120', 20, 'Screen brightness not adjustable', 'fixing', '2025-01-29');
 
-
-INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
-VALUES
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES
 (1, 2, 'The repair process was quick and efficient.', '2025-02-14', 0, 'https://via.placeholder.com/300', 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4'),
