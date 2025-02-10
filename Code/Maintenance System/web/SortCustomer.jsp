@@ -36,7 +36,7 @@
                     </form>
 
                     <!-- Create Button -->
-                    <div style="margin-bottom: 20px; text-align: center;">
+                    <div style="margin-bottom: 20px;">
                         <a href="customer?action=add" class="btn btn-primary">Create New Customer</a>
                         <a href="customer" class="btn btn-secondary">All Customers</a>
                     </div>
