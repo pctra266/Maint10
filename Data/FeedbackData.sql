@@ -30,19 +30,18 @@ VALUES
 ('WC119', 19, 'Software crashes frequently', 'completed', '2025-01-28'),
 ('WC120', 20, 'Screen brightness not adjustable', 'fixing', '2025-01-29');
 
-
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES
-(1, 2, 'The repair process was quick and efficient.', '2025-02-14', 0, 'https://example.com/images/repair1.jpg', 'https://example.com/videos/repair1.mp4'),
-(2, 3, 'The staff was very helpful and resolved my issue completely.', '2025-02-14', 0, 'https://example.com/images/helpful_staff.jpg', NULL),
-(3, 4, 'I was satisfied with the repair, but it took a bit longer than expected.', '2025-03-14', 0, NULL, 'https://example.com/videos/long_repair.mp4'),
-(4, 5, 'The issue was resolved, but I had to visit the service center twice.', '2025-03-24', 0, 'https://example.com/images/service_center.jpg', NULL),
+(1, 2, 'The repair process was quick and efficient.', '2025-02-14', 0, 'https://via.placeholder.com/300', 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4'),
+(2, 3, 'The staff was very helpful and resolved my issue completely.', '2025-02-14', 0, 'https://via.placeholder.com/300', NULL),
+(3, 4, 'I was satisfied with the repair, but it took a bit longer than expected.', '2025-03-14', 0, NULL, 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4'),
+(4, 5, 'The issue was resolved, but I had to visit the service center twice.', '2025-03-24', 0, 'https://via.placeholder.com/300', NULL),
 (5, 1, 'The repair was excellent, and the product works like new.', '2025-03-04', 0, NULL, NULL),
-(6, 2, 'The staff explained everything clearly and provided great service.', '2025-03-11', 0, 'https://example.com/images/excellent_service.jpg', 'https://example.com/videos/excellent_service.mp4'),
+(6, 2, 'The staff explained everything clearly and provided great service.', '2025-03-11', 0, 'https://via.placeholder.com/300', 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4'),
 (7, 3, 'The process was smooth, but I had to wait for parts to arrive.', '2025-03-02', 0, NULL, NULL),
-(8, 4, 'I appreciate the service, but I feel the warranty coverage could be better.','2025-03-31', 0, 'https://example.com/images/warranty_issue.jpg', NULL),
-(9, 5, 'I had a great experience with the service team.', '2025-03-25', 0, NULL, 'https://example.com/videos/great_service.mp4'),
-(1, null, 'The issue was fixed promptly, and I was kept informed throughout.', '2025-03-01', 0, 'https://example.com/images/fixed_issue.jpg', NULL),
+(8, 4, 'I appreciate the service, but I feel the warranty coverage could be better.','2025-03-31', 0, 'https://via.placeholder.com/300', NULL),
+(9, 5, 'I had a great experience with the service team.', '2025-03-25', 0, NULL, 'https://samplelib.com/lib/preview/mp4/sample-5s.mp4'),
+(1, null, 'The issue was fixed promptly, and I was kept informed throughout.', '2025-03-01', 0, 'https://via.placeholder.com/300', NULL),
 (1, 1, 'The service was excellent, and the staff was very professional.', '2025-03-15', 0, NULL, NULL),
 (1, 2, 'I had to wait longer than expected, but the repair quality was good.', '2025-03-20', 0, NULL, NULL),
 (1, 3, 'The staff went above and beyond to assist me.', '2025-03-22', 0, NULL, NULL),
