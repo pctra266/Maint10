@@ -6,8 +6,8 @@ package Controller.Component;
 
 import DAO.ComponentDAO;
 import Model.Component;
+import Model.Pagination;
 import Utils.FormatUtils;
-import Utils.Pagination;
 import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -88,17 +88,22 @@ public class ComponentWarehouse extends HttpServlet {
             deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
             request.setAttribute("deleteStatus", deleteStatus);
         }
+        //Phan trang
+        Pagination pagination = new Pagination();
+        pagination.setListPageSize(totalComponents);
+        pagination.setCurrentPage(page);
+        pagination.setTotalPages(totalPages);
+        pagination.setTotalPagesToShow(5);
+        pagination.setPageSize(pageSize);
+        pagination.setSort(sort);
+        pagination.setOrder(order);
+        pagination.setUrlPattern("/ComponentWarehouse");
+        pagination.setSearchFields(new String[] {"search"});
+        pagination.setSearchValues(new String[] {paraSearch});
+        request.setAttribute("pagination", pagination);
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);
-        request.setAttribute("search", paraSearch);
-        request.setAttribute("totalPagesToShow", 5);
-        request.setAttribute("listSize", Pagination.listPageSize(totalComponents));
-        request.setAttribute("size", pageSize);
         request.setAttribute("components", components);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("sort", sort);
-        request.setAttribute("order", order);
         // Chuyển tiếp đến trang JSP để hiển thị
         request.getRequestDispatcher("views/Component/ComponentWarehouse.jsp").forward(request, response);
     }

@@ -69,15 +69,15 @@
                         </form>
                     </div>
                     <form action="WarrantyCard" method="get" class="row align-items-center">
-                        <input type="hidden" name="page" value="${currentPage}">
-                        <input type="hidden" name="sort" value="${sort}">
-                        <input type="hidden" name="order" value="${order}">
-                        <input type="hidden" name="status" value="${status}" />
+                        <input type="hidden" name="page" value="${pagination.currentPage}">
+                        <input type="hidden" name="sort" value="${pagination.sort}">
+                        <input type="hidden" name="order" value="${pagination.order}">
+                        <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <c:forEach items="${listSize}" var="s">
-                                        <option value="${s}" ${size==s?"selected":""}>${s}</option>
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
                                     </c:forEach>
                                 </select> 
                                 entries
@@ -85,7 +85,7 @@
                         </div>
                         <div class="col-sm-6 col-md-6 text-end">
                             <div class="col-md-3 input-group d-flex justify-content-end">
-                                <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${search}" aria-controls="datatables-column-search-text-inputs">
+                                <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" placeholder="Search" value="${pagination.searchValues[0]}" aria-controls="datatables-column-search-text-inputs">
                                 <button type="submit" class="btn btn-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                 </button>
@@ -96,11 +96,25 @@
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
-                                <th style="width:9%">
+                                <th style="width:8%">
                                     Card Code
                                 </th>
-                                <th>
-                                    Product Code
+                                <th style="width:10%">
+                                     <form action="WarrantyCard" method="get">
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
+                                        <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
+                                        <input type="hidden" name="sort" value="productCode" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'productCode' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <button type="submit" class="btn-sort">
+                                            <i class="align-middle fas fa-fw
+                                               ${pagination.sort eq 'productCode' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        Product Code
+                                    </form>
+
                                 </th>
                                 <th>
                                     Product Name
@@ -108,19 +122,19 @@
 
                                 <th style="width:6%">
                                     <form action="WarrantyCard" method="get" class="d-flex">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                  
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="sort" value="${sort}" />
-                                        <input type="hidden" name="order" value="${order}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
+                                        <input type="hidden" name="sort" value="${pagination.sort}" />
+                                        <input type="hidden" name="order" value="${pagination.order}" />
                                         <select name="status" class="form-select form-select-sm d-inline-block custom-select" 
                                                 style="width: auto; padding-right:1px ; border: none; background: transparent; font: inherit; transform: translate(-0.38rem, 0.18rem)" 
                                                 onchange="this.form.submit()">
                                             <option disabled selected>Status</option>
-                                            <option value="fixing" ${status=="fixing"?"selected":""}>Fixing</option>
-                                            <option value="done" ${status=="done"?"selected":""}>Done</option>
-                                            <option value="completed" ${status=="completed"?"selected":""}>Completed</option>
-                                            <option value="cancel" ${status=="cancel"?"selected":""}>Cancel</option>
+                                            <option value="fixing" ${pagination.searchValues[1]=="fixing"?"selected":""}>Fixing</option>
+                                            <option value="done" ${pagination.searchValues[1]=="done"?"selected":""}>Done</option>
+                                            <option value="completed" ${pagination.searchValues[1]=="completed"?"selected":""}>Completed</option>
+                                            <option value="cancel" ${pagination.searchValues[1]=="cancel"?"selected":""}>Cancel</option>
                                         </select> 
                                         <i class="align-middle me-2 fas fa-fw fa-angle-down" style="transform: translate(-0.1rem, 0.7rem)"></i>
                                     </form>
@@ -128,15 +142,15 @@
 
                                 <th style="width:10%">
                                     <form action="WarrantyCard" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                  
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="status" value="${status}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
+                                        <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
                                         <input type="hidden" name="sort" value="createdDate" />
-                                        <input type="hidden" name="order" value="${sort eq 'createdDate' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'createdDate' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'createdDate' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'createdDate' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Created Date
@@ -145,15 +159,15 @@
                                 </th>
                                 <th style="width:10%">
                                     <form action="WarrantyCard" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />                                        
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
-                                        <input type="hidden" name="status" value="${status}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />                                        
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
+                                        <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
                                         <input type="hidden" name="sort" value="returnDate" />
-                                        <input type="hidden" name="order" value="${sort eq 'returnDate' and order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'returnDate' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'returnDate' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'returnDate' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Return Date
@@ -168,7 +182,7 @@
                                     Issue
                                 </th>
 
-                                <th style="width:8%">Action<a href="?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
 
@@ -177,7 +191,7 @@
                             <!--varStatus để lấy trạng thái của vòng lặp-->
                             <c:forEach var="card" items="${cardList}" varStatus="status">
                                 <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-                                    <td>${status.index + 1 + (currentPage - 1) * size}</td>
+                                    <td>${status.index + 1 + (currentPage - 1) * pageSize}</td>
                                     <td>${card.warrantyCardCode}</td>
                                     <td>${card.productCode}</td>
                                     <td>${card.productName}</td>
@@ -214,7 +228,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="WarrantyCard/Delete?ID=${card.warrantyCardID}&page=${currentPage}&page-size=${size}&search=${search}&sort=${sort}&order=${order}" class="btn btn-primary">Delete</a>
+                                            <a href="WarrantyCard/Delete?ID=${card.warrantyCardID}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&status=${pagination.searchValues[1]}&sort=${pagination.sort}&order=${pagination.order}" class="btn btn-primary">Delete</a>
                                         </div>
                                     </div>
                                 </div>
@@ -232,71 +246,25 @@
 
                     </c:if>
 
-                    <!-- Phân trang -->
-                    <div class="text-center">
-                        <div class="btn-group me-2" role="group" style="margin-top:1rem" aria-label="First group">
-                            <c:if test="${page > totalPages}">
-                                <c:set var="page" value="totalPages" />
-                            </c:if>
-                            <!-- Nút "Đầu" -->
-                            <a href="?page=1&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
+                    <jsp:include page="../../includes/pagination.jsp" />
 
-                            <!-- Nút "Trước" -->
-                            <a href="?page=${currentPage - 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
-
-                            <!-- Các số trang -->
-                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
-                            <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
-
-                            <!-- Điều chỉnh startPage và endPage nếu cần -->
-                            <c:if test="${startPage < 1}">
-                                <c:set var="startPage" value="1" />
-                                <c:set var="endPage" value="${totalPagesToShow>totalPages?totalPages:totalPagesToShow}" />
-                            </c:if>
-                            <c:if test="${endPage > totalPages}">
-                                <c:set var="endPage" value="${totalPages}" />
-                                <c:set var="startPage" value="${endPage - totalPagesToShow + 1>0?endPage - totalPagesToShow + 1:1}" />
-                            </c:if>
-
-                            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="?page=${i}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
-                            </c:forEach>
-
-                            <!-- Nút "Sau" -->
-                            <a href="?page=${currentPage + 1}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
-
-                            <!-- Nút "Cuối" -->
-                            <a href="?page=${totalPages}&page-size=${size}&search=${search}&sort=${sort}&order=${order}&status=${status}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
-                        </div>
-
-                        <!-- Ô nhập trang -->
-                        <div class="text-center" style="margin-top: 1rem;">
-                            <form class="row align-items-center justify-content-center" action="" method="get">
-                                <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
-                                <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
-                                <input type="hidden" name="sort" value="${sort}">
-                                <input type="hidden" name="order" value="${order}">
-                                <input type="hidden" name="search" value="${search}">
-                                <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
-                            </form>
-                        </div>
-                        <c:if test="${not empty deleteStatus}">
-                            <div class="alert alert-warning alert-dismissible" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                <div class="alert-message">
-                                    <strong>${deleteStatus}</strong>
-                                </div>
+                    <c:if test="${not empty deleteStatus}">
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${deleteStatus}</strong>
                             </div>
-                        </c:if>
-                    </div>
-                </main>
-                <jsp:include page="../../includes/footer.jsp" />
+                        </div>
+                    </c:if>
             </div>
+        </main>
+        <jsp:include page="../../includes/footer.jsp" />
+    </div>
 
-        </div>
+</div>
 
-        <script src="js/app.js"></script>
+<script src="js/app.js"></script>
 
-    </body>
+</body>
 
 </html>

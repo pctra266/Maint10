@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
-import Utils.Pagination;
+import Model.Pagination;
 import Utils.SearchUtils;
 import java.util.ArrayList;
 
@@ -65,17 +65,22 @@ public class WarrantyCardList extends HttpServlet {
         if (createStatus != null && createStatus.equals("true")) {
             request.setAttribute("createStatus", "Card created successfully");
         }
-        request.setAttribute("order", order);
-        request.setAttribute("sort", sort);
-        request.setAttribute("status", status);
-        request.setAttribute("cardList", cards);
+          //Phan trang
+        Pagination pagination = new Pagination();
+        pagination.setListPageSize(totalCards);
+        pagination.setCurrentPage(page);
+        pagination.setTotalPages(totalPages);
+        pagination.setTotalPagesToShow(5);
+        pagination.setPageSize(pageSize);
+        pagination.setSort(sort);
+        pagination.setOrder(order);
+        pagination.setUrlPattern("/WarrantyCard");
+        pagination.setSearchFields(new String[] {"search", "status"});
+        pagination.setSearchValues(new String[] {paraSearch, status});
+        request.setAttribute("pagination", pagination);
+
         request.setAttribute("totalCards", totalCards);
-        request.setAttribute("listSize", Pagination.listPageSize(totalCards));
-        request.setAttribute("search", paraSearch);
-        request.setAttribute("totalPagesToShow", 5);
-        request.setAttribute("size", pageSize);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("cardList", cards);
         request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);
     }
 
