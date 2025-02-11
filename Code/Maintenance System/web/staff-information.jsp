@@ -129,13 +129,9 @@ button:hover {
                 </c:if>
                 <form action="StaffController" method="post" enctype="multipart/form-data">    
                     <input type="hidden" name="action" value="Update">
-                    <div class="add__signin-input">
-                            <label for="password" class="add__input-label"
-                                >Staff ID</label
-                            ><br>
                             <input
                                 id="staffID"
-                                type="staffID"
+                                type="hidden"
                                 class="add__input"
                                 oninput="checkInput(this)"
                                 name="staffID"
@@ -143,7 +139,6 @@ button:hover {
                                 readonly
                             />
 
-                        </div>
 
                         <div class="add__signin-input">    
                             <label for="password" class="add__input-label"
@@ -160,13 +155,10 @@ button:hover {
                             />
 
                         </div>
-                        <div class="add__signin-input">
-                            <label for="password" class="add__input-label"
-                                >Password</label
-                            ><br>
+                        
                             <input
                                 id="password"
-                                type="password"
+                                type="hidden"
                                 class="add__input"
                                 oninput="checkInput(this)"
                                 name="password"
@@ -174,7 +166,6 @@ button:hover {
                                 required
                             />
 
-                        </div>
 
                         <div class="add__signin-input">
                             <label for="password" class="add__input-label"
