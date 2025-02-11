@@ -91,10 +91,11 @@ public class UpdateProductServlet extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ProductDAO p = new ProductDAO();
-        PrintWriter out = response.getWriter();
+
         String productIdParam = request.getParameter("pid");
         String productName = request.getParameter("productName");
         String brandIdParam = request.getParameter("brandId");
@@ -105,33 +106,75 @@ public class UpdateProductServlet extends HttpServlet {
         String status = request.getParameter("status");
 
         Part imagePart = request.getPart("image");
-        String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
+        String imagePath = null;
 
-//        out.println(productIdParam);
-//        out.println(productName);
-//        out.println(productCodeParam);
-//        out.println(brandIdParam);
-//        out.println(productTypeParam);
-//        out.println(quantityParam);
-//        out.println(warrantyParam);
-//        out.println(status);
-        Product updatedProduct = new Product(Integer.parseInt(productIdParam), 
-                productCodeParam, 
-                productName, 
-                Integer.parseInt(brandIdParam), 
-                productTypeParam, 
-                Integer.parseInt(quantityParam), 
-                Integer.parseInt(warrantyParam), 
-                status, 
-                imagePath);
-
-        boolean success = p.updateProduct(updatedProduct);
-        if (success) {
-            response.sendRedirect("viewProduct");
-        } else {
-            request.setAttribute("errorMessage", "Failed to update product");
-            request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
+        if (p.isProductCodeExists(productCodeParam)) {
+            request.setAttribute("errorMessage", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
+            reloadProductData(request, response, p, productIdParam, productName, brandIdParam, productCodeParam, productTypeParam, quantityParam, warrantyParam, status);
+            return;
         }
+
+        // Kiểm tra ảnh nếu có tải lên
+        if (imagePart != null && imagePart.getSize() > 0) {
+            String fileName = imagePart.getSubmittedFileName();
+            if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
+                request.setAttribute("errorMessage", "Only JPG, JPEG, and PNG files are allowed!");
+                reloadProductData(request, response, p, productIdParam, productName, brandIdParam, productCodeParam, productTypeParam, quantityParam, warrantyParam, status);
+                return;
+            }
+            imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
+        } else {
+            imagePath = request.getParameter("existingImage");
+        }
+
+        try {
+            Product updatedProduct = new Product(
+                    Integer.parseInt(productIdParam),
+                    productCodeParam,
+                    productName,
+                    Integer.parseInt(brandIdParam),
+                    productTypeParam,
+                    Integer.parseInt(quantityParam),
+                    Integer.parseInt(warrantyParam),
+                    status,
+                    imagePath
+            );
+            boolean success = p.updateProduct(updatedProduct);
+            if (success) {
+                response.sendRedirect("viewProduct");
+            } else {
+                request.setAttribute("errorMessage", "Failed to update product");
+                reloadProductData(request, response, p, productIdParam, productName, brandIdParam, productCodeParam, productTypeParam, quantityParam, warrantyParam, status);
+            }
+        } catch (NumberFormatException e) {
+            request.setAttribute("errorMessage", "Invalid input format!");
+            reloadProductData(request, response, p, productIdParam, productName, brandIdParam, productCodeParam, productTypeParam, quantityParam, warrantyParam, status);
+        }
+    }
+
+    private void reloadProductData(HttpServletRequest request, HttpServletResponse response, ProductDAO p,
+            String productId, String productName, String brandId, String productCode,
+            String productType, String quantity, String warranty, String status)
+            throws ServletException, IOException {
+        List<String> productTypes = p.getDistinctProductTypes();
+        List<Brand> listBrand = p.getAllBrands();
+        request.setAttribute("listBrand", listBrand);
+        request.setAttribute("listType", productTypes);
+
+        Product product = new Product(
+                Integer.parseInt(productId),
+                productCode,
+                productName,
+                Integer.parseInt(brandId),
+                productType,
+                Integer.parseInt(quantity),
+                Integer.parseInt(warranty),
+                status,
+                request.getParameter("existingImage")
+        );
+
+        request.setAttribute("product", product);
+        request.getRequestDispatcher("Product/updateProduct1.jsp").forward(request, response);
     }
 
     /**

@@ -205,7 +205,7 @@ public class ProductDAO extends DBContext {
     }
 
     public int getTotalProducts(String searchName, String searchCode, Integer brandId, String type) {
-        String sql = "SELECT COUNT(*) FROM Product p WHERE 1=1";
+        String sql = "SELECT COUNT(*) FROM Product p WHERE Status != 'inactive'";
         if (searchName != null && !searchName.trim().isEmpty()) {
             sql += " AND p.ProductName LIKE ?";
         }
@@ -372,16 +372,18 @@ public class ProductDAO extends DBContext {
 
     public static void main(String[] args) {
         ProductDAO productDAO = new ProductDAO();
+        
+        
         /*
         List<Product> products = productDAO.getAllProducts();
         for (Product p : products) {
             System.out.println(p.getBrandName());
         }
          */
-        ArrayList<ProductDetail> d = productDAO.getProductDetailByCustomerID(2);
-        for (ProductDetail p : d) {
-            System.out.println(p.getPurchaseDate());
-        }
+//        ArrayList<ProductDetail> d = productDAO.getProductDetailByCustomerID(2);
+//        for (ProductDetail p : d) {
+//            System.out.println(p.getPurchaseDate());
+//        }
     }
 
 }

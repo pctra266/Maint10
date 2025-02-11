@@ -14,26 +14,26 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-
             body {
-                font-family: Arial, sans-serif;
-                background-color: #f4f4f4;
+                font-family: 'Inter', sans-serif;
+                background-color: #f8f9fa;
                 margin: 0;
                 padding: 0;
             }
 
             h1 {
                 text-align: center;
-                margin-top: 30px;
+                margin-top: 20px;
+                color: #333;
             }
 
             .form-container {
                 max-width: 600px;
                 margin: 20px auto;
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                background-color: #ffffff;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
             }
 
             form {
@@ -44,35 +44,79 @@
 
             label {
                 font-size: 1rem;
-                font-weight: bold;
+                font-weight: 600;
+                color: #444;
             }
 
             input, select {
-                padding: 10px;
+                padding: 12px;
                 font-size: 1rem;
-                border-radius: 5px;
-                border: 1px solid #ddd;
+                border-radius: 8px;
+                border: 1px solid #ccc;
+                transition: 0.3s;
             }
 
-            input[type="number"] {
-                -moz-appearance: textfield; /* For removing the up/down arrows in the number field */
-                appearance: textfield;
+            input:focus, select:focus {
+                border-color: #4CAF50;
+                outline: none;
+                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
-            input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
-                -webkit-appearance: none;
-                margin: 0;
+            /* Cải thiện phần tải lên ảnh */
+            .image-upload-container {
+                text-align: center;
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin-top: 10px;
+            }
+
+            #currentImage {
+                max-width: 100%;
+                height: auto;
+                border-radius: 10px;
+                border: 2px solid #ddd;
+                transition: 0.3s;
+            }
+
+            #currentImage:hover {
+                border-color: #4CAF50;
+                transform: scale(1.05);
+            }
+
+            .image-upload-label {
+                display: block;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 15px;
+                border-radius: 6px;
+                margin-top: 10px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+
+            .image-upload-label:hover {
+                background-color: #45a049;
+            }
+
+            #newImage {
+                display: none;
+            }
+
+            /* Cải thiện nút */
+            button {
+                padding: 12px;
+                font-size: 1rem;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: 0.3s;
             }
 
             button[type="submit"] {
                 background-color: #4CAF50;
                 color: white;
                 border: none;
-                padding: 12px 20px;
-                font-size: 1rem;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
             }
 
             button[type="submit"]:hover {
@@ -83,27 +127,24 @@
                 background-color: #f44336;
                 color: white;
                 border: none;
-                padding: 12px 20px;
-                font-size: 1rem;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
             }
 
             .add-product:hover {
                 background-color: #da190b;
             }
 
-            .form-container h2 {
-                text-align: center;
-                color: #333;
-            }
-
+            /* Cải thiện thông báo lỗi */
             .error-message {
                 color: red;
                 font-size: 14px;
-                display: block;
                 margin-top: 5px;
+                display: block;
+                font-weight: 500;
+            }
+
+            input.error, select.error {
+                border: 2px solid red;
+                box-shadow: 0 0 6px rgba(255, 0, 0, 0.3);
             }
         </style>
     </head>
@@ -123,11 +164,11 @@
                         <input type="hidden" name="pid" value="${product.productId}">
                         <input type="hidden" name="status" value="${product.status}">
 
-                        <label for="productName">Product Name:</label>
-                        <input type="text" id="productName" name="productName" value="${product.productName}" required>
-
                         <label for="productCode">Product Code:</label>
                         <input type="text" id="productCode" name="productCode" value="${product.code}" required>
+
+                        <label for="productName">Product Name:</label>
+                        <input type="text" id="productName" name="productName" value="${product.productName}" required>
 
                         <label for="brandId">Brand:</label>
                         <select name="brandId" id="brandId" required>
@@ -214,20 +255,6 @@
                                     }
                                 });
 
-                                imageInput.addEventListener("change", function () {
-                                    let file = imageInput.files[0];
-                                    if (file) {
-                                        let fileType = file.type;
-                                        if (fileType !== "image/jpeg" && fileType !== "image/png") {
-                                            showError(imageInput, "Only JPG and PNG files are allowed!");
-                                            imageInput.value = ""; // Reset file input
-                                        } else {
-                                            clearError(imageInput);
-                                            previewImage(event);
-                                        }
-                                    }
-                                });
-
                                 form.addEventListener("submit", function (event) {
                                     let isValid = true;
 
@@ -272,8 +299,6 @@
                                 };
                                 reader.readAsDataURL(event.target.files[0]);
                             }
-
-
         </script>
     </body>
 </html>
