@@ -350,14 +350,52 @@
                                         });
                                     });
 
-                                    function previewImage(event) {
-                                        const reader = new FileReader();
-                                        reader.onload = function () {
-                                            const output = document.getElementById('currentImage');
-                                            output.src = reader.result;
-                                        };
-                                        reader.readAsDataURL(event.target.files[0]);
-                                    }
+                                    document.addEventListener("DOMContentLoaded", function () {
+                                        let imageInput = document.getElementById("newImage");
+
+                                        function showError(input, message) {
+                                            let errorSpan = input.parentNode.querySelector(".error-message");
+                                            if (!errorSpan) {
+                                                errorSpan = document.createElement("span");
+                                                errorSpan.className = "error-message";
+                                                errorSpan.style.color = "red";
+                                                errorSpan.style.fontSize = "14px";
+                                                input.parentNode.appendChild(errorSpan);
+                                            }
+                                            errorSpan.innerText = message;
+                                        }
+
+                                        function clearError(input) {
+                                            let errorSpan = input.parentNode.querySelector(".error-message");
+                                            if (errorSpan) {
+                                                errorSpan.remove();
+                                            }
+                                        }
+
+                                        // Kiểm tra file định dạng ảnh hợp lệ
+                                        imageInput.addEventListener("change", function (event) {
+                                            let file = event.target.files[0];
+                                            if (file) {
+                                                let allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+                                                if (!allowedExtensions.test(file.name)) {
+                                                    showError(imageInput, "Only JPG, JPEG, and PNG files are allowed!");
+                                                    imageInput.value = ""; // Xóa file không hợp lệ
+                                                } else {
+                                                    clearError(imageInput);
+                                                    previewImage(event);
+                                                }
+                                            }
+                                        });
+
+                                        function previewImage(event) {
+                                            const reader = new FileReader();
+                                            reader.onload = function () {
+                                                const output = document.getElementById('currentImage');
+                                                output.src = reader.result;
+                                            };
+                                            reader.readAsDataURL(event.target.files[0]);
+                                        }
+                                    });
         </script>
 
     </body>
