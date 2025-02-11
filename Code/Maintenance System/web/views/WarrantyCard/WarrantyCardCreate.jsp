@@ -79,6 +79,17 @@
                                 </div>
                             </div>
                         </c:if>
+                        <c:if test="${not empty pictureAlert}">
+                            <div class="d-flex justify-content-center">
+                                <div class="col-md-7 alert alert-danger alert-dismissible mt-4 text-center" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message">
+                                        <strong>${pictureAlert}</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
+                       
                         <form action="WarrantyCard/Add" method="POST" class="row g-3" enctype="multipart/form-data">
                             <!-- ID ẩn -->
                             <input type="hidden" name="productDetailID" value="${pd.productDetailID}">

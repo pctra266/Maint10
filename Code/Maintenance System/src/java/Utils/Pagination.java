@@ -16,7 +16,6 @@ public class Pagination {
         List<Integer> list = new ArrayList<>();
         list.add(10);
         list.add(30);
-        list.add(total/10);
         list.add(total/5);
         list.add(total/4);
         list.add(total/3);

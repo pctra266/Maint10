@@ -151,11 +151,15 @@ public class ComponentAction extends HttpServlet {
         } else {
             request.setAttribute("price", newPrice);
         }
-
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
+        if (imagePath == null) {
+        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+            canAdd = false;
+            request.setAttribute("pictureAlert", "Invalid picture");
+        }
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
         // Khong hop le thi tra lai trang Add
         if (canAdd) {
-            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
             Component component = new Component();
             component.setComponentName(newName.trim());
             component.setComponentCode(newCode.trim());
@@ -226,6 +230,12 @@ public class ComponentAction extends HttpServlet {
             request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
             canUpdate = false;
         }
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
+        if (imagePath == null) {
+        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+            canUpdate = false;
+            request.setAttribute("pictureAlert", "Invalid picture");
+        }
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
@@ -237,7 +247,6 @@ public class ComponentAction extends HttpServlet {
             component.setPrice(newPrice);
 
             // Lưu ảnh mới nếu có
-            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component/");
             if (imagePath != null) {
                 component.setImage(imagePath);
             }
