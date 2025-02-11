@@ -72,12 +72,12 @@ public class ChangePasswordServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-//       CustomerDAO customerDao = new CustomerDAO();
-//        StaffDAO staffDao = new StaffDAO();
-//        HttpSession session = request.getSession();
-//        String oldpassword = request.getParameter("oldpassword");
-//        String newpassword = request.getParameter("newpassword");
-//        String confirmpassword = request.getParameter("confirmpassword");
+       CustomerDAO customerDao = new CustomerDAO();
+        StaffDAO staffDao = new StaffDAO();
+        HttpSession session = request.getSession();
+        String oldpassword = request.getParameter("oldpassword");
+        String newpassword = request.getParameter("newpassword");
+        String confirmpassword = request.getParameter("confirmpassword");
 //
 //        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
 //            request.setAttribute("error", "Confirm password not the same new password");
@@ -143,7 +143,7 @@ public class ChangePasswordServlet extends HttpServlet {
         }
         // change password customer
         if (customer != null) {
-            Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), newpassword,
+            Customer updatedCustomerPassword = new Customer(String.valueOf(customer.getCustomerID()), customer.getUsernameC(), newpassword,
                     customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(),customer.getImage());
 
             customerDao.changePassword(updatedCustomerPassword); 

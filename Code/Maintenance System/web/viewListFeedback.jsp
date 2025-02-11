@@ -77,7 +77,7 @@
                                     <td>${o.note}</td>
                                     <td>${(o.videoURL!=null || o.imageURL != null)?"Attached":"Empty"}</td>
                                     <td><a href="feedback?feedbackID=${o.feedbackID}&action=deleteFeedback">Delete</a></td>
-                                    <td><a href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail</a></td>
+                                    <td><a href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail & Edit</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
