@@ -14,6 +14,91 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
+
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+
+            h1 {
+                text-align: center;
+                margin-top: 30px;
+            }
+
+            .form-container {
+                max-width: 600px;
+                margin: 20px auto;
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            }
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            label {
+                font-size: 1rem;
+                font-weight: bold;
+            }
+
+            input, select {
+                padding: 10px;
+                font-size: 1rem;
+                border-radius: 5px;
+                border: 1px solid #ddd;
+            }
+
+            input[type="number"] {
+                -moz-appearance: textfield; /* For removing the up/down arrows in the number field */
+                appearance: textfield;
+            }
+
+            input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            button[type="submit"] {
+                background-color: #4CAF50;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                font-size: 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            button[type="submit"]:hover {
+                background-color: #45a049;
+            }
+
+            .add-product {
+                background-color: #f44336;
+                color: white;
+                border: none;
+                padding: 12px 20px;
+                font-size: 1rem;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .add-product:hover {
+                background-color: #da190b;
+            }
+
+            .form-container h2 {
+                text-align: center;
+                color: #333;
+            }
+
             .error-message {
                 color: red;
                 font-size: 14px;
@@ -93,8 +178,8 @@
                                 let imageInput = document.getElementById("newImage");
 
                                 function showError(input, message) {
-                                    let errorSpan = input.nextElementSibling;
-                                    if (!errorSpan || !errorSpan.classList.contains("error-message")) {
+                                    let errorSpan = input.parentNode.querySelector(".error-message");
+                                    if (!errorSpan) {
                                         errorSpan = document.createElement("span");
                                         errorSpan.className = "error-message";
                                         input.parentNode.appendChild(errorSpan);
@@ -103,8 +188,8 @@
                                 }
 
                                 function clearError(input) {
-                                    let errorSpan = input.nextElementSibling;
-                                    if (errorSpan && errorSpan.classList.contains("error-message")) {
+                                    let errorSpan = input.parentNode.querySelector(".error-message");
+                                    if (errorSpan) {
                                         errorSpan.remove();
                                     }
                                 }
@@ -112,27 +197,71 @@
                                 codeInput.addEventListener("input", function () {
                                     let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
                                     this.value = validValue;
-                                    validValue ? clearError(codeInput) : showError(codeInput, "Only letters and numbers are allowed!");
+                                    if (validValue) {
+                                        clearError(codeInput);
+                                    } else {
+                                        showError(codeInput, "Only letters and numbers are allowed!");
+                                    }
                                 });
 
                                 nameInput.addEventListener("input", function () {
                                     let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, ' ');
                                     this.value = validValue;
-                                    validValue ? clearError(nameInput) : showError(nameInput, "Only letters, numbers, and single spaces are allowed!");
+                                    if (validValue) {
+                                        clearError(nameInput);
+                                    } else {
+                                        showError(nameInput, "Only letters, numbers, and single spaces are allowed!");
+                                    }
+                                });
+
+                                imageInput.addEventListener("change", function () {
+                                    let file = imageInput.files[0];
+                                    if (file) {
+                                        let fileType = file.type;
+                                        if (fileType !== "image/jpeg" && fileType !== "image/png") {
+                                            showError(imageInput, "Only JPG and PNG files are allowed!");
+                                            imageInput.value = ""; // Reset file input
+                                        } else {
+                                            clearError(imageInput);
+                                            previewImage(event);
+                                        }
+                                    }
                                 });
 
                                 form.addEventListener("submit", function (event) {
                                     let isValid = true;
-                                    if (!codeInput.value.trim())
-                                        showError(codeInput, "Product Code is required!"), isValid = false;
-                                    if (!nameInput.value.trim())
-                                        showError(nameInput, "Product Name is required!"), isValid = false;
-                                    if (!quantityInput.value.trim() || quantityInput.value <= 0)
-                                        showError(quantityInput, "Quantity must be at least 1!"), isValid = false;
-                                    if (!warrantyInput.value.trim() || warrantyInput.value <= 0)
-                                        showError(warrantyInput, "Warranty must be at least 1 month!"), isValid = false;
-                                    if (!isValid)
+
+                                    if (!codeInput.value.trim()) {
+                                        showError(codeInput, "Product Code is required!");
+                                        isValid = false;
+                                    } else {
+                                        clearError(codeInput);
+                                    }
+
+                                    if (!nameInput.value.trim()) {
+                                        showError(nameInput, "Product Name is required!");
+                                        isValid = false;
+                                    } else {
+                                        clearError(nameInput);
+                                    }
+
+                                    if (!quantityInput.value.trim() || quantityInput.value <= 0) {
+                                        showError(quantityInput, "Quantity must be at least 1!");
+                                        isValid = false;
+                                    } else {
+                                        clearError(quantityInput);
+                                    }
+
+                                    if (!warrantyInput.value.trim() || warrantyInput.value <= 0) {
+                                        showError(warrantyInput, "Warranty must be at least 1 month!");
+                                        isValid = false;
+                                    } else {
+                                        clearError(warrantyInput);
+                                    }
+
+                                    if (!isValid) {
                                         event.preventDefault();
+                                    }
                                 });
                             });
 
@@ -143,6 +272,8 @@
                                 };
                                 reader.readAsDataURL(event.target.files[0]);
                             }
+
+
         </script>
     </body>
 </html>
