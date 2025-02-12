@@ -245,14 +245,13 @@
 
         <script>
                                     document.addEventListener("DOMContentLoaded", function () {
-                                        let form = document.querySelector("form[action='addP']"); // Chọn form thêm sản phẩm
+                                        let form = document.querySelector("form[action='addP']");
                                         let codeInput = document.getElementById("code");
                                         let nameInput = document.getElementById("name");
                                         let brandInput = document.getElementById("brand");
                                         let typeInput = document.getElementById("type");
                                         let quantityInput = document.getElementById("quantity");
                                         let warrantyInput = document.getElementById("warranty");
-                                        let statusInput = document.getElementById("status");
                                         let imageInput = document.getElementById("newImage");
 
                                         // Hàm hiển thị lỗi
@@ -276,9 +275,9 @@
                                             }
                                         }
 
-                                        // Kiểm tra chỉ nhập chữ cái và số cho Product Code
+                                        // Kiểm tra Product Code chỉ có chữ và số
                                         codeInput.addEventListener("input", function () {
-                                            let validValue = this.value.replace(/[^a-zA-Z0-9]/g, ''); // Chỉ giữ lại chữ cái và số
+                                            let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
                                             if (this.value !== validValue) {
                                                 this.value = validValue;
                                                 showError(codeInput, "Only letters and numbers are allowed!");
@@ -287,18 +286,21 @@
                                             }
                                         });
 
-                                        // Kiểm tra Product Name: chỉ cho phép chữ cái, số và 1 dấu cách giữa các từ
+                                        // Kiểm tra định dạng Product Name
                                         nameInput.addEventListener("input", function () {
-                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, ''); // Chỉ cho phép chữ cái, số và khoảng trắng
-                                            validValue = validValue.replace(/\s+/g, ' '); // Chỉ cho phép 1 khoảng trắng giữa các từ
+                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, ''); // Chỉ cho phép chữ cái, số, và dấu cách
+                                            validValue = validValue.replace(/\s{2,}/g, ' '); // Chỉ cho phép 1 dấu cách giữa các từ
 
                                             if (this.value !== validValue) {
                                                 this.value = validValue;
                                                 showError(nameInput, "Only letters, numbers, and single spaces between words are allowed!");
+                                            } else if (this.value.trim() === "") {
+                                                showError(nameInput, "Product Name cannot be only spaces!");
                                             } else {
                                                 clearError(nameInput);
                                             }
                                         });
+
 
                                         // Kiểm tra khi nhấn submit
                                         form.addEventListener("submit", function (event) {
@@ -334,18 +336,13 @@
                                                 isValid = false;
                                             }
 
-                                            if (statusInput.value === "") {
-                                                showError(statusInput, "Please select a Status!");
-                                                isValid = false;
-                                            }
-
                                             if (imageInput.files.length === 0) {
                                                 showError(imageInput, "Please upload a Product Image!");
                                                 isValid = false;
                                             }
 
                                             if (!isValid) {
-                                                event.preventDefault(); // Ngăn không cho form gửi đi nếu có lỗi
+                                                event.preventDefault(); // Ngăn form gửi nếu có lỗi
                                             }
                                         });
                                     });
@@ -371,21 +368,6 @@
                                                 errorSpan.remove();
                                             }
                                         }
-
-                                        // Kiểm tra file định dạng ảnh hợp lệ
-                                        imageInput.addEventListener("change", function (event) {
-                                            let file = event.target.files[0];
-                                            if (file) {
-                                                let allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
-                                                if (!allowedExtensions.test(file.name)) {
-                                                    showError(imageInput, "Only JPG, JPEG, and PNG files are allowed!");
-                                                    imageInput.value = ""; // Xóa file không hợp lệ
-                                                } else {
-                                                    clearError(imageInput);
-                                                    previewImage(event);
-                                                }
-                                            }
-                                        });
 
                                         function previewImage(event) {
                                             const reader = new FileReader();

@@ -29,15 +29,6 @@ import java.util.List;
 )
 public class AddProduct extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -55,15 +46,6 @@ public class AddProduct extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,14 +58,6 @@ public class AddProduct extends HttpServlet {
         request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -98,7 +72,7 @@ public class AddProduct extends HttpServlet {
         String status = request.getParameter("status");
         Part imagePart = request.getPart("image");
 
-        // Kiểm tra xem mã sản phẩm đã tồn tại chưa
+        // Kiểm tra mã sản phẩm đã tồn tại chưa
         if (productDAO.isProductCodeExists(code)) {
             request.setAttribute("errorMessage", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
             request.setAttribute("code", code);
@@ -108,39 +82,57 @@ public class AddProduct extends HttpServlet {
             request.setAttribute("quantity", quantity);
             request.setAttribute("warrantyPeriod", warrantyPeriod);
             request.setAttribute("status", status);
-
-            doGet(request, response); // Quay lại form nhập với thông báo lỗi
+            doGet(request, response);
             return;
         }
 
-        // Lưu ảnh và tiếp tục thêm sản phẩm nếu không bị trùng mã
+        // Kiểm tra định dạng ảnh
+        String fileName = imagePart.getSubmittedFileName();
+        if (fileName == null || fileName.isEmpty()) {
+            request.setAttribute("errorMessage", "Vui lòng tải lên ảnh sản phẩm.");
+            request.setAttribute("code", code);
+            request.setAttribute("name", name);
+            request.setAttribute("brandId", brandId);
+            request.setAttribute("type", type);
+            request.setAttribute("quantity", quantity);
+            request.setAttribute("warrantyPeriod", warrantyPeriod);
+            request.setAttribute("status", status);
+            doGet(request, response);
+            return;
+        }
+
+        String lowerCaseFileName = fileName.toLowerCase();
+        if (!(lowerCaseFileName.endsWith(".jpg") || lowerCaseFileName.endsWith(".jpeg") || lowerCaseFileName.endsWith(".png"))) {
+            request.setAttribute("errorMessage", "Ảnh phải có định dạng JPG, JPEG hoặc PNG.");
+            request.setAttribute("code", code);
+            request.setAttribute("name", name);
+            request.setAttribute("brandId", brandId);
+            request.setAttribute("type", type);
+            request.setAttribute("quantity", quantity);
+            request.setAttribute("warrantyPeriod", warrantyPeriod);
+            request.setAttribute("status", status);
+            doGet(request, response);
+            return;
+        }
+
+        // Lưu ảnh nếu hợp lệ
         String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-        Product product = new Product(code,
-                name,
-                Integer.parseInt(brandId),
-                type,
-                Integer.parseInt(quantity),
-                Integer.parseInt(warrantyPeriod),
-                status,
-                imagePath);
+        Product product = new Product(code, name, Integer.parseInt(brandId), type, Integer.parseInt(quantity), Integer.parseInt(warrantyPeriod), status, imagePath);
 
         boolean success = productDAO.addProduct(product);
         if (success) {
             response.sendRedirect("viewProduct");
         } else {
             request.setAttribute("errorMessage", "Thêm sản phẩm thất bại. Vui lòng thử lại.");
+            request.setAttribute("code", code);
+            request.setAttribute("name", name);
+            request.setAttribute("brandId", brandId);
+            request.setAttribute("type", type);
+            request.setAttribute("quantity", quantity);
+            request.setAttribute("warrantyPeriod", warrantyPeriod);
+            request.setAttribute("status", status);
             doGet(request, response);
         }
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }
