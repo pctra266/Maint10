@@ -35,11 +35,10 @@
                             </div>
                             <div>
                                 <label class="form-label">Product: </label>
-
                                 <select class="form-select" name="WarrantyCardID">
                                     <option value=""></option>
                                     <c:forEach items="${listProductByCustomerId}" var="o">
-                                        <option value="${o.warrantyCardID}">${o.productName}</option>
+                                        <option ${(warrantyCardID== o.warrantyCardID)?"selected":""} value="${o.warrantyCardID}">${o.productName}</option>
                                     </c:forEach>
                                 </select>
                             </div>

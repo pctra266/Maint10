@@ -151,7 +151,13 @@ public class FeedbackController extends HttpServlet {
                 break;
             case "viewListFeedbackByCustomerId":
                 ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId);
+                
                 request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
+                request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
+                break;
+            case "viewFeedbackDashboard":
+                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId);
+                request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
             case "deleteFeedback":
@@ -175,6 +181,8 @@ public class FeedbackController extends HttpServlet {
             case "createFeedback":
                 ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductByCustomerId", listProductByCustomerId);
+                String warrantyCardID = request.getParameter("warrantyCardID");
+                request.setAttribute("warrantyCardID", warrantyCardID);
                 request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 break;
             default:
@@ -295,7 +303,7 @@ public class FeedbackController extends HttpServlet {
                 if(valid){
                     daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
                     mess = "Create successfully";
-                    response.sendRedirect("feedback?action=viewListFeedbackByCustomerId&mess="+mess);
+                    response.sendRedirect("feedback?action=viewFeedbackDashboard&mess="+mess);
                 }else{
                     ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                     request.setAttribute("listProductByCustomerId", listProductByCustomerId);

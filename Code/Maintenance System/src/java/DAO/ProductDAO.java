@@ -80,19 +80,22 @@ public class ProductDAO extends DBContext {
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-                       select p.ProductName, wc.WarrantyCardID 
-                       from Customer c 
-                       left join ProductDetail pd on c.CustomerID = pd.CustomerID
-                       join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
-                       join Product p on pd.ProductID = p.ProductID
-                       where c.CustomerID = ?""";
+        select wc.WarrantyCardID, wc.WarrantyCardCode, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
+                              from Customer c 
+                              left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                              join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
+                              join Product p on pd.ProductID = p.ProductID
+                              where c.CustomerID = ?""";
         try (PreparedStatement ps = connection.prepareStatement(query);) {
             ps.setString(1, customerID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProductDetail productDetail = new ProductDetail();
-                productDetail.setProductName(rs.getString(1));
-                productDetail.setWarrantyCardID(rs.getInt(2));
+                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                productDetail.setProductName(rs.getString("ProductName"));
+                productDetail.setIssueDescription(rs.getString("IssueDescription"));
+                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
                 list.add(productDetail);
             }
         } catch (SQLException e) {
@@ -380,10 +383,10 @@ public class ProductDAO extends DBContext {
             System.out.println(p.getBrandName());
         }
          */
-//        ArrayList<ProductDetail> d = productDAO.getProductDetailByCustomerID(2);
-//        for (ProductDetail p : d) {
-//            System.out.println(p.getPurchaseDate());
-//        }
+        ArrayList<ProductDetail> d = productDAO.getListProductByCustomerID("1");
+        for (ProductDetail p : d) {
+            System.out.println(p);
+        }
     }
 
 }
