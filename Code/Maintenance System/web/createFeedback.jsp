@@ -27,6 +27,9 @@
                         <div class="alert-danger">
                             ${mess}
                         </div>
+                        <div class="alert-danger">
+                            ${pictureAlert}
+                        </div>
                          <div class="card-body">
                              <form action="feedback" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="createFeedback">
@@ -72,11 +75,7 @@
                     const file = event.target.files[0];
                     if (!file) return; 
 
-                    if (!file.type.startsWith("image/")) {
-                        alert("Vui lòng chọn một tệp hình ảnh!");
-                        event.target.value = "";
-                        return;
-                    }else{
+                    else{
                         const img = document.getElementById("currentImage");
                         img.src = URL.createObjectURL(file); 
                     }

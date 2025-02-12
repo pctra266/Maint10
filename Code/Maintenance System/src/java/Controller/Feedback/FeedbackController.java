@@ -202,6 +202,13 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Integer maxSizeMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxSizeMB == null) {
+            maxSizeMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeMB", maxSizeMB);
+        }
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
@@ -284,10 +291,20 @@ public class FeedbackController extends HttpServlet {
                 String imageURL = "";
                 boolean valid = true;
                 if(imagePart != null){
-                    String imagePath = saveMedia(imagePart, request);
+                    String imagePath = Utils.OtherUtils.saveImage(imagePart, request, "img/Feedback");
+                    if (imagePath == null) {
+                        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+                            valid = false;
+                            request.setAttribute("pictureAlert", "Invalid picture");
+                        }
+                    if(imagePath.startsWith("File is too large")){
+                            valid = false;
+                            request.setAttribute("pictureAlert", "Picture too large, max size is:"+maxSizeMB+" MB");
+                    }
                     imageURL = imagePath;
+                   
                 }
-                System.out.println("image path la : " + imagePart);
+                System.out.println("image path la : " + imageURL);
                 String videoURL = "";
                 if(videoPart != null){
                     String videoPath = saveMedia(videoPart, request);
@@ -297,6 +314,7 @@ public class FeedbackController extends HttpServlet {
                 // valid
                 if(noteCreate == null || noteCreate.trim().isEmpty()){
                     valid = false;
+                     mess = "You need fill feedback note";
                 }
                 
                
@@ -307,7 +325,6 @@ public class FeedbackController extends HttpServlet {
                 }else{
                     ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                     request.setAttribute("listProductByCustomerId", listProductByCustomerId);
-                    mess = "You need fill feedback note";
                     request.setAttribute("mess", mess);
                     request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 }

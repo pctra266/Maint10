@@ -23,6 +23,25 @@ public class OtherUtils {
     if (imagePart == null || imagePart.getSize() == 0) {
         return null; // Không có file nào được tải lên
     }
+    
+     // 🔥 Lấy giá trị maxSize từ ServletContext
+    Integer maxSizeMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeMB");
+
+    // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+    if (maxSizeMB == null) {
+        maxSizeMB = 5; // Giá trị mặc định
+        request.getServletContext().setAttribute("maxUploadSizeMB", maxSizeMB);
+    }
+
+    System.out.println("maxSizeMB hiện tại là: " + maxSizeMB);
+
+    // Chuyển đổi sang byte để kiểm tra
+    long maxSizeBytes = maxSizeMB * 1024L * 1024L;
+
+    if (imagePart.getSize() > maxSizeBytes) {
+        return "File is too large. Max size: " + maxSizeMB + "MB";
+    }
+
 
     // Kiểm tra MIME type (có thể bị giả mạo)
     String mimeType = imagePart.getContentType();
