@@ -14,138 +14,81 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            body {
-                font-family: 'Inter', sans-serif;
+            main.content {
                 background-color: #f8f9fa;
-                margin: 0;
-                padding: 0;
-            }
-
-            h1 {
-                text-align: center;
-                margin-top: 20px;
-                color: #333;
-            }
-
-            .form-container {
-                max-width: 600px;
-                margin: 20px auto;
-                background-color: #ffffff;
-                padding: 25px;
+                padding: 20px;
                 border-radius: 12px;
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                max-width: 800px;
+                margin: 20px auto;
+                font-family: 'Inter', sans-serif;
             }
 
-            form {
+            main.content form {
                 display: flex;
                 flex-direction: column;
-                gap: 15px;
+                gap: 5px;
             }
 
-            label {
-                font-size: 1rem;
+            main.content label {
                 font-weight: 600;
-                color: #444;
+                color: #333;
+                margin-bottom: 5px;
             }
 
-            input, select {
-                padding: 12px;
-                font-size: 1rem;
+            main.content input,
+            main.content select {
+                padding: 10px;
+                border: 1px solid #ddd;
                 border-radius: 8px;
-                border: 1px solid #ccc;
-                transition: 0.3s;
+                font-size: 16px;
+                transition: all 0.3s ease-in-out;
             }
 
-            input:focus, select:focus {
-                border-color: #4CAF50;
+            main.content input:focus,
+            main.content select:focus {
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
                 outline: none;
-                box-shadow: 0 0 6px rgba(76, 175, 80, 0.3);
             }
 
-            /* Cải thiện phần tải lên ảnh */
-            .image-upload-container {
-                text-align: center;
-                position: relative;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                margin-top: 10px;
-            }
-
-            #currentImage {
+            main.content img {
+                display: block;
+                margin: 10px auto;
                 max-width: 100%;
-                height: auto;
-                border-radius: 10px;
-                border: 2px solid #ddd;
-                transition: 0.3s;
+                border-radius: 8px;
             }
 
-            #currentImage:hover {
-                border-color: #4CAF50;
+            main.content button {
+                padding: 12px;
+                background: linear-gradient(135deg, #007bff, #0056b3);
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                color: #fff;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            main.content button:hover {
+                background: linear-gradient(135deg, #0056b3, #003c7a);
                 transform: scale(1.05);
             }
 
-            .image-upload-label {
-                display: block;
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 15px;
-                border-radius: 6px;
-                margin-top: 10px;
-                cursor: pointer;
-                transition: 0.3s;
+            main.content .add-product {
+                background: #28a745;
             }
 
-            .image-upload-label:hover {
-                background-color: #45a049;
+            main.content .add-product:hover {
+                background: #218838;
             }
 
-            #newImage {
-                display: none;
+            main.content h2{
+                text-align: center;
             }
 
-            /* Cải thiện nút */
-            button {
-                padding: 12px;
-                font-size: 1rem;
-                border-radius: 8px;
-                cursor: pointer;
-                transition: 0.3s;
-            }
 
-            button[type="submit"] {
-                background-color: #4CAF50;
-                color: white;
-                border: none;
-            }
-
-            button[type="submit"]:hover {
-                background-color: #45a049;
-            }
-
-            .add-product {
-                background-color: #f44336;
-                color: white;
-                border: none;
-            }
-
-            .add-product:hover {
-                background-color: #da190b;
-            }
-
-            /* Cải thiện thông báo lỗi */
-            .error-message {
-                color: red;
-                font-size: 14px;
-                margin-top: 5px;
-                display: block;
-                font-weight: 500;
-            }
-
-            input.error, select.error {
-                border: 2px solid red;
-                box-shadow: 0 0 6px rgba(255, 0, 0, 0.3);
-            }
         </style>
     </head>
     <body>
@@ -160,15 +103,20 @@
                         </div>
                     </c:if>
 
+                    <h2>Update Product</h2>
                     <form method="post" action="updateproduct" enctype="multipart/form-data">
+
                         <input type="hidden" name="pid" value="${product.productId}">
                         <input type="hidden" name="status" value="${product.status}">
+                        <input type="hidden" name="existingImage" value="${product.image}">
 
                         <label for="productCode">Product Code:</label>
-                        <input type="text" id="productCode" name="productCode" value="${product.code}" required>
+                        <input type="text" id="productCode" name="productCode" value="${product.code}" required oninput="validateProductCode()">
+                        <span id="productCodeError" style="color: red;"></span>
 
                         <label for="productName">Product Name:</label>
-                        <input type="text" id="productName" name="productName" value="${product.productName}" required>
+                        <input type="text" id="productName" name="productName" value="${product.productName}" required oninput="validateProductName()">
+                        <span id="productNameError" style="color: red;"></span>
 
                         <label for="brandId">Brand:</label>
                         <select name="brandId" id="brandId" required>
@@ -198,7 +146,7 @@
                         <img src="${product.image}" id="currentImage" alt="No Image" style="max-width: 100%; height: auto;">
                         <input type="file" name="image" id="newImage" accept="image/*" onchange="previewImage(event)">
 
-                        <button type="submit">Update Product</button>
+                        <button type="submit" id="submitBtn">Update Product</button>
                     </form>
 
                     <form action="viewProduct" style="margin-top: 10px">
@@ -210,94 +158,54 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                            document.addEventListener("DOMContentLoaded", function () {
-                                let form = document.querySelector("form[action='updateproduct']");
-                                let codeInput = document.getElementById("productCode");
-                                let nameInput = document.getElementById("productName");
-                                let quantityInput = document.getElementById("quantity");
-                                let warrantyInput = document.getElementById("warrantyPeriod");
-                                let imageInput = document.getElementById("newImage");
-
-                                function showError(input, message) {
-                                    let errorSpan = input.parentNode.querySelector(".error-message");
-                                    if (!errorSpan) {
-                                        errorSpan = document.createElement("span");
-                                        errorSpan.className = "error-message";
-                                        input.parentNode.appendChild(errorSpan);
-                                    }
-                                    errorSpan.innerText = message;
-                                }
-
-                                function clearError(input) {
-                                    let errorSpan = input.parentNode.querySelector(".error-message");
-                                    if (errorSpan) {
-                                        errorSpan.remove();
-                                    }
-                                }
-
-                                codeInput.addEventListener("input", function () {
-                                    let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
-                                    this.value = validValue;
-                                    if (validValue) {
-                                        clearError(codeInput);
-                                    } else {
-                                        showError(codeInput, "Only letters and numbers are allowed!");
-                                    }
-                                });
-
-                                nameInput.addEventListener("input", function () {
-                                    let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, '').replace(/\s+/g, ' ');
-                                    this.value = validValue;
-                                    if (validValue) {
-                                        clearError(nameInput);
-                                    } else {
-                                        showError(nameInput, "Only letters, numbers, and single spaces are allowed!");
-                                    }
-                                });
-
-                                form.addEventListener("submit", function (event) {
-                                    let isValid = true;
-
-                                    if (!codeInput.value.trim()) {
-                                        showError(codeInput, "Product Code is required!");
-                                        isValid = false;
-                                    } else {
-                                        clearError(codeInput);
-                                    }
-
-                                    if (!nameInput.value.trim()) {
-                                        showError(nameInput, "Product Name is required!");
-                                        isValid = false;
-                                    } else {
-                                        clearError(nameInput);
-                                    }
-
-                                    if (!quantityInput.value.trim() || quantityInput.value <= 0) {
-                                        showError(quantityInput, "Quantity must be at least 1!");
-                                        isValid = false;
-                                    } else {
-                                        clearError(quantityInput);
-                                    }
-
-                                    if (!warrantyInput.value.trim() || warrantyInput.value <= 0) {
-                                        showError(warrantyInput, "Warranty must be at least 1 month!");
-                                        isValid = false;
-                                    } else {
-                                        clearError(warrantyInput);
-                                    }
-
-                                    if (!isValid) {
-                                        event.preventDefault();
-                                    }
-                                });
-                            });
-
                             function previewImage(event) {
                                 const reader = new FileReader();
                                 reader.onload = function () {
                                     document.getElementById('currentImage').src = reader.result;
                                 };
                                 reader.readAsDataURL(event.target.files[0]);
+                            }
+
+                            function validateProductCode() {
+                                const productCode = document.getElementById("productCode").value.trim();
+                                const errorSpan = document.getElementById("productCodeError");
+                                const regex = /^[a-zA-Z0-9]+$/; // Chỉ cho phép chữ cái và số
+
+                                if (!productCode) {
+                                    errorSpan.textContent = "Product code không được để trống hoặc chỉ chứa dấu cách.";
+                                } else if (!regex.test(productCode)) {
+                                    errorSpan.textContent = "Product code chỉ được chứa chữ cái và số, không có dấu cách hoặc ký tự đặc biệt.";
+                                } else {
+                                    errorSpan.textContent = "";
+                                }
+                                validateForm();
+                            }
+
+                            function validateProductName() {
+                                const productName = document.getElementById("productName").value.trim();
+                                const errorSpan = document.getElementById("productNameError");
+                                const regex = /^[a-zA-Z0-9]+(\s[a-zA-Z0-9]+)*$/; // Chỉ cho phép chữ cái, số và khoảng trắng hợp lệ
+
+                                if (!productName) {
+                                    errorSpan.textContent = "Product name không được để trống hoặc chỉ chứa dấu cách.";
+                                } else if (!regex.test(productName)) {
+                                    errorSpan.textContent = "Product name chỉ được chứa chữ cái, số và mỗi từ chỉ có 1 dấu cách giữa.";
+                                } else {
+                                    errorSpan.textContent = "";
+                                }
+                                validateForm();
+                            }
+
+                            function validateForm() {
+                                const productCodeError = document.getElementById("productCodeError").textContent;
+                                const productNameError = document.getElementById("productNameError").textContent;
+                                const submitBtn = document.getElementById("submitBtn");
+
+                                if (productCodeError || productNameError) {
+                                    submitBtn.disabled = true;
+                                } else {
+                                    submitBtn.disabled = false;
+                                }
                             }
         </script>
     </body>
