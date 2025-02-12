@@ -68,43 +68,52 @@ public class updateMaxSize extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        String maxSizeStr = request.getParameter("maxSize");
-        int maxSizeMB = 5; // Mặc định 5MB nếu lỗi
+                String maxSizeImageStr = request.getParameter("maxSizeImage");
+        String maxSizeVideoStr = request.getParameter("maxSizeVideo");
+        
+        int maxSizeImageMB = 5; // Mặc định 5MB nếu lỗi
+        int maxSizeVideoMB = 50; // Mặc định 50MB nếu lỗi
 
-        if (maxSizeStr.equals("kb")) {
-            maxSizeMB = 1;  // 500KB làm tròn về 1MB
-        } else if (maxSizeStr.equals("1g")) {
-            maxSizeMB = 1024; // 1GB = 1024MB
-        } else if (maxSizeStr.equals("custom")) {
-            try {
-                int customSize = Integer.parseInt(request.getParameter("customSize"));
-                String customUnit = request.getParameter("customUnit");
-                
-                if (customUnit.equals("kb")) {
-                    maxSizeMB = customSize / 1024; // KB -> MB
-                } else if (customUnit.equals("gb")) {
-                    maxSizeMB = customSize * 1024; // GB -> MB
-                } else {
-                    maxSizeMB = customSize; // MB
-                }
-
-                if (maxSizeMB < 1) {
-                    maxSizeMB = 1; // Không cho nhỏ hơn 1MB
-                }
-            } catch (NumberFormatException e) {
-                response.getWriter().write("Lỗi: Giá trị nhập không hợp lệ!");
-                return;
-            }
-        } else {
-            maxSizeMB = Integer.parseInt(maxSizeStr);
+        try {
+            maxSizeImageMB = parseSize(maxSizeImageStr, request.getParameter("customSizeImage"), request.getParameter("customUnitImage"));
+            maxSizeVideoMB = parseSize(maxSizeVideoStr, request.getParameter("customSizeVideo"), request.getParameter("customUnitVideo"));
+        } catch (NumberFormatException e) {
+            response.getWriter().write("Lỗi: Giá trị nhập không hợp lệ!");
+            return;
         }
 
         // Cập nhật giá trị trong ServletContext
-        getServletContext().setAttribute("maxUploadSizeMB", maxSizeMB);
+        getServletContext().setAttribute("maxUploadSizeMB", maxSizeImageMB);
+        getServletContext().setAttribute("maxUploadSizeVideoMB", maxSizeVideoMB);
         
         // Chuyển về trang admin
         response.sendRedirect("adminDashboard.jsp");
     }
+    private int parseSize(String sizeStr, String customSizeStr, String customUnit) throws NumberFormatException {
+    int sizeMB = 5; // Mặc định
+
+    if ("kb".equals(sizeStr)) {
+        sizeMB = 1; // 500KB làm tròn về 1MB
+    } else if ("1g".equals(sizeStr)) {
+        sizeMB = 1024; // 1GB = 1024MB
+    } else if ("custom".equals(sizeStr) && customSizeStr != null && !customSizeStr.isEmpty()) {
+        int customSize = Integer.parseInt(customSizeStr);
+        if ("kb".equals(customUnit)) {
+            sizeMB = customSize / 1024; // KB -> MB
+        } else if ("gb".equals(customUnit)) {
+            sizeMB = customSize * 1024; // GB -> MB
+        } else {
+            sizeMB = customSize; // MB
+        }
+        if (sizeMB < 1) {
+            sizeMB = 1; // Không cho nhỏ hơn 1MB
+        }
+    } else {
+        sizeMB = Integer.parseInt(sizeStr);
+    }
+    
+    return sizeMB;
+}
 
     /** 
      * Returns a short description of the servlet.

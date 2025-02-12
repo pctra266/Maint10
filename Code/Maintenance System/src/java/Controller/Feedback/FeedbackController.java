@@ -202,13 +202,19 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        Integer maxSizeMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeMB");
+        Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
 
-        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
-        if (maxSizeMB == null) {
-            maxSizeMB = 5; // Giá trị mặc định
-            request.getServletContext().setAttribute("maxUploadSizeMB", maxSizeMB);
-        }
+    // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+    if (maxUploadSizeImageMB == null) {
+        maxUploadSizeImageMB = 5; // Giá trị mặc định
+        request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+    }
+        Integer maxUploadSizeVideoMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeVideoMB");
+    if (maxUploadSizeVideoMB == null) {
+        maxUploadSizeVideoMB = 50; // Giá trị mặc định 50MB
+        request.getServletContext().setAttribute("maxUploadSizeVideoMB", maxUploadSizeVideoMB);
+    }
+   
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
@@ -296,10 +302,11 @@ public class FeedbackController extends HttpServlet {
                         } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
                             valid = false;
                             request.setAttribute("pictureAlert", "Invalid picture");
-                        }
-                    if(imagePath.startsWith("File is too large")){
+                        }else{
+                            if(imagePath.startsWith("File is too large")){
                             valid = false;
-                            request.setAttribute("pictureAlert", "Picture too large, max size is:"+maxSizeMB+" MB");
+                            request.setAttribute("pictureAlert", "Picture too large, max size is:"+maxUploadSizeImageMB+" MB");
+                        }
                     }
                     imageURL = imagePath;
                    
@@ -307,9 +314,20 @@ public class FeedbackController extends HttpServlet {
                 System.out.println("image path la : " + imageURL);
                 String videoURL = "";
                 if(videoPart != null){
-                    String videoPath = saveMedia(videoPart, request);
+                    String videoPath = Utils.OtherUtils.saveVideo(videoPart, request,"video/Feedback");
+                    if (videoPath == null) {
+                        } else if (videoPath.equalsIgnoreCase("Invalid video")) {
+                            valid = false;
+                            request.setAttribute("videoAlert", "Invalid video");
+                        }else{
+                            if(videoPath.startsWith("File is too large")){
+                            valid = false;
+                            request.setAttribute("videoAlert", "Picture too large, max size is:"+maxUploadSizeVideoMB+" MB");
+                        }
+                    }
                     videoURL = videoPath;
                 }
+                System.out.println("video path la : " + videoURL);
                 
                 // valid
                 if(noteCreate == null || noteCreate.trim().isEmpty()){

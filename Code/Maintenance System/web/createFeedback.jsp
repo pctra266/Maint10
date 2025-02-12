@@ -30,6 +30,9 @@
                         <div class="alert-danger">
                             ${pictureAlert}
                         </div>
+                        <div class="alert-danger">
+                            ${videoAlert}
+                        </div>
                          <div class="card-body">
                              <form action="feedback" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="createFeedback">
@@ -86,11 +89,7 @@
                 const file = event.target.files[0];
                 if (!file) return; 
 
-                if (!file.type.startsWith("video/")) {
-                    alert("Vui lòng chọn một tệp video!");
-                    event.target.value = "";
-                    return;
-                }
+                
 
                 const video = document.getElementById("currentVideo");
                 video.src = URL.createObjectURL(file); 
