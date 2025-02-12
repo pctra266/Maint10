@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import Utils.SearchUtils;
+import jakarta.servlet.http.HttpSession;
 
 
 /**
@@ -39,6 +40,10 @@ public class ComponentSearch extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Xu ly nut back quay ve
+        HttpSession session = request.getSession();
+        if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        //
         String pageParam = request.getParameter("page");
         String paraSearchCode = SearchUtils.preprocessSearchQuery( request.getParameter("searchCode"));
         String paraSearchName = SearchUtils.preprocessSearchQuery(request.getParameter("searchName"));

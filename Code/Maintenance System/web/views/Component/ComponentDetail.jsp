@@ -30,12 +30,13 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    
-                    <c:if test="${from eq 'search'}">
-                    <a href="ComponentWarehouse/Search" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
+                    <c:set var="viewProductFrom" value="ComponentWarehouse/Detail?ID=${component.componentID}" scope="session" />
+
+                    <c:if test="${sessionScope.detailComponentFrom eq 'search'}">
+                        <a href="ComponentWarehouse/Search" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
                     </c:if>
-                    <c:if test="${from ne 'search'}">
-                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
+                    <c:if test="${sessionScope.detailComponentFrom ne 'search'}">
+                        <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
                     </c:if>
 
                     <h2>Component Detail</h2>
@@ -64,7 +65,7 @@
                             </div>
                         </div>
                     </c:if>
-                     <c:if test="${not empty pictureAlert}">
+                    <c:if test="${not empty pictureAlert}">
                         <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             <div class="alert-message">
@@ -146,6 +147,14 @@
                                 </div> 
                                 <div class="col-md-10">
                                     <label for="validationDefault06" class="form-label">Products</label>
+                                    <c:if test="${not empty remove}">
+                                        <div class="alert alert-success alert-dismissible" role="alert">
+                                            <div class="alert-message text-center">
+                                                <strong>${remove}</strong>
+                                            </div>
+                                        </div>
+
+                                    </c:if>
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
@@ -164,8 +173,32 @@
                                                         ${p.code}
                                                     </td>
                                                     <td>
-                                                        <a href="">Delete</a>
-                                                        <a href="">View</a>
+                                                        <a href="updateproduct?id=${p.productId}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                                        </a>
+                                                        <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${p.productId}">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                                            <polyline points="3 6 5 6 21 6"></polyline>
+                                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                            </svg>
+                                                        </a>
+                                                        <div class="modal fade" id="centeredModalPrimary_${p.productId}" tabindex="-1" aria-hidden="true">
+                                                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                                                <div class="modal-content">
+                                                                    <div class="modal-header">
+                                                                        <h5 class="modal-title">Delete Confirmation</h5>
+                                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                                    </div>
+                                                                    <div class="modal-body m-3">
+                                                                        <p class="mb-0">Confirm your action. Really want to delete?</p>
+                                                                    </div>
+                                                                    <div class="modal-footer">
+                                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                                        <a href="ComponentWarehouse/Detail?ID=${component.componentID}&product=${p.productId}" class="btn btn-primary">Delete</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             </tbody>
@@ -185,7 +218,7 @@
                         </div>
 
                     </form>
-                            
+
                 </main>
 
                 <jsp:include page="../../includes/footer.jsp" />
@@ -196,14 +229,14 @@
         <script src="js/app.js"></script>
         <script src="js/format-input.js"></script>
         <script>
-                                    function previewImage(event) {
-                                        const reader = new FileReader();
-                                        reader.onload = function () {
-                                            const output = document.getElementById('currentImage');
-                                            output.src = reader.result;
-                                        };
-                                        reader.readAsDataURL(event.target.files[0]);
-                                    }
+                                function previewImage(event) {
+                                    const reader = new FileReader();
+                                    reader.onload = function () {
+                                        const output = document.getElementById('currentImage');
+                                        output.src = reader.result;
+                                    };
+                                    reader.readAsDataURL(event.target.files[0]);
+                                }
         </script>
     </body>
 

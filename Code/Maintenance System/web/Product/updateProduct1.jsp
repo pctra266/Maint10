@@ -159,10 +159,17 @@
 
                         <button type="submit">Update Product</button>
                     </form>
-
-                    <form action="viewProduct" style="margin-top: 10px">
-                        <button class="add-product" type="submit">Back</button>
-                    </form>
+                    <c:if test="${sessionScope.viewProductFrom ne null}">
+                        <form action="Redirect" style="margin-top: 10px">
+                            <input type="hidden" name="target" value="${sessionScope.viewProductFrom}">
+                            <button class="add-product" type="submit">Back</button>
+                        </form>                        
+                    </c:if>
+                    <c:if test="${sessionScope.viewProductFrom eq null}">
+                        <form action="viewProduct" style="margin-top: 10px">
+                            <button class="add-product" type="submit">Back</button>
+                        </form>
+                    </c:if>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

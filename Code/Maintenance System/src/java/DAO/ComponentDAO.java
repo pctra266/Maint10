@@ -730,6 +730,25 @@ public class ComponentDAO extends DBContext {
         }
         return productList;
     }
+    
+public boolean removeProductComponent(int componentId, int productId) {
+    String sql = "DELETE FROM ProductComponents WHERE ComponentID = ? AND ProductID = ?";
+    
+    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+        pstmt.setInt(1, componentId);
+        pstmt.setInt(2, productId);
+
+        int affectedRows = pstmt.executeUpdate(); // Thực thi câu lệnh xóa
+        
+        return affectedRows > 0; // Nếu có dòng bị xóa, trả về true
+        
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
+
 
     public Integer getBrandID(String brandName) {
         String query = "SELECT BrandID FROM Brand WHERE BrandName = ?";

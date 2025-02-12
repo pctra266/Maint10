@@ -16,6 +16,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,10 @@ public class ComponentWarehouse extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Xu ly nut back quay ve
+        HttpSession session = request.getSession();
+        if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        //
         String pageParam = request.getParameter("page");
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
@@ -58,7 +63,7 @@ public class ComponentWarehouse extends HttpServlet {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        
+
         if (order != null && sort != null && (order.equals("asc") || order.equals("desc"))) {
             //xac nhan cac tham so de sort truyen vao la dung
             if (sort.equals("quantity") || sort.equals("name") || sort.equals("price") || sort.equals("code")) {
@@ -98,8 +103,8 @@ public class ComponentWarehouse extends HttpServlet {
         pagination.setSort(sort);
         pagination.setOrder(order);
         pagination.setUrlPattern("/ComponentWarehouse");
-        pagination.setSearchFields(new String[] {"search"});
-        pagination.setSearchValues(new String[] {paraSearch});
+        pagination.setSearchFields(new String[]{"search"});
+        pagination.setSearchValues(new String[]{paraSearch});
         request.setAttribute("pagination", pagination);
         // Đặt các thuộc tính cho request
         request.setAttribute("totalComponents", totalComponents);

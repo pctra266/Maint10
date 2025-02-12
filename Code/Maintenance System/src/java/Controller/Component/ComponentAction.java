@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 
@@ -288,11 +289,22 @@ public class ComponentAction extends HttpServlet {
         switch (action) {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
+                HttpSession session = request.getSession();
+                String from = request.getParameter("from");
+                if (from != null && !from.isBlank()) {
+                    session.setAttribute("detailComponentFrom", from);
+                }
+                String paraProduct = request.getParameter("product");
+                Integer productID = FormatUtils.tryParseInt(paraProduct);
+                if (productID != null) {
+                    if (componentDAO.removeProductComponent(component.getComponentID(), productID)) {
+                        request.setAttribute("remove", "Product removed");
+                    }
+                }
                 request.setAttribute("list", componentDAO.getProductsByComponentId(id));
                 request.setAttribute("typeList", componentDAO.getListType());
                 request.setAttribute("brandList", componentDAO.getListBrand());
                 request.setAttribute("component", component);
-                request.setAttribute("from", request.getParameter("from"));
                 request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
             }
             case "/ComponentWarehouse/Delete" -> {
