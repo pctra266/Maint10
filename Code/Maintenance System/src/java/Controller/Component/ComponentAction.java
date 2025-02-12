@@ -292,6 +292,7 @@ public class ComponentAction extends HttpServlet {
                 request.setAttribute("typeList", componentDAO.getListType());
                 request.setAttribute("brandList", componentDAO.getListBrand());
                 request.setAttribute("component", component);
+                request.setAttribute("from", request.getParameter("from"));
                 request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
             }
             case "/ComponentWarehouse/Delete" -> {

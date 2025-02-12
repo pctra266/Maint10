@@ -30,7 +30,13 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
+                    
+                    <c:if test="${from eq 'search'}">
+                    <a href="ComponentWarehouse/Search" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
+                    </c:if>
+                    <c:if test="${from ne 'search'}">
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
+                    </c:if>
 
                     <h2>Component Detail</h2>
                     <!--                                Alert khi du lieu truyen sang sever sai-->
