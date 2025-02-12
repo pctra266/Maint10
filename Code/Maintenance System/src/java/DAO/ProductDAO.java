@@ -80,19 +80,22 @@ public class ProductDAO extends DBContext {
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-                       select p.ProductName, wc.WarrantyCardID 
-                       from Customer c 
-                       left join ProductDetail pd on c.CustomerID = pd.CustomerID
-                       join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
-                       join Product p on pd.ProductID = p.ProductID
-                       where c.CustomerID = ?""";
+        select wc.WarrantyCardID, wc.WarrantyCardCode, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
+                              from Customer c 
+                              left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                              join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
+                              join Product p on pd.ProductID = p.ProductID
+                              where c.CustomerID = ?""";
         try (PreparedStatement ps = connection.prepareStatement(query);) {
             ps.setString(1, customerID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProductDetail productDetail = new ProductDetail();
-                productDetail.setProductName(rs.getString(1));
-                productDetail.setWarrantyCardID(rs.getInt(2));
+                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                productDetail.setProductName(rs.getString("ProductName"));
+                productDetail.setIssueDescription(rs.getString("IssueDescription"));
+                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
                 list.add(productDetail);
             }
         } catch (SQLException e) {
@@ -205,7 +208,7 @@ public class ProductDAO extends DBContext {
     }
 
     public int getTotalProducts(String searchName, String searchCode, Integer brandId, String type) {
-        String sql = "SELECT COUNT(*) FROM Product p WHERE 1=1";
+        String sql = "SELECT COUNT(*) FROM Product p WHERE Status != 'inactive'";
         if (searchName != null && !searchName.trim().isEmpty()) {
             sql += " AND p.ProductName LIKE ?";
         }
@@ -363,7 +366,21 @@ public class ProductDAO extends DBContext {
             ps.setString(1, code);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
-                return rs.getInt(1) > 0; 
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+        }
+        return false;
+    }
+
+    public boolean isProductCodeExists(String productCode, int productId) {
+        String sql = "SELECT COUNT(*) FROM Product WHERE Code = ? AND ProductID != ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, productCode);
+            ps.setInt(2, productId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
             }
         } catch (SQLException e) {
         }
@@ -378,9 +395,9 @@ public class ProductDAO extends DBContext {
             System.out.println(p.getBrandName());
         }
          */
-        ArrayList<ProductDetail> d = productDAO.getProductDetailByCustomerID(2);
+        ArrayList<ProductDetail> d = productDAO.getListProductByCustomerID("1");
         for (ProductDetail p : d) {
-            System.out.println(p.getPurchaseDate());
+            System.out.println(p);
         }
     }
 

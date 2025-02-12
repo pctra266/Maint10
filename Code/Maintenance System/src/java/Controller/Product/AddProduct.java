@@ -115,9 +115,14 @@ public class AddProduct extends HttpServlet {
 
         // Lưu ảnh và tiếp tục thêm sản phẩm nếu không bị trùng mã
         String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-        Product product = new Product(code, name, Integer.parseInt(brandId), type,
-                Integer.parseInt(quantity), Integer.parseInt(warrantyPeriod),
-                status, imagePath);
+        Product product = new Product(code,
+                name,
+                Integer.parseInt(brandId),
+                type,
+                Integer.parseInt(quantity),
+                Integer.parseInt(warrantyPeriod),
+                status,
+                imagePath);
 
         boolean success = productDAO.addProduct(product);
         if (success) {

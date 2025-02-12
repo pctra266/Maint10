@@ -27,6 +27,12 @@
                         <div class="alert-danger">
                             ${mess}
                         </div>
+                        <div class="alert-danger">
+                            ${pictureAlert}
+                        </div>
+                        <div class="alert-danger">
+                            ${videoAlert}
+                        </div>
                          <div class="card-body">
                              <form action="feedback" method="post" enctype="multipart/form-data">
                             <input type="hidden" name="action" value="createFeedback">
@@ -35,11 +41,10 @@
                             </div>
                             <div>
                                 <label class="form-label">Product: </label>
-
                                 <select class="form-select" name="WarrantyCardID">
                                     <option value=""></option>
                                     <c:forEach items="${listProductByCustomerId}" var="o">
-                                        <option value="${o.warrantyCardID}">${o.productName}</option>
+                                        <option ${(warrantyCardID== o.warrantyCardID)?"selected":""} value="${o.warrantyCardID}">${o.productName}</option>
                                     </c:forEach>
                                 </select>
                             </div>
@@ -73,11 +78,7 @@
                     const file = event.target.files[0];
                     if (!file) return; 
 
-                    if (!file.type.startsWith("image/")) {
-                        alert("Vui lòng chọn một tệp hình ảnh!");
-                        event.target.value = "";
-                        return;
-                    }else{
+                    else{
                         const img = document.getElementById("currentImage");
                         img.src = URL.createObjectURL(file); 
                     }
@@ -88,11 +89,7 @@
                 const file = event.target.files[0];
                 if (!file) return; 
 
-                if (!file.type.startsWith("video/")) {
-                    alert("Vui lòng chọn một tệp video!");
-                    event.target.value = "";
-                    return;
-                }
+                
 
                 const video = document.getElementById("currentVideo");
                 video.src = URL.createObjectURL(file); 

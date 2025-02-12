@@ -2,6 +2,7 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+<<<<<<< HEAD
         <group>
             <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardCreate.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardAdd.java</file>
@@ -20,6 +21,21 @@
             <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
             <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
+=======
+        <group/>
+        <group>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/UpdateProductServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
+        </group>
+        <group>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/UpdateProductServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/addProduct.jsp</file>
+>>>>>>> 77d9e5e5d3accc346a7e12f41af169d38a24ed04
         </group>
     </open-files>
 </project-private>
