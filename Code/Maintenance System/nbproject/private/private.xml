@@ -2,8 +2,24 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
-        <group/>
-        <group/>
+        <group>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardCreate.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardAdd.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/SearchUtils.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/web/views/WarrantyCard/WarrantyCardList.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/New%20folder/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
+        </group>
+        <group>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
+        </group>
+        <group>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
+            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
+        </group>
     </open-files>
 </project-private>
