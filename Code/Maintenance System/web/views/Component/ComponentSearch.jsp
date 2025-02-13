@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,15 +57,15 @@
                     <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <h2>Advanced Search</h2>
                     <form action="ComponentWarehouse/Search" method="get" class="row align-items-center">
-                        <input type="hidden" name="page" value="${currentPage}" />
-                        <input type="hidden" name="sort" value="${sort}" />
-                        <input type="hidden" name="order" value="${order}" />
+                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                        <input type="hidden" name="sort" value="${pagination.sort}" />
+                        <input type="hidden" name="order" value="${pagination.order}" />
                         <div class="col-md-3 input-group d-flex justify-content-end">
-                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Code" name="searchCode" value="${searchCode}" />
+                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Code" name="searchCode" value="${pagination.searchValues[1]}" />
                             <select name="searchType" class="form-select form-select-md" style="flex: 1 1 auto;">
                                 <option value="">Type</option>
                                 <c:forEach var="type" items="${typeList}">
-                                    <option value="${type}" ${searchType eq type ? "selected" : ""}>${type}</option>
+                                    <option value="${type}" ${pagination.searchValues[2] eq type ? "selected" : ""}>${type}</option>
                                 </c:forEach>
                             </select>
 
@@ -72,10 +73,10 @@
                             <select name="searchBrand" class="form-select form-select-md" style="flex: 1 1 auto;">
                                 <option value="">Brand</option>
                                 <c:forEach var="brand" items="${brandList}">
-                                    <option value="${brand}" ${searchBrand eq brand ? "selected" : ""}>${brand}</option>
+                                    <option value="${brand}" ${pagination.searchValues[3]  eq brand ? "selected" : ""}>${brand}</option>
                                 </c:forEach>
                             </select>
-                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Name" name="searchName" value="${searchName}" />  
+                            <input type="search" style="flex: 1 1 auto" class="form-control form-control-md" placeholder="Name" name="searchName" value="${pagination.searchValues[0]}" />  
                             <button type="submit" class="btn btn-primary">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                             </button>
@@ -86,19 +87,19 @@
                                     <div class="price-input">
                                         <div class="field">
                                             <span>Quantity</span>
-                                            <input type="text" class="input-min format-int" name="searchQuantityMin" value="${searchQuantityMin}" step="1">
+                                            <input type="text" class="input-min format-int" name="searchQuantityMin" value="${pagination.rangeValues[2]}" step="1">
                                         </div>
                                         <div class="separator">-</div>
                                         <div class="field">
-                                            <input type="text" class="input-max format-int" name="searchQuantityMax" value="${searchQuantityMax}" step="1">
+                                            <input type="text" class="input-max format-int" name="searchQuantityMax" value="${pagination.rangeValues[3]}" step="1">
                                         </div>
                                     </div>
                                     <div class="slider">
                                         <div class="progress"></div>
                                     </div>
                                     <div class="range-input">
-                                        <input type="range" class="range-min" min="0" max="${quantityMax}" value="${searchQuantityMin}" step="1">
-                                        <input type="range" class="range-max" min="0" max="${quantityMax}" value="${searchQuantityMax}" step="1">
+                                        <input type="range" class="range-min" min="0" max="${quantityMax}" value="${pagination.rangeValues[2]}" step="1">
+                                        <input type="range" class="range-max" min="0" max="${quantityMax}" value="${pagination.rangeValues[3]}" step="1">
                                     </div>
                                 </div>
                             </div>
@@ -108,19 +109,19 @@
                                     <div class="price-input">
                                         <div class="field">
                                             <span>Price</span>
-                                            <input type="text" class="input-min format-float" name="searchPriceMin" value="${searchPriceMin}" step="0.01">
+                                            <input type="text" class="input-min format-float" name="searchPriceMin" value="${pagination.rangeValues[0]}" step="0.01">
                                         </div>
                                         <div class="separator">-</div>
                                         <div class="field">
-                                            <input type="text" class="input-max format-float" name="searchPriceMax" value="${searchPriceMax==priceMax?searchPriceMax+0.01:searchPriceMax}" step="0.01" >
+                                            <input type="text" class="input-max format-float" name="searchPriceMax" value="${pagination.rangeValues[1]==priceMax?pagination.rangeValues[1]+0.01:pagination.rangeValues[1]}" step="0.01" >
                                         </div>
                                     </div>
                                     <div class="slider">
                                         <div class="progress"></div>
                                     </div>
                                     <div class="range-input">
-                                        <input type="range" class="range-min" min="0" max="${priceMax+0.01}" value="${searchPriceMin}" step="0.01">
-                                        <input type="range" class="range-max" min="0" max="${priceMax+0.01}" value="${searchPriceMax==priceMax?searchPriceMax+0.01:searchPriceMax}" step="0.01">
+                                        <input type="range" class="range-min" min="0" max="${priceMax+0.01}" value="${pagination.rangeValues[0]}" step="0.01">
+                                        <input type="range" class="range-max" min="0" max="${priceMax+0.01}" value="${pagination.rangeValues[1]==priceMax?pagination.rangeValues[1]+0.01:pagination.rangeValues[1]}" step="0.01">
                                     </div>
                                 </div>
                             </div>
@@ -129,13 +130,12 @@
 
 
 
-                        <div class="col-sm-6 col-md-6 mt-2">
+                        <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <option value="5" ${size==5?"selected":""}>5</option>
-                                    <option value="7" ${size==7?"selected":""}>7</option>
-                                    <option value="10" ${size==10?"selected":""}>10</option>
-                                    <option value="15" ${size==15?"selected":""}>15</option>
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                    </c:forEach>
                                 </select> 
                                 entries
                             </label>
@@ -147,22 +147,24 @@
                                 <th style="width:3%">#</th>
                                 <th style="width:13%">
                                     <form action="ComponentWarehouse/Search" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
-                                        <input type="hidden" name="search" value="${search}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="sort" value="code" />
-                                        <input type="hidden" name="order" value="${sort eq 'code' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <input type="hidden" name="searchName" value="${searchName}" />
-                                        <input type="hidden" name="searchCode" value="${searchCode}" />
-                                        <input type="hidden" name="searchType" value="${searchType}" />
-                                        <input type="hidden" name="searchBrand" value="${searchBrand}" />
-                                        <input type="hidden" name="searchQuantityMin" value="${searchQuantityMin}" />
-                                        <input type="hidden" name="searchQuantityMax" value="${searchQuantityMax}" />
-                                        <input type="hidden" name="searchPriceMin" value="${searchPriceMin}" />
-                                        <input type="hidden" name="searchPriceMax" value="${searchPriceMax}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'code' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
+
+                                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'code' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'code' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Code
@@ -172,21 +174,24 @@
                                 <th>Brand</th>
                                 <th style="width:30%">
                                     <form action="ComponentWarehouse/Search" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="sort" value="name" />
-                                        <input type="hidden" name="order" value="${sort eq 'name' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <input type="hidden" name="searchName" value="${searchName}" />
-                                        <input type="hidden" name="searchCode" value="${searchCode}" />
-                                        <input type="hidden" name="searchType" value="${searchType}" />
-                                        <input type="hidden" name="searchBrand" value="${searchBrand}" />
-                                        <input type="hidden" name="searchQuantityMin" value="${searchQuantityMin}" />
-                                        <input type="hidden" name="searchQuantityMax" value="${searchQuantityMax}" />
-                                        <input type="hidden" name="searchPriceMin" value="${searchPriceMin}" />
-                                        <input type="hidden" name="searchPriceMax" value="${searchPriceMax}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'name' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
+
+                                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'name' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'name' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Name
@@ -195,21 +200,24 @@
 
                                 <th style="width:15%">
                                     <form action="ComponentWarehouse/Search" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="sort" value="quantity" />
-                                        <input type="hidden" name="order" value="${sort eq 'quantity' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <input type="hidden" name="searchName" value="${searchName}" />
-                                        <input type="hidden" name="searchCode" value="${searchCode}" />
-                                        <input type="hidden" name="searchType" value="${searchType}" />
-                                        <input type="hidden" name="searchBrand" value="${searchBrand}" />
-                                        <input type="hidden" name="searchQuantityMin" value="${searchQuantityMin}" />
-                                        <input type="hidden" name="searchQuantityMax" value="${searchQuantityMax}" />
-                                        <input type="hidden" name="searchPriceMin" value="${searchPriceMin}" />
-                                        <input type="hidden" name="searchPriceMax" value="${searchPriceMax}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'quantity' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
+
+                                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'quantity' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'quantity' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Quantity
@@ -218,21 +226,24 @@
 
                                 <th style="width:15%">
                                     <form action="ComponentWarehouse/Search" method="get">
-                                        <input type="hidden" name="page" value="${currentPage}" />
-                                        <input type="hidden" name="page-size" value="${size}" />
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="sort" value="price" />
-                                        <input type="hidden" name="order" value="${sort eq 'price' and order eq 'asc' ? 'desc' : 'asc'}" />
-                                        <input type="hidden" name="searchName" value="${searchName}" />
-                                        <input type="hidden" name="searchCode" value="${searchCode}" />
-                                        <input type="hidden" name="searchType" value="${searchType}" />
-                                        <input type="hidden" name="searchBrand" value="${searchBrand}" />
-                                        <input type="hidden" name="searchQuantityMin" value="${searchQuantityMin}" />
-                                        <input type="hidden" name="searchQuantityMax" value="${searchQuantityMax}" />
-                                        <input type="hidden" name="searchPriceMin" value="${searchPriceMin}" />
-                                        <input type="hidden" name="searchPriceMax" value="${searchPriceMax}" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'price' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                   <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                    <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                        <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                    </c:forEach>
+                                </c:if>
+
+                                <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                                    <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                        <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.searchValues[i]}">
+                                    </c:forEach>
+                                </c:if>
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${sort eq 'price' ? (order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'price' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
                                         Unit Price
@@ -240,13 +251,13 @@
                                 </th>
 
 
-                                <th style="width:8%">Action<a href="ComponentWarehouse/Search?page=${currentPage}&page-size=${size}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="ComponentWarehouse/Search?page=${pagination.currentPage}&page-size=${pagination.pageSize}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
                         <!--                        varStatus để lấy trạng thái của vòng lặp-->
                         <c:forEach var="component" items="${components}" varStatus="status">
                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-                                <td>${status.index+1+(currentPage-1)*size}</td>
+                                <td>${status.index+1+(pagination.currentPage-1)*pagination.pageSize}</td>
                                 <td>${component.componentCode}</td>
                                 <td>${component.type}</td>
                                 <td>${component.brand}</td>
@@ -254,7 +265,7 @@
                                 <td>${component.quantity}</td>
                                 <td>${component.price}</td>
                                 <td class="table-action">
-                                    <a href="ComponentWarehouse/Detail?ID=${component.componentID}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
+                                    <a href="ComponentWarehouse/Detail?ID=${component.componentID}&from=search"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-2 align-middle"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg></a>
                                     <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></a>
                                 </td>
                             </tr>
@@ -270,7 +281,7 @@
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="ComponentWarehouse/Delete?ID=${component.componentID}&page=${currentPage}&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" type="button" class="btn btn-primary">Delete</a>
+                                            <a href="ComponentWarehouse/Delete?ID=${component.componentID}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&searchCode=${pagination.searchValues[1]}&searchName=${pagination.searchValues[0]}&sort=${sort}&order=${order}&searchType=${pagination.searchValues[2]}&searchBrand=${pagination.searchValues[3]}&searchQuantityMin=${pagination.rangeValues[2]}&searchQuantityMax=${pagination.rangeValues[3]}&searchPriceMin=${pagination.rangeValues[0]}&searchPriceMax=${pagination.rangeValues[1]}" type="button" class="btn btn-primary">Delete</a>
                                         </div>
                                     </div>
                                 </div>
@@ -279,64 +290,17 @@
                         <tbody>
 
                         </tbody>
-                    </table
-
-                    <!-- Phân trang -->
-                    <div class="text-center">
-                        <div class="btn-group me-2" role="group" style="margin-top:1rem" aria-label="First group">
-                            <c:if test="${page > totalPages}">
-                                <c:set var="page" value="totalPages" />
-                            </c:if>
-                            <!-- Nút "Đầu" -->
-                            <a href="ComponentWarehouse/Search?page=1&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" style="margin-right:5px" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;&lt;</a>
-
-                            <!-- Nút "Trước" -->
-                            <a href="ComponentWarehouse/Search?page=${currentPage - 1}&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" class="btn btn-primary ${currentPage <= 1 ? 'disabled' : ''} btn-pagination">&lt;</a>
-
-                            <!-- Các số trang -->
-                            <c:set var="startPage" value="${currentPage - (totalPagesToShow / 2)+1}" />
-                            <c:set var="endPage" value="${startPage + totalPagesToShow - 1}" />
-
-                            <!-- Điều chỉnh startPage và endPage nếu cần -->
-                            <c:if test="${startPage < 1}">
-                                <c:set var="startPage" value="1" />
-                                <c:set var="endPage" value="${totalPagesToShow>totalPages?totalPages:totalPagesToShow}" />
-                            </c:if>
-                            <c:if test="${endPage > totalPages}">
-                                <c:set var="endPage" value="${totalPages}" />
-                                <c:set var="startPage" value="${endPage - totalPagesToShow + 1>0?endPage - totalPagesToShow + 1:1}" />
-                            </c:if>
-
-                            <c:forEach var="i" begin="${startPage}" end="${endPage}">
-                                <a href="ComponentWarehouse/Search?page=${i}&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" class="btn btn-primary ${i == currentPage ? 'active' : ''} btn-pagination">${i}</a>
-                            </c:forEach>
-
-                            <!-- Nút "Sau" -->
-                            <a href="ComponentWarehouse/Search?page=${currentPage + 1}&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;</a>
-
-                            <!-- Nút "Cuối" -->
-                            <a href="ComponentWarehouse/Search?page=${totalPages}&page-size=${size}&searchCode=${searchCode}&searchName=${searchName}&sort=${sort}&order=${order}&searchType=${searchType}&searchBrand=${searchBrand}&searchQuantityMin=${searchQuantityMin}&searchQuantityMax=${searchQuantityMax}&searchPriceMin=${searchPriceMin}&searchPriceMax=${searchPriceMax}" style="margin-left:5px" class="btn btn-primary ${currentPage >= totalPages ? 'disabled' : ''} btn-pagination">&gt;&gt;</a>
+                    </table>
+                                        <c:if test="${totalComponents==0}">
+                        <div class="alert alert-primary alert-dismissible" role="alert">
+                            <div class="alert-message text-center">
+                                <strong style="font-size:1.6rem">No suitable card in the filter</strong>
+                            </div>
                         </div>
 
-                        <!-- Ô nhập trang -->
-                        <div class="text-center" style="margin-top: 1rem;">
-                            <form class="row align-items-center justify-content-center" action="" method="get">
-                                <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${totalPages}" placeholder="Page">
-                                <input type="hidden" name="page-size" value="${size}"> <!-- Giữ lại page-size -->
-                                <input type="hidden" name="search" value="${search}" />
-                                <input type="hidden" name="sort" value="${sort}" />
-                                <input type="hidden" name="searchName" value="${searchName}" />
-                                <input type="hidden" name="searchCode" value="${searchCode}" />
-                                <input type="hidden" name="searchType" value="${searchType}" />
-                                <input type="hidden" name="searchBrand" value="${searchBrand}" />
-                                <input type="hidden" name="searchQuantityMin" value="${searchQuantityMin}" />
-                                <input type="hidden" name="searchQuantityMax" value="${searchQuantityMax}" />
-                                <input type="hidden" name="searchPriceMin" value="${searchPriceMin}" />
-                                <input type="hidden" name="searchPriceMax" value="${searchPriceMax}" />
-                                <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
-                            </form>
-                        </div>
-                        <c:if test="${not empty deleteStatus}">
+                    </c:if>
+                    <jsp:include page="../../includes/pagination.jsp"/>
+                                 <c:if test="${not empty deleteStatus}">
                             <div class="alert alert-warning alert-dismissible" role="alert">
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                 <div class="alert-message">
@@ -344,19 +308,19 @@
                                 </div>
                             </div>
                         </c:if>
-                    </div>
-                </main>
-                <jsp:include page="../../includes/footer.jsp" />
-            </div>
-
+                </div>
+            </main>
+            <jsp:include page="../../includes/footer.jsp" />
         </div>
 
-        <script src="js/app.js"></script>
-                <script src="js/range-slider.js"></script>
-                        <script src="js/format-input.js"></script>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/range-slider.js"></script>
+    <script src="js/format-input.js"></script>
 
 
 
-    </body>
+</body>
 
 </html>

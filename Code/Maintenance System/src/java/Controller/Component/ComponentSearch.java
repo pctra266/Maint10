@@ -6,6 +6,7 @@ package Controller.Component;
 
 import DAO.ComponentDAO;
 import Model.Component;
+import Model.Pagination;
 import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import Utils.SearchUtils;
+import jakarta.servlet.http.HttpSession;
 
 
 /**
@@ -38,6 +40,10 @@ public class ComponentSearch extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //Xu ly nut back quay ve
+        HttpSession session = request.getSession();
+        if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        //
         String pageParam = request.getParameter("page");
         String paraSearchCode = SearchUtils.preprocessSearchQuery( request.getParameter("searchCode"));
         String paraSearchName = SearchUtils.preprocessSearchQuery(request.getParameter("searchName"));
@@ -99,29 +105,32 @@ public class ComponentSearch extends HttpServlet {
             deleteStatus = delete.equals("1") ? "Success to delete" : "Fail to delete";
             request.setAttribute("deleteStatus", deleteStatus);
         }
+                //Phan trang
+         Pagination pagination = new Pagination();
+        pagination.setListPageSize(totalComponents);
+        pagination.setCurrentPage(page);
+        pagination.setTotalPages(totalPages);
+        pagination.setTotalPagesToShow(5);
+        pagination.setPageSize(pageSize);
+        pagination.setSort(sort);
+        pagination.setOrder(order);
+        pagination.setUrlPattern("/ComponentWarehouse/Search");
+        pagination.setSearchFields(new String[] {"searchName","searchCode","searchType","searchBrand"});
+        pagination.setSearchValues(new String[] {paraSearchName, paraSearchCode, type, brand});
+        pagination.setRangeFields(new String[] {"searchPriceMin","searchPriceMax","searchQuantityMin","searchQuantityMax"});
+        pagination.setRangeValues(new Object[]{searchPriceMin, searchPriceMax, searchQuantityMin, searchQuantityMax});
+        request.setAttribute("pagination", pagination);
+        
         // Đặt các thuộc tính cho request
-        request.setAttribute("searchQuantityMin", searchQuantityMin);
-        request.setAttribute("searchQuantityMax", searchQuantityMax);
+     
         request.setAttribute("quantityMin", componentDAO.getQuantityMin());
         request.setAttribute("quantityMax", componentDAO.getQuantityMax());
-        request.setAttribute("searchPriceMin", searchPriceMin);
-        request.setAttribute("searchPriceMax", searchPriceMax);
         request.setAttribute("priceMin", componentDAO.getPriceMin());
         request.setAttribute("priceMax", componentDAO.getPriceMax());
         request.setAttribute("totalComponents", totalComponents);
         request.setAttribute("typeList", componentDAO.getListType());
         request.setAttribute("brandList", componentDAO.getListBrand());
-        request.setAttribute("searchName", paraSearchName);
-        request.setAttribute("searchCode", paraSearchCode);
-        request.setAttribute("totalPagesToShow", 5);
-        request.setAttribute("size", pageSize);
         request.setAttribute("components", components);
-        request.setAttribute("currentPage", page);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("sort", sort);
-        request.setAttribute("order", order);
-        request.setAttribute("searchType", type);
-        request.setAttribute("searchBrand", brand);
         // Chuyển tiếp đến trang JSP để hiển thị
         request.getRequestDispatcher("/views/Component/ComponentSearch.jsp").forward(request, response);
 

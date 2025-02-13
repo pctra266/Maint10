@@ -51,8 +51,14 @@ public class WarrantyCardAdd extends HttpServlet {
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
         Part imagePart = request.getPart("newImage");
         String image = OtherUtils.saveImage(imagePart, request, "img/warranty-card");
+        boolean canAdd=true;
+         if (image == null) {
+        } else if (image.equalsIgnoreCase("Invalid picture")) {
+            canAdd = false;
+            request.setAttribute("pictureAlert", "Invalid picture");
+        }
         if (issue != null) {
-            if (warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image)) {
+            if (canAdd&&warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image)) {
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
             } else {

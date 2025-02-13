@@ -1,11 +1,11 @@
 <%-- 
-    Document   : feedbackDashBoard
-    Created on : Feb 7, 2025, 7:48:02 PM
+    Document   : viewListFeedbackByCustomerId
+    Created on : Feb 12, 2025, 7:42:36 PM
     Author     : Tra Pham
 --%>
 
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -20,51 +20,39 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <div class="alert-success">${param.mess}</div>
-                    <h1 class="text-center">List Product Maintain</h1>
+                    <h1 class="text-center">List Feedback</h1>
+                    <a href="feedback?action=viewFeedbackDashboard" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
                     <div>
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
-                                <th>Warranty Card Code</th>
-                                <th>Product Name</th>
-                                <th>Issue Description</th>
-                                <th>Warranty Status</th>
+                                <th>Create Date</th>
+                                <th>Feedback</th>
+                                <th>Image</th>
+                                <th>Video</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            
-                            <c:forEach items="${listProductCreateFeedback}" var="o">
+                            <c:forEach items="${listFeedbackByCustomerId}" var="o">
                                 <tr>
-                                    <td>${o.warrantyCardCode}</td>
-                                    <td>${o.productName}</td>
-                                    <td>${o.issueDescription}</td>
-                                    <td>${o.warrantyStatus}</td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</td>
+                                    <td>${o.dateCreated}</td>
+                                    <td>${o.note}</td>
+                                    <td><img src="${o.imageURL}" alt="" style="max-width: 100%; height: auto;"></td>
+                                    <td><video src="${o.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video></td>
+                                    <td><a href="#" data-url="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}" onclick="doDelete(event)">Delete</td>
                                 </tr>
                             </c:forEach>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback">Create Feedback</td>
-                                </tr>
                         </tbody>
                         
                         </table>
                         
                     </div>
-                     <%--<jsp:include page="/includes/pagination.jsp" />--%>
-                     <a class="btn btn-primary" href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
-                     
+<!--                    <a href="feedback?action=deletefeedback">Feedback History</a>-->
                 </main>
-                    
-               <jsp:include page="/includes/footer.jsp" />
+                <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-           
             <script>
                 function doDelete(event) {
                         event.preventDefault();

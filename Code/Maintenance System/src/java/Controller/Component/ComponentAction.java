@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 
@@ -92,6 +93,14 @@ public class ComponentAction extends HttpServlet {
 // Xử lý thêm mới Component
     private void handleAddComponent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
+        
         String newName = request.getParameter("Name");
         String newCode = request.getParameter("Code");
         String newBrand = request.getParameter("Brand");
@@ -151,11 +160,18 @@ public class ComponentAction extends HttpServlet {
         } else {
             request.setAttribute("price", newPrice);
         }
-
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
+        if (imagePath == null) {
+        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+            canAdd = false;
+            request.setAttribute("pictureAlert", "Invalid picture");
+        } else if (imagePath.startsWith("File is too large")) {
+            canAdd = false;
+            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
+        }
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
         // Khong hop le thi tra lai trang Add
         if (canAdd) {
-            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
             Component component = new Component();
             component.setComponentName(newName.trim());
             component.setComponentCode(newCode.trim());
@@ -183,6 +199,14 @@ public class ComponentAction extends HttpServlet {
 
     private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
             throws ServletException, IOException {
+            Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
+        
         String newName = request.getParameter("Name");
         Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
@@ -226,6 +250,15 @@ public class ComponentAction extends HttpServlet {
             request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
             canUpdate = false;
         }
+        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
+        if (imagePath == null) {
+        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+            canUpdate = false;
+            request.setAttribute("pictureAlert", "Invalid picture");
+        } else if (imagePath.startsWith("File is too large")) {
+            canUpdate = false;
+            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
+        }
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
@@ -237,7 +270,6 @@ public class ComponentAction extends HttpServlet {
             component.setPrice(newPrice);
 
             // Lưu ảnh mới nếu có
-            String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component/");
             if (imagePath != null) {
                 component.setImage(imagePath);
             }
@@ -279,6 +311,18 @@ public class ComponentAction extends HttpServlet {
         switch (action) {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
+                HttpSession session = request.getSession();
+                String from = request.getParameter("from");
+                if (from != null && !from.isBlank()) {
+                    session.setAttribute("detailComponentFrom", from);
+                }
+                String paraProduct = request.getParameter("product");
+                Integer productID = FormatUtils.tryParseInt(paraProduct);
+                if (productID != null) {
+                    if (componentDAO.removeProductComponent(component.getComponentID(), productID)) {
+                        request.setAttribute("remove", "Product removed");
+                    }
+                }
                 request.setAttribute("list", componentDAO.getProductsByComponentId(id));
                 request.setAttribute("typeList", componentDAO.getListType());
                 request.setAttribute("brandList", componentDAO.getListBrand());

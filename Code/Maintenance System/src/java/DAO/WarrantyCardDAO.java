@@ -270,7 +270,7 @@ public class WarrantyCardDAO extends DBContext {
             order = "DESC"; // Mặc định sắp xếp giảm dần
         }
 
-        query.append("ORDER BY wc.").append(sort).append(" ").append(order).append(" ");
+        query.append("ORDER BY ").append(sort).append(" ").append(order).append(" ");
         query.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {

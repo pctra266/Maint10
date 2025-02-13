@@ -97,6 +97,10 @@
         <servlet-name>AddImage</servlet-name>
         <servlet-class>Controller.Product.AddImage</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Redirect</servlet-name>
+        <servlet-class>Controller.Redirect</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -212,5 +216,9 @@
     <servlet-mapping>
         <servlet-name>AddImage</servlet-name>
         <url-pattern>/addImage</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Redirect</servlet-name>
+        <url-pattern>/Redirect</url-pattern>
     </servlet-mapping>
 </web-app>

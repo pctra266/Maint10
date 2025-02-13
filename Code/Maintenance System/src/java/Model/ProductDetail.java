@@ -23,6 +23,9 @@ public class ProductDetail {
     private String productName;
     private int warrantyPeriod;
     private int WarrantyCardID;
+    private String WarrantyCardCode;
+    private String IssueDescription;
+    private String WarrantyStatus;
 
     // Constructor
     public ProductDetail(int productDetailID, String productCode, Date purchaseDate, 
@@ -44,10 +47,39 @@ public class ProductDetail {
     public ProductDetail() {
     }
     
-    public ProductDetail(int WarrantyCardID, String productName) {
+    public ProductDetail(int WarrantyCardID,  String WarrantyCardCode,String productName, String IssueDescription,String WarrantyStatus) {
         this.WarrantyCardID = WarrantyCardID;
+        this.WarrantyCardCode = WarrantyCardCode;
         this.productName = productName;
+        this.IssueDescription = IssueDescription;
+        this.WarrantyStatus = WarrantyStatus;
+        
     }
+
+    public String getWarrantyCardCode() {
+        return WarrantyCardCode;
+    }
+
+    public void setWarrantyCardCode(String WarrantyCardCode) {
+        this.WarrantyCardCode = WarrantyCardCode;
+    }
+
+    public String getIssueDescription() {
+        return IssueDescription;
+    }
+
+    public void setIssueDescription(String IssueDescription) {
+        this.IssueDescription = IssueDescription;
+    }
+
+    public String getWarrantyStatus() {
+        return WarrantyStatus;
+    }
+
+    public void setWarrantyStatus(String WarrantyStatus) {
+        this.WarrantyStatus = WarrantyStatus;
+    }
+    
 
     public int getProductDetailID() {
         return productDetailID;
@@ -144,16 +176,9 @@ public class ProductDetail {
     public void setWarrantyCardID(int WarrantyCardID) {
         this.WarrantyCardID = WarrantyCardID;
     }
-    
-    
-
-    
-    
 
     @Override
     public String toString() {
-        return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + '}';
+        return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", customerID=" + customerID + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + ", WarrantyCardID=" + WarrantyCardID + ", WarrantyCardCode=" + WarrantyCardCode + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + '}';
     }
-    
-    
 }
