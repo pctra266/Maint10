@@ -48,6 +48,9 @@
                 text-align: center;
                 margin-bottom: 10px;
             }
+            .alert:empty {
+                display: none;
+            }
 
             .add__signin-input {
                 position: relative;
@@ -140,6 +143,9 @@
                 <div class="add__signin-info">Enter information</div>
                 <c:if test="${not empty errorMessage}">
                     <div class="alert">${errorMessage}</div>
+                </c:if>
+                <c:if test="${not empty ErrorImage}">
+                    <div class="alert">${ErrorImage}</div>
                 </c:if>
                 <form action="StaffController" method="post"  enctype="multipart/form-data">
                     <input type="hidden" name="action" value="AddStaff">

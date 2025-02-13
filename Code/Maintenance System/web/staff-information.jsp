@@ -115,6 +115,9 @@ button:hover {
     border-radius: 5px;
     font-weight: bold;
 }
+.alert:empty {
+    display: none;
+}
 
         </style> 
          
@@ -126,6 +129,9 @@ button:hover {
                 <div class="add__signin-info">Information</div>
                 <c:if test="${not empty errorMessage}">
                     <div class="alert">${errorMessage}</div>
+                </c:if>
+                <c:if test="${not empty ErrorImage}">
+                    <div class="alert">${ErrorImage}</div>
                 </c:if>
                 <form action="StaffController" method="post" enctype="multipart/form-data">    
                     <input type="hidden" name="action" value="Update">
@@ -257,8 +263,10 @@ button:hover {
                         </div>    
                            
                         
-                        <div class="add__signin-next">                      
-                                <button type="submit">Change</button>                      
+                        <div class="add__signin-next">  
+                            <c:if test="${not empty change}">
+                                <button type="submit" onclick="return change">Change</button>  
+                            </c:if>
                         </div>
                     </form>
                     <div class="add__signin-next">                        
