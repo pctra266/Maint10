@@ -203,8 +203,8 @@
                 }
             }
         </style>
-    </head>
 
+    </head>
 
     <body>
         <div class="wrapper">
@@ -218,6 +218,11 @@
                             ${errorMessage}
                         </div>
                     </c:if>
+
+                    <label for="recordsPerPage">Products per page:</label>
+                    <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
+                    <button onclick="updateRecordsPerPage()">Apply</button>
+
 
                     <div class="gom">
                         <select id="sortQuantity">
@@ -309,29 +314,14 @@
 
                     <!-- Pagination -->
                     <div class="pagination">
-                        <c:if test="${page > 1}">
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=1">
-                                First
-                            </a>
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${page - 1}">
-                                Previous
-                            </a>
-                        </c:if>
                         <c:forEach var="i" begin="1" end="${totalPages}">
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${i}" 
+                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${i}&recordsPerPage=${recordsPerPage}" 
                                class="${i == page ? 'active' : ''}">
                                 ${i}
                             </a>
                         </c:forEach>
-                        <c:if test="${page < totalPages}">
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${page + 1}">
-                                Next
-                            </a>
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${totalPages}">
-                                Last
-                            </a>
-                        </c:if>
                     </div>
+
 
                     <script>
                         document.getElementById("sortQuantity").addEventListener("change", function () {
@@ -351,13 +341,24 @@
                         function validateCode() {
                             let input = document.getElementById("searchCode");
                             let value = input.value;
-
-                            // Chỉ cho phép nhập chữ và số (không có dấu cách hoặc ký tự đặc biệt)
                             if (!/^[a-zA-Z0-9]*$/.test(value)) {
                                 alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
-                                input.value = value.replace(/[^a-zA-Z0-9]/g, ""); // Xóa ký tự không hợp lệ
+                                input.value = value.replace(/[^a-zA-Z0-9]/g, "");
                             }
                         }
+
+                        function updateRecordsPerPage() {
+                            let recordsInput = document.getElementById("recordsPerPage").value;
+                            if (recordsInput < 1) {
+                                alert("Number must be at least 1!");
+                                return;
+                            }
+                            let url = new URL(window.location.href);
+                            url.searchParams.set("recordsPerPage", recordsInput);
+                            url.searchParams.set("page", "1"); // Quay về trang đầu tiên sau khi thay đổi
+                            window.location.href = url;
+                        }
+
                     </script>
 
                 </main>
