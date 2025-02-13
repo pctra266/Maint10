@@ -76,7 +76,7 @@ public class ProductDAO extends DBContext {
         }
         return products;
     }
-
+// feedback ===================================================================================================
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
@@ -102,7 +102,26 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-
+    
+    public int totalProductByCustomerId(String customerID){
+        String query = """
+                       select count(*) from Customer c   
+                       \t\t\t\t\t\tjoin ProductDetail pd on c.CustomerID = pd.CustomerID
+                                              join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
+                                              join Product p on pd.ProductID = p.ProductID
+                                            where c.CustomerID = ?""";
+        int total = 0;
+        try (PreparedStatement ps = connection.prepareStatement(query);) {
+            ps.setString(1, customerID);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+        }
+        return total;
+    }
+// end feedback ==========================================================================================
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT * FROM Brand";
@@ -395,10 +414,11 @@ public class ProductDAO extends DBContext {
             System.out.println(p.getBrandName());
         }
          */
-        ArrayList<ProductDetail> d = productDAO.getListProductByCustomerID("1");
-        for (ProductDetail p : d) {
-            System.out.println(p);
-        }
+//        ArrayList<ProductDetail> d = productDAO.getListProductByCustomerID("1");
+//        for (ProductDetail p : d) {
+//            System.out.println(p);
+//        }
+        System.out.println(productDAO.totalProductByCustomerId("1"));
     }
 
 }

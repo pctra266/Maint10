@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -41,7 +42,7 @@
                                     <td>${o.productName}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</td>
+                                    <td><a class="btn btn-success" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
                                 </tr>
                             </c:forEach>
                                 <tr>
@@ -49,14 +50,14 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback">Create Feedback</td>
+                                    <td><a class="btn btn-success" href="feedback?action=createFeedback">Create Feedback</a></td>
                                 </tr>
                         </tbody>
                         
                         </table>
                         
                     </div>
-                     <%--<jsp:include page="/includes/pagination.jsp" />--%>
+                     <jsp:include page="/includes/pagination.jsp" />
                      <a class="btn btn-primary" href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
                      
                 </main>
@@ -77,6 +78,5 @@
                     }
             </script>
         <script src="js/app.js"></script>
-       
     </body>
 </html>

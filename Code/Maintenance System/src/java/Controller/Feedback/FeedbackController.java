@@ -14,6 +14,7 @@ import Model.Feedback;
 import Model.FeedbackLog;
 import Model.Pagination;
 import Model.ProductDetail;
+import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
         maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class FeedbackController extends HttpServlet {
-
+    private static final int PAGE_SIZE = 5;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -113,6 +114,28 @@ public class FeedbackController extends HttpServlet {
         if (action == null) {
             action = "viewFeedback";
         }
+        int total1 = 0;
+        switch(action){
+            case "viewListFeedbackByCustomerId": 
+                total1 = daoFeedback.totalFeedbackByCustomerId(customerId);
+                break;
+            case "viewFeedbackDashboard":
+                total1 = productDAO.totalProductByCustomerId(customerId);
+                break;
+        }
+        //lay tham so de phan trang
+        Pagination pagination = new Pagination();
+        String pageParam = request.getParameter("page");
+                String pageSizeParam = request.getParameter("page-size");
+                int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+                 Integer pageSize;
+                pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+                int totalPages1 = (int) Math.ceil((double) total1 / pageSize);
+                if (page > totalPages1) {
+                    page = totalPages1;
+                }
+                page = page < 1 ? 1 : page;
+        // end thay tham so de phan trang
         switch (action) {
             case "viewFeedback":
                 String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
@@ -155,25 +178,42 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "viewListFeedbackByCustomerId":
-                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId);
+                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId,page,pageSize);
+                pagination.setListPageSize(total1); // total select count(*)
+                pagination.setCurrentPage(page);
+                
+                pagination.setTotalPages(totalPages1);
+                pagination.setTotalPagesToShow(5); // thich hien thi bao nhieu thi hien
+                pagination.setPageSize(pageSize);
+                pagination.setSort("");
+                pagination.setOrder("");
+                pagination.setUrlPattern("/feedback");
+                pagination.setSearchFields(new String[]{"action"});
+                pagination.setSearchValues(new String[]{"viewListFeedbackByCustomerId"});
+                request.setAttribute("pagination", pagination);
                 
                 request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
+                int totalProductByCustomerId = productDAO.totalProductByCustomerId(customerId);
+                
+                
+                
                 ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
-                Pagination pagination = new Pagination();
-                pagination.setListPageSize(5);
-                pagination.setCurrentPage(1);
-                pagination.setTotalPages(5);
-                pagination.setTotalPagesToShow(5);
-                pagination.setPageSize(1);
+                
+                pagination.setListPageSize(totalProductByCustomerId); // total select count(*)
+                pagination.setCurrentPage(page);
+                
+                pagination.setTotalPages(totalPages1);
+                pagination.setTotalPagesToShow(5); // thich hien thi bao nhieu thi hien
+                pagination.setPageSize(pageSize);
                 pagination.setSort("");
                 pagination.setOrder("");
-                pagination.setUrlPattern("/feedback?action=viewFeedbackDashboard");
-//                pagination.setSearchFields(new String[]{"search"});
-//                pagination.setSearchValues(new String[]{paraSearch});
+                pagination.setUrlPattern("/feedback");
+                pagination.setSearchFields(new String[]{"action"});
+                pagination.setSearchValues(new String[]{"viewFeedbackDashboard"});
                 request.setAttribute("pagination", pagination);
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
