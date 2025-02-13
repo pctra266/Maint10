@@ -68,9 +68,9 @@ public class updateMaxSize extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-                String maxSizeImageStr = request.getParameter("maxSizeImage");
+        String maxSizeImageStr = request.getParameter("maxSizeImage");
         String maxSizeVideoStr = request.getParameter("maxSizeVideo");
-        
+        System.out.println("maxSizeImgae hien tai la : " +maxSizeImageStr );
         int maxSizeImageMB = 5; // Mặc định 5MB nếu lỗi
         int maxSizeVideoMB = 50; // Mặc định 50MB nếu lỗi
 
@@ -81,9 +81,10 @@ public class updateMaxSize extends HttpServlet {
             response.getWriter().write("Lỗi: Giá trị nhập không hợp lệ!");
             return;
         }
+        System.out.println("maxSizeImageMB hientai la : "+ maxSizeImageMB);
 
         // Cập nhật giá trị trong ServletContext
-        getServletContext().setAttribute("maxUploadSizeMB", maxSizeImageMB);
+        getServletContext().setAttribute("maxUploadSizeImageMB", maxSizeImageMB);
         getServletContext().setAttribute("maxUploadSizeVideoMB", maxSizeVideoMB);
         
         // Chuyển về trang admin
@@ -91,13 +92,14 @@ public class updateMaxSize extends HttpServlet {
     }
     private int parseSize(String sizeStr, String customSizeStr, String customUnit) throws NumberFormatException {
     int sizeMB = 5; // Mặc định
-
+    
     if ("kb".equals(sizeStr)) {
         sizeMB = 1; // 500KB làm tròn về 1MB
     } else if ("1g".equals(sizeStr)) {
         sizeMB = 1024; // 1GB = 1024MB
     } else if ("custom".equals(sizeStr) && customSizeStr != null && !customSizeStr.isEmpty()) {
         int customSize = Integer.parseInt(customSizeStr);
+        System.out.println("custom size hien tai la: " + customSize);
         if ("kb".equals(customUnit)) {
             sizeMB = customSize / 1024; // KB -> MB
         } else if ("gb".equals(customUnit)) {
@@ -111,7 +113,7 @@ public class updateMaxSize extends HttpServlet {
     } else {
         sizeMB = Integer.parseInt(sizeStr);
     }
-    
+        System.out.println("sizeMB cuoi cung laf" + sizeMB);
     return sizeMB;
 }
 

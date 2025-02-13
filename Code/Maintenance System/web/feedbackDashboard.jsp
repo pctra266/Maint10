@@ -56,11 +56,15 @@
                         </table>
                         
                     </div>
-                    <a href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
+                     <%--<jsp:include page="/includes/pagination.jsp" />--%>
+                     <a class="btn btn-primary" href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
+                     
                 </main>
-                <jsp:include page="/includes/footer.jsp" />
+                    
+               <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
+           
             <script>
                 function doDelete(event) {
                         event.preventDefault();

@@ -12,6 +12,7 @@ import Model.Customer;
 import Model.Staff;
 import Model.Feedback;
 import Model.FeedbackLog;
+import Model.Pagination;
 import Model.ProductDetail;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -91,6 +92,10 @@ public class FeedbackController extends HttpServlet {
         if (currentCustomer != null) {
             customerId = String.valueOf(currentCustomer.getCustomerID());
         }
+//        if(currentCustomer == null){
+//            response.sendRedirect("LoginForm.jsp");
+//            return ;
+//        }
         
         try {
             currentStaff = (Staff) session.getAttribute("staff");
@@ -158,6 +163,18 @@ public class FeedbackController extends HttpServlet {
             case "viewFeedbackDashboard":
                 ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
+                Pagination pagination = new Pagination();
+                pagination.setListPageSize(5);
+                pagination.setCurrentPage(1);
+                pagination.setTotalPages(5);
+                pagination.setTotalPagesToShow(5);
+                pagination.setPageSize(1);
+                pagination.setSort("");
+                pagination.setOrder("");
+                pagination.setUrlPattern("/feedback?action=viewFeedbackDashboard");
+//                pagination.setSearchFields(new String[]{"search"});
+//                pagination.setSearchValues(new String[]{paraSearch});
+                request.setAttribute("pagination", pagination);
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
             case "deleteFeedback":

@@ -205,7 +205,7 @@ public static boolean isValidVideo(File file) throws IOException {
         return hex.startsWith("000001BA") ||  // MPEG-2
                hex.startsWith("000001B3") ||  // MPEG-1
                hex.startsWith("1A45DFA3") ||  // MKV (Matroska)
-               hex.contains("66747970") ||  // MP4
+               hex.substring(8).startsWith("66747970") ||  // MP4
                hex.startsWith("3026B275") ||  // WMV
                hex.startsWith("52494646");    // AVI
     }

@@ -50,10 +50,11 @@
                                 <button type="button" class="btn btn-primary ${pagination.currentPage >= pagination.totalPages ? 'disabled' : ''} btn-pagination" onclick="setPage(${pagination.totalPages})">&gt;&gt;</button>
                             </div>
                         </form>
-
+ <h1>action la: ${pageContext.request.contextPath}${pagination.urlPattern}</h1>
                         <!-- Ô nh?p trang -->
                         <div class="text-center" style="margin-top: 1rem;">
                             <form class="row align-items-center justify-content-center" action="${pageContext.request.contextPath}${pagination.urlPattern}" method="get">
+                               
                                 <input type="number" style="width:4.5rem; padding:.3rem .5rem" class="form-control mb-2 me-sm-2" id="inlineFormInputName2" name="page" min="1" max="${pagination.totalPages}" placeholder="Page">
                                 <input type="hidden" name="page-size" value="${pagination.pageSize}">
                                 <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
