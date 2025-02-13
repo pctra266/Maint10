@@ -50,7 +50,7 @@
                                 <button type="button" class="btn btn-primary ${pagination.currentPage >= pagination.totalPages ? 'disabled' : ''} btn-pagination" onclick="setPage(${pagination.totalPages})">&gt;&gt;</button>
                             </div>
                         </form>
- <h1>action la: ${pageContext.request.contextPath}${pagination.urlPattern}</h1>
+<!-- <h1>action la: ${pageContext.request.contextPath}${pagination.urlPattern}</h1>-->
                         <!-- Ô nh?p trang -->
                         <div class="text-center" style="margin-top: 1rem;">
                             <form class="row align-items-center justify-content-center" action="${pageContext.request.contextPath}${pagination.urlPattern}" method="get">
