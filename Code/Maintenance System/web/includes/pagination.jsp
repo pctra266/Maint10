@@ -64,6 +64,9 @@
             </c:if>
                 <input type="hidden" name="sort" value="${pagination.sort}">
                 <input type="hidden" name="order" value="${pagination.order}">
+                 <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                    <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                </c:forEach>
                 <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
             </form>
         </div>

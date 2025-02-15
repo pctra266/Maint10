@@ -107,8 +107,6 @@ public class FeedbackController extends HttpServlet {
             staffId = String.valueOf(currentStaff.getStaffID());
         }
         
-        System.out.println("Customer ID hien tai la : " + customerId);
-        System.out.println("Staff ID hien tai la : " + staffId);
         // end session customer
         String action = request.getParameter("action");
         if (action == null) {
