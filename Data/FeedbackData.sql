@@ -1,3 +1,4 @@
+USE MaintainManagement
 
 INSERT INTO ProductDetail (CustomerID, ProductID, ProductCode, PurchaseDate)
 VALUES
@@ -21,14 +22,20 @@ VALUES
 ('WC110', 10, 'Wi-Fi connectivity issue', 'cancel', '2025-01-19'),
 ('WC111', 11, 'Screen flickering', 'fixing', '2025-01-20'),
 ('WC112', 12, 'Battery draining quickly', 'completed', '2025-01-21'),
-('WC113', 13, 'Speaker distortion', 'fixing', '2025-01-22'),
+
 ('WC114', 14, 'Power button not working', 'completed', '2025-01-23'),
 ('WC115', 15, 'Overheating during charging', 'fixing', '2025-01-24'),
 ('WC116', 16, 'Random shutdowns', 'cancel', '2025-01-25'),
 ('WC117', 17, 'Hard drive failure', 'completed', '2025-01-26'),
 ('WC118', 18, 'USB port not functioning', 'fixing', '2025-01-27'),
-('WC119', 19, 'Software crashes frequently', 'completed', '2025-01-28'),
-('WC120', 20, 'Screen brightness not adjustable', 'fixing', '2025-01-29');
+
+('WC113', 13, 'Speaker distortion', 'fixing', '2025-01-22'),
+('WC119', 19, 'Software crashes frequently', 'completed', '2025-01-23'),
+('WC120', 23, 'Power button not working', 'fixing', '2025-01-29'),
+('WC121', 33, 'Random shutdowns', 'cancel', '2025-01-21'),
+('WC122', 43, 'Camera malfunction', 'completed', '2025-01-18'),
+('WC123', 53, 'Touchpad unresponsive', 'completed', '2025-01-16'),
+('WC124', 63, 'Screen brightness not adjustable', 'completed', '2025-01-29');
 
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES
