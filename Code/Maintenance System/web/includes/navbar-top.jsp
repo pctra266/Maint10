@@ -16,45 +16,21 @@
     <ul class="navbar-nav d-none d-lg-flex">
         <li class="nav-item px-2 dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Mega Menu
+               Look Up Online
             </a>
             <div class="dropdown-menu dropdown-menu-start dropdown-mega" aria-labelledby="megaDropdown">
                 <div class="d-md-flex align-items-start justify-content-start">
                     <div class="dropdown-mega-list">
                         <div class="dropdown-header">UI Elements</div>
-                        <a class="dropdown-item" href="#">Alerts</a>
-                        <a class="dropdown-item" href="#">Buttons</a>
-                        <a class="dropdown-item" href="#">Cards</a>
-                        <a class="dropdown-item" href="#">Carousel</a>
-                        <a class="dropdown-item" href="#">General</a>
-                        <a class="dropdown-item" href="#">Grid</a>
-                        <a class="dropdown-item" href="#">Modals</a>
-                        <a class="dropdown-item" href="#">Tabs</a>
-                        <a class="dropdown-item" href="#">Typography</a>
+                        <a class="dropdown-item" href="LookUpOnline.jsp">Warranty Card</a>
+                        <a class="dropdown-item" href="#">Product</a>
+                       
                     </div>
-                    <div class="dropdown-mega-list">
-                        <div class="dropdown-header">Forms</div>
-                        <a class="dropdown-item" href="#">Layouts</a>
-                        <a class="dropdown-item" href="#">Basic Inputs</a>
-                        <a class="dropdown-item" href="#">Input Groups</a>
-                        <a class="dropdown-item" href="#">Advanced Inputs</a>
-                        <a class="dropdown-item" href="#">Editors</a>
-                        <a class="dropdown-item" href="#">Validation</a>
-                        <a class="dropdown-item" href="#">Wizard</a>
-                    </div>
-                    <div class="dropdown-mega-list">
-                        <div class="dropdown-header">Tables</div>
-                        <a class="dropdown-item" href="#">Basic Tables</a>
-                        <a class="dropdown-item" href="#">Responsive Table</a>
-                        <a class="dropdown-item" href="#">Table with Buttons</a>
-                        <a class="dropdown-item" href="#">Column Search</a>
-                        <a class="dropdown-item" href="#">Muulti Selection</a>
-                        <a class="dropdown-item" href="#">Ajax Sourced Data</a>
-                    </div>
+                   
                 </div>
             </div>
         </li>
-
+        
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="resourcesDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Resources

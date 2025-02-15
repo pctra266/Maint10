@@ -77,43 +77,22 @@ public class CustomerServlet extends HttpServlet {
                 int customerId = Integer.parseInt(request.getParameter("id"));
                 Customer customer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", customer);
-                request.getRequestDispatcher("DetailCustomerForm.jsp").forward(request, response);
-                break;
-
-            case "advancedSearch":
-                advancedSearch(request, response);
+                request.getRequestDispatcher("Customer/DetailCustomerForm.jsp").forward(request, response);
                 break;
             case "update":
                 int updateCustomerId = Integer.parseInt(request.getParameter("id"));
                 Customer updateCustomer = customerDao.getCustomerByID(updateCustomerId);
                 request.setAttribute("customer", updateCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 break;
             case "add":
+                request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
+                break;
 
-                request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
-                break;
-            case "sort":
-                sortCustomer(request, response);
-                break;
+               
 
             default:
-                String index = request.getParameter("index");
-                int indexPage = 1;
-
-                if (index != null && !index.isEmpty()) {
-                    try {
-                        indexPage = Integer.parseInt(index);
-                    } catch (NumberFormatException e) {
-                        indexPage = 1;
-                    }
-                }
-                int totalCustomers = customerDao.getTotalCustomersPage();
-                ArrayList<Customer> listPage = customerDao.getCustomerPage(indexPage);
-                int totalPages = (int) Math.ceil((double) totalCustomers / 5);
-                request.setAttribute("totalPages", totalPages);
-                request.setAttribute("listCustomer", listPage);
-                request.getRequestDispatcher("Customer.jsp").forward(request, response);
+               customer(request, response);
 
                 break;
         }
@@ -147,72 +126,13 @@ public class CustomerServlet extends HttpServlet {
             default:
                 ArrayList<Customer> listCustomer = customerDao.getAllCustomer();
                 request.setAttribute("listCustomer", listCustomer);
-                request.getRequestDispatcher("Customer.jsp").forward(request, response);
+                request.getRequestDispatcher("Customer/Customer.jsp").forward(request, response);
                 break;
         }
 
     }
 
-    /**
-     * Advanced Search
-     *
-     * @param request
-     * @param response
-     * @throws ServletException
-     * @throws IOException
-     */
-    protected void advancedSearch(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-
-        CustomerDAO customerDao = new CustomerDAO();
-        String searchName = SearchUtils.normalizeString(request.getParameter("name"));
-        String searchGender = SearchUtils.normalizeString(request.getParameter("gender"));
-        String searchEmail = SearchUtils.normalizeString(request.getParameter("email"));
-        String searchPhone = SearchUtils.normalizeString(request.getParameter("phone"));
-        String searchAddress = SearchUtils.normalizeString(request.getParameter("address"));
-        String index = request.getParameter("index");
-        int page = 1;
-
-        try {
-            page = Integer.parseInt(index);
-        } catch (NumberFormatException e) {
-            page = 1;
-        }
-
-        ArrayList<Customer> searchResult = new ArrayList<>();
-        int totalCustomer = 0;
-        int totalPages = 1;
-
-// Kiểm tra xem có điều kiện tìm kiếm nào không
-        if ((searchName != null && !searchName.trim().isEmpty())
-                || (searchGender != null && !searchGender.trim().isEmpty())
-                || (searchEmail != null && !searchEmail.trim().isEmpty())
-                || (searchPhone != null && !searchPhone.trim().isEmpty())
-                || (searchAddress != null && !searchAddress.trim().isEmpty())) {
-
-            // Tìm kiếm nâng cao
-            searchResult = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, page);
-            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress);
-            totalPages = (int) Math.ceil((double) totalCustomer / 5);
-
-            // Nếu không có kết quả tìm kiếm
-            if (searchResult.isEmpty()) {
-                request.setAttribute("searchMessage", "No results found.");
-            }
-
-        }
-
-        request.setAttribute("searchName", searchName);
-        request.setAttribute("searchGender", searchGender);
-        request.setAttribute("searchEmail", searchEmail);
-        request.setAttribute("searchPhone", searchPhone);
-        request.setAttribute("searchAddress", searchAddress);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("listCustomer", searchResult);
-
-        request.getRequestDispatcher("CustomerSearch.jsp").forward(request, response);
-
-    }
+    
 
     /**
      * Add customer
@@ -246,43 +166,44 @@ public class CustomerServlet extends HttpServlet {
                 || customerGender.isEmpty() || customerEmail.isEmpty() || customerPhone.isEmpty()
                 || customerAddress.isEmpty()) {
             request.setAttribute("error", "All fields are required! Please fill in all information.");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // check space
         if (customerPhone.contains(" ") || customerEmail.contains(" ") || password.contains(" ")) {
             request.setAttribute("error", "Phone and email,password not contain space!");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // Check phone
         if (customerPhone.length() != 10) {
             request.setAttribute("error", "Phone contain 10 number!");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // Check username
         if (customerDao.getCustomerByUsername(username) != null) {
             request.setAttribute("error", "Username already exists! Please choose another username.");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // Check email
         if (customerDao.getCustomerByEmail(customerEmail) != null) {
             request.setAttribute("error", "Email already exists! Please choose another email.");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // Check phone
         if (customerDao.getCustomerByPhone(customerPhone) != null) {
             request.setAttribute("error", "Phone number already exists! Please choose another phone number.");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
+        
         // Check fomat password
         if (!format.checkPassword(password)) {
             request.setAttribute("error", "Password must be between 8 and 16 characters.");
-            request.getRequestDispatcher("AddCustomer.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
             return;
         }
         // Xử lý upload ảnh
@@ -302,6 +223,15 @@ public class CustomerServlet extends HttpServlet {
             filePart.write(uploadPath + File.separator + fileName);
             customerImage = "img/avatar/" + fileName;
         }
+        
+        // Check image
+             String customerImageCheck  = customerImage.toLowerCase();
+            if(!customerImageCheck .endsWith(".jpg") && !customerImageCheck.endsWith(".png")) {
+                request.setAttribute("error", "File must be jpg or png");
+                
+                request.getRequestDispatcher("Customer/AddProduct.jsp").forward(request, response);
+                return;
+            }
         String encryptedPassword = Encryption.EncryptionPassword(password);
 
         Customer newCustomer = new Customer(username, encryptedPassword, customerName, customerGender,
@@ -339,7 +269,7 @@ public class CustomerServlet extends HttpServlet {
             Part filePart = request.getPart("image");
             String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
             String customerImage;
-
+            
             if (fileName == null || fileName.isEmpty()) {
                 customerImage = customer.getImage();
 
@@ -359,7 +289,7 @@ public class CustomerServlet extends HttpServlet {
                 request.setAttribute("error", "All fields are required! Please fill in all information.");
                 Customer tempCustomer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", tempCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 return;
             }
 
@@ -368,14 +298,14 @@ public class CustomerServlet extends HttpServlet {
                 request.setAttribute("error", "Email already exists! Please choose another email.");
                 Customer tempCustomer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", tempCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 return;
             }
             if (!customerPhone.equals(customer.getPhone()) && customerDao.getCustomerByPhone(customerPhone) != null) {
                 request.setAttribute("error", "Phone number already exists! Please choose another phone number.");
                 Customer tempCustomer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", tempCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 return;
             }
             // Check space
@@ -383,7 +313,7 @@ public class CustomerServlet extends HttpServlet {
                 request.setAttribute("error", "Space");
                 Customer tempCustomer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", tempCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 return;
 
             }
@@ -391,7 +321,16 @@ public class CustomerServlet extends HttpServlet {
                 request.setAttribute("error", "Phone contain 10 number!");
                 Customer tempCustomer = customerDao.getCustomerByID(customerId);
                 request.setAttribute("customer", tempCustomer);
-                request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
+                return;
+            }
+            
+            String customerImageCheck  = customerImage.toLowerCase();
+            if(!customerImageCheck .endsWith(".jpg") && !customerImageCheck.endsWith(".png")) {
+                request.setAttribute("error", "File must be jpg or png");
+                Customer tempCustomer = customerDao.getCustomerByID(customerId);
+                request.setAttribute("customer", tempCustomer);
+                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 return;
             }
 
@@ -402,54 +341,103 @@ public class CustomerServlet extends HttpServlet {
             request.setAttribute("customer", updateCustomer);
 
             request.setAttribute("mess", "Update sucessfully!");
-            request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+             request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
 
         } catch (IOException | ServletException | NumberFormatException e) {
 
             request.setAttribute("error", "An error occurred while updating the customer: " + e.getMessage());
-            request.getRequestDispatcher("UpdateCustomerForm.jsp").forward(request, response);
+            request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
         }
     }
-
     /**
-     * Sort customer
-     *
+     * 
      * @param request
      * @param response
      * @throws ServletException
-     * @throws IOException
+     * @throws IOException 
      */
-    protected void sortCustomer(HttpServletRequest request, HttpServletResponse response)
+    protected void customer(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         CustomerDAO customerDao = new CustomerDAO();
-        String field = request.getParameter("field");
-        String order = request.getParameter("order");
-        String index = request.getParameter("index");
+
+        // Lấy thông tin tìm kiếm và sắp xếp từ request
+        String searchName = SearchUtils.normalizeString(request.getParameter("name"));
+        String searchGender = request.getParameter("gender");
+        String searchEmail = SearchUtils.normalizeString(request.getParameter("email"));
+        String searchPhone = SearchUtils.normalizeString(request.getParameter("phone"));
+        String searchAddress = SearchUtils.normalizeString(request.getParameter("address"));
+        String sortBy = request.getParameter("field");
+        String sortOrder = request.getParameter("order");
+
+        // Lấy giá trị phân trang
+        String pageIndex = request.getParameter("index");
+        String pageSize = request.getParameter("page-size");
+
+        // Xử lý giá trị mặc định cho pageSize và pageIndex
+        if (pageSize == null || pageSize.isEmpty()) {
+            pageSize = "5";  // Mặc định là 5 bản ghi mỗi trang
+        }
+
+        if (pageIndex == null || pageIndex.isEmpty()) {
+            pageIndex = "1";  // Mặc định là trang đầu tiên
+        }
+
+        // Chuyển pageSize và pageIndex sang kiểu số nguyên
+        int size = 5;
         int page = 1;
+        int offset = 0;
 
         try {
-            page = Integer.parseInt(index);
+            size = Integer.parseInt(pageSize);
+            page = Integer.parseInt(pageIndex);
+            offset = (page - 1) * size;  // Tính toán offset
         } catch (NumberFormatException e) {
-            page = 1;
+            System.out.println("Error parsing page size or index: " + e);
         }
 
-        ArrayList<Customer> sortResult = new ArrayList<>();
-
+        ArrayList<Customer> listCustomer = new ArrayList<>();
+        int totalCustomer = 0;
         int totalPages = 1;
-        if (field != null && order != null) {
-            sortResult = customerDao.sort(field, order, page);
-            int totalSortCustomer = customerDao.getTotalCustomersPage();
-            totalPages = (int) Math.ceil((double) totalSortCustomer / 5);
+
+        // Kiểm tra nếu có điều kiện tìm kiếm
+        if ((searchName != null && !searchName.trim().isEmpty())
+                || (searchGender != null && !searchGender.trim().isEmpty())
+                || (searchEmail != null && !searchEmail.trim().isEmpty())
+                || (searchPhone != null && !searchPhone.trim().isEmpty())
+                || (searchAddress != null && !searchAddress.trim().isEmpty())) {
+
+            // Gọi phương thức tìm kiếm với các tham số tìm kiếm, sắp xếp, phân trang
+            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, sortBy, sortOrder, offset, size);
+
+            // Lấy tổng số khách hàng tìm được
+            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress);
+
+            // Tính toán tổng số trang
+            totalPages = (int) Math.ceil((double) totalCustomer / size);
 
         } else {
-
+           listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, sortBy, sortOrder, offset, size);
+            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress);
+            totalPages = (int) Math.ceil((double) totalCustomer / size);
+           
+            
         }
-        request.setAttribute("listCustomer", sortResult);
-        request.setAttribute("totalPages", totalPages);
-        request.setAttribute("sortField", field);
-        request.setAttribute("sortOrder", order);
 
-        request.getRequestDispatcher("SortCustomer.jsp").forward(request, response);
+        // Gửi các tham số tìm kiếm và phân trang đến JSP
+        request.setAttribute("searchName", searchName);
+        request.setAttribute("searchGender", searchGender);
+        request.setAttribute("searchEmail", searchEmail);
+        request.setAttribute("searchPhone", searchPhone);
+        request.setAttribute("searchAddress", searchAddress);
+        request.setAttribute("size", size);
+        request.setAttribute("sortBy", sortBy);
+        request.setAttribute("sortOrder", sortOrder);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("listCustomer", listCustomer);
+
+        // Chuyển tiếp tới JSP
+        request.getRequestDispatcher("Customer/Customer.jsp").forward(request, response);
     }
 
     /**
