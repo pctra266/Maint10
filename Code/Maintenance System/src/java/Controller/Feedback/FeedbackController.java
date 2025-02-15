@@ -112,6 +112,8 @@ public class FeedbackController extends HttpServlet {
         if (action == null) {
             action = "viewFeedback";
         }
+        
+        //lay tham so de phan trang
         int total1 = 0;
         switch(action){
             case "viewListFeedbackByCustomerId": 
@@ -121,7 +123,6 @@ public class FeedbackController extends HttpServlet {
                 total1 = productDAO.totalProductByCustomerId(customerId);
                 break;
         }
-        //lay tham so de phan trang
         Pagination pagination = new Pagination();
         String pageParam = request.getParameter("page");
                 String pageSizeParam = request.getParameter("page-size");
@@ -133,6 +134,8 @@ public class FeedbackController extends HttpServlet {
                     page = totalPages1;
                 }
                 page = page < 1 ? 1 : page;
+                System.out.println("Page hien tai: "+ page);
+                System.out.println("page size hien tai: " + pageSize);
         // end thay tham so de phan trang
         switch (action) {
             case "viewFeedback":
@@ -194,14 +197,11 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
-                int totalProductByCustomerId = productDAO.totalProductByCustomerId(customerId);
-                
-                
-                
-                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId);
+   
+                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId,page,pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 
-                pagination.setListPageSize(totalProductByCustomerId); // total select count(*)
+                pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
                 
                 pagination.setTotalPages(totalPages1);

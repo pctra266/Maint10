@@ -97,7 +97,7 @@ public class FeedbackDAO {
         if (customerId != null && !customerId.trim().isEmpty()) {
             query += " and f.CustomerID like ?";
         }
-        query += " order by DateCreated asc ";
+        query += " order by DateCreated desc ";
         query += " offset ? rows  fetch next ? rows only;";
         try {
             conn = new DBContext().connection;
