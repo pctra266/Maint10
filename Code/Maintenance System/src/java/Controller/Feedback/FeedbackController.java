@@ -182,7 +182,6 @@ public class FeedbackController extends HttpServlet {
                 ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId,page,pageSize);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
-                
                 pagination.setTotalPages(totalPages1);
                 pagination.setTotalPagesToShow(5); // thich hien thi bao nhieu thi hien
                 pagination.setPageSize(pageSize);
@@ -192,18 +191,14 @@ public class FeedbackController extends HttpServlet {
                 pagination.setSearchFields(new String[]{"action"});
                 pagination.setSearchValues(new String[]{"viewListFeedbackByCustomerId"});
                 request.setAttribute("pagination", pagination);
-                
                 request.setAttribute("listFeedbackByCustomerId", listFeedbackByCustomerId);
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
-   
                 ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId,page,pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
-                
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
-                
                 pagination.setTotalPages(totalPages1);
                 pagination.setTotalPagesToShow(5); // thich hien thi bao nhieu thi hien
                 pagination.setPageSize(pageSize);
@@ -219,7 +214,6 @@ public class FeedbackController extends HttpServlet {
                 String feedbackIdDelete = request.getParameter("feedbackID");
                 daoFeedback.inActiveFeedbackById(feedbackIdDelete);
                 daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
-                // chuyen sang view action
                 response.sendRedirect("feedback");
                 break;
             case "deleteFeedbackFromCustomer":
