@@ -60,6 +60,22 @@
                             </div>
                         </div>
                     </c:if>
+                    <div class="d-flex justify-content-center align-items-center mb-3">
+                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="type" value="repair">
+                            <button type="submit" class="btn ${pagination.searchValues[2] eq 'repair'?'btn-instagram':'btn-primary'}  btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Repair</button>
+                        </form>
+                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="type" value="warranty">
+                            <button type="submit" class="btn ${pagination.searchValues[2] eq 'warranty'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Warranty</button>
+                        </form>
+                        <form action="WarrantyCard" method="POST" style="display: inline; width: 8rem;">
+                            <input type="hidden" name="type" value="all">
+                            <button type="submit" class="btn  ${pagination.searchValues[2] eq 'all'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">All</button>
+                        </form>
+                    </div>
+
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
@@ -100,7 +116,7 @@
                                     Card Code
                                 </th>
                                 <th style="width:10%">
-                                     <form action="WarrantyCard" method="get">
+                                    <form action="WarrantyCard" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
@@ -191,7 +207,7 @@
                             <!--varStatus để lấy trạng thái của vòng lặp-->
                             <c:forEach var="card" items="${cardList}" varStatus="status">
                                 <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
-                                    <td>${status.index + 1 + (currentPage - 1) * pageSize}</td>
+                                    <td>${status.index + 1 + (pagination.currentPage - 1) * pagination.pageSize}</td>
                                     <td>${card.warrantyCardCode}</td>
                                     <td>${card.productCode}</td>
                                     <td>${card.productName}</td>

@@ -8,7 +8,15 @@ VALUES
 (4, 1, 'P13435', '2025-01-04'),
 (5, 4, 'P134535', '2025-01-05')
 
-INSERT INTO WarrantyCard (WarrantyCardCode, ProductDetailID, IssueDescription, WarrantyStatus, CreatedDate)
+INSERT INTO WarrantyProduct (ProductDetailID, UnknowProductID)
+VALUES 
+(1, NULL), (2, NULL), (3, NULL), (4, NULL), (5, NULL),
+(6, NULL), (7, NULL), (8, NULL), (9, NULL), (10, NULL),
+(11, NULL), (12, NULL), (13, NULL), (14, NULL), (15, NULL),
+(16, NULL), (17, NULL), (18, NULL), (19, NULL), (23, NULL),
+(33, NULL), (43, NULL), (53, NULL), (63, NULL);
+
+INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
 VALUES
 ('WC101', 1, 'Screen malfunction', 'fixing', '2024-01-10'),
 ('WC102', 2, 'Battery issue', 'completed', '2024-01-11'),
@@ -22,20 +30,18 @@ VALUES
 ('WC110', 10, 'Wi-Fi connectivity issue', 'cancel', '2024-01-19'),
 ('WC111', 11, 'Screen flickering', 'fixing', '2024-01-20'),
 ('WC112', 12, 'Battery draining quickly', 'completed', '2024-01-21'),
-
+('WC113', 13, 'Speaker distortion', 'fixing', '2024-01-22'),
 ('WC114', 14, 'Power button not working', 'completed', '2024-01-23'),
 ('WC115', 15, 'Overheating during charging', 'fixing', '2024-01-24'),
 ('WC116', 16, 'Random shutdowns', 'cancel', '2024-01-25'),
 ('WC117', 17, 'Hard drive failure', 'completed', '2024-01-26'),
 ('WC118', 18, 'USB port not functioning', 'fixing', '2024-01-27'),
-
-('WC113', 13, 'Speaker distortion', 'fixing', '2024-01-22'),
 ('WC119', 19, 'Software crashes frequently', 'completed', '2024-01-23'),
-('WC120', 23, 'Power button not working', 'fixing', '2024-01-29'),
-('WC121', 33, 'Random shutdowns', 'cancel', '2024-01-21'),
-('WC122', 43, 'Camera malfunction', 'completed', '2024-01-18'),
-('WC123', 53, 'Touchpad unresponsive', 'completed', '2024-01-16'),
-('WC124', 63, 'Screen brightness not adjustable', 'completed', '2024-01-29');
+('WC120', 20, 'Power button not working', 'fixing', '2024-01-29'),
+('WC121', 21, 'Random shutdowns', 'cancel', '2024-01-21'),
+('WC122', 22, 'Camera malfunction', 'completed', '2024-01-18'),
+('WC123', 23, 'Touchpad unresponsive', 'completed', '2024-01-16'),
+('WC124', 24, 'Screen brightness not adjustable', 'completed', '2024-01-29');
 
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES

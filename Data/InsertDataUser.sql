@@ -1,29 +1,37 @@
 ﻿
 USE MaintainManagement
+INSERT INTO [Role] (RoleName)
+VALUES 
+('Admin'),
+('Technician'),
+('Inventory Manager'),
+('Repair Contractor'),
+('Customer Service Agent'),
+('Inactive');
+
 --them data vao staff
-INSERT INTO Staff (UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address], Image)
+INSERT INTO Staff (UsernameS, PasswordS, RoleID, [Name], Email, Phone, [Address], Image)
 VALUES
-('admin01', 'T2D6i9+ldWGqevu6W6FAP1iXBbI=', 'Admin', 'Admin User 1', 'admin1@example.com', '0123456789', '123 Admin Street', NULL),
-('tech01', 'Cw2LaFmhUP2i/jGdPuB5aVCxAQg=', 'Technician', 'Technician 1', 'tech1@example.com', '0123456790', '456 Tech Street', NULL),
-('inv_manager1', 'G1VKaeAjqcN762tlQAIFfla2Hnc=', 'Inventory Manager', 'Inventory Manager 1', 'inv1@example.com', '0123456791', '789 Inventory Ave', NULL),
-('cust_service1', 'mnIoccUReEqm3CnIyVEsEqXI418=', 'Customer Service Agent', 'Customer Service 1', 'cs1@example.com', '0123456792', '321 Service Blvd', NULL),
-('repair_contractor1', 'cDW7EzjR1mP8REo1UF3mWlnuZdo=', 'Repair Contractor', 'Repair Contractor 1', 'repair1@example.com', '0123456793', '654 Repair St', NULL),
-('admin02', 'O5eiLfa5pJNrHk7ck1tNBw6pUYE=', 'Admin', 'Admin User 2', 'admin2@example.com', '0123456794', '234 Admin Street', NULL),
-('tech02', 't6oNiVU8eL8t1C+e11mByn7n7oA=', 'Technician', 'Technician 2', 'tech2@example.com', '0123456795', '567 Tech St', NULL),
-('inv_manager2', '2L5q1/vlAepSi4mrWEoz+oJnTEY=', 'Inventory Manager', 'Inventory Manager 2', 'inv2@example.com', '0123456796', '890 Inventory Ave', NULL),
-('cust_service2', 'hNpyQH84BIbgDRM+z0nJgUqCeV8=', 'Customer Service Agent', 'Customer Service 2', 'cs2@example.com', '0123456797', '432 Service Blvd', NULL),
-('repair_contractor2', 'NiH6AmjlqDCWROFjLhNDiYQ1F5U=', 'Repair Contractor', 'Repair Contractor 2', 'repair2@example.com', '0123456798', '765 Repair St', NULL),
-('admin03', 'm1HKaKLljc/8wGtZ4IIGTTCCPdE=', 'Admin', 'Admin User 3', 'admin3@example.com', '0123456799', '345 Admin Ave', NULL),
-('tech03', 'z7f1n0HLfbf71/EAPMwcnzUhKLg=', 'Technician', 'Technician 3', 'tech3@example.com', '0123456800', '678 Tech St', NULL),
-('inv_manager3', 'hMOqi32PeNalXipffGflzq/L9EY=', 'Inventory Manager', 'Inventory Manager 3', 'inv3@example.com', '0123456801', '901 Inventory St', NULL),
-('cust_service3', '6glxG6yT7gkwR4oRHlU7X7akgY4=', 'Customer Service Agent', 'Customer Service 3', 'cs3@example.com', '0123456802', '543 Service Rd', NULL),
-('repair_contractor3', '01g8MZ8t7IJL2iIGtzRMPTzJiTo=', 'Repair Contractor', 'Repair Contractor 3', 'repair3@example.com', '0123456803', '876 Repair St', NULL),
-('admin04', 'VSoUE0cbBMY/79BqIk1v+kCdG1M=', 'Admin', 'Admin User 4', 'admin4@example.com', '0123456804', '456 Admin Blvd', NULL),
-('tech04', 'DTxKhA7pCN1NwkGj1iPWadYUOz0=', 'Technician', 'Technician 4', 'tech4@example.com', '0123456805', '789 Tech Rd', NULL),
-('inv_manager4', 'R+RhrqNOhedR/3foIWXfAA8DHnc=', 'Inventory Manager', 'Inventory Manager 4', 'inv4@example.com', '0123456806', '234 Inventory Blvd', NULL),
-('cust_service4', 'nMGd0IHxlcneVgs1GoQ6SjRSB2A=', 'Customer Service Agent', 'Customer Service 4', 'cs4@example.com', '0123456807', '678 Service Ave', NULL),
-('cust_service5', 'nMGd0IHxlcneVgs1GoQ6SjRSB2A=', NULL, 'Customer Service 5', 'cs5@example.com', '0123456847', '679 Service Ave', NULL),
-('repair_contractor4', '8qZHe/AetEyne9jfDSciHoot6Y4=', 'Repair Contractor', 'Repair Contractor 4', 'repair4@example.com', '0123456808', '123 Repair Rd', NULL);
+('admin01', 'T2D6i9+ldWGqevu6W6FAP1iXBbI=', 1, 'Admin User 1', 'admin1@example.com', '0123456789', '123 Admin Street', NULL),
+('tech01', 'Cw2LaFmhUP2i/jGdPuB5aVCxAQg=', 2, 'Technician 1', 'tech1@example.com', '0123456790', '456 Tech Street', NULL),
+('inv_manager1', 'G1VKaeAjqcN762tlQAIFfla2Hnc=', 3, 'Inventory Manager 1', 'inv1@example.com', '0123456791', '789 Inventory Ave', NULL),
+('cust_service1', 'mnIoccUReEqm3CnIyVEsEqXI418=', 5, 'Customer Service 1', 'cs1@example.com', '0123456792', '321 Service Blvd', NULL),
+('repair_contractor1', 'cDW7EzjR1mP8REo1UF3mWlnuZdo=', 4, 'Repair Contractor 1', 'repair1@example.com', '0123456793', '654 Repair St', NULL),
+('admin02', 'O5eiLfa5pJNrHk7ck1tNBw6pUYE=', 1, 'Admin User 2', 'admin2@example.com', '0123456794', '234 Admin Street', NULL),
+('tech02', 't6oNiVU8eL8t1C+e11mByn7n7oA=', 2, 'Technician 2', 'tech2@example.com', '0123456795', '567 Tech St', NULL),
+('inv_manager2', '2L5q1/vlAepSi4mrWEoz+oJnTEY=', 3, 'Inventory Manager 2', 'inv2@example.com', '0123456796', '890 Inventory Ave', NULL),
+('cust_service2', 'hNpyQH84BIbgDRM+z0nJgUqCeV8=', 5, 'Customer Service 2', 'cs2@example.com', '0123456797', '432 Service Blvd', NULL),
+('repair_contractor2', 'NiH6AmjlqDCWROFjLhNDiYQ1F5U=', 4, 'Repair Contractor 2', 'repair2@example.com', '0123456798', '765 Repair St', NULL),
+('admin03', 'm1HKaKLljc/8wGtZ4IIGTTCCPdE=', 1, 'Admin User 3', 'admin3@example.com', '0123456799', '345 Admin Ave', NULL),
+('tech03', 'z7f1n0HLfbf71/EAPMwcnzUhKLg=', 2, 'Technician 3', 'tech3@example.com', '0123456800', '678 Tech St', NULL),
+('inv_manager3', 'hMOqi32PeNalXipffGflzq/L9EY=', 3, 'Inventory Manager 3', 'inv3@example.com', '0123456801', '901 Inventory St', NULL),
+('cust_service3', '6glxG6yT7gkwR4oRHlU7X7akgY4=', 5, 'Customer Service 3', 'cs3@example.com', '0123456802', '543 Service Rd', NULL),
+('repair_contractor3', '01g8MZ8t7IJL2iIGtzRMPTzJiTo=', 4, 'Repair Contractor 3', 'repair3@example.com', '0123456803', '876 Repair St', NULL),
+('admin04', 'VSoUE0cbBMY/79BqIk1v+kCdG1M=', 1, 'Admin User 4', 'admin4@example.com', '0123456804', '456 Admin Blvd', NULL),
+('tech04', 'DTxKhA7pCN1NwkGj1iPWadYUOz0=', 2, 'Technician 4', 'tech4@example.com', '0123456805', '789 Tech Rd', NULL),
+('inv_manager4', 'R+RhrqNOhedR/3foIWXfAA8DHnc=', 3, 'Inventory Manager 4', 'inv4@example.com', '0123456806', '234 Inventory Blvd', NULL),
+('cust_service4', 'nMGd0IHxlcneVgs1GoQ6SjRSB2A=', 5, 'Customer Service 4', 'cs4@example.com', '0123456807', '678 Service Ave', NULL),
+('repair_contractor4', '8qZHe/AetEyne9jfDSciHoot6Y4=', 4, 'Repair Contractor 4', 'repair4@example.com', '0123456808', '123 Repair Rd', NULL);
 
 
 -- them data vao customer
