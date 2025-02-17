@@ -16,6 +16,11 @@ CREATE DATABASE MaintainManagement
 GO
 USE MaintainManagement
 GO
+--('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
+CREATE TABLE [Role] (
+    RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    RoleName NVARCHAR(50) UNIQUE NOT NULL
+);
 
 -- Staff Table
 CREATE TABLE Staff (
@@ -23,6 +28,7 @@ CREATE TABLE Staff (
     UsernameS NVARCHAR(50) UNIQUE,
     PasswordS NVARCHAR(50),
     [Name] NVARCHAR(100),
+	RoleID INT REFERENCES [Role](RoleID), 
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
@@ -59,11 +65,7 @@ CREATE TABLE Customer (
 CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
 WHERE UsernameC IS NOT NULL;
 
---('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
-CREATE TABLE [Role] (
-    RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    RoleName NVARCHAR(50) UNIQUE NOT NULL
-);
+
 
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -215,7 +217,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
