@@ -76,7 +76,6 @@ public class ProductDAO extends DBContext {
         }
         return products;
     }
-// feedback ===================================================================================================
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
@@ -121,7 +120,6 @@ public class ProductDAO extends DBContext {
         }
         return total;
     }
-// end feedback ==========================================================================================
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT * FROM Brand";
