@@ -394,7 +394,9 @@ public class FeedbackController extends HttpServlet {
                 break;
             case "createFeedback":
                 String noteCreate = SearchUtils.preprocessSearchQuery(request.getParameter("note"));
-                String warrantyCardId = request.getParameter("warrantyCardId");
+                String warrantyCardID = request.getParameter("warrantyCardID");
+                request.setAttribute("warrantyCardID", warrantyCardID);
+                
                 Part imagePart = request.getPart("imageURL");
                 Part videoPart = request.getPart("videoURL");
                 String mess = "";
@@ -434,13 +436,18 @@ public class FeedbackController extends HttpServlet {
                 System.out.println("video path la : " + videoURL);
 
                 // valid
+                
                 if (noteCreate == null || noteCreate.trim().isEmpty()) {
                     valid = false;
                     mess = "You need fill feedback note";
+                }else{
+                    request.setAttribute("note", noteCreate);
                 }
+                
+                
 
                 if (valid) {
-                    daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
+                    daoFeedback.createFeedback(customerId, warrantyCardID, noteCreate, imageURL, videoURL);
                     mess = "Create successfully";
                     response.sendRedirect("feedback?action=viewFeedbackDashboard&mess=" + mess);
                 } else {
