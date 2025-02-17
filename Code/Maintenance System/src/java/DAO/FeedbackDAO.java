@@ -22,7 +22,7 @@ public class FeedbackDAO {
     ResultSet rs = null;
     // paging and searching
 
-    public ArrayList<Feedback> getAllFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo, int index, String column, String sortOrder) {
+    public ArrayList<Feedback> getAllFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo, int page,int pageSize, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, \n"
                 + "                pr.ProductName,w.IssueDescription,\n"
@@ -57,7 +57,7 @@ public class FeedbackDAO {
         } else {
             query += " order by DateCreated asc\n";
         }
-        query += " offset ? rows  fetch next 7 rows only;";
+        query += " offset ? rows  fetch next ? rows only;";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
@@ -71,7 +71,9 @@ public class FeedbackDAO {
             if (customerPhone != null && !customerPhone.trim().isEmpty()) {
                 ps.setString(count++, customerPhone);
             }
-            ps.setInt(count++, (index - 1) * 7);
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),

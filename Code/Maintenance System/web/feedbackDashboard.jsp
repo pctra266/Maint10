@@ -56,7 +56,7 @@
                                     <td>${o.productName}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
+                                    <td><a class="btn btn-primary" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
                                 </tr>
                             </c:forEach>
                                 <tr>
@@ -65,7 +65,7 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback">Create Feedback</a></td>
+                                    <td><a class="btn btn-primary" href="feedback?action=createFeedback">Create Feedback</a></td>
                                 </tr>
                         </tbody>
                         
@@ -80,18 +80,6 @@
                <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-           
-            <script>
-                function doDelete(event) {
-                        event.preventDefault();
-
-                        const url = event.currentTarget.getAttribute('data-url');
-
-                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                            window.location.href = url;
-                        }
-                    }
-            </script>
         <script src="js/app.js"></script>
     </body>
 </html>

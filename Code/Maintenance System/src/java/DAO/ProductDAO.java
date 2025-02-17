@@ -155,8 +155,6 @@ public class ProductDAO extends DBContext {
         }
         return total;
     }
-// end feedback ==========================================================================================
-
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT * FROM Brand";

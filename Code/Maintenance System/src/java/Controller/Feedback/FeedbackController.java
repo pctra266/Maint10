@@ -39,7 +39,9 @@ import java.util.ArrayList;
         maxRequestSize = 1024 * 1024 * 50 // 50MB
 )
 public class FeedbackController extends HttpServlet {
+
     private static final int PAGE_SIZE = 5;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -97,7 +99,7 @@ public class FeedbackController extends HttpServlet {
 //            response.sendRedirect("LoginForm.jsp");
 //            return ;
 //        }
-        
+
         try {
             currentStaff = (Staff) session.getAttribute("staff");
         } catch (Exception e) {
@@ -106,80 +108,73 @@ public class FeedbackController extends HttpServlet {
         if (currentStaff != null) {
             staffId = String.valueOf(currentStaff.getStaffID());
         }
-        
+
         // end session customer
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewFeedback";
         }
-        
+
         //lay tham so de phan trang
+        String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
+        String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+        String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
+        String imageAndVideo = request.getParameter("imageAndVideo");
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
+        request.setAttribute("customerName", customerName);
+        request.setAttribute("imageAndVideo", imageAndVideo);
+        request.setAttribute("sort", sort);
+        request.setAttribute("sortOrder", order);
+        request.setAttribute("customerEmail", customerEmail);
+        request.setAttribute("customerPhone", customerPhone);
         int total1 = 0;
-        switch(action){
-            case "viewListFeedbackByCustomerId": 
+        switch (action) {
+            case "viewListFeedbackByCustomerId":
                 total1 = daoFeedback.totalFeedbackByCustomerId(customerId);
                 break;
             case "viewFeedbackDashboard":
                 total1 = productDAO.totalProductByCustomerId(customerId);
                 break;
+            case "viewFeedback":
+                total1 = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
+                break;
         }
         Pagination pagination = new Pagination();
         String pageParam = request.getParameter("page");
-                String pageSizeParam = request.getParameter("page-size");
-                int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
-                 Integer pageSize;
-                pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
-                int totalPages1 = (int) Math.ceil((double) total1 / pageSize);
-                if (page > totalPages1) {
-                    page = totalPages1;
-                }
-                page = page < 1 ? 1 : page;
-                System.out.println("Page hien tai: "+ page);
-                System.out.println("page size hien tai: " + pageSize);
+        String pageSizeParam = request.getParameter("page-size");
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+        Integer pageSize;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        int totalPages1 = (int) Math.ceil((double) total1 / pageSize);
+        if (page > totalPages1) {
+            page = totalPages1;
+        }
+        page = page < 1 ? 1 : page;
+        System.out.println("Page hien tai: " + page);
+        System.out.println("page size hien tai: " + pageSize);
         // end thay tham so de phan trang
         switch (action) {
             case "viewFeedback":
-                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
-                String imageAndVideo = request.getParameter("imageAndVideo");
-                String column = request.getParameter("column");
-                String sortOrder = request.getParameter("sortOrder");
-                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
-                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
-                request.setAttribute("customerName", customerName);
-                request.setAttribute("imageAndVideo", imageAndVideo);
-                request.setAttribute("column", column);
-                request.setAttribute("sortOrder", sortOrder);
-                request.setAttribute("customerEmail", customerEmail);
-                request.setAttribute("customerPhone", customerPhone);
                 //======phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
-                int endPage = totalPages / 7;
-                if (totalPages % 7 != 0) {
-                    endPage++;
-                }
-                request.setAttribute("endPage", endPage);
-                String indexStr = request.getParameter("index");
-                int index = 1;
-                try {
-                    index = Integer.parseInt(indexStr);
-                    if (index == 0) {
-                        index = 1;
-                    }
-                } catch (Exception e) {
-
-                }
-                if (endPage < index && endPage != 0) {
-                    index = endPage;
-                }
-                request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
-
+                pagination.setListPageSize(total1); 
+                pagination.setCurrentPage(page);
+                pagination.setTotalPages(totalPages1);
+                pagination.setTotalPagesToShow(5); 
+                pagination.setPageSize(pageSize);
+                pagination.setSort(sort);
+                pagination.setOrder(order);
+                pagination.setUrlPattern("/feedback");
+                pagination.setSearchFields(new String[]{"action","customerName","imageAndVideo","customerPhone","customerEmail"});
+                pagination.setSearchValues(new String[]{"viewFeedback",customerName,imageAndVideo,customerPhone,customerEmail});
+                request.setAttribute("pagination", pagination);
                 //======end phan trang
+                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, page,pageSize, sort, order);
                 request.setAttribute("listFeedback", listFeedback);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "viewListFeedbackByCustomerId":
-                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId,page,pageSize);
+                ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId, page, pageSize);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
                 pagination.setTotalPages(totalPages1);
@@ -195,7 +190,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
-                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId,page,pageSize);
+                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId, page, pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
@@ -211,10 +206,27 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
             case "deleteFeedback":
+                //======phan trang
+                pagination.setListPageSize(total1); 
+                pagination.setCurrentPage(page);
+                pagination.setTotalPages(totalPages1);
+                pagination.setTotalPagesToShow(5); 
+                pagination.setPageSize(pageSize);
+                pagination.setSort(sort);
+                pagination.setOrder(order);
+                pagination.setUrlPattern("/feedback");
+                pagination.setSearchFields(new String[]{"action","customerName","imageAndVideo","customerPhone","customerEmail"});
+                pagination.setSearchValues(new String[]{"viewFeedback",customerName,imageAndVideo,customerPhone,customerEmail});
+                request.setAttribute("pagination", pagination);
+
+                //======end phan trang
                 String feedbackIdDelete = request.getParameter("feedbackID");
                 daoFeedback.inActiveFeedbackById(feedbackIdDelete);
                 daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
-                response.sendRedirect("feedback");
+                
+                ArrayList<Feedback> listFeedbackAfterDelete = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, page,pageSize, sort, order);
+                request.setAttribute("listFeedback", listFeedbackAfterDelete);
+                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "deleteFeedbackFromCustomer":
                 String feedbackIdDeleteFromCustomer = request.getParameter("feedbackIdDeleteFromCustomer");
@@ -253,23 +265,36 @@ public class FeedbackController extends HttpServlet {
             throws ServletException, IOException {
         Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
 
-    // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
-    if (maxUploadSizeImageMB == null) {
-        maxUploadSizeImageMB = 5; // Giá trị mặc định
-        request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
-    }
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
         Integer maxUploadSizeVideoMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeVideoMB");
-    if (maxUploadSizeVideoMB == null) {
-        maxUploadSizeVideoMB = 50; // Giá trị mặc định 50MB
-        request.getServletContext().setAttribute("maxUploadSizeVideoMB", maxUploadSizeVideoMB);
-    }
-   
+        if (maxUploadSizeVideoMB == null) {
+            maxUploadSizeVideoMB = 50; // Giá trị mặc định 50MB
+            request.getServletContext().setAttribute("maxUploadSizeVideoMB", maxUploadSizeVideoMB);
+        }
+        String feedbackIdDelete = request.getParameter("feedbackID");
+        String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
+        String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+        String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
+        String imageAndVideo = request.getParameter("imageAndVideo");
+        String sort = request.getParameter("sort");
+        String order = request.getParameter("order");
+        request.setAttribute("customerName", customerName);
+        request.setAttribute("imageAndVideo", imageAndVideo);
+        request.setAttribute("sort", sort);
+        request.setAttribute("sortOrder", order);
+        request.setAttribute("customerEmail", customerEmail);
+        request.setAttribute("customerPhone", customerPhone);
         ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
         HttpSession session = request.getSession();
-        Customer currentCustomer = null;
+          Customer currentCustomer = null;
+        Staff currentStaff = null;
         try {
             currentCustomer = (Customer) session.getAttribute("customer");
         } catch (Exception e) {
@@ -278,55 +303,85 @@ public class FeedbackController extends HttpServlet {
         if (currentCustomer != null) {
             customerId = String.valueOf(currentCustomer.getCustomerID());
         }
+                try {
+            currentStaff = (Staff) session.getAttribute("staff");
+        } catch (Exception e) {
+        }
+        String staffId = "1";
+        if (currentStaff != null) {
+            staffId = String.valueOf(currentStaff.getStaffID());
+        }
         System.out.println("Customer ID hien tai la : " + customerId);
         if (action == null) {
             action = "viewListFeedback";
         }
+        int total1 = 0;
+        switch (action) {
+            case "deleteFeedback":
+                total1 = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
+                if(feedbackIdDelete != null && !feedbackIdDelete.trim().isEmpty()){
+                   total1--;
+                }
+                break;
+        }
+        Pagination pagination = new Pagination();
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("page-size");
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+        Integer pageSize;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        int totalPages1 = (int) Math.ceil((double) total1 / pageSize);
+        if (page > totalPages1) {
+            page = totalPages1;
+        }
+        page = page < 1 ? 1 : page;
         switch (action) {
             case "viewListFeedback":
-                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
-                String imageAndVideo = request.getParameter("imageAndVideo");
-                String column = request.getParameter("column");
-                String sortOrder = request.getParameter("sortOrder");
-                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
-                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
-                request.setAttribute("customerName", customerName);
-                request.setAttribute("imageAndVideo", imageAndVideo);
-                request.setAttribute("column", column);
-                request.setAttribute("sortOrder", sortOrder);
-                request.setAttribute("customerEmail", customerEmail);
-                request.setAttribute("customerPhone", customerPhone);
-                //phan trang
-                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
-                int endPage = totalPages / 7;
-                if (totalPages % 7 != 0) {
-                    endPage++;
-                }
-                request.setAttribute("endPage", endPage);
-                String indexStr = request.getParameter("index");
-
-                int index = 1;
-                try {
-                    index = Integer.parseInt(indexStr);
-                    if (index == 0) {
-                        index = 1;
-                    }
-                } catch (Exception e) {
-                }
-
-                if (endPage < index && endPage != 0) {
-                    index = endPage;
-                }
-                request.setAttribute("index", index);
-                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
-                request.setAttribute("listFeedback", listFeedback);
-                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
-                break;
+//                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
+//                String imageAndVideo = request.getParameter("imageAndVideo");
+//                String column = request.getParameter("column");
+//                String sortOrder = request.getParameter("sortOrder");
+//                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
+//                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
+//                request.setAttribute("customerName", customerName);
+//                request.setAttribute("imageAndVideo", imageAndVideo);
+//                request.setAttribute("column", column);
+//                request.setAttribute("sortOrder", sortOrder);
+//                request.setAttribute("customerEmail", customerEmail);
+//                request.setAttribute("customerPhone", customerPhone);
+//                //phan trang
+//                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
+//                int endPage = totalPages / 7;
+//                if (totalPages % 7 != 0) {
+//                    endPage++;
+//                }
+//                request.setAttribute("endPage", endPage);
+//                String indexStr = request.getParameter("index");
+//
+//                int index = 1;
+//                try {
+//                    index = Integer.parseInt(indexStr);
+//                    if (index == 0) {
+//                        index = 1;
+//                    }
+//                } catch (Exception e) {
+//                }
+//
+//                if (endPage < index && endPage != 0) {
+//                    index = endPage;
+//                }
+//                request.setAttribute("index", index);
+//                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
+//                request.setAttribute("listFeedback", listFeedback);
+//                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+                response.sendRedirect("feedback");
+               
+                 return ;
+                
             case "updateFeedback":
 
                 String note = request.getParameter("note");
                 String feedbackId = request.getParameter("feedbackId");
-                String staffId = "1";
                 //save history change to feedback log
                 // neu note giong nhu cu thi khong doi
                 Feedback oldFeedback = daoFeedback.getFeedbackById(feedbackId);
@@ -339,108 +394,95 @@ public class FeedbackController extends HttpServlet {
                 break;
             case "createFeedback":
                 String noteCreate = SearchUtils.preprocessSearchQuery(request.getParameter("note"));
-                String warrantyCardId = request.getParameter("warrantyCardId");
+                String warrantyCardID = request.getParameter("warrantyCardID");
+                request.setAttribute("warrantyCardID", warrantyCardID);
+                
                 Part imagePart = request.getPart("imageURL");
                 Part videoPart = request.getPart("videoURL");
                 String mess = "";
                 String imageURL = "";
                 boolean valid = true;
-                if(imagePart != null){
+                if (imagePart != null) {
                     String imagePath = Utils.OtherUtils.saveImage(imagePart, request, "img/Feedback");
                     if (imagePath == null) {
-                        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+                    } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
+                        valid = false;
+                        request.setAttribute("pictureAlert", "Invalid picture");
+                    } else {
+                        if (imagePath.startsWith("File is too large")) {
                             valid = false;
-                            request.setAttribute("pictureAlert", "Invalid picture");
-                        }else{
-                            if(imagePath.startsWith("File is too large")){
-                            valid = false;
-                            request.setAttribute("pictureAlert", "Picture too large, max size is:"+maxUploadSizeImageMB+" MB");
+                            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
                         }
                     }
                     imageURL = imagePath;
-                   
+
                 }
                 System.out.println("image path la : " + imageURL);
                 String videoURL = "";
-                if(videoPart != null){
-                    String videoPath = Utils.OtherUtils.saveVideo(videoPart, request,"video/Feedback");
+                if (videoPart != null) {
+                    String videoPath = Utils.OtherUtils.saveVideo(videoPart, request, "video/Feedback");
                     if (videoPath == null) {
-                        } else if (videoPath.equalsIgnoreCase("Invalid video")) {
+                    } else if (videoPath.equalsIgnoreCase("Invalid video")) {
+                        valid = false;
+                        request.setAttribute("videoAlert", "Invalid video");
+                    } else {
+                        if (videoPath.startsWith("File is too large")) {
                             valid = false;
-                            request.setAttribute("videoAlert", "Invalid video");
-                        }else{
-                            if(videoPath.startsWith("File is too large")){
-                            valid = false;
-                            request.setAttribute("videoAlert", "Picture too large, max size is:"+maxUploadSizeVideoMB+" MB");
+                            request.setAttribute("videoAlert", "Picture too large, max size is:" + maxUploadSizeVideoMB + " MB");
                         }
                     }
                     videoURL = videoPath;
                 }
                 System.out.println("video path la : " + videoURL);
-                
+
                 // valid
-                if(noteCreate == null || noteCreate.trim().isEmpty()){
+                
+                if (noteCreate == null || noteCreate.trim().isEmpty()) {
                     valid = false;
-                     mess = "You need fill feedback note";
+                    mess = "You need fill feedback note";
+                }else{
+                    request.setAttribute("note", noteCreate);
                 }
                 
-               
-                if(valid){
-                    daoFeedback.createFeedback(customerId, warrantyCardId, noteCreate, imageURL, videoURL);
+                
+
+                if (valid) {
+                    daoFeedback.createFeedback(customerId, warrantyCardID, noteCreate, imageURL, videoURL);
                     mess = "Create successfully";
-                    response.sendRedirect("feedback?action=viewFeedbackDashboard&mess="+mess);
-                }else{
+                    response.sendRedirect("feedback?action=viewFeedbackDashboard&mess=" + mess);
+                } else {
                     ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
                     request.setAttribute("listProductByCustomerId", listProductByCustomerId);
                     request.setAttribute("mess", mess);
                     request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 }
                 break;
-            default:
+            case "deleteFeedback":
+                //======phan trang
+                pagination.setListPageSize(total1); 
+                pagination.setCurrentPage(page);
+                pagination.setTotalPages(totalPages1);
+                pagination.setTotalPagesToShow(5); 
+                pagination.setPageSize(pageSize);
+                pagination.setSort(sort);
+                pagination.setOrder(order);
+                pagination.setUrlPattern("/feedback");
+                pagination.setSearchFields(new String[]{"action","customerName","imageAndVideo","customerPhone","customerEmail"});
+                pagination.setSearchValues(new String[]{"viewFeedback",customerName,imageAndVideo,customerPhone,customerEmail});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                
+                daoFeedback.inActiveFeedbackById(feedbackIdDelete);
+                daoFeedbackLog.createDeleteFeedbackLog(daoFeedback.getFeedbackById(feedbackIdDelete), staffId);
+                
+                ArrayList<Feedback> listFeedbackAfterDelete = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, page,pageSize, sort, order);
+                request.setAttribute("listFeedback", listFeedbackAfterDelete);
+                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
+                break;
+            default:response.sendRedirect("feedback");
                 break;
         }
 
-    }
-// Lưu ảnh vào thư mục /img/Component
-    private String saveMedia(Part mediaPart, HttpServletRequest request) throws IOException {
-        if (mediaPart == null || mediaPart.getSize() == 0) {
-            return null;
-        }
-        
-        String contentType = mediaPart.getContentType();
-        String folder = "";
-        if (contentType.startsWith("image/")) {
-            folder = "img/Feedback/";
-        } else if (contentType.startsWith("video/")) {
-            folder = "video/Feedback/";
-        } else {
-            return null; // Không phải ảnh hoặc video
-        }
-        
-        // Đường dẫn tuyệt đối
-        String uploadPath = request.getServletContext().getRealPath("/" + folder);
-        File uploadDir = new File(uploadPath);
-        if (!uploadDir.exists()) {
-            uploadDir.mkdirs();
-        }
-
-        // Xử lý tên file
-        String originalFileName = mediaPart.getSubmittedFileName();
-        if (originalFileName == null || originalFileName.isEmpty()) {
-            return null;
-        }
-        
-        String fileName = System.currentTimeMillis() + "_" + originalFileName;
-        String filePath = uploadPath + File.separator + fileName;
-
-        try {
-            mediaPart.write(filePath);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return folder + fileName;
     }
     /**
      * Returns a short description of the servlet.

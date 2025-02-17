@@ -149,14 +149,12 @@ public static String saveVideo(Part videoPart, HttpServletRequest request, Strin
     // Kiểm tra phần mở rộng file
     String originalFileName = videoPart.getSubmittedFileName();
     if (originalFileName == null || originalFileName.isEmpty()) {
-        System.out.println("rat hay haha");
         return "Invalid video";
     }
 
     String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
     List<String> allowedExtensions = Arrays.asList("mp4", "avi", "mov", "wmv", "flv", "mkv", "webm");
     if (!allowedExtensions.contains(fileExtension)) {
-        System.out.println("in valid 3");
         return "Invalid video";
     }
 
@@ -171,7 +169,7 @@ public static String saveVideo(Part videoPart, HttpServletRequest request, Strin
         }
     }
 
-    // Kiểm tra magic number
+    // Kiểm tra magic number 
     if (!isValidVideo(tempFile)) {
         tempFile.delete();
         return "Invalid video";
