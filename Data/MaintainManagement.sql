@@ -22,7 +22,6 @@ CREATE TABLE Staff (
     StaffID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
     UsernameS NVARCHAR(50) UNIQUE,
     PasswordS NVARCHAR(50),
-    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
     [Name] NVARCHAR(100),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
@@ -36,7 +35,6 @@ CREATE TABLE StaffLog (
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50) ,
     PasswordS NVARCHAR(50),
-    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
     [Name] NVARCHAR(100),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
@@ -52,12 +50,36 @@ CREATE TABLE Customer (
     UsernameC NVARCHAR(50) UNIQUE,
     PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
-	Gender NVARCHAR(10),
+	Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+--('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
+CREATE TABLE [Role] (
+    RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    RoleName NVARCHAR(50) UNIQUE NOT NULL
+);
+
+CREATE TABLE [Permissions] (
+    PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    PermissionName NVARCHAR(100) UNIQUE NOT NULL,
+    Description NVARCHAR(255)
+);
+
+CREATE TABLE Role_Permissions (
+    RoleID INT NOT NULL REFERENCES Role(RoleID) ON DELETE CASCADE,
+    PermissionID INT NOT NULL REFERENCES Permissions(PermissionID) ON DELETE CASCADE,
+    PRIMARY KEY (RoleID, PermissionID)
+);
+
+CREATE TABLE Staff_Role (
+    StaffID INT NOT NULL REFERENCES Staff(StaffID) ON DELETE CASCADE,
+    RoleID INT NOT NULL REFERENCES Role(RoleID) ON DELETE CASCADE,
+    PRIMARY KEY (StaffID, RoleID)
+);
 
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
