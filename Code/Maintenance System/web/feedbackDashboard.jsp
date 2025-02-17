@@ -80,18 +80,6 @@
                <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-           
-            <script>
-                function doDelete(event) {
-                        event.preventDefault();
-
-                        const url = event.currentTarget.getAttribute('data-url');
-
-                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                            window.location.href = url;
-                        }
-                    }
-            </script>
         <script src="js/app.js"></script>
     </body>
 </html>
