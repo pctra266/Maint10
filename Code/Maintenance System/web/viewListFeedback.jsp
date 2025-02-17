@@ -30,20 +30,7 @@
 
                                 <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
                                 <input style="margin-top: 15px" class="form-control" type="search" name="customerEmail" placeholder="Customer Email"  value="${customerEmail}" >
-
-                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
-
-                            </div >
-                            <div class="col-md-6" style="width: 500px">
-                                <input style="margin-top: 15px" class="form-control" type="search" name="customerPhone" placeholder="Customer Phone Number"  value="${customerPhone}" >
-                                <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
-                                    <option value="">Image & Video </option>
-                                    <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
-                                    <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
-                                </select>
-                            </div>        
-                        </div>
-                        <div class="col-sm-6 col-md-6">
+                        <div style="margin-top: 15px" class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">
@@ -53,9 +40,25 @@
                                 entries
                             </label>
                         </div>
+                                
+
+                            </div >
+                            <div class="col-md-6" style="width: 500px">
+                                <input style="margin-top: 15px" class="form-control" type="search" name="customerPhone" placeholder="Customer Phone Number"  value="${customerPhone}" >
+                                <select style="margin-top: 15px" class="form-select" name="imageAndVideo">
+                                    <option value="">Image & Video </option>
+                                    <option ${(imageAndVideo=='empty')?"selected":""} value="empty">Empty</option>
+                                    <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
+                                </select>
+                                <div style="float: right">
+                                <button  class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                </div>
+                            </div>        
+                        </div>
+                        
                     </form>         
                     <table class="table table-hover my-0">
-                        <thead>
+                        <thead >
                             <tr>
                                 <th>ID</th>
                                 <th>
@@ -69,12 +72,14 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                        <button type="submit" class="btn-sort">
+                                                Customer Name
+                                                <button type="submit" class="btn-sort btn-primary btn">
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'CustomerName' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
+                                            
                                         </button>
-                                        Customer Name
+                                        
                                     </form>
                                 </th>
                                 <th>
@@ -89,12 +94,15 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                        <button type="submit" class="btn-sort">
+                                                Create Date
+                                                <button type="submit" class="btn-sort btn btn-primary">
+                                                     
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'DateCreated' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
+                                           
                                         </button>
-                                        Create Date
+                                        
                                     </form>
                                 </th>
                                 <th>Feedback</th>
@@ -150,21 +158,21 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                                                function doDelete(event) {
-                                                    event.preventDefault();
+            function doDelete(event) {
+                event.preventDefault();
 
-                                                    const url = event.currentTarget.getAttribute('data-url');
+                const url = event.currentTarget.getAttribute('data-url');
 
-                                                    if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                                                        window.location.href = url;
-                                                    }
-                                                }
-                                                function confirmSubmit(event) {
-                                                    event.preventDefault();
-                                                    if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                                                        event.target.closest('form').submit();
-                                                    }
-                                                }
+                if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
+                    window.location.href = url;
+                }
+            }
+            function confirmSubmit(event) {
+                event.preventDefault();
+                if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
+                    event.target.closest('form').submit();
+                }
+            }
         </script>
     </body>
 </html>
