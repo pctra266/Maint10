@@ -1,4 +1,6 @@
-﻿--them data vao staff
+﻿
+USE MaintainManagement
+--them data vao staff
 INSERT INTO Staff (UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address], Image)
 VALUES
 ('admin01', 'T2D6i9+ldWGqevu6W6FAP1iXBbI=', 'Admin', 'Admin User 1', 'admin1@example.com', '0123456789', '123 Admin Street', NULL),

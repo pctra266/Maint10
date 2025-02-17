@@ -24,10 +24,23 @@
                     <div class="alert-success">${param.mess}</div>
                     <h1 class="text-center">List Product Maintain</h1>
                     <div>
+                         <form method="get" action="feedback" >
+                            <input type="hidden" name="action" value="viewFeedbackDashboard">
+                        <div class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                    </c:forEach>
+                                </select> 
+                                entries
+                            </label>
+                        </div>
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
                                 <th>Warranty Card Code</th>
+                                <th>Created Date</th>
                                 <th>Product Name</th>
                                 <th>Issue Description</th>
                                 <th>Warranty Status</th>
@@ -39,10 +52,11 @@
                             <c:forEach items="${listProductCreateFeedback}" var="o">
                                 <tr>
                                     <td>${o.warrantyCardCode}</td>
+                                    <td>${o.createdDate}</td>
                                     <td>${o.productName}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
+                                    <td><a class="btn btn-primary" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
                                 </tr>
                             </c:forEach>
                                 <tr>
@@ -50,12 +64,13 @@
                                     <td></td>
                                     <td></td>
                                     <td></td>
-                                    <td><a class="btn btn-success" href="feedback?action=createFeedback">Create Feedback</a></td>
+                                    <td></td>
+                                    <td><a class="btn btn-primary" href="feedback?action=createFeedback">Create Feedback</a></td>
                                 </tr>
                         </tbody>
                         
                         </table>
-                        
+                         </form>   
                     </div>
                      <jsp:include page="/includes/pagination.jsp" />
                      <a class="btn btn-primary" href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
@@ -65,18 +80,6 @@
                <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-           
-            <script>
-                function doDelete(event) {
-                        event.preventDefault();
-
-                        const url = event.currentTarget.getAttribute('data-url');
-
-                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                            window.location.href = url;
-                        }
-                    }
-            </script>
         <script src="js/app.js"></script>
     </body>
 </html>

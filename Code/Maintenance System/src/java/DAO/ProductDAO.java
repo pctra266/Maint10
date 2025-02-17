@@ -76,6 +76,41 @@ public class ProductDAO extends DBContext {
         }
         return products;
     }
+// feedback ===================================================================================================
+
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, int page, int pageSize) {
+        ArrayList<ProductDetail> list = new ArrayList<>();
+        String query = """
+          select wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
+                                      from Customer c 
+                                      left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                                      join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
+                                      join Product p on pd.ProductID = p.ProductID
+                                      where c.CustomerID = ?""";
+        query += " order by wc.CreatedDate desc ";
+        query += " offset ? rows  fetch next ? rows only;";
+        try (PreparedStatement ps = connection.prepareStatement(query);) {
+            int count = 1;
+            ps.setString(count++, customerID);
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                productDetail.setProductName(rs.getString("ProductName"));
+                productDetail.setIssueDescription(rs.getString("IssueDescription"));
+                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                productDetail.setCreatedDate(rs.getDate("CreatedDate"));
+                list.add(productDetail);
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
@@ -101,8 +136,8 @@ public class ProductDAO extends DBContext {
         }
         return list;
     }
-    
-    public int totalProductByCustomerId(String customerID){
+
+    public int totalProductByCustomerId(String customerID) {
         String query = """
                        select count(*) from Customer c   
                        \t\t\t\t\t\tjoin ProductDetail pd on c.CustomerID = pd.CustomerID

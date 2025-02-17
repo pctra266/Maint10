@@ -66,7 +66,7 @@
                         </div>
                     </c:if>
                     <c:if test="${not empty pictureAlert}">
-                        <div class="col-md-10 alert alert-danger alert-dismissible" role="alert">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             <div class="alert-message">
                                 <strong>${pictureAlert}</strong>

@@ -59,7 +59,7 @@
             <c:if test="${fn:length(pagination.searchFields) > 0}">
 
                 <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
-                    <input type="hidden" name="${searchFields[i]}" value="${pagination.searchValues[i]}">
+                    <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                 </c:forEach>
             </c:if>
                 <input type="hidden" name="sort" value="${pagination.sort}">
