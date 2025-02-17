@@ -78,7 +78,7 @@ public class ProductDAO extends DBContext {
     }
 // feedback ===================================================================================================
 
-    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, int page, int pageSize) {
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID,String warrantyCardCode, String warrantyStatus, int page, int pageSize) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
           select wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
@@ -87,11 +87,23 @@ public class ProductDAO extends DBContext {
                                       join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
                                       join Product p on pd.ProductID = p.ProductID
                                       where c.CustomerID = ?""";
+        if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            query += " and WarrantyCardCode like ?";
+        }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            query += " and warrantyStatus like ?";
+        }
         query += " order by wc.CreatedDate desc ";
         query += " offset ? rows  fetch next ? rows only;";
         try (PreparedStatement ps = connection.prepareStatement(query);) {
             int count = 1;
             ps.setString(count++, customerID);
+            if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            ps.setString(count++, "%"+warrantyCardCode+"%");
+            }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            ps.setString(count++,warrantyStatus );
+            }
             int offset = (page - 1) * pageSize;
             ps.setInt(count++, offset);
             ps.setInt(count++, pageSize);
@@ -120,8 +132,11 @@ public class ProductDAO extends DBContext {
                               join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
                               join Product p on pd.ProductID = p.ProductID
                               where c.CustomerID = ?""";
+         
         try (PreparedStatement ps = connection.prepareStatement(query);) {
-            ps.setString(1, customerID);
+            int count = 1;
+            ps.setString(count++, customerID);
+            
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 ProductDetail productDetail = new ProductDetail();
@@ -137,16 +152,29 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public int totalProductByCustomerId(String customerID) {
+    public int totalProductByCustomerId(String customerID,String warrantyCardCode, String warrantyStatus) {
         String query = """
                        select count(*) from Customer c   
                        \t\t\t\t\t\tjoin ProductDetail pd on c.CustomerID = pd.CustomerID
                                               join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
                                               join Product p on pd.ProductID = p.ProductID
                                             where c.CustomerID = ?""";
+        if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            query += " and WarrantyCardCode like ?";
+        }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            query += " and warrantyStatus like ?";
+        }
         int total = 0;
         try (PreparedStatement ps = connection.prepareStatement(query);) {
-            ps.setString(1, customerID);
+            int count =1;
+            ps.setString(count++, customerID);
+            if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            ps.setString(count++, "%"+warrantyCardCode+"%");
+            }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            ps.setString(count++,warrantyStatus );
+            }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 return rs.getInt(1);
@@ -451,7 +479,7 @@ public class ProductDAO extends DBContext {
 //        for (ProductDetail p : d) {
 //            System.out.println(p);
 //        }
-        System.out.println(productDAO.totalProductByCustomerId("1"));
+//        System.out.println(productDAO.totalProductByCustomerId("1"));
     }
 
 }

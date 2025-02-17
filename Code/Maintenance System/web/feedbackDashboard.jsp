@@ -26,8 +26,11 @@
                     <div>
                          <form method="get" action="feedback" >
                             <input type="hidden" name="action" value="viewFeedbackDashboard">
-                        <div class="col-sm-6 col-md-6">
-                            <label>Show 
+                            <div class="row"  style="justify-content: space-between">
+                        <div class="col-sm-6 col-md-6" style="width: 500px">
+                           <input style="margin-top: 15px" class="form-control" type="search" name="WarrantyCardCode" placeholder="Warranty Card Code"  value="${WarrantyCardCode}" >
+                           <div style="margin-top: 15px"> 
+                           <label >Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">
                                         <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
@@ -35,7 +38,21 @@
                                 </select> 
                                 entries
                             </label>
+                               </div>
                         </div>
+                        <div class="col-sm-6 col-md-6" style="width: 500px">
+                                 <select style="margin-top: 15px" class="form-select" name="WarrantyStatus">
+                                    <option value="">Warranty Status </option>
+                                    <option ${(WarrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
+                                    <option ${(WarrantyStatus=='done')?"selected":""} value="done">Done</option>
+                                    <option ${(WarrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
+                                    <option ${(WarrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
+                                </select>
+                                <div style="float: right">
+                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                </div>
+                        </div>
+                                </div>
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
@@ -73,7 +90,7 @@
                          </form>   
                     </div>
                      <jsp:include page="/includes/pagination.jsp" />
-                     <a class="btn btn-primary" href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
+                     <a  href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>
                      
                 </main>
                     
