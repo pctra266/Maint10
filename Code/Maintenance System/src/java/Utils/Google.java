@@ -8,6 +8,6 @@ package Utils;
  *
  * @author PC
  */
-public class Excel {
+public class Google {
     
 }
