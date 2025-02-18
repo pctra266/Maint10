@@ -109,6 +109,10 @@
         <servlet-name>AddCustomerExcel</servlet-name>
         <servlet-class>ControllerCustomer.AddCustomerExcel</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImportExcel</servlet-name>
+        <servlet-class>Controller.Product.ImportExcel</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -236,5 +240,9 @@
     <servlet-mapping>
         <servlet-name>AddCustomerExcel</servlet-name>
         <url-pattern>/addCustomerExcel</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImportExcel</servlet-name>
+        <url-pattern>/importExcel</url-pattern>
     </servlet-mapping>
 </web-app>

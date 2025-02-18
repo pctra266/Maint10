@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package DAO;
 
 import Model.Brand;
@@ -183,6 +180,7 @@ public class ProductDAO extends DBContext {
         }
         return total;
     }
+    
     public List<Brand> getAllBrands() {
         List<Brand> brands = new ArrayList<>();
         String sql = "SELECT * FROM Brand";
@@ -469,17 +467,7 @@ public class ProductDAO extends DBContext {
 
     public static void main(String[] args) {
         ProductDAO productDAO = new ProductDAO();
-        /*
-        List<Product> products = productDAO.getAllProducts();
-        for (Product p : products) {
-            System.out.println(p.getBrandName());
-        }
-         */
-//        ArrayList<ProductDetail> d = productDAO.getListProductByCustomerID("1");
-//        for (ProductDetail p : d) {
-//            System.out.println(p);
-//        }
-//        System.out.println(productDAO.totalProductByCustomerId("1"));
+ 
     }
 
 }

@@ -159,7 +159,6 @@ public class AddCustomerExcel extends HttpServlet {
 
             case Cell.CELL_TYPE_NUMERIC:
                 return cell.getNumericCellValue();
-
         }
         return null;
 

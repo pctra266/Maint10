@@ -219,10 +219,17 @@
                         </div>
                     </c:if>
 
-                    <label for="recordsPerPage">Products per page:</label>
-                    <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
-                    <button onclick="updateRecordsPerPage()">Apply</button>
+                    <div style="display: flex">
+                        <label for="recordsPerPage">Products per page:</label>
+                        <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
+                        <button onclick="updateRecordsPerPage()">Apply</button>
 
+                        <label for="importExcel">Import Excel:</label>
+                        <form action="addCustomerExcel" method="post" enctype="multipart/form-data">
+                            <input id="importExcel" type="file" name="productExcel" required>
+                            <button type="submit">Upload</button>
+                        </form>
+                    </div>
 
                     <div class="gom">
                         <select id="sortQuantity">
@@ -269,6 +276,12 @@
                         <form action="addP">
                             <button class="add-product" type="submit">Add Product</button>
                         </form>
+
+                        <form action="addP">
+                            <button class="add-product" type="submit">Add Product</button>
+                        </form>
+
+
                     </div>
 
                     <h1>Product List</h1>
