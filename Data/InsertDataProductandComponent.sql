@@ -337,3 +337,24 @@ VALUES
 (9, 23, 'PDT069', '2024-12-10'),  -- Purchase for Huawei Mate 50 Pro
 (6, 24, 'PDT070', '2024-12-15');  -- Purchase for Google Pixel 7
 
+WITH RandomData AS (
+    SELECT TOP 24
+        CustomerID = ABS(CHECKSUM(NEWID())) % 10 + 1, -- Chọn ngẫu nhiên CustomerID từ 1 đến 10
+        ProductName = 'Product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
+        ProductCode = 'P' + CAST(ABS(CHECKSUM(NEWID())) % 10000 AS NVARCHAR), -- Mã sản phẩm ngẫu nhiên từ P0 đến P9999
+        Description = 'This is a description for product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
+        PurchaseDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 730, GETDATE()) -- Ngày ngẫu nhiên trong 2 năm gần đây
+    FROM master.dbo.spt_values
+)
+INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate)
+SELECT CustomerID, ProductName, ProductCode, Description, PurchaseDate
+FROM RandomData;
+-- insert more to customerID = 1 for testing
+INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate)
+SELECT TOP 5
+    1, -- CustomerID cố định là 1
+    'Product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
+    'P' + CAST(ABS(CHECKSUM(NEWID())) % 10000 AS NVARCHAR),
+    'This is a description for product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
+    DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 730, GETDATE()) 
+FROM master.dbo.spt_values;
