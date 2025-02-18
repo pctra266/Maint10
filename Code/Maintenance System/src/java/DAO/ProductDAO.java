@@ -465,6 +465,29 @@ public class ProductDAO extends DBContext {
         return false;
     }
 
+      public void insertListProducts(List<Product> productList) {
+        String sql = "INSERT INTO Product (Code, ProductName, BrandID, Type, Quantity, WarrantyPeriod, Status, Image) "
+                   + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";        
+        try (
+             PreparedStatement ps = connection.prepareStatement(sql)) {
+            
+            for (Product product : productList) {
+                ps.setString(1, product.getCode());
+                ps.setString(2, product.getProductName());
+                ps.setInt(3, product.getBrandId());
+                ps.setString(4, product.getType());
+                ps.setInt(5, product.getQuantity());
+                ps.setInt(6, product.getWarrantyPeriod());
+                ps.setString(7, product.getStatus());
+                ps.setString(8, product.getImage());
+                
+                ps.addBatch(); // Thêm vào batch để tối ưu hóa hiệu suất
+            }
+            ps.executeBatch(); // Thực thi batch để chèn nhiều bản ghi cùng lúc
+        } catch (SQLException e) {
+        }
+    }
+      
     public static void main(String[] args) {
         ProductDAO productDAO = new ProductDAO();
  
