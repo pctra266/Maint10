@@ -589,13 +589,6 @@ public class WarrantyCardDAO extends DBContext {
         return null;
     }
     
-    
-
-    public static void main(String[] args) {
-        WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(d.getTotalCards("", "Fixing"));
-        
-
     public boolean addWarrantyCardProcess(int warrantyCardId, int handlerId, String action, String note) {
         String sql = """
                      INSERT INTO [dbo].[WarrantyCardProcess]
