@@ -1,8 +1,10 @@
 package Model;
 
 import java.util.Date;
+import Utils.FormatUtils;
 
 public class WarrantyCard {
+
     private int warrantyCardID;
     private String warrantyCardCode;
     private int productDetailID;
@@ -21,36 +23,65 @@ public class WarrantyCard {
     private String customerName;
     private String customerPhone;
 
-    public int getWarrantyCardID() {
-        return warrantyCardID;
+    public int getUnknowProductID() {
+        return unknowProductID;
+    }
+
+    public void setUnknowProductID(int unknowProductID) {
+        this.unknowProductID = unknowProductID;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
     public Date getReturnDate() {
         return returnDate;
     }
 
-    public void setReturnDate(Date returndDate) {
-        this.returnDate = returndDate;
-    }
-
     public Date getDonedDate() {
         return donedDate;
-    }
-
-    public void setDonedDate(Date donedDate) {
-        this.donedDate = donedDate;
     }
 
     public Date getCompletedDate() {
         return completedDate;
     }
 
+    public Date getCanceldDate() {
+        return canceldDate;
+    }
+
+    
+    public int getWarrantyCardID() {
+        return warrantyCardID;
+    }
+
+    public String getFormatReturnDate() {
+        return FormatUtils.formatDate(returnDate);
+    }
+
+    public void setReturnDate(Date returndDate) {
+        this.returnDate = returndDate;
+    }
+
+    public String getFormatDonedDate() {
+        return FormatUtils.formatDate(donedDate);
+    }
+
+    public void setDonedDate(Date donedDate) {
+        this.donedDate = donedDate;
+    }
+
+    public String getFormatCompletedDate() {
+        return FormatUtils.formatDate(completedDate);
+    }
+
     public void setCompletedDate(Date completedDate) {
         this.completedDate = completedDate;
     }
 
-    public Date getCanceldDate() {
-        return canceldDate;
+    public String getFormatCanceldDate() {
+        return FormatUtils.formatDate(canceldDate);
     }
 
     public void setCanceldDate(Date canceldDate) {
@@ -64,8 +95,6 @@ public class WarrantyCard {
     public void setImage(String image) {
         this.image = image;
     }
-    
-    
 
     public void setWarrantyCardID(int warrantyCardID) {
         this.warrantyCardID = warrantyCardID;
@@ -111,8 +140,8 @@ public class WarrantyCard {
         this.warrantyStatus = warrantyStatus;
     }
 
-    public Date getCreatedDate() {
-        return createdDate;
+    public String getFormatCreatedDate() {
+        return FormatUtils.formatDate(createdDate);
     }
 
     public void setCreatedDate(Date createdDate) {
@@ -155,10 +184,5 @@ public class WarrantyCard {
     public String toString() {
         return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returndDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
     }
-    
-
-    
-   
-    
 
 }

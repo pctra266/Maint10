@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page import="Model.WarrantyCard, Utils.FormatUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -212,8 +213,8 @@
                                     <td>${card.productCode}</td>
                                     <td>${card.productName}</td>
                                     <td>${card.warrantyStatus}</td>
-                                    <td>${card.createdDate}</td>
-                                    <td>${card.returnDate}</td>
+                                    <td>${card.getFormatCreatedDate()}</td>
+                                    <td>${card.getFormatReturnDate()}</td>
                                     <td><img src="${card.image}" width="100%" height="auto" alt="alt"/></td>
                                     <td>${card.issueDescription}</td>
                                     <td class="table-action">

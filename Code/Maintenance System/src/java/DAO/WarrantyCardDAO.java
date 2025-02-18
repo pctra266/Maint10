@@ -5,6 +5,7 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import Model.WarrantyCard;
+import Utils.FormatUtils;
 import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
 import java.sql.*;
 
@@ -616,6 +617,9 @@ public class WarrantyCardDAO extends DBContext {
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
+        for (WarrantyCard arg : d.getAllWarrantyCards()) {
+            System.out.println(arg.getCreatedDate());
+        }
         System.out.println(d.getTotalCards("", "", ""));
         System.out.println(d.getCards(1, 10, "", "", "CreatedDate", "DESC", null));
         System.out.println(d.addWarrantyCardProcess(1, 1, "reception", ""));

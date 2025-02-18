@@ -6,6 +6,9 @@ package Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.Date;
 
 public class FormatUtils {
@@ -46,6 +49,14 @@ public class FormatUtils {
             }
         }
         return returnDate;
+    }
+
+    public static String formatDate(Date date) {
+        if (date == null) {
+            return "";
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(date);
     }
 // Assuming this is inside a method where you handle the request
 
