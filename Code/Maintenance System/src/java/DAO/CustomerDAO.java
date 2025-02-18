@@ -56,7 +56,7 @@ public class CustomerDAO extends DBContext {
                 return customer;
 
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
 
         }
         return null;
@@ -254,17 +254,19 @@ public class CustomerDAO extends DBContext {
     }
 
     /**
-     * Advanced search
      *
      * @param name
      * @param gender
      * @param email
      * @param phone
      * @param address
-     * @param page
+     * @param sortBy
+     * @param sortOrder
+     * @param offset
+     * @param fetch
      * @return
      */
-    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, int page) {
+    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, String sortBy, String sortOrder, int offset, int fetch) {
         ArrayList<Customer> listCustomer = new ArrayList<>();
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -296,10 +298,19 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
+        if (sortBy != null && !sortBy.trim().isEmpty()) {
+            sql += " ORDER BY " + sortBy;
 
-        sql += " ORDER BY CustomerID\n"
-                + " OFFSET ? ROWS\n"
-                + " FETCH FIRST 5 ROWS ONLY";
+            if (sortOrder != null && (sortOrder.equalsIgnoreCase("ASC") || sortOrder.equalsIgnoreCase("DESC"))) {
+                sql += " " + sortOrder;  // Thêm khoảng trắng để tránh lỗi cú pháp
+            } else {
+                sql += " ASC";
+            }
+        } else {
+            sql += " ORDER BY CustomerID ASC";
+        }
+
+        sql += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
         try {
             int index = 1;
@@ -319,7 +330,9 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-            ps.setInt(index++, (page - 1) * 5);
+            ps.setInt(index++, offset);
+            ps.setInt(index++, fetch);
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -364,10 +377,11 @@ public class CustomerDAO extends DBContext {
     /**
      * Get customer each page
      *
-     * @param index
+     * @param offset
+     * @param fetch
      * @return
      */
-    public ArrayList<Customer> getCustomerPage(int index) {
+    public ArrayList<Customer> getCustomerPage(int offset, int fetch) {
         ArrayList<Customer> listCustomer = new ArrayList<>();
         String sql = "SELECT [CustomerID]\n"
                 + "      ,[UsernameC]\n"
@@ -381,10 +395,11 @@ public class CustomerDAO extends DBContext {
                 + "  FROM [dbo].[Customer]\n"
                 + "  ORDER BY CustomerID\n"
                 + " OFFSET ? ROWS\n"
-                + " FETCH NEXT 5 ROWS ONLY";
+                + " FETCH NEXT ? ROWS ONLY";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, (index - 1) * 5);
+            ps.setInt(1, offset);
+            ps.setInt(2, fetch);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Customer customer = new Customer();
@@ -617,41 +632,68 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    // Sort 
     /**
-     * Sort
+     * Import excel
      *
-     * @param sortBy
-     * @param sortOrder
-     * @param index
-     *
-     * @return
+     * @param customers
      */
-    public ArrayList<Customer> sort(String sortBy, String sortOrder, int index) {
-        ArrayList<Customer> listCustomer = new ArrayList<>();
-        String sql = "SELECT [CustomerID], [UsernameC], [PasswordC], [Name], [Gender], [Email], [Phone], [Address], [Image] "
-                + "FROM [dbo].[Customer] WHERE 1=1";
-
-        if (sortBy != null && !sortBy.trim().isEmpty()) {
-            sql += " ORDER BY " + sortBy;
-
-            if (sortOrder != null && (sortOrder.equalsIgnoreCase("ASC") || sortOrder.equalsIgnoreCase("DESC"))) {
-                sql += " " + sortOrder;  // Thêm khoảng trắng để tránh lỗi cú pháp
-            } else {
-                sql += " ASC";
+    public void importExcelCustomer(ArrayList<Customer> customers) {
+        String sql = "INSERT INTO [dbo].[Customer]\n"
+                + "           ([UsernameC]\n"
+                + "           ,[PasswordC]\n"
+                + "           ,[Name]\n"
+                + "      ,[Gender]\n"
+                + "           ,[Email]\n"
+                + "           ,[Phone]\n"
+                + "           ,[Address]\n"
+                + "           ,[Image])\n"
+                + "     VALUES\n"
+                + "          (?,?,?,?,?,?,?,?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            connection.setAutoCommit(false);
+            for (Customer c : customers) {
+                ps.setString(1, c.getUsernameC());
+                ps.setString(2, c.getPasswordC());
+                ps.setString(3, c.getName());
+                ps.setString(4, c.getGender());
+                ps.setString(5, c.getEmail());
+                ps.setString(6, c.getPhone());
+                ps.setString(7, c.getAddress());
+                ps.setString(8, c.getImage());
+                ps.addBatch();
             }
-        } else {
-            sql += " ORDER BY CustomerID ASC";
+            ps.executeBatch();
+            connection.commit();
+
+        } catch (SQLException e) {
+            System.out.println(e);
         }
 
-        sql += " OFFSET ? ROWS FETCH NEXT 5 ROWS ONLY";
+    }
+
+    public Customer getCustomer(String mail, String phone) {
+        String sql = "SELECT [CustomerID]\n"
+                + "      ,[UsernameC]\n"
+                + "      ,[PasswordC]\n"
+                + "      ,[Name]\n"
+                + "      ,[Gender]\n"
+                + "      ,[Email]\n"
+                + "      ,[Phone]\n"
+                + "      ,[Address]\n"
+                + "      ,[Image]\n"
+                + "  FROM [dbo].[Customer]\n"
+                + "  WHERE Email = ?\n"
+                + "  AND Phone =?";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, (index - 1) * 5);
+
+            ps.setString(1, mail);
+            ps.setString(2, phone);
 
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            if (rs.next()) {
                 Customer customer = new Customer();
                 customer.setCustomerID(rs.getInt("CustomerID"));
                 customer.setUsernameC(rs.getString("UsernameC"));
@@ -662,26 +704,19 @@ public class CustomerDAO extends DBContext {
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
                 customer.setImage(rs.getString("Image"));
-                listCustomer.add(customer);
+                return customer;
             }
 
         } catch (SQLException e) {
-            System.out.println("Error while sorting customers: " + e.getMessage());
+            System.out.println(e);
         }
-
-        return listCustomer;
+        return null;
     }
-
-    
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
-        ArrayList<Customer> customer = dao.sort("CustomerID", "DESC", 2);
-        for(Customer c: customer) {
-            System.out.println(c.getCustomerID());
-        }
-        
-    
+        Customer c = dao.getCustomer("customer1@example.com", "0123456001");
+        System.out.println(c.getGender());
     }
 
 }
