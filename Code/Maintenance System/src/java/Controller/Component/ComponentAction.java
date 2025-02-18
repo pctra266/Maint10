@@ -93,6 +93,14 @@ public class ComponentAction extends HttpServlet {
 // Xử lý thêm mới Component
     private void handleAddComponent(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
+        
         String newName = request.getParameter("Name");
         String newCode = request.getParameter("Code");
         String newBrand = request.getParameter("Brand");
@@ -157,6 +165,9 @@ public class ComponentAction extends HttpServlet {
         } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
             canAdd = false;
             request.setAttribute("pictureAlert", "Invalid picture");
+        } else if (imagePath.startsWith("File is too large")) {
+            canAdd = false;
+            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
         }
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
         // Khong hop le thi tra lai trang Add
@@ -188,6 +199,14 @@ public class ComponentAction extends HttpServlet {
 
     private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
             throws ServletException, IOException {
+            Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
+        
         String newName = request.getParameter("Name");
         Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
@@ -236,6 +255,9 @@ public class ComponentAction extends HttpServlet {
         } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
             canUpdate = false;
             request.setAttribute("pictureAlert", "Invalid picture");
+        } else if (imagePath.startsWith("File is too large")) {
+            canUpdate = false;
+            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
         }
 
         // Nếu có thể cập nhật, thực hiện cập nhật

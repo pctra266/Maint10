@@ -16,14 +16,19 @@ CREATE DATABASE MaintainManagement
 GO
 USE MaintainManagement
 GO
+--('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
+CREATE TABLE [Role] (
+    RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    RoleName NVARCHAR(50) UNIQUE NOT NULL
+);
 
 -- Staff Table
 CREATE TABLE Staff (
     StaffID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
     UsernameS NVARCHAR(50) UNIQUE,
     PasswordS NVARCHAR(50),
-    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
     [Name] NVARCHAR(100),
+	RoleID INT REFERENCES [Role](RoleID), 
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
@@ -36,7 +41,6 @@ CREATE TABLE StaffLog (
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50) ,
     PasswordS NVARCHAR(50),
-    [Role] NVARCHAR(30) CHECK ([Role] IN ('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)),
     [Name] NVARCHAR(100),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
@@ -52,12 +56,34 @@ CREATE TABLE Customer (
     UsernameC NVARCHAR(50) UNIQUE,
     PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
-	Gender NVARCHAR(10),
+	Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
+WHERE UsernameC IS NOT NULL;
+
+
+
+CREATE TABLE [Permissions] (
+    PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    PermissionName NVARCHAR(100) UNIQUE NOT NULL,
+    Description NVARCHAR(255)
+);
+
+CREATE TABLE Role_Permissions (
+    RoleID INT NOT NULL REFERENCES Role(RoleID) ON DELETE CASCADE,
+    PermissionID INT NOT NULL REFERENCES Permissions(PermissionID) ON DELETE CASCADE,
+    PRIMARY KEY (RoleID, PermissionID)
+);
+
+CREATE TABLE Staff_Role (
+    StaffID INT NOT NULL REFERENCES Staff(StaffID) ON DELETE CASCADE,
+    RoleID INT NOT NULL REFERENCES Role(RoleID) ON DELETE CASCADE,
+    PRIMARY KEY (StaffID, RoleID)
+);
 
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
@@ -115,11 +141,32 @@ CREATE TABLE ProductDetail (
     PurchaseDate DATETIME NOT NULL
 );
 
+-- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
+CREATE TABLE UnknowProduct (
+    UnknowProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    CustomerID INT NOT NULL REFERENCES Customer(CustomerID), -- Liên kết với khách hàng
+    ProductName NVARCHAR(50),
+	ProductCode NVARCHAR(20), --Auto generate
+    Description NVARCHAR(MAX),
+    PurchaseDate DATETIME
+);
+
+-- Bảng WarrantyProduct: Liên kết sản phẩm từ ProductDetail hoặc UnknowProduct
+CREATE TABLE WarrantyProduct (
+    WarrantyProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ProductDetailID INT NULL REFERENCES ProductDetail(ProductDetailID),
+    UnknowProductID INT NULL REFERENCES UnknowProduct(UnknowProductID),
+    CHECK (
+        (ProductDetailID IS NOT NULL AND UnknowProductID IS NULL) OR 
+        (ProductDetailID IS NULL AND UnknowProductID IS NOT NULL)
+    )
+);
+
 -- WarrantyCard Table
 CREATE TABLE WarrantyCard (
     WarrantyCardID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
-    ProductDetailID INT NOT NULL REFERENCES ProductDetail(ProductDetailID),
+    WarrantyProductID INT NOT NULL REFERENCES WarrantyProduct(WarrantyProductID),
     IssueDescription NVARCHAR(MAX),
     WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'done', 'completed', 'cancel')),
 	[ReturnDate] DATETIME, --Ngay du kien
@@ -159,7 +206,7 @@ CREATE TABLE ComponentRequestResponsible (
 CREATE TABLE WarrantyCardDetail (
     WarrantyCardDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
-    ProductComponentsID INT NOT NULL REFERENCES ProductComponents(ProductComponentsID),
+    ComponentID INT NOT NULL REFERENCES Component(ComponentID),
     Status NVARCHAR(20) NOT NULL CHECK (Status IN ('under_warranty', 'repaired', 'replace')),
     Price FLOAT NOT NULL CHECK (Price >= 0),
     Quantity INT NOT NULL CHECK (Quantity >= 0)
@@ -170,7 +217,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );

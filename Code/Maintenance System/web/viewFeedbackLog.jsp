@@ -4,6 +4,7 @@
     Author     : Tra Pham
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -23,77 +24,105 @@
                 <main class="content">
 
                     <h1 class="text-center">History</h1>
-                    <form class="" action="feedbacklog" method="post">
-                        <input type="hidden" name="index" value="${index}">
+                    <form class="" action="feedbacklog" method="get">
+                        <input type="hidden" name="action" value="viewListFeedbackLog">        
                         <div class="row" style="justify-content: space-between">
-                        <div class="col-md-6" style="width: 500px">
-                            <input style="margin-top: 15px" class="form-control" type="search" name="feedbackID" placeholder="Feedback ID"  value="${feedbackID}" >
-                            <select style="margin-top: 15px" class="form-select" name="actionOfLog">
-                                <option value="">Action </option>
-                                <option ${(actionOfLog=='update')?"selected":""} value="update">Update</option>
-                                <option ${(actionOfLog=='delete')?"selected":""} value="delete">Delete</option>
-                            </select>
-
-                            <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
-                        </div>
-                            
                             <div class="col-md-6" style="width: 500px">
-                                <div>
-                                    <select  onchange="checkSort()" name="column" id="column" style="margin-top: 15px" class="form-select">
-                                        <option value="">Sort By</option>
-                                        <option ${(column=='FeedbackID')?"selected":""} value="FeedbackID">Feedback ID</option>
-                                        <option ${(column=='DateModified')?"selected":""} value="DateModified">Date Modified</option>
-                                    </select>
+                                <input style="margin-top: 15px" class="form-control" type="search" name="feedbackID" placeholder="Feedback ID"  value="${feedbackID}" >
+                                <div style="margin-top: 15px" class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                    </c:forEach>
+                                </select> 
+                                entries
+                            </label>
+                        </div>
+                            </div>
+                                <div class="col-md-6" style="width: 500px">
+                              <select style="margin-top: 15px" class="form-select" name="actionOfLog">
+                                    <option value="">Action </option>
+                                    <option ${(actionOfLog=='update')?"selected":""} value="update">Update</option>
+                                    <option ${(actionOfLog=='delete')?"selected":""} value="delete">Delete</option>
+                                </select>
+                                <div style="float: right">
+                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
                                 </div>
-                                <div>
-                                    <select onchange="checkSort()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
-                                        <option value="">Sort Order</option>
-                                        <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
-                                        <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
-                                    </select>
-                                </div>
-                            </div>   
-                                    </div>
+                                </div>   
+                        </div>
                     </form>
-
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
-                                <th>Feedback Log ID</th>
-                                <th>Feedback ID</th>
+                                <!--<th>Feedback Log ID</th>-->
+                                <th>
+                                    <form action="feedbacklog" method="get">
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="sort" value="FeedbackID" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'FeedbackID' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
+                                                Feedback ID
+                                        <button type="submit" class="btn-sort btn-primary btn">
+                                            <i class="align-middle fas fa-fw
+                                               ${pagination.sort eq 'FeedbackID' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        
+                                    </form>
+                                </th>
+                                <th>
+                                    <form action="feedbacklog" method="get">
+                                        <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                        <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                                        <input type="hidden" name="sort" value="DateModified" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'DateModified' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                            </c:forEach>
+                                        </c:if>
+                                                Date Modified
+                                        <button type="submit" class="btn-sort btn-primary btn">
+                                            <i class="align-middle fas fa-fw
+                                               ${pagination.sort eq 'DateModified' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                            </i>
+                                        </button>
+                                        
+                                    </form>
+                                </th>
                                 <th>Action</th>
                                 <th>Old Feedback Text</th>
                                 <th>New Feedback Text</th>
-                                <th>Modified By</th>
-                                <th>Date Modified</th>
+                                <!--<th>Modified By</th>-->
+                                
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             <c:forEach items="${listFeedbackLog}" var="o">
                                 <tr>
-                                    <td>${o.feedbackLogID}</td>
+                                    <!--<td>${o.feedbackLogID}</td>-->
                                     <td>${o.feedbackID}</td>
+                                    <td>${o.dateModified}</td>
                                     <td>${o.action}</td>
                                     <td>${o.oldFeedbackText}</td>
                                     <td>${o.newFeedbackText}</td>
-                                    <td>${o.modifiedBy}</td>
-                                    <td>${o.dateModified}</td>
+                                    <!--<td>${o.modifiedBy}</td>-->
+                                    
                                     <c:if test="${o.action=='delete'}">
-                                        <td><a href="feedbacklog?feedbackLogID=${o.feedbackLogID}&action=undoFeedback">Undo</a></td>
+                                        <td><a class="btn btn-primary" href="feedbacklog?feedbackLogID=${o.feedbackLogID}&action=undoFeedback">Undo</a></td>
                                     </c:if>
                                 </tr>
                             </c:forEach>
                         </tbody>
                     </table>
-                    <div class="text-center">
-                        <ul class="pagination pagination-lg" style="display: flex; justify-content: center; margin-top: 15px">
-                            <c:forEach begin="1" end="${endPage}" var="i">
-                                <li class="${index == i ? 'page-item active' : 'page-item'}"><a class="page-link" href="feedbacklog?index=${i}&actionOfLog=${actionOfLog}&feedbackID=${feedbackID}&column=${column}&sortOrder=${sortOrder}">${i}</a></li>
-                                </c:forEach>
-                        </ul>
-
-                    </div>
+                    <jsp:include page="/includes/pagination.jsp" />
                     <a href="feedback">Back</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
@@ -101,14 +130,6 @@
             </div>
 
         </div>
-                <script>
-                                        function checkSort() {
-                                            var column = document.getElementById('column').value;
-                                            var sortOrder = document.getElementById('sortOrder').value;
-                                            window.location.href = 'feedbacklog?index=${index}&column=' + column + '&sortOrder=' + sortOrder + '&feedbackID=${feedbackID}&actionOfLog=${actionOfLog}';
-                                        }
-        </script>
-
         <script src="js/app.js"></script>
     </body>
 </html>

@@ -4,7 +4,6 @@ import DAO.ProductDAO;
 import Model.Brand;
 import Model.Product;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -12,22 +11,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 
 public class ViewProduct extends HttpServlet {
-
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ViewProduct</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>hello ViewProduct at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -45,63 +28,40 @@ public class ViewProduct extends HttpServlet {
         String sortWarranty = request.getParameter("sortWarranty") != null ? request.getParameter("sortWarranty").trim() : "";
 
         Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.parseInt(brandIdParam) : null;
-
-        // 🔹 Chuẩn hóa input: Xóa khoảng trắng thừa
         searchName = searchName.replaceAll("\\s+", " ");
 
-        // 🔹 Kiểm tra định dạng nhập vào
         if (!searchName.matches("^[a-zA-Z0-9 ]*$")) {
             errorMessage = "Tên sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
         } else if (!searchCode.matches("^[a-zA-Z0-9 ]*$")) {
             errorMessage = "Mã sản phẩm chỉ được chứa chữ cái, số và dấu cách!";
         }
 
-        List<Product> productList;
-        int totalPages = 1;
+        int page = 1;
+        int recordsPerPage = 8;
 
-        if (errorMessage != null) {
-            // 🔹 Nếu có lỗi, lấy danh sách sản phẩm từ đầu mà không áp dụng bộ lọc tìm kiếm
-            int page = 1;
-            int recordsPerPage = 8;
-            if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-            int offset = (page - 1) * recordsPerPage;
-            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
-            productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
-            int totalRecords = productDAO.getTotalProducts(null, null, null, null);
-            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
-        } else {
-            int page = 1;
-            int recordsPerPage = 8;
-            if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-            int offset = (page - 1) * recordsPerPage;
-            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
-            productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
-            int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
-            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
+        if (request.getParameter("page") != null) {
+            page = Integer.parseInt(request.getParameter("page"));
         }
+
+        if (request.getParameter("recordsPerPage") != null) {
+            recordsPerPage = Integer.parseInt(request.getParameter("recordsPerPage"));
+            if (recordsPerPage < 1) {
+                recordsPerPage = 8; // Đảm bảo giá trị hợp lệ
+            }
+        }
+
+        int offset = (page - 1) * recordsPerPage;
+        List<Product> productList = productDAO.searchProducts(searchName, searchCode, brandId, type, sortQuantity, sortWarranty, offset, recordsPerPage);
+        int totalRecords = productDAO.getTotalProducts(searchName, searchCode, brandId, type);
+        int totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
 
         if (productList.isEmpty()) {
             errorMessage = "Không tìm thấy sản phẩm phù hợp với tìm kiếm của bạn.";
-            int page = 1;
-            int recordsPerPage = 8;
-            if (request.getParameter("page") != null) {
-                page = Integer.parseInt(request.getParameter("page"));
-            }
-            int offset = (page - 1) * recordsPerPage;
-            // 🔹 Lấy danh sách sản phẩm dựa trên tìm kiếm & phân trang
-            productList = productDAO.searchProducts(null, null, null, null, null, null, offset, recordsPerPage);
-            int totalRecords = productDAO.getTotalProducts(null, null, null, null);
-            totalPages = (int) Math.ceil(totalRecords * 1.0 / recordsPerPage);
         }
 
-        // 🔹 Truyền lại dữ liệu vào JSP
         request.setAttribute("errorMessage", errorMessage);
         request.setAttribute("productList", productList);
-        request.setAttribute("currentPage", 1);
+        request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("searchName", searchName);
         request.setAttribute("searchCode", searchCode);
@@ -111,6 +71,7 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("sortWarranty", sortWarranty);
         request.setAttribute("listBrand", listBrand);
         request.setAttribute("listType", productTypes);
+        request.setAttribute("recordsPerPage", recordsPerPage);
 
         request.getRequestDispatcher("/Product/product.jsp").forward(request, response);
     }
@@ -118,11 +79,6 @@ public class ViewProduct extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
 
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }
 }

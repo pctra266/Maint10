@@ -1,4 +1,6 @@
-﻿INSERT INTO Brand (BrandName) VALUES
+﻿USE MaintainManagement
+
+INSERT INTO Brand (BrandName) VALUES
 ('ASUS'),
 ('MSI'),
 ('Gigabyte'),

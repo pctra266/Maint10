@@ -52,7 +52,7 @@ public class FeedbackLogDAO {
 
         return list;
     }
-    public ArrayList<FeedbackLog> getAllFeedbackLog(String action, String feedbackID, String column, String sortOrder,int index) {
+    public ArrayList<FeedbackLog> getAllFeedbackLog(String action, String feedbackID, String column, String sortOrder,int page, int pageSize) {
         ArrayList<FeedbackLog> list = new ArrayList<>();
         String query = "select * from FeedbackLog where 1=1";
         if (action != null && !action.trim().isEmpty()) {
@@ -73,7 +73,7 @@ public class FeedbackLogDAO {
         }else{
             query += " order by DateModified desc";
         }
-            query += " offset ? rows  fetch next 7 rows only;";
+            query += " offset ? rows  fetch next ? rows only;";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
@@ -81,8 +81,9 @@ public class FeedbackLogDAO {
             if(feedbackID != null && !feedbackID.trim().isEmpty()){
             ps.setString(count++, feedbackID);
         }
-            
-            ps.setInt(count++, (index -1)* 7);
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new FeedbackLog(rs.getInt("FeedbackLogID"), rs.getInt("FeedbackID"),
@@ -189,10 +190,10 @@ public class FeedbackLogDAO {
 
     public static void main(String[] args) {
         FeedbackLogDAO dao = new FeedbackLogDAO();
-//        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("update","6","DateModified","asc", 1);
-//        for (FeedbackLog feedbackLog : list) {
-//            System.out.println(feedbackLog);
-//        }
+        ArrayList<FeedbackLog> list = dao.getAllFeedbackLog("","","","", 1,5);
+        for (FeedbackLog feedbackLog : list) {
+            System.out.println(feedbackLog);
+        }
         System.out.println(dao.getTotalFeedbackLog("update", "6"));
 //        System.out.println(dao.getTotalFeedbackLog());
 //            FeedbackLog f = dao.getFeedbackLogById("16");

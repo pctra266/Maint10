@@ -22,7 +22,7 @@ public class FeedbackDAO {
     ResultSet rs = null;
     // paging and searching
 
-    public ArrayList<Feedback> getAllFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo, int index, String column, String sortOrder) {
+    public ArrayList<Feedback> getAllFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo, int page,int pageSize, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, \n"
                 + "                pr.ProductName,w.IssueDescription,\n"
@@ -57,7 +57,7 @@ public class FeedbackDAO {
         } else {
             query += " order by DateCreated asc\n";
         }
-        query += " offset ? rows  fetch next 7 rows only;";
+        query += " offset ? rows  fetch next ? rows only;";
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
@@ -71,7 +71,9 @@ public class FeedbackDAO {
             if (customerPhone != null && !customerPhone.trim().isEmpty()) {
                 ps.setString(count++, customerPhone);
             }
-            ps.setInt(count++, (index - 1) * 7);
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
             rs = ps.executeQuery();
             while (rs.next()) {
                 list.add(new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
@@ -89,7 +91,7 @@ public class FeedbackDAO {
         return list;
     }
 
-    public ArrayList<Feedback> getListFeedbackByCustomerId(String customerId) {
+    public ArrayList<Feedback> getListFeedbackByCustomerId(String customerId,int page, int pageSize) {
         ArrayList<Feedback> list = new ArrayList<>();
         String query = "select f.FeedbackID, f.CustomerID, f.Note, f.DateCreated, f.ImageURL, f.VideoURL\n"
                 + "	from Feedback f\n"
@@ -97,15 +99,19 @@ public class FeedbackDAO {
         if (customerId != null && !customerId.trim().isEmpty()) {
             query += " and f.CustomerID like ?";
         }
-            query += " order by DateCreated asc ";
-            try {
+        query += " order by DateCreated desc ";
+        query += " offset ? rows  fetch next ? rows only;";
+        try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             int count = 1;
             if (customerId != null && !customerId.trim().isEmpty()) {
                 ps.setString(count++, customerId.trim());
+                int offset = (page - 1) * pageSize;
+                ps.setInt(count++, offset);
+                ps.setInt(count++, pageSize);
                 rs = ps.executeQuery();
-                while(rs.next()){
+                while (rs.next()) {
                     Feedback f = new Feedback();
                     f.setFeedbackID(rs.getInt("FeedbackID"));
                     f.setCustomerID(rs.getInt("CustomerID"));
@@ -116,10 +122,35 @@ public class FeedbackDAO {
                     list.add(f);
                 }
             }
-            
+
         } catch (Exception e) {
         }
         return list;
+    }
+
+    public int totalFeedbackByCustomerId(String customerId) {
+        String query = """
+                        select count (*) 
+                       \t\t\t\t\t\tfrom Feedback f
+                       \t\t\t\t\t\twhere f.IsDeleted = 0""";
+        if (customerId != null && !customerId.trim().isEmpty()) {
+            query += " and f.CustomerID like ?";
+        }
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if (customerId != null && !customerId.trim().isEmpty()) {
+                ps.setString(count++, customerId.trim());
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+
+        } catch (Exception e) {
+        }
+        return 0;
     }
 
     public void deleteFeedbackById(String feedbackId) {
@@ -299,6 +330,7 @@ public class FeedbackDAO {
 //                for (Feedback feedback : list) {
 //            System.out.println(feedback);
 //        }
-            dao.createFeedback("1", "", "toi tao mot feedback ", "", "");
+//        dao.createFeedback("1", "", "toi tao mot feedback ", "", "");
+        System.out.println(dao.totalFeedbackByCustomerId("1"));
     }
 }

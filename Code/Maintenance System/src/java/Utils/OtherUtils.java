@@ -149,14 +149,12 @@ public static String saveVideo(Part videoPart, HttpServletRequest request, Strin
     // Kiểm tra phần mở rộng file
     String originalFileName = videoPart.getSubmittedFileName();
     if (originalFileName == null || originalFileName.isEmpty()) {
-        System.out.println("rat hay haha");
         return "Invalid video";
     }
 
     String fileExtension = originalFileName.substring(originalFileName.lastIndexOf(".") + 1).toLowerCase();
     List<String> allowedExtensions = Arrays.asList("mp4", "avi", "mov", "wmv", "flv", "mkv", "webm");
     if (!allowedExtensions.contains(fileExtension)) {
-        System.out.println("in valid 3");
         return "Invalid video";
     }
 
@@ -171,7 +169,7 @@ public static String saveVideo(Part videoPart, HttpServletRequest request, Strin
         }
     }
 
-    // Kiểm tra magic number
+    // Kiểm tra magic number 
     if (!isValidVideo(tempFile)) {
         tempFile.delete();
         return "Invalid video";
@@ -205,7 +203,7 @@ public static boolean isValidVideo(File file) throws IOException {
         return hex.startsWith("000001BA") ||  // MPEG-2
                hex.startsWith("000001B3") ||  // MPEG-1
                hex.startsWith("1A45DFA3") ||  // MKV (Matroska)
-               hex.contains("66747970") ||  // MP4
+               hex.substring(8).startsWith("66747970") ||  // MP4
                hex.startsWith("3026B275") ||  // WMV
                hex.startsWith("52494646");    // AVI
     }

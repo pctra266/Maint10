@@ -181,6 +181,7 @@ public class StaffController extends HttpServlet {
                 String address = request.getParameter("address").trim();
                 Part imagePart = request.getPart("newImage");
                 String imagePath = saveImage(imagePart, request);
+                
 
                 list = dao.getAllStaff(searchname, search, pageIndex, pagesize, column, sortOrder);
                 
@@ -206,6 +207,17 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "Số điện thoại đã được đăng ký.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
+                }
+                
+                if(imagePath.equals("Chỉ lấy file png và jpg")){
+                    request.setAttribute("ErrorImage", "File upload khong hop ");
+                    request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                    return;
+                }
+                if(imagePart.getSize()> 1024*1024){
+                   request.setAttribute("ErrorImage", "Anh phai nho hon 1MB ");
+                   request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                   return;
                 }
                 
                 boolean add = dao.addStaff(usename, password, role, name, email, phone, address, imagePath);
@@ -279,7 +291,21 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
-                
+                if(UpdateimagePath.equals("Chỉ lấy file png và jpg")){
+                    request.setAttribute("ErrorImage", "File upload khong hop ");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+                if(UpdateimagePart.getSize()> 1024*1024){
+                   request.setAttribute("ErrorImage", "Anh phai nho hon 1MB ");
+                   Staff staff = dao.getInformationByID(UpdatestaffID);
+                   request.setAttribute("staff", staff);
+                   request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                   return;
+                }
+                request.setAttribute("change", "confirm('Bạn có chắc chắn muốn thay đổi không!')");
                 
                 
                 StaffDAO staff = new StaffDAO();
@@ -322,6 +348,12 @@ public class StaffController extends HttpServlet {
     if (!buildUploadDir.exists()) buildUploadDir.mkdirs();
 
     String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+    
+    if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")) {
+        String error = "Chỉ lấy file png và jpg";
+        return error;
+    }
+    
     File devFile = new File(devUploadPath, fileName);
     File buildFile = new File(buildUploadPath, fileName);
 
