@@ -17,25 +17,20 @@ import java.sql.*;
  */
 public class WarrantyCardDAO extends DBContext {
 
-    private static final WarrantyCardDAO d = new WarrantyCardDAO();
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int CODE_LENGTH = 10;
     private SecureRandom random = new SecureRandom();
 
     public List<WarrantyCard> getAllWarrantyCards() {
         List<WarrantyCard> warrantyCards = new ArrayList<>();
-        String query = "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, wc.IssueDescription, wc.WarrantyStatus, "
-                + "wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image, "
-                + "COALESCE(pd.ProductCode, up.ProductCode) AS ProductCode, "
-                + "COALESCE(p.ProductName, up.ProductName) AS ProductName, "
-                + "c.Name AS CustomerName, c.Phone AS CustomerPhone "
+        String query = "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, pd.ProductCode, wc.ProductDetailID, wc.IssueDescription, "
+                + "wc.WarrantyStatus, wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image "
+                + "p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone "
                 + "FROM WarrantyCard wc "
-                + "JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID "
-                + "LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID "
-                + "LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID "
-                + "LEFT JOIN Product p ON pd.ProductID = p.ProductID "
-                + "LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID "
-                + "ORDER BY wc.WarrantyCardID DESC";
+                + "JOIN ProductDetail pd ON wc.ProductDetailID = pd.ProductDetailID "
+                + "JOIN Product p ON pd.ProductID = p.ProductID "
+                + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
+                + "Order by wc.WarrantyCardID desc ";
 
         try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
@@ -43,6 +38,7 @@ public class WarrantyCardDAO extends DBContext {
                 WarrantyCard warrantyCard = new WarrantyCard();
                 warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
                 warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                warrantyCard.setProductDetailID(rs.getInt("ProductDetailID"));
                 warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
                 warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
                 warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
@@ -50,10 +46,10 @@ public class WarrantyCardDAO extends DBContext {
                 warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
                 warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
                 warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
-                warrantyCard.setProductCode(rs.getString("ProductCode"));
                 warrantyCard.setProductName(rs.getString("ProductName"));
                 warrantyCard.setCustomerName(rs.getString("CustomerName"));
                 warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
+                warrantyCard.setProductCode(rs.getString("ProductCode"));
                 warrantyCard.setImage(rs.getString("Image"));
 
                 warrantyCards.add(warrantyCard);
@@ -65,69 +61,21 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCards;
     }
 
-    public boolean createWarrantyCard(String productCode, String issue, java.util.Date returnDate, String image, int handlerID) {
-        try {
-            // Tìm ProductDetailID theo ProductCode
-            String findProductDetailQuery = "SELECT ProductDetailID FROM ProductDetail WHERE ProductCode = ?";
-            int productDetailID = -1;
+    public boolean createWarrantyCard(String productCode, String issue, java.util.Date returnDate, String image) {
+        String query = "INSERT INTO WarrantyCard (WarrantyCardCode, ProductDetailID, IssueDescription, WarrantyStatus, CreatedDate, ReturnDate, Image) "
+                + "SELECT ?, pd.ProductDetailID, ?, 'fixing', GETDATE(), ?, ? "
+                + "FROM ProductDetail pd WHERE pd.ProductCode = ?";
 
-            try (PreparedStatement ps = connection.prepareStatement(findProductDetailQuery)) {
-                ps.setString(1, productCode);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        productDetailID = rs.getInt("ProductDetailID");
-                    } else {
-                        System.out.println("Không tìm thấy sản phẩm có mã: " + productCode);
-                        return false;
-                    }
-                }
-            }
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            String warrantyCardCode = generateWarrantyCardCode(); // Tạo mã WarrantyCardCode
+            ps.setString(1, warrantyCardCode);
+            ps.setString(2, issue);
+            ps.setDate(3, returnDate == null ? null : new java.sql.Date(returnDate.getTime()));
+            ps.setString(4, image);
+            ps.setString(5, productCode);
 
-            // Tìm hoặc tạo WarrantyProduct
-            int warrantyProductID = -1;
-            String findWarrantyProductQuery = "SELECT WarrantyProductID FROM WarrantyProduct WHERE ProductDetailID = ?";
-
-            try (PreparedStatement ps = connection.prepareStatement(findWarrantyProductQuery)) {
-                ps.setInt(1, productDetailID);
-                try (ResultSet rs = ps.executeQuery()) {
-                    if (rs.next()) {
-                        warrantyProductID = rs.getInt("WarrantyProductID");
-                    }
-                }
-            }
-
-            // Nếu chưa có WarrantyProduct, tạo mới
-            if (warrantyProductID == -1) {
-                String insertWarrantyProductQuery = "INSERT INTO WarrantyProduct (ProductDetailID) VALUES (?)";
-                try (PreparedStatement ps = connection.prepareStatement(insertWarrantyProductQuery, Statement.RETURN_GENERATED_KEYS)) {
-                    ps.setInt(1, productDetailID);
-                    ps.executeUpdate();
-                    try (ResultSet rs = ps.getGeneratedKeys()) {
-                        if (rs.next()) {
-                            warrantyProductID = rs.getInt(1);
-                        }
-                    }
-                }
-            }
-
-            // Tạo mã WarrantyCardCode
-            String warrantyCardCode = generateWarrantyCardCode();
-
-            // Chèn vào bảng WarrantyCard
-            String insertWarrantyCardQuery = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate, ReturnDate, Image) "
-                    + "VALUES (?, ?, ?, 'fixing', GETDATE(), ?, ?)";
-
-            try (PreparedStatement ps = connection.prepareStatement(insertWarrantyCardQuery)) {
-                ps.setString(1, warrantyCardCode);
-                ps.setInt(2, warrantyProductID);
-                ps.setString(3, issue);
-                ps.setDate(4, returnDate == null ? null : new java.sql.Date(returnDate.getTime()));
-                ps.setString(5, image);
-
-                int rowsAffected = ps.executeUpdate();
-                if(rowsAffected>0) d.addWarrantyCardProcess(warrantyProductID, handlerID, "create", "");
-                return rowsAffected > 0;
-            }
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -135,67 +83,36 @@ public class WarrantyCardDAO extends DBContext {
     }
 
     public ProductDetail getProductDetailByCode(String code) {
-        String sql = "SELECT pd.ProductDetailID, pd.ProductCode, pd.PurchaseDate, "
-                + "c.UsernameC, c.Name AS CustomerName, c.Email, c.Phone, c.Address, "
-                + "p.ProductName, p.WarrantyPeriod "
+        String sql = "SELECT pd.ProductDetailID, pd.ProductCode, pd.PurchaseDate, c.UsernameC, c.Name, c.Email, c.Phone, c.Address, p.ProductName, p.WarrantyPeriod "
                 + "FROM ProductDetail pd "
                 + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
                 + "JOIN Product p ON pd.ProductID = p.ProductID "
                 + "WHERE pd.ProductCode = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, code); // Sử dụng setString thay vì setNString nếu cột không phải NVARCHAR
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new ProductDetail(
-                            rs.getInt("ProductDetailID"),
-                            rs.getString("ProductCode"),
-                            rs.getDate("PurchaseDate"),
-                            rs.getString("UsernameC"),
-                            rs.getString("CustomerName"),
-                            rs.getString("Email"),
-                            rs.getString("Phone"),
-                            rs.getString("Address"),
-                            rs.getString("ProductName"),
-                            rs.getInt("WarrantyPeriod")
-                    );
-                }
+            ps.setNString(1, code);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                ProductDetail productDetail = new ProductDetail(
+                        rs.getInt("ProductDetailID"),
+                        rs.getString("ProductCode"),
+                        rs.getDate("PurchaseDate"),
+                        rs.getString("UsernameC"),
+                        rs.getString("Name"),
+                        rs.getString("Email"),
+                        rs.getString("Phone"),
+                        rs.getString("Address"),
+                        rs.getString("ProductName"),
+                        rs.getInt("WarrantyPeriod")
+                );
+                return productDetail; // Trả về đối tượng ProductDetail
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return null; // Trả về null nếu không tìm thấy sản phẩm
-    }
 
-    public ProductDetail getUnknowProductDetail(String code) {
-        String sql = "SELECT up.UnknowProductID, up.ProductCode, up.ProductName, up.Description, "
-                + "up.PurchaseDate, c.UsernameC, c.Name AS CustomerName, c.Email, c.Phone, c.Address "
-                + "FROM UnknowProduct up "
-                + "JOIN Customer c ON up.CustomerID = c.CustomerID "
-                + "WHERE up.ProductCode = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setString(1, code);
-            try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) {
-                    return new ProductDetail(
-                            rs.getInt("ProductDetailID"),
-                            rs.getString("ProductCode"),
-                            rs.getDate("PurchaseDate"),
-                            rs.getString("UsernameC"),
-                            rs.getString("CustomerName"),
-                            rs.getString("Email"),
-                            rs.getString("Phone"),
-                            rs.getString("Address"),
-                            rs.getString("ProductName"),
-                            rs.getInt("WarrantyPeriod")
-                    );
-                }
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return null; // Trả về null nếu không tìm thấy sản phẩm không rõ nguồn gốc
+        return null; // Trả về null nếu không tìm thấy kết quả
     }
 
     private String generateWarrantyCardCode() {
@@ -288,37 +205,19 @@ public class WarrantyCardDAO extends DBContext {
 
     }
 
-    public int getTotalCards(String paraSearch, String status, String type) {
+    public int getTotalCards(String paraSearch, String status) {
         int total = 0;
-        StringBuilder query = new StringBuilder("SELECT COUNT(*) FROM WarrantyCard wc ");
-        query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
+        StringBuilder query = new StringBuilder(
+                "SELECT COUNT(*) FROM WarrantyCard wc "
+                + "JOIN ProductDetail pd ON wc.ProductDetailID = pd.ProductDetailID "
+                + "JOIN Product p ON pd.ProductID = p.ProductID "
+                + "WHERE (wc.WarrantyCardCode LIKE ? "
+                + "   OR pd.ProductCode LIKE ? "
+                + "   OR p.ProductName LIKE ? "
+                + "   OR wc.IssueDescription LIKE ?)"
+        );
 
-        // Trường hợp lấy từ ProductDetail (warranty)
-        if ("warranty".equalsIgnoreCase(type)) {
-            query.append("JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
-            query.append("JOIN Product p ON pd.ProductID = p.ProductID ");
-        } // Trường hợp lấy từ UnknowProduct (repair)
-        else if ("repair".equalsIgnoreCase(type)) {
-            query.append("JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
-        } // Trường hợp lấy cả hai (null)
-        else {
-            query.append("LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
-            query.append("LEFT JOIN Product p ON pd.ProductID = p.ProductID ");
-            query.append("LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
-        }
-
-        query.append("WHERE (wc.WarrantyCardCode LIKE ? ");
-
-        if (!"repair".equalsIgnoreCase(type)) {
-            query.append("   OR pd.ProductCode LIKE ? OR p.ProductName LIKE ? ");
-        }
-        if (!"warranty".equalsIgnoreCase(type)) {
-            query.append("   OR up.ProductCode LIKE ? OR up.ProductName LIKE ? ");
-        }
-
-        query.append("   OR wc.IssueDescription LIKE ?)");
-
-        // Thêm điều kiện lọc theo trạng thái nếu có
+        // Nếu có status, thêm điều kiện lọc vào truy vấn
         if (status != null && !status.isEmpty()) {
             query.append(" AND wc.WarrantyStatus = ?");
         }
@@ -326,22 +225,13 @@ public class WarrantyCardDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
             String searchPattern = "%" + paraSearch + "%";
             ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ps.setString(3, searchPattern);
+            ps.setString(4, searchPattern);
 
-            int paramIndex = 2;
-            if (!"repair".equalsIgnoreCase(type)) {
-                ps.setString(paramIndex++, searchPattern);
-                ps.setString(paramIndex++, searchPattern);
-            }
-            if (!"warranty".equalsIgnoreCase(type)) {
-                ps.setString(paramIndex++, searchPattern);
-                ps.setString(paramIndex++, searchPattern);
-            }
-
-            ps.setString(paramIndex++, searchPattern);
-
-            // Nếu có trạng thái, truyền vào tham số cuối cùng
+            // Nếu có status, truyền thêm giá trị vào PreparedStatement
             if (status != null && !status.isEmpty()) {
-                ps.setString(paramIndex, status);
+                ps.setString(5, status);
             }
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -355,54 +245,21 @@ public class WarrantyCardDAO extends DBContext {
         return total;
     }
 
-    public List<WarrantyCard> getCards(int page, Integer pageSize, String paraSearch, String status, String sort, String order, String type) {
+    public List<WarrantyCard> getCards(int page, Integer pageSize, String paraSearch, String status, String sort, String order) {
         List<WarrantyCard> cards = new ArrayList<>();
-        StringBuilder query = new StringBuilder("SELECT wc.WarrantyCardID, wc.WarrantyCardCode, wc.IssueDescription, ");
-        query.append("wc.WarrantyStatus, wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image ");
+        StringBuilder query = new StringBuilder(
+                "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, pd.ProductCode, p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone, "
+                + "wc.IssueDescription, wc.WarrantyStatus, wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image "
+                + "FROM WarrantyCard wc "
+                + "JOIN ProductDetail pd ON wc.ProductDetailID = pd.ProductDetailID "
+                + "JOIN Product p ON pd.ProductID = p.ProductID "
+                + "JOIN Customer c ON pd.CustomerID = c.CustomerID "
+                + "WHERE (wc.WarrantyCardCode LIKE ? OR p.ProductName LIKE ? OR c.Name LIKE ? OR pd.ProductCode LIKE ?) "
+        );
 
-        // Trường hợp lấy từ ProductDetail (warranty)
-        if ("warranty".equalsIgnoreCase(type)) {
-            query.append(", pd.ProductCode, p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
-            query.append("FROM WarrantyCard wc ");
-            query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
-            query.append("JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
-            query.append("JOIN Product p ON pd.ProductID = p.ProductID ");
-            query.append("JOIN Customer c ON pd.CustomerID = c.CustomerID ");
-        } // Trường hợp lấy từ UnknowProduct (repair)
-        else if ("repair".equalsIgnoreCase(type)) {
-            query.append(", up.ProductCode, up.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
-            query.append("FROM WarrantyCard wc ");
-            query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
-            query.append("JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
-            query.append("JOIN Customer c ON up.CustomerID = c.CustomerID ");
-
-        } // Trường hợp lấy cả hai (null)
-        else {
-            query.append(", COALESCE(pd.ProductCode, up.ProductCode) AS ProductCode, ");
-            query.append("COALESCE(p.ProductName, up.ProductName) AS ProductName, ");
-            query.append("c.Name AS CustomerName, c.Phone AS CustomerPhone ");
-            query.append("FROM WarrantyCard wc ");
-            query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
-            query.append("LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
-            query.append("LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
-            query.append("LEFT JOIN Product p ON pd.ProductID = p.ProductID ");
-            query.append("LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID ");
-        }
-
-        query.append("WHERE (wc.WarrantyCardCode LIKE ? ");
-
-        if (!"repair".equalsIgnoreCase(type)) {
-            query.append("   OR pd.ProductCode LIKE ? OR p.ProductName LIKE ? ");
-        }
-        if (!"warranty".equalsIgnoreCase(type)) {
-            query.append("   OR up.ProductCode LIKE ? OR up.ProductName LIKE ? ");
-        }
-
-        query.append("   OR wc.IssueDescription LIKE ?)");
-
-        // Thêm điều kiện lọc theo trạng thái nếu có
+        // Nếu có lọc theo trạng thái
         if (status != null && !status.isEmpty()) {
-            query.append(" AND wc.WarrantyStatus = ?");
+            query.append("AND wc.WarrantyStatus = ? ");
         }
 
         // Xử lý sắp xếp
@@ -413,26 +270,17 @@ public class WarrantyCardDAO extends DBContext {
             order = "DESC"; // Mặc định sắp xếp giảm dần
         }
 
-        query.append(" ORDER BY ").append(sort).append(" ").append(order).append(" ");
-        query.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+        query.append("ORDER BY ").append(sort).append(" ").append(order).append(" ");
+        query.append("OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
             String searchPattern = "%" + paraSearch + "%";
             ps.setString(1, searchPattern);
+            ps.setString(2, searchPattern);
+            ps.setString(3, searchPattern);
+            ps.setString(4, searchPattern);
 
-            int paramIndex = 2;
-            if (!"repair".equalsIgnoreCase(type)) {
-                ps.setString(paramIndex++, searchPattern);
-                ps.setString(paramIndex++, searchPattern);
-            }
-            if (!"warranty".equalsIgnoreCase(type)) {
-                ps.setString(paramIndex++, searchPattern);
-                ps.setString(paramIndex++, searchPattern);
-            }
-
-            ps.setString(paramIndex++, searchPattern);
-
-            // Nếu có trạng thái, truyền vào tham số cuối cùng
+            int paramIndex = 5;
             if (status != null && !status.isEmpty()) {
                 ps.setString(paramIndex++, status);
             }
@@ -457,6 +305,7 @@ public class WarrantyCardDAO extends DBContext {
                 card.setCompletedDate(rs.getDate("CompleteDate"));
                 card.setCanceldDate(rs.getDate("CancelDate"));
                 card.setImage(rs.getString("Image"));
+
                 cards.add(card);
             }
         } catch (SQLException e) {
@@ -466,36 +315,9 @@ public class WarrantyCardDAO extends DBContext {
         return cards;
     }
 
-    public boolean addWarrantyCardProcess(int warrantyCardId, int handlerId, String action, String note) {
-        String sql = """
-                     INSERT INTO [dbo].[WarrantyCardProcess]
-                                ([WarrantyCardID]
-                                ,[HandlerID]
-                                ,[Action]
-                                ,[Note])
-                          VALUES(
-                                ?
-                                ,?
-                                ,?
-                                ,?)""";
-        try(PreparedStatement ps = connection.prepareStatement(sql)){
-            ps.setInt(1,warrantyCardId);
-            ps.setInt(2,handlerId);
-            ps.setString(3,action);
-            ps.setString(4,note);
-            return ps.executeUpdate()>0;
-        }
-        catch(SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(d.getTotalCards("", "", ""));
-        System.out.println(d.getCards(1, 10, "", "", "CreatedDate", "DESC", null));
-        System.out.println(d.addWarrantyCardProcess(1, 1, "reception", ""));
+        System.out.println(d.getTotalCards("", "Fixing"));
     }
 
 }

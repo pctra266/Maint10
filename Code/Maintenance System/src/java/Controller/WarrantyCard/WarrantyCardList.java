@@ -42,12 +42,8 @@ public class WarrantyCardList extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String pageParam = request.getParameter("page");
-        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
-        String type = request.getParameter("type");
-        if(!("repair".equalsIgnoreCase(type)||"warranty".equalsIgnoreCase(type))){
-            type="all";
-        }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         // Lấy page-size từ request, mặc định là PAGE_SIZE
         String pageSizeParam = request.getParameter("page-size");
         Integer pageSize;
@@ -57,13 +53,13 @@ public class WarrantyCardList extends HttpServlet {
         String order = request.getParameter("order");
         //--------------------------------------------------------------------------
         List<WarrantyCard> cards = new ArrayList<>();
-        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status, type);
+        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status);
         int totalPages = (int) Math.ceil((double) totalCards / pageSize);
         if (page > totalPages) {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order, type);
+        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order);
 
         String createStatus = request.getParameter("create");
         if (createStatus != null && createStatus.equals("true")) {
@@ -79,8 +75,8 @@ public class WarrantyCardList extends HttpServlet {
         pagination.setSort(sort);
         pagination.setOrder(order);
         pagination.setUrlPattern("/WarrantyCard");
-        pagination.setSearchFields(new String[] {"search", "status", "type"});
-        pagination.setSearchValues(new String[] {paraSearch, status, type});
+        pagination.setSearchFields(new String[] {"search", "status"});
+        pagination.setSearchValues(new String[] {paraSearch, status});
         request.setAttribute("pagination", pagination);
 
         request.setAttribute("totalCards", totalCards);

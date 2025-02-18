@@ -6,7 +6,6 @@ public class WarrantyCard {
     private int warrantyCardID;
     private String warrantyCardCode;
     private int productDetailID;
-    private int unknowProductID;
     private String productCode;
     private String issueDescription;
     private String warrantyStatus;

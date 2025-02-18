@@ -6,9 +6,7 @@ package Controller.WarrantyCard;
 
 import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
-import Model.Customer;
 import Model.ProductDetail;
-import Model.Staff;
 import Utils.FormatUtils;
 import Utils.OtherUtils;
 import java.io.IOException;
@@ -20,7 +18,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.annotation.MultipartConfig;
-import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 
 /**
@@ -54,24 +51,14 @@ public class WarrantyCardAdd extends HttpServlet {
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
         Part imagePart = request.getPart("newImage");
         String image = OtherUtils.saveImage(imagePart, request, "img/warranty-card");
-        boolean canAdd = true;
-        if (image == null) {
+        boolean canAdd=true;
+         if (image == null) {
         } else if (image.equalsIgnoreCase("Invalid picture")) {
             canAdd = false;
             request.setAttribute("pictureAlert", "Invalid picture");
         }
         if (issue != null) {
-            int handlerID = -1;
-            HttpSession session = request.getSession();
-            Staff staff = (Staff) session.getAttribute("staff");
-            if(staff==null) {
-                Customer customer = (Customer) session.getAttribute("customer");
-                if(customer!=null) handlerID = customer.getCustomerID();
-            }
-            else{
-                handlerID = staff.getStaffID();
-            }
-            if (canAdd && warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image, handlerID)) {
+            if (canAdd&&warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image)) {
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
             } else {
