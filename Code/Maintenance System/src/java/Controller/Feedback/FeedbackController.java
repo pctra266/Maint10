@@ -434,7 +434,7 @@ public class FeedbackController extends HttpServlet {
                     } else {
                         if (videoPath.startsWith("File is too large")) {
                             valid = false;
-                            request.setAttribute("videoAlert", "Picture too large, max size is:" + maxUploadSizeVideoMB + " MB");
+                            request.setAttribute("videoAlert", "Video too large, max size is:" + maxUploadSizeVideoMB + " MB");
                         }
                     }
                     videoURL = videoPath;

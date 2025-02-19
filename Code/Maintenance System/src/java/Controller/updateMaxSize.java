@@ -20,7 +20,7 @@
     @WebServlet(name="updateMaxSize", urlPatterns={"/updateMaxSize"})
     public class updateMaxSize extends HttpServlet {
         private static final int MAX_IMAGE_SIZE_MB = 10; 
-        private static final int MAX_VIDEO_SIZE_MB = 100; 
+        private static final int MAX_VIDEO_SIZE_MB = 10; 
         /** 
          * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
          * @param request servlet request
@@ -77,7 +77,7 @@
 
             String errorMessage = null;
             int maxSizeImageMB = 5; 
-            int maxSizeVideoMB = 50;
+            int maxSizeVideoMB = 10;
 
                try {
                 maxSizeImageMB = parseSize(maxSizeImageStr, customSizeImageStr, MAX_IMAGE_SIZE_MB);

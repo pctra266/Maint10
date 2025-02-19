@@ -58,17 +58,17 @@
                                         </c:if>
                                         <label class="form-label">Image (File Size ${maxUploadSizeImageMB}MB Limit): </label>
                                         <img src="" id="currentImage" alt="" style="max-width: 100%; height: auto;">
-                                        <input class="form-control" accept="image/*" name="imageURL" type="file" onchange="previewImage(event)">
+                                        <input id="fileInput" class="form-control" accept="image/*" name="imageURL" type="file" onchange="previewImage(event)">
                                     </div>
                                     <div class="col-md-6">
                                         <c:set var="maxUploadSizeVideoMB" value="${applicationScope.maxUploadSizeVideoMB}" />
                                         <c:if test="${empty maxUploadSizeVideoMB}">
-                                            <c:set var="maxUploadSizeVideoMB" value="50" />
-                                            <c:set var="applicationScope.maxUploadSizeVideoMB" value="50" />
+                                            <c:set var="maxUploadSizeVideoMB" value="10" />
+                                            <c:set var="applicationScope.maxUploadSizeVideoMB" value="10" />
                                         </c:if>
                                         <label class="form-label">Video (File Size ${maxUploadSizeVideoMB}MB Limit): </label>
                                         <video src="" id="currentVideo" style="max-width: 100%; height: auto;" controls="" ></video>
-                                        <input class="form-control"  accept="video/*" name="videoURL" type="file" onchange="previewVideo(event)">
+                                        <input id="fileInput" class="form-control"  accept="video/*" name="videoURL" type="file" onchange="previewVideo(event)">
                                     </div>
                                 </div>
                                 <div>
@@ -109,12 +109,17 @@
 //                video.load(); // Nạp lại video để hiển thị
 //                video.play(); // (Tùy chọn) Tự động phát video
                                             }
-                                            window.onload = function () {
-                                                var videoElement = document.getElementById("currentVideo");
-                                                if (videoElement.src === "") {
-                                                    videoElement.style.display = "none";  // Ẩn video nếu src rỗng
+
+                                            document.getElementById("fileInput").addEventListener("change", function () {
+                                                let file = this.files[0]; // Lấy file được chọn
+                                                if (file) {
+                                                    let maxSize = 10 * 1024 * 1024; // 5MB
+                                                    if (file.size > maxSize) {
+                                                        alert("File không được vượt quá 10MB!");
+                                                        this.value = ""; // Reset input file nếu file quá lớn
+                                                    }
                                                 }
-                                            };
+                                            });
         </script>
     </body>
 </html>
