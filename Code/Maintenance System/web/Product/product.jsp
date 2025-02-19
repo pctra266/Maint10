@@ -57,16 +57,16 @@
             }
 
             button.search {
-                background-color: #4CAF50;
+                background-color: #3B7DDD;
                 color: white;
             }
 
             button.search:hover {
-                background-color: #45a049;
+                background-color: #007bb5;
             }
 
             button.add-product {
-                background-color: #008CBA;
+                background-color: #3B7DDD;
                 color: white;
             }
 
@@ -113,11 +113,11 @@
             }
 
             a.btn-update {
-                background-color: #4CAF50;
+                background-color: #3B7DDD;
             }
 
             a.btn-update:hover {
-                background-color: #45a049;
+                background-color: #007bb5;
             }
 
             a.btn-delete {
@@ -282,11 +282,6 @@
                         <form action="addP">
                             <button class="add-product" type="submit">Add Product</button>
                         </form>
-
-                        <form action="addP">
-                            <button class="add-product" type="submit">Add Product</button>
-                        </form>
-
                     </div>
 
                     <h1>Product List</h1>
@@ -340,7 +335,6 @@
                         </c:forEach>
                     </div>
 
-
                     <script>
                         document.getElementById("sortQuantity").addEventListener("change", function () {
                             let url = new URL(window.location.href);
@@ -376,6 +370,18 @@
                             url.searchParams.set("page", "1"); // Quay về trang đầu tiên sau khi thay đổi
                             window.location.href = url;
                         }
+
+                        document.getElementById("importExcel").addEventListener("change", function () {
+                            let file = this.files[0]; // Lấy file được chọn
+                            if (file) {
+                                let maxSize = 5 * 1024 * 1024; // 5MB
+                                if (file.size > maxSize) {
+                                    alert("File không được vượt quá 5MB!");
+                                    this.value = ""; // Reset input file nếu file quá lớn
+                                }
+                            }
+                        });
+
 
                     </script>
 
