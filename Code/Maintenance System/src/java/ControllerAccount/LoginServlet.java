@@ -7,7 +7,6 @@ import Model.Customer;
 import Model.Staff;
 import Utils.Encryption;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
