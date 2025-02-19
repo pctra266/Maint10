@@ -4,12 +4,16 @@
  */
 package DAO;
 
+import Model.Brand;
 import Model.Feedback;
+import Model.ProductDetail;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -328,6 +332,126 @@ public class FeedbackDAO {
         } catch (Exception e) {
         }
         return 0;
+    }
+    // create feedback
+
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID,String warrantyCardCode, String warrantyStatus, int page, int pageSize) {
+        ArrayList<ProductDetail> list = new ArrayList<>();
+        String query = """
+          select wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
+         from Customer c 
+                left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                  left join UnknowProduct up on c.CustomerID = up.CustomerID
+                  left join WarrantyProduct wp on pd.ProductDetailID = wp.ProductDetailID
+                  left join WarrantyCard wc on wc.WarrantyProductID = wp.WarrantyProductID
+                join Product p on pd.ProductID = p.ProductID
+                where c.CustomerID = ?""";
+        if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            query += " and WarrantyCardCode like ?";
+        }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            query += " and warrantyStatus like ?";
+        }
+        query += " order by wc.CreatedDate desc ";
+        query += " offset ? rows  fetch next ? rows only;";
+        try  {
+            conn = new DBContext().connection;
+            PreparedStatement ps = conn.prepareStatement(query);
+            int count = 1;
+            ps.setString(count++, customerID);
+            if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            ps.setString(count++, "%"+warrantyCardCode+"%");
+            }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            ps.setString(count++,warrantyStatus );
+            }
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                productDetail.setProductName(rs.getString("ProductName"));
+                productDetail.setIssueDescription(rs.getString("IssueDescription"));
+                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                productDetail.setCreatedDate(rs.getDate("CreatedDate"));
+                list.add(productDetail);
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
+        ArrayList<ProductDetail> list = new ArrayList<>();
+        String query = """
+        select wc.WarrantyCardID, wc.WarrantyCardCode, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
+                              from Customer c 
+                            left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                              left join UnknowProduct up on c.CustomerID = up.CustomerID
+                              left join WarrantyProduct wp on pd.ProductDetailID = wp.ProductDetailID
+                              left join WarrantyCard wc on wc.WarrantyProductID = wp.WarrantyProductID
+                            join Product p on pd.ProductID = p.ProductID
+                              where c.CustomerID = ?""";
+         
+        try  {
+            conn = new DBContext().connection;
+            PreparedStatement ps = conn.prepareStatement(query);
+            int count = 1;
+            ps.setString(count++, customerID);
+            
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                ProductDetail productDetail = new ProductDetail();
+                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                productDetail.setProductName(rs.getString("ProductName"));
+                productDetail.setIssueDescription(rs.getString("IssueDescription"));
+                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                list.add(productDetail);
+            }
+        } catch (SQLException e) {
+        }
+        return list;
+    }
+
+    public int totalProductByCustomerId(String customerID,String warrantyCardCode, String warrantyStatus) {
+        String query = """
+                       select count(*) 
+                       from Customer c 
+                    left join ProductDetail pd on c.CustomerID = pd.CustomerID
+                      left join UnknowProduct up on c.CustomerID = up.CustomerID
+                      left join WarrantyProduct wp on pd.ProductDetailID = wp.ProductDetailID
+                      left join WarrantyCard wc on wc.WarrantyProductID = wp.WarrantyProductID
+                    join Product p on pd.ProductID = p.ProductID
+                                            where c.CustomerID = ?""";
+        if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            query += " and WarrantyCardCode like ?";
+        }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            query += " and warrantyStatus like ?";
+        }
+        int total = 0;
+        try  {
+            conn = new DBContext().connection;
+            PreparedStatement ps = conn.prepareStatement(query);
+            int count =1;
+            ps.setString(count++, customerID);
+            if(warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()){
+            ps.setString(count++, "%"+warrantyCardCode+"%");
+            }
+        if(warrantyStatus != null && !warrantyStatus.trim().isEmpty()){
+            ps.setString(count++,warrantyStatus );
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+        }
+        return total;
     }
 
     public static void main(String[] args) {
