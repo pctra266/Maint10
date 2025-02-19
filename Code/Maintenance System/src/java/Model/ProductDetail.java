@@ -15,6 +15,7 @@ public class ProductDetail {
     private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private int productDetailID;
     private String productCode;
+    private String unknownProductCode;
     private Date purchaseDate;
      private int customerID;
     private String usernameC;
@@ -60,6 +61,15 @@ public class ProductDetail {
         
     }
 
+    public String getUnknownProductCode() {
+        return unknownProductCode;
+    }
+
+    public void setUnknownProductCode(String unknownProductCode) {
+        this.unknownProductCode = unknownProductCode;
+    }
+    
+    
     public String getUnknownProductName() {
         return unknownProductName;
     }
