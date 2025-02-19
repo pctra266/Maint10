@@ -14,7 +14,12 @@ VALUES
 (6, NULL), (7, NULL), (8, NULL), (9, NULL), (10, NULL),
 (11, NULL), (12, NULL), (13, NULL), (14, NULL), (15, NULL),
 (16, NULL), (17, NULL), (18, NULL), (19, NULL), (23, NULL),
-(33, NULL), (43, NULL), (53, NULL), (63, NULL);
+(33, NULL), (43, NULL), (53, NULL), (63, NULL),(NULL,25),(NULL,26),(NULL,27),(NULL,28),(NULL,29),
+(NULL, 1), (NULL, 2), (NULL, 3), (NULL, 4), (NULL, 5),  
+(NULL, 6), (NULL, 7), (NULL, 8), (NULL, 9), (NULL, 10),  
+(NULL, 11), (NULL, 12), (NULL, 13), (NULL, 14), (NULL, 15),  
+(NULL, 16), (NULL, 17), (NULL, 18), (NULL, 19),
+(NULL, 20), (NULL, 21), (NULL, 22), (NULL, 23),(NULL,24)
 
 INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
 VALUES
@@ -42,6 +47,38 @@ VALUES
 ('WC122', 22, 'Camera malfunction', 'completed', '2024-01-18'),
 ('WC123', 23, 'Touchpad unresponsive', 'completed', '2024-01-16'),
 ('WC124', 24, 'Screen brightness not adjustable', 'completed', '2024-01-29');
+
+INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
+VALUES
+('WC125', 25, 'Fingerprint sensor not working', 'fixing', '2024-01-30'),
+('WC126', 26, 'Mouse pad sensitivity issue', 'completed', '2024-01-31'),
+('WC127', 27, 'Volume buttons not responding', 'cancel', '2024-02-01'),
+('WC128', 28, 'Graphics card failure', 'fixing', '2024-02-02'),
+('WC129', 29, 'Cooling fan noise', 'completed', '2024-02-03'),
+('WC130', 30, 'Software update issue', 'cancel', '2024-02-04'),
+('WC131', 31, 'Hinges are loose', 'fixing', '2024-02-05'),
+('WC132', 32, 'System slow performance', 'completed', '2024-02-06'),
+('WC133', 33, 'DVD drive not working', 'fixing', '2024-02-07'),
+('WC134', 34, 'USB-C port damaged', 'cancel', '2024-02-08'),
+('WC135', 35, 'Battery not charging', 'completed', '2024-02-09'),
+('WC136', 36, 'Unresponsive power button', 'fixing', '2024-02-10'),
+('WC137', 37, 'Frequent blue screen errors', 'completed', '2024-02-11'),
+('WC138', 38, 'Wi-Fi keeps disconnecting', 'cancel', '2024-02-12'),
+('WC139', 39, 'Screen has dead pixels', 'fixing', '2024-02-13'),
+('WC140', 40, 'Laptop case cracked', 'completed', '2024-02-14'),
+('WC141', 41, 'Overheating after updates', 'fixing', '2024-02-15'),
+('WC142', 42, 'Keyboard backlight not working', 'completed', '2024-02-16'),
+('WC143', 43, 'Sound card failure', 'cancel', '2024-02-17'),
+('WC144', 44, 'Ethernet port not functioning', 'fixing', '2024-02-18'),
+('WC145', 45, 'Camera blurry images', 'completed', '2024-02-19'),
+('WC146', 46, 'Lid not closing properly', 'cancel', '2024-02-20'),
+('WC147', 47, 'Power adapter overheating', 'fixing', '2024-02-21'),
+('WC148', 48, 'Touchscreen unresponsive', 'completed', '2024-02-22'),
+('WC149', 49, 'Fingerprint sensor delay', 'cancel', '2024-02-23'),
+('WC150', 50, 'Laptop freezing randomly', 'fixing', '2024-02-24'),
+('WC151', 51, 'Webcam not recognized', 'completed', '2024-02-25'),
+('WC152', 52, 'Fan running at high speed', 'cancel', '2024-02-26'),
+('WC153', 53, 'Frequent connectivity drops', 'fixing', '2024-02-27');
 
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES
