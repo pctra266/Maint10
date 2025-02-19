@@ -14,7 +14,8 @@ public class Feedback {
     private final  SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
     private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private int FeedbackID, CustomerID, WarrantyCardID;
-    private String Note, CustomerName,CustomerEmail, CustomerPhoneNumber ,ImageURL, VideoURL, ProductName, IssueDescription, WarrantyStatus;
+    private String Note, CustomerName,CustomerEmail, CustomerPhoneNumber ,ImageURL, VideoURL, 
+            productName,unkownProductName, IssueDescription, WarrantyStatus;
     private Date DateCreated;
     private boolean IsDeleted;
     
@@ -31,7 +32,7 @@ public class Feedback {
         this.CustomerName = CustomerName;
         this.ImageURL = ImageURL;
         this.VideoURL = VideoURL;
-        this.ProductName = ProductName;
+        this.productName = ProductName;
         this.IssueDescription = IssueDescription;
         this.WarrantyStatus = WarrantyStatus;
         this.DateCreated = DateCreated;
@@ -48,16 +49,20 @@ public class Feedback {
         this.CustomerPhoneNumber = CustomerPhoneNumber;
         this.ImageURL = ImageURL;
         this.VideoURL = VideoURL;
-        this.ProductName = ProductName;
+        this.productName = ProductName;
         this.IssueDescription = IssueDescription;
         this.WarrantyStatus = WarrantyStatus;
         this.DateCreated = DateCreated;
         this.IsDeleted = IsDeleted;
     }
-    
-    
-    
-    
+
+    public String getUnkownProductName() {
+        return unkownProductName;
+    }
+
+    public void setUnkownProductName(String unkownProductName) {
+        this.unkownProductName = unkownProductName;
+    }
 
     public String getCustomerName() {
         return CustomerName;
@@ -84,11 +89,11 @@ public class Feedback {
     }
 
     public String getProductName() {
-        return ProductName;
+        return productName;
     }
 
     public void setProductName(String ProductName) {
-        this.ProductName = ProductName;
+        this.productName = ProductName;
     }
 
     public String getIssueDescription() {
@@ -181,7 +186,7 @@ public class Feedback {
 
     @Override
     public String toString() {
-        return "Feedback{" + "FeedbackID=" + FeedbackID + ", CustomerID=" + CustomerID + ", WarrantyCardID=" + WarrantyCardID + ", Note=" + Note + ", CustomerName=" + CustomerName + ", CustomerEmail=" + CustomerEmail + ", CustomerPhoneNumber=" + CustomerPhoneNumber + ", ImageURL=" + ImageURL + ", VideoURL=" + VideoURL + ", ProductName=" + ProductName + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", DateCreated=" + DateCreated + ", IsDeleted=" + IsDeleted + '}';
+        return "Feedback{" + "FeedbackID=" + FeedbackID + ", CustomerID=" + CustomerID + ", WarrantyCardID=" + WarrantyCardID + ", Note=" + Note + ", CustomerName=" + CustomerName + ", CustomerEmail=" + CustomerEmail + ", CustomerPhoneNumber=" + CustomerPhoneNumber + ", ImageURL=" + ImageURL + ", VideoURL=" + VideoURL + ", ProductName=" + productName + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", DateCreated=" + DateCreated + ", IsDeleted=" + IsDeleted + '}';
     }
     
     

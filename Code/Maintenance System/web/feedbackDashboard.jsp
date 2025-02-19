@@ -30,7 +30,11 @@
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                            <input style="margin-top: 15px" class="form-control" type="search" name="WarrantyCardCode" placeholder="Warranty Card Code"  value="${WarrantyCardCode}" >
                            <div style="margin-top: 15px"> 
-                           <label >Show 
+                               <div>
+                                   <input type="text" readonly="" style="border: none; background: none; ">
+                               </div>
+                               <div style="margin-top: 15px" >
+                               <label >Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">
                                         <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
@@ -38,6 +42,7 @@
                                 </select> 
                                 entries
                             </label>
+                                   </div>
                                </div>
                         </div>
                         <div class="col-sm-6 col-md-6" style="width: 500px">
@@ -47,6 +52,11 @@
                                     <option ${(WarrantyStatus=='done')?"selected":""} value="done">Done</option>
                                     <option ${(WarrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
                                     <option ${(WarrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
+                                </select>
+                                 <select style="margin-top: 15px" class="form-select" name="typeMaintain">
+                                    <option value="">Type </option>
+                                    <option ${(typeMaintain=='maintain')?"selected":""} value="maintain">Maintain</option>
+                                    <option ${(typeMaintain=='repair')?"selected":""} value="repair">Repair</option>
                                 </select>
                                 <div style="float: right">
                                 <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
@@ -59,6 +69,7 @@
                                 <th>Warranty Card Code</th>
                                 <th>Created Date</th>
                                 <th>Product Name</th>
+                                <th>Type</th>
                                 <th>Issue Description</th>
                                 <th>Warranty Status</th>
                                 <th></th>
@@ -71,12 +82,14 @@
                                     <td>${o.warrantyCardCode}</td>
                                     <td>${o.createdDate}</td>
                                     <td>${o.productName!=null?o.productName:o.unknownProductName}</td>
+                                    <td>${o.productName!=null?"Maintain":o.unknownProductName!=null?"Repair":"None"}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
                                     <td><a class="btn btn-primary" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>
                                 </tr>
                             </c:forEach>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>

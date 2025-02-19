@@ -173,27 +173,41 @@ public class FeedbackDAO {
 
     public Feedback getFeedbackById(String feedbackId) {
         String query = """
-                       select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,
-                       w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted
-                       from Feedback f 
-                       left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID
-                        left join WarrantyProduct wp on w.WarrantyProductID= wp.WarrantyProductID
-                        left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
-                       left join Product pr on p.ProductID = pr.ProductID
-                       left join Customer c on f.CustomerID = c.CustomerID
-                       where f.FeedbackID = ?""";
+                       select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, pr.ProductName,up.ProductName as UnknownProductName,w.IssueDescription,
+                                              w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted
+                                              from Feedback f 
+                                              left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID
+                                               left join WarrantyProduct wp on w.WarrantyProductID= wp.WarrantyProductID
+                                               left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
+                                              left join Product pr on p.ProductID = pr.ProductID
+                                              left join Customer c on f.CustomerID = c.CustomerID
+                       					   left join UnknowProduct up on up.UnknowProductID = wp.UnknowProductID
+                                              where f.FeedbackID = ?""";
 
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             ps.setString(1, feedbackId);
             rs = ps.executeQuery();
-            while (rs.next()) {
-                return new Feedback(rs.getInt("FeedbackID"), rs.getInt("CustomerID"), rs.getInt("WarrantyCardID"),
-                        rs.getString("Note"), rs.getString("CustomerName"), rs.getString("CustomerEmail"), rs.getString("CustomerPhoneNumber"), rs.getString("ImageURL"),
-                        rs.getString("VideoURL"), rs.getString("ProductName"),
-                        rs.getString("IssueDescription"), rs.getString("WarrantyStatus"),
-                        rs.getDate("DateCreated"), rs.getBoolean("IsDeleted"));
+            while (rs.next()) {Feedback feedback = new Feedback();
+
+                feedback.setFeedbackID(rs.getInt("FeedbackID"));
+                feedback.setCustomerID(rs.getInt("CustomerID"));
+                feedback.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                feedback.setNote(rs.getString("Note"));
+                feedback.setCustomerName(rs.getString("CustomerName"));
+                feedback.setCustomerEmail(rs.getString("CustomerEmail"));
+                feedback.setCustomerPhoneNumber(rs.getString("CustomerPhoneNumber"));
+                feedback.setImageURL(rs.getString("ImageURL"));
+                feedback.setVideoURL(rs.getString("VideoURL"));
+                feedback.setProductName(rs.getString("ProductName"));
+                feedback.setIssueDescription(rs.getString("IssueDescription"));
+                feedback.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                feedback.setDateCreated(rs.getDate("DateCreated"));
+                feedback.setIsDeleted(rs.getBoolean("IsDeleted"));
+                feedback.setUnkownProductName(rs.getString("UnknownProductName"));
+                return feedback;
+
             }
         } catch (Exception e) {
         }
@@ -335,10 +349,10 @@ public class FeedbackDAO {
     }
     // create feedback
 
-    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, String warrantyCardCode, String warrantyStatus, int page, int pageSize) {
+    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, String warrantyCardCode, String warrantyStatus,String typeMaintain, int page, int pageSize) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-          SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName, p.ProductName as UnknownProductName
+          SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName as UnknownProductName, p.ProductName 
           FROM WarrantyProduct wp
           LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
           LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
@@ -352,6 +366,13 @@ public class FeedbackDAO {
         }
         if (warrantyStatus != null && !warrantyStatus.trim().isEmpty()) {
             query += " and warrantyStatus like ?";
+        }
+        if (typeMaintain != null && !typeMaintain.trim().isEmpty()) {
+            if (typeMaintain.equalsIgnoreCase("maintain")) {
+                query += " and p.ProductName is not null";
+            } else {
+                query += " and p.ProductName is null";
+            }
         }
         query += " order by wc.CreatedDate desc ";
         query += " offset ? rows  fetch next ? rows only;";
@@ -389,7 +410,7 @@ public class FeedbackDAO {
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-        SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName, p.ProductName as UnknownProductName
+        SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName as UnknownProductName, p.ProductName 
         FROM WarrantyProduct wp
         LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
         LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
@@ -421,7 +442,7 @@ public class FeedbackDAO {
         return list;
     }
 
-    public int totalProductByCustomerId(String customerID, String warrantyCardCode, String warrantyStatus) {
+    public int totalProductByCustomerId(String customerID, String warrantyCardCode, String warrantyStatus, String typeMaintain) {
         String query = """
                        select count(*) 
                     FROM WarrantyProduct wp
@@ -438,6 +459,14 @@ public class FeedbackDAO {
         if (warrantyStatus != null && !warrantyStatus.trim().isEmpty()) {
             query += " and warrantyStatus like ?";
         }
+        if (typeMaintain != null && !typeMaintain.trim().isEmpty()) {
+            if (typeMaintain.equalsIgnoreCase("maintain")) {
+                query += " and p.ProductName is not null";
+            } else {
+                query += " and p.ProductName is null";
+            }
+        }
+
         int total = 0;
         try {
             conn = new DBContext().connection;
