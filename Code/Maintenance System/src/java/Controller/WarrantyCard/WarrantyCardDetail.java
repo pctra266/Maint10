@@ -5,6 +5,10 @@
 
 package Controller.WarrantyCard;
 
+import DAO.CustomerDAO;
+import DAO.WarrantyCardDAO;
+import Model.WarrantyCard;
+import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +23,9 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name="WarrantyCardDetail", urlPatterns={"/WarrantyCard/Detail"})
 public class WarrantyCardDetail extends HttpServlet {
-   
+    private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
+
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -29,19 +35,15 @@ public class WarrantyCardDetail extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet WarrantyCardDetail</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet WarrantyCardDetail at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String idPara = request.getParameter("ID");
+        Integer id = FormatUtils.tryParseInt(idPara);
+        if(id==null || warrantyCardDAO.getWarrantyCardById(id)==null) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            return;
         }
+        WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
+        request.setAttribute("card", wc);   
+        request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

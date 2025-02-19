@@ -15,7 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -66,7 +66,7 @@ public class YourWarrantyCard extends HttpServlet {
             return;
         }
         WarrantyCardDAO warrantyCardDao = new WarrantyCardDAO();
-        ArrayList<WarrantyCard> listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID());
+        List<WarrantyCard> listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID());
         request.setAttribute("listWarrantyCard", listWarrantyCard);
         request.getRequestDispatcher("YourWarrantyCard.jsp").forward(request, response);
     } 
