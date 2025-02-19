@@ -3,100 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
- Excel
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDetailDAO.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/FeedbackLogDAO.java</file>
-            <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/PurchaseProduct.java</file>
-
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/adminDashboard.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/LoginServlet.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/updateMaxSize.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Pagination.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardList.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Product.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/uploadImage.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FormatUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/HomePage.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/ProductDetail.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Feedback/FeedbackController.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Redirect.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/includes/pagination.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Feedback.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
         </group>
         <group>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/adminDashboard.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/LoginServlet.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/updateMaxSize.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Pagination.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardList.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Product.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/uploadImage.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FormatUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/HomePage.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/ProductDetail.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Feedback/FeedbackController.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Redirect.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/includes/pagination.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Feedback.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerCustomer/AddCustomerExcel.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/UpdateProductServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ProductDAO.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ImportExcel.java</file>
         </group>
         <group>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/adminDashboard.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/LoginServlet.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentWarehouse.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentSearch.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentWarehouse.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/WarrantyCard.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentAdd.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/updateMaxSize.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/views/Component/ComponentDetail.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Pagination.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentAction.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/OtherUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/WarrantyCard/WarrantyCardList.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/ComponentDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Product.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/updateProduct1.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/uploadImage.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Utils/FormatUtils.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Component/ComponentSearch.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/HomePage.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/ProductDetail.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Feedback/FeedbackController.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Redirect.java</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/web/includes/pagination.jsp</file>
-            <file>file:/D:/SWP_ProductsMaintainManagement/MainTen/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/Feedback.java</file>
- main
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ViewProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/AddProduct.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/web/Product/product.jsp</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/DeleteProductServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/UpdateProductServlet.java</file>
+            <file>file:/C:/Users/sonNH/Downloads/BanDangSua/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/Product/ImportExcel.java</file>
         </group>
     </open-files>
 </project-private>

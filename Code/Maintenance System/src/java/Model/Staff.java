@@ -38,9 +38,8 @@ public class Staff {
     }
 
     public int getStaffID() {
-        this.imgage = imgage;
         return staffID;
-    }   
+    }
 
     public void setStaffID(int staffID) {
         this.staffID = staffID;
