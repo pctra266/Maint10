@@ -27,6 +27,7 @@ public class ProductDetail {
     private String IssueDescription;
     private String WarrantyStatus;
     private Date CreatedDate;
+    private String unknownProductName;
 
     // Constructor
     public ProductDetail(int productDetailID, String productCode, Date purchaseDate, 
@@ -57,6 +58,14 @@ public class ProductDetail {
         
     }
 
+    public String getUnknownProductName() {
+        return unknownProductName;
+    }
+
+    public void setUnknownProductName(String UnknownProductName) {
+        this.unknownProductName = UnknownProductName;
+    }
+    
     public Date getCreatedDate() {
         return CreatedDate;
     }
@@ -188,6 +197,8 @@ public class ProductDetail {
 
     @Override
     public String toString() {
-        return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", customerID=" + customerID + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + ", WarrantyCardID=" + WarrantyCardID + ", WarrantyCardCode=" + WarrantyCardCode + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + '}';
+        return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", customerID=" + customerID + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + ", WarrantyCardID=" + WarrantyCardID + ", WarrantyCardCode=" + WarrantyCardCode + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", CreatedDate=" + CreatedDate + ", UnknownProductName=" + unknownProductName + '}';
     }
+
+    
 }

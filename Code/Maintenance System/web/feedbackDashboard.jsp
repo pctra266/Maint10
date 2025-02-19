@@ -70,7 +70,7 @@
                                 <tr>
                                     <td>${o.warrantyCardCode}</td>
                                     <td>${o.createdDate}</td>
-                                    <td>${o.productName}</td>
+                                    <td>${o.productName!=null?o.productName:o.unknownProductName}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
                                     <td><a class="btn btn-primary" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>

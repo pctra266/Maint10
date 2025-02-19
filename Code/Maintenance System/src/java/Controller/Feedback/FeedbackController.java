@@ -80,7 +80,6 @@ public class FeedbackController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         // session to get customer and customerId
@@ -138,7 +137,7 @@ public class FeedbackController extends HttpServlet {
                 total1 = daoFeedback.totalFeedbackByCustomerId(customerId);
                 break;
             case "viewFeedbackDashboard":
-                total1 = productDAO.totalProductByCustomerId(customerId,warrantyCardCode,warrantyStatus);
+                total1 = daoFeedback.totalProductByCustomerId(customerId,warrantyCardCode,warrantyStatus);
                 break;
             case "viewFeedback":
                 total1 = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
@@ -194,7 +193,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
-                ArrayList<ProductDetail> listProductCreateFeedback = productDAO.getListProductByCustomerID(customerId,warrantyCardCode,warrantyStatus, page, pageSize);
+                ArrayList<ProductDetail> listProductCreateFeedback = daoFeedback.getListProductByCustomerID(customerId,warrantyCardCode,warrantyStatus, page, pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
@@ -244,7 +243,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("updateFeedback.jsp").forward(request, response);
                 break;
             case "createFeedback":
-                ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
+                ArrayList<ProductDetail> listProductByCustomerId = daoFeedback.getListProductByCustomerID(customerId);
                 request.setAttribute("listProductByCustomerId", listProductByCustomerId);
                 String warrantyCardID = request.getParameter("warrantyCardID");
                 request.setAttribute("warrantyCardID", warrantyCardID);
@@ -292,7 +291,6 @@ public class FeedbackController extends HttpServlet {
         request.setAttribute("sortOrder", order);
         request.setAttribute("customerEmail", customerEmail);
         request.setAttribute("customerPhone", customerPhone);
-        ProductDAO productDAO = new ProductDAO();
         FeedbackDAO daoFeedback = new FeedbackDAO();
         FeedbackLogDAO daoFeedbackLog = new FeedbackLogDAO();
         String action = request.getParameter("action");
@@ -455,7 +453,7 @@ public class FeedbackController extends HttpServlet {
                     mess = "Create successfully";
                     response.sendRedirect("feedback?action=viewFeedbackDashboard&mess=" + mess);
                 } else {
-                    ArrayList<ProductDetail> listProductByCustomerId = productDAO.getListProductByCustomerID(customerId);
+                    ArrayList<ProductDetail> listProductByCustomerId = daoFeedback.getListProductByCustomerID(customerId);
                     request.setAttribute("listProductByCustomerId", listProductByCustomerId);
                     request.setAttribute("mess", mess);
                     request.getRequestDispatcher("createFeedback.jsp").forward(request, response);

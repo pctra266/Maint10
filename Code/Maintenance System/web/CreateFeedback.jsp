@@ -44,7 +44,7 @@
                                     <select  class="form-select" name="warrantyCardID">
                                         <option value=""></option>
                                         <c:forEach items="${listProductByCustomerId}" var="o">
-                                            <option ${(warrantyCardID== o.warrantyCardID)?"selected":""} value="${o.warrantyCardID}">${o.productName}</option>
+                                            <option ${(warrantyCardID== o.warrantyCardID)?"selected":""} value="${o.warrantyCardID}">${o.productName!=null?o.productName:o.unknownProductName}</option>
                                         </c:forEach>
                                     </select>
                                 </div>
