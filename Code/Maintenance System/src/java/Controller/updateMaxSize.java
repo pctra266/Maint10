@@ -96,8 +96,8 @@
 
             getServletContext().setAttribute("maxUploadSizeImageMB", maxSizeImageMB);
             getServletContext().setAttribute("maxUploadSizeVideoMB", maxSizeVideoMB);
-
-            response.sendRedirect("adminDashboard.jsp");
+            
+            request.getRequestDispatcher("adminDashboard.jsp").forward(request, response);
         }    
         
            private int parseSize(String sizeStr, String customSizeStr, int maxLimit) throws NumberFormatException {

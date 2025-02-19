@@ -4,6 +4,7 @@
  */
 package Model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,6 +12,7 @@ import java.util.Date;
  * @author Tra Pham
  */
 public class FeedbackLog {
+    private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private int FeedbackLogID, FeedbackID;
     private String Action,OldFeedbackText, NewFeedbackText;
     private int ModifiedBy;
@@ -77,8 +79,8 @@ public class FeedbackLog {
         this.ModifiedBy = ModifiedBy;
     }
 
-    public Date getDateModified() {
-        return DateModified;
+    public String getDateModified() {
+        return outputFormat.format(DateModified);
     }
 
     public void setDateModified(Date DateModified) {

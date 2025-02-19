@@ -8,9 +8,11 @@ package Model;
  *
  * @author ADMIN
  */
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class ProductDetail {
+    private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private int productDetailID;
     private String productCode;
     private Date purchaseDate;
@@ -66,8 +68,8 @@ public class ProductDetail {
         this.unknownProductName = UnknownProductName;
     }
     
-    public Date getCreatedDate() {
-        return CreatedDate;
+    public String getCreatedDate() {
+        return outputFormat.format(CreatedDate);
     }
 
     public void setCreatedDate(Date CreatedDate) {
