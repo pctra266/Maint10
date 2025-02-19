@@ -24,15 +24,17 @@ public class FeedbackDAO {
 
     public ArrayList<Feedback> getAllFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo, int page,int pageSize, String column, String sortOrder) {
         ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, \n"
-                + "                pr.ProductName,w.IssueDescription,\n"
-                + "                w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
-                + "                from Feedback f \n"
-                + "               left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
-                + "                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
-                + "                left join Product pr on p.ProductID = pr.ProductID\n"
-                + "                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "                 where f.IsDeleted = 0 ";
+        String query = """
+                       select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, 
+                                       pr.ProductName,w.IssueDescription,
+                                       w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted
+                                       from Feedback f 
+                                      left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID
+                                       left join WarrantyProduct wp on w.WarrantyProductID= wp.WarrantyProductID
+                                       left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
+                                       left join Product pr on p.ProductID = pr.ProductID
+                                       left join Customer c on f.CustomerID = c.CustomerID
+                                        where f.IsDeleted = 0 """;
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
         }
@@ -93,9 +95,10 @@ public class FeedbackDAO {
 
     public ArrayList<Feedback> getListFeedbackByCustomerId(String customerId,int page, int pageSize) {
         ArrayList<Feedback> list = new ArrayList<>();
-        String query = "select f.FeedbackID, f.CustomerID, f.Note, f.DateCreated, f.ImageURL, f.VideoURL\n"
-                + "	from Feedback f\n"
-                + "	where f.IsDeleted = 0";
+        String query = """
+                       select f.FeedbackID, f.CustomerID, f.Note, f.DateCreated, f.ImageURL, f.VideoURL
+                       \tfrom Feedback f
+                       \twhere f.IsDeleted = 0""";
         if (customerId != null && !customerId.trim().isEmpty()) {
             query += " and f.CustomerID like ?";
         }
@@ -165,14 +168,16 @@ public class FeedbackDAO {
     }
 
     public Feedback getFeedbackById(String feedbackId) {
-        String query = "select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,\n"
-                + "w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted\n"
-                + "from Feedback f \n"
-                + "left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
-                + "left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
-                + "left join Product pr on p.ProductID = pr.ProductID\n"
-                + "left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "where f.FeedbackID = ?";
+        String query = """
+                       select f.FeedbackID,f.CustomerID,c.Name as CustomerName, c.Email as CustomerEmail, c.Phone as CustomerPhoneNumber, f.DateCreated ,f.WarrantyCardID, pr.ProductName,w.IssueDescription,
+                       w.WarrantyStatus, f.Note, f.ImageURL, f.VideoURL, f.IsDeleted
+                       from Feedback f 
+                       left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID
+                        left join WarrantyProduct wp on w.WarrantyProductID= wp.WarrantyProductID
+                        left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
+                       left join Product pr on p.ProductID = pr.ProductID
+                       left join Customer c on f.CustomerID = c.CustomerID
+                       where f.FeedbackID = ?""";
 
         try {
             conn = new DBContext().connection;
@@ -192,9 +197,10 @@ public class FeedbackDAO {
     }
 
     public void updateFeedback(String feedbackId, String note) {
-        String query = "update Feedback\n"
-                + "set Note = ?\n"
-                + "where FeedbackID = ?";
+        String query = """
+                       update Feedback
+                       set Note = ?
+                       where FeedbackID = ?""";
 
         try {
             conn = new DBContext().connection;
@@ -245,9 +251,10 @@ public class FeedbackDAO {
     }
 
     public void inActiveFeedbackById(String feedbackId) {
-        String query = "update Feedback\n"
-                + "set IsDeleted = 1\n"
-                + "where FeedbackID = ?";
+        String query = """
+                       update Feedback
+                       set IsDeleted = 1
+                       where FeedbackID = ?""";
 
         try {
             conn = new DBContext().connection;
@@ -260,9 +267,10 @@ public class FeedbackDAO {
     }
 
     public void activeFeedbackById(String feedbackId) {
-        String query = "update Feedback\n"
-                + "set IsDeleted = 0\n"
-                + "where FeedbackID = ?";
+        String query = """
+                       update Feedback
+                       set IsDeleted = 0
+                       where FeedbackID = ?""";
 
         try {
             conn = new DBContext().connection;
@@ -275,12 +283,14 @@ public class FeedbackDAO {
     }
 
     public int getTotalFeedback(String customerName, String customerEmail, String customerPhone, String hasImageAndVideo) {
-        String query = "select count(*) from Feedback f\n"
-                + "                              left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID\n"
-                + "                                left join ProductDetail p on w.ProductDetailID = p.ProductDetailID\n"
-                + "                               left join Product pr on p.ProductID = pr.ProductID\n"
-                + "                                left join Customer c on f.CustomerID = c.CustomerID\n"
-                + "                                 where f.IsDeleted = 0";
+        String query = """
+                       select count(*) from Feedback f
+                        left join WarrantyCard w on f.WarrantyCardID = w.WarrantyCardID
+                          left join WarrantyProduct wp on w.WarrantyProductID= wp.WarrantyProductID
+                          left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
+                         left join Product pr on p.ProductID = pr.ProductID
+                          left join Customer c on f.CustomerID = c.CustomerID
+                           where f.IsDeleted = 0""";
         if (customerName != null && !customerName.trim().isEmpty()) {
             query += " and c.Name like ?";
         }
