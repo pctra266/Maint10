@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package Model;
-
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -11,6 +11,8 @@ import java.util.Date;
  * @author Tra Pham
  */
 public class Feedback {
+    private final  SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd");
+    private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private int FeedbackID, CustomerID, WarrantyCardID;
     private String Note, CustomerName,CustomerEmail, CustomerPhoneNumber ,ImageURL, VideoURL, ProductName, IssueDescription, WarrantyStatus;
     private Date DateCreated;
@@ -105,8 +107,15 @@ public class Feedback {
         this.WarrantyStatus = WarrantyStatus;
     }
 
-    public Date getDateCreated() {
-        return DateCreated;
+    public String getDateCreated() {
+        return  outputFormat.format(DateCreated);
+//        
+//        try {
+//            return outputFormat.parse(result);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
     public void setDateCreated(Date DateCreated) {
