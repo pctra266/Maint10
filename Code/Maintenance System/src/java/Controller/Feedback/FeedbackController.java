@@ -123,6 +123,8 @@ public class FeedbackController extends HttpServlet {
         String order = request.getParameter("order");
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("WarrantyCardCode"));
         String warrantyStatus = SearchUtils.preprocessSearchQuery(request.getParameter("WarrantyStatus"));
+        String typeMaintain = request.getParameter("typeMaintain");
+        request.setAttribute("typeMaintain", typeMaintain);
         request.setAttribute("WarrantyStatus", warrantyStatus);
         request.setAttribute("WarrantyCardCode", warrantyCardCode);
         request.setAttribute("customerName", customerName);
@@ -137,7 +139,7 @@ public class FeedbackController extends HttpServlet {
                 total1 = daoFeedback.totalFeedbackByCustomerId(customerId);
                 break;
             case "viewFeedbackDashboard":
-                total1 = daoFeedback.totalProductByCustomerId(customerId,warrantyCardCode,warrantyStatus);
+                total1 = daoFeedback.totalProductByCustomerId(customerId,warrantyCardCode,warrantyStatus,typeMaintain);
                 break;
             case "viewFeedback":
                 total1 = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
@@ -193,7 +195,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
-                ArrayList<ProductDetail> listProductCreateFeedback = daoFeedback.getListProductByCustomerID(customerId,warrantyCardCode,warrantyStatus, page, pageSize);
+                ArrayList<ProductDetail> listProductCreateFeedback = daoFeedback.getListProductByCustomerID(customerId,warrantyCardCode,warrantyStatus,typeMaintain, page, pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
@@ -203,8 +205,8 @@ public class FeedbackController extends HttpServlet {
                 pagination.setSort("");
                 pagination.setOrder("");
                 pagination.setUrlPattern("/feedback");
-                pagination.setSearchFields(new String[]{"action","warrantyCardCode","WarrantyStatus"});
-                pagination.setSearchValues(new String[]{"viewFeedbackDashboard",warrantyCardCode,warrantyStatus});
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode","WarrantyStatus","typeMaintain"});
+                pagination.setSearchValues(new String[]{"viewFeedbackDashboard",warrantyCardCode,warrantyStatus,typeMaintain});
                 request.setAttribute("pagination", pagination);
                 request.getRequestDispatcher("feedbackDashboard.jsp").forward(request, response);
                 break;
@@ -285,6 +287,8 @@ public class FeedbackController extends HttpServlet {
         String imageAndVideo = request.getParameter("imageAndVideo");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        String typeMaintain = request.getParameter("typeMaintain");
+        request.setAttribute("typeMaintain", typeMaintain);
         request.setAttribute("customerName", customerName);
         request.setAttribute("imageAndVideo", imageAndVideo);
         request.setAttribute("sort", sort);

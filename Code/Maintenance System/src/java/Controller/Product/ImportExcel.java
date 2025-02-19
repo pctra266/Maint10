@@ -28,13 +28,6 @@ public class ImportExcel extends HttpServlet {
 
         Part productFile = request.getPart("productExcel");
 
-        // Kiểm tra dung lượng file
-        if (productFile.getSize() > 5 * 1024 * 1024) { // 5MB
-            request.setAttribute("errorMessage", "File size must be less than 5MB.");
-            request.getRequestDispatcher("Product/product.jsp").forward(request, response);
-            return;
-        }
-
         // Kiểm tra định dạng file
         String fileName = productFile.getSubmittedFileName().toLowerCase();
         if (!fileName.endsWith(".xlsx")) {

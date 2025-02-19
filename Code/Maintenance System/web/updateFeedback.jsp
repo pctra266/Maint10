@@ -70,8 +70,12 @@
 
                                 <div class="mb-3">
                                     <label class="form-label">Product Name: </label>
-                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.productName}">
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.productName!=null?feedbackUpdate.productName:feedbackUpdate.unkownProductName}">
                                 </div>
+<!--                                <div class="mb-3">
+                                    <label class="form-label">UnknownProduct: </label>
+                                    <input class="form-control" type="text" readonly="" value="${feedbackUpdate.unkownProductName}">
+                                </div>-->
 
                                 <div class="mb-3">
                                     <label class="form-label">Issue Description: </label>
