@@ -96,7 +96,7 @@
                         <tbody>
                             <c:forEach items="${listProductUnderMaintain}" var="o">
                                 <tr>
-                                    <td>${o.warrantyCardCode}</td>
+                                    <td><a href="WarrantyCard/Detail?ID=${o.warrantyCardID}">${o.warrantyCardCode}</td>
                                     <td>${o.createdDate}</td>
                                     <td>${o.productCode!=null?o.productCode:o.unknownProductCode}</td>
                                     <td>${o.productName!=null?o.productName:o.unknownProductName}</td>
