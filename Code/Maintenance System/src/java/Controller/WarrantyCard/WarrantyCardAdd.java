@@ -51,6 +51,9 @@ public class WarrantyCardAdd extends HttpServlet {
             throws ServletException, IOException {
                 //Nut back
         String referer = request.getHeader("Referer");
+        if(referer==null || referer.isBlank()) {
+            referer="/MaintenanceSystem/WarrantyCard";
+        }
         request.setAttribute("backUrl", referer);
         
         String productCode = request.getParameter("productCode");
