@@ -48,7 +48,7 @@
                                         </c:forEach>
                                     </select>
                                 </div>
-                                <div class="row">
+                                <div  style="margin-top: 5px" class="row">
                                     <div class="col-md-6">
 
                                         <c:set var="maxUploadSizeImageMB" value="${applicationScope.maxUploadSizeImageMB}" />
@@ -58,24 +58,24 @@
                                         </c:if>
                                         <label class="form-label">Image (File Size ${maxUploadSizeImageMB}MB Limit): </label>
                                         <img src="" id="currentImage" alt="" style="max-width: 100%; height: auto;">
-                                        <input class="form-control" accept="image/*" name="imageURL" type="file" onchange="previewImage(event)">
+                                        <input style="margin-top: 10px" id="fileInput" class="form-control" accept="image/*" name="imageURL" type="file" onchange="previewImage(event)">
                                     </div>
                                     <div class="col-md-6">
                                         <c:set var="maxUploadSizeVideoMB" value="${applicationScope.maxUploadSizeVideoMB}" />
                                         <c:if test="${empty maxUploadSizeVideoMB}">
-                                            <c:set var="maxUploadSizeVideoMB" value="50" />
-                                            <c:set var="applicationScope.maxUploadSizeVideoMB" value="50" />
+                                            <c:set var="maxUploadSizeVideoMB" value="10" />
+                                            <c:set var="applicationScope.maxUploadSizeVideoMB" value="10" />
                                         </c:if>
                                         <label class="form-label">Video (File Size ${maxUploadSizeVideoMB}MB Limit): </label>
-                                        <video src="" id="currentVideo" style="max-width: 100%; height: auto;" controls="" ></video>
-                                        <input class="form-control"  accept="video/*" name="videoURL" type="file" onchange="previewVideo(event)">
+                                        <video src="" id="currentVideo" style="max-width: 100%; height: auto; display: none" controls="" ></video>
+                                        <input style="margin-top: 10px" id="fileInput" class="form-control"  accept="video/*" name="videoURL" type="file" onchange="previewVideo(event)">
                                     </div>
                                 </div>
                                 <div>
                                     <label class="form-label">Note: </label>
                                     <textarea class="form-control" name="note" required="" >${note}</textarea>
                                 </div>
-                                <button class="btn btn-primary" type="submit"> Submit </button>
+                                <button style="margin-top: 15px" class="btn btn-primary" type="submit"> Submit </button>
                             </form>
                         </div>
                     </div>
@@ -85,36 +85,42 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                                            function previewImage(event) {
-                                                const file = event.target.files[0];
-                                                if (!file)
-                                                    return;
+function previewImage(event) {
+    const file = event.target.files[0];
+    const img = document.getElementById("currentImage");
 
-                                                else {
-                                                    const img = document.getElementById("currentImage");
-                                                    img.src = URL.createObjectURL(file);
+    if (file) {
+        img.src = URL.createObjectURL(file);
+    } else {
+        img.src = ""; // Xóa ảnh khi nhấn Cancel
+    }
+}
+
+function previewVideo(event) {
+    const file = event.target.files[0];
+    const video = document.getElementById("currentVideo");
+
+    if (file) {
+        video.src = URL.createObjectURL(file);
+        video.style.display = "block";
+    } else {
+        video.src = ""; // Xóa video khi nhấn Cancel
+         video.style.display = "none";
+        video.load();  // Reset video để tránh lỗi hiển thị khung hình cũ
+    }
+}
+
+
+                                            document.getElementById("fileInput").addEventListener("change", function () {
+                                                let file = this.files[0]; // Lấy file được chọn
+                                                if (file) {
+                                                    let maxSize = 10 * 1024 * 1024; // 5MB
+                                                    if (file.size > maxSize) {
+                                                        alert("File không được vượt quá 10MB!");
+                                                        this.value = ""; // Reset input file nếu file quá lớn
+                                                    }
                                                 }
-
-
-                                            }
-                                            function previewVideo(event) {
-                                                const file = event.target.files[0];
-                                                if (!file)
-                                                    return;
-
-
-
-                                                const video = document.getElementById("currentVideo");
-                                                video.src = URL.createObjectURL(file);
-//                video.load(); // Nạp lại video để hiển thị
-//                video.play(); // (Tùy chọn) Tự động phát video
-                                            }
-                                            window.onload = function () {
-                                                var videoElement = document.getElementById("currentVideo");
-                                                if (videoElement.src === "") {
-                                                    videoElement.style.display = "none";  // Ẩn video nếu src rỗng
-                                                }
-                                            };
+                                            });
         </script>
     </body>
 </html>

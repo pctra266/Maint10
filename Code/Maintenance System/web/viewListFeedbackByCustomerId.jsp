@@ -38,11 +38,11 @@
                         <table class="table table-hover my-0">
                             <thead>
                                 <tr>
-                                    <th>Create Date</th>
-                                    <th>Feedback</th>
-                                    <th>Image</th>
-                                    <th>Video</th>
-                                    <th></th>
+                                    <th style="width: 10%;">Create Date</th>
+                                    <th style="width: 25%;" >Feedback</th>
+                                    <th style="width: 20%;" >Image</th>
+                                    <th style="width: 20%;" >Video</th>
+                                    <th style="width: 5%;"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,12 +51,15 @@
                                         <td>${o.dateCreated}</td>
                                         <td>${o.note}</td>
                                         <td><img src="${o.imageURL}" alt="" style="max-width: 100%; height: auto;"></td>
-                                        <td><video src="${o.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video></td>
+                                        <td>
+                                            <div style="display: ${empty o.videoURL ? 'none' : 'block'}" >
+                                            <video src="${o.videoURL}" style="max-width: 100%; height: auto;" controls="" ></video>
+                                            </div>
+                                        </td>
                                         <td><a href="#" data-url="feedback?action=deleteFeedbackFromCustomer&feedbackIdDeleteFromCustomer=${o.feedbackID}" onclick="doDelete(event)">Delete</td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
-
                         </table>
                         </form>
                     </div>

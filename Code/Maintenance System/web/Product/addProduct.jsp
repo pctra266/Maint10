@@ -378,6 +378,17 @@
                                             reader.readAsDataURL(event.target.files[0]);
                                         }
                                     });
+
+                                    document.getElementById("newImage").addEventListener("change", function () {
+                                        let file = this.files[0]; // Lấy file được chọn
+                                        if (file) {
+                                            let maxSize = 5 * 1024 * 1024; // 5MB
+                                            if (file.size > maxSize) {
+                                                alert("File không được vượt quá 5MB!");
+                                                this.value = ""; // Reset input file nếu file quá lớn
+                                            }
+                                        }
+                                    });
         </script>
 
     </body>

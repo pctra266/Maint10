@@ -129,8 +129,9 @@ public static String saveVideo(Part videoPart, HttpServletRequest request, Strin
 
     // 🔥 Lấy giá trị maxSize từ ServletContext
     Integer maxSizeMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeVideoMB");
+    System.out.println("maxSizeMB luc lay:" + maxSizeMB);
     if (maxSizeMB == null) {
-        maxSizeMB = 50; // Giá trị mặc định 50MB
+        maxSizeMB = 10; 
         request.getServletContext().setAttribute("maxUploadSizeVideoMB", maxSizeMB);
     }
 

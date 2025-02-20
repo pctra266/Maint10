@@ -32,7 +32,7 @@
                 customImageSizeInput.value = "${maxUploadSizeImageMB}"; // Thiết lập giá trị
             }
 
-            if (videoSizeSelect.value !== "50" && videoSizeSelect.value !== "100") {
+            if (videoSizeSelect.value !== "5" && videoSizeSelect.value !== "10") {
                 videoSizeSelect.value = "custom";
                 customVideoSizeInput.style.display = "inline-block";
                 customVideoSizeInput.value = "${maxUploadSizeVideoMB}"; // Thiết lập giá trị
@@ -72,20 +72,20 @@
 
         <c:set var="maxUploadSizeVideoMB" value="${applicationScope.maxUploadSizeVideoMB}" />
         <c:if test="${empty maxUploadSizeVideoMB}">
-            <c:set var="maxUploadSizeVideoMB" value="50" />
-            <c:set var="applicationScope.maxUploadSizeVideoMB" value="50" />
+            <c:set var="maxUploadSizeVideoMB" value="10" />
+            <c:set var="applicationScope.maxUploadSizeVideoMB" value="10" />
         </c:if>
 
         <p><strong>Current video limit:</strong> ${maxUploadSizeVideoMB} MB</p>
 
         <label>Select maximum file size for videos:</label>
         <select id="maxSizeSelectVideo" name="maxSizeVideo" onchange="toggleCustomInput('Video')">
-            <option value="50" ${maxUploadSizeVideoMB == 50 ? "selected" : ""}>50 MB</option>
-            <option value="100" ${maxUploadSizeVideoMB == 100 ? "selected" : ""}>100 MB</option>
-            <option value="custom" ${!(maxUploadSizeVideoMB == 50 || maxUploadSizeVideoMB == 100) ? "selected" : ""} >Customize</option>
+            <option value="5" ${maxUploadSizeVideoMB == 5 ? "selected" : ""}>5 MB</option>
+            <option value="10" ${maxUploadSizeVideoMB == 10 ? "selected" : ""}>10 MB</option>
+            <option value="custom" ${!(maxUploadSizeVideoMB == 5 || maxUploadSizeVideoMB == 10) ? "selected" : ""} >Customize</option>
         </select>
         
-            <input type="number" id="customSizeVideo" name="customSizeVideo" min="1" max="100" placeholder="Enter size()" value="${maxUploadSizeVideoMB}" style="display:none;">
+            <input type="number" id="customSizeVideo" name="customSizeVideo" min="1" max="10" placeholder="Enter size(MB)" value="${maxUploadSizeVideoMB}" style="display:none;">
         <br><br>
         <div>
             ${errorMessage}

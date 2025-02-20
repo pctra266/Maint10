@@ -61,7 +61,7 @@ public class FeedbackDAO {
                 query += sortOrder;
             }
         } else {
-            query += " order by DateCreated asc\n";
+            query += " order by DateCreated desc\n";
         }
         query += " offset ? rows  fetch next ? rows only;";
         try {

@@ -10,198 +10,134 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
-            .gom{
-                display: flex;
-            }
-
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f5f5f5;
-                color: #333;
-                margin: 0;
-                padding: 0;
-            }
-
-            .wrapper {
-                display: flex;
-                min-height: 100vh;
-            }
-
-            .main {
-                flex: 1;
+            /* General Styles for Main Content */
+            main.content {
+                background-color: #f4f6f9;
                 padding: 20px;
-                background-color: #ffffff;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                margin: 20px;
+                font-family: 'Inter', sans-serif;
             }
 
-            h1 {
-                font-size: 2rem;
-                color: #444;
+            /* Alert Messages */
+            .alert {
+                padding: 15px;
+                border-radius: 5px;
+                margin-bottom: 20px;
+            }
+            .alert-danger {
+                background-color: #ffcccc;
+                color: #a94442;
+                border: 1px solid #a94442;
+            }
+            .alert-success {
+                background-color: #ccffcc;
+                color: #2d862d;
+                border: 1px solid #2d862d;
+            }
+
+            /* Form Controls */
+            div.gom {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                align-items: center;
+                padding: 15px;
+                border-radius: 8px;
                 margin-bottom: 20px;
             }
 
-            button, select, input {
-                font-family: 'Inter', sans-serif;
-                font-size: 1rem;
-                padding: 10px;
-                margin: 5px;
-                border: 1px solid #ddd;
+            select, input[type="text"], input[type="number"] {
+                padding: 8px;
+                border: 1px solid #ccc;
                 border-radius: 4px;
-                background-color: #fff;
-                color: #333;
-                transition: all 0.3s ease;
+                font-size: 14px;
             }
-
-            button:hover, select:hover, input:hover {
-                background-color: #f4f4f4;
+            button {
+                background-color: #3B7DDD;
+                color: white;
+                border: none;
+                padding: 8px 12px;
+                border-radius: 5px;
                 cursor: pointer;
+                transition: background 0.3s ease;
+            }
+            button:hover {
+                background-color: #0056b3;
             }
 
-            button.search {
-                background-color: #3B7DDD;
-                color: white;
-            }
-
-            button.search:hover {
-                background-color: #007bb5;
-            }
-
-            button.add-product {
-                background-color: #3B7DDD;
-                color: white;
-            }
-
-            button.add-product:hover {
-                background-color: #007bb5;
-            }
-
-            /* Table Styles */
+            /* Table Styling */
             table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 20px;
+                background: #fff;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.1);
+                margin-top: 10px;
             }
-
-            table th, table td {
+            th, td {
                 padding: 12px;
                 text-align: left;
                 border-bottom: 1px solid #ddd;
             }
-
-            table th {
-                background-color: #f2f2f2;
-                color: #333;
-                font-weight: bold;
+            th {
+                background: #3B7DDD;
+                color: white;
+                font-weight: 600;
             }
-
-            table tr:hover {
-                background-color: #f9f9f9;
-            }
-
-            table img {
-                max-width: 80px;
-                height: auto;
+            tr:hover {
+                background: #f1f1f1;
             }
 
             /* Action Buttons */
-            a.btn-update, a.btn-delete {
+            .btn-update, .btn-delete {
                 text-decoration: none;
-                color: #fff;
-                padding: 6px 12px;
-                border-radius: 4px;
+                padding: 6px 10px;
+                border-radius: 5px;
+                font-size: 14px;
                 display: inline-block;
-                transition: background-color 0.3s ease;
+                transition: 0.3s;
             }
-
-            a.btn-update {
-                background-color: #3B7DDD;
-            }
-
-            a.btn-update:hover {
-                background-color: #007bb5;
-            }
-
-            a.btn-delete {
-                background-color: #f44336;
-            }
-
-            a.btn-delete:hover {
-                background-color: #d32f2f;
-            }
-
-            /* Select and Input Styles */
-            select, input[type="text"] {
-                width: 200px;
-            }
-
-            select option {
-                padding: 10px;
-            }
-
-            /* Pagination Styles */
-            .pagination {
-                display: flex;
-                justify-content: center;
-                margin-top: 20px;
-            }
-
-            .pagination a {
-                padding: 10px 15px;
-                margin: 0 5px;
-                background-color: #f0f0f0;
-                color: #333;
-                border-radius: 4px;
-                text-decoration: none;
-                transition: background-color 0.3s ease;
-            }
-
-            .pagination a:hover {
-                background-color: #e0e0e0;
-            }
-
-            .pagination a.active {
-                background-color: #4CAF50;
+            .btn-update {
+                background: #509E41;
                 color: white;
             }
+            .btn-update:hover {
+                background: #218838;
+                text-decoration: none;
+                color: white;
+            }
+            .btn-delete {
+                background: #EA2939;
+                color: white;
+            }
+            .btn-delete:hover {
+                background: #c82333;
+                text-decoration: none;
+                color: white;
 
-            .pagination a:focus {
-                outline: none;
+
             }
 
             /* Responsive Design */
             @media (max-width: 768px) {
-                .wrapper {
+                main.content {
+                    padding: 10px;
+                    margin: 10px;
+                }
+                div.gom {
                     flex-direction: column;
                 }
-
-                .main {
-                    padding: 10px;
-                }
-
                 table {
-                    font-size: 0.9rem;
+                    font-size: 14px;
                 }
-
-                button, select, input {
-                    width: 100%;
-                    margin: 10px 0;
-                }
-
-                .pagination a {
-                    font-size: 0.9rem;
-                    padding: 8px 12px;
+                th, td {
+                    padding: 8px;
                 }
             }
 
-            @media (max-width: 480px) {
-                h1 {
-                    font-size: 1.5rem;
-                }
-
-                .pagination a {
-                    font-size: 0.8rem;
-                    padding: 6px 10px;
-                }
-            }
         </style>
 
     </head>
@@ -225,16 +161,21 @@
                         </div>
                     </c:if>
 
-                    <div style="display: flex">
-                        <label for="recordsPerPage">Products per page:</label>
-                        <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
-                        <button onclick="updateRecordsPerPage()">Apply</button>
+                    <div style="display: flex; align-items: center; gap: 2%">
+                        <div>
+                            <label for="recordsPerPage">Products per page:</label>
+                            <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
+                            <button onclick="updateRecordsPerPage()">Apply</button>
+                        </div>
 
-                        <label for="importExcel">Import Excel:</label>
-                        <form action="importExcel" method="post" enctype="multipart/form-data">
-                            <input id="importExcel" type="file" name="productExcel" required>
-                            <button type="submit">Upload</button>
-                        </form>
+                        <div style="display: flex; align-items: center;">
+                            <label style="margin-right: 2px" for="importExcel">Import Excel:</label>
+                            <form action="importExcel" method="post" enctype="multipart/form-data">
+                                <input style="" id="importExcel" type="file" name="productExcel" required>
+                                <button type="submit">Upload</button>
+                            </form>
+                        </div>
+
                     </div>
 
                     <div class="gom">
@@ -284,7 +225,7 @@
                         </form>
                     </div>
 
-                    <h1>Product List</h1>
+                    <h1 style="text-align: center">Product List</h1>
                     <table>
                         <thead>
                             <tr>
@@ -312,7 +253,7 @@
                                             <img src="${product.image}" alt="Product Image" width="80">
                                         </c:if>
                                     </td>
-                                    <td>
+                                    <td style="width: 15%">
                                         <a href="updateproduct?id=${product.productId}" class="btn-update">
                                             <i class="fas fa-edit"></i> Update
                                         </a>
@@ -381,7 +322,6 @@
                                 }
                             }
                         });
-
 
                     </script>
 
