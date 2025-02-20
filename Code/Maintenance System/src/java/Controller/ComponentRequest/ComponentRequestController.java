@@ -6,6 +6,7 @@
 package Controller.ComponentRequest;
 
 import DAO.ComponentRequestDAO;
+import Model.Component;
 import Model.Pagination;
 import Model.ProductDetail;
 import Utils.FormatUtils;
@@ -18,6 +19,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.List;
+import org.apache.commons.collections4.list.AbstractLinkedList;
 
 /**
  *
@@ -69,10 +72,12 @@ public class ComponentRequestController extends HttpServlet {
         if(action == null){
             action = "viewComponentRequestDashboard";
         }
+        System.out.println("action la: " + action);
 //        String warrantyCardCode, String productCode,
 //          String unknownProductCode,  String warrantyStatus,String typeMaintain, String sort, 
 //          String order, int page, int pageSize
         //parameter
+        String warrantyCardID = request.getParameter("warrantyCardID");
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("warrantyCardCode"));
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
@@ -86,6 +91,7 @@ public class ComponentRequestController extends HttpServlet {
         String typeMaintain = request.getParameter("typeMaintain");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        request.setAttribute("warrantyCardID", warrantyCardID);
         request.setAttribute("warrantyCardCode", warrantyCardCode);
         request.setAttribute("productCode", productCode);
         request.setAttribute("unknownProductCode", unknownProductCode);
@@ -99,7 +105,6 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalProductUnderMaintain(warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain);
                 break;
         }
-        System.out.println("total: "+ total);
         //paging
         Pagination pagination = new Pagination();
         String pageParam = request.getParameter("page");
@@ -112,11 +117,6 @@ public class ComponentRequestController extends HttpServlet {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        
-        //do
-        switch(action){
-            case "viewComponentRequestDashboard":
-                //======phan trang
                 pagination.setListPageSize(total); 
                 pagination.setCurrentPage(page);
                 pagination.setTotalPages(totalPages);
@@ -125,6 +125,10 @@ public class ComponentRequestController extends HttpServlet {
                 pagination.setSort(sort);
                 pagination.setOrder(order);
                 pagination.setUrlPattern("/componentRequest");
+        //do
+        switch(action){
+            case "viewComponentRequestDashboard":
+                //======phan trang
                 pagination.setSearchFields(new String[]{"action","productCode","unknownProductCode","warrantyStatus","typeMaintain"});
                 pagination.setSearchValues(new String[]{"viewComponentRequestDashboard",productCode,unknownProductCode,warrantyStatus,typeMaintain});
                 request.setAttribute("pagination", pagination);
@@ -133,6 +137,11 @@ public class ComponentRequestController extends HttpServlet {
                 unknownProductCode, warrantyStatus, typeMaintain, sort, order, page, pageSize);
                 request.setAttribute("listProductUnderMaintain", listProductUnderMaintain);
                 request.getRequestDispatcher("requestComponentDashboard.jsp").forward(request, response);
+                break;
+            case "createComponentRequest":
+                ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode);
+                request.setAttribute("listComponentByProductCode", listComponentByProductCode);
+                request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;
         }
     } 
@@ -147,7 +156,64 @@ public class ComponentRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        //dao
+        ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
+        
+        //action
+        String action = request.getParameter("action");
+        
+        
+        if(action == null){
+            action = "viewComponentRequestDashboard";
+        }
+        
+        //parameter
+        String warrantyCardIDstr = request.getParameter("warrantyCardID");
+        String note = request.getParameter("note");
+        request.setAttribute("note", note);
+        request.setAttribute("warrantyCardID", warrantyCardIDstr);
+        String[] quantities = request.getParameterValues("quantities");
+        String[] componentIDs = request.getParameterValues("componentIDs");
+        List<Integer> listQuantities = new ArrayList<Integer>();
+        List<Integer> listComponentIDs = new ArrayList<Integer>();
+        listQuantities = parselistStringToList(quantities);
+        listComponentIDs = parselistStringToList(componentIDs);
+        boolean valid = true;
+        //do
+        switch(action){
+            case "createComponentRequest":
+                if(listQuantities == null || listComponentIDs == null){
+                    valid = false;
+                }
+            if(valid){
+                if(!componentRequestDao.createComponentRequest(Integer.parseInt(warrantyCardIDstr), note, listComponentIDs, listQuantities)){
+                    request.setAttribute("mess", "create fail");
+                }else{
+                    request.setAttribute("mess", "success");
+                }
+            }else{
+                request.setAttribute("mess", "in valid do cai gi do");
+            }
+            request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
+                break;
+        }
+    }
+    
+    private List<Integer> parselistStringToList(String[] listString){
+        List<Integer> list = new ArrayList<Integer>();
+        for (String str : listString) {
+            try {
+                Integer x = Integer.parseInt(str);
+                list.add(x);
+            } catch (Exception e) {
+            }
+        }
+        System.out.println("So luong phan tu list String: " + listString.length);
+        System.out.println("So luong list thuc the: " + list.size());
+        if(listString.length != list.size()){
+            return null;
+        }
+        return list;
     }
 
     /** 

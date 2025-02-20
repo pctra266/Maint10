@@ -21,7 +21,7 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <div class="alert-success">${param.mess}</div>
-                    <h1 class="text-center">List Product Maintain</h1>
+                    <h1 class="text-center">Component Request Dashboard</h1>
                     <div>
                          <form method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="viewComponentRequestDashboard">
@@ -45,14 +45,14 @@
                                </div>
                         </div>
                         <div class="col-sm-6 col-md-6" style="width: 500px">
-                                 <select style="margin-top: 15px" class="form-select" name="warrantyStatus">
+                                 <select style="margin-top: 15px" class="form-select" name="warrantyStatus" onchange="this.form.submit()">
                                      <option ${(warrantyStatus=='')?"selected":""} value="all" >Warranty Status </option>
                                     <option ${(warrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
                                     <option ${(warrantyStatus=='done')?"selected":""} value="done">Done</option>
                                     <option ${(warrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
                                     <option ${(warrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
                                 </select>
-                                 <select style="margin-top: 15px" class="form-select" name="typeMaintain">
+                                 <select style="margin-top: 15px" class="form-select" name="typeMaintain" onchange="this.form.submit()">
                                     <option value="">Type Maintain</option>
                                     <option ${(typeMaintain=='maintain')?"selected":""} value="maintain">Maintain</option>
                                     <option ${(typeMaintain=='repair')?"selected":""} value="repair">Repair</option>
@@ -90,7 +90,7 @@
                                 <th>Type</th>
                                 <th>Issue Description</th>
                                 <th>Warranty Status</th>
-                                <!--<th></th>-->
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -103,7 +103,7 @@
                                     <td>${o.productName!=null?"Maintain":o.unknownProductName!=null?"Repair":"None"}</td>
                                     <td>${o.issueDescription}</td>
                                     <td>${o.warrantyStatus}</td>
-                                    <!--<td><a class="btn btn-primary" href="feedback?action=createFeedback&warrantyCardID=${o.warrantyCardID}">Create Feedback</a></td>-->
+                                    <td><a class="btn btn-primary" href="componentRequest?action=createComponentRequest&warrantyCardID=${o.warrantyCardID}&productCode=${o.productCode}">Create Component Request</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>

@@ -3,11 +3,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
+import Model.Component;
 import Model.ProductDetail;
+import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.List;
 
 /**
  *
@@ -87,7 +91,6 @@ public class ComponentRequestDAO {
             int offset = (page-1)*pageSize;
             ps.setInt(count++, offset);
             ps.setInt(count++, pageSize);
-            System.out.println(query);
             rs = ps.executeQuery();
             while(rs.next()){
                 ProductDetail productDetail = new ProductDetail();
@@ -156,12 +159,125 @@ public class ComponentRequestDAO {
         }
         return total;
     }
+    private  ArrayList<Component> getallListComponent(){
+        ArrayList<Component> list = new ArrayList<>();
+            String query = "select ComponentID,ComponentCode, ComponentName from Component";
+        try{
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                Component component = new Component();
+                component.setComponentID(rs.getInt("ComponentID"));
+                component.setComponentCode(rs.getString("ComponentCode"));
+                component.setComponentName(rs.getString("ComponentName"));
+                list.add(component);
+            }
+        }catch(Exception e){
+            
+        }
+        return list;
+    }
+    
+    public ArrayList<Component> getallListComponentByProductCode(String productCode){
+        ArrayList<Component> list = new ArrayList<>();
+            String query = """
+                           select c.ComponentID, c.ComponentCode, c.ComponentName 
+                           \tfrom Product p 
+                           \tjoin ProductComponents pc on p.ProductID = pc.ProductID
+                           \tjoin Component c on pc.ComponentID = c.ComponentID
+                           \twhere 1=1""";
+            if(productCode != null && !productCode.trim().isEmpty()){
+                query += " and p.Code like ?";
+            }else{
+                return getallListComponent();
+            }
+        try{
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            if(productCode != null && !productCode.trim().isEmpty()){
+                ps.setString(1, productCode);
+            }
+            rs = ps.executeQuery();
+            while(rs.next()){
+                Component component = new Component();
+                component.setComponentID(rs.getInt("ComponentID"));
+                component.setComponentCode(rs.getString("ComponentCode"));
+                component.setComponentName(rs.getString("ComponentName"));
+                list.add(component);
+            }
+        }catch(Exception e){
+            
+        }
+        return list;
+    }
+    
+        public int insertComponentRequest(int warrantyCardID, String note, Connection conn) throws SQLException {
+        int componentRequestID = -1;
+        String query = "INSERT INTO ComponentRequest (WarrantyCardID, [Date], Status, Note) "
+                + "VALUES (?, GETDATE(), 'waiting', ?)";
+        try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setInt(1, warrantyCardID);
+            ps.setString(2, note);
+            ps.executeUpdate();
+
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    componentRequestID = rs.getInt(1);
+                }
+            }
+        }
+        return componentRequestID;
+        }
+        
+        public void insertComponentRequestDetails(int componentRequestID, List<Integer> componentIDs, List<Integer> quantities, Connection conn) throws SQLException {
+        String query = "INSERT INTO ComponentRequestDetail (ComponentID, ComponentRequestID, Quantity) VALUES (?, ?, ?)";
+        if (componentIDs.size() != quantities.size()) {
+            throw new IllegalArgumentException("ComponentIDs and Quantities must have the same size.");
+        }
+
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
+            for (int i = 0; i < componentIDs.size(); i++) {
+                ps.setInt(1, componentIDs.get(i));
+                ps.setInt(2, componentRequestID);
+                ps.setInt(3, quantities.get(i));
+                ps.addBatch();
+            }
+            ps.executeBatch();
+        }
+    }
+        public boolean createComponentRequest(int warrantyCardID, String note, List<Integer> componentIDs, List<Integer> quantities) {
+        boolean success = false;
+        try {
+            conn = new DBContext().connection;
+            conn.setAutoCommit(false);
+
+            int componentRequestID = insertComponentRequest(warrantyCardID, note, conn);
+            if (componentRequestID > 0) {
+                insertComponentRequestDetails(componentRequestID, componentIDs, quantities, conn);
+                conn.commit(); 
+                success = true;
+            } else {
+                conn.rollback(); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return success;
+    }
+    
+            
     public static void main(String[] args) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         ComponentRequestDAO dao = new ComponentRequestDAO();
-        list = dao.getAllListProductUnderMaintain("", "", "", "fixing", "", "", "", 1, 5);
-        for (ProductDetail productDetail : list) {
-            System.out.println(productDetail);
+//        list = dao.getAllListProductUnderMaintain("", "", "", "fixing", "", "", "", 1, 5);
+//        for (ProductDetail productDetail : list) {
+//            System.out.println(productDetail);
+//        }
+        ArrayList<Component> list1 = dao.getallListComponentByProductCode("");
+        for (Component component : list1) {
+            System.out.println(component);
         }
 //        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
     }
