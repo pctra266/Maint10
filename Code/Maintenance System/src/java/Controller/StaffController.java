@@ -9,6 +9,7 @@ import DAO.StaffDAO;
 import DAO.StaffLogDAO;
 import Model.Staff;
 import Model.StaffLog;
+import Model.Pagination;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -21,6 +22,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 /**
@@ -74,7 +76,7 @@ public class StaffController extends HttpServlet {
                 }
                     
                 int pageIndex = 1;
-                String pageIndexStr = request.getParameter("index");
+                String pageIndexStr = request.getParameter("page");
 
                 if (pageIndexStr != null) {
                     try {
@@ -87,6 +89,38 @@ public class StaffController extends HttpServlet {
                 list = dao.getAllStaff(name, search, pageIndex, pagesize, column, sortOrder);
                 totalStaff = dao.getAllStaff(name, search, column, sortOrder).size();
                 int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                
+                Pagination pagination = new Pagination();
+                
+                pagination.setUrlPattern( "/StaffController");
+                pagination.setCurrentPage(pageIndex);
+                pagination.setPageSize(pagesize);
+                pagination.setTotalPages(totalPageCount);
+                pagination.setTotalPagesToShow(5); // Hiển thị tối đa 5 trang liền kề
+                pagination.setSort(column == null ? "" : column);
+                pagination.setOrder(sortOrder == null ? "" : sortOrder);
+                
+                List<String> searchFields = new ArrayList();
+                List<String> searchValues = new ArrayList<>();
+                if(searchname != null && !searchname.isEmpty()){
+                    searchFields.add("searchname");
+                    searchValues.add(searchname);
+                }
+                if(search != null && !search.isEmpty()){
+                    searchFields.add("search");
+                    searchValues.add(search);
+                }
+                if(page_size != null && !page_size.isEmpty()){
+                    searchFields.add("page_size");
+                    searchValues.add(page_size);
+                }
+                pagination.setSearchFields(searchFields.toArray(new String[searchFields.size()]));
+                pagination.setSearchValues(searchValues.toArray(new String[searchValues.size()]));
+
+                
+                // Gán các thuộc tính cần thiết cho JSP
+                request.setAttribute("pagination", pagination);
+                
                 request.setAttribute("totalPageCount", totalPageCount);
                 request.setAttribute("search", search);
                 request.setAttribute("searchname", searchname);
@@ -106,8 +140,7 @@ public class StaffController extends HttpServlet {
                 String UpdateStaffID = request.getParameter("staffID");
                 Staff staff = dao.getInformationByID(UpdateStaffID);
                 request.setAttribute("staff", staff);
-//                PrintWriter out = response.getWriter();
-//                out.print(staff.getImgage());
+                
                 request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                 break;
             default:
@@ -155,7 +188,7 @@ public class StaffController extends HttpServlet {
                     }
                 }
                 int pageIndex = 1;
-                String pageIndexStr = request.getParameter("index");
+                String pageIndexStr = request.getParameter("page");
 
                 if (pageIndexStr != null) {
                     try {
@@ -168,6 +201,36 @@ public class StaffController extends HttpServlet {
         int totalStaff;
         totalStaff = dao.getAllStaff(searchname, search, column, sortOrder).size();
         int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);  
+        Pagination pagination = new Pagination();
+                
+                pagination.setUrlPattern( "/StaffController");
+                pagination.setCurrentPage(pageIndex);
+                pagination.setPageSize(pagesize);
+                pagination.setTotalPages(totalPageCount);
+                pagination.setTotalPagesToShow(5); // Hiển thị tối đa 5 trang liền kề
+                pagination.setSort(column == null ? "" : column);
+                pagination.setOrder(sortOrder == null ? "" : sortOrder);
+                
+                List<String> searchFields = new ArrayList();
+                List<String> searchValues = new ArrayList();
+                if(searchname != null && !searchname.isEmpty()){
+                    searchFields.add("searchname");
+                    searchValues.add(searchname);
+                }
+                if(search != null && !search.isEmpty()){
+                    searchFields.add("search");
+                    searchValues.add(search);
+                }
+                if(page_size != null && !page_size.isEmpty()){
+                    searchFields.add("page_size");
+                    searchValues.add(page_size);
+                }
+                pagination.setSearchFields(searchFields.toArray(new String[searchFields.size()]));
+                pagination.setSearchValues(searchValues.toArray(new String[searchValues.size()]));
+
+                
+                // Gán các thuộc tính cần thiết cho JSP
+                request.setAttribute("pagination", pagination);
         
         switch(action){
             
@@ -182,11 +245,7 @@ public class StaffController extends HttpServlet {
                 Part imagePart = request.getPart("newImage");
                 String imagePath = saveImage(imagePart, request);
                 
-
-                list = dao.getAllStaff(searchname, search, pageIndex, pagesize, column, sortOrder);
-                
-                
-                if (usename.isEmpty() || password.isEmpty() || role == null ||
+                if (usename.isEmpty() || password.isEmpty() ||
                     name.isEmpty() || email.isEmpty() || phone.isEmpty() || address.isEmpty()) {
                     request.setAttribute("errorMessage", "Không được bỏ trống bất kỳ trường nào.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
@@ -221,6 +280,9 @@ public class StaffController extends HttpServlet {
                 }
                 
                 boolean add = dao.addStaff(usename, password, role, name, email, phone, address, imagePath);
+                String staffID = dao.updateStaff_Role(phone);
+                boolean add_role = dao.addStaff_Role(staffID, role);
+                list = dao.getAllStaff(searchname, search, pageIndex, pagesize, column, sortOrder);
                 if (add) {
                     request.setAttribute("message", "Thêm nhân viên thành công!");
                 } else {
@@ -238,6 +300,7 @@ public class StaffController extends HttpServlet {
 
                 request.getRequestDispatcher("Staff.jsp").forward(request, response);
                 break;
+            
             case "Update":
                 String UpdatestaffID = request.getParameter("staffID").trim();
                 String Updateusename = request.getParameter("usename").trim();
@@ -249,8 +312,7 @@ public class StaffController extends HttpServlet {
                 String Updateaddress = request.getParameter("address").trim();
                 Part UpdateimagePart = request.getPart("newImage");
                 String UpdateimagePath = saveImage(UpdateimagePart, request);
-                
-                if (Updateusename.isEmpty() || Updatepassword.isEmpty() || Updaterole == null ||
+                if (Updateusename.isEmpty() || Updatepassword.isEmpty() || 
                     Updatename.isEmpty() || Updateemail.isEmpty() || Updatephone.isEmpty() || Updateaddress.isEmpty() || UpdatestaffID.isEmpty()) {
                     request.setAttribute("errorMessage", "Không được bỏ trống bất kỳ trường nào.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
@@ -312,7 +374,7 @@ public class StaffController extends HttpServlet {
                 StaffLogDAO  stafflog = new StaffLogDAO();
                 boolean update = stafflog.addStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole, Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean uppdate = staff.updateStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole, Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
-                
+                boolean update_role = staff.updateStaff_Role(UpdatestaffID, Updaterole);
                 if (update) {
                     request.setAttribute("message", "Thay đổi thành công!");
                 } else {
@@ -338,8 +400,6 @@ public class StaffController extends HttpServlet {
     // Đường dẫn đến thư mục build/web/img/Staff
     String buildUploadPath = request.getServletContext().getRealPath("/") + "img/Staff";
 
-    System.out.println("Dev Upload Path: " + devUploadPath);
-    System.out.println("Build Upload Path: " + buildUploadPath);
 
     File devUploadDir = new File(devUploadPath);
     File buildUploadDir = new File(buildUploadPath);

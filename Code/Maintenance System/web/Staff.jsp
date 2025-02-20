@@ -172,6 +172,7 @@
                             </tr>   
                         </thead>
                         <tbody>
+                            <p>Size of list: ${list.size()}</p>
                             <c:forEach var="List" items="${list}">
                                 <tr>
                                     <td># ${List.getStaffID()}</td>
@@ -198,15 +199,12 @@
 
 
                                 </tr>
-                                    </c:forEach>
+                            </c:forEach>
 
                         </tbody>
                     </table>
-                    <div style="text-align: center; margin-top: 20px;">
-                        <c:forEach begin="1" end="${totalPageCount}" var="index">
-                            <a href="StaffController?index=${index}&searchname=${param.searchname}&search=${param.search}&column=${param.column}&sortOrder=${param.sortOrder}&page_size=${param.page_size}" style="margin: 0 5px;">${index}</a>
-                        </c:forEach>
-                    </div>           
+
+                    <jsp:include page="/includes/pagination.jsp" />           
                      
                 
                 </main>

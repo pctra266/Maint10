@@ -185,12 +185,12 @@ button:hover {
                                 name="role"
                                 required
                                 >
-                                <option value="Admin" ${staff.getRole() == 'Admin' ? 'selected' : ''}>Admin</option>
-                                <option value="Technician" ${staff.getRole() == 'Technician' ? 'selected' : ''}>Technician</option>
-                                <option value="Inventory Manager" ${staff.getRole() == 'Inventory Manager' ? 'selected' : ''}>Inventory Manager</option>
-                                <option value="Customer" ${staff.getRole() == 'Customer' ? 'selected' : ''}>Customer</option>
-                                <option value="Repair Contractor" ${staff.getRole() == 'Repair Contractor' ? 'selected' : ''}>Repair Contractor</option>
-                                <option value="Customer Service Agent" ${staff.getRole() == 'Customer Service Agent' ? 'selected' : ''}>Customer Service Agent</option>
+                                <option value="1" ${staff.getRole() == '1' ? 'selected' : ''}>Admin</option>
+                                <option value="2" ${staff.getRole() == '2' ? 'selected' : ''}>Technician</option>
+                                <option value="3" ${staff.getRole() == '3' ? 'selected' : ''}>Inventory Manager</option>
+                                <option value="4" ${staff.getRole() == '4' ? 'selected' : ''}>Customer</option>
+                                <option value="5" ${staff.getRole() == '5' ? 'selected' : ''}>Repair Contractor</option>
+                                <option value="6" ${staff.getRole() == '6' ? 'selected' : ''}>Customer Service Agent</option>
                             </select>
 
                         </div>

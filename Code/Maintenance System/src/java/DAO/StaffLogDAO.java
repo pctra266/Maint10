@@ -154,7 +154,7 @@ public class StaffLogDAO extends DBContext{
     public boolean addStaff(String staffId, String useNameS, String passworldS, String role, String name, String email, String phone, String address,String image){
         PreparedStatement stm =null ;
         ResultSet rs = null;
-        String sql = "INSERT INTO StaffLog (StaffID,UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address],Image,Time,Status) VALUES (?,?,?,?,?,?,?,?,?,GETDATE(),'Active')";
+        String sql = "INSERT INTO StaffLog (StaffID,UsernameS, PasswordS, [RoleID], [Name], Email, Phone, [Address],Image,Time,Status) VALUES (?,?,?,?,?,?,?,?,?,GETDATE(),'Active')";
         try {
             stm = connection.prepareStatement(sql);
             stm.setString(1, staffId);

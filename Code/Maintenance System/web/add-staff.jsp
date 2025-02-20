@@ -185,12 +185,12 @@
                             required
                             >
                             <option value="option1"></option>
-                            <option value="Admin">Admin</option>
-                            <option value="Technician">Technician</option>
-                            <option value="Inventory Manager">Inventory Manager</option>
-                            <option value="Customer">Customer</option>
-                            <option value="Repair Contractor">Repair Contractor</option>
-                            <option value="Customer Service Agent">Customer Service Agent</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Technician</option>
+                            <option value="3">Inventory Manager</option>
+                            <option value="4">Customer</option>
+                            <option value="5">Repair Contractor</option>
+                            <option value="6">Customer Service Agent</option>
                         </select>
                         <label for="password" class="add__input-label"
                             >Role</label

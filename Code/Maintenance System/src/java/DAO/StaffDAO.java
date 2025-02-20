@@ -37,7 +37,7 @@ public class StaffDAO extends DBContext{
                 staff.setStaffID(rs.getInt("StaffID"));
                 staff.setUsernameS(rs.getString("UsernameS"));
                 staff.setPasswordS(rs.getString("PasswordS"));
-                staff.setRole(rs.getString("Role"));
+                staff.setRole(rs.getInt("Role"));
                 staff.setName(rs.getString("Name"));
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
@@ -87,7 +87,7 @@ public class StaffDAO extends DBContext{
                 staff.setStaffID(rs.getInt("StaffID"));
                 staff.setUsernameS(rs.getString("UsernameS"));
                 staff.setPasswordS(rs.getString("PasswordS"));
-                staff.setRole(rs.getString("Role"));
+                staff.setRole(rs.getInt("Role"));
                 staff.setName(rs.getString("Name"));
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
@@ -113,7 +113,7 @@ public class StaffDAO extends DBContext{
                 int staffID = rs.getInt("staffID");
                 String userNameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
+                int role = rs.getInt("roleid");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -132,7 +132,7 @@ public class StaffDAO extends DBContext{
     public boolean addStaff(String useNameS, String passworldS, String role, String name, String email, String phone, String address,String image){
         PreparedStatement stm =null ;
         ResultSet rs = null;
-        String sql = "INSERT INTO Staff (UsernameS, PasswordS, [Role], [Name], Email, Phone, [Address],Image) VALUES (?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO Staff (UsernameS, PasswordS, [RoleID], [Name], Email, Phone, [Address],Image) VALUES (?,?,?,?,?,?,?,?);";
         try {
             stm = connection.prepareStatement(sql);   
             stm.setString(1, useNameS);
@@ -144,6 +144,7 @@ public class StaffDAO extends DBContext{
             stm.setString(7, address);
             stm.setString(8, image);
             
+            
             rs = stm.executeQuery();
             
         } catch (SQLException e) {
@@ -151,10 +152,57 @@ public class StaffDAO extends DBContext{
         }
         return true;
     }
+    public boolean addStaff_Role(String staffID, String roleID){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "INSERT INTO Staff_Role (StaffID, RoleID) VALUES (?, ?)";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, staffID);
+            stm.setString(2, roleID);
+            rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
+        public boolean updateStaff_Role(String staffID, String roleID){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String sql = "UPDATE Staff_Role set RoleID = ? where StaffID =?";
+        try {
+            stm = connection.prepareStatement(sql);   
+            stm.setString(1, roleID);
+            stm.setString(2, staffID);
+            rs = stm.executeQuery();
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return true;
+    }
+    public String updateStaff_Role(String phone){
+        PreparedStatement stm =null ;
+        ResultSet rs = null;
+        String staffID = null;
+        String sql = "SELECT StaffID FROM Staff WHERE Phone = ?";
+        try {
+            stm = connection.prepareStatement(sql);              
+            stm.setString(1, phone);
+            rs = stm.executeQuery();
+            if (rs.next()) { 
+                staffID = rs.getString("StaffID"); 
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return staffID;
+    }
     public boolean updateStaff(String staffID, String useNameS, String passworldS, String role, String name, String email, String phone, String address, String image){
         PreparedStatement stm =null ;
         ResultSet rs = null;
-        String sql = "UPDATE Staff SET UsernameS = ?, PasswordS = ?, Role = ?, Name = ?, Email = ?, Phone = ?, Address = ? ,Image = ? WHERE StaffID = ?;";
+        String sql = "UPDATE Staff SET UsernameS = ?, PasswordS = ?, RoleID = ?, Name = ?, Email = ?, Phone = ?, Address = ? ,Image = ? WHERE StaffID = ?;";
         try {
             stm = connection.prepareStatement(sql);   
             stm.setString(1, useNameS);
@@ -183,9 +231,10 @@ public class StaffDAO extends DBContext{
         if (searchname != null && !searchname.trim().isEmpty()) {
             if(search.equals("Name")){
                 sql +=" WHERE Name LIKE ?";
-            }else{
-                sql+=" WHERE Role LIKE ?";
             }
+//            else{
+//                sql+=" WHERE Role LIKE ?";
+//            }
         }
         if(column != null && !column.trim().isEmpty() ){
             sql += " order by "+ column+" ";
@@ -213,7 +262,7 @@ public class StaffDAO extends DBContext{
                 int staffID = rs.getInt("staffID");
                 String usernameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
+                int role = rs.getInt("roleid");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -261,7 +310,7 @@ public class StaffDAO extends DBContext{
                 int staffID = rs.getInt("staffID");
                 String usernameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
+                int role = rs.getInt("roleid");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
@@ -289,7 +338,7 @@ public class StaffDAO extends DBContext{
                 int staffID = rs.getInt("staffID");
                 String userNameS = rs.getString("usernameS");
                 String passwordS = rs.getString("passwordS");
-                String role = rs.getString("role");
+                int role = rs.getInt("roleid");
                 String name = rs.getString("name");
                 String email = rs.getString("email");
                 String phone = rs.getString("phone");
