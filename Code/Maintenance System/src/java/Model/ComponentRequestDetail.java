@@ -10,8 +10,25 @@ package Model;
  */
 public class ComponentRequestDetail {
     private int componentRequestDetailID, componentID, componentRequestID, quantity;
+    private String componentCode, componentName;
 
     public ComponentRequestDetail() {
+    }
+
+    public String getComponentCode() {
+        return componentCode;
+    }
+
+    public void setComponentCode(String componentCode) {
+        this.componentCode = componentCode;
+    }
+
+    public String getComponentName() {
+        return componentName;
+    }
+
+    public void setComponentName(String componentName) {
+        this.componentName = componentName;
     }
 
     public int getComponentRequestDetailID() {

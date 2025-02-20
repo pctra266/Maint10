@@ -279,16 +279,16 @@ public class ComponentRequestDAO {
         public ArrayList<ComponentRequestDetail> getListComponentRequestDetailById(String componentRequestID){
             ArrayList<ComponentRequestDetail> list = new ArrayList<>();
             String query = """
-                          select crd.ComponentRequestDetailID, crd.ComponentID,crd.ComponentRequestID, crd.Quantity
-                          	from ComponentRequestDetail crd where 1=1""";
-            if(componentRequestID != null && componentRequestID.trim().isEmpty()){
+                          select crd.ComponentRequestDetailID, crd.ComponentID,crd.ComponentRequestID, crd.Quantity, c.ComponentCode, c.ComponentName
+                          	from ComponentRequestDetail crd join Component c on crd.ComponentID = c.ComponentID where 1=1""";
+            if(componentRequestID != null && !componentRequestID.trim().isEmpty()){
                 query += " and ComponentRequestID = ?";
             }
            try{
                conn = new DBContext().connection;
                ps = conn.prepareStatement(query);
                int count = 1;
-               if(componentRequestID != null && componentRequestID.trim().isEmpty()){
+               if(componentRequestID != null && !componentRequestID.trim().isEmpty()){
                 ps.setString(count++, componentRequestID);
                 }
                rs = ps.executeQuery();
@@ -298,7 +298,8 @@ public class ComponentRequestDAO {
                    componentRequestDetail.setComponentRequestDetailID(rs.getInt("ComponentRequestDetailID"));
                    componentRequestDetail.setComponentRequestID(rs.getInt("ComponentRequestID"));
                    componentRequestDetail.setQuantity(rs.getInt("Quantity"));
-                   
+                   componentRequestDetail.setComponentName(rs.getString("ComponentName"));
+                   componentRequestDetail.setComponentCode(rs.getString("ComponentCode"));
                    list.add(componentRequestDetail);
                }
            }catch (Exception e){
@@ -314,8 +315,12 @@ public class ComponentRequestDAO {
 //            System.out.println(productDetail);
 //        }
         ArrayList<Component> list1 = dao.getallListComponentByProductCode("");
-        for (Component component : list1) {
-            System.out.println(component);
+//        for (Component component : list1) {
+//            System.out.println(component);
+//        }
+            ArrayList<ComponentRequestDetail> list2 = dao.getListComponentRequestDetailById("1");
+            for (ComponentRequestDetail componentRequestDetail : list2) {
+                System.out.println(componentRequestDetail);
         }
 //        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
     }

@@ -33,14 +33,31 @@
                                 entries
                             </label>
                         </div>-->
-                                <c:forEach items="${listComponentRequestDetail}" var="o">
-                                    <div style="display: none">
+                                <table border="1">
+                                    <thead>
+                                        <tr>
+                                            <th>Component Request ID</th>
+                                            <th>Component Code</th>
+                                            <th>Component Name</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${listComponentRequestDetail}" var="o">
+<!--                                    <div style="display: none">
                                         <td>${o.componentRequestDetailID}</td>
-                                    </div>
-                                        <td>${o.componentID}</td>
+                                    </div>-->
+                                            <tr>
+                                        <!--<td>${o.componentID}</td>-->
                                         <td>${o.componentRequestID}</td>
+                                        <td>${o.componentCode}</td>
+                                        <td>${o.componentName}</td>
                                         <td>${o.quantity}</td>
-                                </c:forEach>       
+                                            </tr>
+                                        
+                                </c:forEach> 
+                                    </tbody>
+                                </table>
                         </form>
                     </div>
                     <jsp:include page="/includes/pagination.jsp" />
