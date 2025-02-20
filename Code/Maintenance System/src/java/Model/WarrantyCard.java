@@ -57,7 +57,7 @@ public class WarrantyCard {
     }
 
     public String getFormatReturnDate() {
-        return FormatUtils.formatDate(returnDate);
+        return FormatUtils.formatHourDate(returnDate);
     }
 
     public void setReturnDate(Date returndDate) {
@@ -65,7 +65,7 @@ public class WarrantyCard {
     }
 
     public String getFormatDonedDate() {
-        return FormatUtils.formatDate(donedDate);
+        return FormatUtils.formatHourDate(donedDate);
     }
 
     public void setDonedDate(Date donedDate) {
@@ -73,7 +73,7 @@ public class WarrantyCard {
     }
 
     public String getFormatCompletedDate() {
-        return FormatUtils.formatDate(completedDate);
+        return FormatUtils.formatHourDate(completedDate);
     }
 
     public void setCompletedDate(Date completedDate) {
@@ -81,7 +81,7 @@ public class WarrantyCard {
     }
 
     public String getFormatCanceldDate() {
-        return FormatUtils.formatDate(canceldDate);
+        return FormatUtils.formatHourDate(canceldDate);
     }
 
     public void setCanceldDate(Date canceldDate) {
@@ -141,7 +141,7 @@ public class WarrantyCard {
     }
 
     public String getFormatCreatedDate() {
-        return FormatUtils.formatDate(createdDate);
+        return FormatUtils.formatHourDate(createdDate);
     }
 
     public void setCreatedDate(Date createdDate) {
