@@ -78,81 +78,58 @@ public class ChangePasswordServlet extends HttpServlet {
         String oldpassword = request.getParameter("oldpassword");
         String newpassword = request.getParameter("newpassword");
         String confirmpassword = request.getParameter("confirmpassword");
-//
-//        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
-//            request.setAttribute("error", "Confirm password not the same new password");
-//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-//            return;
-//        }
-//
-//        String encryptionPassword = Encryption.EncryptionPassword(newpassword);
-//
-//        Staff staff = (Staff) session.getAttribute("staff");
-//        Customer customer = (Customer) session.getAttribute("customer");
-//
-//        if (staff != null) {
-//            String currentPassword = staff.getPasswordS();
-//            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
-//            if (!currentPassword.equals(oldPasswordEncryption)) {
-//                request.setAttribute("error", "Old password is incorrect!");
-//                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-//                return;
-//            }
-//            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), encryptionPassword, staff.getRole(),
-//                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.getImgage());
-//
-//            staffDao.changePassword(updatedStaffPassword);
-//            request.setAttribute("message", "Change password succesfuly!");
-//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-//           
-//        }
-//
-//        if (customer != null) {
-//            String currentPassword = customer.getPasswordC();
-//            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
-//            if (!currentPassword.equals(oldPasswordEncryption)) {
-//                request.setAttribute("error", "Old password is incorrect!");
-//                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-//                return;
-//            }
-//            Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), encryptionPassword,
-//                    customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.getImage());
-//
-//            customerDao.changePassword(updatedCustomerPassword);
-//            request.setAttribute("message", "Change password succesfuly!");
-//            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-//        }
-
-        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
-            request.setAttribute("error", "The confirm password is not the same as the new password");
+        if (oldpassword.isBlank() || newpassword.isBlank() || confirmpassword.isBlank()) {
+            request.setAttribute("error", "All fields are required! Please fill in all information.");
             request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
             return;
         }
+        // Check new password and confirm password
+        if (!newpassword.equalsIgnoreCase(confirmpassword)) {
+            request.setAttribute("error", "Confirm password not the same new password");
+            request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+            return;
+        }
+        // Encription password
+        String encryptionPassword = Encryption.EncryptionPassword(newpassword);
 
-        Staff staff = (Staff) session.getAttribute("accStaff");
-        Customer customer = (Customer) session.getAttribute("accCus");
-        // change password staff
+        Staff staff = (Staff) session.getAttribute("staff");
+        Customer customer = (Customer) session.getAttribute("customer");
+
         if (staff != null) {
-            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), newpassword, staff.getRole(),
-                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(),staff.getImgage());
+            String currentPassword = staff.getPasswordS();
+            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
+            if (!currentPassword.equals(oldPasswordEncryption)) {
+                request.setAttribute("error", "Old password is incorrect!");
+                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+                return;
+            }
+            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), encryptionPassword, staff.getRole(),
+                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.getImgage());
 
             staffDao.changePassword(updatedStaffPassword);
-
-            request.setAttribute("message", "Password changed successfully!");
+            session.setAttribute("staff", updatedStaffPassword);
+            request.setAttribute("message", "Change password succesfuly!");
             request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+
         }
-        // change password customer
+
         if (customer != null) {
-            Customer updatedCustomerPassword = new Customer(String.valueOf(customer.getCustomerID()), customer.getUsernameC(), newpassword,
-                    customer.getName(), customer.getEmail(), customer.getPhone(), customer.getAddress(),customer.getImage());
+            String currentPassword = customer.getPasswordC();
+            String oldPasswordEncryption = Encryption.EncryptionPassword(oldpassword);
+            if (!currentPassword.equals(oldPasswordEncryption)) {
+                request.setAttribute("error", "Old password is incorrect!");
+                request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
+                return;
+            }
+            Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), encryptionPassword,
+                    customer.getName(), customer.getGender(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.getImage());
 
-            customerDao.changePassword(updatedCustomerPassword); 
-
-            
-            request.setAttribute("message", "Password changed successfully!");
+            customerDao.changePassword(updatedCustomerPassword);
+            session.setAttribute("customer", updatedCustomerPassword);
+            request.setAttribute("message", "Change password succesfuly!");
             request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
-
         }
+
     }
 
     /** 

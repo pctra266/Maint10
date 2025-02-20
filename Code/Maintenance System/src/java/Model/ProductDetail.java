@@ -23,6 +23,7 @@ public class ProductDetail {
     private String email;
     private String phone;
     private String address;
+    private String code;
     private String productName;
     private int warrantyPeriod;
     private int WarrantyCardID;
@@ -207,6 +208,14 @@ public class ProductDetail {
         this.WarrantyCardID = WarrantyCardID;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+    
     @Override
     public String toString() {
         return "ProductDetail{" + "productDetailID=" + productDetailID + ", productCode=" + productCode + ", purchaseDate=" + purchaseDate + ", customerID=" + customerID + ", usernameC=" + usernameC + ", name=" + name + ", email=" + email + ", phone=" + phone + ", address=" + address + ", productName=" + productName + ", warrantyPeriod=" + warrantyPeriod + ", WarrantyCardID=" + WarrantyCardID + ", WarrantyCardCode=" + WarrantyCardCode + ", IssueDescription=" + IssueDescription + ", WarrantyStatus=" + WarrantyStatus + ", CreatedDate=" + CreatedDate + ", UnknownProductName=" + unknownProductName + '}';

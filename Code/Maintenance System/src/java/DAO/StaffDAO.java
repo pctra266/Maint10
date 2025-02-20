@@ -15,18 +15,18 @@ import Model.Staff;
  * @author ADMIN
  */
 public class StaffDAO extends DBContext{
-    public Staff getStaffByUsenamePassword(String username, String password) {
+   public Staff getStaffByUsenamePassword(String username, String password) {
         String sql = "SELECT [StaffID]\n"
                 + "      ,[UsernameS]\n"
                 + "      ,[PasswordS]\n"
-                + "      ,[Role]\n"
                 + "      ,[Name]\n"
+                + "      ,[RoleID]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
                 + "      ,[Image]\n"
                 + "  FROM [dbo].[Staff]\n"
-                + "  WHERE UsernameS =? AND PasswordS =?;";
+                + "  WHERE UsernameS = ? AND PasswordS = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, username);
@@ -37,12 +37,12 @@ public class StaffDAO extends DBContext{
                 staff.setStaffID(rs.getInt("StaffID"));
                 staff.setUsernameS(rs.getString("UsernameS"));
                 staff.setPasswordS(rs.getString("PasswordS"));
-                staff.setRole(rs.getInt("Role"));
+                staff.setRole(rs.getInt("RoleID"));
                 staff.setName(rs.getString("Name"));
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
-                staff.setAddress(rs.getString("Image"));
+                staff.setImgage(rs.getString("Image"));
                 return staff;
 
             }
@@ -70,14 +70,14 @@ public class StaffDAO extends DBContext{
         String sql = "SELECT [StaffID]\n"
                 + "      ,[UsernameS]\n"
                 + "      ,[PasswordS]\n"
-                + "      ,[Role]\n"
                 + "      ,[Name]\n"
+                + "      ,[RoleID]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
                 + "      ,[Image]\n"
                 + "  FROM [dbo].[Staff]\n"
-                + "  WHERE Email = ?;";
+                + "  WHERE Email=?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, email);
@@ -87,12 +87,12 @@ public class StaffDAO extends DBContext{
                 staff.setStaffID(rs.getInt("StaffID"));
                 staff.setUsernameS(rs.getString("UsernameS"));
                 staff.setPasswordS(rs.getString("PasswordS"));
-                staff.setRole(rs.getInt("Role"));
+                staff.setRole(rs.getInt("RoleID"));
                 staff.setName(rs.getString("Name"));
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
-                staff.setAddress(rs.getString("Image"));
+                staff.setImgage(rs.getString("Image"));
                 return staff;
             }
         } catch (SQLException e) {
@@ -100,6 +100,7 @@ public class StaffDAO extends DBContext{
         }
         return null;
     }
+
 
     public List<Staff> getAllOrder(){
         List<Staff> list = new ArrayList();
