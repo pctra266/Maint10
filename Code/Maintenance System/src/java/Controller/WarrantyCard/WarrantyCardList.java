@@ -18,6 +18,7 @@ import Model.WarrantyCard;
 import Utils.FormatUtils;
 import Model.Pagination;
 import Utils.SearchUtils;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 
 /**
@@ -44,8 +45,8 @@ public class WarrantyCardList extends HttpServlet {
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if(!("repair".equalsIgnoreCase(type)||"warranty".equalsIgnoreCase(type))){
-            type="all";
+        if (!("repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+            type = "all";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         // Lấy page-size từ request, mặc định là PAGE_SIZE
@@ -69,7 +70,7 @@ public class WarrantyCardList extends HttpServlet {
         if (createStatus != null && createStatus.equals("true")) {
             request.setAttribute("createStatus", "Card created successfully");
         }
-          //Phan trang
+        //Phan trang
         Pagination pagination = new Pagination();
         pagination.setListPageSize(totalCards);
         pagination.setCurrentPage(page);
@@ -79,8 +80,8 @@ public class WarrantyCardList extends HttpServlet {
         pagination.setSort(sort);
         pagination.setOrder(order);
         pagination.setUrlPattern("/WarrantyCard");
-        pagination.setSearchFields(new String[] {"search", "status", "type"});
-        pagination.setSearchValues(new String[] {paraSearch, status, type});
+        pagination.setSearchFields(new String[]{"search", "status", "type"});
+        pagination.setSearchValues(new String[]{paraSearch, status, type});
         request.setAttribute("pagination", pagination);
 
         request.setAttribute("totalCards", totalCards);

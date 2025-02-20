@@ -4,6 +4,8 @@
  */
 package DAO;
 import Model.Component;
+import Model.ComponentRequest;
+import Model.ComponentRequestDetail;
 import Model.ProductDetail;
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -23,22 +25,29 @@ public class ComponentRequestDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-// public ArrayList<OBJECT> getAll***(){
-//        ArrayList<OBJECT> list = new ArrayList<>();
-//        String query = "YOUR QUERY";
-//        try{
-//            conn = new DBContext().connection;
-//            ps = conn.prepareStatement(query);
-//            rs = ps.executeQuery();
-//            while(rs.next()){
-//                list.add(new OBJECT);
-//            }
-//        }catch (Exception e){
-//            
-//        }
-//        
-//        return list;
-//    }
+    public ArrayList<ComponentRequest> getAllComponentRequest(){
+           ArrayList<ComponentRequest> list = new ArrayList<>();
+           String query = """
+                          select cr.ComponentRequestID,cr.WarrantyCardID,cr.Date,cr.Status, cr.Note 
+                          \tfrom ComponentRequest cr""";
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   ComponentRequest componentRequest = new ComponentRequest();
+                   componentRequest.setComponentRequestID(rs.getInt("ComponentRequestID"));
+                   componentRequest.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                   componentRequest.setDate(rs.getDate("Date"));
+                   componentRequest.setNote(rs.getString("Note"));
+                   
+                   list.add(componentRequest);
+               }
+           }catch (Exception e){
+           }
+
+           return list;
+       }
     public ArrayList<ProductDetail> getAllListProductUnderMaintain(String warrantyCardCode, String productCode,
           String unknownProductCode,  String warrantyStatus,String typeMaintain, String sort, String order, int page, int pageSize){
         ArrayList<ProductDetail> list = new ArrayList<>();
@@ -266,7 +275,37 @@ public class ComponentRequestDAO {
         }
         return success;
     }
-    
+        
+        public ArrayList<ComponentRequestDetail> getListComponentRequestDetailById(String componentRequestID){
+            ArrayList<ComponentRequestDetail> list = new ArrayList<>();
+            String query = """
+                          select crd.ComponentRequestDetailID, crd.ComponentID,crd.ComponentRequestID, crd.Quantity, c.ComponentCode, c.ComponentName
+                          	from ComponentRequestDetail crd join Component c on crd.ComponentID = c.ComponentID where 1=1""";
+            if(componentRequestID != null && !componentRequestID.trim().isEmpty()){
+                query += " and ComponentRequestID = ?";
+            }
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               int count = 1;
+               if(componentRequestID != null && !componentRequestID.trim().isEmpty()){
+                ps.setString(count++, componentRequestID);
+                }
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   ComponentRequestDetail componentRequestDetail = new ComponentRequestDetail();
+                   componentRequestDetail.setComponentID(rs.getInt("ComponentID"));
+                   componentRequestDetail.setComponentRequestDetailID(rs.getInt("ComponentRequestDetailID"));
+                   componentRequestDetail.setComponentRequestID(rs.getInt("ComponentRequestID"));
+                   componentRequestDetail.setQuantity(rs.getInt("Quantity"));
+                   componentRequestDetail.setComponentName(rs.getString("ComponentName"));
+                   componentRequestDetail.setComponentCode(rs.getString("ComponentCode"));
+                   list.add(componentRequestDetail);
+               }
+           }catch (Exception e){
+           }
+            return list;
+        }
             
     public static void main(String[] args) {
         ArrayList<ProductDetail> list = new ArrayList<>();
@@ -276,8 +315,12 @@ public class ComponentRequestDAO {
 //            System.out.println(productDetail);
 //        }
         ArrayList<Component> list1 = dao.getallListComponentByProductCode("");
-        for (Component component : list1) {
-            System.out.println(component);
+//        for (Component component : list1) {
+//            System.out.println(component);
+//        }
+            ArrayList<ComponentRequestDetail> list2 = dao.getListComponentRequestDetailById("1");
+            for (ComponentRequestDetail componentRequestDetail : list2) {
+                System.out.println(componentRequestDetail);
         }
 //        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
     }

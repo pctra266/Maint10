@@ -30,7 +30,10 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <a href="WarrantyCard" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
+                    <form action="Redirect">
+                        <input type="hidden" name="target" value="${backUrl}">
+                        <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </button>                 
+                    </form>
                     <h1 class="text-center text-primary" style="font-size: 4rem">Create Warranty Card</h1>
                     <div class="d-flex flex-column col justify-content-center align-items-center vh-50">
                         <form action="WarrantyCard/Add" method="POST" class="w-50 row" enctype="multipart/form-data">
@@ -47,7 +50,6 @@
                                 </div>
                             </div>
                         </form>
-
                         <c:if test="${not empty NotFoundProduct}">
                             <div class="col-md-7 alert alert-dark alert-dismissible mt-4" role="alert">
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -89,7 +91,7 @@
                                 </div>
                             </div>
                         </c:if>
-                       
+
                         <form action="WarrantyCard/Add" method="POST" class="row g-3" enctype="multipart/form-data">
                             <!-- ID ẩn -->
                             <input type="hidden" name="productDetailID" value="${pd.productDetailID}">

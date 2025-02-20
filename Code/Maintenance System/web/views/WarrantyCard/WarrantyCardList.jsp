@@ -210,7 +210,7 @@
                                 <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
                                     <td>${status.index + 1 + (pagination.currentPage - 1) * pagination.pageSize}</td>
                                     <td>${card.warrantyCardCode}</td>
-                                    <td>${card.productCode}</td>
+                                    <td>${card.productDetailCode}</td>
                                     <td>${card.productName}</td>
                                     <td>${card.warrantyStatus}</td>
                                     <td>${card.getFormatCreatedDate()}</td>
