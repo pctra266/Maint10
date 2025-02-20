@@ -35,15 +35,18 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <c:set var="viewProductFrom" value="WarrantyCard/Detail?ID=${card.warrantyCardID}" scope="session" />
-                    <c:if test="${sessionScope.detailWarrantyCardFrom eq 'search'}">
-                        <a href="ComponentWarehouse/Search" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
-                    </c:if>
-                    <c:if test="${sessionScope.detailWarrantyCardFrom ne 'search'}">
-                        <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>                        
-                    </c:if>
+                    <form action="Redirect">
+                        <input type="hidden" name="target" value="${backUrl}">
+                        <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </button>                 
+                    </form>
 
                     <h2>Warranty Card Detail</h2>
+                    <form action="/MaintenanceSystem/componentRequest">
+                                       <input type="hidden" class="form-control" name="action" value="createComponentRequest" readonly> 
+                                       <input type="hidden" class="form-control" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
+                                       <input type="hidden" class="form-control" name="productCode" value="${card.productCode}" readonly>  
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Request Component</button>
+                    </form>
                     <!--                                Alert khi du lieu truyen sang sever sai-->
                     <c:if test="${not empty codeAlert}">
                         <div class="alert alert-danger alert-dismissible" role="alert">
@@ -126,7 +129,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Product Code</label>
-                    <input type="text" class="form-control" value="${card.productCode}" readonly>
+                    <input type="text" class="form-control" value="${card.productDetailCode}" readonly>
                 </div>
                 <div class="col-md-6">
                     <label class="form-label">Product Name</label>

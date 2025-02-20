@@ -9,6 +9,7 @@ public class WarrantyCard {
     private String warrantyCardCode;
     private int productDetailID;
     private int unknowProductID;
+    private String productDetailCode;
     private String productCode;
     private String issueDescription;
     private String warrantyStatus;
@@ -35,6 +36,14 @@ public class WarrantyCard {
         return createdDate;
     }
 
+    public String getProductCode() {
+        return productCode;
+    }
+
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+    
     public Date getReturnDate() {
         return returnDate;
     }
@@ -116,13 +125,14 @@ public class WarrantyCard {
         this.productDetailID = productDetailID;
     }
 
-    public String getProductCode() {
-        return productCode;
+    public String getProductDetailCode() {
+        return productDetailCode;
     }
 
-    public void setProductCode(String productCode) {
-        this.productCode = productCode;
+    public void setProductDetailCode(String productDetailCode) {
+        this.productDetailCode = productDetailCode;
     }
+
 
     public String getIssueDescription() {
         return issueDescription;
@@ -182,7 +192,9 @@ public class WarrantyCard {
 
     @Override
     public String toString() {
-        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returndDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
+        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", unknowProductID=" + unknowProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
     }
+
+    
 
 }

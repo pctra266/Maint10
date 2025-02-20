@@ -35,6 +35,10 @@ public class WarrantyCardDetail extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+                //Nut back
+        String referer = request.getHeader("Referer");
+        request.setAttribute("backUrl", referer);
+        //
         String idPara = request.getParameter("ID");
         Integer id = FormatUtils.tryParseInt(idPara);
         if(id==null || warrantyCardDAO.getWarrantyCardById(id)==null) {

@@ -49,6 +49,10 @@ public class WarrantyCardAdd extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+                //Nut back
+        String referer = request.getHeader("Referer");
+        request.setAttribute("backUrl", referer);
+        
         String productCode = request.getParameter("productCode");
         String issue = request.getParameter("issue");
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
@@ -61,16 +65,10 @@ public class WarrantyCardAdd extends HttpServlet {
             request.setAttribute("pictureAlert", "Invalid picture");
         }
         if (issue != null) {
-            int handlerID = -1;
             HttpSession session = request.getSession();
             Staff staff = (Staff) session.getAttribute("staff");
-            if(staff==null) {
-                Customer customer = (Customer) session.getAttribute("customer");
-                if(customer!=null) handlerID = customer.getCustomerID();
-            }
-            else{
-                handlerID = staff.getStaffID();
-            }
+            Customer customer = (Customer) session.getAttribute("customer");
+            int handlerID = (staff != null) ? staff.getStaffID() : (customer != null ? customer.getCustomerID() : -1);
             if (canAdd && warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image, handlerID)) {
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
