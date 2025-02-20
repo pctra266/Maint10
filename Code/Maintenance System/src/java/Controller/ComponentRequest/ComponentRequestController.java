@@ -7,6 +7,8 @@ package Controller.ComponentRequest;
 
 import DAO.ComponentRequestDAO;
 import Model.Component;
+import Model.ComponentRequest;
+import Model.ComponentRequestDetail;
 import Model.Pagination;
 import Model.ProductDetail;
 import Utils.FormatUtils;
@@ -20,7 +22,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.collections4.list.AbstractLinkedList;
 
 /**
  *
@@ -91,6 +92,8 @@ public class ComponentRequestController extends HttpServlet {
         String typeMaintain = request.getParameter("typeMaintain");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        String componentRequestID = request.getParameter("componentRequestID");
+        request.setAttribute("componentRequestID", componentRequestID);
         request.setAttribute("warrantyCardID", warrantyCardID);
         request.setAttribute("warrantyCardCode", warrantyCardCode);
         request.setAttribute("productCode", productCode);
@@ -142,6 +145,16 @@ public class ComponentRequestController extends HttpServlet {
                 ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode);
                 request.setAttribute("listComponentByProductCode", listComponentByProductCode);
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
+                break;
+            case "viewListComponentRequest":
+                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest();
+                request.setAttribute("listComponentRequest", listComponentRequest);
+                request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
+                break;
+            case "detailComponentRequest":
+                ArrayList<ComponentRequestDetail> listComponentRequestDetail = componentRequestDao.getListComponentRequestDetailById(componentRequestID);
+                request.setAttribute("listComponentRequestDetail", listComponentRequestDetail);
+                request.getRequestDispatcher("detailComponentRequest.jsp").forward(request, response);
                 break;
         }
     } 
