@@ -17,6 +17,8 @@ public class Component {
     private String componentName;  // Tên thành phần
     private int quantity;          // Số lượng
     private boolean status;
+    private int brandId;
+    private int typeId;
     private String type;
     private String brand;
     private double price;          // Giá
@@ -39,6 +41,24 @@ public class Component {
     }
 
     // Getter và Setter cho từng thuộc tính
+
+    public int getBrandId() {
+        return brandId;
+    }
+
+    public void setBrandId(int brandId) {
+        this.brandId = brandId;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
+    }
+    
+    
     public int getComponentID() {
         return componentID;
     }

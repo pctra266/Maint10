@@ -44,6 +44,16 @@ public class ComponentWarehouse extends HttpServlet {
         //Xu ly nut back quay ve
         HttpSession session = request.getSession();
         if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        //Tai component khong import duoc
+        List<Component> errorComponents = (List<Component>) session.getAttribute("errorComponents");
+        if(errorComponents!=null){
+            if (errorComponents.isEmpty()) {
+                request.setAttribute("alertImportSuccess", "Import Successfully ");
+                  session.removeAttribute("errorComponents");
+            } else {
+                request.setAttribute("alertImportFail", "Some components can't add.");
+            }
+        }
         //
         String pageParam = request.getParameter("page");
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));

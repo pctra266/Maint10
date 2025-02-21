@@ -101,26 +101,15 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getAllComponents() {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, c.Image "
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.Status, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, c.Image "
                 + "FROM Component c "
                 + "JOIN Brand cb ON c.BrandID = cb.BrandID "
-                + "JOIN ComponentType ct ON c.TypeID = ct.TypeID "
-                + "WHERE c.Status = 1";
+                + "JOIN ComponentType ct ON c.TypeID = ct.TypeID ";
 
         try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                Component component = new Component();
-                component.setComponentID(rs.getInt("ComponentID"));
-                component.setComponentCode(rs.getString("ComponentCode"));
-                component.setComponentName(rs.getString("ComponentName"));
-                component.setBrand(rs.getString("BrandName"));
-                component.setType(rs.getString("TypeName"));
-                component.setQuantity(rs.getInt("Quantity"));
-                component.setPrice(rs.getDouble("Price"));
-                component.setImage(rs.getString("Image"));
-
-                components.add(component);
+                components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,7 +120,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getComponentsByPage(int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -147,17 +136,7 @@ public class ComponentDAO extends DBContext {
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {
-                    Component component = new Component();
-                    component.setComponentID(resultSet.getInt("ComponentID"));
-                    component.setComponentName(resultSet.getString("ComponentName"));
-                    component.setComponentCode(resultSet.getString("ComponentCode"));
-                    component.setQuantity(resultSet.getInt("Quantity"));
-                    component.setPrice(resultSet.getDouble("Price"));
-                    component.setImage(resultSet.getString("Image"));
-                    component.setBrand(resultSet.getString("BrandName")); // Set the brand name
-                    component.setType(resultSet.getString("TypeName"));   // Set the type name
-
-                    components.add(component);
+                    components.add(mapComponent(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -182,7 +161,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public Component getComponentByID(int componentID) {
-        String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM [dbo].[Component] c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -193,16 +172,7 @@ public class ComponentDAO extends DBContext {
             stmt.setInt(1, componentID);
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Component component = new Component();
-                    component.setComponentID(rs.getInt("ComponentID"));
-                    component.setComponentName(rs.getString("ComponentName"));
-                    component.setComponentCode(rs.getString("ComponentCode"));
-                    component.setQuantity(rs.getInt("Quantity"));
-                    component.setPrice(rs.getDouble("Price"));
-                    component.setImage(rs.getString("Image"));
-                    component.setBrand(rs.getString("BrandName")); // Set the brand name
-                    component.setType(rs.getString("TypeName"));   // Set the type name
-                    return component;
+                    return mapComponent(rs);
                 }
             }
         } catch (SQLException e) {
@@ -243,8 +213,8 @@ public class ComponentDAO extends DBContext {
             }
 
             // Set the BrandID and TypeID
-            statement.setInt(6, getBrandID(component.getBrand())); // Assuming you have a method to get BrandID
-            statement.setInt(7, getTypeID(component.getType()));   // Assuming you have a method to get TypeID
+            statement.setInt(6, getBrandID(component.getBrand()));
+            statement.setInt(7, getTypeID(component.getType()));
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0; // Return true if the insert was successful
@@ -291,7 +261,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public Component getLast() {
-        String query = "SELECT TOP 1 c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT TOP 1 c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -302,16 +272,7 @@ public class ComponentDAO extends DBContext {
         try (PreparedStatement statement = connection.prepareStatement(query); ResultSet resultSet = statement.executeQuery()) {
 
             if (resultSet.next()) {
-                Component component = new Component();
-                component.setComponentID(resultSet.getInt("ComponentID"));
-                component.setComponentCode(resultSet.getString("ComponentCode"));
-                component.setComponentName(resultSet.getString("ComponentName"));
-                component.setQuantity(resultSet.getInt("Quantity"));
-                component.setPrice(resultSet.getDouble("Price"));
-                component.setImage(resultSet.getString("Image"));
-                component.setBrand(resultSet.getString("BrandName")); // Set the brand name
-                component.setType(resultSet.getString("TypeName"));   // Set the type name
-                return component;
+                return mapComponent(resultSet);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -321,7 +282,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -347,17 +308,7 @@ public class ComponentDAO extends DBContext {
             ResultSet resultSet = statement.executeQuery();
 
             while (resultSet.next()) {
-                int id = resultSet.getInt("ComponentID");
-                String name = resultSet.getString("ComponentName");
-                String code = resultSet.getString("ComponentCode");
-                int quantity = resultSet.getInt("Quantity");
-                double price = resultSet.getDouble("Price");
-                String image = resultSet.getString("Image");
-                String brand = resultSet.getString("BrandName"); // Get the brand name
-                String type = resultSet.getString("TypeName");   // Get the type name
-
-                Component component = new Component(id, code, name, quantity, true, type, brand, price, image);
-                components.add(component);
+                components.add(mapComponent(resultSet));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -397,7 +348,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> getComponentsByPageSorted(int page, int pageSize, String sort, String order) {
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -412,18 +363,8 @@ public class ComponentDAO extends DBContext {
             ps.setInt(2, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Component component = new Component(
-                        rs.getInt("ComponentID"),
-                        rs.getString("ComponentCode"),
-                        rs.getString("ComponentName"),
-                        rs.getInt("Quantity"),
-                        true, // Assuming status is true since we are filtering by Status = 1
-                        rs.getString("TypeName"), // Set the type name
-                        rs.getString("BrandName"), // Set the brand name
-                        rs.getDouble("Price"),
-                        rs.getString("Image")
-                );
-                components.add(component);
+  
+                components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -432,7 +373,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByPageSorted(String search, int page, int pageSize, String sort, String order) {
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -455,18 +396,8 @@ public class ComponentDAO extends DBContext {
             ps.setInt(6, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Component component = new Component(
-                        rs.getInt("ComponentID"),
-                        rs.getString("ComponentCode"),
-                        rs.getString("ComponentName"),
-                        rs.getInt("Quantity"),
-                        true, // Assuming status is true since we are filtering by Status = 1
-                        rs.getString("TypeName"), // Set the type name
-                        rs.getString("BrandName"), // Set the brand name
-                        rs.getDouble("Price"),
-                        rs.getString("Image")
-                );
-                components.add(component);
+
+                components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -538,7 +469,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, int page, int pageSize, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -599,18 +530,8 @@ public class ComponentDAO extends DBContext {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Component component = new Component(
-                        rs.getInt("ComponentID"),
-                        rs.getString("ComponentCode"),
-                        rs.getString("ComponentName"),
-                        rs.getInt("Quantity"),
-                        true, // Assuming status is true since we are filtering by Status = 1
-                        rs.getString("TypeName"), // Set the type name
-                        rs.getString("BrandName"), // Set the brand name
-                        rs.getDouble("Price"),
-                        rs.getString("Image")
-                );
-                components.add(component);
+ 
+                components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -619,7 +540,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, int page, int pageSize, String sort, String order, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -680,18 +601,8 @@ public class ComponentDAO extends DBContext {
             }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Component component = new Component(
-                        rs.getInt("ComponentID"),
-                        rs.getString("ComponentCode"),
-                        rs.getString("ComponentName"),
-                        rs.getInt("Quantity"),
-                        true, // Assuming status is true since we are filtering by Status = 1
-                        rs.getString("TypeName"), // Set the type name
-                        rs.getString("BrandName"), // Set the brand name
-                        rs.getDouble("Price"),
-                        rs.getString("Image")
-                );
-                components.add(component);
+         
+                components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -701,7 +612,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT p.*, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName "
+        String sql = "SELECT p.*, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName, "
                 + "FROM Product p "
                 + "JOIN ProductComponents pc ON p.ProductID = pc.ProductID "
                 + "JOIN Component c ON pc.ComponentID = c.ComponentID "
@@ -730,25 +641,24 @@ public class ComponentDAO extends DBContext {
         }
         return productList;
     }
-    
-public boolean removeProductComponent(int componentId, int productId) {
-    String sql = "DELETE FROM ProductComponents WHERE ComponentID = ? AND ProductID = ?";
-    
-    try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
 
-        pstmt.setInt(1, componentId);
-        pstmt.setInt(2, productId);
+    public boolean removeProductComponent(int componentId, int productId) {
+        String sql = "DELETE FROM ProductComponents WHERE ComponentID = ? AND ProductID = ?";
 
-        int affectedRows = pstmt.executeUpdate(); // Thực thi câu lệnh xóa
-        
-        return affectedRows > 0; // Nếu có dòng bị xóa, trả về true
-        
-    } catch (SQLException e) {
-        e.printStackTrace();
-        return false;
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, componentId);
+            pstmt.setInt(2, productId);
+
+            int affectedRows = pstmt.executeUpdate(); // Thực thi câu lệnh xóa
+
+            return affectedRows > 0; // Nếu có dòng bị xóa, trả về true
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
-}
-
 
     public Integer getBrandID(String brandName) {
         String query = "SELECT BrandID FROM Brand WHERE BrandName = ?";
@@ -779,19 +689,19 @@ public boolean removeProductComponent(int componentId, int productId) {
         }
         return null;
     }
-    
-  public boolean isComponentCodeExist(String code) {
-    String sql = "SELECT ComponentCode FROM Component WHERE ComponentCode = ?";
-    try (PreparedStatement ps = connection.prepareStatement(sql)) {
-        ps.setString(1, code.trim());
-        try (ResultSet rs = ps.executeQuery()) {  // Dùng executeQuery()
-            return rs.next();  // Nếu có dữ liệu thì trả về true
+
+    public boolean isComponentCodeExist(String code) {
+        String sql = "SELECT ComponentCode FROM Component WHERE ComponentCode = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, code.trim());
+            try (ResultSet rs = ps.executeQuery()) {  // Dùng executeQuery()
+                return rs.next();  // Nếu có dữ liệu thì trả về true
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return false;  // Trả về false nếu có lỗi hoặc không tìm thấy
     }
-    return false;  // Trả về false nếu có lỗi hoặc không tìm thấy
-}
 
     public static void main(String arg[]) throws SQLException {
         ComponentDAO d = new ComponentDAO();
@@ -808,6 +718,7 @@ public boolean removeProductComponent(int componentId, int productId) {
         Double maxPrice = d.getPriceMax();
         Integer maxQuantity = d.getQuantityMax();
         Integer minQuantity = d.getQuantityMin();
+        System.out.println("--------------");
         System.out.println(d.isComponentCodeExist("MB-LEN-X12"));
         System.out.println(d.getListType());
         System.out.println(d.getBrandID("Apple"));
@@ -832,6 +743,20 @@ public boolean removeProductComponent(int componentId, int productId) {
         System.out.println(d.getPriceMax());
         System.out.println(d.getQuantityMax());
         System.out.println(d.getQuantityMin());
+    }
+
+    private Component mapComponent(ResultSet rs) throws SQLException {
+        Component component = new Component();
+        component.setComponentID(rs.getInt("ComponentID"));
+        component.setComponentCode(rs.getString("ComponentCode"));
+        component.setComponentName(rs.getString("ComponentName"));
+        component.setBrand(rs.getString("BrandName"));
+        component.setType(rs.getString("TypeName"));
+        component.setStatus(rs.getBoolean("Status"));
+        component.setQuantity(rs.getInt("Quantity"));
+        component.setPrice(rs.getDouble("Price"));
+        component.setImage(rs.getString("Image"));
+        return component;
     }
 
 }
