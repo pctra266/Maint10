@@ -7,7 +7,10 @@ import java.util.List;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
 import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -45,25 +48,7 @@ public class WarrantyCardDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                WarrantyCard warrantyCard = new WarrantyCard();
-                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
-                warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
-                warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
-                warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
-                warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
-                warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-                warrantyCard.setProductCode(rs.getString("Code"));
-                warrantyCard.setProductName(rs.getString("ProductName"));
-                warrantyCard.setCustomerName(rs.getString("CustomerName"));
-                warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
-                warrantyCard.setCustomerID(rs.getInt("CustomerID"));
-                warrantyCard.setImage(rs.getString("Image"));
-
-                warrantyCards.add(warrantyCard);
+                   warrantyCards.add(mapWarrantyCard(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -256,25 +241,7 @@ public class WarrantyCardDAO extends DBContext {
             ps.setInt(1, customerID);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                WarrantyCard warrantyCard = new WarrantyCard();
-                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
-                warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
-                warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
-                warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
-                warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
-                warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-                warrantyCard.setProductCode(rs.getString("Code"));
-                warrantyCard.setProductName(rs.getString("ProductName"));
-                warrantyCard.setCustomerName(rs.getString("CustomerName"));
-                warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
-                warrantyCard.setCustomerID(rs.getInt("CustomerID"));
-                warrantyCard.setImage(rs.getString("Image"));
-
-                warrantyCards.add(warrantyCard);
+                warrantyCards.add(mapWarrantyCard(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -437,23 +404,7 @@ public class WarrantyCardDAO extends DBContext {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                WarrantyCard warrantyCard = new WarrantyCard();
-                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-                warrantyCard.setProductCode(rs.getString("Code"));
-                warrantyCard.setProductName(rs.getString("ProductName"));
-                warrantyCard.setCustomerName(rs.getString("CustomerName"));
-                warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
-                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                warrantyCard.setCreatedDate(rs.getDate("CreatedDate"));
-                warrantyCard.setReturnDate(rs.getDate("ReturnDate"));
-                warrantyCard.setDonedDate(rs.getDate("DoneDate"));
-                warrantyCard.setCompletedDate(rs.getDate("CompleteDate"));
-                warrantyCard.setCanceldDate(rs.getDate("CancelDate"));
-                warrantyCard.setImage(rs.getString("Image"));
-                cards.add(warrantyCard);
+                cards.add(mapWarrantyCard(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -492,24 +443,7 @@ public class WarrantyCardDAO extends DBContext {
             ps.setString(1, para);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                WarrantyCard warrantyCard = new WarrantyCard();
-                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
-                warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
-                warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
-                warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
-                warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
-                warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-                warrantyCard.setProductCode(rs.getString("Code"));
-                warrantyCard.setProductName(rs.getString("ProductName"));
-                warrantyCard.setCustomerName(rs.getString("CustomerName"));
-                warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
-                warrantyCard.setCustomerID(rs.getInt("CustomerID"));
-                warrantyCard.setImage(rs.getString("Image"));
-                return warrantyCard;
+                return mapWarrantyCard(rs);
             }
 
         } catch (SQLException e) {
@@ -541,6 +475,28 @@ public class WarrantyCardDAO extends DBContext {
         }
         return false;
     }
+    
+    private WarrantyCard mapWarrantyCard(ResultSet rs) throws SQLException {
+    WarrantyCard warrantyCard = new WarrantyCard();
+    warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+    warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+    warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
+    warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+    warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
+    warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
+    warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
+    warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
+    warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
+    warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
+    warrantyCard.setProductCode(rs.getString("Code"));
+    warrantyCard.setProductName(rs.getString("ProductName"));
+    warrantyCard.setCustomerName(rs.getString("CustomerName"));
+    warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
+    warrantyCard.setImage(rs.getString("Image"));
+    return warrantyCard;
+}
+
+    
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();

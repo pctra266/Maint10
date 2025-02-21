@@ -30,8 +30,8 @@ import jakarta.servlet.http.Part;
 @WebServlet(name = "AddWarrantyCard", urlPatterns = {"/WarrantyCard/Add"})
 @MultipartConfig(
         fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50 // 50MB
+        maxFileSize = 1024 * 1024 * 50, // 50MB
+        maxRequestSize = 1024 * 1024 * 100 // 100MB
 )
 public class WarrantyCardAdd extends HttpServlet {
 
@@ -49,13 +49,6 @@ public class WarrantyCardAdd extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-                //Nut back
-        String referer = request.getHeader("Referer");
-        if(referer==null || referer.isBlank()) {
-            referer="/MaintenanceSystem/WarrantyCard";
-        }
-        request.setAttribute("backUrl", referer);
-        
         String productCode = request.getParameter("productCode");
         String issue = request.getParameter("issue");
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));

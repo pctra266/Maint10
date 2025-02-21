@@ -157,7 +157,7 @@
                                     </form>
                                 </th>
 
-                                <th style="width:10%">
+                                <th style="width:8%">
                                     <form action="WarrantyCard" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
@@ -174,7 +174,7 @@
                                     </form>
 
                                 </th>
-                                <th style="width:10%">
+                                <th style="width:8%">
                                     <form action="WarrantyCard" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                        
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />

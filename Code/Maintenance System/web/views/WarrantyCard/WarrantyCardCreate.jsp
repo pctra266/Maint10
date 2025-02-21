@@ -30,44 +30,47 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <form action="Redirect">
-                        <input type="hidden" name="target" value="${backUrl}">
+                    <form action="Redirect" enctype="multipart/form-data">
+                        <input type="hidden" name="target" value="${empty createWarrantyCardFom? '/MaintenanceSystem/WarrantyCard':createWarrantyCardFom}">
                         <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </button>                 
                     </form>
-                    <h1 class="text-center text-primary" style="font-size: 4rem">Create Warranty Card</h1>
-                    <div class="d-flex flex-column col justify-content-center align-items-center vh-50">
-                        <form action="WarrantyCard/Add" method="POST" class="w-50 row" enctype="multipart/form-data">
-                            <div class="row d-flex align-items-center ">
-                                <!-- Ô input -->
-                                <div class="col bg-primary bg-opacity-75 p-4 rounded-pill shadow"> <!-- Tăng padding -->
-                                    <input type="text" class="form-control w-100 border-0 text-white" style="font-size: 2rem; background-color: rgba(59,125,221,0)"  name="productCode" id="ProductCode" value="${ProductCode}" required style="font-size: 1.5rem;"> <!-- Tăng kích thước font chữ -->
+                    <c:if test="${createWarrantyCardFom eq '/MaintenanceSystem/WarrantyCard' or empty createWarrantyCardFom }">
+                        <h1 class="text-center text-primary" style="font-size: 4rem">Create Warranty Card</h1>
+                        <div class="d-flex flex-column col justify-content-center align-items-center vh-50">
+                            <form action="WarrantyCard/Add" method="POST" class="w-50 row" enctype="multipart/form-data">
+                                <div class="row d-flex align-items-center ">
+                                    <!-- Ô input -->
+                                    <div class="col bg-primary bg-opacity-75 p-4 rounded-pill shadow"> <!-- Tăng padding -->
+                                        <input type="text" class="form-control w-100 border-0 text-white" style="font-size: 2rem; background-color: rgba(59,125,221,0)"  name="productCode" id="ProductCode" value="${ProductCode}" required style="font-size: 1.5rem;"> <!-- Tăng kích thước font chữ -->
+                                    </div>
+                                    <!-- Nút tìm kiếm -->
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn col-auto bg-primary bg-opacity-75 p-4 rounded-circle shadow h-100" style="font-size: 1.5rem;"> <!-- Tăng padding và kích thước font chữ -->
+                                            <i class="align-middle fas fa-fw fa-search text-white text-opacity-75"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <!-- Nút tìm kiếm -->
-                                <div class="col-auto">
-                                    <button type="submit" class="btn col-auto bg-primary bg-opacity-75 p-4 rounded-circle shadow h-100" style="font-size: 1.5rem;"> <!-- Tăng padding và kích thước font chữ -->
-                                        <i class="align-middle fas fa-fw fa-search text-white text-opacity-75"></i>
-                                    </button>
+                            </form>
+                            <c:if test="${not empty NotFoundProduct}">
+                                <div class="col-md-7 alert alert-dark alert-dismissible mt-4" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message text-center">
+                                        <strong>${NotFoundProduct}</strong>
+                                    </div>
                                 </div>
-                            </div>
-                        </form>
-                        <c:if test="${not empty NotFoundProduct}">
-                            <div class="col-md-7 alert alert-dark alert-dismissible mt-4" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                <div class="alert-message text-center">
-                                    <strong>${NotFoundProduct}</strong>
+                            </c:if>
+                            <c:if test="${not empty pd}">
+                                <div class="col-md-7 alert alert-success alert-dismissible mt-4" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message text-center">
+                                        <strong>Found product</strong>
+                                    </div>
                                 </div>
-                            </div>
-                        </c:if>
-                        <c:if test="${not empty pd}">
-                            <div class="col-md-7 alert alert-success alert-dismissible mt-4" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                <div class="alert-message text-center">
-                                    <strong>Found product</strong>
-                                </div>
-                            </div>
-                        </c:if>
+                            </c:if>
+                       
 
                     </div>
+                                     </c:if>
                     <c:if test="${not empty pd}">
                         <hr class=""> 
                         <h1 class="text-center text-primary" style="font-size: 4rem">Warranty Card</h1>
@@ -94,6 +97,7 @@
 
                         <form action="WarrantyCard/Add" method="POST" class="row g-3" enctype="multipart/form-data">
                             <!-- ID ẩn -->
+                            <div class="row g-3">
                             <input type="hidden" name="productDetailID" value="${pd.productDetailID}">
                             <!-- Mã sản phẩm -->
                             <div class="col-md-3">
@@ -158,17 +162,16 @@
                                 <input type="email" class="form-control" name="email" id="email" 
                                        value="${pd.email}" readonly="readonly">
                             </div>
+                            </div>
                             <div class="col-md-2">
                                 <a href="customer?action=update&id=${cusID}" class="btn btn-info d-flex justify-content-center align-items-center" style="height: 2.3rem; font-size: 0.8rem; width: 55%">Edit customer</a>
                             </div>
-                            <div class="col-md-10">
-                            </div>
+                            <div class="col-md-10"></div>
                             <div class="col-md-3">
                                 <label for="returnDate" class="form-label">Return Date</label>
                                 <input type="date" class="form-control" name="returnDate" id="returnDate">
                             </div>
-                            <div class="col-md-10">
-                            </div>
+                            <div class="col-md-10"></div>
                             <div class="col-md-5">
                                 <textarea class="form-control" placeholder="Descript issue" name= "issue" rows="2" style="height: 10rem;"></textarea>
                             </div>

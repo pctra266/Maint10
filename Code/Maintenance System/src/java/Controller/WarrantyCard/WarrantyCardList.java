@@ -42,6 +42,10 @@ public class WarrantyCardList extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        //truyen tham so cho nut back
+        HttpSession session = request.getSession();
+        session.setAttribute("createWarrantyCardFom", "/MaintenanceSystem/WarrantyCard");
+        
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");

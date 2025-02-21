@@ -66,6 +66,9 @@
                                     <a href="purchaseproduct?sortBy=PurchaseDate&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
                                     <a href="purchaseproduct?sortBy=PurchaseDate&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
+                                <th>
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -81,6 +84,12 @@
                                             <td>${productDetail.productName}</td>
                                             <td>${productDetail.warrantyPeriod}</td>
                                             <td>${productDetail.purchaseDate}</td>
+                                            <td>
+                                                <form action="WarrantyCard/Add" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" name="productCode" value="${productDetail.productCode}">
+                                                    <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" ><i class="fas fa-add fa-4"></i> <span class="ms-2">Create warranty card</span> </button>                 
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                 </c:otherwise>

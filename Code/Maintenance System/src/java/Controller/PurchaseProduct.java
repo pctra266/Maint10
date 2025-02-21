@@ -60,6 +60,9 @@ public class PurchaseProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
          HttpSession session = request.getSession();
+         //truyen tham so cho nut back
+        session.setAttribute("createWarrantyCardFom", "/MaintenanceSystem/purchaseproduct");
+        
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
             response.sendRedirect("HomePage.jsp");
