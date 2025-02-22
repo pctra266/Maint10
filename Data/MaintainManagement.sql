@@ -24,11 +24,13 @@ CREATE TABLE [Role] (
 
 -- Staff Table
 CREATE TABLE Staff (
-    StaffID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    StaffID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     UsernameS NVARCHAR(50) UNIQUE,
     PasswordS NVARCHAR(50),
     [Name] NVARCHAR(100),
-	RoleID INT REFERENCES [Role](RoleID), 
+    RoleID INT REFERENCES [Role](RoleID), 
+    Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
+    DateOfBirth DATE,
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
@@ -39,29 +41,34 @@ CREATE TABLE Staff (
 CREATE TABLE StaffLog (
     StaffLogID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
-    UsernameS NVARCHAR(50) ,
+    UsernameS NVARCHAR(50),
     PasswordS NVARCHAR(50),
     [Name] NVARCHAR(100),
+    Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
+    DateOfBirth DATE,
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
-    Image NVARCHAR(MAX) ,
+    Image NVARCHAR(MAX),
     [Time] DATETIME,
-    [Status] NVARCHAR(100),
+    [Status] NVARCHAR(100)
 );
 
 -- Customer Table
 CREATE TABLE Customer (
-    CustomerID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    CustomerID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     UsernameC NVARCHAR(50) UNIQUE,
     PasswordC NVARCHAR(50),
     [Name] NVARCHAR(100),
-	Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
+    Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
+    DateOfBirth DATE,
     Email NVARCHAR(100),
     Phone NVARCHAR(20),
     [Address] NVARCHAR(255),
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
+-- Unique index for UsernameC (ignoring NULL values)
 CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
 WHERE UsernameC IS NOT NULL;
 
