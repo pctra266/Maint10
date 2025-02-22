@@ -93,6 +93,14 @@ public class ComponentRequestController extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
         String componentRequestID = request.getParameter("componentRequestID");
+        String componentCode = request.getParameter("componentCode");
+        String componentName = request.getParameter("componentName");
+        String typeID = request.getParameter("typeID");
+        String brandID = request.getParameter("brandID");
+        request.setAttribute("brandID", brandID);
+        request.setAttribute("typeID", typeID);
+        request.setAttribute("componentName", componentName);
+        request.setAttribute("componentCode", componentCode);
         request.setAttribute("componentRequestID", componentRequestID);
         request.setAttribute("warrantyCardID", warrantyCardID);
         request.setAttribute("warrantyCardCode", warrantyCardCode);
@@ -106,6 +114,10 @@ public class ComponentRequestController extends HttpServlet {
         switch(action){
             case "viewComponentRequestDashboard":
                 total = componentRequestDao.totalProductUnderMaintain(warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain);
+                break;
+            case "createComponentRequest":
+                total = componentRequestDao.totalComponentByProductCode(productCode, componentCode, componentName, typeID, brandID);
+                System.out.println("total: " + total);
                 break;
         }
         //paging
@@ -142,7 +154,13 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("requestComponentDashboard.jsp").forward(request, response);
                 break;
             case "createComponentRequest":
-                ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode);
+                //======phan trang
+                pagination.setSearchFields(new String[]{"action","productCode","componentCode","componentName","typeID","brandID"});
+                pagination.setSearchValues(new String[]{"createComponentRequest",productCode,componentCode,componentName,typeID,brandID});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode,componentCode,componentName,
+                        typeID, brandID,page,pageSize);
                 request.setAttribute("listComponentByProductCode", listComponentByProductCode);
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;

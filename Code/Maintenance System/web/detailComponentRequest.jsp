@@ -33,7 +33,7 @@
                                 entries
                             </label>
                         </div>-->
-                                <table border="1">
+                                <table  class="table table-hover my-0">
                                     <thead>
                                         <tr>
                                             <th>Component Request ID</th>
