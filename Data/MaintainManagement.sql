@@ -66,7 +66,6 @@ CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
 WHERE UsernameC IS NOT NULL;
 
 
-
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     PermissionName NVARCHAR(100) UNIQUE NOT NULL,
@@ -111,18 +110,24 @@ CREATE UNIQUE INDEX UX_ComponentCode ON Component(ComponentCode)
 WHERE ComponentCode IS NOT NULL;
 
 
+CREATE TABLE ProductType (
+    ProductTypeID INT IDENTITY(1,1) PRIMARY KEY,
+    TypeName NVARCHAR(100) NOT NULL UNIQUE
+);
+
 -- Product Table (Updated)
 CREATE TABLE Product (
-    ProductID int IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Code Nvarchar(20) null,
-    ProductName NVARCHAR(100) , 
-	 BrandID INT FOREIGN KEY REFERENCES Brand(BrandID),
-    [Type] nvarchar(100), 
-    Quantity int,
-    WarrantyPeriod int NOT NULL,
-    [Status] nvarchar(100),
+    ProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Code NVARCHAR(20) NULL,
+    ProductName NVARCHAR(100), 
+    BrandID INT FOREIGN KEY REFERENCES Brand(BrandID),
+    ProductTypeID INT NOT NULL REFERENCES ProductType(ProductTypeID),
+    Quantity INT,
+    WarrantyPeriod INT NOT NULL,
+    [Status] NVARCHAR(100),
     Image NVARCHAR(MAX)
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+
 
 -- ProductComponents Table
 CREATE TABLE ProductComponents (
@@ -253,6 +258,7 @@ CREATE TABLE FeedbackLog (
     ModifiedBy INT NOT NULL REFERENCES Staff(StaffID),                      
     DateModified DATETIME                
 );
+
 
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột

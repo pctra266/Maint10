@@ -1,3 +1,9 @@
+<%-- 
+    Document   : viewProduct
+    Created on : Feb 21, 2025, 11:49:16 PM
+    Author     : sonNH
+--%>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -110,6 +116,7 @@
                 color: white;
             }
             .btn-delete {
+                width: 85px;
                 background: #EA2939;
                 color: white;
             }
@@ -139,7 +146,6 @@
             }
 
         </style>
-
     </head>
 
     <body>
@@ -148,6 +154,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+
 
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger">
@@ -162,7 +169,7 @@
                     </c:if>
 
                     <div style="display: flex; align-items: center; gap: 2%">
-                        <div>
+                        <div style="margin-left: 1%">
                             <label for="recordsPerPage">Products per page:</label>
                             <input type="number" id="recordsPerPage" name="recordsPerPage" min="1" value="${recordsPerPage}">
                             <button onclick="updateRecordsPerPage()">Apply</button>
@@ -175,7 +182,6 @@
                                 <button type="submit">Upload</button>
                             </form>
                         </div>
-
                     </div>
 
                     <div class="gom">
@@ -207,23 +213,25 @@
                             </select>
 
                             <select name="type">
-                                <option value="all">All Types</option>
+                                <option value="">All Types</option>
                                 <c:forEach var="t" items="${listType}">
-                                    <option value="${t}" ${type == t ? 'selected' : ''}>${t}</option>
+                                    <option value="${t.productTypeId}"${ productTypeId == t.productTypeId ? 'selected' : ''}>
+                                        ${t.typeName}
+                                    </option>
                                 </c:forEach>
                             </select>
 
                             <button class="search" type="submit">Search</button>
                         </form>
-
-                        <form action="viewProduct">
-                            <button class="search" type="submit">All Product</button>
-                        </form>
-
-                        <form action="addP">
-                            <button class="add-product" type="submit">Add Product</button>
-                        </form>
                     </div>
+
+                    <form action="viewProduct">
+                        <button class="search" type="submit">All Product</button>
+                    </form>
+
+                    <a href="viewProduct?action=add" class="btn-update">
+                        <i class="fas fa-edit"></i> Add Product
+                    </a>
 
                     <h1 style="text-align: center">Product List</h1>
                     <table>
@@ -245,7 +253,7 @@
                                     <td>${product.code}</td>
                                     <td>${product.productName}</td>
                                     <td>${product.brandName}</td>
-                                    <td>${product.type}</td>
+                                    <td>${product.productTypeName}</td>
                                     <td>${product.quantity}</td>
                                     <td>${product.warrantyPeriod} months</td>
                                     <td>
@@ -254,10 +262,10 @@
                                         </c:if>
                                     </td>
                                     <td style="width: 15%">
-                                        <a href="updateproduct?id=${product.productId}" class="btn-update">
+                                        <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
                                             <i class="fas fa-edit"></i> Update
                                         </a>
-                                        <a href="deleteproduct?id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
+                                        <a href="viewProduct?action=delete&id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </a>
                                     </td>
@@ -266,69 +274,69 @@
                         </tbody>
                     </table>
 
-                    <!-- Pagination -->
                     <div class="pagination">
                         <c:forEach var="i" begin="1" end="${totalPages}">
-                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${type}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${i}&recordsPerPage=${recordsPerPage}" 
+                            <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${i}&recordsPerPage=${recordsPerPage}" 
                                class="${i == page ? 'active' : ''}">
                                 ${i}
                             </a>
                         </c:forEach>
-                    </div>
-
-                    <script>
-                        document.getElementById("sortQuantity").addEventListener("change", function () {
-                            let url = new URL(window.location.href);
-                            url.searchParams.set("sortQuantity", this.value);
-                            url.searchParams.delete("sortWarranty");
-                            window.location.href = url;
-                        });
-
-                        document.getElementById("sortWarranty").addEventListener("change", function () {
-                            let url = new URL(window.location.href);
-                            url.searchParams.set("sortWarranty", this.value);
-                            url.searchParams.delete("sortQuantity");
-                            window.location.href = url;
-                        });
-
-                        function validateCode() {
-                            let input = document.getElementById("searchCode");
-                            let value = input.value;
-                            if (!/^[a-zA-Z0-9]*$/.test(value)) {
-                                alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
-                                input.value = value.replace(/[^a-zA-Z0-9]/g, "");
-                            }
-                        }
-
-                        function updateRecordsPerPage() {
-                            let recordsInput = document.getElementById("recordsPerPage").value;
-                            if (recordsInput < 1) {
-                                alert("Number must be at least 1!");
-                                return;
-                            }
-                            let url = new URL(window.location.href);
-                            url.searchParams.set("recordsPerPage", recordsInput);
-                            url.searchParams.set("page", "1"); // Quay về trang đầu tiên sau khi thay đổi
-                            window.location.href = url;
-                        }
-
-                        document.getElementById("importExcel").addEventListener("change", function () {
-                            let file = this.files[0]; // Lấy file được chọn
-                            if (file) {
-                                let maxSize = 5 * 1024 * 1024; // 5MB
-                                if (file.size > maxSize) {
-                                    alert("File không được vượt quá 5MB!");
-                                    this.value = ""; // Reset input file nếu file quá lớn
-                                }
-                            }
-                        });
-
-                    </script>
+                    </div>             
 
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
+
+        <script>
+                                            document.getElementById("sortQuantity").addEventListener("change", function () {
+                                                let url = new URL(window.location.href);
+                                                url.searchParams.set("sortQuantity", this.value);
+                                                url.searchParams.delete("sortWarranty");
+                                                window.location.href = url;
+                                            });
+
+                                            document.getElementById("sortWarranty").addEventListener("change", function () {
+                                                let url = new URL(window.location.href);
+                                                url.searchParams.set("sortWarranty", this.value);
+                                                url.searchParams.delete("sortQuantity");
+                                                window.location.href = url;
+                                            });
+
+                                            function validateCode() {
+                                                let input = document.getElementById("searchCode");
+                                                let value = input.value;
+                                                if (!/^[a-zA-Z0-9]*$/.test(value)) {
+                                                    alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
+                                                    input.value = value.replace(/[^a-zA-Z0-9]/g, "");
+                                                }
+                                            }
+
+                                            function updateRecordsPerPage() {
+                                                let recordsInput = document.getElementById("recordsPerPage").value;
+                                                if (recordsInput < 1) {
+                                                    alert("Number must be at least 1!");
+                                                    return;
+                                                }
+                                                let url = new URL(window.location.href);
+                                                url.searchParams.set("recordsPerPage", recordsInput);
+                                                url.searchParams.set("page", "1"); // Quay về trang đầu tiên sau khi thay đổi
+                                                window.location.href = url;
+                                            }
+
+                                            document.getElementById("importExcel").addEventListener("change", function () {
+                                                let file = this.files[0]; // Lấy file được chọn
+                                                if (file) {
+                                                    let maxSize = 5 * 1024 * 1024; // 5MB
+                                                    if (file.size > maxSize) {
+                                                        alert("File không được vượt quá 5MB!");
+                                                        this.value = ""; // Reset input file nếu file quá lớn
+                                                    }
+                                                }
+                                            });
+
+        </script>
+
     </body>
 </html>

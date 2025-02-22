@@ -76,42 +76,47 @@ VALUES
 
 
 
-
-
--- Thêm dữ liệu mới cho bảng Product
-INSERT INTO Product (Code, ProductName,              BrandID, [Type],           Quantity, WarrantyPeriod, [Status], Image)
+INSERT INTO ProductType (TypeName)
 VALUES 
-    ('P001',  'Samsung Galaxy S23',        9,  'Smartphone',      100,  24, 'Active', NULL),
-    ('P002',  'Apple iPhone 14',           10, 'Smartphone',      150,  24, 'Active', NULL),
-    ('P003',  'Sony WH-1000XM5',           11, 'Headphones',      200,  12, 'Active', NULL),
-    ('P004',  'Dell XPS 13',               5,  'Laptop',          80,   36, 'Active', NULL),
-    ('P005',  'Microsoft Surface Pro 9',   12, 'Tablet',          60,   36, 'Active', NULL),
-    ('P006',  'Apple MacBook Air M2',      10, 'Laptop',          120,  24, 'Active', NULL),
-    ('P007',  'Bose QuietComfort 45',      13, 'Headphones',      140,  12, 'Active', NULL),
-    ('P008',  'HP Spectre x360',           5,  'Laptop',          90,   24, 'Active', NULL),
-    ('P009',  'LG OLED C2',                14, 'TV',              50,   36, 'Active', NULL),
-    ('P010',  'Sony PlayStation 5',        11, 'Gaming Console',  180,  12, 'Active', NULL),
-    ('P011',  'Samsung QLED 8K TV',        9,  'TV',              70,   36, 'Active', NULL),
-    ('P012',  'Apple iPad Pro 11"',        10, 'Tablet',          160,  24, 'Active', NULL),
-    ('P013',  'Fitbit Charge 5',           15, 'Wearable',        200,  12, 'Active', NULL),
-    ('P014',  'GoPro Hero 11',             8,  'Camera',          50,   24, 'Active', NULL),
-    ('P015',  'Nintendo Switch OLED',      11, 'Gaming Console',  90,   12, 'Active', NULL),
-    ('P016',  'Apple AirPods Pro 2',       10, 'Earbuds',         150,  24, 'Active', NULL),
-    ('P017',  'OnePlus 10 Pro',            16, 'Smartphone',      100,  18, 'Active', NULL),
-    ('P018',  'Microsoft Xbox Series X',   12, 'Gaming Console',  120,  12, 'Active', NULL),
-    ('P019',  'Huawei Mate 50 Pro',        15, 'Smartphone',      60,   36, 'Active', NULL),
-    ('P020',  'Google Pixel 7',            16, 'Smartphone',      80,   24, 'Active', NULL),
-    ('P021',  'Xiaomi Mi 11',              16, 'Smartphone',      90,   24, 'Active', NULL),
-    ('P022',  'Oculus Quest 2',            12, 'VR Headset',      70,   12, 'Active', NULL),
-    ('P023',  'Razer Blade 15',            1,  'Laptop',          50,   24, 'Active', NULL),
-    ('P024',  'Dell Alienware m15',        5,  'Laptop',          40,   36, 'Active', NULL);
+    ('Smartphone'),
+    ('Headphones'),
+    ('Laptop'),
+    ('Tablet'),
+    ('TV'),
+    ('Gaming Console'),
+    ('Wearable'),
+    ('Camera'),
+    ('Earbuds'),
+    ('VR Headset');
 
 
 
-
-
-
-
+INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, [Status], Image)
+VALUES 
+    ('P001',  'Samsung Galaxy S23',        9,  1,  100,  24, 'Active', NULL),
+    ('P002',  'Apple iPhone 14',           10, 1,  150,  24, 'Active', NULL),
+    ('P003',  'Sony WH-1000XM5',           11, 2,  200,  12, 'Active', NULL),
+    ('P004',  'Dell XPS 13',               5,  3,  80,   36, 'Active', NULL),
+    ('P005',  'Microsoft Surface Pro 9',   12, 4,  60,   36, 'Active', NULL),
+    ('P006',  'Apple MacBook Air M2',      10, 3,  120,  24, 'Active', NULL),
+    ('P007',  'Bose QuietComfort 45',      13, 2,  140,  12, 'Active', NULL),
+    ('P008',  'HP Spectre x360',           5,  3,  90,   24, 'Active', NULL),
+    ('P009',  'LG OLED C2',                14, 5,  50,   36, 'Active', NULL),
+    ('P010',  'Sony PlayStation 5',        11, 6,  180,  12, 'Active', NULL),
+    ('P011',  'Samsung QLED 8K TV',        9,  5,  70,   36, 'Active', NULL),
+    ('P012',  'Apple iPad Pro 11"',        10, 4,  160,  24, 'Active', NULL),
+    ('P013',  'Fitbit Charge 5',           15, 7,  200,  12, 'Active', NULL),
+    ('P014',  'GoPro Hero 11',             8,  8,  50,   24, 'Active', NULL),
+    ('P015',  'Nintendo Switch OLED',      11, 6,  90,   12, 'Active', NULL),
+    ('P016',  'Apple AirPods Pro 2',       10, 9,  150,  24, 'Active', NULL),
+    ('P017',  'OnePlus 10 Pro',            16, 1,  100,  18, 'Active', NULL),
+    ('P018',  'Microsoft Xbox Series X',   12, 6,  120,  12, 'Active', NULL),
+    ('P019',  'Huawei Mate 50 Pro',        15, 1,  60,   36, 'Active', NULL),
+    ('P020',  'Google Pixel 7',            16, 1,  80,   24, 'Active', NULL),
+    ('P021',  'Xiaomi Mi 11',              16, 1,  90,   24, 'Active', NULL),
+    ('P022',  'Oculus Quest 2',            12, 10, 70,   12, 'Active', NULL),
+    ('P023',  'Razer Blade 15',            1,  3,  50,   24, 'Active', NULL),
+    ('P024',  'Dell Alienware m15',        5,  3,  40,   36, 'Active', NULL);
 
 
 

@@ -28,11 +28,28 @@
                         <p><strong>Phone:</strong> ${customerProfile.phone}</p>
                         <p><strong>Address:</strong> ${customerProfile.address}</p>
                     </div>
+
+                    <!-- Nút Update và Cancel -->
+                    <div class="profile-actions">
+                        <a href="updateProfile.jsp" class="update-button">Update Profile</a>
+                        <button type="button" class="cancel-button" onclick="cancelUpdate()">Cancel</button>
+                    </div>
+
                 </c:when>
                 <c:otherwise>
                     <p>No profile found. Please log in.</p>
                 </c:otherwise>
             </c:choose>
+
+            <!-- Nút Back to Home -->
+            <a href="HomePage.jsp" class="back-button">Back to Home</a>
         </div>
+
+        <script>
+            function cancelUpdate() {
+                window.location.href = 'profile.jsp';
+            }
+        </script>
+
     </body>
 </html>

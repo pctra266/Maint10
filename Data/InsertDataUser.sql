@@ -1,5 +1,5 @@
-﻿
-USE MaintainManagement
+﻿USE MaintainManagement
+
 INSERT INTO [Role] (RoleName)
 VALUES 
 ('Admin'),

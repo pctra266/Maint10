@@ -363,7 +363,7 @@ public class ComponentDAO extends DBContext {
             ps.setInt(2, pageSize);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-  
+
                 components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
@@ -530,7 +530,7 @@ public class ComponentDAO extends DBContext {
 
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
- 
+
                 components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
@@ -601,7 +601,7 @@ public class ComponentDAO extends DBContext {
             }
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-         
+
                 components.add(mapComponent(rs));
             }
         } catch (SQLException e) {
@@ -612,12 +612,13 @@ public class ComponentDAO extends DBContext {
 
     public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
-        String sql = "SELECT p.*, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName, "
+        String sql = "SELECT p.*, pt.TypeName, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName "
                 + "FROM Product p "
                 + "JOIN ProductComponents pc ON p.ProductID = pc.ProductID "
                 + "JOIN Component c ON pc.ComponentID = c.ComponentID "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
                 + "JOIN ComponentType t ON c.TypeID = t.TypeID "
+                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
                 + "WHERE pc.ComponentID = ?";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -629,7 +630,8 @@ public class ComponentDAO extends DBContext {
                 product.setCode(rs.getString("Code"));
                 product.setProductName(rs.getString("ProductName"));
                 product.setBrandId(rs.getInt("BrandID"));
-                product.setType(rs.getString("Type"));
+                product.setProductTypeId(rs.getInt("ProductTypeID"));
+                product.setProductTypeName(rs.getString("TypeName"));
                 product.setQuantity(rs.getInt("Quantity"));
                 product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
                 product.setStatus(rs.getString("Status"));

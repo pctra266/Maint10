@@ -164,6 +164,7 @@
 
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
+
                 <main class="content">
                     <div class="form-container">
                         <h2>Add Product</h2>
@@ -174,7 +175,9 @@
                             </div>
                         </c:if>
 
-                        <form action="addP" method="post" enctype="multipart/form-data">
+                        <form action="viewProduct" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="add">
+
                             <!-- Nhập code -->
                             <div class="form-group">
                                 <label for="code">Product Code:</label>
@@ -202,8 +205,14 @@
 
                             <!-- Nhập type -->
                             <div class="form-group">
-                                <label for="type">Type:</label>
-                                <input type="text" id="type" name="type" value="${type}" required>
+                                <select name="type">
+                                    <option value="">All Types</option>
+                                    <c:forEach var="t" items="${listType}">
+                                        <option value="${t.productTypeId}"${ productTypeId == t.productTypeId ? 'selected' : ''}>
+                                            ${t.typeName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
                             </div>
 
                             <!-- Nhập quantity -->
@@ -245,7 +254,7 @@
 
         <script>
                                     document.addEventListener("DOMContentLoaded", function () {
-                                        let form = document.querySelector("form[action='addP']");
+                                        let form = document.querySelector("form[action='viewProduct']");
                                         let codeInput = document.getElementById("code");
                                         let nameInput = document.getElementById("name");
                                         let brandInput = document.getElementById("brand");
@@ -347,37 +356,16 @@
                                         });
                                     });
 
-                                    document.addEventListener("DOMContentLoaded", function () {
-                                        let imageInput = document.getElementById("newImage");
+                                    function previewImage(event) {
+                                        const reader = new FileReader();
+                                        reader.onload = function () {
+                                            document.getElementById('currentImage').src = reader.result;
+                                        };
+                                        reader.readAsDataURL(event.target.files[0]);
+                                    }
 
-                                        function showError(input, message) {
-                                            let errorSpan = input.parentNode.querySelector(".error-message");
-                                            if (!errorSpan) {
-                                                errorSpan = document.createElement("span");
-                                                errorSpan.className = "error-message";
-                                                errorSpan.style.color = "red";
-                                                errorSpan.style.fontSize = "14px";
-                                                input.parentNode.appendChild(errorSpan);
-                                            }
-                                            errorSpan.innerText = message;
-                                        }
+                                    document.getElementById("newImage").addEventListener("change", previewImage);
 
-                                        function clearError(input) {
-                                            let errorSpan = input.parentNode.querySelector(".error-message");
-                                            if (errorSpan) {
-                                                errorSpan.remove();
-                                            }
-                                        }
-
-                                        function previewImage(event) {
-                                            const reader = new FileReader();
-                                            reader.onload = function () {
-                                                const output = document.getElementById('currentImage');
-                                                output.src = reader.result;
-                                            };
-                                            reader.readAsDataURL(event.target.files[0]);
-                                        }
-                                    });
 
                                     document.getElementById("newImage").addEventListener("change", function () {
                                         let file = this.files[0]; // Lấy file được chọn
@@ -387,6 +375,20 @@
                                                 alert("File không được vượt quá 5MB!");
                                                 this.value = ""; // Reset input file nếu file quá lớn
                                             }
+                                        }
+                                    });
+
+                                    // Kiểm tra khi nhấn submit
+                                    form.addEventListener("submit", function (event) {
+                                        let isValid = true;
+
+                                        if (nameInput.value.trim() === "") {
+                                            showError(nameInput, "Product Name cannot be empty or only spaces!");
+                                            isValid = false;
+                                        }
+
+                                        if (!isValid) {
+                                            event.preventDefault(); // Ngăn form gửi nếu có lỗi
                                         }
                                     });
         </script>
