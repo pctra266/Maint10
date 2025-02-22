@@ -25,7 +25,6 @@
                 margin: 20px;
                 font-family: 'Inter', sans-serif;
             }
-
             /* Alert Messages */
             .alert {
                 padding: 15px;
@@ -124,10 +123,7 @@
                 background: #c82333;
                 text-decoration: none;
                 color: white;
-
-
             }
-
             /* Responsive Design */
             @media (max-width: 768px) {
                 main.content {
@@ -223,15 +219,17 @@
 
                             <button class="search" type="submit">Search</button>
                         </form>
+
+                        <div>
+                            <a href="viewProduct?action=add" class="btn-update">
+                                <i class="fas fa-add"></i> Add Product
+                            </a>
+                            <button class="search" onclick="window.location.href = 'viewProduct'">All Product</button>
+                        </div>
+
                     </div>
 
-                    <form action="viewProduct">
-                        <button class="search" type="submit">All Product</button>
-                    </form>
 
-                    <a href="viewProduct?action=add" class="btn-update">
-                        <i class="fas fa-edit"></i> Add Product
-                    </a>
 
                     <h1 style="text-align: center">Product List</h1>
                     <table>
