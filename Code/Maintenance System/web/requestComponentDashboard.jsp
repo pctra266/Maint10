@@ -20,7 +20,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <div class="alert-success">${param.mess}</div>
+                    <div class="alert-primary">${param.mess}</div>
                     <h1 class="text-center">Component Request Dashboard</h1>
                     <div>
                          <form method="get" action="componentRequest" >

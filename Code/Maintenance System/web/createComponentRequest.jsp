@@ -6,6 +6,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -21,17 +22,17 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1>Create Component Request</h1>
-                    <div>
-                        ${mess}
+                    <div class="alert-primary" >
+                        ${param.mess}
                     </div>
                     <form action="componentRequest" method="get">
                         <input type="hidden" name="action" value="createComponentRequest">
                         <div class="row"  style="justify-content: space-between">
                         <div class="col-sm-6 col-md-6" style="width: 500px">
-                           <input style="margin-top: 15px" class="form-control" type="search" name="warrantyCardCode" placeholder="Warranty Card Code"  value="${warrantyCardCode}" >
+                           <input style="margin-top: 15px" class="form-control" type="search" name="componentName" placeholder="Component Name"  value="${componentName}" >
                            <div style="margin-top: 15px"> 
                                <div>
-                            <input style="margin-top: 15px" class="form-control" type="search" name="productCode" placeholder="Product Code"  value="${productCode}" >
+                            <input style="margin-top: 15px" class="form-control" type="search" name="componentCode" placeholder="Component Code"  value="${componentCode}" >
                                </div>
                                <div style="margin-top: 15px" >
                                <label >Show 
@@ -46,17 +47,17 @@
                                </div>
                         </div>
                         <div class="col-sm-6 col-md-6" style="width: 500px">
-                                 <select style="margin-top: 15px" class="form-select" name="warrantyStatus" onchange="this.form.submit()">
-                                     <option ${(warrantyStatus=='')?"selected":""} value="all" >Warranty Status </option>
-                                    <option ${(warrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
-                                    <option ${(warrantyStatus=='done')?"selected":""} value="done">Done</option>
-                                    <option ${(warrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
-                                    <option ${(warrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
+                                 <select style="margin-top: 15px" class="form-select" name="typeID" onchange="this.form.submit()">
+                                     <option value="" >Component Type </option>
+                                    <c:forEach var="type" items="${typeList}">
+                                     <option value="${type.typeID}" ${type.typeID eq typeID ? "selected" : ""}>${type.typeName}</option>
+                                </c:forEach>
                                 </select>
-                                 <select style="margin-top: 15px" class="form-select" name="typeMaintain" onchange="this.form.submit()">
-                                    <option value="">Type Maintain</option>
-                                    <option ${(typeMaintain=='maintain')?"selected":""} value="maintain">Maintain</option>
-                                    <option ${(typeMaintain=='repair')?"selected":""} value="repair">Repair</option>
+                                 <select style="margin-top: 15px" class="form-select" name="brandID" onchange="this.form.submit()">
+                                    <option value="">Component Brand</option>
+                                    <c:forEach var="brand" items="${brandList}">
+                                    <option value="${brand.brandId}" ${brandID  eq brand.brandId ? "selected" : ""}>${brand.brandName}</option>
+                                </c:forEach>
                                 </select>
                                 <div style="float: right">
                                 <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
@@ -64,8 +65,10 @@
                         </div>
                                 </div>
                     </form>
-                    <form action="componentRequest" method="post">
+                    
+                   <form action="componentRequest" method="post">
                         <input type="hidden" name="action" value="createComponentRequest">
+                        <input type="hidden" name="productCode" value="${productCode}"> 
                         <input type="hidden"  name="warrantyCardID" value="${warrantyCardID}">
                         <table class="table table-hover my-0">
                             <thead>
@@ -85,22 +88,16 @@
                                 <td>${o.type}</td>
                                 <td>${o.brand}</td>
                                 <td>${o.componentName}</td>
-                                <td><input type="number" name="quantities"  min="0" required></td>
+                                <td><input type="number" name="quantities"  min="0" value=""></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                         
                         </table>
+
                             <div><textarea name="note"></textarea></div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
-                    <div>
-                         <form method="get" action="componentRequest" >
-                            <input type="hidden" name="action" value="viewComponentRequestDashboard">
-                            
-                        
-                         </form>   
-                    </div>
                      <jsp:include page="/includes/pagination.jsp" />
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
@@ -108,7 +105,6 @@
             </div>
 
         </div>
-
         <script src="js/app.js"></script>
 
     </body>

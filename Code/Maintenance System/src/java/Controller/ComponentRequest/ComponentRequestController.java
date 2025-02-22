@@ -5,6 +5,7 @@
 
 package Controller.ComponentRequest;
 
+import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import Model.Component;
 import Model.ComponentRequest;
@@ -67,7 +68,6 @@ public class ComponentRequestController extends HttpServlet {
     throws ServletException, IOException {
         //dao
         ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
-        
         //action
         String action = request.getParameter("action");
         if(action == null){
@@ -93,10 +93,12 @@ public class ComponentRequestController extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
         String componentRequestID = request.getParameter("componentRequestID");
-        String componentCode = request.getParameter("componentCode");
-        String componentName = request.getParameter("componentName");
+        String componentCode = SearchUtils.preprocessSearchQuery(request.getParameter("componentCode"));
+        String componentName = SearchUtils.preprocessSearchQuery(request.getParameter("componentName"));
         String typeID = request.getParameter("typeID");
         String brandID = request.getParameter("brandID");
+        String mess = request.getParameter("mess");
+        request.setAttribute("mess", mess);
         request.setAttribute("brandID", brandID);
         request.setAttribute("typeID", typeID);
         request.setAttribute("componentName", componentName);
@@ -110,6 +112,8 @@ public class ComponentRequestController extends HttpServlet {
         request.setAttribute("typeMaintain", typeMaintain);
         request.setAttribute("sort", sort);
         request.setAttribute("order", order);
+        request.setAttribute("typeList", componentRequestDao.getAllComponentType());
+        request.setAttribute("brandList", componentRequestDao.getAllBrand());
         int total = 0;
         switch(action){
             case "viewComponentRequestDashboard":
@@ -199,53 +203,54 @@ public class ComponentRequestController extends HttpServlet {
         }
         
         //parameter
+        String productCode = request.getParameter("productCode");
         String warrantyCardIDstr = request.getParameter("warrantyCardID");
         String note = request.getParameter("note");
         request.setAttribute("note", note);
         request.setAttribute("warrantyCardID", warrantyCardIDstr);
+        request.setAttribute("productCode", productCode);
         String[] quantities = request.getParameterValues("quantities");
         String[] componentIDs = request.getParameterValues("componentIDs");
         List<Integer> listQuantities = new ArrayList<Integer>();
         List<Integer> listComponentIDs = new ArrayList<Integer>();
-        listQuantities = parselistStringToList(quantities);
-        listComponentIDs = parselistStringToList(componentIDs);
+           if (componentIDs != null && quantities != null) {
+        for (int i = 0; i < componentIDs.length; i++) {
+            try {
+                int quantity = Integer.parseInt(quantities[i]); 
+                if (quantity > 0) { 
+                    listComponentIDs.add(Integer.parseInt(componentIDs[i]));
+                    listQuantities.add(quantity);
+                }
+            } catch (NumberFormatException e) {
+               
+            }
+        }
+    }
+           
         boolean valid = true;
+        String mess ="";
         //do
         switch(action){
             case "createComponentRequest":
-                if(listQuantities == null || listComponentIDs == null){
+                if(listQuantities == null){
                     valid = false;
                 }
             if(valid){
                 if(!componentRequestDao.createComponentRequest(Integer.parseInt(warrantyCardIDstr), note, listComponentIDs, listQuantities)){
-                    request.setAttribute("mess", "create fail");
+                    mess  = "Create fail";
                 }else{
-                    request.setAttribute("mess", "success");
+                    mess = "Create Successfully !";
                 }
+                 response.sendRedirect("componentRequest?action=viewComponentRequestDashboard&mess="+mess);
+                 return ;
             }else{
-                request.setAttribute("mess", "in valid do cai gi do");
+                mess = "invalid ...";
             }
-            request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
+            response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID="+warrantyCardIDstr+"&productCode="+productCode+"&mess="+mess);
                 break;
         }
     }
     
-    private List<Integer> parselistStringToList(String[] listString){
-        List<Integer> list = new ArrayList<Integer>();
-        for (String str : listString) {
-            try {
-                Integer x = Integer.parseInt(str);
-                list.add(x);
-            } catch (Exception e) {
-            }
-        }
-        System.out.println("So luong phan tu list String: " + listString.length);
-        System.out.println("So luong list thuc the: " + list.size());
-        if(listString.length != list.size()){
-            return null;
-        }
-        return list;
-    }
 
     /** 
      * Returns a short description of the servlet.

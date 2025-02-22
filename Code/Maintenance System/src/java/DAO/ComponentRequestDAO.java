@@ -3,9 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
+import Model.Brand;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
+import Model.ComponentType;
 import Model.ProductDetail;
 import java.sql.Statement;
 import java.sql.SQLException;
@@ -439,6 +441,51 @@ public class ComponentRequestDAO {
            }
             return list;
         }
+        
+        public ArrayList<Brand> getAllBrand(){
+            ArrayList<Brand> list = new ArrayList<>();
+           String query = """
+                        select BrandID, BrandName
+                        from Brand """;
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   Brand brand = new Brand();
+                   brand.setBrandId(rs.getInt("BrandID"));
+                   brand.setBrandName(rs.getString("BrandName"));
+                   
+                   list.add(brand);
+               }
+           }catch (Exception e){
+           }
+
+           return list;
+        }
+        public ArrayList<ComponentType> getAllComponentType(){
+            ArrayList<ComponentType> list = new ArrayList<>();
+           String query = """
+                          select TypeID, TypeName
+                          from ComponentType """;
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   ComponentType componentType = new ComponentType();
+                   componentType.setTypeID(rs.getInt("TypeID"));
+                   componentType.setTypeName(rs.getString("TypeName"));
+                   
+                   list.add(componentType);
+               }
+           }catch (Exception e){
+           }
+
+           return list;
+        }
+        
+        
             
     public static void main(String[] args) {
         ArrayList<ProductDetail> list = new ArrayList<>();
