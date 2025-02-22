@@ -168,18 +168,58 @@ public class ComponentRequestDAO {
         }
         return total;
     }
-    private  ArrayList<Component> getallListComponent(){
+    private  ArrayList<Component> getallListComponent(String componentCode, String componentName,
+            String typeID, String brandID, int page, int pageSize){
         ArrayList<Component> list = new ArrayList<>();
-            String query = "select ComponentID,ComponentCode, ComponentName from Component";
+            String query = """
+                           select c.ComponentID, c.ComponentCode, c.ComponentName,c.TypeID, c.BrandID, b.BrandName, ct.TypeName
+                           from Component c 
+                           join Brand b on c.BrandID = b.BrandID
+                           join ComponentType ct on c.TypeID = ct.TypeID
+                           where 1=1""";
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                query += " and c.ComponentCode like ?";
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+                query += " and c.ComponentName like ?";
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                query += " and c.BrandID = ?";
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                query += " and c.TypeID = ?";
+            }
+            query += " order by ComponentID asc";
+            query += " offset ? rows  fetch next ? rows only;";
         try{
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
+            int count = 1;
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                ps.setString(count++, "%"+ componentCode + "%");
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+               ps.setString(count++,  "%"+ componentName + "%");
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                ps.setString(count++, brandID);
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                ps.setString(count++, typeID);
+            }
+            int offset = (page-1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
             rs = ps.executeQuery();
             while(rs.next()){
                 Component component = new Component();
                 component.setComponentID(rs.getInt("ComponentID"));
                 component.setComponentCode(rs.getString("ComponentCode"));
                 component.setComponentName(rs.getString("ComponentName"));
+                component.setBrandId(rs.getInt("BrandID"));
+                component.setTypeId(rs.getInt("TypeID"));
+                component.setBrand(rs.getString("BrandName"));
+                component.setType(rs.getString("TypeName"));
                 list.add(component);
             }
         }catch(Exception e){
@@ -188,37 +228,130 @@ public class ComponentRequestDAO {
         return list;
     }
     
-    public ArrayList<Component> getallListComponentByProductCode(String productCode){
+    public ArrayList<Component> getallListComponentByProductCode(String productCode, String componentCode, String componentName,
+            String typeID, String brandID, int page, int pageSize){
         ArrayList<Component> list = new ArrayList<>();
             String query = """
-                           select c.ComponentID, c.ComponentCode, c.ComponentName 
-                           \tfrom Product p 
-                           \tjoin ProductComponents pc on p.ProductID = pc.ProductID
-                           \tjoin Component c on pc.ComponentID = c.ComponentID
-                           \twhere 1=1""";
+                           select c.ComponentID, c.ComponentCode, c.ComponentName,c.TypeID, c.BrandID, b.BrandName, ct.TypeName
+                           	from Product p 
+                           	join ProductComponents pc on p.ProductID = pc.ProductID
+                           	join Component c on pc.ComponentID = c.ComponentID
+                           	join Brand b on c.BrandID = b.BrandID
+                           	join ComponentType ct on c.TypeID = ct.TypeID
+                           	where 1=1""";
             if(productCode != null && !productCode.trim().isEmpty()){
                 query += " and p.Code like ?";
             }else{
-                return getallListComponent();
+                return getallListComponent(componentCode, componentName,
+            typeID,  brandID,  page,  pageSize);
             }
+            
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                query += " and c.ComponentCode like ?";
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+                query += " and c.ComponentName like ?";
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                query += " and c.BrandID = ?";
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                query += " and c.TypeID = ?";
+            }
+            query += " order by ComponentID asc";
+            query += " offset ? rows  fetch next ? rows only;";
+            
         try{
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
+            int count = 1;
             if(productCode != null && !productCode.trim().isEmpty()){
-                ps.setString(1, productCode);
+                ps.setString(count++, productCode);
             }
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                ps.setString(count++, "%"+ componentCode + "%");
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+               ps.setString(count++,  "%"+ componentName + "%");
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                ps.setString(count++, brandID);
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                ps.setString(count++, typeID);
+            }
+            int offset = (page-1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
             rs = ps.executeQuery();
             while(rs.next()){
                 Component component = new Component();
                 component.setComponentID(rs.getInt("ComponentID"));
                 component.setComponentCode(rs.getString("ComponentCode"));
                 component.setComponentName(rs.getString("ComponentName"));
+                component.setBrandId(rs.getInt("BrandID"));
+                component.setTypeId(rs.getInt("TypeID"));
+                component.setBrand(rs.getString("BrandName"));
+                component.setType(rs.getString("TypeName"));
                 list.add(component);
             }
         }catch(Exception e){
             
         }
         return list;
+    }
+    public int totalComponentByProductCode(String productCode, String componentCode, String componentName,
+            String typeID, String brandID){
+        String query = """
+                           select count(*)
+                           	from Product p 
+                           	join ProductComponents pc on p.ProductID = pc.ProductID
+                           	join Component c on pc.ComponentID = c.ComponentID
+                           	where 1=1""";
+            if(productCode != null && !productCode.trim().isEmpty()){
+                query += " and p.Code like ?";
+            }
+            
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                query += " and c.ComponentCode like ?";
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+                query += " and c.ComponentName like ?";
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                query += " and c.BrandID = ?";
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                query += " and c.TypeID = ?";
+            }
+            try{
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if(productCode != null && !productCode.trim().isEmpty()){
+                ps.setString(count++, productCode);
+            }
+            if(componentCode != null && !componentCode.trim().isEmpty()){
+                ps.setString(count++, "%"+ componentCode + "%");
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+               ps.setString(count++,  "%"+ componentName + "%");
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                ps.setString(count++, brandID);
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                ps.setString(count++, typeID);
+            }
+            rs = ps.executeQuery();
+            while(rs.next()){
+                return rs.getInt(1);
+            }
+        }catch(Exception e){
+            
+        }
+        return 0;
+            
     }
     
         public int insertComponentRequest(int warrantyCardID, String note, Connection conn) throws SQLException {
@@ -314,14 +447,15 @@ public class ComponentRequestDAO {
 //        for (ProductDetail productDetail : list) {
 //            System.out.println(productDetail);
 //        }
-        ArrayList<Component> list1 = dao.getallListComponentByProductCode("");
+//        ArrayList<Component> list1 = dao.getallListComponentByProductCode("","","","","",1,30);
 //        for (Component component : list1) {
 //            System.out.println(component);
 //        }
-            ArrayList<ComponentRequestDetail> list2 = dao.getListComponentRequestDetailById("1");
-            for (ComponentRequestDetail componentRequestDetail : list2) {
-                System.out.println(componentRequestDetail);
-        }
+//            ArrayList<ComponentRequestDetail> list2 = dao.getListComponentRequestDetailById("1");
+//            for (ComponentRequestDetail componentRequestDetail : list2) {
+//                System.out.println(componentRequestDetail);
+//        }
 //        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
+        System.out.println(dao.totalComponentByProductCode("", "", "", "", ""));
     }
 }
