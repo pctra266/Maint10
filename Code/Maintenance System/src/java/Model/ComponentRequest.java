@@ -12,12 +12,28 @@ import java.util.Date;
  */
 public class ComponentRequest {
     private int componentRequestID, warrantyCardID;
-    private Date date;
-    private String status, note;
-
+    private Date date, warrantyCreateDate;
+    private String status, note, warrantyCode;
     public ComponentRequest() {
     }
 
+    public Date getWarrantyCreateDate() {
+        return warrantyCreateDate;
+    }
+
+    public void setWarrantyCreateDate(Date warrantyCreateDate) {
+        this.warrantyCreateDate = warrantyCreateDate;
+    }
+
+    public String getWarrantyCode() {
+        return warrantyCode;
+    }
+
+    public void setWarrantyCode(String warrantyCode) {
+        this.warrantyCode = warrantyCode;
+    }
+    
+    
     public int getComponentRequestID() {
         return componentRequestID;
     }

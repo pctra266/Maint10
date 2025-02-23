@@ -27,20 +27,37 @@ public class ComponentRequestDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-    public ArrayList<ComponentRequest> getAllComponentRequest(){
+    public ArrayList<ComponentRequest> getAllComponentRequest(String warrantyCardCode,int page, int pageSize){
            ArrayList<ComponentRequest> list = new ArrayList<>();
            String query = """
-                          select cr.ComponentRequestID,cr.WarrantyCardID,cr.Date,cr.Status, cr.Note 
-                          \tfrom ComponentRequest cr""";
+                          select cr.ComponentRequestID,wc.WarrantyCardID ,wc.WarrantyCardCode, wc.CreatedDate as WCardCreateDate,cr.Date as CRequestCreateDate, cr.Status, cr.Note 
+                          	from ComponentRequest cr 
+                          	join WarrantyCard wc on cr.WarrantyCardID = wc.WarrantyCardID
+                          	where 1=1""";
+           if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+            query += "	and wc.WarrantyCardCode like ?";
+            }
+           query +=" order by cr.Date desc";
+           query +=" offset ? rows fetch next ? rows only;";
            try{
                conn = new DBContext().connection;
                ps = conn.prepareStatement(query);
+               int count =1;
+               if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+                   ps.setString(count++, "%"+ warrantyCardCode+"%");
+                }
+               int offset = (page-1)*pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
                rs = ps.executeQuery();
                while(rs.next()){
                    ComponentRequest componentRequest = new ComponentRequest();
                    componentRequest.setComponentRequestID(rs.getInt("ComponentRequestID"));
                    componentRequest.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                   componentRequest.setDate(rs.getDate("Date"));
+                   componentRequest.setWarrantyCode(rs.getString("WarrantyCardCode"));
+                   componentRequest.setDate(rs.getDate("CRequestCreateDate"));
+                   componentRequest.setWarrantyCreateDate(rs.getDate("WCardCreateDate"));
+                   componentRequest.setStatus(rs.getString("Status"));
                    componentRequest.setNote(rs.getString("Note"));
                    
                    list.add(componentRequest);
@@ -50,6 +67,31 @@ public class ComponentRequestDAO {
 
            return list;
        }
+    public int totalComponentRequest(String warrantyCardCode){
+        String query = """
+                          select count(*) 
+                          	from ComponentRequest cr 
+                          	join WarrantyCard wc on cr.WarrantyCardID = wc.WarrantyCardID
+                          	where 1=1""";
+           if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+            query += "	and wc.WarrantyCardCode like ?";
+            }
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               int count =1;
+               if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+                   ps.setString(count++, "%"+ warrantyCardCode+"%");
+                }
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   return rs.getInt(1);
+               }
+           }catch (Exception e){
+           }
+
+           return 0;
+    }
     public ArrayList<ProductDetail> getAllListProductUnderMaintain(String warrantyCardCode, String productCode,
           String unknownProductCode,  String warrantyStatus,String typeMaintain, String sort, String order, int page, int pageSize){
         ArrayList<ProductDetail> list = new ArrayList<>();
@@ -498,11 +540,11 @@ public class ComponentRequestDAO {
 //        for (Component component : list1) {
 //            System.out.println(component);
 //        }
-//            ArrayList<ComponentRequestDetail> list2 = dao.getListComponentRequestDetailById("1");
-//            for (ComponentRequestDetail componentRequestDetail : list2) {
-//                System.out.println(componentRequestDetail);
-//        }
+            ArrayList<ComponentRequest> list2 = dao.getAllComponentRequest("",1   , 5);
+            for (ComponentRequest x : list2) {
+                System.out.println(x);
+        }
 //        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
-        System.out.println(dao.totalComponentByProductCode("", "", "", "", ""));
+//        System.out.println(dao.totalComponentByProductCode("", "", "", "", ""));
     }
 }
