@@ -84,6 +84,54 @@
         background-color: #0056b3;
         font-weight: bold;
     }
+    /* Tổng thể form */
+    .form-container {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        margin: 15px 0;
+    }
+
+    /* Input và Select */
+    .input-group, .form-select {
+        transition: all 0.3s ease-in-out;
+        border-radius: 8px;
+    }
+
+    .form-select:focus, 
+    .form-control:focus {
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        border-color: #007bff;
+    }
+
+    /* Nút Search */
+    button.btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: all 0.3s ease;
+        border-radius: 8px;
+    }
+
+    button.btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+        transform: scale(1.05);
+    }
+
+    /* Chỉnh khoảng cách giữa các phần tử */
+    .me-2 {
+        margin-right: 10px;
+    }
+
+    .ms-2 {
+        margin-left: 10px;
+    }
+
+    .shadow-sm {
+        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
 </style>
     </head>
     <body>
@@ -94,50 +142,50 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center ">Staff List</h1>
-                    <form class="" action="StaffController" method="get">
-                        <div class="col-md-6" style="width: 500px">
-                            <input class="form-control" type="searchname" name="searchname" placeholder="Search"  value="${param.searchname}" style="margin-bottom:5px">
-                            <select
-                            id="search"
-                            type="search"
-                            class="add__input"
-                            oninput="checkInput(this)"
-                            name="search"
-                            required
-                            >
-                            <option></option>
-                            <option value="Name" ${param.search == 'Name' ? 'selected' : ''}>Name</option>
-                            <option value="Role"${param.search == 'Role' ? 'selected' : ''}>Role</option>
-                            </select>
-                            <button class="btn btn-primary" style="margin: 2px; color: white;background-color: #007bff" type="submit">Search</button>        
-                                                                                                               
-                        </div> 
-                        <div class="col-md-6" style="width: 500px">
-                            <div>
-                                <select onchange="this.form.submit;()" name="column" id="column" class="form-select">
-                                    <option value="">Sort By</option>
-                                    <option ${(column=='Name')?"selected":""} value="Name">Name</option>
-                                    <option ${(column=='Role')?"selected":""} value="Role">Role</option>
+                    <form class="row g-3 align-items-center form-container" action="StaffController" method="get">
+                        <!-- Search Section -->
+                        <div class="col-md-6">
+                            <div class="input-group shadow-sm">
+                                <input class="form-control" type="text" name="searchname" placeholder="🔍 Search..." value="${param.searchname}">
+                                <select id="search" class="form-select" name="search" required>
+                                    <option value="">-- Search By --</option>
+                                    <option value="Name" ${param.search == 'Name' ? 'selected' : ''}>Name</option>
+                                    <option value="Email" ${param.search == 'Email' ? 'selected' : ''}>Email</option>
                                 </select>
-                            </div>
-                            <div>
-                                    <select onchange="this.form.submit()" name="sortOrder" id="sortOrder" style="margin-top: 15px" class="form-select">
-                                    <option value="">Sort Order</option>
-                                    <option ${(sortOrder=='asc')?"selected":""} value="asc">Ascending</option>
-                                    <option ${(sortOrder=='desc')?"selected":""} value="desc" >Descending</option>
-                                </select>
+                                <button class="btn btn-primary" type="submit">Search</button>
                             </div>
                         </div>
-                                <label style="margin: 5px">Show 
-                                <select name="page_size" class="form-select form-select-sm d-inline-block" style="width: auto; " onchange="this.form.submit()">
-                                    <option value="5" ${page_size==5?"selected":""}>5</option>
-                                    <option value="7" ${page_size==7?"selected":""}>7</option>
-                                    <option value="10" ${page_size==10?"selected":""}>10</option>
-                                    <option value="15" ${page_size==15?"selected":""}>15</option>
-                                </select> 
-                                entries
-                            </label>
-                    </form>  
+
+                        <!-- Sort Section -->
+                        <div class="col-md-3">
+                            <select onchange="this.form.submit()" name="column" id="column" class="form-select shadow-sm">
+                                <option value="">Sort By</option>
+                                <option value="Name" ${column=='Name' ? 'selected' : ''}>Name</option>
+                                <option value="Email" ${column=='Email' ? 'selected' : ''}>Email</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-3">
+                            <select onchange="this.form.submit()" name="sortOrder" id="sortOrder" class="form-select shadow-sm">
+                                <option value="">Sort Order</option>
+                                <option value="asc" ${sortOrder=='asc' ? 'selected' : ''}>Ascending</option>
+                                <option value="desc" ${sortOrder=='desc' ? 'selected' : ''}>Descending</option>
+                            </select>
+                        </div>
+
+                        <!-- Page Size -->
+                        <div class="col-auto d-flex align-items-center">
+                            <label class="form-label fw-bold me-2">Show</label>
+                            <select name="page_size" class="form-select form-select-sm shadow-sm" onchange="this.form.submit()">
+                                <option value="5" ${page_size==5 ? "selected" : ""}>5</option>
+                                <option value="7" ${page_size==7 ? "selected" : ""}>7</option>
+                                <option value="10" ${page_size==10 ? "selected" : ""}>10</option>
+                                <option value="15" ${page_size==15 ? "selected" : ""}>15</option>
+                            </select>
+                            <label class="form-label ms-2">entries</label>
+                        </div>
+                    </form>
+  
                             
                     <table class="table table-hover my-0">
                         <div class="row mb-3">
@@ -166,7 +214,8 @@
                                 <th>Name</th>
                                 <th>Image</th>
                                 <th>Role</th>
-                                <th>Email</th>
+                                <th>Gender</th>
+                                <th>Email</th>                               
                                 <th>Change</th>
                                 <th>Delete</th>
                             </tr>   
@@ -182,6 +231,7 @@
                                          
                                     </td>                                                                         
                                     <td>${List.getRole()}</td>
+                                    <td>${List.getGender()}</td>
                                     <td>${List.getEmail()}</td>
                                     <td>
                                         <a href="./StaffController?staffID=${List.getStaffID()}&action=Update" 

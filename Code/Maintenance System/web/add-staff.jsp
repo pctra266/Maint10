@@ -31,7 +31,9 @@
                 border-radius: 10px;
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             }
-
+            .add__signin {
+                margin-top: 150px; /* Tạo khoảng trống trên cùng */
+            }
             .add__signin-info {
                 font-size: 20px;
                 font-weight: bold;
@@ -208,6 +210,19 @@
                         <label for="password" class="add__input-label"
                             >Name</label
                         >
+                    </div>
+                    <div class="add__signin-input">
+                        <select id="gender" class="add__input" name="gender" required>
+                            <option value="" disabled selected></option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label for="gender" class="add__input-label">Gender</label>
+                    </div>
+
+                    <div class="add__signin-input">
+                        <input id="date" type="date" class="add__input" name="date" required />
                     </div>
                     <div class="add__signin-input">
                         <input
