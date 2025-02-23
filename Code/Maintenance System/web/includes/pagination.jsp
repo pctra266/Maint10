@@ -62,17 +62,23 @@
                     <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                 </c:forEach>
             </c:if>
-                <input type="hidden" name="sort" value="${pagination.sort}">
-                <input type="hidden" name="order" value="${pagination.order}">
-                <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
-            </form>
-        </div>
-    </div>
+            <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                    <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
+                </c:forEach>
+            </c:if>
 
-    <!-- Script gi?p c?p nh?t gi? tr? trang -->
-    <script>
-        function setPage(page) {
-            document.getElementById('pageInput').value = page;
-            document.getElementById('paginationForm').submit();
-        }
-    </script>
+            <input type="hidden" name="sort" value="${pagination.sort}">
+            <input type="hidden" name="order" value="${pagination.order}">
+            <button type="submit" style="width:3rem" class="btn btn-primary mb-2">Go</button>
+        </form>
+    </div>
+</div>
+
+<!-- Script gi?p c?p nh?t gi? tr? trang -->
+<script>
+    function setPage(page) {
+        document.getElementById('pageInput').value = page;
+        document.getElementById('paginationForm').submit();
+    }
+</script>
