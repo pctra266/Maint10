@@ -6,23 +6,26 @@ package Controller.WarrantyCard;
 
 import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
+import DAO.WarrantyCardDetailDAO;
+import Model.WarrantyCardDetail;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author ADMIN
  */
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
-public class WarrantyCardDetail extends HttpServlet {
+public class WarrantyCardDetailServlet extends HttpServlet {
 
+    private final WarrantyCardDetailDAO wcdDao = new WarrantyCardDetailDAO();
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
 
@@ -50,7 +53,9 @@ public class WarrantyCardDetail extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
+        List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(id);
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
+        request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);
     }
@@ -81,6 +86,58 @@ public class WarrantyCardDetail extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String action = request.getParameter("action");
+        String warrantyCardIdParam = request.getParameter("ID");
+        Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIdParam);
+
+        if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            return;
+        }
+
+        if ("update".equals(action)) {
+            String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
+            String status = request.getParameter("status");
+            String quantityParam = request.getParameter("quantity");
+            Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
+            Integer quantity = FormatUtils.tryParseInt(quantityParam);
+
+            if (warrantyCardDetailId != null) {
+                WarrantyCardDetail detail = wcdDao.getWarrantyCardDetailById(warrantyCardDetailId);
+                if (detail != null) {
+                    boolean updated = false;
+                    if (status != null && isValidStatus(status)) {
+                        detail.setStatus(status);
+                        updated = true;
+                    }
+                    if (quantity != null && quantity >= 0) {
+                        detail.setQuantity(quantity);
+                        updated = true;
+                    }
+                    if (updated) {
+                        boolean success = wcdDao.updateWarrantyCardDetail(detail);
+                        if (success) {
+                            request.setAttribute("updateAlert1", "Update successful!");
+                        } else {
+                            request.setAttribute("updateAlert0", "Failed to update.");
+                        }
+                    }
+                }
+            }
+        } else if ("delete".equals(action)) {
+            String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
+            Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
+
+            if (warrantyCardDetailId != null) {
+                boolean deleted = wcdDao.deleteWarrantyCardDetail(warrantyCardDetailId);
+                if (deleted) {
+                    request.setAttribute("updateAlert1", "Component deleted successfully!");
+                } else {
+                    request.setAttribute("updateAlert0", "Failed to delete component.");
+                }
+            }
+        }
+
         processRequest(request, response);
     }
 
@@ -93,5 +150,9 @@ public class WarrantyCardDetail extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
+    private boolean isValidStatus(String status) {
+        return "under_warranty".equals(status) || "repaired".equals(status) || "replace".equals(status);
+    }
 
 }

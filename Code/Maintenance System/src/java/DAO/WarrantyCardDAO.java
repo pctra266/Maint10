@@ -48,7 +48,7 @@ public class WarrantyCardDAO extends DBContext {
         try (PreparedStatement ps = connection.prepareStatement(query); ResultSet rs = ps.executeQuery()) {
 
             while (rs.next()) {
-                   warrantyCards.add(mapWarrantyCard(rs));
+                warrantyCards.add(mapWarrantyCard(rs));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -320,11 +320,11 @@ public class WarrantyCardDAO extends DBContext {
     public List<WarrantyCard> getCards(int page, Integer pageSize, String paraSearch, String status, String sort, String order, String type) {
         List<WarrantyCard> cards = new ArrayList<>();
         StringBuilder query = new StringBuilder("SELECT wc.WarrantyCardID, wc.WarrantyCardCode, wc.IssueDescription, ");
-        query.append("wc.WarrantyStatus, wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image, p.Code ");
+        query.append("wc.WarrantyStatus, wc.CreatedDate, wc.ReturnDate, wc.DoneDate, wc.CompleteDate, wc.CancelDate, wc.Image, ");
 
         // Trường hợp lấy từ ProductDetail (warranty)
         if ("warranty".equalsIgnoreCase(type)) {
-            query.append(", pd.ProductCode, p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
+            query.append("p.Code , pd.ProductCode, p.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
             query.append("FROM WarrantyCard wc ");
             query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
             query.append("JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
@@ -332,7 +332,7 @@ public class WarrantyCardDAO extends DBContext {
             query.append("JOIN Customer c ON pd.CustomerID = c.CustomerID ");
         } // Trường hợp lấy từ UnknowProduct (repair)
         else if ("repair".equalsIgnoreCase(type)) {
-            query.append(", up.ProductCode, up.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
+            query.append("up.ProductCode, up.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
             query.append("FROM WarrantyCard wc ");
             query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
             query.append("JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
@@ -340,7 +340,7 @@ public class WarrantyCardDAO extends DBContext {
 
         } // Trường hợp lấy cả hai (null)
         else {
-            query.append(", COALESCE(pd.ProductCode, up.ProductCode) AS ProductCode, ");
+            query.append("p.Code , COALESCE(pd.ProductCode, up.ProductCode) AS ProductCode, ");
             query.append("COALESCE(p.ProductName, up.ProductName) AS ProductName, ");
             query.append("c.Name AS CustomerName, c.Phone AS CustomerPhone ");
             query.append("FROM WarrantyCard wc ");
@@ -401,7 +401,6 @@ public class WarrantyCardDAO extends DBContext {
 
             ps.setInt(paramIndex++, (page - 1) * pageSize);
             ps.setInt(paramIndex, pageSize);
-
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 cards.add(mapWarrantyCard(rs));
@@ -475,32 +474,35 @@ public class WarrantyCardDAO extends DBContext {
         }
         return false;
     }
-    
-    private WarrantyCard mapWarrantyCard(ResultSet rs) throws SQLException {
-    WarrantyCard warrantyCard = new WarrantyCard();
-    warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-    warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-    warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-    warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-    warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
-    warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
-    warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
-    warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
-    warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
-    warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-    warrantyCard.setProductCode(rs.getString("Code"));
-    warrantyCard.setProductName(rs.getString("ProductName"));
-    warrantyCard.setCustomerName(rs.getString("CustomerName"));
-    warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
-    warrantyCard.setImage(rs.getString("Image"));
-    return warrantyCard;
-}
 
-    
+    private WarrantyCard mapWarrantyCard(ResultSet rs) throws SQLException {
+        WarrantyCard warrantyCard = new WarrantyCard();
+        warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+        warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+        warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
+        warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+        warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
+        warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
+        warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
+        warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
+        warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
+        warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
+        try {
+            warrantyCard.setProductCode(rs.getString("Code"));
+        } catch (SQLException e) {
+            // Nếu cột "Code" không tồn tại, bỏ qua lỗi
+            System.out.println("Cột 'Code' không tồn tại, bỏ qua gán giá trị.");
+        }
+        warrantyCard.setProductName(rs.getString("ProductName"));
+        warrantyCard.setCustomerName(rs.getString("CustomerName"));
+        warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
+        warrantyCard.setImage(rs.getString("Image"));
+        return warrantyCard;
+    }
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(d.getCards(1, 10, "", "", "", "", ""));
+        System.out.println(d.getCards(1, 10, "", "", "", "", "repair"));
     }
 
 }
