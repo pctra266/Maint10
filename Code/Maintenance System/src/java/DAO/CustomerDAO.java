@@ -715,8 +715,8 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
-        Customer c = dao.getCustomer("customer1@example.com", "0123456001");
-        System.out.println(c.getGender());
+        Customer c = dao.getCustomerByID(1);
+        System.out.println(c.getName());
     }
 
 }

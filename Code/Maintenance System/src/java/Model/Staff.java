@@ -10,7 +10,6 @@ package Model;
  */
 public class Staff {
 
-
     private int staffID;
     private String usernameS;
     private String passwordS;
@@ -126,13 +125,5 @@ public class Staff {
 
     public void setImgage(String imgage) {
         this.imgage = imgage;
-    }
-    
-
-
-    
-
-    
-    
-    
+    } 
 }
