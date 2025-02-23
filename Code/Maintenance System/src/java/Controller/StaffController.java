@@ -22,6 +22,8 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -239,14 +241,17 @@ public class StaffController extends HttpServlet {
                 String password = request.getParameter("password").trim();
                 String role = request.getParameter("role");
                 String name = request.getParameter("name").trim();
+                String gender = request.getParameter("gender");
+                String date = request.getParameter("date");
                 String email = request.getParameter("email").trim();
                 String phone = request.getParameter("phone").trim();
                 String address = request.getParameter("address").trim();
                 Part imagePart = request.getPart("newImage");
                 String imagePath = saveImage(imagePart, request);
+
                 
                 if (usename.isEmpty() || password.isEmpty() ||
-                    name.isEmpty() || email.isEmpty() || phone.isEmpty() || address.isEmpty()) {
+                    name.isEmpty() || email.isEmpty() || phone.isEmpty() || address.isEmpty() || gender.isEmpty() || date.isEmpty()) {
                     request.setAttribute("errorMessage", "Không được bỏ trống bất kỳ trường nào.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
@@ -267,6 +272,19 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
                 }
+                if (date != null && !date.isEmpty()) {
+                    LocalDate datenow = LocalDate.parse(date); // Chuyển String thành LocalDate
+                    LocalDate today = LocalDate.now(); // Ngày hiện tại
+
+                    // Tính tuổi
+                    int age = Period.between(datenow, today).getYears();
+
+                    if (age < 18) {
+                        request.setAttribute("errorMessage", "You must be at least 18 years old.");
+                        request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                        return;
+                    }
+                }
                 
                 if(imagePath.equals("Chỉ lấy file png và jpg")){
                     request.setAttribute("ErrorImage", "File upload khong hop ");
@@ -279,7 +297,7 @@ public class StaffController extends HttpServlet {
                    return;
                 }
                 
-                boolean add = dao.addStaff(usename, password, role, name, email, phone, address, imagePath);
+                boolean add = dao.addStaff(usename, password, name, role, gender, date, email, phone, address, imagePath);
                 String staffID = dao.updateStaff_Role(phone);
                 boolean add_role = dao.addStaff_Role(staffID, role);
                 list = dao.getAllStaff(searchname, search, pageIndex, pagesize, column, sortOrder);
@@ -310,6 +328,8 @@ public class StaffController extends HttpServlet {
                 String Updateemail = request.getParameter("email").trim();
                 String Updatephone = request.getParameter("phone").trim();
                 String Updateaddress = request.getParameter("address").trim();
+                String Updategender = request.getParameter("gender");
+                String Updatedate = request.getParameter("date");
                 Part UpdateimagePart = request.getPart("newImage");
                 String UpdateimagePath = saveImage(UpdateimagePart, request);
                 if (Updateusename.isEmpty() || Updatepassword.isEmpty() || 
@@ -320,14 +340,6 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
-                
-//                if (!Updatepassword.matches("^(?=.*[A-Za-z])(?=.*\\\\d)(?=.*[@$!%*?&])[A-Za-z\\\\d@$!%*?&]{8,}$")) {
-//                    request.setAttribute("errorMessage", "Password phai có ít nhất 1 chữ cái, 1 số và 1 kí tự đặc biệt.");
-//                    Staff staff = dao.getInformationByID(UpdatestaffID);
-//                    request.setAttribute("staff", staff);
-//                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
-//                    return;
-//                }
                 
                 if (!Updatephone.matches("\\d+")) {
                     request.setAttribute("errorMessage", "Số điện thoại chỉ được chứa số.");
@@ -353,6 +365,22 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
+                
+                if (Updatedate != null && !Updatedate.isEmpty()) {
+                    LocalDate datenow = LocalDate.parse(Updatedate); // Chuyển String thành LocalDate
+                    LocalDate today = LocalDate.now(); // Ngày hiện tại
+
+                    // Tính tuổi
+                    int age = Period.between(datenow, today).getYears();
+
+                    if (age < 18) {
+                        request.setAttribute("errorMessage", "You must be at least 18 years old.");
+                        Staff staff = dao.getInformationByID(UpdatestaffID);
+                         request.setAttribute("staff", staff);
+                        request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                        return;
+                    }
+                }
                 if(UpdateimagePath.equals("Chỉ lấy file png và jpg")){
                     request.setAttribute("ErrorImage", "File upload khong hop ");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
@@ -373,7 +401,7 @@ public class StaffController extends HttpServlet {
                 StaffDAO staff = new StaffDAO();
                 StaffLogDAO  stafflog = new StaffLogDAO();
                 boolean update = stafflog.addStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole, Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
-                boolean uppdate = staff.updateStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole, Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
+                boolean uppdate = staff.updateStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole,Updategender,Updatedate,Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean update_role = staff.updateStaff_Role(UpdatestaffID, Updaterole);
                 if (update) {
                     request.setAttribute("message", "Thay đổi thành công!");
