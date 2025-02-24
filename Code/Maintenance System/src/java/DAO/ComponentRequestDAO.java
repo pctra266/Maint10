@@ -527,24 +527,30 @@ public class ComponentRequestDAO {
            return list;
         }
         
+        public void updateStatusComponentRequest(String componentRequestId, String status){
+            String query ="""
+                          update ComponentRequest
+                          set Status = ?
+                          where ComponentRequestID = ?""";
+            try {
+                conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               ps.setString(1, status);
+               ps.setString(2, componentRequestId);
+               ps.executeUpdate();
+            } catch (Exception e) {
+            }
+        }
+        
         
             
     public static void main(String[] args) {
-        ArrayList<ProductDetail> list = new ArrayList<>();
+//        ArrayList<ProductDetail> list = new ArrayList<>();
         ComponentRequestDAO dao = new ComponentRequestDAO();
-//        list = dao.getAllListProductUnderMaintain("", "", "", "fixing", "", "", "", 1, 5);
-//        for (ProductDetail productDetail : list) {
-//            System.out.println(productDetail);
+//            ArrayList<ComponentRequest> list2 = dao.getAllComponentRequest("",1   , 5);
+//            for (ComponentRequest x : list2) {
+//                System.out.println(x);
 //        }
-//        ArrayList<Component> list1 = dao.getallListComponentByProductCode("","","","","",1,30);
-//        for (Component component : list1) {
-//            System.out.println(component);
-//        }
-            ArrayList<ComponentRequest> list2 = dao.getAllComponentRequest("",1   , 5);
-            for (ComponentRequest x : list2) {
-                System.out.println(x);
-        }
-//        System.out.println(dao.totalProductUnderMaintain("", "", "", "fixing", ""));
-//        System.out.println(dao.totalComponentByProductCode("", "", "", "", ""));
+            dao.updateStatusComponentRequest("10", "cancel");
     }
 }

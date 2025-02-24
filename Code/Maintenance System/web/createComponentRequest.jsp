@@ -64,12 +64,10 @@
                                 </div>
                         </div>
                                 </div>
-                    </form>
-                    
-                   <form action="componentRequest" method="post">
-                        <input type="hidden" name="action" value="createComponentRequest">
-                        <input type="hidden" name="productCode" value="${productCode}"> 
-                        <input type="hidden"  name="warrantyCardID" value="${warrantyCardID}">
+ 
+                         </form>
+                               
+
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
@@ -88,13 +86,72 @@
                                 <td>${o.type}</td>
                                 <td>${o.brand}</td>
                                 <td>${o.componentName}</td>
-                                <td><input type="number" name="quantities"  min="0" value=""></td>
+                                <td>
+                                    <form action="componentRequest" method="get" style="display:inline;">
+                                                <input type="hidden" name="action" value="addComponent">
+                                                <input type="hidden" name="componentID" value="${o.componentID}">
+                                                <input type="hidden" name="productCode" value="${productCode}">
+                                                <input type="hidden" name="warrantyCardID" value="${warrantyCardID}">
+                                                <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                                <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                <input type="hidden" name="componentName" value="${componentName}">
+                                                <input type="hidden" name="componentCode" value="${componentCode}">
+                                                <input type="hidden" name="typeID" value="${typeID}">
+                                                <input type="hidden" name="brandID" value="${brandID}">
+                                                <button type="submit" class="btn btn-primary">ADD</button>
+                                    </form>
+                                </td>
                                 </tr>
                             </c:forEach>
                         </tbody>
                         
                         </table>
-
+                    <form action="componentRequest" method="post">
+                        <input type="hidden" name="action" value="createComponentRequest">
+                        <input type="hidden" name="productCode" value="${productCode}"> 
+                        <input type="hidden"  name="warrantyCardID" value="${warrantyCardID}">
+                        <!-- bang moi -->
+                        <h3>Selected Components</h3>
+                        <table class="table table-hover my-0">
+                            <thead>
+                                <tr>
+                                    <th>Component Code</th>
+                                    <th>Component Type</th>
+                                    <th>Component Brand</th>
+                                    <th>Component Name</th>
+                                    <th>Quantity</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <c:forEach var="selected" items="${selectedComponents}">
+                                    <tr>
+                                        <td>${selected.componentCode}</td>
+                                        <td>${selected.type}</td>
+                                        <td>${selected.brand}</td>
+                                        <td>${selected.componentName}</td>
+                                        <td><input type="number" name="quantities" min="0" value="${selected.quantity}"></td>
+                                        <td>
+                                            <form action="componentRequest" method="get" style="display:inline;">
+                                                <input type="hidden" name="action" value="removeComponent">
+                                                <input type="hidden" name="componentID" value="${selected.componentID}">
+                                                <input type="hidden" name="productCode" value="${productCode}">
+                                                <input type="hidden" name="warrantyCardID" value="${warrantyCardID}">
+                                                <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                                <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                <input type="hidden" name="componentName" value="${componentName}">
+                                                <input type="hidden" name="componentCode" value="${componentCode}">
+                                                <input type="hidden" name="typeID" value="${typeID}">
+                                                <input type="hidden" name="brandID" value="${brandID}">
+                                                <button type="submit" class="btn btn-danger">Remove</button>
+                                            </form>
+                                        </td>
+                                        <input type="hidden" name="componentIDs" value="${selected.componentID}">
+                                    </tr>
+                                </c:forEach>
+                            </tbody>
+                        </table>
+ 
                             <div><textarea name="note"></textarea></div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                     </form>

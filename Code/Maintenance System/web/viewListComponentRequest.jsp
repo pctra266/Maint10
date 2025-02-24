@@ -45,7 +45,7 @@
                                 </div>
                         </div>
                             </div>
-                        
+                           </form>
                         <table class="table table-hover my-0">
                            <thead>
                                 <tr>
@@ -55,12 +55,15 @@
                                     <th>Component Request Create Date</th>
                                     <th>Status</th>
                                     <th>Note</th>
-                                    <th></th>
+                                    <th>Detail</th>
+                                    <th>Approve</th>
+                                    <th>Cancel</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <c:forEach items="${listComponentRequest}" var="o">
                                     <tr>
+                                <input type="hidden" >
                                         <td>${o.componentRequestID}</td>
                                         <td>${o.warrantyCode}</td>
                                         <td>${o.warrantyCreateDate}</td>
@@ -68,11 +71,32 @@
                                         <td>${o.status}</td>
                                         <td>${o.note}</td>
                                         <td><a href="componentRequest?action=detailComponentRequest&componentRequestID=${o.componentRequestID}">Detail</td>
+                                        <td>
+                                            <!--<a href="componentRequest?action=updateStatusComponentRequest&componentRequestID=${o.componentRequestID}&componentStatus=approved">-->
+                                            <form action="componentRequest" method="get">
+                                                    <input type="hidden" name="action" value="updateStatusComponentRequest">
+                                                    <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                                    <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                    <input  type="hidden" name="componentRequestID" value="${o.componentRequestID}">
+                                                    <input type="hidden" name="componentStatus" value="approved">
+                                                    <button class="btn btn-primary" type="submit">Approve</button>
+                                                </form>
+                                                </td>
+                                        <td>
+                                            <form action="componentRequest" method="get">
+                                                    <input type="hidden" name="action" value="updateStatusComponentRequest">
+                                                    <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                                    <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                    <input  type="hidden" name="componentRequestID" value="${o.componentRequestID}">
+                                                    <input type="hidden" name="componentStatus" value="cancel">
+                                                    <button class="btn btn-primary" type="submit">Cancel</button>
+                                                </form>
+                                            </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
-                        </form>
+                     
                     </div>
                     <jsp:include page="/includes/pagination.jsp" />
                     

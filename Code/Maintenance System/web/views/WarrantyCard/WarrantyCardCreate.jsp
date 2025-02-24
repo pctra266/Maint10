@@ -31,7 +31,7 @@
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <form action="Redirect" enctype="multipart/form-data">
-                        <input type="hidden" name="target" value="${empty createWarrantyCardFom? '/MaintenanceSystem/WarrantyCard':createWarrantyCardFom}">
+                        <input type="hidden" name="target" value="${empty createWarrantyCardForm? '/MaintenanceSystem/WarrantyCard':createWarrantyCardFrom}">
                         <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </button>                 
                     </form>
                     <c:if test="${createWarrantyCardFom eq '/MaintenanceSystem/WarrantyCard' or empty createWarrantyCardFom }">

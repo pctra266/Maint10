@@ -35,11 +35,11 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <form action="Redirect">
-                        <input type="hidden" name="target" value="${backUrl}">
+                    <form action="Redirect" enctype="multipart/form-data">
+                        <input type="hidden" name="target" value="${empty detailWarrantyCardFrom? '/MaintenanceSystem/WarrantyCard':detailWarrantyCardFrom}">
                         <button type="submit" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </button>                 
                     </form>
-                            <h2>Repair List</h2>
+                    <h2>Repair List</h2>
 
                     <!--                                Alert khi du lieu truyen sang sever sai-->
                     <c:if test="${not empty codeAlert}">
@@ -108,13 +108,13 @@
                     </c:if>
                     <div class="row">
                         <div class="col-md-8">  
-                            <div class="row ms-0">
-                                
-                            <button type="button" class="btn btn-primary mb-2 col-md-3" data-bs-toggle="modal" data-bs-target="#addComponentModal">
-                                Add new component to list
-                            </button>
-
-                            <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-md-3">
+                            <div class="row">
+                                <div class="mb-2 col-auto">
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addComponentModal">
+                                        <i class="fas fa-plus"></i> Add New Component
+                                    </button>
+                                </div>
+                            <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto">
                                 <input type="hidden" class="form-control" name="action" value="createComponentRequest" readonly> 
                                 <input type="hidden" class="form-control" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
                                 <input type="hidden" class="form-control" name="productCode" value="${card.productCode}" readonly>  
@@ -138,7 +138,7 @@
                                             <td>${status.index + 1}</td>
                                             <td>${detail.component.componentName}</td>
                                             <td>
-                                                <form action="WarrantyCard/Detail" id="updateForm-${status.index}" method="post" class="d-inline">
+                                                <form action="WarrantyCard/Detail" method="post" id="updateForm-${status.index}">
                                                     <input type="hidden" name="action" value="update">
                                                     <input type="hidden" name="warrantyCardDetailID" value="${detail.warrantyCardDetailID}">
                                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
@@ -172,8 +172,56 @@
                                     </c:forEach>     
                                 </tbody>
                             </table>
-                        </div> 
+                        </div>
 
+                        <!-- Add Component Modal -->
+                        <div class="modal fade" id="addComponentModal" tabindex="-1" aria-labelledby="addComponentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="addComponentModalLabel">Add New Component</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="WarrantyCard/Detail" method="post" id="addComponentForm">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="action" value="add">
+                                            <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                            <div class="mb-3">
+                                                <label for="componentInput" class="form-label">Component</label>
+                                                <input type="text" list="componentList" id="componentInput" name="componentName" class="form-control" placeholder="Type to search components" required>
+                                                <datalist id="componentList">
+                                                    <c:forEach var="component" items="${availableComponents}">
+                                                        <option value="${component.componentName}" data-id="${component.componentID}">
+                                                            ${component.componentName} (Code: ${component.componentCode})
+                                                        </option>
+                                                    </c:forEach>
+                                                </datalist>
+                                                <div class="invalid-feedback" id="componentError">
+                                                    Component name not found in the list.
+                                                </div>
+                                                <input type="hidden" name="componentID" id="selectedComponentID">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="status" class="form-label">Status</label>
+                                                <select name="status" id="status" class="form-select" required>
+                                                    <option value="under_warranty">Under Warranty</option>
+                                                    <option value="repaired">Repaired</option>
+                                                    <option value="replace">Replace</option>
+                                                </select>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label for="quantity" class="form-label">Quantity</label>
+                                                <input type="number" name="quantity" id="quantity" class="form-control" min="0" value="1" required>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary" id="addComponentSubmit" disabled="disabled">Add Component</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-md-4">
                             <label class="form-label">Image</label>
                             <div>
@@ -259,6 +307,33 @@
                                                         document.querySelectorAll('.save').forEach(button => {
                                                             button.disabled = true;
                                                         });
+                                                      document.getElementById('componentInput').addEventListener('input', function () {
+        const inputValue = this.value.trim();
+        const options = Array.from(document.querySelectorAll('#componentList option'));
+        const submitButton = document.getElementById('addComponentSubmit');
+        const errorMessage = document.getElementById('componentError');
+        let selectedId = '';
+
+        const isValid = options.some(option => {
+            if (option.value === inputValue) {
+                selectedId = option.getAttribute('data-id');
+                return true;
+            }
+            return false;
+        });
+
+        document.getElementById('selectedComponentID').value = selectedId;
+
+        if (isValid || inputValue === '') {
+            this.classList.remove('is-invalid');
+            errorMessage.style.display = 'none';
+            submitButton.disabled = false;
+        } else {
+            this.classList.add('is-invalid');
+            errorMessage.style.display = 'block';
+            submitButton.disabled = true;
+        }
+    });
     </script>
 </body>
 
