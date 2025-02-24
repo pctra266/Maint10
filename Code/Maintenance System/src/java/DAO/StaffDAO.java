@@ -430,7 +430,7 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean updateStaffWithNoImage(int staffID, String name, String gender, String dateOfBirth,
-                               String email, String phone, String address) {
+            String email, String phone, String address) {
         String sql = "UPDATE Staff SET Name = ?, Gender = ?, DateOfBirth = ?, Email = ?, Phone = ?, Address = ? WHERE StaffID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setString(1, name);
@@ -440,7 +440,7 @@ public class StaffDAO extends DBContext {
             stmt.setString(5, phone);
             stmt.setString(6, address);
             stmt.setInt(7, staffID);
-            
+
             int rowsUpdated = stmt.executeUpdate();
             return rowsUpdated > 0;
         } catch (SQLException e) {
@@ -448,7 +448,19 @@ public class StaffDAO extends DBContext {
             return false;
         }
     }
-    
+
+    public boolean updateStaffImage(int staffId, String imageUrl) {
+        String sql = "UPDATE Staff SET Image = ? WHERE StaffID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, imageUrl);
+            stmt.setInt(2, staffId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
 

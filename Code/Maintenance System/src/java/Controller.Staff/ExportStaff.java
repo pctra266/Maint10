@@ -62,8 +62,6 @@ public class ExportStaff extends HttpServlet {
             StaffDAO dao = new StaffDAO();
             list = dao.getAllStaff(searchname, search, column, sortOrder);
             
-
-
             for (Staff stafflist : list) {
                 Row row = sheet.createRow(rowNum++);
                 row.createCell(0).setCellValue(stafflist.getStaffID());
@@ -76,12 +74,12 @@ public class ExportStaff extends HttpServlet {
                 row.createCell(7).setCellValue(stafflist.getEmail());
                 row.createCell(8).setCellValue(stafflist.getPhone());
                 row.createCell(9).setCellValue(stafflist.getAddress());
-                row.createCell(10).setCellValue(stafflist.getImgage());
+                row.createCell(10).setCellValue(stafflist.getImage());
             }
 
             workbook.write(out);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
     } 
 

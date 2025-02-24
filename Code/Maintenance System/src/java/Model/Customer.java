@@ -50,7 +50,7 @@ public class Customer {
         this.address = address;
         this.image = image;
     }
-    
+
     public Customer(int customerID, String name, String Gender, Date dateOfBirth, String email, String phone, String address) {
         this.customerID = customerID;
         this.name = name;
@@ -140,7 +140,4 @@ public class Customer {
     public void setImage(String image) {
         this.image = image;
     }
-
-    
- 
 }

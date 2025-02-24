@@ -756,7 +756,7 @@ public class CustomerDAO extends DBContext {
     }
 
     public boolean updateCustomerWithNoImage(Customer customer) {
-        String sql = "UPDATE Customer SET Name = ?, Gender = ?, Email = ?, Phone = ?, Address = ?,DateOfBirth = ? WHERE CustomerID = ?";
+        String sql = "UPDATE Customer SET Name = ?, Gender = ?, Email = ?, Phone = ?, Address = ?, DateOfBirth = ? WHERE CustomerID = ?";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
 
             ps.setString(1, customer.getName());
@@ -764,13 +764,16 @@ public class CustomerDAO extends DBContext {
             ps.setString(3, customer.getEmail());
             ps.setString(4, customer.getPhone());
             ps.setString(5, customer.getAddress());
-            ps.setInt(6, customer.getCustomerID());
+
             // Chuyển đổi DateOfBirth (nếu không null)
             if (customer.getDateOfBirth() != null) {
-                ps.setDate(7, new java.sql.Date(customer.getDateOfBirth().getTime()));
+                ps.setDate(6, new java.sql.Date(customer.getDateOfBirth().getTime()));
             } else {
-                ps.setNull(7, java.sql.Types.DATE);
+                ps.setNull(6, java.sql.Types.DATE);
             }
+
+            ps.setInt(7, customer.getCustomerID()); // Đặt CustomerID đúng vị trí
+
             int rowsUpdated = ps.executeUpdate();
             return rowsUpdated > 0; // Trả về true nếu có dòng được cập nhật
         } catch (SQLException e) {
@@ -779,16 +782,25 @@ public class CustomerDAO extends DBContext {
         return false;
     }
 
+    public boolean updateCustomerImage(int customerId, String imageUrl) {
+        String sql = "UPDATE Customer SET Image = ? WHERE CustomerID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, imageUrl);
+            stmt.setInt(2, customerId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
 
-        ArrayList<Customer> ac = dao.advancedSearch("", "", "", "", "", 19, Integer.SIZE, Integer.SIZE, "", "", 1, 1);
-        for (Customer c : ac) {
-            System.out.println(c.getGender());
-        }
+        boolean u;
+        u = dao.updateCustomerWithNoImage(new Customer(1, "hello", "male", Date.valueOf("1999-09-09"), "llll", "kkkk", "llll"));
 
-        Customer c = dao.getCustomerByID(1);
-        System.out.println(c.getName());
+        System.out.println(u);
 
     }
 
