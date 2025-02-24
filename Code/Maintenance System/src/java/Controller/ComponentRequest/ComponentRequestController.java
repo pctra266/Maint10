@@ -31,6 +31,7 @@ import java.util.List;
 @WebServlet(name="ComponentRequestController", urlPatterns={"/componentRequest"})
 public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
+    private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -66,8 +67,6 @@ public class ComponentRequestController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //dao
-        ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
         //action
         String action = request.getParameter("action");
         if(action == null){
@@ -98,6 +97,8 @@ public class ComponentRequestController extends HttpServlet {
         String typeID = request.getParameter("typeID");
         String brandID = request.getParameter("brandID");
         String mess = request.getParameter("mess");
+        String componentStatus = request.getParameter("componentStatus");
+        request.setAttribute("componentStatus", componentStatus);
         request.setAttribute("mess", mess);
         request.setAttribute("brandID", brandID);
         request.setAttribute("typeID", typeID);
@@ -122,7 +123,7 @@ public class ComponentRequestController extends HttpServlet {
             case "createComponentRequest":
                 total = componentRequestDao.totalComponentByProductCode(productCode, componentCode, componentName, typeID, brandID);
                 break;
-            case "viewListComponentRequest":
+            case "viewListComponentRequest": case "updateStatusComponentRequest":
                 total = componentRequestDao.totalComponentRequest(warrantyCardCode);
                 break;
         }
@@ -171,7 +172,32 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;
             case "viewListComponentRequest":
-                //======phan trang
+//                //======phan trang
+//                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
+//                pagination.setSearchValues(new String[]{"viewListComponentRequest",warrantyCardCode});
+//                request.setAttribute("pagination", pagination);
+//                //======end phan trang
+//                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode,page, pageSize);
+//                request.setAttribute("listComponentRequest", listComponentRequest);
+//                request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
+                this.viewListComponentRequest(pagination, warrantyCardCode, page, pageSize, request, response);
+                
+                break;
+            case "detailComponentRequest":
+                ArrayList<ComponentRequestDetail> listComponentRequestDetail = componentRequestDao.getListComponentRequestDetailById(componentRequestID);
+                request.setAttribute("listComponentRequestDetail", listComponentRequestDetail);
+                request.getRequestDispatcher("detailComponentRequest.jsp").forward(request, response);
+                break;
+            case "updateStatusComponentRequest":
+               componentRequestDao.updateStatusComponentRequest(componentRequestID,componentStatus);
+              this.viewListComponentRequest(pagination, warrantyCardCode, page, pageSize, request, response);
+                break;
+        }
+    }
+    
+    private void viewListComponentRequest(Pagination pagination,String warrantyCardCode,int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException{
+        //======phan trang
                 pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
                 pagination.setSearchValues(new String[]{"viewListComponentRequest",warrantyCardCode});
                 request.setAttribute("pagination", pagination);
@@ -179,15 +205,7 @@ public class ComponentRequestController extends HttpServlet {
                 ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode,page, pageSize);
                 request.setAttribute("listComponentRequest", listComponentRequest);
                 request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
-                break;
-            case "detailComponentRequest":
-                ArrayList<ComponentRequestDetail> listComponentRequestDetail = componentRequestDao.getListComponentRequestDetailById(componentRequestID);
-                request.setAttribute("listComponentRequestDetail", listComponentRequestDetail);
-                request.getRequestDispatcher("detailComponentRequest.jsp").forward(request, response);
-                break;
-        }
-    } 
-
+    }
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
@@ -198,8 +216,6 @@ public class ComponentRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        //dao
-        ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
         
         //action
         String action = request.getParameter("action");
