@@ -759,7 +759,7 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
- Fix
+
         ArrayList<Customer> ac = dao.advancedSearch("", "", "", "", "", 19, Integer.SIZE, Integer.SIZE, "", "", 1, 1);
         for (Customer c : ac) {
             System.out.println(c.getGender());
@@ -768,7 +768,7 @@ public class CustomerDAO extends DBContext {
 
         Customer c = dao.getCustomerByID(1);
         System.out.println(c.getName());
- main
+
     }
 
 }

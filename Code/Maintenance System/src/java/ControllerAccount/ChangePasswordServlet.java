@@ -103,8 +103,8 @@ public class ChangePasswordServlet extends HttpServlet {
                 request.getRequestDispatcher("ChangePasswordForm.jsp").forward(request, response);
                 return;
             }
-            Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), encryptionPassword, staff.getRole(),
-                    staff.getName(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.getImgage());
+           Staff updatedStaffPassword = new Staff(staff.getStaffID(), staff.getUsernameS(), encryptionPassword, staff.getRole(),
+                    staff.getName(),staff.getGender(),staff.getDate(), staff.getEmail(), staff.getPhone(), staff.getAddress(), staff.getImgage());
 
             staffDao.changePassword(updatedStaffPassword);
             session.setAttribute("staff", updatedStaffPassword);

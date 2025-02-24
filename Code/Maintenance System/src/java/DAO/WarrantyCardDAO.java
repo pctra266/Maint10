@@ -578,7 +578,7 @@ public class WarrantyCardDAO extends DBContext {
         warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
         warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
         warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
- Fix
+ 
         warrantyCard.setProductCode(rs.getString("Code"));
 
         try {
@@ -587,7 +587,7 @@ public class WarrantyCardDAO extends DBContext {
             // Nếu cột "Code" không tồn tại, bỏ qua lỗi
             System.out.println("Cột 'Code' không tồn tại, bỏ qua gán giá trị.");
         }
- main
+ 
         warrantyCard.setProductName(rs.getString("ProductName"));
         warrantyCard.setCustomerName(rs.getString("CustomerName"));
         warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
