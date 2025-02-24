@@ -51,7 +51,15 @@ public class Customer {
         this.image = image;
     }
     
-    
+    public Customer(int customerID, String name, String Gender, Date dateOfBirth, String email, String phone, String address) {
+        this.customerID = customerID;
+        this.name = name;
+        this.Gender = Gender;
+        this.dateOfBirth = dateOfBirth;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
 
     public int getCustomerID() {
         return customerID;

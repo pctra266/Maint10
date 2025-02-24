@@ -446,18 +446,17 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
-          if (day != null) {
+        if (day != null) {
             sql += " AND DAY(DateOfBirth) = ?";
         }
         if (month != null) {
             sql += " AND MONTH(DateOfBirth) = ?";
-        }  
-          
+        }
+
         if (year != null) {
             sql += " AND YEAR(DateOfBirth) = ?";
         }
-        
-      
+
         try {
             int index = 1;
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -476,18 +475,17 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-             if (day != null) {
+            if (day != null) {
                 ps.setInt(index++, day);
             }
-             
+
             if (month != null) {
                 ps.setInt(index++, month);
             }
             if (year != null) {
                 ps.setInt(index++, year);
             }
-            
-           
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -757,6 +755,30 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
+    public boolean updateCustomerWithNoImage(Customer customer) {
+        String sql = "UPDATE Customer SET Name = ?, Gender = ?, Email = ?, Phone = ?, Address = ?,DateOfBirth = ? WHERE CustomerID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setString(1, customer.getName());
+            ps.setString(2, customer.getGender());
+            ps.setString(3, customer.getEmail());
+            ps.setString(4, customer.getPhone());
+            ps.setString(5, customer.getAddress());
+            ps.setInt(6, customer.getCustomerID());
+            // Chuyển đổi DateOfBirth (nếu không null)
+            if (customer.getDateOfBirth() != null) {
+                ps.setDate(7, new java.sql.Date(customer.getDateOfBirth().getTime()));
+            } else {
+                ps.setNull(7, java.sql.Types.DATE);
+            }
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0; // Trả về true nếu có dòng được cập nhật
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
 
@@ -764,7 +786,6 @@ public class CustomerDAO extends DBContext {
         for (Customer c : ac) {
             System.out.println(c.getGender());
         }
-
 
         Customer c = dao.getCustomerByID(1);
         System.out.println(c.getName());

@@ -40,7 +40,7 @@ public class StaffDAO extends DBContext {
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
-                staff.setImgage(rs.getString("Image"));
+                staff.setImage(rs.getString("Image"));
                 return staff;
 
             }
@@ -92,7 +92,7 @@ public class StaffDAO extends DBContext {
                 staff.setEmail(rs.getString("Email"));
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
-                staff.setImgage(rs.getString("Image"));
+                staff.setImage(rs.getString("Image"));
                 return staff;
             }
         } catch (SQLException e) {
@@ -411,6 +411,44 @@ public class StaffDAO extends DBContext {
         return null;
     }
 
+    public String getRoleNameByStaffID(int staffID) {
+        String roleName = null;
+        String sql = "SELECT r.RoleName FROM Staff s "
+                + "JOIN Role r ON s.RoleID = r.RoleID "
+                + "WHERE s.StaffID = ?";
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, staffID);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                roleName = rs.getString("RoleName");
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return roleName;
+    }
+
+    public boolean updateStaffWithNoImage(int staffID, String name, String gender, String dateOfBirth,
+                               String email, String phone, String address) {
+        String sql = "UPDATE Staff SET Name = ?, Gender = ?, DateOfBirth = ?, Email = ?, Phone = ?, Address = ? WHERE StaffID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, name);
+            stmt.setString(2, gender);
+            stmt.setString(3, dateOfBirth);
+            stmt.setString(4, email);
+            stmt.setString(5, phone);
+            stmt.setString(6, address);
+            stmt.setInt(7, staffID);
+            
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+    
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
 
