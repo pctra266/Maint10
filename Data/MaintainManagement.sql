@@ -211,7 +211,8 @@ CREATE TABLE ComponentRequestResponsible (
     ComponentRequestResponsibleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     StaffID INT NOT NULL REFERENCES Staff(StaffID),
     ComponentRequestID INT NOT NULL REFERENCES ComponentRequest(ComponentRequestID),
-    [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel'))
+    [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel')),
+	CreateDate DATETIME DEFAULT GETDATE(),
 );
 
 -- WarrantyCardDetail Table
