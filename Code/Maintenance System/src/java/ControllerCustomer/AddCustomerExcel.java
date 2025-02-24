@@ -15,9 +15,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
@@ -88,52 +93,80 @@ public class AddCustomerExcel extends HttpServlet {
         ArrayList<Customer> listExistCustomer = new ArrayList<>();
         Part customerFile = request.getPart("customerFile");
         String checkFile = customerFile.getSubmittedFileName().toLowerCase();
-        if(!checkFile.endsWith("xlsx")) {
+        if (!checkFile.endsWith("xlsx")) {
             request.setAttribute("error", "Please enter xlsx file");
-             request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
-             return;
+            request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
+            return;
         }
-        
-        
+
         InputStream inputStream = customerFile.getInputStream();
         Workbook workbook = new XSSFWorkbook(inputStream);
         Sheet sheet = workbook.getSheetAt(0);
         Iterator<Row> rows = sheet.iterator();
 
-
         if (rows.hasNext()) {
             rows.next();
         }
-       
+
         while (rows.hasNext()) {
             Row row = rows.next();
             String usernameC = (String) getCellValue(row.getCell(0));
             String passwordC = (String) getCellValue(row.getCell(1));
             String name = (String) getCellValue(row.getCell(2));
             String gender = (String) getCellValue(row.getCell(3));
-            String email = (String) getCellValue(row.getCell(4));
-            String phone = (String) getCellValue(row.getCell(5));
-            String address = (String) getCellValue(row.getCell(6));
-            String image = (String) getCellValue(row.getCell(7));
 
-           
-            if (customerDao.getCustomer(email, phone) != null) {
-                
-                listExistCustomer.add(new Customer(usernameC, passwordC, name, gender, email, phone, address, image));
-            } else {
-                
-                listCustomer.add(new Customer(usernameC, passwordC, name, gender, email, phone, address, image));
+            // Xử lý Date of Birth khi lưu dưới dạng số (Numeric)
+            java.sql.Date dateOfBirth = null;
+            try {
+                Cell dateCell = row.getCell(4); 
+                if (dateCell != null) {
+                    if (dateCell.getCellType() == Cell.CELL_TYPE_NUMERIC && DateUtil.isCellDateFormatted(dateCell)) {
+                        Date excelDate = dateCell.getDateCellValue();
+                        dateOfBirth = new java.sql.Date(excelDate.getTime());
+                    } else if (dateCell.getCellType() == Cell.CELL_TYPE_STRING) {
+                        // Nếu ngày tháng lưu dưới dạng chuỗi "dd/MM/yyyy"
+                        String dateStr = dateCell.getStringCellValue().trim();
+                        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy/MM/dd");
+
+                        Date parsedDate = inputFormat.parse(dateStr);
+                        String formattedDate = outputFormat.format(parsedDate);
+
+                        // Chuyển sang java.sql.Date
+                        dateOfBirth = java.sql.Date.valueOf(formattedDate.replace("/", "-"));
+                    } else {
+                        throw new IllegalArgumentException("Invalid date format in Excel!");
+                    }
+                } else {
+                    throw new IllegalArgumentException("Date cell is empty!");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                request.setAttribute("error", "Invalid date format in Excel!");
+                request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
+                return;
             }
-            
-        }
 
+            String email = (String) getCellValue(row.getCell(5));
+            String phone = (String) getCellValue(row.getCell(6));
+            String address = (String) getCellValue(row.getCell(7));
+            String image = (String) getCellValue(row.getCell(8));
+
+            if (customerDao.getCustomer(email, phone) != null) {
+
+                listExistCustomer.add(new Customer(usernameC, passwordC, name, gender, dateOfBirth, email, phone, address, image));
+            } else {
+
+                listCustomer.add(new Customer(usernameC, passwordC, name, gender, dateOfBirth, email, phone, address, image));
+            }
+
+        }
 
         if (!listExistCustomer.isEmpty()) {
             request.setAttribute("listExistCustomer", listExistCustomer);
             request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
-           
-        }
 
+        }
 
         if (!listCustomer.isEmpty()) {
             customerDao.importExcelCustomer(listCustomer);
@@ -142,13 +175,10 @@ public class AddCustomerExcel extends HttpServlet {
             request.setAttribute("mess", "No customer imported");
         }
 
-
         request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
 
     }
 
-    
-    
     private Object getCellValue(Cell cell) {
         if (cell == null) {
             return null;
@@ -161,7 +191,6 @@ public class AddCustomerExcel extends HttpServlet {
                 return cell.getNumericCellValue();
         }
         return null;
-
     }
 
     /**

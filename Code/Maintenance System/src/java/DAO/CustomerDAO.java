@@ -5,6 +5,7 @@
 package DAO;
 
 import Model.Customer;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -29,12 +30,13 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
                 + "      ,[Image]\n"
                 + "  FROM [dbo].[Customer]\n"
-                + "  WHERE UsernameC =? AND PasswordC =? ;";
+                + "  WHERE UsernameC =? AND PasswordC =?;";
 
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -48,6 +50,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -95,6 +98,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -112,11 +116,11 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
                 customer.setImage(rs.getString("Image"));
-
                 return customer;
             }
         } catch (SQLException e) {
@@ -137,6 +141,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -153,6 +158,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -178,6 +184,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -195,6 +202,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -208,51 +216,6 @@ public class CustomerDAO extends DBContext {
         return null;
     }
 
-    /// SEARCH
-    /**
-     * Search customer by name
-     *
-     * @param txt
-     * @return
-     */
-    public ArrayList<Customer> searchCustomerByName(String txt) {
-        ArrayList<Customer> listCustomer = new ArrayList<>();
-        String keyword = "%" + txt.trim().replaceAll("\\s+", "%") + "%";
-        String sql = "SELECT [CustomerID]\n"
-                + "      ,[UsernameC]\n"
-                + "      ,[PasswordC]\n"
-                + "      ,[Name]\n"
-                + "      ,[Gender]\n"
-                + "      ,[Email]\n"
-                + "      ,[Phone]\n"
-                + "      ,[Address]\n"
-                + "      ,[Image]\n"
-                + "  FROM [dbo].[Customer]\n"
-                + "  WHERE Name LIKE ?;";
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, keyword);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Customer customer = new Customer();
-
-                customer.setCustomerID(rs.getInt("CustomerID"));
-                customer.setUsernameC(rs.getString("UsernameC"));
-                customer.setPasswordC(rs.getString("PasswordC"));
-                customer.setName(rs.getString("Name"));
-                customer.setGender(rs.getString("Gender"));
-                customer.setEmail(rs.getString("Email"));
-                customer.setPhone(rs.getString("Phone"));
-                customer.setAddress(rs.getString("Address"));
-                customer.setImage(rs.getString("Image"));
-                listCustomer.add(customer);
-            }
-        } catch (SQLException e) {
-
-        }
-        return listCustomer;
-    }
-
     /**
      *
      * @param name
@@ -260,13 +223,16 @@ public class CustomerDAO extends DBContext {
      * @param email
      * @param phone
      * @param address
+     * @param day
+     * @param month
+     * @param year
      * @param sortBy
      * @param sortOrder
      * @param offset
      * @param fetch
      * @return
      */
-    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, String sortBy, String sortOrder, int offset, int fetch) {
+    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, Integer day, Integer month, Integer year, String sortBy, String sortOrder, int offset, int fetch) {
         ArrayList<Customer> listCustomer = new ArrayList<>();
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -277,6 +243,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -298,6 +265,17 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
+        if (day != null) {
+            sql += " AND DATEPART(DAY, DateOfBirth) = ?";
+        }
+        if (month != null) {
+            sql += " AND MONTH(DateOfBirth) = ?";
+        }
+
+        if (year != null) {
+            sql += " AND YEAR(DateOfBirth) = ?";
+        }
+
         if (sortBy != null && !sortBy.trim().isEmpty()) {
             sql += " ORDER BY " + sortBy;
 
@@ -330,6 +308,18 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
+            if (day != null) {
+                ps.setInt(index++, day);
+            }
+
+            if (month != null) {
+                ps.setInt(index++, month);
+            }
+
+            if (year != null) {
+                ps.setInt(index++, year);
+            }
+
             ps.setInt(index++, offset);
             ps.setInt(index++, fetch);
 
@@ -342,6 +332,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -388,6 +379,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -409,6 +401,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -431,7 +424,7 @@ public class CustomerDAO extends DBContext {
      * @param address
      * @return
      */
-    public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address) {
+    public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address, Integer day, Integer month, Integer year) {
 
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -453,7 +446,18 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
-
+          if (day != null) {
+            sql += " AND DAY(DateOfBirth) = ?";
+        }
+        if (month != null) {
+            sql += " AND MONTH(DateOfBirth) = ?";
+        }  
+          
+        if (year != null) {
+            sql += " AND YEAR(DateOfBirth) = ?";
+        }
+        
+      
         try {
             int index = 1;
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -472,7 +476,18 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-
+             if (day != null) {
+                ps.setInt(index++, day);
+            }
+             
+            if (month != null) {
+                ps.setInt(index++, month);
+            }
+            if (year != null) {
+                ps.setInt(index++, year);
+            }
+            
+           
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -491,26 +506,37 @@ public class CustomerDAO extends DBContext {
      */
     public void updateCustomer(Customer c) {
         String sql = "UPDATE [dbo].[Customer]\n"
-                + "SET \n"
-                + "    [Name] = ?, \n"
-                + "    [Gender] = ?, \n"
-                + "    [Email] = ?, \n"
-                + "    [Phone] = ?, \n"
-                + "    [Address] = ?, \n"
-                + "    [Image] = ?\n"
-                + "WHERE [CustomerID] = ?;";
+                + "   SET \n"
+                + "      [Name] = ?,\n"
+                + "      [Gender] = ?,\n"
+                + "      [DateOfBirth] = ?,\n"
+                + "      [Email] = ?,\n"
+                + "      [Phone] = ?,\n"
+                + "      [Address] = ?,\n"
+                + "      [Image] = ?\n"
+                + " WHERE CustomerID = ?";
+
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, c.getName());
             ps.setString(2, c.getGender());
-            ps.setString(3, c.getEmail());
-            ps.setString(4, c.getPhone());
-            ps.setString(5, c.getAddress());
-            ps.setString(6, c.getImage());
-            ps.setInt(7, c.getCustomerID());
-            ps.executeUpdate();
-        } catch (SQLException e) {
 
+            // Chuyển đổi DateOfBirth (nếu không null)
+            if (c.getDateOfBirth() != null) {
+                ps.setDate(3, new java.sql.Date(c.getDateOfBirth().getTime()));
+            } else {
+                ps.setNull(3, java.sql.Types.DATE);
+            }
+
+            ps.setString(4, c.getEmail());
+            ps.setString(5, c.getPhone());
+            ps.setString(6, c.getAddress());
+            ps.setString(7, c.getImage());
+            ps.setInt(8, c.getCustomerID()); // Đúng thứ tự của CustomerID
+            ps.executeUpdate();
+
+        } catch (SQLException e) {
+            e.printStackTrace(); // In lỗi nếu có
         }
     }
 
@@ -524,23 +550,29 @@ public class CustomerDAO extends DBContext {
                 + "           ([UsernameC]\n"
                 + "           ,[PasswordC]\n"
                 + "           ,[Name]\n"
-                + "      ,[Gender]\n"
+                + "           ,[Gender]\n"
+                + "           ,[DateOfBirth]\n"
                 + "           ,[Email]\n"
                 + "           ,[Phone]\n"
                 + "           ,[Address]\n"
                 + "           ,[Image])\n"
                 + "     VALUES\n"
-                + "          (?,?,?,?,?,?,?,?)";
+                + "           (?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setString(1, c.getUsernameC());
             ps.setString(2, c.getPasswordC());
             ps.setString(3, c.getName());
             ps.setString(4, c.getGender());
-            ps.setString(5, c.getEmail());
-            ps.setString(6, c.getPhone());
-            ps.setString(7, c.getAddress());
-            ps.setString(8, c.getImage());
+            if (c.getDateOfBirth() != null) {
+                ps.setDate(5, new java.sql.Date(c.getDateOfBirth().getTime()));
+            } else {
+                ps.setNull(5, java.sql.Types.DATE);
+            }
+            ps.setString(6, c.getEmail());
+            ps.setString(7, c.getPhone());
+            ps.setString(8, c.getAddress());
+            ps.setString(9, c.getImage());
             ps.executeUpdate();
         } catch (SQLException e) {
 
@@ -560,6 +592,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -577,6 +610,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -602,6 +636,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -619,6 +654,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -642,13 +678,14 @@ public class CustomerDAO extends DBContext {
                 + "           ([UsernameC]\n"
                 + "           ,[PasswordC]\n"
                 + "           ,[Name]\n"
-                + "      ,[Gender]\n"
+                + "           ,[Gender]\n"
+                + "           ,[DateOfBirth]\n"
                 + "           ,[Email]\n"
                 + "           ,[Phone]\n"
                 + "           ,[Address]\n"
                 + "           ,[Image])\n"
                 + "     VALUES\n"
-                + "          (?,?,?,?,?,?,?,?)";
+                + "           (?,?,?,?,?,?,?,?,?)";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             connection.setAutoCommit(false);
@@ -657,10 +694,15 @@ public class CustomerDAO extends DBContext {
                 ps.setString(2, c.getPasswordC());
                 ps.setString(3, c.getName());
                 ps.setString(4, c.getGender());
-                ps.setString(5, c.getEmail());
-                ps.setString(6, c.getPhone());
-                ps.setString(7, c.getAddress());
-                ps.setString(8, c.getImage());
+                if (c.getDateOfBirth() != null) {
+                    ps.setDate(5, new java.sql.Date(c.getDateOfBirth().getTime()));
+                } else {
+                    ps.setNull(5, java.sql.Types.DATE);
+                }
+                ps.setString(6, c.getEmail());
+                ps.setString(7, c.getPhone());
+                ps.setString(8, c.getAddress());
+                ps.setString(9, c.getImage());
                 ps.addBatch();
             }
             ps.executeBatch();
@@ -678,6 +720,7 @@ public class CustomerDAO extends DBContext {
                 + "      ,[PasswordC]\n"
                 + "      ,[Name]\n"
                 + "      ,[Gender]\n"
+                + "      ,[DateOfBirth]\n"
                 + "      ,[Email]\n"
                 + "      ,[Phone]\n"
                 + "      ,[Address]\n"
@@ -700,6 +743,7 @@ public class CustomerDAO extends DBContext {
                 customer.setPasswordC(rs.getString("PasswordC"));
                 customer.setName(rs.getString("Name"));
                 customer.setGender(rs.getString("Gender"));
+                customer.setDateOfBirth(rs.getDate("DateOfBirth"));
                 customer.setEmail(rs.getString("Email"));
                 customer.setPhone(rs.getString("Phone"));
                 customer.setAddress(rs.getString("Address"));
@@ -715,8 +759,16 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
+ Fix
+        ArrayList<Customer> ac = dao.advancedSearch("", "", "", "", "", 19, Integer.SIZE, Integer.SIZE, "", "", 1, 1);
+        for (Customer c : ac) {
+            System.out.println(c.getGender());
+        }
+
+
         Customer c = dao.getCustomerByID(1);
         System.out.println(c.getName());
+ main
     }
 
 }
