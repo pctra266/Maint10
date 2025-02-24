@@ -4,9 +4,11 @@
  */
 package Controller.WarrantyCard;
 
+import DAO.ComponentDAO;
 import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
+import Model.Component;
 import Model.WarrantyCardDetail;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
@@ -27,7 +29,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
 
     private final WarrantyCardDetailDAO wcdDao = new WarrantyCardDetailDAO();
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
-    private final CustomerDAO customerDAO = new CustomerDAO();
+    private final ComponentDAO componentDAO = new ComponentDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,8 +57,10 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         }
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(id);
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
+        List<Component> availableComponents = componentDAO.getAllComponents(); // Fetch all components
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
+        request.setAttribute("availableComponents", availableComponents); // Pass to JSP
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);
     }
 
@@ -134,6 +138,32 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     request.setAttribute("updateAlert1", "Component deleted successfully!");
                 } else {
                     request.setAttribute("updateAlert0", "Failed to delete component.");
+                }
+            }
+        }
+        else if ("add".equals(action)) {
+            String componentIdParam = request.getParameter("componentID");
+            String status = request.getParameter("status");
+            String quantityParam = request.getParameter("quantity");
+            Integer componentId = FormatUtils.tryParseInt(componentIdParam);
+            Integer quantity = FormatUtils.tryParseInt(quantityParam);
+
+            if (componentId != null && isValidStatus(status) && quantity != null && quantity >= 0) {
+                Component component = componentDAO.getComponentByID(componentId);
+                if (component != null) {
+                    WarrantyCardDetail newDetail = new WarrantyCardDetail();
+                    newDetail.setWarrantyCardID(warrantyCardId);
+                    newDetail.setComponent(component);
+                    newDetail.setStatus(status);
+                    newDetail.setQuantity(quantity);
+                    newDetail.setPrice(component.getPrice()); // Set price from component
+
+                    boolean added = wcdDao.addWarrantyCardDetailDAO(newDetail);
+                    if (added) {
+                        request.setAttribute("addAlert1", "Component added successfully!");
+                    } else {
+                        request.setAttribute("updateAlert0", "Failed to add component.");
+                    }
                 }
             }
         }
