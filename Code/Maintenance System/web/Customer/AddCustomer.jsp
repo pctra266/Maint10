@@ -53,6 +53,10 @@
                                     <label class="form-check-label" for="genderFemale">Female</label>
                                 </div>
                             </div>
+                             <div class="col-md-10">
+                                <label for="dateOfBirth" class="form-label">Date Of Birth</label>
+                                <input type="date" class="form-control" name="dateOfBirth" id="dateOfBirth" value="${customerDateOfBirth}" required>
+                            </div>       
                             <div class="col-md-10">
                                 <label for="customerEmail" class="form-label">Email</label>
                                 <input type="email" class="form-control" name="email" id="customerEmail" value="${customerEmail}" required>

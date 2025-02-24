@@ -1,5 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html" pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -83,7 +85,10 @@
                                             <td>${productDetail.code}</td>
                                             <td>${productDetail.productName}</td>
                                             <td>${productDetail.warrantyPeriod}</td>
-                                            <td>${productDetail.purchaseDate}</td>
+                                            <td>
+                                                <fmt:formatDate value="${productDetail.purchaseDate}" pattern="dd-MM-yyyy" />
+                                            </td>
+
                                             <td>
                                                 <form action="WarrantyCard/Add" method="post" enctype="multipart/form-data">
                                                     <input type="hidden" name="productCode" value="${productDetail.productCode}">

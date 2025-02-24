@@ -4,6 +4,8 @@
  */
 package Model;
 
+import java.util.Date;
+
 /**
  *
  * @author PC
@@ -15,6 +17,7 @@ public class Customer {
     private String passwordC;
     private String name;
     private String Gender;
+    private Date dateOfBirth;
     private String email;
     private String phone;
     private String address;
@@ -23,28 +26,32 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int customerID, String usernameC, String passwordC, String name, String Gender, String email, String phone, String address, String image) {
+    public Customer(int customerID, String usernameC, String passwordC, String name, String Gender, Date dateOfBirth, String email, String phone, String address, String image) {
         this.customerID = customerID;
         this.usernameC = usernameC;
         this.passwordC = passwordC;
         this.name = name;
         this.Gender = Gender;
+        this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.image = image;
     }
 
-    public Customer(String usernameC, String passwordC, String name, String Gender, String email, String phone, String address, String image) {
+    public Customer(String usernameC, String passwordC, String name, String Gender, Date dateOfBirth, String email, String phone, String address, String image) {
         this.usernameC = usernameC;
         this.passwordC = passwordC;
         this.name = name;
         this.Gender = Gender;
+        this.dateOfBirth = dateOfBirth;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.image = image;
     }
+    
+    
 
     public int getCustomerID() {
         return customerID;
@@ -86,6 +93,14 @@ public class Customer {
         this.Gender = Gender;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -118,5 +133,6 @@ public class Customer {
         this.image = image;
     }
 
+    
  
 }

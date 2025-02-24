@@ -122,7 +122,7 @@ public class ChangePasswordServlet extends HttpServlet {
                 return;
             }
             Customer updatedCustomerPassword = new Customer(customer.getCustomerID(), customer.getUsernameC(), encryptionPassword,
-                    customer.getName(), customer.getGender(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.getImage());
+                    customer.getName(), customer.getGender(),customer.getDateOfBirth(), customer.getEmail(), customer.getPhone(), customer.getAddress(), customer.getImage());
 
             customerDao.changePassword(updatedCustomerPassword);
             session.setAttribute("customer", updatedCustomerPassword);

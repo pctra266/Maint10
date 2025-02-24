@@ -81,8 +81,14 @@
                                                 <label for="female">Female</label>
                                             </div>
                                         </div>
+                                        
+                                          <div class="mb-3">
+                                            <label class="form-label">Date Of Birth</label>
+                                            <input class="form-control form-control-lg" type="date" name="dateOfBirth"
+                                                placeholder="Enter customer's date of birth" 
+                                                value="${customer.dateOfBirth != null ? customer.dateOfBirth : ''}" />
+                                        </div>
 
-                                     
                                         <div class="mb-3">
                                             <label class="form-label">Phone</label>
                                             <input class="form-control form-control-lg" type="text" name="phone"
