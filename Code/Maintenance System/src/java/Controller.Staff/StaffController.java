@@ -10,14 +10,17 @@ import DAO.StaffLogDAO;
 import Model.Staff;
 import Model.StaffLog;
 import Model.Pagination;
+import com.sun.jdi.connect.spi.Connection;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,6 +30,13 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 /**
  *
  * @author ADMIN
@@ -176,29 +186,29 @@ public class StaffController extends HttpServlet {
         PrintWriter out = response.getWriter();
         
         String search = request.getParameter("search");
-                String searchname = request.getParameter("searchname");
-                String column = request.getParameter("column");
-                String sortOrder = request.getParameter("sortOrder");
-                String page_size = request.getParameter("page_size");               
-                int pagesize = 5; 
+        String searchname = request.getParameter("searchname");
+        String column = request.getParameter("column");
+        String sortOrder = request.getParameter("sortOrder");
+        String page_size = request.getParameter("page_size");               
+        int pagesize = 5; 
 
-                if (page_size != null && !page_size.isEmpty()) {
-                    try {
-                        pagesize = Integer.parseInt(page_size);
-                    } catch (NumberFormatException e) {
-                        pagesize = 5; 
-                    }
-                }
-                int pageIndex = 1;
-                String pageIndexStr = request.getParameter("page");
+        if (page_size != null && !page_size.isEmpty()) {
+            try {
+                pagesize = Integer.parseInt(page_size);
+            } catch (NumberFormatException e) {
+                pagesize = 5; 
+            }
+        }
+        int pageIndex = 1;
+        String pageIndexStr = request.getParameter("page");
 
-                if (pageIndexStr != null) {
-                    try {
-                        pageIndex = Integer.parseInt(pageIndexStr);
-                    } catch (NumberFormatException e) {
-                        pageIndex = 1;
-                    }
-                }
+        if (pageIndexStr != null) {
+            try {
+                pageIndex = Integer.parseInt(pageIndexStr);
+            } catch (NumberFormatException e) {
+                pageIndex = 1;
+            }
+        }
         
         int totalStaff;
         totalStaff = dao.getAllStaff(searchname, search, column, sortOrder).size();
@@ -233,7 +243,6 @@ public class StaffController extends HttpServlet {
                 
                 // Gán các thuộc tính cần thiết cho JSP
                 request.setAttribute("pagination", pagination);
-        
         switch(action){
             
             case "AddStaff":
@@ -400,7 +409,7 @@ public class StaffController extends HttpServlet {
                 
                 StaffDAO staff = new StaffDAO();
                 StaffLogDAO  stafflog = new StaffLogDAO();
-                boolean update = stafflog.addStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole, Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
+                boolean update = stafflog.addStaff(UpdatestaffID, Updateusename, Updatepassword, Updatename,Updategender, Updatedate, Updaterole, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean uppdate = staff.updateStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole,Updategender,Updatedate,Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean update_role = staff.updateStaff_Role(UpdatestaffID, Updaterole);
                 if (update) {
@@ -413,6 +422,7 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("totalPageCount", totalPageCount);
                 request.getRequestDispatcher("Staff.jsp").forward(request, response);
                 break;
+
             default:
                 break;
         } 

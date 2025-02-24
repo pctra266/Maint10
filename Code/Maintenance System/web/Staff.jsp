@@ -16,123 +16,123 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
         <style>
-    body {
-        font-family: Arial, sans-serif;
-        background-color: #f8f9fa;
-        margin: 0;
-        padding: 0;
-    }
-    .wrapper {
-        display: flex;
-    }
-    .main {
-        flex-grow: 1;
-        padding: 20px;
-    }
-    .content {
-        background: white;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-    .table th, .table td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-    .table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    .alert {
-        padding: 10px;
-        background-color: #009926; 
-        color: white;
-        margin-bottom: 15px;
-        border-radius: 5px;
-        display: block; 
-    }
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background 0.3s;
-    }
-    .btn-primary:hover {
-        background-color: #0056b3;
-    }
-    .pagination a {
-        margin: 0 5px;
-        padding: 8px 12px;
-        background-color: #007bff;
-        color: white;
-        text-decoration: none;
-        border-radius: 4px;
-        transition: background 0.3s;
-    }
-    .pagination a:hover {
-        background-color: #0056b3;
-    }
-    .pagination a.active {
-        background-color: #0056b3;
-        font-weight: bold;
-    }
-    /* Tổng thể form */
-    .form-container {
-        background: #fff;
-        padding: 20px;
-        border-radius: 12px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        margin: 15px 0;
-    }
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                margin: 0;
+                padding: 0;
+            }
+            .wrapper {
+                display: flex;
+            }
+            .main {
+                flex-grow: 1;
+                padding: 20px;
+            }
+            .content {
+                background: white;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            .table th, .table td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            .table tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            .alert {
+                padding: 10px;
+                background-color: #009926; 
+                color: white;
+                margin-bottom: 15px;
+                border-radius: 5px;
+                display: block; 
+            }
+            .btn-primary {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+            .pagination a {
+                margin: 0 5px;
+                padding: 8px 12px;
+                background-color: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: background 0.3s;
+            }
+            .pagination a:hover {
+                background-color: #0056b3;
+            }
+            .pagination a.active {
+                background-color: #0056b3;
+                font-weight: bold;
+            }
+            /* Tổng thể form */
+            .form-container {
+                background: #fff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+                margin: 15px 0;
+            }
 
-    /* Input và Select */
-    .input-group, .form-select {
-        transition: all 0.3s ease-in-out;
-        border-radius: 8px;
-    }
+            /* Input và Select */
+            .input-group, .form-select {
+                transition: all 0.3s ease-in-out;
+                border-radius: 8px;
+            }
 
-    .form-select:focus, 
-    .form-control:focus {
-        box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-        border-color: #007bff;
-    }
+            .form-select:focus, 
+            .form-control:focus {
+                box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                border-color: #007bff;
+            }
 
-    /* Nút Search */
-    button.btn-primary {
-        background-color: #007bff;
-        border-color: #007bff;
-        transition: all 0.3s ease;
-        border-radius: 8px;
-    }
+            /* Nút Search */
+            button.btn-primary {
+                background-color: #007bff;
+                border-color: #007bff;
+                transition: all 0.3s ease;
+                border-radius: 8px;
+            }
 
-    button.btn-primary:hover {
-        background-color: #0056b3;
-        border-color: #004085;
-        transform: scale(1.05);
-    }
+            button.btn-primary:hover {
+                background-color: #0056b3;
+                border-color: #004085;
+                transform: scale(1.05);
+            }
 
-    /* Chỉnh khoảng cách giữa các phần tử */
-    .me-2 {
-        margin-right: 10px;
-    }
+            /* Chỉnh khoảng cách giữa các phần tử */
+            .me-2 {
+                margin-right: 10px;
+            }
 
-    .ms-2 {
-        margin-left: 10px;
-    }
+            .ms-2 {
+                margin-left: 10px;
+            }
 
-    .shadow-sm {
-        box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
-    }
+            .shadow-sm {
+                box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            }
 
-</style>
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -161,7 +161,7 @@
                             <select onchange="this.form.submit()" name="column" id="column" class="form-select shadow-sm">
                                 <option value="">Sort By</option>
                                 <option value="Name" ${column=='Name' ? 'selected' : ''}>Name</option>
-                                <option value="Email" ${column=='Email' ? 'selected' : ''}>Email</option>
+                                <option value="DateOfBirth" ${column=='DateOfBirth' ? 'selected' : ''}>Date</option>
                             </select>
                         </div>
 
@@ -184,25 +184,31 @@
                             </select>
                             <label class="form-label ms-2">entries</label>
                         </div>
-                    </form>
-  
+                    </form>                          
                             
                     <table class="table table-hover my-0">
                         <div class="row mb-3">
-                        <div class="col-md-6 d-flex justify-content-end">
-                            <a href="add-staff.jsp" class="btn btn-success btn-lg d-flex align-items-center gap-2 shadow">
-                                <i class="fas fa-user-plus"></i> Add More
-                            </a>
+                            <div class="col-md-6 d-flex justify-content-end">
+                                <a href="add-staff.jsp" class="btn btn-success btn-lg d-flex align-items-center gap-2 shadow">
+                                    <i class="fas fa-user-plus"></i> Add More
+                                </a>
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-start">
+                                <form action="seeMoreController" method="get">
+                                    <button type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 shadow">
+                                        <i class="fas fa-history"></i> History
+                                    </button>
+                                </form>
+                            </div>
                         </div>
-                        <div class="col-md-6 d-flex justify-content-start">
-                            <form action="seeMoreController" method="post">
-                                <button type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 shadow">
-                                    <i class="fas fa-history"></i> History
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-
+                                                
+                        <form action="ExportStaff" method="get" class="ms-1">
+                            <input type="hidden" name="searchname" value="${param.searchname}">
+                            <input type="hidden" name="search" value="${param.search}">
+                            <input type="hidden" name="column" value="${param.column}">
+                            <input type="hidden" name="sortOrder" value="${param.sortOrder}">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-print"></i></button>
+                        </form> 
                         
                         <c:if test="${not empty message}">
                             <div class="alert">${message}</div>
@@ -215,6 +221,7 @@
                                 <th>Image</th>
                                 <th>Role</th>
                                 <th>Gender</th>
+                                <th>Date</th>
                                 <th>Email</th>                               
                                 <th>Change</th>
                                 <th>Delete</th>
@@ -228,10 +235,12 @@
                                     <td>${List.getName()}</td>
                                     <td>
                                          <img src="${List.getImgage()}" alt="Null" width="100" height="100">
-                                         
                                     </td>                                                                         
                                     <td>${List.getRole()}</td>
                                     <td>${List.getGender()}</td>
+                                    <td>
+                                        ${List.getDate()}
+                                    </td>
                                     <td>${List.getEmail()}</td>
                                     <td>
                                         <a href="./StaffController?staffID=${List.getStaffID()}&action=Update" 

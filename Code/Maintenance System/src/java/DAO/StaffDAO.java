@@ -268,7 +268,7 @@ public class StaffDAO extends DBContext {
             if (search.equals("Name")) {
                 sql += " WHERE Name LIKE ? ";
             } else {
-                sql += " WHERE Role LIKE ? ";
+                sql += " WHERE Email LIKE ? ";
             }
         }
         if (column != null && !column.trim().isEmpty()) {

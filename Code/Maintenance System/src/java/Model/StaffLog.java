@@ -9,29 +9,33 @@ package Model;
  * @author ADMIN
  */
 public class StaffLog {
-    int stafflogId;
-    int staffId;
-    String useNameS;
-    String passwordS;
-    String role;
-    String name;
-    String email;
-    String phone;
-    String address;
-    String imgage;
-    String time;
-    String status;
+    private int stafflogId;
+    private int staffId;
+    private String useNameS;
+    private String passwordS;
+    private String role;
+    private String name;
+    private String gender;
+    private String date;
+    private String email;
+    private String phone;
+    private String address;
+    private String imgage;
+    private String time;
+    private String status;
 
     public StaffLog() {
     }
 
-    public StaffLog(int stafflogId, int staffId, String useNameS, String passwordS, String role, String name, String email, String phone, String address, String imgage, String time, String status) {
+    public StaffLog(int stafflogId, int staffId, String useNameS, String passwordS, String role, String name, String gender, String date, String email, String phone, String address, String imgage, String time, String status) {
         this.stafflogId = stafflogId;
         this.staffId = staffId;
         this.useNameS = useNameS;
         this.passwordS = passwordS;
         this.role = role;
         this.name = name;
+        this.gender = gender;
+        this.date = date;
         this.email = email;
         this.phone = phone;
         this.address = address;
@@ -88,6 +92,22 @@ public class StaffLog {
         this.name = name;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -135,5 +155,7 @@ public class StaffLog {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    
     
 }

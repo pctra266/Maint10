@@ -7,5 +7,12 @@
             <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/WarrantyCardDAO.java</file>
             <file>file:/C:/Users/PC/Desktop/MSA/ProductsMaintainManagement/Code/Maintenance%20System/src/java/ControllerAccount/ChangePasswordServlet.java</file>
         </group>
+        <group name="perfume-shop-main">
+            <file>file:/F:/Clone%20maintain/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Model/StaffLog.java</file>
+            <file>file:/F:/Clone%20maintain/ProductsMaintainManagement/Code/Maintenance%20System/web/all-changeStaff.jsp</file>
+            <file>file:/F:/Clone%20maintain/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/StaffController.java</file>
+            <file>file:/F:/Clone%20maintain/ProductsMaintainManagement/Code/Maintenance%20System/src/java/Controller/seeMoreController.java</file>
+            <file>file:/F:/Clone%20maintain/ProductsMaintainManagement/Code/Maintenance%20System/src/java/DAO/StaffLogDAO.java</file>
+        </group>
     </open-files>
 </project-private>
