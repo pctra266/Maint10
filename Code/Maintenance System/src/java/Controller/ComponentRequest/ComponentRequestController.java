@@ -122,9 +122,9 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalProductUnderMaintain(warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain);
                 break;
             case "createComponentRequest":
-                total = componentRequestDao.totalComponentByProductCode(productCode, componentCode, componentName, typeID, brandID);
+                total = componentRequestDao.totalComponentByProductCode("", componentCode, componentName, typeID, brandID);
                 break;
-            case "viewListComponentRequest": case "updateStatusComponentRequest":
+            case "viewListComponentRequest": case "updateStatusComponentRequest": case"addComponent":case"removeComponent":
                 total = componentRequestDao.totalComponentRequest(warrantyCardCode);
                 break;
         }
@@ -148,12 +148,9 @@ public class ComponentRequestController extends HttpServlet {
                 pagination.setSort(sort);
                 pagination.setOrder(order);
                 pagination.setUrlPattern("/componentRequest");
-        //session        
-        HttpSession session = request.getSession();
-        ArrayList<Component> selectedComponents = (ArrayList<Component>) session.getAttribute("selectedComponents");
-        if (selectedComponents == null) {
-            selectedComponents = new ArrayList<>();
-        }        
+        // Session
+    HttpSession session = request.getSession();
+    ArrayList<Component> selectedComponents = (ArrayList<Component>) session.getAttribute("selectedComponents");
         //do
         switch(action){
             case "viewComponentRequestDashboard":
@@ -168,41 +165,76 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("requestComponentDashboard.jsp").forward(request, response);
                 break;
             case "createComponentRequest":
+            String previousWarrantyCardID = (String) session.getAttribute("currentWarrantyCardID");
+            if (warrantyCardID != null && !warrantyCardID.trim().isEmpty() && !warrantyCardID.equals(previousWarrantyCardID)) {
+                if (productCode != null && !productCode.trim().isEmpty() ) {
+                    
+                    selectedComponents = componentRequestDao.getallListComponentByProductCode(productCode, null, null, null, null, 1, Integer.MAX_VALUE);
+                } else {
+                    selectedComponents = new ArrayList<>();
+                }
+                session.setAttribute("selectedComponents", selectedComponents);
+                session.setAttribute("currentWarrantyCardID", warrantyCardID);
+            } else if (warrantyCardID == null || warrantyCardID.trim().isEmpty()) {
+                selectedComponents = new ArrayList<>();
+                session.setAttribute("selectedComponents", selectedComponents);
+                session.removeAttribute("currentWarrantyCardID");
+            }
                 //======phan trang
-                pagination.setSearchFields(new String[]{"action","productCode","componentCode","componentName","typeID","brandID"});
-                pagination.setSearchValues(new String[]{"createComponentRequest",productCode,componentCode,componentName,typeID,brandID});
+                pagination.setSearchFields(new String[]{"action","warrantyCardID","productCode","componentCode","componentName","typeID","brandID"});
+                pagination.setSearchValues(new String[]{"createComponentRequest",warrantyCardID,productCode,componentCode,componentName,typeID,brandID});
                 request.setAttribute("pagination", pagination);
                 //======end phan trang
-                ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode,componentCode,componentName,
+                ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode("",componentCode,componentName,
                         typeID, brandID,page,pageSize);
+                
                 request.setAttribute("listComponentByProductCode", listComponentByProductCode);
-                request.setAttribute("selectedComponents", selectedComponents);
+                request.setAttribute("selectedComponents", selectedComponents != null ? selectedComponents : new ArrayList<>());
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;
                 
             case "addComponent":
+            if (selectedComponents == null) {
+                selectedComponents = new ArrayList<>();
+            }
             String componentID = request.getParameter("componentID");
-            Component componentToAdd = componentRequestDao.getallListComponentByProductCode(productCode, null, null, null, null, 1, Integer.MAX_VALUE)
-                .stream().filter(c -> c.getComponentID() == Integer.parseInt(componentID)).findFirst().orElse(null);
-            if (componentToAdd != null && !selectedComponents.stream().anyMatch(c -> c.getComponentID() == componentToAdd.getComponentID())) {
-                componentToAdd.setQuantity(1); // Mặc định số lượng là 1
+            Component componentToAdd = getComponentById("", componentID);
+            if (componentToAdd != null && !isComponentInList(selectedComponents, componentToAdd)) {
+                componentToAdd.setQuantity(1); 
                 selectedComponents.add(componentToAdd);
                 session.setAttribute("selectedComponents", selectedComponents);
             }
-            response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardID + "&productCode=" + productCode +
-                "&page=" + page + "&page-size=" + pageSize + "&componentName=" + componentName + "&componentCode=" + componentCode +
-                "&typeID=" + typeID + "&brandID=" + brandID);
+                      //======phan trang
+                pagination.setSearchFields(new String[]{"action","warrantyCardID","productCode","componentCode","componentName","typeID","brandID"});
+                pagination.setSearchValues(new String[]{"createComponentRequest",warrantyCardID,productCode,componentCode,componentName,typeID,brandID});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                ArrayList<Component> listComponentByProductCode1 = componentRequestDao.getallListComponentByProductCode("",componentCode,componentName,
+                        typeID, brandID,page,pageSize);
+                
+                request.setAttribute("listComponentByProductCode", listComponentByProductCode1);
+                request.setAttribute("selectedComponents", selectedComponents != null ? selectedComponents : new ArrayList<>());
+                request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
             break;
 
         case "removeComponent":
-            String removeComponentID = request.getParameter("componentID");
-            selectedComponents.removeIf(c -> c.getComponentID() == Integer.parseInt(removeComponentID));
-            session.setAttribute("selectedComponents", selectedComponents);
-            response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardID + "&productCode=" + productCode +
-                "&page=" + page + "&page-size=" + pageSize + "&componentName=" + componentName + "&componentCode=" + componentCode +
-                "&typeID=" + typeID + "&brandID=" + brandID);
+            if (selectedComponents != null) {
+                String removeComponentID = request.getParameter("componentID");
+                removeComponentById(selectedComponents, removeComponentID);
+                session.setAttribute("selectedComponents", selectedComponents);
+            }
+                      //======phan trang
+                pagination.setSearchFields(new String[]{"action","warrantyCardID","productCode","componentCode","componentName","typeID","brandID"});
+                pagination.setSearchValues(new String[]{"createComponentRequest",warrantyCardID,productCode,componentCode,componentName,typeID,brandID});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                ArrayList<Component> listComponentByProductCode2 = componentRequestDao.getallListComponentByProductCode("",componentCode,componentName,
+                        typeID, brandID,page,pageSize);
+                
+                request.setAttribute("listComponentByProductCode", listComponentByProductCode2);
+                request.setAttribute("selectedComponents", selectedComponents != null ? selectedComponents : new ArrayList<>());
+                request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
             break;
-            
             case "viewListComponentRequest":
 //                //======phan trang
 //                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
@@ -226,6 +258,39 @@ public class ComponentRequestController extends HttpServlet {
                 break;
         }
     }
+    private Component getComponentById(String productCode, String componentID) {
+    if (componentID == null || componentID.trim().isEmpty()) {
+        return null;
+    }
+    ArrayList<Component> components = componentRequestDao.getallListComponentByProductCode(productCode, "", "", "", "", 1, Integer.MAX_VALUE);
+    for (Component c : components) {
+        if (c.getComponentID() == Integer.parseInt(componentID)) {
+            return c;
+        }
+    }
+    return null;
+}private boolean isComponentInList(ArrayList<Component> selectedComponents, Component component) {
+    if (selectedComponents == null || component == null) {
+        return false;
+    }
+    for (Component c : selectedComponents) {
+        if (c.getComponentID() == component.getComponentID()) {
+            return true;
+        }
+    }
+    return false;
+    
+}private void removeComponentById(ArrayList<Component> selectedComponents, String componentID) {
+    if (selectedComponents == null || componentID == null || componentID.trim().isEmpty()) {
+        return;
+    }
+    for (int i = 0; i < selectedComponents.size(); i++) {
+        if (selectedComponents.get(i).getComponentID() == Integer.parseInt(componentID)) {
+            selectedComponents.remove(i);
+            break;
+        }
+    }
+}
     
     private void viewListComponentRequest(Pagination pagination,String warrantyCardCode,int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException{
@@ -280,6 +345,7 @@ public class ComponentRequestController extends HttpServlet {
                
             }
         }
+        
     }
            
         boolean valid = true;
@@ -287,9 +353,16 @@ public class ComponentRequestController extends HttpServlet {
         //do
         switch(action){
             case "createComponentRequest":
-                if(listQuantities == null){
+                // valid
+                int totalQuantities = 0;
+               for (Integer x : listQuantities) {
+                   totalQuantities +=x;
+               }
+                if(totalQuantities <1){
                     valid = false;
                 }
+                System.out.println("totalQuantities: "+ totalQuantities);
+                //end valid
             if(valid){
                 if(!componentRequestDao.createComponentRequest(Integer.parseInt(warrantyCardIDstr), note, listComponentIDs, listQuantities)){
                     mess  = "Create fail";

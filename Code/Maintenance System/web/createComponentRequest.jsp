@@ -21,12 +21,15 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <h1>Create Component Request</h1>
+                    <h1 class="text-center">Create Component Request</h1>
                     <div class="alert-primary" >
                         ${param.mess}
                     </div>
+                    <a href="componentRequest" >Back</a>
                     <form action="componentRequest" method="get">
                         <input type="hidden" name="action" value="createComponentRequest">
+                        <input type="hidden" name="productCode" value="${productCode}"> 
+                        <input type="hidden"  name="warrantyCardID" value="${warrantyCardID}">
                         <div class="row"  style="justify-content: space-between">
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                            <input style="margin-top: 15px" class="form-control" type="search" name="componentName" placeholder="Component Name"  value="${componentName}" >
@@ -75,7 +78,7 @@
                                 <th>Component Type</th>
                                 <th>Component Brand</th>
                                 <th>Component Name</th>
-                                <th>Quantity</th>
+                                <th>Add to request</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -98,7 +101,7 @@
                                                 <input type="hidden" name="componentCode" value="${componentCode}">
                                                 <input type="hidden" name="typeID" value="${typeID}">
                                                 <input type="hidden" name="brandID" value="${brandID}">
-                                                <button type="submit" class="btn btn-primary">ADD</button>
+                                                <button type="submit" class="btn btn-primary">Add</button>
                                     </form>
                                 </td>
                                 </tr>
@@ -106,6 +109,7 @@
                         </tbody>
                         
                         </table>
+                               <jsp:include page="/includes/pagination.jsp" />
                     <form action="componentRequest" method="post">
                         <input type="hidden" name="action" value="createComponentRequest">
                         <input type="hidden" name="productCode" value="${productCode}"> 
@@ -132,19 +136,7 @@
                                         <td>${selected.componentName}</td>
                                         <td><input type="number" name="quantities" min="0" value="${selected.quantity}"></td>
                                         <td>
-                                            <form action="componentRequest" method="get" style="display:inline;">
-                                                <input type="hidden" name="action" value="removeComponent">
-                                                <input type="hidden" name="componentID" value="${selected.componentID}">
-                                                <input type="hidden" name="productCode" value="${productCode}">
-                                                <input type="hidden" name="warrantyCardID" value="${warrantyCardID}">
-                                                <input type="hidden" name="page-size" value="${pagination.pageSize}">
-                                                <input type="hidden" name="page" value="${pagination.currentPage}">
-                                                <input type="hidden" name="componentName" value="${componentName}">
-                                                <input type="hidden" name="componentCode" value="${componentCode}">
-                                                <input type="hidden" name="typeID" value="${typeID}">
-                                                <input type="hidden" name="brandID" value="${brandID}">
-                                                <button type="submit" class="btn btn-danger">Remove</button>
-                                            </form>
+                                            <a href="componentRequest?action=removeComponent&componentID=${selected.componentID}&productCode=${productCode}&warrantyCardID=${warrantyCardID}&page-size=${pagination.pageSize}&page=${pagination.currentPage}&componentName=${componentName}&componentCode=${componentCode}&typeID=${typeID}&brandID=${brandID}" class="btn btn-danger">Remove</a>
                                         </td>
                                         <input type="hidden" name="componentIDs" value="${selected.componentID}">
                                     </tr>
@@ -155,7 +147,7 @@
                             <div><textarea name="note"></textarea></div>
                             <button class="btn btn-primary" type="submit">Submit</button>
                     </form>
-                     <jsp:include page="/includes/pagination.jsp" />
+                     
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
 
