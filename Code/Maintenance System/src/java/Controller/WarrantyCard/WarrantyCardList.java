@@ -44,7 +44,8 @@ public class WarrantyCardList extends HttpServlet {
             throws ServletException, IOException {
         //truyen tham so cho nut back
         HttpSession session = request.getSession();
-        session.setAttribute("createWarrantyCardFom", "/MaintenanceSystem/WarrantyCard");
+        session.setAttribute("createWarrantyCardFrom", request.getContextPath()+request.getServletPath());
+        session.setAttribute("detailWarrantyCardFrom", request.getContextPath()+request.getServletPath());
         
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
@@ -87,7 +88,7 @@ public class WarrantyCardList extends HttpServlet {
         pagination.setSearchFields(new String[]{"search", "status", "type"});
         pagination.setSearchValues(new String[]{paraSearch, status, type});
         request.setAttribute("pagination", pagination);
-
+        
         request.setAttribute("totalCards", totalCards);
         request.setAttribute("cardList", cards);
         request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);
