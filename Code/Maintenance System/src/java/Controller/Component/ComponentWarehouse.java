@@ -43,13 +43,20 @@ public class ComponentWarehouse extends HttpServlet {
             throws ServletException, IOException {
         //Xu ly nut back quay ve
         HttpSession session = request.getSession();
-        if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        if (session.getAttribute("detailComponentFrom") != null) {
+            session.removeAttribute("from");
+        }
+        // Handle cleanup action from the "Close" button
+        String action = request.getParameter("action");
+        if ("clearErrorComponents".equals(action)) {
+            session.removeAttribute("errorComponents");
+        }
         //Tai component khong import duoc
         List<Component> errorComponents = (List<Component>) session.getAttribute("errorComponents");
-        if(errorComponents!=null){
+        if (errorComponents != null) {
             if (errorComponents.isEmpty()) {
                 request.setAttribute("alertImportSuccess", "Import Successfully ");
-                  session.removeAttribute("errorComponents");
+                session.removeAttribute("errorComponents");
             } else {
                 request.setAttribute("alertImportFail", "Some components can't add.");
             }

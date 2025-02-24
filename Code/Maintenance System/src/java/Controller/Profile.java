@@ -5,7 +5,9 @@
 package Controller;
 
 import DAO.CustomerDAO;
+import DAO.StaffDAO;
 import Model.Customer;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -20,44 +22,32 @@ import jakarta.servlet.http.HttpSession;
  */
 public class Profile extends HttpServlet {
 
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Profile</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet Profile at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        CustomerDAO custonmer = new CustomerDAO();
+        CustomerDAO customerDAO = new CustomerDAO();
+        StaffDAO staffDAO = new StaffDAO();
         HttpSession session = request.getSession();
-        Customer customerOnSession = (Customer) session.getAttribute("customer");
-        Customer customerProfile = custonmer.getCustomerByID(customerOnSession.getCustomerID());
-        
-        request.setAttribute("customerProfile", customerProfile);
-        request.getRequestDispatcher("profile.jsp").forward(request, response);
-        
 
+        Customer customerOnSession = (Customer) session.getAttribute("customer");
+        Staff staffOnSession = (Staff) session.getAttribute("staff");
+
+        PrintWriter out = response.getWriter();
+
+        out.println(customerOnSession.getName());
+
+//        if (customerOnSession != null) {
+//            Customer customerProfile = customerDAO.getCustomerByID(customerOnSession.getCustomerID());
+//            request.setAttribute("customerProfile", customerProfile);
+//            out.println(customerProfile.getName());
+//
+//        } else if (staffOnSession != null) {
+//            Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+//            request.setAttribute("staffProfile", staffProfile);
+//            out.println(staffProfile.getName());
+//
+//        }
+        //request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
     /**
@@ -71,17 +61,6 @@ public class Profile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

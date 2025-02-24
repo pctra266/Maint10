@@ -27,7 +27,8 @@
                     <div>
                         <form method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="viewListComponentRequest">
-<!--                        <div class="col-sm-6 col-md-6">
+                            <div  class="row"  style="justify-content: space-between" >
+                                <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">
@@ -36,15 +37,24 @@
                                 </select> 
                                 entries
                             </label>
-                        </div>-->
+                        </div>
+                                <div class="col-sm-6 col-md-6"  style="width: 500px">
+                           <input style="margin-top: 15px" class="form-control" type="search" name="warrantyCardCode" placeholder="Warranty Card Code"  value="${warrantyCardCode}" >
+                            <div style="float: right">
+                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                </div>
+                        </div>
+                            </div>
+                        
                         <table class="table table-hover my-0">
-                            <thead>
+                           <thead>
                                 <tr>
-                                    <th >component Request ID</th>
-                                    <th  >warranty Card ID</th>
-                                    <th >Date</th>
-                                    <th >Status</th>
-                                    <th >Note</th>
+                                    <th>component Request ID</th>
+                                    <th>Warranty Card Code</th>
+                                    <th>Warranty Create Date</th>
+                                    <th>Component Request Create Date</th>
+                                    <th>Status</th>
+                                    <th>Note</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -52,7 +62,8 @@
                                 <c:forEach items="${listComponentRequest}" var="o">
                                     <tr>
                                         <td>${o.componentRequestID}</td>
-                                        <td>${o.warrantyCardID}</td>
+                                        <td>${o.warrantyCode}</td>
+                                        <td>${o.warrantyCreateDate}</td>
                                         <td>${o.date}</td>
                                         <td>${o.status}</td>
                                         <td>${o.note}</td>

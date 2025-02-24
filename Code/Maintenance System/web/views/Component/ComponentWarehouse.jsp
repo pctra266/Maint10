@@ -107,7 +107,26 @@
                         </c:if>
                         <c:if test="${not empty alertImportFail}">
                             <div class="alert alert-warning alert-dismissible mt-1" role="alert">
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <form action="ComponentWarehouse" method="post" class="d-inline">
+                                    <input type="hidden" name="page" value="${pagination.currentPage}" />
+                                    <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                    <c:if test="${fn:length(pagination.searchFields) > 0}">
+
+                                        <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                            <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                                        </c:forEach>
+                                    </c:if>
+                                    <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                                        <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                            <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
+                                        </c:forEach>
+                                    </c:if>
+
+                                    <input type="hidden" name="sort" value="${pagination.sort}">
+                                    <input type="hidden" name="order" value="${pagination.order}">
+                                    <input type="hidden" name="action" value="clearErrorComponents">
+                                    <button type="submit" class="btn-close" aria-label="Close"></button>
+                                </form>
                                 <form action="ExportComponents" method="get" class="ms-2 d-flex justify-content-center">
                                     <input type="hidden" name="type" value="error">
                                     <button type="submit" class="btn btn-warning"><i class="fas fa-print"></i></button>

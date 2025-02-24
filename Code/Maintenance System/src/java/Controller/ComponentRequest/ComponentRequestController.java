@@ -121,7 +121,9 @@ public class ComponentRequestController extends HttpServlet {
                 break;
             case "createComponentRequest":
                 total = componentRequestDao.totalComponentByProductCode(productCode, componentCode, componentName, typeID, brandID);
-                System.out.println("total: " + total);
+                break;
+            case "viewListComponentRequest":
+                total = componentRequestDao.totalComponentRequest(warrantyCardCode);
                 break;
         }
         //paging
@@ -169,7 +171,12 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;
             case "viewListComponentRequest":
-                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest();
+                //======phan trang
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
+                pagination.setSearchValues(new String[]{"viewListComponentRequest",warrantyCardCode});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode,page, pageSize);
                 request.setAttribute("listComponentRequest", listComponentRequest);
                 request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
                 break;

@@ -194,6 +194,22 @@ button:hover {
                             </select>
 
                         </div>
+                        
+                        <div class="add__signin-input">
+                            <label for="gender" class="add__input-label">Gender</label><br>
+                            <select id="gender" class="add__input" name="gender" required>
+                                <option value="" ></option>
+                                <option value="Male" ${staff.getGender() == 'Male' ? 'selected' : ''}>Male</option>
+                                <option value="Female" ${staff.getGender() == 'Female' ? 'selected' : ''}>Female</option>
+                                <option value="Other" ${staff.getGender() == 'Other' ? 'selected' : ''}>Other</option>
+                            </select>
+                            
+                        </div>
+
+                        <div class="add__signin-input">
+                            <input id="date" type="date" class="add__input" name="date" value="${staff.getDate()}" required />
+                        </div>
+                            
                         <div class="add__signin-input">
                             <label for="password" class="add__input-label"
                                 >Name</label

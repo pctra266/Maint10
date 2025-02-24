@@ -1,4 +1,3 @@
-
 package ControllerAccount;
 
 import DAO.CustomerDAO;
@@ -40,6 +39,7 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("LoginForm.jsp").forward(request, response);
             return;
         }
+        
         String encryptionPassword = Encryption.EncryptionPassword(password);
         Staff staff = staffDao.getStaffByUsenamePassword(username, encryptionPassword);
         Customer customer = customerDao.getCustomerByUsenamePassword(username, encryptionPassword);
