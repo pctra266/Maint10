@@ -21,6 +21,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -147,6 +148,12 @@ public class ComponentRequestController extends HttpServlet {
                 pagination.setSort(sort);
                 pagination.setOrder(order);
                 pagination.setUrlPattern("/componentRequest");
+        //session        
+        HttpSession session = request.getSession();
+        ArrayList<Component> selectedComponents = (ArrayList<Component>) session.getAttribute("selectedComponents");
+        if (selectedComponents == null) {
+            selectedComponents = new ArrayList<>();
+        }        
         //do
         switch(action){
             case "viewComponentRequestDashboard":
@@ -169,8 +176,33 @@ public class ComponentRequestController extends HttpServlet {
                 ArrayList<Component> listComponentByProductCode = componentRequestDao.getallListComponentByProductCode(productCode,componentCode,componentName,
                         typeID, brandID,page,pageSize);
                 request.setAttribute("listComponentByProductCode", listComponentByProductCode);
+                request.setAttribute("selectedComponents", selectedComponents);
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
                 break;
+                
+            case "addComponent":
+            String componentID = request.getParameter("componentID");
+            Component componentToAdd = componentRequestDao.getallListComponentByProductCode(productCode, null, null, null, null, 1, Integer.MAX_VALUE)
+                .stream().filter(c -> c.getComponentID() == Integer.parseInt(componentID)).findFirst().orElse(null);
+            if (componentToAdd != null && !selectedComponents.stream().anyMatch(c -> c.getComponentID() == componentToAdd.getComponentID())) {
+                componentToAdd.setQuantity(1); // Mặc định số lượng là 1
+                selectedComponents.add(componentToAdd);
+                session.setAttribute("selectedComponents", selectedComponents);
+            }
+            response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardID + "&productCode=" + productCode +
+                "&page=" + page + "&page-size=" + pageSize + "&componentName=" + componentName + "&componentCode=" + componentCode +
+                "&typeID=" + typeID + "&brandID=" + brandID);
+            break;
+
+        case "removeComponent":
+            String removeComponentID = request.getParameter("componentID");
+            selectedComponents.removeIf(c -> c.getComponentID() == Integer.parseInt(removeComponentID));
+            session.setAttribute("selectedComponents", selectedComponents);
+            response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardID + "&productCode=" + productCode +
+                "&page=" + page + "&page-size=" + pageSize + "&componentName=" + componentName + "&componentCode=" + componentCode +
+                "&typeID=" + typeID + "&brandID=" + brandID);
+            break;
+            
             case "viewListComponentRequest":
 //                //======phan trang
 //                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
@@ -263,6 +295,7 @@ public class ComponentRequestController extends HttpServlet {
                     mess  = "Create fail";
                 }else{
                     mess = "Create Successfully !";
+                    request.getSession().removeAttribute("selectedComponents");
                 }
                  response.sendRedirect("componentRequest?action=viewComponentRequestDashboard&mess="+mess);
                  return ;
