@@ -101,7 +101,7 @@ public class ComponentRequestDAO {
                        \tfrom WarrantyCard wc
                        \tleft join WarrantyProduct wp on wc.WarrantyProductID = wp.WarrantyProductID
                        \tleft join ProductDetail pd on wp.ProductDetailID = pd.ProductDetailID
-                       \tleft join UnknowProduct up on wp.UnknowProductID = up.UnknowProductID
+                       \tleft join UnknownProduct up on wp.UnknownProductID = up.UnknownProductID
                        \tleft join Product p on pd.ProductID = p.ProductID
                        \twhere 1 =1 """;
         if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
@@ -172,7 +172,7 @@ public class ComponentRequestDAO {
                        \tfrom WarrantyCard wc
                        \tleft join WarrantyProduct wp on wc.WarrantyProductID = wp.WarrantyProductID
                        \tleft join ProductDetail pd on wp.ProductDetailID = pd.ProductDetailID
-                       \tleft join UnknowProduct up on wp.UnknowProductID = up.UnknowProductID
+                       \tleft join UnknownProduct up on wp.UnknownProductID = up.UnknownProductID
                        \tleft join Product p on pd.ProductID = p.ProductID
                        \twhere 1 =1 """;
         if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){

@@ -112,7 +112,7 @@
                          </form>   
                     </div>
                      <jsp:include page="/includes/pagination.jsp" />
-                     <!--<a  href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>-->
+                     <a  href="componentRequest?action=listComponentRequestByStaffId">Component Request History</a>
                      
                 </main>
                     

@@ -264,10 +264,15 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("detailComponentRequest.jsp").forward(request, response);
                 break;
             case "updateStatusComponentRequest":
-                staffId = "3";
+                if(currentStaff == null){
+                   staffId = "3";
+                }
                 crrDao.createComponentRequestResponsible(staffId,componentRequestID,componentStatus);
                componentRequestDao.updateStatusComponentRequest(componentRequestID,componentStatus);
               this.viewListComponentRequest(pagination, warrantyCardCode, page, pageSize, request, response);
+                break;
+            case "listComponentRequestByStaffId":
+//                ArrayList<ComponentRequest> listcomponentRequestByStaffId = componentRequestDAO.
                 break;
         }
     }
