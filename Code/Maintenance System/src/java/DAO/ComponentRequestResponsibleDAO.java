@@ -52,6 +52,25 @@ public class ComponentRequestResponsibleDAO {
         return list;
     }
  
+    public void createComponentRequestResponsible(String staffId, String componentRequestId, String action){
+        String query ="""
+                      insert into ComponentRequestResponsible(StaffID,ComponentRequestID,Action,CreateDate)
+                      \tvalues (?,?,?,GETDATE())""";
+         try{
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            ps.setString(1, staffId);
+            ps.setString(2, componentRequestId);
+            ps.setString(3, action);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                
+            }
+        }catch (Exception e){
+            
+        }
+    }
+ 
     public static void main(String[] args) {
         ComponentRequestResponsibleDAO dao = new ComponentRequestResponsibleDAO();
         ArrayList<ComponentRequestResponsible> list = dao.getAllComponentRequestResponsible();

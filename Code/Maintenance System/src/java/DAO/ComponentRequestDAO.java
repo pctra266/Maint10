@@ -542,6 +542,22 @@ public class ComponentRequestDAO {
             }
         }
         
+        public int getLastComponentRequestId(){
+            String query ="""
+                          SELECT ComponentRequestID FROM ComponentRequest
+                          WHERE ComponentRequestID = (SELECT MAX(ComponentRequestID) FROM ComponentRequest);""";
+            try {
+                conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   return rs.getInt(1);
+               }
+            } catch (Exception e) {
+            }
+            return 0;
+        }
+        
         
             
     public static void main(String[] args) {
