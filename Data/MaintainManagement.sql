@@ -154,7 +154,7 @@ CREATE TABLE ProductDetail (
 );
 
 -- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
-CREATE TABLE UnknowProduct (
+CREATE TABLE UnknownProduct (
     UnknowProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID), -- Liên kết với khách hàng
     ProductName NVARCHAR(50),
@@ -167,10 +167,10 @@ CREATE TABLE UnknowProduct (
 CREATE TABLE WarrantyProduct (
     WarrantyProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     ProductDetailID INT NULL REFERENCES ProductDetail(ProductDetailID),
-    UnknowProductID INT NULL REFERENCES UnknowProduct(UnknowProductID),
+    UnknownProductID INT NULL REFERENCES UnknownProduct(UnknownProductID),
     CHECK (
-        (ProductDetailID IS NOT NULL AND UnknowProductID IS NULL) OR 
-        (ProductDetailID IS NULL AND UnknowProductID IS NOT NULL)
+        (ProductDetailID IS NOT NULL AND UnknownProductID IS NULL) OR 
+        (ProductDetailID IS NULL AND UnknownProductID IS NOT NULL)
     )
 );
 

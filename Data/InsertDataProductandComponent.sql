@@ -351,11 +351,11 @@ WITH RandomData AS (
         ReceivedDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 730, GETDATE()) -- Ngày ngẫu nhiên trong 2 năm gần đây
     FROM master.dbo.spt_values
 )
-INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
+INSERT INTO UnknownProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
 SELECT CustomerID, ProductName, ProductCode, Description, ReceivedDate
 FROM RandomData;
 -- insert more to customerID = 1 for testing
-INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
+INSERT INTO UnknownProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
 SELECT TOP 5
     1, -- CustomerID cố định là 1
     'Product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
