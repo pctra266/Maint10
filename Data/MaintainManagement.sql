@@ -155,7 +155,7 @@ CREATE TABLE ProductDetail (
 
 -- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
 CREATE TABLE UnknownProduct (
-    UnknowProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    UnknownProductID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID), -- Liên kết với khách hàng
     ProductName NVARCHAR(50),
 	ProductCode NVARCHAR(20), --Auto generate

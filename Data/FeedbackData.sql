@@ -8,7 +8,7 @@ VALUES
 (4, 1, 'P13435', '2025-01-04'),
 (5, 4, 'P134535', '2025-01-05')
 
-INSERT INTO WarrantyProduct (ProductDetailID, UnknowProductID)
+INSERT INTO WarrantyProduct (ProductDetailID, UnknownProductID)
 VALUES 
 (1, NULL), (2, NULL), (3, NULL), (4, NULL), (5, NULL),
 (6, NULL), (7, NULL), (8, NULL), (9, NULL), (10, NULL),
