@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -165,8 +166,8 @@ public class CustomerDAO extends DBContext {
                 customer.setImage(rs.getString("Image"));
                 listCustomer.add(customer);
             }
-        } catch (Exception e) {
-
+        } catch (SQLException e) {
+            System.out.println(e);
         }
         return listCustomer;
 
@@ -796,11 +797,6 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
-
-        boolean u;
-        u = dao.updateCustomerWithNoImage(new Customer(1, "hello", "male", Date.valueOf("1999-09-09"), "llll", "kkkk", "llll"));
-
-        System.out.println(u);
 
     }
 

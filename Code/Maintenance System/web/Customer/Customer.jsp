@@ -49,17 +49,15 @@
                             </label>
                         </div>
 
-
                         <button type="submit">Search</button>
                     </form>
-
 
                     <!-- Create New Customer Button -->
                     <div style="margin-bottom: 20px;">
                         <a href="customer?action=add" class="btn btn-primary">Create New Customer</a>
                         <a href="customer" class="btn btn-secondary">All Customers</a>
                         <a href="importExcelCustomer.jsp" class="btn btn-secondary">Import Excel</a>
-
+                        <a href="importExcelCustomer.jsp" class="btn btn-secondary">Import Excel</a>
                     </div>
 
                     <!-- Table of Customers with Sort Buttons -->
@@ -149,12 +147,12 @@
 
                         </c:forEach>
                     </div>
+
                 </main>
 
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-
         <script src="js/app.js"></script>
     </body>
 </html>

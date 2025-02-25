@@ -4,6 +4,7 @@ import Model.Brand;
 import Model.Product;
 import Model.ProductDetail;
 import Model.ProductType;
+import Model.UnknownProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -504,13 +505,49 @@ public class ProductDAO extends DBContext {
         return types;
     }
 
+    public int addUnknownProduct(UnknownProduct product) throws SQLException {
+        String sql = "INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate) VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setInt(1, product.getCustomerId());
+        ps.setString(2, product.getProductName());
+        ps.setString(3, product.getProductCode());
+        ps.setString(4, product.getDescription());
+        ps.setDate(5, new java.sql.Date(product.getReceivedDate().getTime()));
+        ps.executeUpdate();
+        ResultSet rs = ps.getGeneratedKeys();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+        return -1;
+    }
+
+    public List<UnknownProduct> getAllUnknownProducts() {
+        List<UnknownProduct> unknowProducts = new ArrayList<>();
+        String sql = "SELECT up.UnknowProductID, c.Name AS CustomerName, up.ProductName, up.ProductCode, up.Description, up.ReceivedDate "
+                + "FROM UnknowProduct up "
+                + "JOIN Customer c ON up.CustomerID = c.CustomerID";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                unknowProducts.add(new UnknownProduct(
+                        rs.getInt("UnknowProductID"),
+                        rs.getString("CustomerName"),
+                        rs.getString("ProductName"),
+                        rs.getString("ProductCode"),
+                        rs.getString("Description"),
+                        rs.getTimestamp("ReceivedDate")
+                ));
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return unknowProducts;
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-        List<ProductType> types = p.getAllProductTypes();
-        
-        for (ProductType t : types) {
-            System.out.println(t.getProductTypeId());
-            System.out.println(t.getTypeName());
+        List<UnknownProduct> unknowProducts = p.getAllUnknownProducts();
+        for (UnknownProduct u : unknowProducts) {
+            System.out.println(u.getProductName());
         }
 
     }

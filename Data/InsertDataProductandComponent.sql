@@ -348,14 +348,14 @@ WITH RandomData AS (
         ProductName = 'Product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
         ProductCode = 'P' + CAST(ABS(CHECKSUM(NEWID())) % 10000 AS NVARCHAR), -- Mã sản phẩm ngẫu nhiên từ P0 đến P9999
         Description = 'This is a description for product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),
-        PurchaseDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 730, GETDATE()) -- Ngày ngẫu nhiên trong 2 năm gần đây
+        ReceivedDate = DATEADD(DAY, -ABS(CHECKSUM(NEWID())) % 730, GETDATE()) -- Ngày ngẫu nhiên trong 2 năm gần đây
     FROM master.dbo.spt_values
 )
-INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate)
-SELECT CustomerID, ProductName, ProductCode, Description, PurchaseDate
+INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
+SELECT CustomerID, ProductName, ProductCode, Description, ReceivedDate
 FROM RandomData;
 -- insert more to customerID = 1 for testing
-INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate)
+INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate)
 SELECT TOP 5
     1, -- CustomerID cố định là 1
     'Product ' + CHAR(65 + ABS(CHECKSUM(NEWID())) % 26) + CAST(ABS(CHECKSUM(NEWID())) % 100 AS NVARCHAR),

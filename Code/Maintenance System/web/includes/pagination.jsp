@@ -1,12 +1,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<!-- Ph?n trang -->
+<!-- Phan trang -->
 
 <div class="text-center">
     <form id="paginationForm" class="text-center"action="${pageContext.request.contextPath}${pagination.urlPattern}" method="get">
         <div class="btn-group me-2" role="group" style="margin-top:1rem" aria-label="First group">
-            <!-- Form duy nh?t cho ph?n trang -->
+            <!-- Form duy nhat cho phan trang -->
             <input type="hidden" name="page" id="pageInput" value="${pagination.currentPage}">
             <input type="hidden" name="page-size" value="${pagination.pageSize}">
             <c:if test="${fn:length(pagination.searchFields) > 0}">
@@ -75,7 +75,7 @@
     </div>
 </div>
 
-<!-- Script gi?p c?p nh?t gi? tr? trang -->
+<!-- Script giup cap nhat gi? tr? trang -->
 <script>
     function setPage(page) {
         document.getElementById('pageInput').value = page;
