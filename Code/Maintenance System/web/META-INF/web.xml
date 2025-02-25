@@ -47,19 +47,19 @@
     </servlet>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>ControllerAccount.LoginServlet</servlet-class>
+        <servlet-class>Controller.Account.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ChangePasswordServlet</servlet-name>
-        <servlet-class>ControllerAccount.ChangePasswordServlet</servlet-class>
+        <servlet-class>Controller.Account.ChangePasswordServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>LogoutServlet</servlet-name>
-        <servlet-class>ControllerAccount.LogoutServlet</servlet-class>
+        <servlet-class>Controller.Account.LogoutServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ForgotPasswordServlet</servlet-name>
-        <servlet-class>ControllerAccount.ForgotPasswordServlet</servlet-class>
+        <servlet-class>Controller.Account.ForgotPasswordServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddProductServlet</servlet-name>
@@ -75,7 +75,7 @@
     </servlet>
     <servlet>
         <servlet-name>CustomerServlet</servlet-name>
-        <servlet-class>ControllerCustomer.CustomerServlet</servlet-class>
+        <servlet-class>Controller.Customer.CustomerServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddProduct</servlet-name>
@@ -107,7 +107,7 @@
     </servlet>
     <servlet>
         <servlet-name>AddCustomerExcel</servlet-name>
-        <servlet-class>ControllerCustomer.AddCustomerExcel</servlet-class>
+        <servlet-class>Controller.Customer.AddCustomerExcel</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ImportExcel</servlet-name>

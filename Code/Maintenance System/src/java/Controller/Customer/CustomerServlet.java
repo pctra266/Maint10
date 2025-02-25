@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package ControllerCustomer;
+package Controller.Customer;
 
 import DAO.CustomerDAO;
 import Model.Customer;
@@ -392,23 +392,10 @@ public class CustomerServlet extends HttpServlet {
         String searchEmail = SearchUtils.normalizeString(request.getParameter("email"));
         String searchPhone = SearchUtils.normalizeString(request.getParameter("phone"));
         String searchAddress = SearchUtils.normalizeString(request.getParameter("address"));
-        String searchDay = request.getParameter("searchDate");
-        String searchMonth = request.getParameter("searchMonth");
-        String searchYear = request.getParameter("searchYear");
+        String dateOfBirth = request.getParameter("dateOfBirth");
         String sortBy = request.getParameter("field");
         String sortOrder = request.getParameter("order");
-        // Lấy giá trị ngày, tháng, năm từ request và chuyển đổi thành Integer (nếu có nhập)
-        Integer day = request.getParameter("searchDay") != null && !request.getParameter("searchDay").isEmpty()
-                ? Integer.parseInt(request.getParameter("searchDay"))
-                : null;
-
-        Integer month = request.getParameter("searchMonth") != null && !request.getParameter("searchMonth").isEmpty()
-                ? Integer.parseInt(request.getParameter("searchMonth"))
-                : null;
-
-        Integer year = request.getParameter("searchYear") != null && !request.getParameter("searchYear").isEmpty()
-                ? Integer.parseInt(request.getParameter("searchYear"))
-                : null;
+       
 
         // Lấy giá trị phân trang
         String pageIndex = request.getParameter("index");
@@ -452,17 +439,17 @@ public class CustomerServlet extends HttpServlet {
                 || (searchAddress != null && !searchAddress.trim().isEmpty())) {
 
             // Gọi phương thức tìm kiếm với các tham số tìm kiếm, sắp xếp, phân trang
-            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, day, month, year, sortBy, sortOrder, offset, size);
+            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, size);
 
             // Lấy tổng số khách hàng tìm được
-            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, day, month, year);
+            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
 
             // Tính toán tổng số trang
             totalPages = (int) Math.ceil((double) totalCustomer / size);
 
         } else {
-            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, day, month, year, sortBy, sortOrder, offset, size);
-            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, day, month, year);
+            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, size);
+            totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
             totalPages = (int) Math.ceil((double) totalCustomer / size);
 
         }
@@ -472,9 +459,8 @@ public class CustomerServlet extends HttpServlet {
         request.setAttribute("searchEmail", searchEmail);
         request.setAttribute("searchPhone", searchPhone);
         request.setAttribute("searchAddress", searchAddress);
-        request.setAttribute("searchDate", searchDay);
-        request.setAttribute("searchMonth", searchMonth);
-        request.setAttribute("searchYear", searchYear);
+        request.setAttribute("dateOfBirth", dateOfBirth);
+        
         request.setAttribute("size", size);
         request.setAttribute("sortBy", sortBy);
         request.setAttribute("sortOrder", sortOrder);

@@ -3,21 +3,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package ControllerAccount;
+package Controller.Account;
 
+import DAO.CustomerDAO;
+import DAO.StaffDAO;
+import Email.Email;
+import Model.Customer;
+import Model.Staff;
+import Utils.Encryption;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import java.security.SecureRandom;
 
 /**
  *
  * @author PC
  */
-public class LogoutServlet extends HttpServlet {
+public class ForgotPasswordServlet extends HttpServlet {
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -34,10 +40,10 @@ public class LogoutServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet LogoutServlet</title>");  
+            out.println("<title>Servlet ForgotPasswordServlet</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet LogoutServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet ForgotPasswordServlet at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,10 +60,7 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        HttpSession session = request.getSession();
-        session.removeAttribute("staff");
-        session.removeAttribute("customer");
-        response.sendRedirect("HomePage.jsp");
+        processRequest(request, response);
     } 
 
     /** 
@@ -70,7 +73,46 @@ public class LogoutServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+       Email emailSend = new Email();
+        String email = request.getParameter("email");
+        StaffDAO staffDao = new StaffDAO();
+        CustomerDAO customerDao = new CustomerDAO();
+
+        Staff staff = staffDao.getStaffByEmail(email);
+        Customer customer = customerDao.getCustomerByEmail(email);
+        if (staff == null && customer == null) {
+            request.setAttribute("error", "Email not exitst!");
+            request.getRequestDispatcher("ForgotPasswordForm.jsp").forward(request, response);
+            return;
+        }
+        String randomPassword = randomPassword(8);
+        String encryptionPassword = Encryption.EncryptionPassword(randomPassword);
+        if (staff != null) {
+            staff.setPasswordS(encryptionPassword );
+            staffDao.changePassword(staff);
+        } else if (customer != null) {
+            customer.setPasswordC(encryptionPassword );
+            customerDao.changePassword(customer);
+        }
+
+        emailSend.sendEmail(email, "Password Reset Request",
+                "Hello,\n\nYour new password is: " + randomPassword + "\n\nPlease change it after logging in.");
+
+        
+        request.setAttribute("message", "A new password has been sent to your email.");
+        request.getRequestDispatcher("ForgotPasswordForm.jsp").forward(request, response);
+        }
+        private String randomPassword(int length) {
+        String character = "0123456789";
+        StringBuilder password = new StringBuilder();
+        SecureRandom random = new SecureRandom();
+        for (int i = 0; i < length; i++) {
+            int index = random.nextInt(character.length());
+            password.append(character.charAt(index));
+        }
+        return password.toString();
+
+    
     }
 
     /** 

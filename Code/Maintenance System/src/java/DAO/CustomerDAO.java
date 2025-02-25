@@ -232,7 +232,7 @@ public class CustomerDAO extends DBContext {
      * @param fetch
      * @return
      */
-    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, Integer day, Integer month, Integer year, String sortBy, String sortOrder, int offset, int fetch) {
+   public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address,String dateOfBirth, String sortBy, String sortOrder, int offset, int fetch) {
         ArrayList<Customer> listCustomer = new ArrayList<>();
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -265,16 +265,10 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
-        if (day != null) {
-            sql += " AND DATEPART(DAY, DateOfBirth) = ?";
+        if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+            sql += " AND DateOfBirth = ?";
         }
-        if (month != null) {
-            sql += " AND MONTH(DateOfBirth) = ?";
-        }
-
-        if (year != null) {
-            sql += " AND YEAR(DateOfBirth) = ?";
-        }
+       
 
         if (sortBy != null && !sortBy.trim().isEmpty()) {
             sql += " ORDER BY " + sortBy;
@@ -308,16 +302,8 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-            if (day != null) {
-                ps.setInt(index++, day);
-            }
-
-            if (month != null) {
-                ps.setInt(index++, month);
-            }
-
-            if (year != null) {
-                ps.setInt(index++, year);
+            if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+                ps.setDate(index++, java.sql.Date.valueOf(dateOfBirth.trim()));
             }
 
             ps.setInt(index++, offset);
@@ -343,7 +329,7 @@ public class CustomerDAO extends DBContext {
             System.out.println(e);
         }
         return listCustomer;
-    }
+   }
 
     // PHAN TRANG
     /**
@@ -424,7 +410,7 @@ public class CustomerDAO extends DBContext {
      * @param address
      * @return
      */
-    public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address, Integer day, Integer month, Integer year) {
+     public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address, String dateOfBirth) {
 
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -446,17 +432,11 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
-        if (day != null) {
-            sql += " AND DAY(DateOfBirth) = ?";
+         if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+            sql += " AND DateOfBirth = ?";
         }
-        if (month != null) {
-            sql += " AND MONTH(DateOfBirth) = ?";
-        }
-
-        if (year != null) {
-            sql += " AND YEAR(DateOfBirth) = ?";
-        }
-
+        
+      
         try {
             int index = 1;
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -475,17 +455,11 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-            if (day != null) {
-                ps.setInt(index++, day);
+            
+               if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+                ps.setDate(index++, java.sql.Date.valueOf(dateOfBirth.trim()));
             }
-
-            if (month != null) {
-                ps.setInt(index++, month);
-            }
-            if (year != null) {
-                ps.setInt(index++, year);
-            }
-
+           
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);

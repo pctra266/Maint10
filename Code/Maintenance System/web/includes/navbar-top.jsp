@@ -191,7 +191,7 @@
                 <!-- N?u ?ã ??ng nh?p là nhân viên -->
                 <li class="nav-item dropdown">
                     <a class="nav-icon pe-md-0 dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded" alt="${sessionScope.staff.name}">
+                        <img src="${sessionScope.staff.image}" class="avatar img-fluid rounded" alt="${sessionScope.staff.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
                         <a class="dropdown-item" href="pages-profile.html">Profile</a>
