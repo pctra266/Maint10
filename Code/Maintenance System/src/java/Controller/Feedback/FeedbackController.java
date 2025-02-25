@@ -277,7 +277,7 @@ public class FeedbackController extends HttpServlet {
         }
         Integer maxUploadSizeVideoMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeVideoMB");
         if (maxUploadSizeVideoMB == null) {
-            maxUploadSizeVideoMB = 50; // Giá trị mặc định 50MB
+            maxUploadSizeVideoMB = 10; // Giá trị mặc định 50MB
             request.getServletContext().setAttribute("maxUploadSizeVideoMB", maxUploadSizeVideoMB);
         }
         String feedbackIdDelete = request.getParameter("feedbackID");

@@ -7,11 +7,13 @@ package Controller.ComponentRequest;
 
 import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
+import DAO.ComponentRequestResponsibleDAO;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
 import Model.Pagination;
 import Model.ProductDetail;
+import Model.Staff;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;
@@ -33,6 +35,7 @@ import java.util.List;
 public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
     private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
+    private static final ComponentRequestResponsibleDAO crrDao = new ComponentRequestResponsibleDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -149,7 +152,15 @@ public class ComponentRequestController extends HttpServlet {
                 pagination.setOrder(order);
                 pagination.setUrlPattern("/componentRequest");
         // Session
-    HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
+        Staff currentStaff = (Staff) session.getAttribute("staff");
+       
+        String staffId = "2";
+        if (currentStaff != null) {
+            staffId = String.valueOf(currentStaff.getStaffID());
+        }
+        
+    
     ArrayList<Component> selectedComponents = (ArrayList<Component>) session.getAttribute("selectedComponents");
         //do
         switch(action){
@@ -203,8 +214,8 @@ public class ComponentRequestController extends HttpServlet {
                 componentToAdd.setQuantity(1); 
                 selectedComponents.add(componentToAdd);
                 session.setAttribute("selectedComponents", selectedComponents);
-            }
-                      //======phan trang
+            }   
+                //======phan trang
                 pagination.setSearchFields(new String[]{"action","warrantyCardID","productCode","componentCode","componentName","typeID","brandID"});
                 pagination.setSearchValues(new String[]{"createComponentRequest",warrantyCardID,productCode,componentCode,componentName,typeID,brandID});
                 request.setAttribute("pagination", pagination);
@@ -253,6 +264,8 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("detailComponentRequest.jsp").forward(request, response);
                 break;
             case "updateStatusComponentRequest":
+                staffId = "3";
+                crrDao.createComponentRequestResponsible(staffId,componentRequestID,componentStatus);
                componentRequestDao.updateStatusComponentRequest(componentRequestID,componentStatus);
               this.viewListComponentRequest(pagination, warrantyCardCode, page, pageSize, request, response);
                 break;
@@ -347,7 +360,15 @@ public class ComponentRequestController extends HttpServlet {
         }
         
     }
-           
+           // session
+        HttpSession session = request.getSession();
+        Staff currentStaff = (Staff) session.getAttribute("staff");
+       
+        String staffId = "2";
+        if (currentStaff != null) {
+            staffId = String.valueOf(currentStaff.getStaffID());
+        }
+        
         boolean valid = true;
         String mess ="";
         //do
@@ -368,6 +389,17 @@ public class ComponentRequestController extends HttpServlet {
                     mess  = "Create fail";
                 }else{
                     mess = "Create Successfully !";
+                    int componentRequestIDNum = componentRequestDao.getLastComponentRequestId();
+                    if(componentRequestIDNum != 0){
+                        try {
+                            String componentRequestID = String.valueOf(componentRequestIDNum);
+                            crrDao.createComponentRequestResponsible(staffId,componentRequestID,"request");
+                        } catch (Exception e) {
+                            System.out.println("Create Log create loi");
+                        }
+                    }
+                    
+                    
                     request.getSession().removeAttribute("selectedComponents");
                 }
                  response.sendRedirect("componentRequest?action=viewComponentRequestDashboard&mess="+mess);

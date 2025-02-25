@@ -160,7 +160,7 @@ CREATE TABLE UnknowProduct (
     ProductName NVARCHAR(50),
 	ProductCode NVARCHAR(20), --Auto generate
     Description NVARCHAR(MAX),
-    PurchaseDate DATETIME
+    ReceivedDate DATETIME
 );
 
 -- Bảng WarrantyProduct: Liên kết sản phẩm từ ProductDetail hoặc UnknowProduct

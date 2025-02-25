@@ -117,6 +117,10 @@
         <servlet-name>Profile</servlet-name>
         <servlet-class>Controller.Profile</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ViewListUnknowProduct</servlet-name>
+        <servlet-class>Controller.Product.ViewListUnknowProduct</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -252,5 +256,9 @@
     <servlet-mapping>
         <servlet-name>Profile</servlet-name>
         <url-pattern>/profile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewListUnknowProduct</servlet-name>
+        <url-pattern>/listUnknow</url-pattern>
     </servlet-mapping>
 </web-app>

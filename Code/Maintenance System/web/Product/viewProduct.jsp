@@ -225,11 +225,13 @@
                                 <i class="fas fa-add"></i> Add Product
                             </a>
                             <button class="search" onclick="window.location.href = 'viewProduct'">All Product</button>
+
+                            <a href="listUnknow" class="btn-update">
+                                <i class="fas fa-add"></i>External Repair Products
+                            </a>
                         </div>
 
                     </div>
-
-
 
                     <h1 style="text-align: center">Product List</h1>
                     <table>
@@ -248,24 +250,30 @@
                         <tbody>
                             <c:forEach var="product" items="${productList}">
                                 <tr>
+
                                     <td>${product.code}</td>
                                     <td>${product.productName}</td>
                                     <td>${product.brandName}</td>
                                     <td>${product.productTypeName}</td>
                                     <td>${product.quantity}</td>
                                     <td>${product.warrantyPeriod} months</td>
+
                                     <td>
                                         <c:if test="${not empty product.image}">
                                             <img src="${product.image}" alt="Product Image" width="80">
                                         </c:if>
                                     </td>
+
                                     <td style="width: 15%">
+
                                         <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
                                             <i class="fas fa-edit"></i> Update
                                         </a>
+
                                         <a href="viewProduct?action=delete&id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
                                             <i class="fas fa-trash-alt"></i> Delete
                                         </a>
+
                                     </td>
                                 </tr>
                             </c:forEach>

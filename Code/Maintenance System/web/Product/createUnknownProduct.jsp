@@ -1,7 +1,7 @@
 <%-- 
-    Document   : newjsp
-    Created on : Jan 18, 2025, 5:59:14 PM
-    Author     : ADMIN
+    Document   : createUnknowProduct
+    Created on : Feb 25, 2025, 3:40:32 AM
+    Author     : sonNH
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -12,8 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form action="StaffController" method="get">
-            <button type="submit">See More</button>
-        </form>
+        <h1>Hello World!</h1>
     </body>
 </html>
