@@ -32,9 +32,7 @@
                         <input type="text" name="phone" placeholder="Search by phone" value="${searchPhone}" />
                         <input type="text" name="email" placeholder="Search by email" value="${searchEmail}" />
 
-                        <input type="number" name="searchDate" placeholder="Day" style="width: 5%;" min="1" max="31" value="${searchDate}" />
-                        <input type="number" name="searchMonth" placeholder="Month" style="width: 5%;" min="1" max="12" value="${searchMonth}" />
-                        <input type="number" name="searchYear" placeholder="Year" style="width: 5%;" min="1900" max="2100" value="${searchYear}" />
+                        <input type="date" name="dateOfBirth" value="${dateOfBirth}"/>
 
                         <!-- Dropdown để chọn số lượng khách hàng hiển thị mỗi trang -->
                         <div class="col-sm-6 col-md-6">
@@ -71,36 +69,40 @@
                                 </th>
                                 <th>
                                     Name
-                                    <a href="customer?field=name&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↑</a>
-                                    <a href="customer?field=name&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↓</a>
+                                    <a href="customer?field=name&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=name&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
                                 <th>
                                     Gender
-                                    <a href="customer?field=gender&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↑</a>
-                                    <a href="customer?field=gender&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↓</a>
+                                    <a href="customer?field=gender&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=gender&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
                                 <th>
                                     Date Of Birth
-
+                                    <a href="customer?field=dateOfBirth&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=dateOfBirth&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
                                 <th>Image</th>
                                 <th>
                                     Address
-                                    <a href="customer?field=address&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↑</a>
-                                    <a href="customer?field=address&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↓</a>
+                                    <a href="customer?field=address&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=address&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
                                 <th>
                                     Email
-                                    <a href="customer?field=email&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↑</a>
-                                    <a href="customer?field=email&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↓</a>
+                                    <a href="customer?field=email&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=email&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
                                 <th>
                                     Phone
-                                    <a href="customer?field=phone&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↑</a>
-                                    <a href="customer?field=phone&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&page-size=${size}">↓</a>
+                                    <a href="customer?field=phone&order=asc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↑</a>
+                                    <a href="customer?field=phone&order=desc&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&page-size=${size}">↓</a>
                                 </th>
 
-                                <th>Actions</th>
+                                <c:if test="${sessionScope.staff.role == 1}">
+                                    <th>Actions</th>
+                                    </c:if>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -124,10 +126,14 @@
                                             <td>${customer.address}</td>
                                             <td>${customer.email}</td>
                                             <td>${customer.phone}</td>
-                                            <td>
-                                                <a href="customer?action=detail&id=${customer.customerID}">Detail</a>
-                                                <a href="customer?action=update&id=${customer.customerID}">Update</a>
-                                            </td>
+
+                                            <c:if test="${sessionScope.staff.role == 1}">
+                                                <td>
+                                                    <a href="customer?action=detail&id=${customer.customerID}">Detail</a>
+                                                    <a href="customer?action=update&id=${customer.customerID}">Update</a>
+                                                </td>
+                                            </c:if>
+
                                         </tr>
                                     </c:forEach>
                                 </c:when>
@@ -143,7 +149,7 @@
                     <!-- Pagination -->
                     <div class="text-center" style="margin-top: 20px;">
                         <c:forEach begin="1" end="${totalPages}" var="i">
-                            <a href="customer?index=${i}&page-size=${size}&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&searchDate=${searchDate}&searchMonth=${searchMonth}&searchYear=${searchYear}&field=${sortBy}&order=${sortOrder}" class="pagination-link">${i}</a>
+                            <a href="customer?index=${i}&page-size=${size}&name=${searchName}&gender=${searchGender}&address=${searchAddress}&phone=${searchPhone}&email=${searchEmail}&dateOfBirth=${dateOfBirth}&field=${sortBy}&order=${sortOrder}" class="pagination-link">${i}</a>
 
                         </c:forEach>
                     </div>

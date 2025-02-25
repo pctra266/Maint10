@@ -18,7 +18,7 @@
                                 <div class="sidebar-user">
                                     <div class="d-flex justify-content-center">
                                         <div class="flex-shrink-0">
-                                            <img src="img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="${sessionScope.staff.name}" />
+                                            <img src="${sessionScope.staff.image}" class="avatar img-fluid rounded me-1" alt="${sessionScope.staff.name}" />
                                         </div>
                                         <div class="flex-grow-1 ps-2">
                                             <a class="sidebar-user-title dropdown-toggle" href="#" data-bs-toggle="dropdown">
