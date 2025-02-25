@@ -8,7 +8,7 @@ public class WarrantyCard {
     private int warrantyCardID;
     private String warrantyCardCode;
     private int productDetailID;
-    private int unknowProductID;
+    private int unknownProductID;
     private String productDetailCode;
     private String productCode;
     private String issueDescription;
@@ -27,12 +27,12 @@ public class WarrantyCard {
     
     
     
-    public int getUnknowProductID() {
-        return unknowProductID;
+    public int getUnknownProductID() {
+        return unknownProductID;
     }
 
-    public void setUnknowProductID(int unknowProductID) {
-        this.unknowProductID = unknowProductID;
+    public void setUnknownProductID(int unknowProductID) {
+        this.unknownProductID = unknowProductID;
     }
 
     public Date getCreatedDate() {
@@ -195,7 +195,7 @@ public class WarrantyCard {
 
     @Override
     public String toString() {
-        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", unknowProductID=" + unknowProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + getFormatCreatedDate() + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + "}\n";
+        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", warrantyCardCode=" + warrantyCardCode + ", productDetailID=" + productDetailID + ", unknowProductID=" + unknownProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + getFormatCreatedDate() + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + "}\n";
     }
 
     

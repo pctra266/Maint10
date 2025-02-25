@@ -32,7 +32,7 @@ public class WarrantyCardDAO extends DBContext {
     FROM WarrantyCard wc 
     JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID 
     LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID 
-    LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID 
+    LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID 
     LEFT JOIN Product p ON pd.ProductID = p.ProductID 
     LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID
     """;
@@ -159,10 +159,10 @@ public class WarrantyCardDAO extends DBContext {
         return null; // Trả về null nếu không tìm thấy sản phẩm
     }
 
-    public ProductDetail getUnknowProductDetailByCode(String code) {
-        String sql = "SELECT up.UnknowProductID, up.ProductCode, up.ProductName, up.Description, "
+    public ProductDetail getUnknownProductDetailByCode(String code) {
+        String sql = "SELECT up.UnknownProductID, up.ProductCode, up.ProductName, up.Description, "
                 + "up.PurchaseDate, c.UsernameC, c.Name AS CustomerName, c.Email, c.Phone, c.Address "
-                + "FROM UnknowProduct up "
+                + "FROM UnknownProduct up "
                 + "JOIN Customer c ON up.CustomerID = c.CustomerID "
                 + "WHERE up.ProductCode = ?";
 
@@ -257,14 +257,14 @@ public class WarrantyCardDAO extends DBContext {
         if ("warranty".equalsIgnoreCase(type)) {
             query.append("JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
             query.append("JOIN Product p ON pd.ProductID = p.ProductID ");
-        } // Trường hợp lấy từ UnknowProduct (repair)
+        } // Trường hợp lấy từ UnknownProduct (repair)
         else if ("repair".equalsIgnoreCase(type)) {
-            query.append("JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
+            query.append("JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID ");
         } // Trường hợp lấy cả hai (null)
         else {
             query.append("LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
             query.append("LEFT JOIN Product p ON pd.ProductID = p.ProductID ");
-            query.append("LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
+            query.append("LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID ");
         }
 
         query.append("WHERE (wc.WarrantyCardCode LIKE ? ");
@@ -328,12 +328,12 @@ public class WarrantyCardDAO extends DBContext {
             query.append("JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
             query.append("JOIN Product p ON pd.ProductID = p.ProductID ");
             query.append("JOIN Customer c ON pd.CustomerID = c.CustomerID ");
-        } // Trường hợp lấy từ UnknowProduct (repair)
+        } // Trường hợp lấy từ UnknownProduct (repair)
         else if ("repair".equalsIgnoreCase(type)) {
             query.append("up.ProductCode, up.ProductName, c.Name AS CustomerName, c.Phone AS CustomerPhone ");
             query.append("FROM WarrantyCard wc ");
             query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
-            query.append("JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
+            query.append("JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID ");
             query.append("JOIN Customer c ON up.CustomerID = c.CustomerID ");
 
         } // Trường hợp lấy cả hai (null)
@@ -343,7 +343,7 @@ public class WarrantyCardDAO extends DBContext {
             query.append("c.Name AS CustomerName, c.Phone AS CustomerPhone ");
             query.append("FROM WarrantyCard wc ");
             query.append("JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID ");
-            query.append("LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID ");
+            query.append("LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID ");
             query.append("LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID ");
             query.append("LEFT JOIN Product p ON pd.ProductID = p.ProductID ");
             query.append("LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID ");
@@ -421,7 +421,7 @@ public class WarrantyCardDAO extends DBContext {
         String sql = "SELECT wc.WarrantyCardID,\n"
                 + "       wc.WarrantyCardCode,\n"
                 + "	   pd.ProductDetailID,\n"
-                + "	   up.UnknowProductID,\n"
+                + "	   up.UnknownProductID,\n"
                 + "	   p.Code,\n"
                 + "	   wc.IssueDescription,\n"
                 + "	   wc.WarrantyStatus,\n"
@@ -442,7 +442,7 @@ public class WarrantyCardDAO extends DBContext {
                 + "                     LEFT JOIN ProductDetail pd ON pd.ProductDetailID = wp.ProductDetailID\n"
                 + "					 LEFT JOIN Product p ON p.ProductID = pd.ProductID\n"
                 + "					 LEFT JOIN Customer c ON c.CustomerID = pd.CustomerID\n"
-                + "					 LEFT JOIN UnknowProduct up ON up.CustomerID = c.CustomerID\n"
+                + "					 LEFT JOIN UnknownProduct up ON up.CustomerID = c.CustomerID\n"
                 + "					 WHERE c.Phone = ? AND wc.WarrantyCardCode =?\n"
                 + "		 ";
         try {
@@ -455,7 +455,7 @@ public class WarrantyCardDAO extends DBContext {
                 warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
                 warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
                 warrantyCard.setProductDetailID(rs.getInt("ProductDetailID"));
-                warrantyCard.setUnknowProductID(rs.getInt("UnknowProductID"));
+                warrantyCard.setUnknownProductID(rs.getInt("UnknownProductID"));
                 warrantyCard.setProductCode(rs.getString("Code"));
                 warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
                 warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
@@ -575,9 +575,6 @@ public class WarrantyCardDAO extends DBContext {
         warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
         warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
         warrantyCard.setProductDetailCode(rs.getString("ProductCode"));
-
-        warrantyCard.setProductCode(rs.getString("Code"));
-
         try {
             warrantyCard.setProductCode(rs.getString("Code"));
         } catch (SQLException e) {
@@ -592,13 +589,13 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCard;
     }
 
-    public boolean addWarrantyCardForUnknowProduct(WarrantyCard warrantyCard) {
+    public boolean addWarrantyCardForUnknownProduct(WarrantyCard warrantyCard) {
         String sql = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
             stmt.setString(1, warrantyCard.getWarrantyCardCode());
-            stmt.setInt(2, warrantyCard.getUnknowProductID());
+            stmt.setInt(2, warrantyCard.getUnknownProductID());
             stmt.setString(3, warrantyCard.getIssueDescription());
             stmt.setString(4, warrantyCard.getWarrantyStatus());
             stmt.setString(5, warrantyCard.getFormatReturnDate());
