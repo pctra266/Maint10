@@ -1,4 +1,4 @@
-package ControllerAccount;
+package Controller.Account;
 
 import DAO.CustomerDAO;
 import DAO.StaffDAO;
