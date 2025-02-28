@@ -34,7 +34,6 @@
                         <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
                     </button>
                 </form>
-                <h2>Repair List</h2>
 
                 <!-- Alerts -->
                 <c:if test="${not empty addAlert1}">
@@ -56,6 +55,48 @@
                     </div>
                 </c:if>
 
+                <!-- Process Buttons -->
+                <div class="mb-3">
+                    <h3>Process Actions</h3>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="fixing">
+                        <button type="submit" class="btn btn-primary me-2" ${latestProcess == null ? '' : 'disabled'}>Fixing</button>
+                    </form>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="refix">
+                        <button type="submit" class="btn btn-warning me-2" ${latestProcess != null && (latestProcess.action == 'fixed' || latestProcess.action == 'completed' || latestProcess.action == 'cancel') ? '' : 'disabled'}>Refix</button>
+                    </form>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="outsource">
+                        <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action != 'completed' ? '' : 'disabled'}>Outsource</button>
+                    </form>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="fixed">
+                        <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action != 'completed' ? '' : 'disabled'}>Fixed</button>
+                    </form>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="completed">
+                        <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'}>Completed</button>
+                    </form>
+                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                        <input type="hidden" name="action" value="process">
+                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                        <input type="hidden" name="processAction" value="cancel">
+                        <button type="submit" class="btn btn-danger" ${latestProcess != null && latestProcess.action != 'completed' ? '' : 'disabled'}>Cancel</button>
+                    </form>
+                </div>
+
+                <h2>Repair List</h2>
                 <div class="row">
                     <div class="col-md-8">  
                         <div class="row">

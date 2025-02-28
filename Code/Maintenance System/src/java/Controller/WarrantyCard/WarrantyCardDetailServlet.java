@@ -4,10 +4,11 @@ import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
+import DAO.WarrantyCardProcessDAO; // New DAO for WarrantyCardProcess
 import Model.Component;
-import Model.ComponentRequestDetail;
 import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
+import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
 import java.io.IOException;
 import java.util.List;
@@ -25,10 +26,10 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final ComponentDAO componentDAO = new ComponentDAO();
     private final ComponentRequestDAO componentRequestDAO = new ComponentRequestDAO();
+    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO(); // New DAO
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String idPara = request.getParameter("ID");
         Integer id = FormatUtils.tryParseInt(idPara);
         if (id == null || warrantyCardDAO.getWarrantyCardById(id) == null) {
@@ -36,17 +37,21 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             return;
         }
 
+        HttpSession session = request.getSession();
+        Integer handlerID = (Integer) session.getAttribute("staffID"); // Assuming staffID is stored in session
+
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(id);
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
         List<Component> availableComponents = componentDAO.getAllComponents();
+        WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(id); // Fetch latest process
+
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
         }
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
         request.setAttribute("availableComponents", availableComponents);
-        
-
+        request.setAttribute("latestProcess", latestProcess); // Pass to JSP
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);
     }
 
@@ -68,6 +73,16 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             return;
         }
 
+        HttpSession session = request.getSession();
+        Integer handlerID = (Integer) session.getAttribute("staffID"); // Assuming staffID from session
+        if (handlerID == null) {
+            request.setAttribute("updateAlert0", "You must be logged in to perform this action.");
+            processRequest(request, response);
+            return;
+        }
+
+        WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
+
         if ("update".equals(action)) {
             String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
             String status = request.getParameter("status");
@@ -84,7 +99,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     if (status != null && isValidStatus(status)) {
                         detail.setStatus(status);
                         if ("warranty_repaired".equals(status) || "warranty_replaced".equals(status)) {
-                            detail.setPrice(0.0); // Force price to 0
+                            detail.setPrice(0.0);
                         }
                         updated = true;
                     }
@@ -118,6 +133,49 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     request.setAttribute("updateAlert0", "Failed to delete component.");
                 }
             }
+        } else if ("process".equals(action)) {
+            String processAction = request.getParameter("processAction");
+            if (processAction != null && isValidProcessAction(processAction)) {
+                boolean canProcess = false;
+                switch (processAction) {
+                    case "fixing":
+                        canProcess = latestProcess == null;
+                        break;
+                    case "refix":
+                        canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
+                        break;
+                    case "outsource":
+                    case "fixed":
+                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction());
+                        break;
+                    case "completed":
+                        canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
+                        break;
+                    case "cancel":
+                        canProcess = latestProcess == null || !"completed".equals(latestProcess.getAction());
+                        break;
+                }
+
+                if (canProcess) {
+                    WarrantyCardProcess newProcess = new WarrantyCardProcess();
+                    newProcess.setWarrantyCardID(warrantyCardId);
+                    newProcess.setHandlerID(handlerID);
+                    newProcess.setAction(processAction);
+                    boolean success = wcpDao.addWarrantyCardProcess(newProcess);
+                    if (success) {
+                        if ("completed".equals(processAction) || "cancel".equals(processAction)) {
+                            WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+                            wc.setWarrantyStatus(processAction);
+                            warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
+                        }
+                        request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
+                    } else {
+                        request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
+                    }
+                } else {
+                    request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.");
+                }
+            }
         }
 
         processRequest(request, response);
@@ -134,5 +192,10 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                 || "replace".equals(status)
                 || "warranty_replaced".equals(status)
                 || "fixing".equals(status);
+    }
+
+    private boolean isValidProcessAction(String action) {
+        return "fixing".equals(action) || "refix".equals(action) || "outsource".equals(action) 
+                || "fixed".equals(action) || "completed".equals(action) || "cancel".equals(action);
     }
 }

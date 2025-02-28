@@ -6,11 +6,13 @@ import Utils.FormatUtils;
 public class WarrantyCard {
 
     private int warrantyCardID;
+    private Integer handlerID;
     private String warrantyCardCode;
+    private int warrantyProductID;
     private int productDetailID;
     private int unknownProductID;
     private String productDetailCode;
-    private String productCode;
+    private String productCode; //code cua nhung san pham trong kho
     private String issueDescription;
     private String warrantyStatus;
     private Date createdDate;
@@ -34,9 +36,24 @@ public class WarrantyCard {
     public void setUnknownProductID(int unknowProductID) {
         this.unknownProductID = unknowProductID;
     }
+    
+    public int getWarrantyProductID() {
+        return warrantyProductID;
+    }
+
+    public void setWarrantyProductID(int warrantyProductID) {
+        this.warrantyProductID = warrantyProductID;
+    }
 
     public Date getCreatedDate() {
         return createdDate;
+    }
+    public Integer getHandlerID() {
+        return handlerID;
+    }
+
+    public void setHandlerID(Integer handlerID) {
+        this.handlerID = handlerID;
     }
 
     public String getProductCode() {

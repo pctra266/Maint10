@@ -85,11 +85,7 @@ CREATE TABLE Role_Permissions (
     PRIMARY KEY (RoleID, PermissionID)
 );
 
-CREATE TABLE Staff_Role (
-    StaffID INT NOT NULL REFERENCES Staff(StaffID) ON DELETE CASCADE,
-    RoleID INT NOT NULL REFERENCES Role(RoleID) ON DELETE CASCADE,
-    PRIMARY KEY (StaffID, RoleID)
-);
+
 
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
@@ -232,7 +228,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'fixing','refix','wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'fixing','refix','wait_components', 'received_components', 'outsource', 'fixed', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
