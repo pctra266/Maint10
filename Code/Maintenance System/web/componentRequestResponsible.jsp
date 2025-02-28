@@ -23,15 +23,12 @@
                     <div class="alert-primary">${param.mess}</div>
                     <h1 class="text-center">Component Request Log</h1>
                     <div>
-                         <form method="get" action="componentRequest" >
-                            <input type="hidden" name="action" value="viewComponentRequestDashboard">
+                         <form method="get" action="componentRequestResponsible" >
+                            <input type="hidden" name="action" value="viewComponentRequestResponsible">
                             <div class="row"  style="justify-content: space-between">
-                        <div class="col-sm-6 col-md-6" style="width: 500px">
-                           <input style="margin-top: 15px" class="form-control" type="search" name="warrantyCardCode" placeholder="Warranty Card Code"  value="${warrantyCardCode}" >
+                        <div class=" col-md-2" >
+                           <input style="margin-top: 15px" class="form-control" type="search" name="componentRequestId" placeholder="Component Request Id"  value="${componentRequestId}" >
                            <div style="margin-top: 15px"> 
-                               <div>
-                            <input style="margin-top: 15px" class="form-control" type="search" name="productCode" placeholder="Product Code"  value="${productCode}" >
-                               </div>
                                <div style="margin-top: 15px" >
                                <label >Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -44,24 +41,28 @@
                                    </div>
                                </div>
                         </div>
-                        <div class="col-sm-6 col-md-6" style="width: 500px">
-                                 <select style="margin-top: 15px" class="form-select" name="warrantyStatus" onchange="this.form.submit()">
-                                     <option ${(warrantyStatus=='')?"selected":""} value="all" >Warranty Status </option>
-                                    <option ${(warrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
-                                    <option ${(warrantyStatus=='done')?"selected":""} value="done">Done</option>
-                                    <option ${(warrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
-                                    <option ${(warrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
+                        <div class=" col-md-2" >
+                                 <select style="margin-top: 15px" class="form-select" name="componentRequestAction" onchange="this.form.submit()">
+                                     <option ${(componentRequestAction=='')?"selected":""} value="" >Action </option>
+                                    <option ${(componentRequestAction=='request')?"selected":""} value="request">Request</option>
+                                    <option ${(componentRequestAction=='approved')?"selected":""} value="approved">Approved</option>
+                                    <option ${(componentRequestAction=='cancel')?"selected":""} value="cancel">Cancel</option>
                                 </select>
-                                 <select style="margin-top: 15px" class="form-select" name="typeMaintain" onchange="this.form.submit()">
-                                    <option value="">Type Maintain</option>
-                                    <option ${(typeMaintain=='maintain')?"selected":""} value="maintain">Maintain</option>
-                                    <option ${(typeMaintain=='repair')?"selected":""} value="repair">Repair</option>
-                                </select>
+                        </div>
+                        <div class=" col-md-2" >
+                             <input style="margin-top: 15px" class="form-control" type="search" name="staffName" placeholder="Staff Name"  value="${staffName}" >
+                        </div>
+                        <div class=" col-md-3">
+                            <input style="margin-top: 15px" class="form-control" type="search" name="staffPhone" placeholder="Staff Phone"  value="${staffPhone}" >
+                        </div>
+                        <div class=" col-md-3">
+                            <input style="margin-top: 15px" class="form-control" type="search" name="staffEmail" placeholder="Staff Email"  value="${staffEmail}" >
                                 <div style="float: right">
                                 <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
                                 </div>
                         </div>
-                                </div>
+                            </div><!-- end row -->
+                            </form> 
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
@@ -92,9 +93,9 @@
                         </tbody>
                         
                         </table>
-                         </form>   
+                           
                     </div>
-                     <%--<jsp:include page="/includes/pagination.jsp" />--%>
+                     <jsp:include page="/includes/pagination.jsp" />
                      <!--<a  href="feedback?action=viewListFeedbackByCustomerId">Feedback History</a>-->
                      
                 </main>
