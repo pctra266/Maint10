@@ -7,6 +7,8 @@ package Controller.ComponentRequest;
 
 import DAO.ComponentRequestResponsibleDAO;
 import Model.ComponentRequestResponsible;
+import Model.Pagination;
+import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -22,6 +24,8 @@ import java.util.ArrayList;
  */
 @WebServlet(name="componentRequestResponsible", urlPatterns={"/componentRequestResponsible"})
 public class componentRequestResponsible extends HttpServlet {
+    private static final int PAGE_SIZE = 5;
+    private static final ComponentRequestResponsibleDAO daoCRResponsible = new ComponentRequestResponsibleDAO();
    
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -58,15 +62,67 @@ public class componentRequestResponsible extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        ComponentRequestResponsibleDAO daoCRResponsible = new ComponentRequestResponsibleDAO();
+        
         String action = request.getParameter("action");
+        
+//        String , String , 
+//         String , String , String , int page, int pageSize
+        //parameter
+        String sort = request.getParameter("sort");
+        request.setAttribute("sort", sort);
+        String order = request.getParameter("order");
+        request.setAttribute("order", order);
+        String componentRequestId = request.getParameter("componentRequestId");
+        request.setAttribute("componentRequestId", componentRequestId);
+        String staffName = request.getParameter("staffName");
+        request.setAttribute("staffName", staffName);
+        String staffPhone = request.getParameter("staffPhone");
+        request.setAttribute("staffPhone", staffPhone);
+        String staffEmail = request.getParameter("staffEmail");
+        request.setAttribute("staffEmail", staffEmail);
+        String componentRequestAction = request.getParameter("componentRequestAction");
+        request.setAttribute("componentRequestAction", componentRequestAction);
+        
+    
         if(action == null){
             action = "viewComponentRequestResponsible";
         }
+        int total = 0;
+        switch(action){
+            case "viewComponentRequestResponsible":
+                total = daoCRResponsible.totalComponentRequestLog(componentRequestId, staffName, staffPhone, staffEmail, componentRequestAction);
+                break;
+        }
+        System.out.println("Total la : " + total);
+        //paging
+        Pagination pagination = new Pagination();
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("page-size");
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+        Integer pageSize;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        int totalPages = (int) Math.ceil((double) total / pageSize);
+        if (page > totalPages) {
+            page = totalPages;
+        }
+        page = page < 1 ? 1 : page;
+                pagination.setListPageSize(total); 
+                pagination.setCurrentPage(page);
+                pagination.setTotalPages(totalPages);
+                pagination.setTotalPagesToShow(5); 
+                pagination.setPageSize(pageSize);
+                pagination.setSort(sort);
+                pagination.setOrder(order);
+                pagination.setUrlPattern("/componentRequestResponsible");
         switch(action){
                 case "viewComponentRequestResponsible":
+                //======phan trang
+                pagination.setSearchFields(new String[]{"action","componentRequestId","staffName","staffPhone","staffEmail","componentRequestAction"});
+                pagination.setSearchValues(new String[]{"viewComponentRequestResponsible",componentRequestId,staffName,staffPhone,staffEmail,componentRequestAction});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
                 ArrayList<ComponentRequestResponsible> listComponentResquestResponsible = new ArrayList<>();
-                listComponentResquestResponsible = daoCRResponsible.getAllComponentRequestResponsible();
+                listComponentResquestResponsible = daoCRResponsible.getAllComponentRequestResponsible(componentRequestId, staffName, staffPhone, staffEmail, componentRequestAction,page,pageSize);
                 request.setAttribute("listComponentResquestResponsible", listComponentResquestResponsible);
                 request.getRequestDispatcher("componentRequestResponsible.jsp").forward(request, response);
                 break;
