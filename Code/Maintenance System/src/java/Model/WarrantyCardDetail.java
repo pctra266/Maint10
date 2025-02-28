@@ -18,7 +18,9 @@ public class WarrantyCardDetail{
     private int quantity;
 
     // Constants for status validation
-    public static final String UNDER_WARRANTY = "under_warranty";
+    public static final String WARRANTY_REPAIRED = "warranty_repaired";
+    public static final String WARRANTY_REPLACED = "warranty_replaced";
+    public static final String FIXING = "fixing";
     public static final String REPAIRED = "repaired";
     public static final String REPLACE = "replace";
 
@@ -64,10 +66,10 @@ public class WarrantyCardDetail{
     }
 
     public void setStatus(String status) {
-        if (status.equals(UNDER_WARRANTY) || status.equals(REPAIRED) || status.equals(REPLACE)) {
+        if (status.equals(FIXING) ||status.equals(WARRANTY_REPLACED) ||status.equals(WARRANTY_REPAIRED) || status.equals(REPAIRED) || status.equals(REPLACE) ) {
             this.status = status;
         } else {
-            throw new IllegalArgumentException("Invalid status value. Allowed values: under_warranty, repaired, replace.");
+            throw new IllegalArgumentException("Invalid status value. Allowed values: 'warranty_repaired','warranty_replaced', 'repaired', 'replace','fixing'.");
         }
     }
 

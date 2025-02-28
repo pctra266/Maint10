@@ -1,92 +1,61 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller.WarrantyCard;
 
 import DAO.ComponentDAO;
-import DAO.CustomerDAO;
+import DAO.ComponentRequestDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
 import Model.Component;
-import Model.WarrantyCardDetail;
+import Model.ComponentRequestDetail;
 import Model.WarrantyCard;
+import Model.WarrantyCardDetail;
 import Utils.FormatUtils;
 import java.io.IOException;
+import java.util.List;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
-/**
- *
- * @author ADMIN
- */
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
 public class WarrantyCardDetailServlet extends HttpServlet {
 
     private final WarrantyCardDetailDAO wcdDao = new WarrantyCardDetailDAO();
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final ComponentDAO componentDAO = new ComponentDAO();
+    private final ComponentRequestDAO componentRequestDAO = new ComponentRequestDAO();
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //Nut back
-        String referer = request.getHeader("Referer");
-        if (referer == null || referer.isBlank()) {
-            referer = "/MaintenanceSystem/WarrantyCard";
-        }
-        request.setAttribute("backUrl", referer);
-        //
+
         String idPara = request.getParameter("ID");
         Integer id = FormatUtils.tryParseInt(idPara);
         if (id == null || warrantyCardDAO.getWarrantyCardById(id) == null) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
+
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(id);
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
-        List<Component> availableComponents = componentDAO.getAllComponents(); // Fetch all components
+        List<Component> availableComponents = componentDAO.getAllComponents();
+        if ("1".equals(request.getParameter("addSuccess"))) {
+            request.setAttribute("addAlert1", "Component added successfully!");
+        }
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
-        request.setAttribute("availableComponents", availableComponents); // Pass to JSP
+        request.setAttribute("availableComponents", availableComponents);
+        
+
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -103,8 +72,10 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
             String status = request.getParameter("status");
             String quantityParam = request.getParameter("quantity");
+            String priceParam = request.getParameter("price");
             Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
             Integer quantity = FormatUtils.tryParseInt(quantityParam);
+            Double price = FormatUtils.tryParseDouble(priceParam);
 
             if (warrantyCardDetailId != null) {
                 WarrantyCardDetail detail = wcdDao.getWarrantyCardDetailById(warrantyCardDetailId);
@@ -112,10 +83,17 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     boolean updated = false;
                     if (status != null && isValidStatus(status)) {
                         detail.setStatus(status);
+                        if ("warranty_repaired".equals(status) || "warranty_replaced".equals(status)) {
+                            detail.setPrice(0.0); // Force price to 0
+                        }
                         updated = true;
                     }
                     if (quantity != null && quantity >= 0) {
                         detail.setQuantity(quantity);
+                        updated = true;
+                    }
+                    if (price != null && price >= 0 && !("warranty_repaired".equals(detail.getStatus()) || "warranty_replaced".equals(detail.getStatus()))) {
+                        detail.setPrice(price);
                         updated = true;
                     }
                     if (updated) {
@@ -141,48 +119,20 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                 }
             }
         }
-        else if ("add".equals(action)) {
-            String componentIdParam = request.getParameter("componentID");
-            String status = request.getParameter("status");
-            String quantityParam = request.getParameter("quantity");
-            Integer componentId = FormatUtils.tryParseInt(componentIdParam);
-            Integer quantity = FormatUtils.tryParseInt(quantityParam);
-
-            if (componentId != null && isValidStatus(status) && quantity != null && quantity >= 0) {
-                Component component = componentDAO.getComponentByID(componentId);
-                if (component != null) {
-                    WarrantyCardDetail newDetail = new WarrantyCardDetail();
-                    newDetail.setWarrantyCardID(warrantyCardId);
-                    newDetail.setComponent(component);
-                    newDetail.setStatus(status);
-                    newDetail.setQuantity(quantity);
-                    newDetail.setPrice(component.getPrice()); // Set price from component
-
-                    boolean added = wcdDao.addWarrantyCardDetailDAO(newDetail);
-                    if (added) {
-                        request.setAttribute("addAlert1", "Component added successfully!");
-                    } else {
-                        request.setAttribute("updateAlert0", "Failed to add component.");
-                    }
-                }
-            }
-        }
 
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
-    }// </editor-fold>
-
-    private boolean isValidStatus(String status) {
-        return "under_warranty".equals(status) || "repaired".equals(status) || "replace".equals(status);
     }
 
+    private boolean isValidStatus(String status) {
+        return "warranty_repaired".equals(status) 
+                || "repaired".equals(status) 
+                || "replace".equals(status)
+                || "warranty_replaced".equals(status)
+                || "fixing".equals(status);
+    }
 }

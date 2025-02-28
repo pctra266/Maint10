@@ -55,6 +55,12 @@
 
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
+                    <form action="Redirect" enctype="multipart/form-data">
+                    <input type="hidden" name="target" value="${empty componentWarehouseFrom ? 'Home' : componentWarehouseFrom}">
+                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem">
+                        <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
+                    </button>
+                </form>
                     <h2>Component Warehouse</h2>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">

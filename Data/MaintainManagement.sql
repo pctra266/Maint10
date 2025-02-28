@@ -177,10 +177,11 @@ CREATE TABLE WarrantyProduct (
 -- WarrantyCard Table
 CREATE TABLE WarrantyCard (
     WarrantyCardID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	HandlerID int references Staff(StaffID),
     WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
     WarrantyProductID INT NOT NULL REFERENCES WarrantyProduct(WarrantyProductID),
     IssueDescription NVARCHAR(MAX),
-    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing', 'done', 'completed', 'cancel')),
+    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing','refix', 'done', 'completed', 'cancel')),
 	[ReturnDate] DATETIME, --Ngay du kien
 	DoneDate DATETIME, -- Ngay sua xong
 	CompleteDate DATETIME, --Ngay tra may
@@ -203,7 +204,8 @@ CREATE TABLE ComponentRequestDetail (
     ComponentRequestDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     ComponentID INT NOT NULL REFERENCES Component(ComponentID),
     ComponentRequestID INT NOT NULL REFERENCES ComponentRequest(ComponentRequestID),
-    Quantity INT NOT NULL CHECK (Quantity >= 0)
+    Quantity INT NOT NULL CHECK (Quantity >= 0),
+	[Status] NVARCHAR(20) NOT NULL CHECK ([Status] IN ('waiting', 'approved', 'cancel'))
 );
 
 -- ComponentRequestResponsible Table
@@ -220,7 +222,7 @@ CREATE TABLE WarrantyCardDetail (
     WarrantyCardDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     ComponentID INT NOT NULL REFERENCES Component(ComponentID),
-    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('under_warranty', 'repaired', 'replace')),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('warranty_repaired','warranty_replaced', 'repaired', 'replace','fixing')),
     Price FLOAT NOT NULL CHECK (Price >= 0),
     Quantity INT NOT NULL CHECK (Quantity >= 0)
 );
@@ -230,7 +232,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'fixing','refix','wait_components', 'received_components', 'outsource', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
