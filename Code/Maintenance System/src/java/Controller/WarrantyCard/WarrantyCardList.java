@@ -17,6 +17,7 @@ import java.util.List;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
 import Model.Pagination;
+import Model.Staff;
 import Utils.SearchUtils;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -46,12 +47,12 @@ public class WarrantyCardList extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("createWarrantyCardFrom", request.getContextPath()+request.getServletPath());
         session.setAttribute("detailWarrantyCardFrom", request.getContextPath()+request.getServletPath());
-        
+        Staff staff = (Staff) session.getAttribute("staff");
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if (!("repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
-            type = "all";
+        if (!("all".equalsIgnoreCase(type) || "repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+            type = "myCard";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         // Lấy page-size từ request, mặc định là PAGE_SIZE
@@ -63,13 +64,13 @@ public class WarrantyCardList extends HttpServlet {
         String order = request.getParameter("order");
         //--------------------------------------------------------------------------
         List<WarrantyCard> cards = new ArrayList<>();
-        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status, type);
+        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status, type, staff.getStaffID());
         int totalPages = (int) Math.ceil((double) totalCards / pageSize);
         if (page > totalPages) {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order, type);
+        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order, type, staff.getStaffID());
 
         String createStatus = request.getParameter("create");
         if (createStatus != null && createStatus.equals("true")) {

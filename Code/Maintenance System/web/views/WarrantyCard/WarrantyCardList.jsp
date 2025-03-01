@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page import="Model.WarrantyCard, Utils.FormatUtils"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -63,14 +64,22 @@
                     </c:if>
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                            <input type="hidden" name="type" value="myCard">
+                            <button type="submit" class="btn ${pagination.searchValues[2] eq 'myCard'?'btn-instagram':'btn-primary'}  btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">My card</button>
+                        </form>
+                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="repair">
                             <button type="submit" class="btn ${pagination.searchValues[2] eq 'repair'?'btn-instagram':'btn-primary'}  btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Repair</button>
                         </form>
                         <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="warranty">
                             <button type="submit" class="btn ${pagination.searchValues[2] eq 'warranty'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Warranty</button>
                         </form>
                         <form action="WarrantyCard" method="POST" style="display: inline; width: 8rem;">
+                            <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="all">
                             <button type="submit" class="btn  ${pagination.searchValues[2] eq 'all'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">All</button>
                         </form>
@@ -89,7 +98,17 @@
                         <input type="hidden" name="page" value="${pagination.currentPage}">
                         <input type="hidden" name="sort" value="${pagination.sort}">
                         <input type="hidden" name="order" value="${pagination.order}">
-                        <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
+                        <c:if test="${fn:length(pagination.searchFields) > 0}">
+                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                            </c:forEach>
+                        </c:if>
+
+                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
+                            </c:forEach>
+                        </c:if>       
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -122,6 +141,7 @@
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
                                         <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
+                                        <input type="hidden" name="type" value="${pagination.searchValues[2]}" />
                                         <input type="hidden" name="sort" value="productCode" />
                                         <input type="hidden" name="order" value="${pagination.sort eq 'productCode' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
@@ -142,12 +162,14 @@
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
+                                        <input type="hidden" name="type" value="${pagination.searchValues[2]}" />
                                         <input type="hidden" name="sort" value="${pagination.sort}" />
                                         <input type="hidden" name="order" value="${pagination.order}" />
                                         <select name="status" class="form-select form-select-sm d-inline-block custom-select" 
                                                 style="width: auto; padding-right:1px ; border: none; background: transparent; font: inherit; transform: translate(-0.38rem, 0.18rem)" 
                                                 onchange="this.form.submit()">
                                             <option disabled selected>Status</option>
+                                            <option value="refix" ${pagination.searchValues[1]=="refix"?"selected":""}>Refix</option>
                                             <option value="waiting" ${pagination.searchValues[1]=="waiting"?"selected":""}>Waiting</option>
                                             <option value="fixing" ${pagination.searchValues[1]=="fixing"?"selected":""}>Fixing</option>
                                             <option value="done" ${pagination.searchValues[1]=="done"?"selected":""}>Done</option>
@@ -164,6 +186,7 @@
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
                                         <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
+                                        <input type="hidden" name="type" value="${pagination.searchValues[2]}" />
                                         <input type="hidden" name="sort" value="createdDate" />
                                         <input type="hidden" name="order" value="${pagination.sort eq 'createdDate' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
@@ -181,6 +204,7 @@
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
                                         <input type="hidden" name="status" value="${pagination.searchValues[1]}" />
+                                        <input type="hidden" name="type" value="${pagination.searchValues[2]}" />
                                         <input type="hidden" name="sort" value="returnDate" />
                                         <input type="hidden" name="order" value="${pagination.sort eq 'returnDate' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
@@ -200,7 +224,7 @@
                                     Issue
                                 </th>
 
-                                <th style="width:8%">Action<a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}"><i class="fa fa-refresh ms-2"></i></a></th>
+                                <th style="width:8%">Action<a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&type=${pagination.searchValues[2]}"><i class="fa fa-refresh ms-2"></i></a></th>
                             </tr>
                         </thead>
 

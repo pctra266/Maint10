@@ -46,10 +46,7 @@ VALUES
 ('WC121', 21, 'Random shutdowns', 'waiting', '2024-01-21'),
 ('WC122', 22, 'Camera malfunction', 'waiting', '2024-01-18'),
 ('WC123', 23, 'Touchpad unresponsive', 'waiting', '2024-01-16'),
-('WC124', 24, 'Screen brightness not adjustable', 'waiting', '2024-01-29');
-
-INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
-VALUES
+('WC124', 24, 'Screen brightness not adjustable', 'waiting', '2024-01-29'),
 ('WC125', 25, 'Fingerprint sensor not working', 'waiting', '2024-01-30'),
 ('WC126', 26, 'Mouse pad sensitivity issue', 'waiting', '2024-01-31'),
 ('WC127', 27, 'Volume buttons not responding', 'waiting', '2024-02-01'),
@@ -71,7 +68,57 @@ VALUES
 ('WC143', 43, 'Sound card failure', 'waiting', '2024-02-17'),
 ('WC144', 44, 'Ethernet port not functioning', 'waiting', '2024-02-18'),
 ('WC145', 45, 'Camera blurry images', 'waiting', '2024-02-19'),
-('WC146', 46, 'Lid not closing properly', 'waiting', '2024-02-20'),
+('WC146', 46, 'Lid not closing properly', 'waiting', '2024-02-20');
+
+Insert into WarrantyCardProcess (WarrantyCardID, HandlerID, Action, ActionDate, Note)
+values
+(1,2,'create',GETDATE(),'create card'),
+(2,2,'create',GETDATE(),'create card'),
+(3,2,'create',GETDATE(),'create card'),
+(4,2,'create',GETDATE(),'create card'),
+(5,2,'create',GETDATE(),'create card'),
+(6,2,'create',GETDATE(),'create card'),
+(7,2,'create',GETDATE(),'create card'),
+(8,2,'create',GETDATE(),'create card'),
+(9,2,'create',GETDATE(),'create card'),
+(10,2,'create',GETDATE(),'create card'),
+(11,2,'create',GETDATE(),'create card'),
+(12,2,'create',GETDATE(),'create card'),
+(13,2,'create',GETDATE(),'create card'),
+(14,2,'create',GETDATE(),'create card'),
+(15,2,'create',GETDATE(),'create card'),
+(16,2,'create',GETDATE(),'create card'),
+(17,2,'create',GETDATE(),'create card'),
+(18,2,'create',GETDATE(),'create card'),
+(19,2,'create',GETDATE(),'create card'),
+(20,2,'create',GETDATE(),'create card'),
+(21,2,'create',GETDATE(),'create card'),
+(22,2,'create',GETDATE(),'create card'),
+(23,2,'create',GETDATE(),'create card'),
+(24,2,'create',GETDATE(),'create card'),
+(25,2,'create',GETDATE(),'create card'),
+(26,2,'create',GETDATE(),'create card'),
+(27,2,'create',GETDATE(),'create card'),
+(28,2,'create',GETDATE(),'create card'),
+(29,2,'create',GETDATE(),'create card'),
+(30,2,'create',GETDATE(),'create card'),
+(31,2,'create',GETDATE(),'create card'),
+(32,2,'create',GETDATE(),'create card'),
+(33,2,'create',GETDATE(),'create card'),
+(34,2,'create',GETDATE(),'create card'),
+(35,2,'create',GETDATE(),'create card'),
+(36,2,'create',GETDATE(),'create card'),
+(37,2,'create',GETDATE(),'create card'),
+(38,2,'create',GETDATE(),'create card'),
+(39,2,'create',GETDATE(),'create card'),
+(40,2,'create',GETDATE(),'create card'),
+(41,2,'create',GETDATE(),'create card'),
+(42,2,'create',GETDATE(),'create card'),
+(43,2,'create',GETDATE(),'create card'),
+(44,2,'create',GETDATE(),'create card'),
+(45,2,'create',GETDATE(),'create card'),
+(46,2,'create',GETDATE(),'create card');
+
 
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted, ImageURL, VideoURL)
 VALUES

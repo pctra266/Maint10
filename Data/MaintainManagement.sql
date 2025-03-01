@@ -228,7 +228,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','reception', 'fixing','refix','wait_components', 'received_components', 'outsource', 'fixed', 'completed', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'fixing','refix','wait_components', 'received_components', 'outsource', 'fixed', 'completed','refuse', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
