@@ -148,6 +148,7 @@
                                                 style="width: auto; padding-right:1px ; border: none; background: transparent; font: inherit; transform: translate(-0.38rem, 0.18rem)" 
                                                 onchange="this.form.submit()">
                                             <option disabled selected>Status</option>
+                                            <option value="waiting" ${pagination.searchValues[1]=="waiting"?"selected":""}>Waiting</option>
                                             <option value="fixing" ${pagination.searchValues[1]=="fixing"?"selected":""}>Fixing</option>
                                             <option value="done" ${pagination.searchValues[1]=="done"?"selected":""}>Done</option>
                                             <option value="completed" ${pagination.searchValues[1]=="completed"?"selected":""}>Completed</option>

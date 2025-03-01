@@ -177,7 +177,7 @@ CREATE TABLE WarrantyCard (
     WarrantyCardCode NVARCHAR(10) NOT NULL UNIQUE,
     WarrantyProductID INT NOT NULL REFERENCES WarrantyProduct(WarrantyProductID),
     IssueDescription NVARCHAR(MAX),
-    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('fixing','refix', 'done', 'completed', 'cancel')),
+    WarrantyStatus NVARCHAR(50) NOT NULL CHECK (WarrantyStatus IN ('waiting','fixing','refix', 'done', 'completed', 'cancel')),
 	[ReturnDate] DATETIME, --Ngay du kien
 	DoneDate DATETIME, -- Ngay sua xong
 	CompleteDate DATETIME, --Ngay tra may

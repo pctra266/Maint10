@@ -6,6 +6,7 @@ import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
 import DAO.WarrantyCardProcessDAO; // New DAO for WarrantyCardProcess
 import Model.Component;
+import Model.Staff;
 import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
 import Model.WarrantyCardProcess;
@@ -38,7 +39,11 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        Integer handlerID = (Integer) session.getAttribute("staffID"); // Assuming staffID is stored in session
+        Staff staff = (Staff) session.getAttribute("staff");
+        Integer handlerID = null;
+        if (staff != null) {
+            handlerID = staff.getStaffID();
+        }
 
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(id);
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
@@ -74,15 +79,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         }
 
         HttpSession session = request.getSession();
-        Integer handlerID = (Integer) session.getAttribute("staffID"); // Assuming staffID from session
-        if (handlerID == null) {
+        Staff staff = (Staff) session.getAttribute("staff");
+        if (staff == null) {
             request.setAttribute("updateAlert0", "You must be logged in to perform this action.");
             processRequest(request, response);
             return;
         }
 
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
-
+        request.setAttribute("l", latestProcess);
         if ("update".equals(action)) {
             String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
             String status = request.getParameter("status");
@@ -134,40 +139,43 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                 }
             }
         } else if ("process".equals(action)) {
+            System.out.println("Check");
+
             String processAction = request.getParameter("processAction");
             if (processAction != null && isValidProcessAction(processAction)) {
                 boolean canProcess = false;
                 switch (processAction) {
-                    case "fixing":
-                        canProcess = latestProcess == null;
-                        break;
-                    case "refix":
+                    case "fixing" ->
+                        canProcess = latestProcess != null && ("reception".equals(latestProcess.getAction()));
+                    case "refix" ->
                         canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
-                        break;
-                    case "outsource":
-                    case "fixed":
-                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction());
-                        break;
-                    case "completed":
+                    case "outsource" ->
+                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
+                    case "fixed" ->
+                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()) || "outsource".equals(latestProcess.getAction()));
+                    case "completed" ->
                         canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
-                        break;
-                    case "cancel":
-                        canProcess = latestProcess == null || !"completed".equals(latestProcess.getAction());
-                        break;
+                    case "cancel" ->
+                        canProcess = latestProcess != null || !"completed".equals(latestProcess.getAction());
                 }
 
                 if (canProcess) {
                     WarrantyCardProcess newProcess = new WarrantyCardProcess();
                     newProcess.setWarrantyCardID(warrantyCardId);
-                    newProcess.setHandlerID(handlerID);
+                    newProcess.setHandlerID(staff.getStaffID());
                     newProcess.setAction(processAction);
                     boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                     if (success) {
+                        WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
                         if ("completed".equals(processAction) || "cancel".equals(processAction)) {
-                            WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
                             wc.setWarrantyStatus(processAction);
-                            warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
                         }
+                        if ("fixed".equals(processAction)) {
+                            wc.setWarrantyStatus("done");
+
+                        }
+                        warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
+
                         request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
                     } else {
                         request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
@@ -187,15 +195,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     }
 
     private boolean isValidStatus(String status) {
-        return "warranty_repaired".equals(status) 
-                || "repaired".equals(status) 
+        return "warranty_repaired".equals(status)
+                || "repaired".equals(status)
                 || "replace".equals(status)
                 || "warranty_replaced".equals(status)
                 || "fixing".equals(status);
     }
 
     private boolean isValidProcessAction(String action) {
-        return "fixing".equals(action) || "refix".equals(action) || "outsource".equals(action) 
+        return "reception".equals(action) || "fixing".equals(action) || "refix".equals(action) || "outsource".equals(action)
                 || "fixed".equals(action) || "completed".equals(action) || "cancel".equals(action);
     }
 }

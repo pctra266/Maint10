@@ -57,12 +57,12 @@
 
                 <!-- Process Buttons -->
                 <div class="mb-3">
-                    <h3>Process Actions</h3>
+                    <h3>Process Actions ${l}</h3>
                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
                         <input type="hidden" name="action" value="process">
                         <input type="hidden" name="ID" value="${card.warrantyCardID}">
                         <input type="hidden" name="processAction" value="fixing">
-                        <button type="submit" class="btn btn-primary me-2" ${latestProcess == null ? '' : 'disabled'}>Fixing</button>
+                        <button type="submit" class="btn btn-primary me-2" ${latestProcess != null && latestProcess.action == 'create' ? '' : 'disabled'}>Fixing</button>
                     </form>
                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
                         <input type="hidden" name="action" value="process">
@@ -74,13 +74,13 @@
                         <input type="hidden" name="action" value="process">
                         <input type="hidden" name="ID" value="${card.warrantyCardID}">
                         <input type="hidden" name="processAction" value="outsource">
-                        <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action != 'completed' ? '' : 'disabled'}>Outsource</button>
+                        <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action != 'completed' && (latestProcess.action == 'fixing'||latestProcess.action == 'refix') ? '' : 'disabled'}>Outsource</button>
                     </form>
                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
                         <input type="hidden" name="action" value="process">
                         <input type="hidden" name="ID" value="${card.warrantyCardID}">
                         <input type="hidden" name="processAction" value="fixed">
-                        <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action != 'completed' ? '' : 'disabled'}>Fixed</button>
+                        <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action != 'completed' && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
                     </form>
                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
                         <input type="hidden" name="action" value="process">

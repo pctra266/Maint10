@@ -55,11 +55,11 @@ public class WarrantyCardDAO extends DBContext {
 
         return warrantyCards;
     }
-    
-     public boolean updateWarrantyCard(WarrantyCard wc) {
-        String sql = "UPDATE WarrantyCard SET  WarrantyCardCode = ?, WarrantyProductID = ?, " +
-                     "IssueDescription = ?, WarrantyStatus = ?, ReturnDate = ?, DoneDate = ?, " +
-                     "CompleteDate = ?, CancelDate = ?, Image = ? WHERE WarrantyCardID = ?";
+
+    public boolean updateWarrantyCard(WarrantyCard wc) {
+        String sql = "UPDATE WarrantyCard SET  WarrantyCardCode = ?, WarrantyProductID = ?, "
+                + "IssueDescription = ?, WarrantyStatus = ?, ReturnDate = ?, DoneDate = ?, "
+                + "CompleteDate = ?, CancelDate = ?, Image = ? WHERE WarrantyCardID = ?";
 //        String sql = "UPDATE WarrantyCard SET HandlerID = ?, WarrantyCardCode = ?, WarrantyProductID = ?, " +
 //                     "IssueDescription = ?, WarrantyStatus = ?, ReturnDate = ?, DoneDate = ?, " +
 //                     "CompleteDate = ?, CancelDate = ?, Image = ? WHERE WarrantyCardID = ?";
@@ -68,10 +68,10 @@ public class WarrantyCardDAO extends DBContext {
             ps.setInt(2, wc.getWarrantyProductID());
             ps.setString(3, wc.getIssueDescription());
             ps.setString(4, wc.getWarrantyStatus());
-            ps.setDate(5, (java.sql.Date)wc.getReturnDate());
-            ps.setDate(6, (java.sql.Date)wc.getDonedDate());
-            ps.setDate(7, (java.sql.Date)wc.getCompletedDate());
-            ps.setDate(8, (java.sql.Date)wc.getCanceldDate());
+            ps.setDate(5, (java.sql.Date) wc.getReturnDate());
+            ps.setDate(6, (java.sql.Date) wc.getDonedDate());
+            ps.setDate(7, (java.sql.Date) wc.getCompletedDate());
+            ps.setDate(8, (java.sql.Date) wc.getCanceldDate());
             ps.setString(9, wc.getImage());
             ps.setInt(10, wc.getWarrantyCardID());
 
@@ -134,8 +134,8 @@ public class WarrantyCardDAO extends DBContext {
             // Chèn vào bảng WarrantyCard
             String insertWarrantyCardQuery = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate, ReturnDate, Image) "
                     + "VALUES (?, ?, ?, 'fixing', GETDATE(), ?, ?)";
-
-            try (PreparedStatement ps = connection.prepareStatement(insertWarrantyCardQuery)) {
+            int warrantyCardId = -1;
+            try (PreparedStatement ps = connection.prepareStatement(insertWarrantyCardQuery, Statement.RETURN_GENERATED_KEYS)) {
                 ps.setString(1, warrantyCardCode);
                 ps.setInt(2, warrantyProductID);
                 ps.setString(3, issue);
@@ -144,7 +144,15 @@ public class WarrantyCardDAO extends DBContext {
 
                 int rowsAffected = ps.executeUpdate();
                 if (rowsAffected > 0) {
-                    d.addWarrantyCardProcess(warrantyProductID, handlerID, "create", "");
+                    try (ResultSet rs = ps.getGeneratedKeys()) {
+                        if (rs.next()) {
+                            warrantyCardId = rs.getInt(1); // Retrieve the generated WarrantyCardID
+                        }
+                    }
+                    if (warrantyCardId != -1) {
+                        d.addWarrantyCardProcess(warrantyCardId, handlerID, "create", ""); // Pass the ID to addWarrantyCardProcess
+                    }
+                    return true;
                 }
                 return rowsAffected > 0;
             }
@@ -640,9 +648,10 @@ public class WarrantyCardDAO extends DBContext {
         }
         return false;
     }
+
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-  
+
     }
 
 }

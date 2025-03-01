@@ -41,4 +41,9 @@ public class WarrantyCardProcessDAO extends DBContext {
         }
         return false;
     }
+    
+    public static void main(String[] args) {
+        WarrantyCardProcessDAO d = new WarrantyCardProcessDAO();
+        System.out.println(d.getLatestProcessByWarrantyCardId(61));
+    }
 }
