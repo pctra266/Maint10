@@ -181,7 +181,7 @@ public class FeedbackDAO {
                                                left join ProductDetail p on wp.ProductDetailID = p.ProductDetailID
                                               left join Product pr on p.ProductID = pr.ProductID
                                               left join Customer c on f.CustomerID = c.CustomerID
-                       					   left join UnknowProduct up on up.UnknowProductID = wp.UnknowProductID
+                       					   left join UnknownProduct up on up.UnknownProductID = wp.UnknownProductID
                                               where f.FeedbackID = ?""";
 
         try {
@@ -356,7 +356,7 @@ public class FeedbackDAO {
           FROM WarrantyProduct wp
           LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
           LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
-          LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID
+          LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
           LEFT JOIN Customer c ON c.CustomerID = 
               COALESCE(pd.CustomerID, up.CustomerID)
           	left join Product p on pd.ProductID = p.ProductID
@@ -414,7 +414,7 @@ public class FeedbackDAO {
         FROM WarrantyProduct wp
         LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
         LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
-        LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID
+        LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
         LEFT JOIN Customer c ON c.CustomerID = 
             COALESCE(pd.CustomerID, up.CustomerID)
         	left join Product p on pd.ProductID = p.ProductID
@@ -448,7 +448,7 @@ public class FeedbackDAO {
                     FROM WarrantyProduct wp
                        LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
                        LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
-                       LEFT JOIN UnknowProduct up ON wp.UnknowProductID = up.UnknowProductID
+                       LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
                        LEFT JOIN Customer c ON c.CustomerID = 
                            COALESCE(pd.CustomerID, up.CustomerID)
                        	left join Product p on pd.ProductID = p.ProductID
