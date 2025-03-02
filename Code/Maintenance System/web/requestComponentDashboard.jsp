@@ -23,7 +23,7 @@
                     <div class="alert-primary">${param.mess}</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <h1 class="text-center">Component Request Dashboard</h1>
-                        <a class="btn btn-secondary" href="componentRequest?action=listComponentRequestByStaffId">My Requests</a>
+                        <a class="btn btn-secondary" href="componentRequest?action=listComponentRequestInStaffRole">List Waiting Requests</a>
                     </div>
 
                     <div>

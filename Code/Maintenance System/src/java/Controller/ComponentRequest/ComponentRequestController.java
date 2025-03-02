@@ -127,6 +127,9 @@ public class ComponentRequestController extends HttpServlet {
             case "createComponentRequest":
                 total = componentRequestDao.totalComponentByProductCode("", componentCode, componentName, typeID, brandID);
                 break;
+            case "listComponentRequestInStaffRole": case "cancelComponentRequest":
+                total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode,"waiting");
+                break;
             case "viewListComponentRequest": case "updateStatusComponentRequest": case"addComponent":case"removeComponent":
                 total = componentRequestDao.totalComponentRequest(warrantyCardCode);
                 break;
@@ -247,7 +250,7 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("createComponentRequest.jsp").forward(request, response);
             break;
             case "viewListComponentRequest":
-//                //======phan trang
+                //======phan trang
 //                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
 //                pagination.setSearchValues(new String[]{"viewListComponentRequest",warrantyCardCode});
 //                request.setAttribute("pagination", pagination);
@@ -271,8 +274,28 @@ public class ComponentRequestController extends HttpServlet {
                componentRequestDao.updateStatusComponentRequest(componentRequestID,componentStatus);
               this.viewListComponentRequest(pagination, warrantyCardCode, page, pageSize, request, response);
                 break;
-            case "listComponentRequestByStaffId":
-//                ArrayList<ComponentRequest> listcomponentRequestByStaffId = componentRequestDAO.
+            case "listComponentRequestInStaffRole":
+                //======phan trang
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
+                pagination.setSearchValues(new String[]{"listComponentRequestInStaffRole",warrantyCardCode});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequestInRoleStaff(warrantyCardCode,"waiting",page, pageSize);
+                request.setAttribute("listComponentRequest", listComponentRequest);
+                request.getRequestDispatcher("listComponentRequestInStaffRole.jsp").forward(request, response);
+                break;
+            case "cancelComponentRequest":
+                if(currentStaff == null){
+                   staffId = "2";
+                }
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
+                pagination.setSearchValues(new String[]{"listComponentRequestInStaffRole",warrantyCardCode});
+                request.setAttribute("pagination", pagination);
+                crrDao.createComponentRequestResponsible(staffId,componentRequestID,componentStatus);
+               componentRequestDao.updateStatusComponentRequest(componentRequestID,componentStatus);
+              ArrayList<ComponentRequest> listComponentRequestafterCancel = componentRequestDao.getAllComponentRequestInRoleStaff(warrantyCardCode,"waiting",page, pageSize);
+                request.setAttribute("listComponentRequest", listComponentRequestafterCancel);
+                request.getRequestDispatcher("listComponentRequestInStaffRole.jsp").forward(request, response);
                 break;
         }
     }

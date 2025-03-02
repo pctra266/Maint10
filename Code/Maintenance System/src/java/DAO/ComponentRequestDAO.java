@@ -417,7 +417,7 @@ public class ComponentRequestDAO {
         }
         
         public void insertComponentRequestDetails(int componentRequestID, List<Integer> componentIDs, List<Integer> quantities, Connection conn) throws SQLException {
-        String query = "INSERT INTO ComponentRequestDetail (ComponentID, ComponentRequestID, Quantity) VALUES (?, ?, ?)";
+        String query = "INSERT INTO ComponentRequestDetail (ComponentID, ComponentRequestID, Quantity, Status) VALUES (?, ?, ?,'waiting')";
         if (componentIDs.size() != quantities.size()) {
             throw new IllegalArgumentException("ComponentIDs and Quantities must have the same size.");
         }
@@ -557,7 +557,84 @@ public class ComponentRequestDAO {
             }
             return 0;
         }
-        
+        // My request list
+        public ArrayList<ComponentRequest> getAllComponentRequestInRoleStaff(String warrantyCardCode,String componentRequestStatus,int page, int pageSize){
+           ArrayList<ComponentRequest> list = new ArrayList<>();
+           String query = """
+                          select cr.ComponentRequestID,wc.WarrantyCardID ,wc.WarrantyCardCode, wc.CreatedDate as WCardCreateDate,cr.Date as CRequestCreateDate, cr.Status, cr.Note 
+                          	from ComponentRequest cr 
+                          	join WarrantyCard wc on cr.WarrantyCardID = wc.WarrantyCardID
+                          	where 1=1""";
+           if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+            query += "	and wc.WarrantyCardCode like ?";
+            }
+           if(componentRequestStatus!= null && !componentRequestStatus.trim().isEmpty()){
+            query += "	and cr.Status like ?";
+            }
+           query +=" order by cr.Date desc";
+           query +=" offset ? rows fetch next ? rows only;";
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               int count =1;
+               if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+                   ps.setString(count++, "%"+ warrantyCardCode+"%");
+                }
+               if(componentRequestStatus!= null && !componentRequestStatus.trim().isEmpty()){
+                    ps.setString(count++, "%"+ componentRequestStatus+"%");
+            }
+               int offset = (page-1)*pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   ComponentRequest componentRequest = new ComponentRequest();
+                   componentRequest.setComponentRequestID(rs.getInt("ComponentRequestID"));
+                   componentRequest.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                   componentRequest.setWarrantyCode(rs.getString("WarrantyCardCode"));
+                   componentRequest.setDate(rs.getDate("CRequestCreateDate"));
+                   componentRequest.setWarrantyCreateDate(rs.getDate("WCardCreateDate"));
+                   componentRequest.setStatus(rs.getString("Status"));
+                   componentRequest.setNote(rs.getString("Note"));
+                   
+                   list.add(componentRequest);
+               }
+           }catch (Exception e){
+           }
+
+           return list;
+       }
+    public int totalComponentRequestInRoleStaff(String warrantyCardCode,String componentRequestStatus){
+        String query = """
+                          select count(*) 
+                          	from ComponentRequest cr 
+                          	join WarrantyCard wc on cr.WarrantyCardID = wc.WarrantyCardID
+                          	where 1=1""";
+           if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+            query += "	and wc.WarrantyCardCode like ?";
+            }
+           if(componentRequestStatus!= null && !componentRequestStatus.trim().isEmpty()){
+            query += "	and cr.Status like ?";
+            }
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               int count =1;
+               if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
+                   ps.setString(count++, "%"+ warrantyCardCode+"%");
+                }
+               if(componentRequestStatus!= null && !componentRequestStatus.trim().isEmpty()){
+                    ps.setString(count++, "%"+ componentRequestStatus+"%");
+            }
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   return rs.getInt(1);
+               }
+           }catch (Exception e){
+           }
+
+           return 0;
+    }
         
             
     public static void main(String[] args) {
