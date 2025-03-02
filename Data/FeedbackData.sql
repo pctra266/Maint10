@@ -20,7 +20,6 @@ VALUES
 (NULL, 11), (NULL, 12), (NULL, 13), (NULL, 14), (NULL, 15),  
 (NULL, 16), (NULL, 17), (NULL, 18), (NULL, 19),
 (NULL, 20), (NULL, 21), (NULL, 22), (NULL, 23),(NULL,24)
-
 INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
 VALUES
 ('WC101', 1, 'Screen malfunction', 'waiting', '2024-01-10'),
@@ -69,6 +68,33 @@ VALUES
 ('WC144', 44, 'Ethernet port not functioning', 'waiting', '2024-02-18'),
 ('WC145', 45, 'Camera blurry images', 'waiting', '2024-02-19'),
 ('WC146', 46, 'Lid not closing properly', 'waiting', '2024-02-20');
+INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
+VALUES
+('WC201', 1, 'Screen malfunction', 'fixing', '2014-01-10'),
+('WC202', 2, 'Battery issue', 'done', '2014-01-11'),
+('WC203', 3, 'Overheating problem', 'refix', '2014-01-12'),
+('WC204', 4, 'Keyboard not working', 'completed', '2014-01-13'),
+('WC205', 5, 'Touchpad unresponsive', 'cancel', '2014-01-14'),
+('WC206', 6, 'Audio not working', 'fixing', '2014-01-15'),
+('WC207', 7, 'Charging port damaged', 'done', '2014-01-16'),
+('WC208', 8, 'Camera blurry', 'refix', '2014-01-17'),
+('WC209', 9, 'WiFi not working', 'completed', '2014-01-18'),
+('WC210', 10, 'Speaker issues', 'cancel', '2014-01-19'),
+('WC211', 11, 'Bluetooth connection drops', 'fixing', '2014-01-20'),
+('WC212', 12, 'Random shutdowns', 'done', '2014-01-21'),
+('WC213', 13, 'Touchscreen unresponsive', 'refix', '2014-01-22'),
+('WC214', 14, 'Microphone not detecting sound', 'completed', '2014-01-23'),
+('WC215', 15, 'Power button stuck', 'cancel', '2014-01-24'),
+('WC216', 16, 'USB not recognized', 'fixing', '2014-01-25'),
+('WC217', 17, 'Headphone jack not working', 'done', '2014-01-26'),
+('WC218', 18, 'Fingerprint sensor issue', 'refix', '2014-01-27'),
+('WC219', 19, 'Auto restart problem', 'completed', '2014-01-28'),
+('WC220', 20, 'Overheating while charging', 'cancel', '2014-01-29'),
+('WC221', 21, 'System lagging frequently', 'fixing', '2014-01-30'),
+('WC222', 22, 'Backlight flickering', 'done', '2014-01-31'),
+('WC223', 23, 'Device fails to boot', 'refix', '2014-02-01'),
+('WC224', 24, 'Unstable battery percentage', 'completed', '2014-02-02');
+
 
 Insert into WarrantyCardProcess (WarrantyCardID, HandlerID, Action, ActionDate, Note)
 values
