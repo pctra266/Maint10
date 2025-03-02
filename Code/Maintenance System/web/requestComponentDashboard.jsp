@@ -21,7 +21,11 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <div class="alert-primary">${param.mess}</div>
-                    <h1 class="text-center">Component Request Dashboard</h1>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <h1 class="text-center">Component Request Dashboard</h1>
+                        <a class="btn btn-secondary" href="componentRequest?action=listComponentRequestByStaffId">My Requests</a>
+                    </div>
+
                     <div>
                          <form method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="viewComponentRequestDashboard">
@@ -111,8 +115,9 @@
                         </table>
                          </form>   
                     </div>
+                   
                      <jsp:include page="/includes/pagination.jsp" />
-                     <a  href="componentRequest?action=listComponentRequestByStaffId">Component Request History</a>
+                     
                      
                 </main>
                     

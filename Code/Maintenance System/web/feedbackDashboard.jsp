@@ -48,7 +48,9 @@
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                                  <select style="margin-top: 15px" class="form-select" name="WarrantyStatus">
                                     <option value="">Warranty Status </option>
+                                    <option ${(WarrantyStatus=='waiting')?"selected":""} value="waiting">Waiting</option>
                                     <option ${(WarrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
+                                    <option ${(WarrantyStatus=='refix')?"selected":""} value="refix">Refix</option>
                                     <option ${(WarrantyStatus=='done')?"selected":""} value="done">Done</option>
                                     <option ${(WarrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
                                     <option ${(WarrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
