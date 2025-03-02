@@ -563,10 +563,10 @@ public class ComponentRequestDAO {
     public static void main(String[] args) {
 //        ArrayList<ProductDetail> list = new ArrayList<>();
         ComponentRequestDAO dao = new ComponentRequestDAO();
-//            ArrayList<ComponentRequest> list2 = dao.getAllComponentRequest("",1   , 5);
-//            for (ComponentRequest x : list2) {
-//                System.out.println(x);
-//        }
-            dao.updateStatusComponentRequest("10", "cancel");
+            ArrayList<ProductDetail> list2 = dao.getAllListProductUnderMaintain("","","","","","","",1,5);
+            for (ProductDetail x : list2) {
+                System.out.println(x);
+        }
+//            dao.updateStatusComponentRequest("10", "cancel");
     }
 }

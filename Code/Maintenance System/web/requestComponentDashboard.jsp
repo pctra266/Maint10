@@ -51,7 +51,9 @@
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                                  <select style="margin-top: 15px" class="form-select" name="warrantyStatus" onchange="this.form.submit()">
                                      <option ${(warrantyStatus=='')?"selected":""} value="all" >Warranty Status </option>
+                                    <option ${(warrantyStatus=='waiting')?"selected":""} value="waiting">Waiting</option>
                                     <option ${(warrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
+                                    <option ${(warrantyStatus=='refix')?"selected":""} value="refix">Refix</option>
                                     <option ${(warrantyStatus=='done')?"selected":""} value="done">Done</option>
                                     <option ${(warrantyStatus=='completed')?"selected":""} value="completed">Completed</option>
                                     <option ${(warrantyStatus=='cancel')?"selected":""} value="cancel">Cancel</option>
