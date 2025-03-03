@@ -6,8 +6,10 @@ package Controller.Customer;
 
 import DAO.CustomerDAO;
 import Model.Customer;
+import Model.Pagination;
 import Utils.Encryption;
 import Utils.Format;
+import Utils.FormatUtils;
 import Utils.SearchUtils;
 
 import java.io.IOException;
@@ -347,41 +349,27 @@ public class CustomerServlet extends HttpServlet {
         String searchPhone = SearchUtils.normalizeString(request.getParameter("phone"));
         String searchAddress = SearchUtils.normalizeString(request.getParameter("address"));
         String dateOfBirth = request.getParameter("dateOfBirth");
-        String sortBy = request.getParameter("field");
+        String sortBy = request.getParameter("sort");
         String sortOrder = request.getParameter("order");
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("page-size");
+
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+         Integer pageSize;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : 5;
+
+      
+       
+     
+
        
 
-        // Lấy giá trị phân trang
-        String pageIndex = request.getParameter("index");
-        String pageSize = request.getParameter("page-size");
-
-        // Xử lý giá trị mặc định cho pageSize và pageIndex
-        if (pageSize
-                == null || pageSize.isEmpty()) {
-            pageSize = "5";  // Mặc định là 5 bản ghi mỗi trang
-        }
-
-        if (pageIndex
-                == null || pageIndex.isEmpty()) {
-            pageIndex = "1";  // Mặc định là trang đầu tiên
-        }
-
-        // Chuyển pageSize và pageIndex sang kiểu số nguyên
-        int size = 5;
-        int page = 1;
-        int offset = 0;
-
-        try {
-            size = Integer.parseInt(pageSize);
-            page = Integer.parseInt(pageIndex);
-            offset = (page - 1) * size;
-        } catch (NumberFormatException e) {
-            System.out.println("Error parsing page size or index: " + e);
-        }
+      
 
         ArrayList<Customer> listCustomer = new ArrayList<>();
         int totalCustomer = 0;
         int totalPages = 1;
+        int   offset = (page - 1) * pageSize;
 
         // Kiểm tra nếu có điều kiện tìm kiếm
         if ((searchName
@@ -393,19 +381,42 @@ public class CustomerServlet extends HttpServlet {
                 || (searchAddress != null && !searchAddress.trim().isEmpty())) {
 
             // Gọi phương thức tìm kiếm với các tham số tìm kiếm, sắp xếp, phân trang
-            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, size);
-
-            // Lấy tổng số khách hàng tìm được
+            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, pageSize);
             totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
-
-            // Tính toán tổng số trang
-            totalPages = (int) Math.ceil((double) totalCustomer / size);
-
+            totalPages = (int) Math.ceil((double) totalCustomer / pageSize);
+            
+            // Phan trnag moi
+            Pagination pagination = new Pagination();
+            pagination.setPageSize(pageSize);
+            pagination.setCurrentPage(page);
+            pagination.setSearchFields(new String[] {"name","gender","email","phone","address","dateOfBirth"});
+            pagination.setSearchValues(new String[] {searchName,searchGender,searchEmail,searchPhone,searchAddress,dateOfBirth});
+            pagination.setSort(sortBy);
+            pagination.setOrder(sortOrder);
+            pagination.setTotalPagesToShow(5);
+            pagination.setTotalPages(totalPages);
+            pagination.setUrlPattern("/customer");
+            pagination.setListPageSize( totalCustomer);
+            request.setAttribute("pagination", pagination);
         } else {
-            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, size);
+           listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, pageSize);
             totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
-            totalPages = (int) Math.ceil((double) totalCustomer / size);
-
+            totalPages = (int) Math.ceil((double) totalCustomer / pageSize);
+            
+            // Phan trnag moi
+            Pagination pagination = new Pagination();
+            pagination.setPageSize(pageSize);
+            pagination.setCurrentPage(page);
+            pagination.setSearchFields(new String[] {"name","gender","email","phone","address","dateOfBirth"});
+            pagination.setSearchValues(new String[] {searchName,searchGender,searchEmail,searchPhone,searchAddress,dateOfBirth});
+            pagination.setSort(sortBy);
+            pagination.setOrder(sortOrder);
+            pagination.setTotalPagesToShow(5);
+            pagination.setTotalPages(totalPages);
+            pagination.setUrlPattern("/customer");
+            pagination.setListPageSize( totalCustomer);
+            request.setAttribute("pagination", pagination);
+      
         }
 
         request.setAttribute("searchName", searchName);
@@ -414,16 +425,22 @@ public class CustomerServlet extends HttpServlet {
         request.setAttribute("searchPhone", searchPhone);
         request.setAttribute("searchAddress", searchAddress);
         request.setAttribute("dateOfBirth", dateOfBirth);
-        
-        request.setAttribute("size", size);
-        request.setAttribute("sortBy", sortBy);
-        request.setAttribute("sortOrder", sortOrder);
+         
+        request.setAttribute("size", pageSize);
+        request.setAttribute("sort", sortBy);
+        request.setAttribute("order", sortOrder);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("listCustomer", listCustomer);
 
         request.getRequestDispatcher("Customer/Customer.jsp").forward(request, response);
-
     }
+
+          
+ 
+            
+
+       
+    
 
 
     /**
