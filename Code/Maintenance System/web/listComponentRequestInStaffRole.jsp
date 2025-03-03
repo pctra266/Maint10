@@ -52,6 +52,7 @@
                                     <th>Component Request Create Date</th>
                                     <th>Status</th>
                                     <th>Note</th>
+                                    <th>Detail</th>
                                     <th>Cancel</th>
                                 </tr>
                             </thead>
@@ -62,6 +63,48 @@
                                         <td>${o.date}</td>
                                         <td>${o.status}</td>
                                         <td>${o.note}</td>
+                                        <td>
+                                        <form action="componentRequest" method="get">
+                                            <input type="hidden" name="action" value="getRequestDetails">
+                                            <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                            <input type="hidden" name="page" value="${pagination.currentPage}">
+                                            <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
+                                            <input type="hidden" name="componentRequestID" value="${o.componentRequestID}">
+                                            <button type="submit" class="btn btn-primary">Detail</button>
+                                        </form>
+
+                                        <c:if test="${not empty requestDetailsList and selectedComponentRequestID == o.componentRequestID}">
+                                            <div class="modal fade show" id="detailModal${o.componentRequestID}" tabindex="-1" 
+                                                 aria-labelledby="detailModalLabel${o.componentRequestID}" style="display: block;" aria-hidden="false">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="detailModalLabel${o.componentRequestID}">Request Details (Component Request ID: ${componentRequestID}) </h5>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            
+                                                            <c:forEach items="${requestDetailsList}" var="detail">
+                                                                Component Code: ${detail.componentCode}<br>
+                                                                Component Name:  ${detail.componentName}<br>
+                                                                Quantity:  ${detail.quantity}<br>
+                                                                <hr>
+                                                            </c:forEach>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <form action="componentRequest" method="get">
+                                                                <input type="hidden" name="action" value="listComponentRequestInStaffRole">
+                                                                <input type="hidden" name="page-size" value="${pagination.pageSize}">
+                                                                <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                                <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
+                                                                <button type="submit" class="btn btn-secondary">Close</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-backdrop fade show"></div>
+                                        </c:if>
+                                    </td>
                                         <td>
                                             <form action="componentRequest" method="get">
                                                     <input type="hidden" name="action" value="cancelComponentRequest">
