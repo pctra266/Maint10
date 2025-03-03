@@ -77,9 +77,6 @@ public class ComponentRequestController extends HttpServlet {
             action = "viewComponentRequestDashboard";
         }
         System.out.println("action la: " + action);
-//        String warrantyCardCode, String productCode,
-//          String unknownProductCode,  String warrantyStatus,String typeMaintain, String sort, 
-//          String order, int page, int pageSize
         //parameter
         String warrantyCardID = request.getParameter("warrantyCardID");
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("warrantyCardCode"));
@@ -127,7 +124,7 @@ public class ComponentRequestController extends HttpServlet {
             case "createComponentRequest":
                 total = componentRequestDao.totalComponentByProductCode("", componentCode, componentName, typeID, brandID);
                 break;
-            case "listComponentRequestInStaffRole": case "cancelComponentRequest":
+            case "listComponentRequestInStaffRole": case "cancelComponentRequest": case"getRequestDetails":
                 total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode,"waiting");
                 break;
             case "viewListComponentRequest": case "updateStatusComponentRequest": case"addComponent":case"removeComponent":
@@ -296,6 +293,20 @@ public class ComponentRequestController extends HttpServlet {
               ArrayList<ComponentRequest> listComponentRequestafterCancel = componentRequestDao.getAllComponentRequestInRoleStaff(warrantyCardCode,"waiting",page, pageSize);
                 request.setAttribute("listComponentRequest", listComponentRequestafterCancel);
                 request.getRequestDispatcher("listComponentRequestInStaffRole.jsp").forward(request, response);
+                break;
+            case "getRequestDetails":
+                //======phan trang
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode"});
+                pagination.setSearchValues(new String[]{"listComponentRequestInStaffRole",warrantyCardCode});
+                request.setAttribute("pagination", pagination);
+                //======end phan trang
+            ArrayList<ComponentRequestDetail> requestDetailsList1 =  componentRequestDao.getListComponentRequestDetailById(componentRequestID);
+            
+            request.setAttribute("requestDetailsList", requestDetailsList1);
+            request.setAttribute("selectedComponentRequestID", componentRequestID);
+            request.setAttribute("listComponentRequest",  componentRequestDao.getAllComponentRequestInRoleStaff(warrantyCardCode,"waiting",page, pageSize)); // Giữ danh sách gốc
+            request.getRequestDispatcher("/listComponentRequestInStaffRole.jsp").forward(request, response);
+        
                 break;
         }
     }
