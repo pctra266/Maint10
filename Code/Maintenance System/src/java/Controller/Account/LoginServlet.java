@@ -52,18 +52,18 @@ public class LoginServlet extends HttpServlet {
 
         if (staff != null) {
             session.setAttribute("staff", staff);
-            saveCookies(response, username, encryptionPassword, rememberme);
+            saveCookies(response, username, password, rememberme);
             response.sendRedirect("HomePage.jsp");
         } else if (customer != null) {
             session.setAttribute("customer", customer);
-            saveCookies(response, username, encryptionPassword, rememberme);
+            saveCookies(response, username, password, rememberme);
             response.sendRedirect("HomePage.jsp");
         }
     }
 
-    private void saveCookies(HttpServletResponse response, String username, String encryptionPassword, String rememberme) {
+    private void saveCookies(HttpServletResponse response, String username, String password, String rememberme) {
         Cookie cusername = new Cookie("cusername", username);
-        Cookie cpassword = new Cookie("cpassword", encryptionPassword);
+        Cookie cpassword = new Cookie("cpassword", password);
         Cookie crememberme = new Cookie("crememberme", rememberme);
 
         if (rememberme != null) {

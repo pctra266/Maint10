@@ -121,6 +121,10 @@
         <servlet-name>ViewListUnknowProduct</servlet-name>
         <servlet-class>Controller.Product.ViewListUnknowProduct</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>YourWarrantyCardDetail</servlet-name>
+        <servlet-class>Controller.WarrantyCard.YourWarrantyCardDetail</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -260,5 +264,9 @@
     <servlet-mapping>
         <servlet-name>ViewListUnknowProduct</servlet-name>
         <url-pattern>/listUnknow</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>YourWarrantyCardDetail</servlet-name>
+        <url-pattern>/yourWarrantyCardDetail</url-pattern>
     </servlet-mapping>
 </web-app>
