@@ -8,6 +8,10 @@ import Model.UnknownProduct;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -505,36 +509,43 @@ public class ProductDAO extends DBContext {
         return types;
     }
 
-    public int addUnknownProduct(UnknownProduct product) throws SQLException {
-        String sql = "INSERT INTO UnknowProduct (CustomerID, ProductName, ProductCode, Description, PurchaseDate) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        ps.setInt(1, product.getCustomerId());
-        ps.setString(2, product.getProductName());
-        ps.setString(3, product.getProductCode());
-        ps.setString(4, product.getDescription());
-        ps.setDate(5, new java.sql.Date(product.getReceivedDate().getTime()));
-        ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        if (rs.next()) {
-            return rs.getInt(1);
+    public boolean isUnknownProductCodeExists(String code) {
+        String sql = "select * from UnknownProduct WHERE ProductCode = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, code);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
         }
-        return -1;
+        return false;
     }
 
     public List<UnknownProduct> getAllUnknownProducts() {
         List<UnknownProduct> unknowProducts = new ArrayList<>();
-        String sql = "SELECT up.UnknowProductID, c.Name AS CustomerName, up.ProductName, up.ProductCode, up.Description, up.ReceivedDate "
-                + "FROM UnknowProduct up "
+        String sql = "SELECT * "
+                + "FROM UnknownProduct up "
                 + "JOIN Customer c ON up.CustomerID = c.CustomerID";
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             while (rs.next()) {
+                String receivedDate = "";
+                Timestamp timestamp = rs.getTimestamp("ReceivedDate");
+                if (timestamp != null) {
+                    receivedDate = sdf.format(timestamp);
+                }
                 unknowProducts.add(new UnknownProduct(
-                        rs.getInt("UnknowProductID"),
-                        rs.getString("CustomerName"),
+                        rs.getInt("UnknownProductID"),
+                        rs.getInt("CustomerID"),
                         rs.getString("ProductName"),
                         rs.getString("ProductCode"),
                         rs.getString("Description"),
-                        rs.getTimestamp("ReceivedDate")
+                        receivedDate,
+                        rs.getString("Name"),
+                        rs.getString("Phone")
                 ));
             }
         } catch (SQLException e) {
@@ -543,10 +554,84 @@ public class ProductDAO extends DBContext {
         return unknowProducts;
     }
 
+    public boolean addUnknownProduct(int customerId, String productName, String productCode, String description, String receivedDate) {
+        String sql = "INSERT INTO UnknownProduct (CustomerID, ProductName, ProductCode, Description, ReceivedDate) VALUES (?, ?, ?, ?, ?)";
+
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, customerId);
+            ps.setString(2, productName);
+            ps.setString(3, productCode);
+            ps.setString(4, description);
+
+            // Kiểm tra nếu receivedDate chứa 'T' thì thay thế bằng dấu cách
+            if (receivedDate.contains("T")) {
+                receivedDate = receivedDate.replace("T", " ");
+            }
+
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(receivedDate, formatter);
+            ps.setTimestamp(5, Timestamp.valueOf(dateTime));
+
+            int affectedRows = ps.executeUpdate();
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
+
+    public Integer getWarrantyProductIdByUnknownProductId(int unknownProductId) {
+        String query = "SELECT WarrantyProductID FROM WarrantyProduct WHERE UnknownProductID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, unknownProductId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("WarrantyProductID");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+
+    public UnknownProduct getUnknownProductById(int unknownProductId) {
+        String query = "SELECT * FROM UnknownProduct WHERE UnknownProductID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, unknownProductId);
+            try (ResultSet rs = ps.executeQuery()) {
+
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                if (rs.next()) {
+                    String receivedDate = "";
+                    Timestamp timestamp = rs.getTimestamp("ReceivedDate");
+                    if (timestamp != null) {
+                        receivedDate = sdf.format(timestamp);
+                    }
+                    return new UnknownProduct(
+                            rs.getInt("UnknownProductID"),
+                            rs.getInt("CustomerID"),
+                            rs.getString("ProductName"),
+                            rs.getString("ProductCode"),
+                            rs.getString("Description"),
+                            receivedDate
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null; // Trả về null nếu không tìm thấy
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-        List<UnknownProduct> unknowProducts = p.getAllUnknownProducts();
-        for (UnknownProduct u : unknowProducts) {
+        List<UnknownProduct> unknownProducts = p.getAllUnknownProducts();
+        for (UnknownProduct u : unknownProducts) {
             System.out.println(u.getProductName());
         }
 

@@ -5,7 +5,6 @@
 package DAO;
 
 import Model.Customer;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -180,18 +179,19 @@ public class CustomerDAO extends DBContext {
      * @return
      */
     public Customer getCustomerByID(int id) {
-        String sql = "SELECT [CustomerID]\n"
-                + "      ,[UsernameC]\n"
-                + "      ,[PasswordC]\n"
-                + "      ,[Name]\n"
-                + "      ,[Gender]\n"
-                + "      ,[DateOfBirth]\n"
-                + "      ,[Email]\n"
-                + "      ,[Phone]\n"
-                + "      ,[Address]\n"
-                + "      ,[Image]\n"
-                + "  FROM [dbo].[Customer]\n"
-                + "  WHERE CustomerID =? ;";
+        String sql = """
+                     SELECT [CustomerID]
+                           ,[UsernameC]
+                           ,[PasswordC]
+                           ,[Name]
+                           ,[Gender]
+                           ,[DateOfBirth]
+                           ,[Email]
+                           ,[Phone]
+                           ,[Address]
+                           ,[Image]
+                       FROM [dbo].[Customer]
+                       WHERE CustomerID =? ;""";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, id);
@@ -210,9 +210,8 @@ public class CustomerDAO extends DBContext {
                 customer.setImage(rs.getString("Image"));
                 return customer;
             }
-
         } catch (SQLException e) {
-
+            System.out.println(e);
         }
         return null;
     }
@@ -233,7 +232,7 @@ public class CustomerDAO extends DBContext {
      * @param fetch
      * @return
      */
-   public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address,String dateOfBirth, String sortBy, String sortOrder, int offset, int fetch) {
+    public ArrayList<Customer> advancedSearch(String name, String gender, String email, String phone, String address, String dateOfBirth, String sortBy, String sortOrder, int offset, int fetch) {
         ArrayList<Customer> listCustomer = new ArrayList<>();
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -269,7 +268,6 @@ public class CustomerDAO extends DBContext {
         if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
             sql += " AND DateOfBirth = ?";
         }
-       
 
         if (sortBy != null && !sortBy.trim().isEmpty()) {
             sql += " ORDER BY " + sortBy;
@@ -330,7 +328,7 @@ public class CustomerDAO extends DBContext {
             System.out.println(e);
         }
         return listCustomer;
-   }
+    }
 
     // PHAN TRANG
     /**
@@ -411,7 +409,7 @@ public class CustomerDAO extends DBContext {
      * @param address
      * @return
      */
-     public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address, String dateOfBirth) {
+    public int getCustomerAdvancedSearchPage(String name, String gender, String email, String phone, String address, String dateOfBirth) {
 
         String searchName = "%" + name.trim().replaceAll("\\s+", "%") + "%";
         String searchEmail = "%" + email.trim().replaceAll("\\s+", "%") + "%";
@@ -433,11 +431,10 @@ public class CustomerDAO extends DBContext {
         if (searchAddress != null && !searchAddress.isEmpty()) {
             sql += " AND Address LIKE ?";
         }
-         if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+        if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
             sql += " AND DateOfBirth = ?";
         }
-        
-      
+
         try {
             int index = 1;
             PreparedStatement ps = connection.prepareStatement(sql);
@@ -456,11 +453,11 @@ public class CustomerDAO extends DBContext {
             if (searchAddress != null && !searchAddress.isEmpty()) {
                 ps.setString(index++, searchAddress);
             }
-            
-               if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
+
+            if (dateOfBirth != null && !dateOfBirth.trim().isEmpty()) {
                 ps.setDate(index++, java.sql.Date.valueOf(dateOfBirth.trim()));
             }
-           
+
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 return rs.getInt(1);
@@ -771,7 +768,10 @@ public class CustomerDAO extends DBContext {
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
-
+        List<Customer> listCustomer = dao.getAllCustomer();
+        for (Customer customer : listCustomer) {
+            System.out.println(customer.getName());
+        }
     }
 
 }

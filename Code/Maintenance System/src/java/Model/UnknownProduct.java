@@ -1,15 +1,26 @@
 
 package Model;
-import java.util.Date;
 
 public class UnknownProduct {
 
-    private int unknowProductId, customerId;
+    private int unknownProductId, customerId;
     private String productName, productCode, description;
-    private Date receivedDate;
+    private String receivedDate;
     private String customerName;
+    private String customerPhone;
 
-    public UnknownProduct(int customerId, String productName, String productCode, String description, Date receivedDate) {
+    public UnknownProduct(int unknownProductId, int customerId, String productName, String productCode, String description, String receivedDate, String customerName, String customerPhone) {
+        this.unknownProductId = unknownProductId;
+        this.customerId = customerId;
+        this.productName = productName;
+        this.productCode = productCode;
+        this.description = description;
+        this.receivedDate = receivedDate;
+        this.customerName = customerName;
+        this.customerPhone = customerPhone;
+    }
+    
+    public UnknownProduct(int customerId, String productName, String productCode, String description, String receivedDate) {
         this.customerId = customerId;
         this.productName = productName;
         this.productCode = productCode;
@@ -20,41 +31,32 @@ public class UnknownProduct {
     public UnknownProduct() {
     }
 
-    public UnknownProduct(int unknowProductId, int customerId, String productName, String productCode, String description, Date receivedDate) {
-        this.unknowProductId = unknowProductId;
+    public UnknownProduct(int unknownProductId, int customerId, String productName, String productCode, String description, String receivedDate) {
+        this.unknownProductId = unknownProductId;
         this.customerId = customerId;
         this.productName = productName;
         this.productCode = productCode;
         this.description = description;
         this.receivedDate = receivedDate;
     }
-
-    public UnknownProduct(int unknowProductId, int customerId, String productName, String productCode, String description, Date receivedDate, String customerName) {
-        this.unknowProductId = unknowProductId;
-        this.customerId = customerId;
+  
+      public UnknownProduct(int unknownProductId, String customerName, String productName, String productCode, String description, String receivedDate, String customerPhone) {
+        this.unknownProductId = unknownProductId;
         this.productName = productName;
         this.productCode = productCode;
         this.description = description;
         this.receivedDate = receivedDate;
         this.customerName = customerName;
-    }
-    
-      public UnknownProduct(int unknowProductId, String customerName, String productName, String productCode, String description, Date receivedDate) {
-        this.unknowProductId = unknowProductId;
-        this.productName = productName;
-        this.productCode = productCode;
-        this.description = description;
-        this.receivedDate = receivedDate;
-        this.customerName = customerName;
+        this.customerPhone = customerPhone;
     }
 
 
-    public int getUnknowProductId() {
-        return unknowProductId;
+    public int getUnknownProductId() {
+        return unknownProductId;
     }
 
-    public void setUnknowProductId(int unknowProductId) {
-        this.unknowProductId = unknowProductId;
+    public void setUnknownProductId(int unknowProductId) {
+        this.unknownProductId = unknowProductId;
     }
 
     public int getCustomerId() {
@@ -89,11 +91,11 @@ public class UnknownProduct {
         this.description = description;
     }
 
-    public Date getReceivedDate() {
+    public String getReceivedDate() {
         return receivedDate;
     }
 
-    public void setReceivedDate(Date receivedDate) {
+    public void setReceivedDate(String receivedDate) {
         this.receivedDate = receivedDate;
     }
 
@@ -103,8 +105,15 @@ public class UnknownProduct {
 
     public void setCustomerName(String customerName) {
         this.customerName = customerName;
+    }    
+
+    public String getCustomerPhone() {
+        return customerPhone;
     }
 
+    public void setCustomerPhone(String customerPhone) {
+        this.customerPhone = customerPhone;
+    }
     
     
 }

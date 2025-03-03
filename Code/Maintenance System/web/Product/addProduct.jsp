@@ -15,6 +15,7 @@
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        
         <style>
             /* Base Styles */
             body {

@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
-import java.io.PrintWriter;
 
 @MultipartConfig(
         fileSizeThreshold = 2 * 1024 * 1024, // 2MB
@@ -28,7 +27,6 @@ public class ViewProduct extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
         if ("update".equals(action)) {
             loadProductForUpdate(request, response);
         } else if ("add".equals(action)) {
@@ -44,7 +42,6 @@ public class ViewProduct extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
-
         if ("add".equals(action)) {
             addProduct(request, response);
         } else if ("update".equals(action)) {

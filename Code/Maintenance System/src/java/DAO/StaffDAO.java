@@ -526,10 +526,43 @@ public class StaffDAO extends DBContext {
         }
     }
 
+    public List<Staff> getAllTechnicians() {
+        List<Staff> technicians = new ArrayList<>();
+        String sql = "SELECT s.StaffID, s.UsernameS, s.Name, s.Gender, s.DateOfBirth, s.Email, s.Phone, s.Address, s.Image "
+                + "FROM Staff s "
+                + "JOIN [Role] r ON s.RoleID = r.RoleID "
+                + "WHERE r.RoleName = ?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, "Technician");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Staff staff = new Staff();
+                staff.setStaffID(rs.getInt("StaffID"));
+                staff.setUsernameS(rs.getString("UsernameS"));
+                staff.setName(rs.getString("Name"));
+                staff.setGender(rs.getString("Gender"));
+                staff.setDate(rs.getString("DateOfBirth"));
+                staff.setEmail(rs.getString("Email"));
+                staff.setPhone(rs.getString("Phone"));
+                staff.setAddress(rs.getString("Address"));
+                staff.setImage(rs.getString("Image"));
+                technicians.add(staff);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return technicians;
+    }
+
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
+        List<Staff> t = staffDAO.getAllTechnicians();
 
-        Staff s = staffDAO.getStaffById(1);
-        System.out.println(s.getName());
+        for (Staff s : t) {
+            System.out.println(s.getName());
+        }
+        
     }
 }

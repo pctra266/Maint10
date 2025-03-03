@@ -1,53 +1,85 @@
 <%-- 
-    Document   : viewUnknownProduct
-    Created on : Feb 25, 2025, 7:52:38 AM
+    Document   : viewProduct
+    Created on : Feb 21, 2025, 11:49:16 PM
     Author     : sonNH
 --%>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta charset="UTF-8">
-        <title>Unknown Products List</title>
-        <link rel="stylesheet" type="text/css" href="styles.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Product List</title>
+        <link href="css/light.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+
     </head>
+
     <body>
-        <h2>List of Unknown Products</h2>
+        <div class="wrapper">
+            <jsp:include page="/includes/navbar-left.jsp" />
+            <div class="main">
+                <jsp:include page="/includes/navbar-top.jsp" />
+                <main class="content">
 
-        <button onclick="location.href = 'AddUnknownProductServlet'">Add Unknown Product</button>
+                    <h2>List of Unknown Products</h2>
 
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>Product Code</th>
-                    <th>Product Name</th>
-                    <th>Description</th>
-                    <th>Received Date</th>
-                    <th>Customer Name</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach var="product" items="${listUnknownProduct}">
-                    <tr>
-                        <td>${product.productCode}</td>
-                        <td>${product.productName}</td>
-                        <td>${product.description}</td>
-                        <td>${product.receivedDate}</td>
-                        <td>${product.customerName}</td>
-                        <td>
-                            <form action="AddWarrantyRequestServlet" method="post">
-                                <input type="hidden" name="productId" value="${product.unknowProductId}">
-                                <input type="hidden" name="customerId" value="${product.customerId}">
-                                <button type="submit">Create a Repair Request</button>
-                            </form>
-                        </td>
-                    </tr>
-                </c:forEach>
-            </tbody>
-        </table>
+                    <button onclick="location.href = 'addUnknown'" >Add Unknown Product</button>
+
+                    <form action="ViewUnknownProductServlet" method="get">
+
+                        <input type="text" name="productCode" placeholder="Product Code" value="${param.productCode}">
+                        <input type="text" name="productName" placeholder="Product Name" value="${param.productName}">
+                        <input type="text" name="description" placeholder="Description" value="${param.description}">
+                        <input type="date" name="receivedDate" value="${param.receivedDate}">
+                        <input type="text" name="customerName" placeholder="Customer Name" value="${param.customerName}">
+                        <button type="submit">Search</button>
+
+                    </form>
+
+                    <table border="1">
+                        <thead>
+                            <tr>
+                                <th>Product Code</th>
+                                <th>Product Name</th>
+                                <th>Description</th>
+                                <th>Received Date</th>
+                                <th>Customer Name</th>
+                                <th>Customer Phone</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="product" items="${listUnknownProduct}">
+                                <tr>
+                                    <td>${product.productCode}</td>
+                                    <td>${product.productName}</td>
+                                    <td>${product.description}</td>
+                                    <td>${product.receivedDate}</td>
+                                    <td>${product.customerName}</td>
+                                    <td>${product.customerPhone}</td>
+                                    <td>
+                                        <form action="addWUP" method="post">
+                                            <input type="hidden" name="productId" value="${product.unknownProductId}">
+                                            <input type="hidden" name="customerId" value="${product.customerId}">
+                                            <button type="submit">Create a Repair Request</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+
+                </main>
+                <jsp:include page="/includes/footer.jsp" />
+            </div>
+        </div>
+        <script src="js/app.js"></script>
+
+
+
     </body>
 </html>
-

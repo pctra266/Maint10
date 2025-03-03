@@ -118,8 +118,16 @@
         <servlet-class>Controller.Profile</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ViewListUnknowProduct</servlet-name>
-        <servlet-class>Controller.Product.ViewListUnknowProduct</servlet-class>
+        <servlet-name>ViewListUnknownProduct</servlet-name>
+        <servlet-class>Controller.Product.ViewListUnknownProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddUnknownProduct</servlet-name>
+        <servlet-class>Controller.Product.AddUnknownProduct</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddWarrantyCardUnknownProduct</servlet-name>
+        <servlet-class>Controller.WarrantyCard.AddWarrantyCardUnknownProduct</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>YourWarrantyCardDetail</servlet-name>
@@ -262,8 +270,16 @@
         <url-pattern>/profile</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>ViewListUnknowProduct</servlet-name>
-        <url-pattern>/listUnknow</url-pattern>
+        <servlet-name>ViewListUnknownProduct</servlet-name>
+        <url-pattern>/listUnknown</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddUnknownProduct</servlet-name>
+        <url-pattern>/addUnknown</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddWarrantyCardUnknownProduct</servlet-name>
+        <url-pattern>/addWUP</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>YourWarrantyCardDetail</servlet-name>
