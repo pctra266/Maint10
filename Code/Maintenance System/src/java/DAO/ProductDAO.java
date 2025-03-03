@@ -628,9 +628,90 @@ public class ProductDAO extends DBContext {
         return null; // Trả về null nếu không tìm thấy
     }
 
+    // Phương thức lấy danh sách sản phẩm không xác định có hỗ trợ tìm kiếm và phân trang
+    public List<UnknownProduct> searchUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName, int page, int pageSize) {
+        List<UnknownProduct> list = new ArrayList<>();
+        String sql = "SELECT up.*, c.Name, c.Phone "
+                + "FROM UnknownProduct up "
+                + "LEFT JOIN Customer c ON up.CustomerID = c.CustomerID "
+                + "WHERE ( ? IS NULL OR up.ProductCode LIKE ?) "
+                + "AND ( ? IS NULL OR up.ProductName LIKE ?) "
+                + "AND ( ? IS NULL OR up.Description LIKE ?) "
+                + "AND ( ? IS NULL OR up.ReceivedDate = ?) "
+                + "AND ( ? IS NULL OR c.Name LIKE ?) "
+                + "ORDER BY up.ReceivedDate DESC "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, productCode);
+            ps.setString(2, productCode != null ? "%" + productCode + "%" : null);
+            ps.setString(3, productName);
+            ps.setString(4, productName != null ? "%" + productName + "%" : null);
+            ps.setString(5, description);
+            ps.setString(6, description != null ? "%" + description + "%" : null);
+            ps.setString(7, receivedDate);
+            ps.setString(8, receivedDate);
+            ps.setString(9, customerName);
+            ps.setString(10, customerName != null ? "%" + customerName + "%" : null);
+            ps.setInt(11, (page - 1) * pageSize);
+            ps.setInt(12, pageSize);
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                UnknownProduct up = new UnknownProduct(
+                        rs.getInt("UnknownProductID"),
+                        rs.getInt("CustomerID"),
+                        rs.getString("ProductName"),
+                        rs.getString("ProductCode"),
+                        rs.getString("Description"),
+                        receivedDate,
+                        rs.getString("Name"),
+                        rs.getString("Phone")
+                );
+                list.add(up);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+
+    // Đếm tổng số sản phẩm không xác định (phục vụ phân trang)
+    public int countUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName) {
+        int total = 0;
+        String sql = "SELECT COUNT(*) FROM UnknownProduct up "
+                + "LEFT JOIN Customer c ON up.CustomerID = c.CustomerID "
+                + "WHERE ( ? IS NULL OR up.ProductCode LIKE ?) "
+                + "AND ( ? IS NULL OR up.ProductName LIKE ?) "
+                + "AND ( ? IS NULL OR up.Description LIKE ?) "
+                + "AND ( ? IS NULL OR up.ReceivedDate = ?) "
+                + "AND ( ? IS NULL OR c.Name LIKE ?)";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, productCode);
+            ps.setString(2, productCode != null ? "%" + productCode + "%" : null);
+            ps.setString(3, productName);
+            ps.setString(4, productName != null ? "%" + productName + "%" : null);
+            ps.setString(5, description);
+            ps.setString(6, description != null ? "%" + description + "%" : null);
+            ps.setString(7, receivedDate);
+            ps.setString(8, receivedDate);
+            ps.setString(9, customerName);
+            ps.setString(10, customerName != null ? "%" + customerName + "%" : null);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                total = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return total;
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
-        List<UnknownProduct> unknownProducts = p.getAllUnknownProducts();
+        List<UnknownProduct> unknownProducts = p.searchUnknownProducts(null, null, null, null, null, 1, 5);
         for (UnknownProduct u : unknownProducts) {
             System.out.println(u.getProductName());
         }

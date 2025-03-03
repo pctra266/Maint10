@@ -14,8 +14,6 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
-
     </head>
 
     <body>
@@ -65,6 +63,7 @@
                                         <form action="addWUP" method="post">
                                             <input type="hidden" name="productId" value="${product.unknownProductId}">
                                             <input type="hidden" name="customerId" value="${product.customerId}">
+                                            <input type="hidden" name="type" value="display">
                                             <button type="submit">Create a Repair Request</button>
                                         </form>
                                     </td>
@@ -73,13 +72,29 @@
                         </tbody>
                     </table>
 
+                    <div class="pagination">
+                        <c:if test="${totalPages > 1}">
+                            <c:if test="${currentPage > 1}">
+                                <a href="?page=1">First</a>
+                                <a href="?page=${currentPage - 1}">Previous</a>
+                            </c:if>
+
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <a href="?page=${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            </c:forEach>
+
+                            <c:if test="${currentPage < totalPages}">
+                                <a href="?page=${currentPage + 1}">Next</a>
+                                <a href="?page=${totalPages}">Last</a>
+                            </c:if>
+                        </c:if>
+                    </div>
+
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
-
-
 
     </body>
 </html>

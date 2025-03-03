@@ -9,11 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 /**
  *
  * @author ADMIN
@@ -336,7 +335,6 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCards;
     }
 
-
     // 
     public int getPageWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String createDate) {
         String sql = "SELECT COUNT(*) \n"
@@ -356,7 +354,7 @@ public class WarrantyCardDAO extends DBContext {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
         return 0;
     }
@@ -395,7 +393,7 @@ public class WarrantyCardDAO extends DBContext {
         if (status != null && !status.isEmpty()) {
             query.append(" AND wc.WarrantyStatus = ?");
         }
-          // xem theo cac card receive
+        // xem theo cac card receive
         if (type != null && "myCard".equals(type)) {
             query.append(" AND wc.HandlerID = ?");
         }
@@ -421,9 +419,9 @@ public class WarrantyCardDAO extends DBContext {
                 ps.setString(paramIndex++, status);
             }
             //Neu loc theo receive card
-             if (type != null && "myCard".equals(type)) {
-                 ps.setInt(paramIndex, handlerId);
-             }
+            if (type != null && "myCard".equals(type)) {
+                ps.setInt(paramIndex, handlerId);
+            }
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -522,9 +520,9 @@ public class WarrantyCardDAO extends DBContext {
                 ps.setString(paramIndex++, status);
             }
             //Neu loc theo receive card
-             if (type != null && "myCard".equals(type)) {
-                 ps.setInt(paramIndex++, handlerId);
-             }
+            if (type != null && "myCard".equals(type)) {
+                ps.setInt(paramIndex++, handlerId);
+            }
 
             ps.setInt(paramIndex++, (page - 1) * pageSize);
             ps.setInt(paramIndex, pageSize);
@@ -741,6 +739,59 @@ public class WarrantyCardDAO extends DBContext {
         } catch (SQLException e) {
         }
         return false;
+    }
+
+    public boolean createWarrantyCard(
+            int handlerID, int warrantyProductID, String warrantyCardCode,
+            String issueDescription, String warrantyStatus,
+            String returnDate, String doneDate, String completeDate, String cancelDate, String createDate,
+            String imagePath) {
+
+        String sql = "INSERT INTO WarrantyCard (HandlerID, WarrantyCardCode, WarrantyProductID, "
+                + "IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate, Image) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setInt(1, handlerID);
+            stmt.setString(2, warrantyCardCode);
+            stmt.setInt(3, warrantyProductID);
+            stmt.setString(4, issueDescription);
+            stmt.setString(5, warrantyStatus);
+
+            // Xử lý ngày tháng
+            stmt.setTimestamp(6, parseDate(returnDate));
+            stmt.setTimestamp(7, parseDate(doneDate));
+            stmt.setTimestamp(8, parseDate(completeDate));
+            stmt.setTimestamp(9, parseDate(cancelDate));
+            stmt.setTimestamp(10, parseDate(createDate));
+
+            stmt.setString(11, imagePath);
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0; // Trả về true nếu thêm thành công
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
+
+    private Timestamp parseDate(String dateStr) {
+        if (dateStr == null || dateStr.isEmpty()) {
+            return null;
+        }
+        if (dateStr.contains("T")) {
+            dateStr = dateStr.replace("T", " ");
+        }
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(dateStr, formatter);
+            return Timestamp.valueOf(dateTime);
+        } catch (Exception e) {
+            System.out.println("Lỗi parseDate: " + e.getMessage());
+            return null;
+        }
     }
 
     public static void main(String[] args) {

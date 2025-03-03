@@ -26,9 +26,6 @@ public class WarrantyCard {
     private String customerName;
     private String customerPhone;
 
-    
-    
-    
     public int getUnknownProductID() {
         return unknownProductID;
     }
@@ -214,7 +211,4 @@ public class WarrantyCard {
     public String toString() {
         return "\n WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", handlerID=" + handlerID + ", warrantyCardCode=" + warrantyCardCode + ", warrantyProductID=" + warrantyProductID + ", productDetailID=" + productDetailID + ", unknownProductID=" + unknownProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
     }
-
-  
-
 }

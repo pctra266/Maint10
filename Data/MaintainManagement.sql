@@ -266,10 +266,21 @@ CREATE TABLE FeedbackLog (
 );
 
 
-
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyStatus ON WarrantyCard(WarrantyStatus);
 
+GO
+CREATE TRIGGER trg_AfterInsert_UnknownProduct
+ON UnknownProduct
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT INTO WarrantyProduct (UnknownProductID)
+    SELECT UnknownProductID
+    FROM inserted;
+END
+GO
 
