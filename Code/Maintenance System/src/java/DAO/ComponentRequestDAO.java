@@ -27,7 +27,7 @@ public class ComponentRequestDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-    public ArrayList<ComponentRequest> getAllComponentRequest(String warrantyCardCode,int page, int pageSize){
+    public ArrayList<ComponentRequest> getAllComponentRequest(String warrantyCardCode,String componentRequestAction,int page, int pageSize){
            ArrayList<ComponentRequest> list = new ArrayList<>();
            String query = """
                           select cr.ComponentRequestID,wc.WarrantyCardID ,wc.WarrantyCardCode, wc.CreatedDate as WCardCreateDate,cr.Date as CRequestCreateDate, cr.Status, cr.Note 
@@ -37,6 +37,10 @@ public class ComponentRequestDAO {
            if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
             query += "	and wc.WarrantyCardCode like ?";
             }
+           if(componentRequestAction!= null && !componentRequestAction.trim().isEmpty()){
+            query += "	and cr.Status like ?";
+            }
+           
            query +=" order by cr.Date desc";
            query +=" offset ? rows fetch next ? rows only;";
            try{
@@ -46,6 +50,9 @@ public class ComponentRequestDAO {
                if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
                    ps.setString(count++, "%"+ warrantyCardCode+"%");
                 }
+               if(componentRequestAction!= null && !componentRequestAction.trim().isEmpty()){
+                ps.setString(count++, "%"+ componentRequestAction+"%");
+            }
                int offset = (page-1)*pageSize;
             ps.setInt(count++, offset);
             ps.setInt(count++, pageSize);
@@ -67,7 +74,7 @@ public class ComponentRequestDAO {
 
            return list;
        }
-    public int totalComponentRequest(String warrantyCardCode){
+    public int totalComponentRequest(String warrantyCardCode,String componentRequestAction){
         String query = """
                           select count(*) 
                           	from ComponentRequest cr 
@@ -76,6 +83,9 @@ public class ComponentRequestDAO {
            if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
             query += "	and wc.WarrantyCardCode like ?";
             }
+             if(componentRequestAction!= null && !componentRequestAction.trim().isEmpty()){
+            query += "	and cr.Status like ?";
+            }
            try{
                conn = new DBContext().connection;
                ps = conn.prepareStatement(query);
@@ -83,6 +93,9 @@ public class ComponentRequestDAO {
                if(warrantyCardCode!= null && !warrantyCardCode.trim().isEmpty()){
                    ps.setString(count++, "%"+ warrantyCardCode+"%");
                 }
+               if(componentRequestAction!= null && !componentRequestAction.trim().isEmpty()){
+                ps.setString(count++, "%"+ componentRequestAction+"%");
+            }
                rs = ps.executeQuery();
                while(rs.next()){
                    return rs.getInt(1);
@@ -635,15 +648,35 @@ public class ComponentRequestDAO {
 
            return 0;
     }
+    public String getComponentRequestStatus(String componentRequestID) {
+    // Truy vấn cơ sở dữ liệu để lấy trạng thái của ComponentRequest dựa trên componentRequestID
+    String query = "SELECT status FROM ComponentRequest WHERE componentRequestID = ?";
+    try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               int count =1;
+               if(componentRequestID!= null && !componentRequestID.trim().isEmpty()){
+                   ps.setString(count++,  componentRequestID);
+                }
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   return rs.getString(1);
+               }
+           } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return ""; 
+}
         
             
     public static void main(String[] args) {
 //        ArrayList<ProductDetail> list = new ArrayList<>();
         ComponentRequestDAO dao = new ComponentRequestDAO();
-            ArrayList<ProductDetail> list2 = dao.getAllListProductUnderMaintain("","","","","","","",1,5);
-            for (ProductDetail x : list2) {
-                System.out.println(x);
-        }
+//            ArrayList<ProductDetail> list2 = dao.getAllListProductUnderMaintain("","","","","","","",1,5);
+//            for (ProductDetail x : list2) {
+//                System.out.println(x);
+//        }
+            System.out.println(dao.getComponentRequestStatus("1"));
 //            dao.updateStatusComponentRequest("10", "cancel");
     }
 }
