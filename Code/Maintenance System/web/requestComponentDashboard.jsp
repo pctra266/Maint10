@@ -96,7 +96,7 @@
                                 <th>Type</th>
                                 <th>Issue Description</th>
                                 <th>Warranty Status</th>
-                                <th></th>
+                                <th>Create Component Request</th>
                             </tr>
                         </thead>
                         <tbody>

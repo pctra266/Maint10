@@ -29,6 +29,14 @@
                             <input type="hidden" name="action" value="viewListComponentRequest">
                             <div  class="row"  style="justify-content: space-between" >
                                 <div class="col-sm-6 col-md-6">
+                                    <div>
+                                         <select style="width: 500px" style="margin-top: 15px" class="form-select" name="componentRequestAction" onchange="this.form.submit()">
+                                     <option ${(componentRequestAction=='')?"selected":""} value="" >Action </option>
+                                    <option ${(componentRequestAction=='waiting')?"selected":""} value="waiting">Waiting</option>
+                                    <option ${(componentRequestAction=='approved')?"selected":""} value="approved">Approved</option>
+                                    <option ${(componentRequestAction=='cancel')?"selected":""} value="cancel">Cancel</option>
+                                </select>
+                                    </div>
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">
@@ -55,7 +63,7 @@
                                     <th>Component Request Create Date</th>
                                     <th>Status</th>
                                     <th>Note</th>
-                                    <th>Detail</th>
+                                    <th>Advance</th>
                                     <th>Approve</th>
                                     <th>Cancel</th>
                                 </tr>
@@ -70,15 +78,18 @@
                                         <td>${o.date}</td>
                                         <td>${o.status}</td>
                                         <td>${o.note}</td>
-                                        <td><a href="componentRequest?action=detailComponentRequest&componentRequestID=${o.componentRequestID}">Detail</td>
+                                        <td><a class="btn btn-info" href="componentRequest?action=detailComponentRequest&componentRequestID=${o.componentRequestID}">Advance</td>
                                         <td>
-                                            <!--<a href="componentRequest?action=updateStatusComponentRequest&componentRequestID=${o.componentRequestID}&componentStatus=approved">-->
                                             <form action="componentRequest" method="get">
                                                     <input type="hidden" name="action" value="updateStatusComponentRequest">
+                                                    
                                                     <input type="hidden" name="page-size" value="${pagination.pageSize}">
                                                     <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                    
                                                     <input  type="hidden" name="componentRequestID" value="${o.componentRequestID}">
                                                     <input type="hidden" name="componentStatus" value="approved">
+                                                    <input type="hidden" name="componentRequestAction" value="${componentRequestAction}">
+                                                    <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
                                                     <button class="btn btn-primary" type="submit">Approve</button>
                                                 </form>
                                                 </td>
@@ -87,7 +98,10 @@
                                                     <input type="hidden" name="action" value="updateStatusComponentRequest">
                                                     <input type="hidden" name="page-size" value="${pagination.pageSize}">
                                                     <input type="hidden" name="page" value="${pagination.currentPage}">
+                                                    
                                                     <input  type="hidden" name="componentRequestID" value="${o.componentRequestID}">
+                                                    <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
+                                                    <input type="hidden" name="componentRequestAction" value="${componentRequestAction}">
                                                     <input type="hidden" name="componentStatus" value="cancel">
                                                     <button class="btn btn-primary" type="submit">Cancel</button>
                                                 </form>

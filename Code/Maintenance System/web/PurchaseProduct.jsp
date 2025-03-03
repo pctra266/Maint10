@@ -27,15 +27,14 @@
                         <button type="submit">Search</button>
 
                         <div class="col-sm-6 col-md-6">
-                            <label>Show 
-                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <option value="5" ${size == 5 ? 'selected' : ''}>5</option>
-                                    <option value="10" ${size == 10 ? 'selected' : ''}>10</option>
-                                    <option value="20" ${size == 20 ? 'selected' : ''}>20</option>
-
-                                </select> 
-                                entries
-                            </label>
+                           <label>Show 
+                                    <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                        <c:forEach items="${pagination.listPageSize}" var="s">
+                                            <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                        </c:forEach>
+                                    </select> 
+                                    entries
+                                </label>
                         </div>
                     </form>
 
@@ -45,28 +44,28 @@
                             <tr>
                                 <th>
                                     Product Code
-                                    <a href="purchaseproduct?sortBy=ProductCode&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sortBy=ProductCode&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=ProductCode&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=ProductCode&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Code
-                                    <a href="purchaseproduct?sortBy=Code&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sortBy=Code&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=Code&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=Code&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Product Name
-                                    <a href="purchaseproduct?sortBy=ProductName&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sortBy=ProductName&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=ProductName&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=ProductName&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Warranty Period
-                                    <a href="purchaseproduct?sortBy=WarrantyPeriod&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sortBy=WarrantyPeriod&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=WarrantyPeriod&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=WarrantyPeriod&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Purchase Date
-                                    <a href="purchaseproduct?sortBy=PurchaseDate&sortOrder=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sortBy=PurchaseDate&sortOrder=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=PurchaseDate&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=PurchaseDate&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Action
@@ -102,14 +101,7 @@
                         </tbody>
                     </table>
 
-                    <!-- Phân trang -->
-                    <div class="text-center" style="margin-top: 20px;">
-                        <c:forEach begin="1" end="${totalPages}" var="i">
-                            <a href="purchaseproduct?index=${i}&sortBy=${sortBy}&sortOrder=${sortOrder} 
-                               &page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}" 
-                               class="pagination-link">${i}</a>
-                        </c:forEach>
-                    </div>
+                     <jsp:include page="/includes/pagination.jsp" />  
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

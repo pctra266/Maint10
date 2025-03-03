@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Model.Staff;
+import java.util.List;
 
 /**
  *
@@ -383,7 +384,71 @@ public class StaffDAO extends DBContext {
         }
         return false;
     }
+    public void importStaff(List<Staff> staffList) throws SQLException {
+        String selectSQL = "SELECT * FROM Staff WHERE StaffID = ?";
+        String insertSQL = "INSERT INTO Staff (UsernameS, PasswordS, Name, RoleID, Gender, DateOfBirth, Email, Phone, Address, Image) "
+                         + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String updateSQL = "UPDATE Staff SET UsernameS=?, PasswordS=?, Name=?, RoleID=?, Gender=?, DateOfBirth=?, "
+                         + "Email=?, Phone=?, Address=?, Image=? WHERE StaffID=?";
 
+        try 
+        {
+            PreparedStatement selectStmt = connection.prepareStatement(selectSQL);
+            PreparedStatement insertStmt = connection.prepareStatement(insertSQL);
+            PreparedStatement updateStmt = connection.prepareStatement(updateSQL);
+            for (Staff staff : staffList) {
+                selectStmt.setInt(1, staff.getStaffID());
+                ResultSet rs = selectStmt.executeQuery();
+
+                if (rs.next()) { // Nếu tồn tại, kiểm tra sự thay đổi
+                    boolean isChanged = !staff.getUsernameS().equals(rs.getString("UsernameS")) ||
+                                        !staff.getPasswordS().equals(rs.getString("PasswordS")) ||
+                                        !staff.getName().equals(rs.getString("Name")) ||
+                                        staff.getRole() != rs.getInt("RoleID") ||
+                                        !staff.getGender().equals(rs.getString("Gender")) ||
+                                        !staff.getDate().equals(rs.getDate("DateOfBirth")) ||
+                                        !staff.getEmail().equals(rs.getString("Email")) ||
+                                        !staff.getPhone().equals(rs.getString("Phone")) ||
+                                        !staff.getAddress().equals(rs.getString("Address")) ||
+                                        !staff.getImage().equals(rs.getString("Image"));
+
+                    if (isChanged) { // Nếu có thay đổi, thực hiện UPDATE
+                        updateStmt.setString(1, staff.getUsernameS());
+                        updateStmt.setString(2, staff.getPasswordS());
+                        updateStmt.setString(3, staff.getName());
+                        updateStmt.setInt(4, staff.getRole());
+                        updateStmt.setString(5, staff.getGender());
+                        updateStmt.setString(6,staff.getDate());
+                        updateStmt.setString(7, staff.getEmail());
+                        updateStmt.setString(8, staff.getPhone());
+                        updateStmt.setString(9, staff.getAddress());
+                        updateStmt.setString(10, staff.getImage());
+                        updateStmt.setInt(11, staff.getStaffID());
+
+                        updateStmt.executeUpdate();
+
+                    }
+                }else { // Nếu chưa tồn tại, INSERT mới
+                    insertStmt.setString(1, staff.getUsernameS());
+                    insertStmt.setString(2, staff.getPasswordS());
+                    insertStmt.setString(3, staff.getName());
+                    insertStmt.setInt(4, staff.getRole());
+                    insertStmt.setString(5, staff.getGender());
+                    insertStmt.setString(6,staff.getDate());
+                    insertStmt.setString(7, staff.getEmail());
+                    insertStmt.setString(8, staff.getPhone());
+                    insertStmt.setString(9, staff.getAddress());
+                    insertStmt.setString(10, staff.getImage());
+
+                    insertStmt.executeUpdate();
+                }
+            }
+            connection.commit();
+
+        }catch(SQLException e) {
+                System.out.println(e);
+        }
+    }
     public Staff getStaffById(int staffId) {
         String query = "SELECT * FROM Staff WHERE StaffID = ?";
         try (PreparedStatement ps = connection.prepareStatement(query)) {

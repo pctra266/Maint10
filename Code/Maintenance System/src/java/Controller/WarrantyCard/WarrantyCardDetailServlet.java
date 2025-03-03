@@ -180,6 +180,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                         }
                         if ("refuse".equals(processAction)) {
                             wc.setWarrantyStatus("waiting");
+                            wc.setHandlerID(null);
                         }
                         if ("receive".equals(processAction)) {
                             System.out.println("check2");

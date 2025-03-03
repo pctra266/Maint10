@@ -269,23 +269,96 @@ public class WarrantyCardDAO extends DBContext {
      * Get warranty card by customer ID
      *
      * @param customerID
+     * @param warrantyCard
+     * @param productName
+     * @param createDate
+     * @param sortBy
+     * @param sortOrder
+     * @param offset
+     * @param fetch
      * @return
      */
-    public List<WarrantyCard> getWarrantyCardByCustomerID(int customerID) {
+    public List<WarrantyCard> getWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String createDate, String sortBy, String sortOrder, int offset, int fetch) {
+
+        String searchWarrantyCardCode = (warrantyCard != null) ? "%" + warrantyCard.trim().replaceAll("\\s+", "%") + "%" : "%";
+
+        String searchProductName = (productName != null) ? "%" + productName.trim().replaceAll("\\s+", "%") + "%" : "%";
+
         List<WarrantyCard> warrantyCards = new ArrayList<>();
         String query = SELECT_STRING + "WHERE c.CustomerID=?";
+        if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
+            query += " AND wc.WarrantyCardCode LIKE ?";
+        }
+        if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+            query += " AND (COALESCE(p.ProductName, up.ProductName) LIKE ?) ";
+
+        }
+        if (createDate != null && !createDate.trim().isEmpty()) {
+            query += " AND  wc.CreatedDate = ?";
+        }
+
+        // Fix lỗi OFFSET khi không có ORDER BY
+        if (sortBy == null || sortBy.trim().isEmpty()) {
+            query += " ORDER BY wc.WarrantyCardID";
+        } else {
+            query += " ORDER BY " + sortBy;
+            if (sortOrder != null && (sortOrder.equalsIgnoreCase("ASC") || sortOrder.equalsIgnoreCase("DESC"))) {
+                query += " " + sortOrder;
+            } else {
+                query += " ASC";
+            }
+        }
+
+        query += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";  // Phân trang an toàn với SQL Server
 
         try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, customerID);
+            int index = 1;
+            ps.setInt(index++, customerID);
+            if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
+                ps.setString(index++, searchWarrantyCardCode);
+            }
+
+            if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+                ps.setString(index++, searchProductName);
+            }
+            if (createDate != null && !createDate.trim().isEmpty()) {
+                ps.setDate(index++, java.sql.Date.valueOf(createDate.trim()));
+            }
+            ps.setInt(index++, offset);
+            ps.setInt(index++, fetch);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 warrantyCards.add(mapWarrantyCard(rs));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
         }
 
         return warrantyCards;
+    }
+
+
+    // 
+    public int getPageWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String createDate) {
+        String sql = "SELECT COUNT(*) \n"
+                + " FROM WarrantyCard wc \n"
+                + " JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID \n"
+                + " LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID \n"
+                + " LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID \n"
+                + " LEFT JOIN Product p ON pd.ProductID = p.ProductID \n"
+                + " LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID \n"
+                + " WHERE c.CustomerID=?";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, customerID);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+        }
+        return 0;
     }
 
     public int getTotalCards(String paraSearch, String status, String type, Integer handlerId) {

@@ -131,7 +131,22 @@
             .shadow-sm {
                 box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
             }
-
+            .upload-box { 
+                border: 1px dashed #007bff;
+                padding: 10px 5px;
+                margin: 15px;
+                display: inline-block; 
+                background: white; width: 100px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .upload-box:hover 
+            { 
+                color: #007bff;
+                background: #e9f5ff;
+            }
+            .upload-box p { margin: 0; color: #007bff; font-weight: bold; }
+            input[type="file"] { display: none; }
         </style>
     </head>
     <body>
@@ -210,6 +225,19 @@
                             <button type="submit" class="btn btn-primary"><i class="fas fa-print"></i></button>
                         </form> 
                         
+                        <form action="ImportStaff" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="action" value="Import">
+                            <input type="hidden" name="searchname" value="${param.searchname}">
+                            <input type="hidden" name="search" value="${param.search}">
+                            <input type="hidden" name="column" value="${param.column}">
+                            <input type="hidden" name="sortOrder" value="${param.sortOrder}">
+                            <label class="upload-box">
+                                <span id="fileLabel">Choose Excel</span>
+                                <input type="file" name="file" accept=".xlsx" required onchange="document.getElementById('fileLabel').innerText = this.files[0].name">
+                            </label>
+                            <button type="submit" class="btn">Import</button>
+                        </form>
+                        
                         <c:if test="${not empty message}">
                             <div class="alert">${message}</div>
                         </c:if>
@@ -234,7 +262,7 @@
                                     <td># ${List.getStaffID()}</td>
                                     <td>${List.getName()}</td>
                                     <td>
-                                         <img src="${List.getImgage()}" alt="Null" width="100" height="100">
+                                         <img src="${List.getImage()}" alt="Null" width="100" height="100">
                                     </td>                                                                         
                                     <td>${List.getRole()}</td>
                                     <td>${List.getGender()}</td>
