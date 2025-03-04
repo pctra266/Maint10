@@ -13,8 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.PrintWriter;
-
 import java.sql.Date;
 
 @MultipartConfig(
@@ -30,24 +28,18 @@ public class Profile extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         StaffDAO staffDAO = new StaffDAO();
         HttpSession session = request.getSession();
-        PrintWriter out = response.getWriter();
-
         Customer customerOnSession = (Customer) session.getAttribute("customer");
         Staff staffOnSession = (Staff) session.getAttribute("staff");
 
         if (customerOnSession != null) {
             Customer customerProfile = customerDAO.getCustomerByID(customerOnSession.getCustomerID());
             request.setAttribute("customerProfile", customerProfile);
-           // out.println(customerProfile.getDateOfBirth());
         } else if (staffOnSession != null) {
             String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
             Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
             request.setAttribute("staffProfile", staffProfile);
             request.setAttribute("roleName", roleName);
-           // out.println(staffProfile.getDate());
-
         }
-
         request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 
@@ -103,8 +95,18 @@ public class Profile extends HttpServlet {
             Staff staffOnSession = (Staff) session.getAttribute("staff");
             if (customerOnSession != null) {
                 isUpdated = customerDAO.updateCustomerImage(id, imagePath);
+                if (isUpdated) {
+                    // Lấy lại thông tin khách hàng mới nhất từ CSDL và cập nhật vào session
+                    Customer updatedCustomer = customerDAO.getCustomerByID(id);
+                    session.setAttribute("customer", updatedCustomer);
+                }
             } else if (staffOnSession != null) {
                 isUpdated = staffDAO.updateStaffImage(id, imagePath);
+                if (isUpdated) {
+                    // Lấy lại thông tin nhân viên mới nhất từ CSDL và cập nhật vào session
+                    Staff updatedStaff = staffDAO.getStaffById(id);
+                    session.setAttribute("staff", updatedStaff);
+                }
             }
         }
 
