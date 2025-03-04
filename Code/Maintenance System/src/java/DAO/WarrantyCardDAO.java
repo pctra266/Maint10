@@ -66,10 +66,10 @@ public class WarrantyCardDAO extends DBContext {
             ps.setInt(2, wc.getWarrantyProductID());
             ps.setString(3, wc.getIssueDescription());
             ps.setString(4, wc.getWarrantyStatus());
-            ps.setDate(5, (java.sql.Date) wc.getReturnDate());
-            ps.setDate(6, (java.sql.Date) wc.getDonedDate());
-            ps.setDate(7, (java.sql.Date) wc.getCompletedDate());
-            ps.setDate(8, (java.sql.Date) wc.getCanceldDate());
+            ps.setTimestamp(5, wc.getReturnDate() != null ? new java.sql.Timestamp(wc.getReturnDate().getTime()) : null);
+            ps.setTimestamp(6, wc.getDonedDate() != null ? new java.sql.Timestamp(wc.getDonedDate().getTime()) : null);
+            ps.setTimestamp(7, wc.getCompletedDate() != null ? new java.sql.Timestamp(wc.getCompletedDate().getTime()) : null);
+            ps.setTimestamp(8, wc.getCanceldDate() != null ? new java.sql.Timestamp(wc.getCanceldDate().getTime()) : null);
             ps.setString(9, wc.getImage());
             if (wc.getHandlerID() != null) { // Assuming HandlerID is positive; adjust if 0 is valid
                 ps.setInt(10, wc.getHandlerID());
@@ -142,7 +142,7 @@ public class WarrantyCardDAO extends DBContext {
                 ps.setString(1, warrantyCardCode);
                 ps.setInt(2, warrantyProductID);
                 ps.setString(3, issue);
-                ps.setDate(4, returnDate == null ? null : new java.sql.Date(returnDate.getTime()));
+                ps.setTimestamp(4,returnDate != null ? new java.sql.Timestamp(returnDate.getTime()) : null);
                 ps.setString(5, image);
 
                 int rowsAffected = ps.executeUpdate();

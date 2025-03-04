@@ -19,6 +19,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.time.Instant;
+import java.util.Date;
 
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
 public class WarrantyCardDetailServlet extends HttpServlet {
@@ -171,9 +173,16 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
                         if ("completed".equals(processAction) || "cancel".equals(processAction)||"refix".equals(processAction)) {
                             wc.setWarrantyStatus(processAction);
+                            if("completed".equals(processAction)){
+                                wc.setCompletedDate(Date.from(Instant.now()));
+                            }
+                            if("cancel".equals(processAction)){
+                                wc.setCanceldDate(Date.from(Instant.now()));
+                            }
                         }
                         if ("fixed".equals(processAction)) {
                             wc.setWarrantyStatus("done");
+                            wc.setDonedDate(Date.from(Instant.now()));
                         }
                         if ("fixing".equals(processAction)) {
                             wc.setWarrantyStatus("fixing");
