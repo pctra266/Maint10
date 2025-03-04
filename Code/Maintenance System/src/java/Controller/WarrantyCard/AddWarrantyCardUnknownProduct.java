@@ -5,7 +5,6 @@ import DAO.ProductDAO;
 import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import Model.Customer;
-import Model.Product;
 import Model.Staff;
 import Model.UnknownProduct;
 import Utils.OtherUtils;
@@ -89,6 +88,7 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             throws ServletException, IOException {
         WarrantyCardDAO d = new WarrantyCardDAO();
         String type = request.getParameter("type");
+
         if (type.equalsIgnoreCase("display")) {
             doGet(request, response);
         } else {
@@ -109,32 +109,22 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                 // Kiểm tra định dạng ảnh
                 String fileName = imagePart.getSubmittedFileName();
                 if (fileName == null || fileName.isEmpty()) {
-
-                    doGet(request, response);
+                    request.setAttribute("errorMessage", "Vui lòng chọn một tệp ảnh.");
+                    setRequestAttributes(request, warrantyProductId, warrantyCardCode, handlerId, issueDescription, warrantyStatus, createDate, returnDate, doneDate, completeDate, cancelDate);
+                    request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                     return;
                 }
 
                 String lowerCaseFileName = fileName.toLowerCase();
                 if (!(lowerCaseFileName.endsWith(".jpg") || lowerCaseFileName.endsWith(".jpeg") || lowerCaseFileName.endsWith(".png"))) {
-
-                    doGet(request, response);
+                    request.setAttribute("errorMessage", "Ảnh phải có định dạng JPG, JPEG hoặc PNG.");
+                    setRequestAttributes(request, warrantyProductId, warrantyCardCode, handlerId, issueDescription, warrantyStatus, createDate, returnDate, doneDate, completeDate, cancelDate);
+                    request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                     return;
                 }
 
-//                // Lưu ảnh nếu hợp lệ
+                // Lưu ảnh nếu hợp lệ
                 String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-//                PrintWriter out = response.getWriter();
-//                out.println("<p>Warranty Product ID: " + warrantyProductId + "</p>");
-//                out.println("<p>Warranty Card Code: " + warrantyCardCode + "</p>");
-//                out.println("<p>Handler ID: " + handlerId + "</p>");
-//                out.println("<p>Issue Description: " + issueDescription + "</p>");
-//                out.println("<p>Warranty Status: " + warrantyStatus + "</p>");
-//                out.println("<p>Create Date: " + createDate + "</p>");
-//                out.println("<p>Return Date: " + returnDate + "</p>");
-//                out.println("<p>Done Date: " + doneDate + "</p>");
-//                out.println("<p>Complete Date: " + completeDate + "</p>");
-//                out.println("<p>Cancel Date: " + cancelDate + "</p>");
-//                out.println(imagePath);
 
                 // Lưu vào DB
                 boolean isAdded = d.createWarrantyCard(handlerId,
@@ -147,6 +137,7 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                     response.sendRedirect("HomePage.jsp");
                 } else {
                     request.setAttribute("errorMessage", "Failed to create warranty card.");
+                    setRequestAttributes(request, warrantyProductId, warrantyCardCode, handlerId, issueDescription, warrantyStatus, createDate, returnDate, doneDate, completeDate, cancelDate);
                     request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                 }
             } catch (ServletException | IOException | NumberFormatException e) {
@@ -154,6 +145,22 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                 request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
             }
         }
+    }
+
+    private void setRequestAttributes(HttpServletRequest request, int warrantyProductId, String warrantyCardCode,
+            int handlerId, String issueDescription, String warrantyStatus,
+            String createDate, String returnDate, String doneDate,
+            String completeDate, String cancelDate) {
+        request.setAttribute("warrantyProductId", warrantyProductId);
+        request.setAttribute("warrantyCardCode", warrantyCardCode);
+        request.setAttribute("staffId", handlerId);
+        request.setAttribute("issueDescription", issueDescription);
+        request.setAttribute("warrantyStatus", warrantyStatus);
+        request.setAttribute("createDate", createDate);
+        request.setAttribute("returnDate", returnDate);
+        request.setAttribute("doneDate", doneDate);
+        request.setAttribute("completeDate", completeDate);
+        request.setAttribute("cancelDate", cancelDate);
     }
 
 }

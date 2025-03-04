@@ -28,6 +28,10 @@
 
                     <h2>Create Warranty Card</h2>
 
+                    <c:if test="${not empty errorMessage}">
+                        <div style="color: red; font-weight: bold;">${errorMessage}</div>
+                    </c:if>
+
                     <!-- Product Information -->
                     <h3>Product Information</h3>
                     <table border="1">
@@ -133,19 +137,21 @@
         <script src="js/app.js"></script>
 
         <script>
-    function toggleDateInput(dateField) {
-        var select = document.getElementsByName(dateField + "Option")[0];
-        var input = document.getElementsByName(dateField)[0];
+                            function toggleDateInput(dateField) {
+                                var select = document.getElementsByName(dateField + "Option")[0];
+                                var input = document.getElementsByName(dateField)[0];
 
-        if (select.value === "select") {
-            input.style.display = "inline-block";
-            input.required = true;
-        } else {
-            input.style.display = "none";
-            input.required = false;
-            input.value = "";
-        }
-    }
+                                if (select.value === "select") {
+                                    input.style.display = "inline-block";
+                                    input.required = true;
+                                } else {
+                                    input.style.display = "none";
+                                    input.required = false;
+                                    input.value = "";
+                                }
+                            }
+
+
         </script>
 
     </body>

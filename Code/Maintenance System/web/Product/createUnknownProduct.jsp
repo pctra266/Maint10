@@ -15,6 +15,137 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
+        <style>
+            /* Tổng thể */
+            .main {
+                display: flex;
+                flex-direction: column;
+                flex-grow: 1;
+                padding: 30px;
+                background-color: #f4f7f9;
+            }
+
+            /* Container chính */
+            .container {
+                max-width: 600px;
+                margin: 0 auto;
+                background: #ffffff;
+                padding: 25px;
+                border-radius: 12px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out;
+            }
+
+            .container:hover {
+                transform: translateY(-5px);
+            }
+
+            /* Tiêu đề */
+            h2 {
+                text-align: center;
+                font-size: 26px;
+                font-weight: bold;
+                color: #333;
+                margin-bottom: 20px;
+            }
+
+            /* Form */
+            form {
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Nhãn */
+            label {
+                font-weight: 600;
+                margin-top: 12px;
+                color: #444;
+            }
+
+            /* Input, Select và Textarea */
+            input, select, textarea {
+                width: 100%;
+                padding: 12px;
+                margin-top: 6px;
+                border: 1px solid #ced4da;
+                border-radius: 8px;
+                font-size: 14px;
+                background-color: #f8f9fa;
+                transition: border-color 0.3s, box-shadow 0.3s;
+            }
+
+            /* Focus hiệu ứng */
+            input:focus, select:focus, textarea:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+            }
+
+            /* Textarea */
+            textarea {
+                resize: vertical;
+                min-height: 120px;
+            }
+
+            /* Button chính */
+            button {
+                margin-top: 20px;
+                padding: 12px;
+                background: linear-gradient(45deg, #007bff, #0056b3);
+                border: none;
+                color: #fff;
+                font-size: 16px;
+                font-weight: bold;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: background 0.3s, transform 0.2s;
+            }
+
+            button:hover {
+                background: linear-gradient(45deg, #0056b3, #004085);
+                transform: scale(1.05);
+            }
+
+            /* Nút quay lại */
+            .btn-update {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-top: 20px;
+                padding: 12px;
+                background: #6c757d;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+                transition: background 0.3s, transform 0.2s;
+            }
+
+            .btn-update:hover {
+                background: #5a6268;
+                transform: scale(1.05);
+            }
+
+            /* Hiển thị thông báo */
+            .message {
+                background: #d4edda;
+                color: #155724;
+                padding: 12px;
+                border-radius: 8px;
+                margin-bottom: 15px;
+                text-align: center;
+                font-weight: bold;
+            }
+
+            /* Hiển thị lỗi */
+            .error-message {
+                color: red;
+                font-size: 13px;
+                margin-top: 6px;
+                font-style: italic;
+            }
+
+        </style>
     </head>
 
     <body>

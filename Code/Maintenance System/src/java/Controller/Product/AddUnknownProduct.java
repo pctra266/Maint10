@@ -20,7 +20,6 @@ public class AddUnknownProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         CustomerDAO customerDao = new CustomerDAO();
         List<Customer> listCustomer = customerDao.getAllCustomer();
         request.setAttribute("listCustomer", listCustomer);

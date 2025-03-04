@@ -27,7 +27,9 @@
 
                     <button onclick="location.href = 'addUnknown'" >Add Unknown Product</button>
 
-                    <form action="ViewUnknownProductServlet" method="get">
+
+
+                    <form action="listUnknown" method="get">
 
                         <input type="text" name="productCode" placeholder="Product Code" value="${param.productCode}">
                         <input type="text" name="productName" placeholder="Product Name" value="${param.productName}">
@@ -35,7 +37,6 @@
                         <input type="date" name="receivedDate" value="${param.receivedDate}">
                         <input type="text" name="customerName" placeholder="Customer Name" value="${param.customerName}">
                         <button type="submit">Search</button>
-
                     </form>
 
                     <table border="1">
@@ -72,26 +73,20 @@
                         </tbody>
                     </table>
 
-                    <div class="pagination">
+                    <div>
                         <c:if test="${totalPages > 1}">
-                            <c:if test="${currentPage > 1}">
-                                <a href="?page=1">First</a>
-                                <a href="?page=${currentPage - 1}">Previous</a>
-                            </c:if>
-
-                            <c:forEach var="i" begin="1" end="${totalPages}">
-                                <a href="?page=${i}" class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            <c:forEach begin="1" end="${totalPages}" var="i">
+                                <a href="listUnknown?page=${i}&productCode=${param.productCode}&productName=${param.productName}&description=${param.description}&receivedDate=${param.receivedDate}&customerName=${param.customerName}"
+                                   class="${currentPage == i ? 'active' : ''}">${i}</a>
                             </c:forEach>
-
-                            <c:if test="${currentPage < totalPages}">
-                                <a href="?page=${currentPage + 1}">Next</a>
-                                <a href="?page=${totalPages}">Last</a>
-                            </c:if>
                         </c:if>
                     </div>
 
+
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
+                <jsp:include page="/,,/includes/pagination.jsp" />
+
             </div>
         </div>
         <script src="js/app.js"></script>
