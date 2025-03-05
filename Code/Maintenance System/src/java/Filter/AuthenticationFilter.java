@@ -5,7 +5,6 @@
 package Filter;
 
 import Model.Staff;
-import jakarta.servlet.Filter;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
@@ -16,16 +15,15 @@ import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 /**
  *
- * @author PC
+ * @author ADMIN
  */
-public class LoginFilter implements Filter {
+public class AuthenticationFilter implements Filter {
 
     private static final boolean debug = true;
 
@@ -34,13 +32,13 @@ public class LoginFilter implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
 
-    public LoginFilter() {
+    public AuthenticationFilter() {
     }
 
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("LoginFilter:DoBeforeProcessing");
+            log("AuthenticationFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -68,7 +66,7 @@ public class LoginFilter implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("LoginFilter:DoAfterProcessing");
+            log("AuthenticationFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -104,26 +102,18 @@ public class LoginFilter implements Filter {
             throws IOException, ServletException {
 
         if (debug) {
-            log("LoginFilter:doFilter()");
+            log("AuthenticationFilter:doFilter()");
         }
 
-        doBeforeProcessing(request, response);
         doBeforeProcessing(request, response);
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession(false);
+        HttpSession session = req.getSession();
         String uri = req.getServletPath();
-
-        if (session == null || (session.getAttribute("staff") == null && session.getAttribute("customer") == null)) {
-
-            if (!uri.contains("login") && !uri.contains("forgotpassword") && !uri.contains("LoginForm.jsp")
-                    && !uri.contains("ForgotPasswordForm.jsp") && !uri.contains("HomePage.jsp") && !uri.contains("Home")
-                    && !uri.endsWith(".css") && !uri.endsWith(".js")
-                    && !uri.endsWith(".png") && !uri.endsWith(".jpg")) {
-                res.sendRedirect("Home");
-                return;
-            }
+        if (uri.equals("/WarrantyCard") && !hasPermission(session,"VIEW_WARRANTY_CARD_LIST")) {
+            res.sendRedirect("401Page.jsp");
         }
+
             Throwable problem = null;
             try {
                 chain.doFilter(request, response);
@@ -149,7 +139,6 @@ public class LoginFilter implements Filter {
                 sendProcessingError(problem, response);
             }
         }
-    
         /**
          * Return the filter configuration object for this filter.
          */
@@ -179,7 +168,7 @@ public class LoginFilter implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {
-                log("LoginFilter:Initializing filter");
+                log("AuthenticationFilter:Initializing filter");
             }
         }
     }
@@ -190,9 +179,9 @@ public class LoginFilter implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("LoginFilter()");
+            return ("AuthenticationFilter()");
         }
-        StringBuffer sb = new StringBuffer("LoginFilter(");
+        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
@@ -244,6 +233,16 @@ public class LoginFilter implements Filter {
 
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);
+    }
+    
+    public boolean hasPermission(HttpSession session, String per){
+        if(session.getAttribute("customer")!= null) return false;
+        if(session.getAttribute("staff")!=null){
+            System.out.println("check1");
+            Staff staff = (Staff) session.getAttribute("staff");
+            return staff.hasPermissions(per);
+        }
+        return false;
     }
 
 }

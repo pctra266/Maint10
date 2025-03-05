@@ -27,7 +27,7 @@ import jakarta.servlet.http.HttpSession;
 public class ComponentSearch extends HttpServlet {
 
     private final ComponentDAO componentDAO = new ComponentDAO();
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 10;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

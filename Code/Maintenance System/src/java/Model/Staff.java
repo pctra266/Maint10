@@ -1,5 +1,7 @@
 package Model;
 
+import java.util.List;
+
 /**
  *
  * @author PC
@@ -17,6 +19,15 @@ public class Staff {
     private String phone;
     private String address;
     private String image;
+    private List<String> permissions;
+
+    public List<String> getPermission() {
+        return permissions;
+    }
+
+    public void setPermission(List<String> permissions) {
+        this.permissions = permissions;
+    }
 
     public Staff() {
     }
@@ -132,4 +143,19 @@ public class Staff {
     public void setImage(String image) {
         this.image = image;
     } 
+    
+    public boolean hasPermissions(String per){
+        for (String p : permissions) {
+            if(per.equals(p)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Staff{" + "staffID=" + staffID + ", usernameS=" + usernameS + ", passwordS=" + passwordS + ", role=" + role + ", name=" + name + ", gender=" + gender + ", date=" + date + ", email=" + email + ", phone=" + phone + ", address=" + address + ", image=" + image + ", permission=" + permissions + '}';
+    }
+    
 }

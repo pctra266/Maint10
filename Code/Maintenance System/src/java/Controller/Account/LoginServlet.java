@@ -49,6 +49,8 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("LoginForm.jsp").forward(request, response);
             return;
         }
+                    session.removeAttribute("staff");
+                    session.removeAttribute("customer");
 
         if (staff != null) {
             session.setAttribute("staff", staff);

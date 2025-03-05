@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class WarrantyCardList extends HttpServlet {
 
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 10;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -48,11 +48,12 @@ public class WarrantyCardList extends HttpServlet {
         session.setAttribute("createWarrantyCardFrom", request.getContextPath()+request.getServletPath());
         session.setAttribute("detailWarrantyCardFrom", request.getContextPath()+request.getServletPath());
         Staff staff = (Staff) session.getAttribute("staff");
+        Integer staffID = staff==null?null:staff.getStaffID();
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if (!("all".equalsIgnoreCase(type) || "repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
-            type = "myCard";
+        if (!("repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+            type = "all";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         // Lấy page-size từ request, mặc định là PAGE_SIZE
@@ -64,13 +65,13 @@ public class WarrantyCardList extends HttpServlet {
         String order = request.getParameter("order");
         //--------------------------------------------------------------------------
         List<WarrantyCard> cards = new ArrayList<>();
-        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status, type, staff.getStaffID());
+        int totalCards = warrantyCardDAO.getTotalCards(paraSearch, status, type, staffID);
         int totalPages = (int) Math.ceil((double) totalCards / pageSize);
         if (page > totalPages) {
             page = totalPages;
         }
         page = page < 1 ? 1 : page;
-        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order, type, staff.getStaffID());
+        cards = warrantyCardDAO.getCards(page, pageSize, paraSearch, status, sort, order, type, staffID);
 
         String createStatus = request.getParameter("create");
         if (createStatus != null && createStatus.equals("true")) {
@@ -88,8 +89,7 @@ public class WarrantyCardList extends HttpServlet {
         pagination.setUrlPattern("/WarrantyCard");
         pagination.setSearchFields(new String[]{"search", "status", "type"});
         pagination.setSearchValues(new String[]{paraSearch, status, type});
-        request.setAttribute("pagination", pagination);
-        
+        request.setAttribute("pagination", pagination);        
         request.setAttribute("totalCards", totalCards);
         request.setAttribute("cardList", cards);
         request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);

@@ -142,7 +142,7 @@ public class WarrantyCardDAO extends DBContext {
                 ps.setString(1, warrantyCardCode);
                 ps.setInt(2, warrantyProductID);
                 ps.setString(3, issue);
-                ps.setTimestamp(4,returnDate != null ? new java.sql.Timestamp(returnDate.getTime()) : null);
+                ps.setTimestamp(4, returnDate != null ? new java.sql.Timestamp(returnDate.getTime()) : null);
                 ps.setString(5, image);
 
                 int rowsAffected = ps.executeUpdate();
@@ -397,6 +397,9 @@ public class WarrantyCardDAO extends DBContext {
         if (type != null && "myCard".equals(type)) {
             query.append(" AND wc.HandlerID = ?");
         }
+        if (type != null && !"myCard".equals(type)) {
+            query.append(" AND wc.HandlerID is null");
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(query.toString())) {
             String searchPattern = "%" + paraSearch + "%";
@@ -486,6 +489,9 @@ public class WarrantyCardDAO extends DBContext {
         // xem theo cac card receive
         if (type != null && "myCard".equals(type)) {
             query.append(" AND wc.HandlerID = ?");
+        }
+        if (type != null && !"myCard".equals(type)) {
+            query.append(" AND wc.HandlerID is null");
         }
 
         // Xử lý sắp xếp

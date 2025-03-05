@@ -31,7 +31,7 @@ import java.io.File;
 public class ComponentAction extends HttpServlet {
 
     private final ComponentDAO componentDAO = new ComponentDAO();
-    private static final int PAGE_SIZE = 5;
+    private static final int PAGE_SIZE = 10;
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
