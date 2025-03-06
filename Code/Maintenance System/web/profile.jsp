@@ -10,6 +10,8 @@
 
         <style>
             main.content {
+                display: flex;
+                justify-content: center; /* Căn giữa theo chiều ngang */
                 background: linear-gradient(135deg, #f0f0f0, #dcdcdc);
             }
 
