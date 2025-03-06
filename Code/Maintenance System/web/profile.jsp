@@ -10,7 +10,6 @@
 
         <style>
             main.content {
-                
                 background: linear-gradient(135deg, #f0f0f0, #dcdcdc);
             }
 
@@ -258,7 +257,7 @@
                                     <button type="button" class="cancel-button" onclick="cancelEdit()">Cancel</button>
                                 </div>
                             </form>
-
+                            <a class="back-button" href="ChangePasswordForm.jsp">Change Password</a><br>
                             <a href="HomePage.jsp" class="back-button">Back to Home</a>
                         </div>
                     </div>
