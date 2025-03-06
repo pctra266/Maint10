@@ -16,16 +16,6 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
-            /* General Styles for Main Content */
-            main.content {
-                background-color: #f4f6f9;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                margin: 20px;
-                font-family: 'Inter', sans-serif;
-            }
-            /* Alert Messages */
             .alert {
                 padding: 15px;
                 border-radius: 5px;
@@ -45,7 +35,6 @@
             /* Form Controls */
             div.gom {
                 display: flex;
-                flex-wrap: wrap;
                 gap: 15px;
                 align-items: center;
                 padding: 15px;
@@ -67,11 +56,15 @@
                 border-radius: 5px;
                 cursor: pointer;
                 transition: background 0.3s ease;
+                height: 38.5px;
             }
             button:hover {
                 background-color: #0056b3;
             }
 
+            select {
+                height: 38.5px;
+            }
             /* Table Styling */
             table {
                 width: 100%;
@@ -181,6 +174,7 @@
                     </div>
 
                     <div class="gom">
+
                         <select id="sortQuantity">
                             <option value="">Sort by Quantity</option>
                             <option value="asc" ${sortQuantity == 'asc' ? 'selected' : ''}>Ascending</option>
@@ -192,12 +186,7 @@
                             <option value="asc" ${sortWarranty == 'asc' ? 'selected' : ''}>Ascending</option>
                             <option value="desc" ${sortWarranty == 'desc' ? 'selected' : ''}>Descending</option>
                         </select>
-
                         <form method="get" action="viewProduct">
-
-                            <input type="text" id="searchCode" name="searchCode" oninput="validateCode()" placeholder="Search by Code" value="${searchCode}">
-
-                            <input type="text" name="searchName" placeholder="Search by Name" value="${searchName}">
 
                             <select name="brandId">
                                 <option value="">Select Brand</option>
@@ -217,20 +206,25 @@
                                 </c:forEach>
                             </select>
 
+                            <input type="text" id="searchCode" name="searchCode" oninput="validateCode()" placeholder="Search by Code" value="${searchCode}">
+
+                            <input type="text" name="searchName" placeholder="Search by Name" value="${searchName}">
+
                             <button class="search" type="submit">Search</button>
                         </form>
+                    </div>
+                    <div>
+                        <button class="search" onclick="window.location.href = 'viewProduct'">
+                            All Product
+                        </button>
 
-                        <div>
-                            <a href="viewProduct?action=add" class="btn-update">
-                                <i class="fas fa-add"></i> Add Product
-                            </a>
-                            <button class="search" onclick="window.location.href = 'viewProduct'">All Product</button>
+                        <a href="viewProduct?action=add" class="btn-update">
+                            <i class="fas fa-add"></i> Add Product
+                        </a>
 
-                            <a href="listUnknown" class="btn-update">
-                                <i class="fas fa-add"></i>External Repair Products
-                            </a>
-                        </div>
-
+                        <a href="listUnknown" class="btn-update">
+                            <i class="fas fa-add"></i> External Repair Products
+                        </a>
                     </div>
 
                     <h1 style="text-align: center">Product List</h1>
@@ -264,7 +258,7 @@
                                         </c:if>
                                     </td>
 
-                                    <td style="width: 15%">
+                                    <td style="width: 14%">
 
                                         <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
                                             <i class="fas fa-edit"></i> Update
@@ -294,7 +288,6 @@
             </div>
         </div>
         <script src="js/app.js"></script>
-
         <script>
                                             document.getElementById("sortQuantity").addEventListener("change", function () {
                                                 let url = new URL(window.location.href);
@@ -341,8 +334,6 @@
                                                     }
                                                 }
                                             });
-
         </script>
-
     </body>
 </html>

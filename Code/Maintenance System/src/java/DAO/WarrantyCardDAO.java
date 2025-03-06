@@ -750,12 +750,12 @@ public class WarrantyCardDAO extends DBContext {
     public boolean createWarrantyCard(
             int handlerID, int warrantyProductID, String warrantyCardCode,
             String issueDescription, String warrantyStatus,
-            String returnDate, String doneDate, String completeDate, String cancelDate, String createDate,
+            String returnDate, String doneDate, String completeDate, String cancelDate,
             String imagePath) {
 
         String sql = "INSERT INTO WarrantyCard (HandlerID, WarrantyCardCode, WarrantyProductID, "
                 + "IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate, Image) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
 
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
 
@@ -765,17 +765,15 @@ public class WarrantyCardDAO extends DBContext {
             stmt.setString(4, issueDescription);
             stmt.setString(5, warrantyStatus);
 
-            // Xử lý ngày tháng
-            stmt.setTimestamp(6, parseDate(returnDate));
-            stmt.setTimestamp(7, parseDate(doneDate));
-            stmt.setTimestamp(8, parseDate(completeDate));
-            stmt.setTimestamp(9, parseDate(cancelDate));
-            stmt.setTimestamp(10, parseDate(createDate));
+            stmt.setTimestamp(6, parseDate(returnDate) != null ? parseDate(returnDate) : null);
+            stmt.setTimestamp(7, parseDate(doneDate) != null ? parseDate(doneDate) : null);
+            stmt.setTimestamp(8, parseDate(completeDate) != null ? parseDate(completeDate) : null);
+            stmt.setTimestamp(9, parseDate(cancelDate) != null ? parseDate(cancelDate) : null);
 
-            stmt.setString(11, imagePath);
+            stmt.setString(10, imagePath);
 
             int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0; // Trả về true nếu thêm thành công
+            return rowsInserted > 0;
 
         } catch (SQLException e) {
             System.out.println(e);
@@ -787,22 +785,35 @@ public class WarrantyCardDAO extends DBContext {
         if (dateStr == null || dateStr.isEmpty()) {
             return null;
         }
-        if (dateStr.contains("T")) {
-            dateStr = dateStr.replace("T", " ");
-        }
         try {
+            if (dateStr.contains("T")) {
+                dateStr = dateStr.replace("T", " ") + ":00";
+            }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDateTime dateTime = LocalDateTime.parse(dateStr, formatter);
             return Timestamp.valueOf(dateTime);
         } catch (Exception e) {
-            System.out.println("Lỗi parseDate: " + e.getMessage());
+            System.out.println("Error in parseDate: " + e.getMessage());
             return null;
         }
     }
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(d.getWarrantyCardById(46));
+
+        boolean add = d.createWarrantyCard(2,
+                49,
+                "111111",
+                "bbbbb",
+                "waiting",
+                "2025-03-06 03:34:27",
+                null,
+                null,
+                null,
+                "ggggggggggg");
+
+        System.out.println(add);
+
     }
 
 }

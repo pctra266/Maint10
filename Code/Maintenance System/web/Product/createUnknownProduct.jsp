@@ -195,10 +195,7 @@
                         <a href="listUnknown" class="btn-update">
                             <i class="fas fa-backward  "></i>Back
                         </a>
-
                     </div>
-
-
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

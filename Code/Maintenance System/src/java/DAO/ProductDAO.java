@@ -628,7 +628,7 @@ public class ProductDAO extends DBContext {
         return null; // Trả về null nếu không tìm thấy
     }
 
-    public List<UnknownProduct> searchUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName, int page, int pageSize) {
+    public List<UnknownProduct> searchUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName, String customerPhone, int page, int pageSize) {
         List<UnknownProduct> list = new ArrayList<>();
         int offset = (page - 1) * pageSize;
 
@@ -653,6 +653,9 @@ public class ProductDAO extends DBContext {
         if (customerName != null) {
             sql += "AND c.Name LIKE ? ";
         }
+        if (customerPhone != null) {
+            sql += "AND c.Phone LIKE ? ";
+        }
 
         sql += "ORDER BY up.ReceivedDate DESC "
                 + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
@@ -673,6 +676,9 @@ public class ProductDAO extends DBContext {
             }
             if (customerName != null) {
                 ps.setString(index++, "%" + customerName + "%");
+            }
+            if (customerPhone != null) {
+                ps.setString(index++, "%" + customerPhone + "%");
             }
 
             ps.setInt(index++, offset);
@@ -699,7 +705,7 @@ public class ProductDAO extends DBContext {
         return list;
     }
 
-    public int countUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName) {
+    public int countUnknownProducts(String productCode, String productName, String description, String receivedDate, String customerName, String customerPhone) {
         int count = 0;
         String sql = "SELECT COUNT(*) FROM UnknownProduct up "
                 + "JOIN Customer c ON up.CustomerID = c.CustomerID "
@@ -720,6 +726,9 @@ public class ProductDAO extends DBContext {
         if (customerName != null) {
             sql += "AND c.Name LIKE ? ";
         }
+        if (customerPhone != null) {
+            sql += "AND c.Phone LIKE ? ";
+        }
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             int index = 1;
@@ -737,6 +746,9 @@ public class ProductDAO extends DBContext {
             }
             if (customerName != null) {
                 ps.setString(index++, "%" + customerName + "%");
+            }
+            if (customerPhone != null) {
+                ps.setString(index++, "%" + customerPhone + "%");
             }
 
             ResultSet rs = ps.executeQuery();
