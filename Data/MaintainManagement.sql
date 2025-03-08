@@ -106,8 +106,7 @@ CREATE TABLE Component (
     Quantity int,
 	[Status] bit default 1,
     Price FLOAT,
-    Image NVARCHAR(MAX) 
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+) 
 -- Tạo chỉ mục chỉ áp dụng ràng buộc unique khi ComponentCode không phải NULL
 CREATE UNIQUE INDEX UX_ComponentCode ON Component(ComponentCode)
 WHERE ComponentCode IS NOT NULL;
@@ -128,8 +127,7 @@ CREATE TABLE Product (
     Quantity INT,
     WarrantyPeriod INT NOT NULL,
     [Status] NVARCHAR(100),
-    Image NVARCHAR(MAX)
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+) 
 
 
 -- ProductComponents Table
@@ -183,7 +181,6 @@ CREATE TABLE WarrantyCard (
 	CompleteDate DATETIME, --Ngay tra may
 	CancelDate DATETIME, --Ngay huy card
     CreatedDate DATETIME DEFAULT GETDATE(),
-	[Image] NVARCHAR(MAX)
 );
 
 -- ComponentRequest Table
@@ -251,8 +248,6 @@ CREATE TABLE Feedback (
     Note NVARCHAR(MAX),
 	DateCreated DATETIME NOT NULL,
 	IsDeleted BIT DEFAULT 0 NOT NULL,
-	ImageURL NVARCHAR(500),
-	VideoURL NVARCHAR(500)
 );
 -- FeedbackLog Table
 CREATE TABLE FeedbackLog (
@@ -263,6 +258,15 @@ CREATE TABLE FeedbackLog (
     NewFeedbackText NVARCHAR(1000),       
     ModifiedBy INT NOT NULL REFERENCES Staff(StaffID),                      
     DateModified DATETIME                
+);
+
+CREATE TABLE Media (
+    MediaID INT IDENTITY(1,1) PRIMARY KEY,
+    ObjectID INT NOT NULL, -- Liên kết trực tiếp đến ID của bảng liên quan
+    ObjectType NVARCHAR(50) NOT NULL CHECK (ObjectType IN ('Component', 'Product', 'WarrantyCard', 'Feedback')),
+    MediaURL NVARCHAR(MAX) NOT NULL, -- URL ảnh hoặc video
+    MediaType NVARCHAR(10) NOT NULL CHECK (MediaType IN ('image', 'video')), -- Phân loại
+    UploadedDate DATETIME DEFAULT GETDATE()
 );
 
 
