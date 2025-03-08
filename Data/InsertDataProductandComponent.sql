@@ -27,52 +27,52 @@ INSERT INTO ComponentType (TypeName) VALUES
 ('Battery'),
 ('Display'),
 ('Camera');
-INSERT INTO Component (ComponentCode, ComponentName, Quantity, Price, Image, BrandID, TypeID)
+INSERT INTO Component (ComponentCode, ComponentName, Quantity, Price,  BrandID, TypeID)
 VALUES
 -- Các mainboard cho máy tính
-('MB-ASUS-B760M', 'Mainboard ASUS B760M-K Prime D4', 50, 120.00, NULL, 1, 1),
-('MB-MSI-Z490', 'Mainboard MSI Z490-A PRO', 40, 150.00, NULL, 2, 1),
-('MB-GIG-B450M', 'Mainboard Gigabyte B450M DS3H', 30, 90.00, NULL, 3, 1),
-('MB-ASUS-Z590', 'Mainboard ASUS ROG Strix Z590-E', 25, 250.00, NULL, 1, 1),
+('MB-ASUS-B760M', 'Mainboard ASUS B760M-K Prime D4', 50, 120.00, 1, 1),
+('MB-MSI-Z490', 'Mainboard MSI Z490-A PRO', 40, 150.00,  2, 1),
+('MB-GIG-B450M', 'Mainboard Gigabyte B450M DS3H', 30, 90.00,  3, 1),
+('MB-ASUS-Z590', 'Mainboard ASUS ROG Strix Z590-E', 25, 250.00,  1, 1),
 -- Các mainboard cho laptop
-('MB-LEN-X1', 'Mainboard Lenovo ThinkPad X1', 60, 180.00, NULL, 4, 1),
-('MB-DELL-XPS13', 'Mainboard Dell XPS 13', 70, 200.00, NULL, 5, 1),
+('MB-LEN-X1', 'Mainboard Lenovo ThinkPad X1', 60, 180.00,  4, 1),
+('MB-DELL-XPS13', 'Mainboard Dell XPS 13', 70, 200.00,  5, 1),
 -- Các linh kiện khác cho máy tính
-('CPU-I7-10700K', 'Processor Intel Core i7-10700K', 100, 350.00, NULL, 6, 2),
-('RAM-COR-16GB', 'RAM Corsair Vengeance 16GB DDR4', 200, 80.00, NULL, 7, 3),
-('GPU-RTX-3060', 'Graphics Card NVIDIA RTX 3060', 50, 450.00, NULL, 8, 4),
-('SSD-SAM-970', 'SSD Samsung 970 Evo 1TB', 75, 120.00, NULL, 9, 5),
+('CPU-I7-10700K', 'Processor Intel Core i7-10700K', 100, 350.00,  6, 2),
+('RAM-COR-16GB', 'RAM Corsair Vengeance 16GB DDR4', 200, 80.00,  7, 3),
+('GPU-RTX-3060', 'Graphics Card NVIDIA RTX 3060', 50, 450.00,  8, 4),
+('SSD-SAM-970', 'SSD Samsung 970 Evo 1TB', 75, 120.00,  9, 5),
 -- Các linh kiện cho điện thoại
-('BAT-IPH-12', 'Battery iPhone 12', 150, 50.00, NULL, 10, 6),
-('BAT-SAM-S20', 'Battery Samsung Galaxy S20', 100, 45.00, NULL, 10, 6),
-('DISP-IPH-12', 'Display iPhone 12', 120, 120.00, NULL, 10, 7),
-('CAM-IPH-13P', 'Camera iPhone 13 Pro', 80, 200.00, NULL, 10, 8),
+('BAT-IPH-12', 'Battery iPhone 12', 150, 50.00,  10, 6),
+('BAT-SAM-S20', 'Battery Samsung Galaxy S20', 100, 45.00,  10, 6),
+('DISP-IPH-12', 'Display iPhone 12', 120, 120.00,  10, 7),
+('CAM-IPH-13P', 'Camera iPhone 13 Pro', 80, 200.00,  10, 8),
 -- Các linh kiện cho các thiết bị khác
-('BAT-MAC-PRO', 'Battery MacBook Pro', 50, 130.00, NULL, 10, 6),
-('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00, NULL, 10, 7),
+('BAT-MAC-PRO', 'Battery MacBook Pro', 50, 130.00,  10, 6),
+('DISP-MAC-PRO', 'Display MacBook Pro', 40, 180.00,  10, 7),
 -- Các linh kiện mới cho máy tính
-('MB-ASUS-ROG', 'Mainboard ASUS ROG Strix B550-F', 40, 200.00, NULL, 1, 1),
-('CPU-AMD-RYZEN', 'Processor AMD Ryzen 5 5600X', 80, 300.00, NULL, 6, 2),
-('RAM-GSKILL-32GB', 'RAM G.Skill Ripjaws V 32GB DDR4', 150, 150.00, NULL, 7, 3),
-('GPU-AMD-RX6800', 'Graphics Card AMD Radeon RX 6800', 30, 600.00, NULL, 8, 4),
-('SSD-WD-1TB', 'SSD WD Blue 1TB', 100, 100.00, NULL, 9, 5),
+('MB-ASUS-ROG', 'Mainboard ASUS ROG Strix B550-F', 40, 200.00,  1, 1),
+('CPU-AMD-RYZEN', 'Processor AMD Ryzen 5 5600X', 80, 300.00,  6, 2),
+('RAM-GSKILL-32GB', 'RAM G.Skill Ripjaws V 32GB DDR4', 150, 150.00,  7, 3),
+('GPU-AMD-RX6800', 'Graphics Card AMD Radeon RX 6800', 30, 600.00,  8, 4),
+('SSD-WD-1TB', 'SSD WD Blue 1TB', 100, 100.00,  9, 5),
 -- Các linh kiện cho điện thoại
-('BAT-SAM-S21', 'Battery Samsung Galaxy S21', 120, 55.00, NULL, 10, 6),
-('DISP-SAM-S21', 'Display Samsung Galaxy S21', 100, 130.00, NULL, 10, 7),
-('CAM-SAM-S21', 'Camera Samsung Galaxy S21', 90, 220.00, NULL, 10, 8),
+('BAT-SAM-S21', 'Battery Samsung Galaxy S21', 120, 55.00,  10, 6),
+('DISP-SAM-S21', 'Display Samsung Galaxy S21', 100, 130.00,  10, 7),
+('CAM-SAM-S21', 'Camera Samsung Galaxy S21', 90, 220.00,  10, 8),
 -- Các linh kiện cho các thiết bị khác
-('BAT-MAC-AIR', 'Battery MacBook Air M1', 60, 140.00, NULL, 10, 6),
-('DISP-MAC-AIR', 'Display MacBook Air M1', 50, 200.00, NULL, 10, 7),
-('BAT-DURACELL-AA', 'Pin Duracell AA', 200, 10.00, NULL, 1, 6),
-('BAT-ENERGIZER-AA', 'Pin Energizer AA', 150, 12.00, NULL, 2, 6),
-('BAT-PANASONIC-AA', 'Pin Panasonic AA', 180, 11.00, NULL, 3, 6),
-('BAT-SONY-CR2032', 'Pin Sony CR2032', 250, 5.00, NULL, 4, 6),
-('BAT-SAMSUNG-18650', 'Pin Samsung 18650', 100, 15.00, NULL, 5, 6),
-('BAT-LG-18650', 'Pin LG 18650', 120, 14.00, NULL, 6, 6),
-('BAT-VARTA-AA', 'Pin Varta AA', 160, 9.00, NULL, 7, 6),
-('BAT-MAXELL-AAA', 'Pin Maxell AAA', 140, 8.00, NULL, 8, 6),
-('BAT-TOSHIBA-CR123A', 'Pin Toshiba CR123A', 90, 7.00, NULL, 9, 6),
-('BAT-PHILIPS-9V', 'Pin Philips 9V', 80, 13.00, NULL, 10, 6);
+('BAT-MAC-AIR', 'Battery MacBook Air M1', 60, 140.00,  10, 6),
+('DISP-MAC-AIR', 'Display MacBook Air M1', 50, 200.00,  10, 7),
+('BAT-DURACELL-AA', 'Pin Duracell AA', 200, 10.00,  1, 6),
+('BAT-ENERGIZER-AA', 'Pin Energizer AA', 150, 12.00,  2, 6),
+('BAT-PANASONIC-AA', 'Pin Panasonic AA', 180, 11.00,  3, 6),
+('BAT-SONY-CR2032', 'Pin Sony CR2032', 250, 5.00,  4, 6),
+('BAT-SAMSUNG-18650', 'Pin Samsung 18650', 100, 15.00,  5, 6),
+('BAT-LG-18650', 'Pin LG 18650', 120, 14.00,  6, 6),
+('BAT-VARTA-AA', 'Pin Varta AA', 160, 9.00,  7, 6),
+('BAT-MAXELL-AAA', 'Pin Maxell AAA', 140, 8.00,  8, 6),
+('BAT-TOSHIBA-CR123A', 'Pin Toshiba CR123A', 90, 7.00,  9, 6),
+('BAT-PHILIPS-9V', 'Pin Philips 9V', 80, 13.00,  10, 6);
 
 
 
@@ -91,32 +91,32 @@ VALUES
 
 
 
-INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, [Status], Image)
+INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, [Status])
 VALUES 
-    ('P001',  'Samsung Galaxy S23',        9,  1,  100,  24, 'Active', NULL),
-    ('P002',  'Apple iPhone 14',           10, 1,  150,  24, 'Active', NULL),
-    ('P003',  'Sony WH-1000XM5',           11, 2,  200,  12, 'Active', NULL),
-    ('P004',  'Dell XPS 13',               5,  3,  80,   36, 'Active', NULL),
-    ('P005',  'Microsoft Surface Pro 9',   12, 4,  60,   36, 'Active', NULL),
-    ('P006',  'Apple MacBook Air M2',      10, 3,  120,  24, 'Active', NULL),
-    ('P007',  'Bose QuietComfort 45',      13, 2,  140,  12, 'Active', NULL),
-    ('P008',  'HP Spectre x360',           5,  3,  90,   24, 'Active', NULL),
-    ('P009',  'LG OLED C2',                14, 5,  50,   36, 'Active', NULL),
-    ('P010',  'Sony PlayStation 5',        11, 6,  180,  12, 'Active', NULL),
-    ('P011',  'Samsung QLED 8K TV',        9,  5,  70,   36, 'Active', NULL),
-    ('P012',  'Apple iPad Pro 11"',        10, 4,  160,  24, 'Active', NULL),
-    ('P013',  'Fitbit Charge 5',           15, 7,  200,  12, 'Active', NULL),
-    ('P014',  'GoPro Hero 11',             8,  8,  50,   24, 'Active', NULL),
-    ('P015',  'Nintendo Switch OLED',      11, 6,  90,   12, 'Active', NULL),
-    ('P016',  'Apple AirPods Pro 2',       10, 9,  150,  24, 'Active', NULL),
-    ('P017',  'OnePlus 10 Pro',            16, 1,  100,  18, 'Active', NULL),
-    ('P018',  'Microsoft Xbox Series X',   12, 6,  120,  12, 'Active', NULL),
-    ('P019',  'Huawei Mate 50 Pro',        15, 1,  60,   36, 'Active', NULL),
-    ('P020',  'Google Pixel 7',            16, 1,  80,   24, 'Active', NULL),
-    ('P021',  'Xiaomi Mi 11',              16, 1,  90,   24, 'Active', NULL),
-    ('P022',  'Oculus Quest 2',            12, 10, 70,   12, 'Active', NULL),
-    ('P023',  'Razer Blade 15',            1,  3,  50,   24, 'Active', NULL),
-    ('P024',  'Dell Alienware m15',        5,  3,  40,   36, 'Active', NULL);
+    ('P001',  'Samsung Galaxy S23',        9,  1,  100,  24, 'Active'),
+    ('P002',  'Apple iPhone 14',           10, 1,  150,  24, 'Active'),
+    ('P003',  'Sony WH-1000XM5',           11, 2,  200,  12, 'Active'),
+    ('P004',  'Dell XPS 13',               5,  3,  80,   36, 'Active'),
+    ('P005',  'Microsoft Surface Pro 9',   12, 4,  60,   36, 'Active'),
+    ('P006',  'Apple MacBook Air M2',      10, 3,  120,  24, 'Active'),
+    ('P007',  'Bose QuietComfort 45',      13, 2,  140,  12, 'Active'),
+    ('P008',  'HP Spectre x360',           5,  3,  90,   24, 'Active'),
+    ('P009',  'LG OLED C2',                14, 5,  50,   36, 'Active'),
+    ('P010',  'Sony PlayStation 5',        11, 6,  180,  12, 'Active'),
+    ('P011',  'Samsung QLED 8K TV',        9,  5,  70,   36, 'Active'),
+    ('P012',  'Apple iPad Pro 11"',        10, 4,  160,  24, 'Active'),
+    ('P013',  'Fitbit Charge 5',           15, 7,  200,  12, 'Active' ),
+    ('P014',  'GoPro Hero 11',             8,  8,  50,   24, 'Active' ),
+    ('P015',  'Nintendo Switch OLED',      11, 6,  90,   12, 'Active' ),
+    ('P016',  'Apple AirPods Pro 2',       10, 9,  150,  24, 'Active' ),
+    ('P017',  'OnePlus 10 Pro',            16, 1,  100,  18, 'Active' ),
+    ('P018',  'Microsoft Xbox Series X',   12, 6,  120,  12, 'Active' ),
+    ('P019',  'Huawei Mate 50 Pro',        15, 1,  60,   36, 'Active' ),
+    ('P020',  'Google Pixel 7',            16, 1,  80,   24, 'Active' ),
+    ('P021',  'Xiaomi Mi 11',              16, 1,  90,   24, 'Active' ),
+    ('P022',  'Oculus Quest 2',            12, 10, 70,   12, 'Active' ),
+    ('P023',  'Razer Blade 15',            1,  3,  50,   24, 'Active' ),
+    ('P024',  'Dell Alienware m15',        5,  3,  40,   36, 'Active' );
 
 
 
