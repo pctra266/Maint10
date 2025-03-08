@@ -20,6 +20,7 @@ VALUES
 (NULL, 11), (NULL, 12), (NULL, 13), (NULL, 14), (NULL, 15),  
 (NULL, 16), (NULL, 17), (NULL, 18), (NULL, 19),
 (NULL, 20), (NULL, 21), (NULL, 22), (NULL, 23),(NULL,24)
+
 INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
 VALUES
 ('WC101', 1, 'Screen malfunction', 'waiting', '2024-01-10'),

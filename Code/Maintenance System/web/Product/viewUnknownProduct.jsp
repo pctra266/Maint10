@@ -16,91 +16,108 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
-
-            /* Phần main chứa toàn bộ nội dung chính */
-            .main {
-                padding: 20px;
-                background-color: #fff;
-            }
-
-            /* Nội dung chính bên trong phần main */
-            .main .content {
-                padding: 20px;
-            }
-
-            /* Tiêu đề trong main */
-            .main .content h2 {
-                margin-top: 0;
+            /* CSS cho nội dung trong main */
+            main.content {
+                background-color: #ffffff;
+                font-family: 'Inter', sans-serif;
                 color: #333;
+                border-radius: 10px;
+                margin: 10px;
+            }
+            /* Tiêu đề */
+            main.content h2 {
+                font-size: 32px;
+                font-weight: 600;
+                color: #2c3e50;
+                margin-bottom: 30px;
+                border-bottom: 2px solid #e1e1e1;
+                padding-bottom: 10px;
+            }
+            /* Form */
+            main.content form {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                align-items: center;
+                margin-bottom: 30px;
             }
 
-            /* Nút bấm trong main */
-            .main .content button {
-                background-color: #007bff;
-                border: none;
-                padding: 10px 20px;
-                margin: 10px 0;
-                border-radius: 4px;
-                color: #fff;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
-
-            .main .content button:hover {
-                background-color: #0056b3;
-            }
-
-            /* Form trong main */
-            .main .content form {
-                margin-bottom: 20px;
-            }
-
-            .main .content form input[type="text"],
-            .main .content form input[type="date"] {
-                padding: 8px;
-                margin: 5px 10px 5px 0;
+            main.content form input[type="text"],
+            main.content form input[type="date"] {
+                flex: 1;
+                min-width: 180px;
+                padding: 12px 15px;
+                font-size: 16px;
                 border: 1px solid #ccc;
-                border-radius: 4px;
+                border-radius: 6px;
+                transition: border-color 0.3s ease;
             }
 
-            .main .content form button[type="submit"] {
-                background-color: #28a745;
-                border: none;
-                padding: 8px 16px;
-                border-radius: 4px;
+            main.content form input[type="text"]:focus,
+            main.content form input[type="date"]:focus {
+                border-color: #3498db;
+                outline: none;
+            }
+
+            main.content form span {
+                font-size: 14px;
+                color: #e74c3c;
+                margin-top: 5px;
+            }
+
+            /* Nút */
+            main.content button {
+                background: linear-gradient(135deg, #7faaff, #8bc1ff);
                 color: #fff;
+                border: none;
+                padding: 12px 20px;
+                font-size: 16px;
+                border-radius: 6px;
                 cursor: pointer;
-                transition: background-color 0.3s ease;
+                transition: background 0.3s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                margin-right: 10px;
             }
 
-            .main .content form button[type="submit"]:hover {
-                background-color: #218838;
+            main.content button:hover {
+                background: linear-gradient(135deg, #0d47a1, #002171);
             }
 
-            /* Bảng danh sách sản phẩm */
-            .main .content table {
+            /* Nút riêng cho "search" */
+            main.content button.search {
+                background: linear-gradient(135deg, #7faaff, #8bc1ff);
+            }
+
+            main.content button.search:hover {
+                background: linear-gradient(135deg, #0d47a1, #002171);
+            }
+
+            /* Bảng */
+            main.content table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 20px;
+                margin-top: 30px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
 
-            .main .content table th,
-            .main .content table td {
-                padding: 12px;
-                border: 1px solid #ddd;
+            main.content table th,
+            main.content table td {
+                padding: 15px 20px;
                 text-align: left;
+                border-bottom: 1px solid #e0e0e0;
             }
 
-            .main .content table th {
-                background-color: #f8f8f8;
-                color: #333;
+            main.content table th {
+                background-color: #f7f7f7;
+                font-weight: 600;
+                color: #2c3e50;
             }
 
-            .main .content table tr:nth-child(even) {
-                background-color: #f2f2f2;
+            main.content table tr:nth-child(even) {
+                background-color: #fafafa;
             }
 
-           
+            /* Lưu ý: CSS này không tác động đến phần phân trang */
         </style>
     </head>
 
@@ -111,24 +128,33 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
 
-
-
                     <h2>List of Unknown Products</h2>
-                    <button onclick="location.href = 'addUnknown'">Add Unknown Product</button>
-
-                    <!-- Hiển thị lỗi -->
-                    <div id="error-messages"></div>
 
                     <form action="listUnknown" method="get">
-                        <input type="text" name="productCode" placeholder="Product Code" value="${param.productCode}">
-                        <input type="text" name="productName" placeholder="Product Name" value="${param.productName}">
-                        <input type="text" name="description" placeholder="Description" value="${param.description}">
+                        <input type="text" id="productCode" name="productCode" placeholder="Product Code" value="${param.productCode}" oninput="validateProductCode(this)">
+                        <span id="productCodeError" style="color: red;"></span>
+
+                        <input type="text" id="productName" name="productName" placeholder="Product Name" value="${param.productName}" oninput="validateProductName(this)">
+                        <span id="productNameError" style="color: red;"></span>
+
+                        <input type="text" id="description" name="description" placeholder="Description" 
+                               value="${param.description}" oninput="validateDescription(this)">
+                        <span id="descriptionError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
+
                         <input type="date" name="receivedDate" value="${param.receivedDate}">
-                        <input type="text" name="customerName" placeholder="Customer Name" value="${param.customerName}">
-                        <input type="text" name="phone" placeholder="Phone" value="${param.phone}">
+
+                        <input type="text" id="customerName" name="customerName" placeholder="Customer Name"
+                               value="${param.customerName}" oninput="validateCustomerName(this)">
+                        <span id="customerNameError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
+
+                        <input type="text" id="phone" name="phone" placeholder="Phone"
+                               value="${param.phone}" oninput="validatePhone(this)">
+                        <span id="phoneError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
+
                         <button type="submit">Search</button>
                     </form>
 
+                    <button onclick="location.href = 'addUnknown'">Add Unknown Product</button>
                     <button class="search" onclick="window.location.href = 'listUnknown'">
                         All Product
                     </button>
@@ -175,11 +201,6 @@
                             </c:forEach>
                         </c:if>
                     </div>
-
-
-
-
-
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
@@ -187,103 +208,113 @@
         <script src="js/app.js"></script>
 
         <script>
-                        document.addEventListener("DOMContentLoaded", function () {
-                            let form = document.querySelector('form[action="listUnknown"]');
+                        function validateProductCode(input) {
+                            let regex = /^[a-zA-Z0-9]*$/; // Chỉ cho phép chữ cái và số
+                            let errorMessage = document.getElementById("productCodeError");
 
-                            let productCodeInput = document.querySelector('input[name="productCode"]');
-                            let productNameInput = document.querySelector('input[name="productName"]');
-                            let descriptionInput = document.querySelector('input[name="description"]');
-                            let customerNameInput = document.querySelector('input[name="customerName"]');
-                            let phoneInput = document.querySelector('input[name="phone"]');
-                            let receivedDateInput = document.querySelector('input[name="receivedDate"]');
-
-                            // Định dạng kiểm tra
-                            let codePattern = /^[a-zA-Z0-9]+$/; // Chỉ chữ cái và số, không có dấu cách
-                            let nameDescPattern = /^(?!\s*$)[a-zA-Z0-9\s]+$/;  // Không có dấu cách đầu/cuối, có thể chứa dấu cách giữa các từ
-                            let phonePattern = /^0\d{0,9}$/; // Bắt đầu bằng số 0, tối đa 10 số
-                            let datePattern = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD
-
-                            function showError(input, message) {
-                                let errorId = input.name + "-error";
-                                let errorElement = document.getElementById(errorId);
-                                if (!errorElement) {
-                                    errorElement = document.createElement("p");
-                                    errorElement.id = errorId;
-                                    errorElement.style.color = "red";
-                                    input.parentNode.appendChild(errorElement);
-                                }
-                                errorElement.textContent = message;
+                            if (!regex.test(input.value)) {
+                                input.value = input.value.replace(/[^a-zA-Z0-9]/g, ""); // Xóa ký tự không hợp lệ
+                                errorMessage.textContent = "Product Code chỉ được chứa chữ cái và số!";
+                            } else {
+                                errorMessage.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
                             }
+                        }
+        </script>
+        <script>
+            function validateProductName(input) {
+                let errorMessage = document.getElementById("customerNameError");
 
-                            function clearError(input) {
-                                let errorId = input.name + "-error";
-                                let errorElement = document.getElementById(errorId);
-                                if (errorElement) {
-                                    errorElement.remove();
-                                }
-                            }
+                // Lấy giá trị nhập vào
+                let value = input.value;
 
-                            function cleanAndValidate(input, pattern, errorMessage) {
-                                input.addEventListener("input", function () {
-                                    let value = input.value; // Không cập nhật lại ngay để tránh xóa khoảng trắng
+                // Nếu input rỗng, xóa lỗi
+                if (value.trim() === "") {
+                    errorMessage.textContent = value.length > 0 ? "Không được nhập toàn dấu cách!" : "";
+                    return;
+                }
 
-                                    if (value.trim() === "") {
-                                        clearError(input);
-                                    } else if (!pattern.test(value)) {
-                                        showError(input, errorMessage);
-                                    } else {
-                                        clearError(input);
-                                    }
-                                });
-                            }
+                // Kiểm tra ký tự hợp lệ: Chỉ cho phép chữ, số và khoảng trắng giữa các từ
+                let regex = /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/;
+                if (!regex.test(value)) {
+                    errorMessage.textContent = "Chỉ được nhập chữ, số và 1 dấu cách giữa các từ!";
+                } else {
+                    errorMessage.textContent = "";
+                }
+            }
+        </script>
+        <script>
+            function validateDescription(input) {
+                let errorMessage = document.getElementById("descriptionError");
 
-                            // Kiểm tra khi nhập
-                            cleanAndValidate(productCodeInput, codePattern, "❌ Product Code chỉ chứa chữ cái và số, không có dấu cách hoặc ký tự đặc biệt.");
-                            cleanAndValidate(productNameInput, nameDescPattern, "❌ Product Name không hợp lệ (không nhập toàn dấu cách, chỉ chứa chữ và số).");
-                            cleanAndValidate(descriptionInput, nameDescPattern, "❌ Description không hợp lệ (không nhập toàn dấu cách).");
-                            cleanAndValidate(customerNameInput, nameDescPattern, "❌ Customer Name không hợp lệ (không nhập toàn dấu cách, chỉ chứa chữ và số).");
-                            cleanAndValidate(phoneInput, phonePattern, "❌ Số điện thoại phải bắt đầu bằng số 0 và tối đa 10 số.");
+                // Loại bỏ khoảng trắng thừa đầu và cuối
+                input.value = input.value.trimStart();
 
-                            // Kiểm tra định dạng ngày
-                            receivedDateInput.addEventListener("input", function () {
-                                let value = receivedDateInput.value.trim();
-                                if (value !== "" && !datePattern.test(value)) {
-                                    showError(receivedDateInput, "❌ Ngày phải nhập đúng định dạng YYYY-MM-DD.");
-                                } else {
-                                    clearError(receivedDateInput);
-                                }
-                            });
+                // Nếu ô nhập trống, không báo lỗi (cho phép để trống)
+                if (input.value === "") {
+                    errorMessage.textContent = "";
+                    return;
+                }
 
-                            // Kiểm tra form khi submit
-                            form.addEventListener("submit", function (event) {
-                                let isValid = true;
+                // Xóa khoảng trắng thừa giữa các từ
+                input.value = input.value.replace(/\s{2,}/g, " ");
 
-                                function checkField(input, pattern, errorMessage) {
-                                    let value = input.value.replace(/^\s+|\s+$/g, "").replace(/\s+/g, ' '); // Chuẩn hóa dấu cách
-                                    input.value = value; // Cập nhật lại giá trị đã chuẩn hóa
+                // Kiểm tra nếu toàn bộ nội dung chỉ có khoảng trắng
+                if (input.value.trim() === "") {
+                    errorMessage.textContent = "Không được nhập toàn dấu cách!";
+                    input.value = ""; // Xóa nội dung nhập sai
+                } else {
+                    errorMessage.textContent = "";
+                }
+            }
+        </script>
 
-                                    if (value !== "" && !pattern.test(value)) { // Chỉ kiểm tra nếu có dữ liệu
-                                        showError(input, errorMessage);
-                                        isValid = false;
-                                    }
-                                }
+        <script>
+            function validateCustomerName(input) {
+                let errorMessage = document.getElementById("customerNameError");
 
-                                checkField(productCodeInput, codePattern, "❌ Product Code không hợp lệ.");
-                                checkField(productNameInput, nameDescPattern, "❌ Product Name không hợp lệ.");
-                                checkField(descriptionInput, nameDescPattern, "❌ Description không hợp lệ.");
-                                checkField(customerNameInput, nameDescPattern, "❌ Customer Name không hợp lệ.");
-                                checkField(phoneInput, phonePattern, "❌ Số điện thoại không hợp lệ.");
+                // Lấy giá trị nhập vào
+                let value = input.value;
 
-                                if (receivedDateInput.value.trim() !== "" && !datePattern.test(receivedDateInput.value.trim())) {
-                                    showError(receivedDateInput, "❌ Ngày phải nhập đúng định dạng YYYY-MM-DD.");
-                                    isValid = false;
-                                }
+                // Nếu input rỗng, xóa lỗi
+                if (value.trim() === "") {
+                    errorMessage.textContent = value.length > 0 ? "Không được nhập toàn dấu cách!" : "";
+                    return;
+                }
 
-                                if (!isValid) {
-                                    event.preventDefault();
-                                }
-                            });
-                        });
+                // Kiểm tra ký tự hợp lệ: Chỉ cho phép chữ, số và khoảng trắng giữa các từ
+                let regex = /^[a-zA-Z0-9]+( [a-zA-Z0-9]+)*$/;
+                if (!regex.test(value)) {
+                    errorMessage.textContent = "Chỉ được nhập chữ, số và 1 dấu cách giữa các từ!";
+                } else {
+                    errorMessage.textContent = "";
+                }
+            }
+        </script>
+        <script>
+            function validatePhone(input) {
+                let errorMessage = document.getElementById("phoneError");
+
+                // Nếu input rỗng, không báo lỗi (cho phép để trống)
+                if (input.value === "") {
+                    errorMessage.textContent = "";
+                    return;
+                }
+
+                // Chỉ giữ lại chữ số (loại bỏ dấu cách và ký tự không phải số)
+                input.value = input.value.replace(/\D/g, "");
+
+                // Kiểm tra độ dài tối đa 10 số
+                if (input.value.length > 10) {
+                    input.value = input.value.slice(0, 10); // Cắt bỏ phần dư
+                }
+
+                // Kiểm tra số đầu tiên có phải là 0 không
+                if (input.value.length > 0 && input.value.charAt(0) !== "0") {
+                    errorMessage.textContent = "Số điện thoại phải bắt đầu bằng số 0!";
+                } else {
+                    errorMessage.textContent = "";
+                }
+            }
         </script>
 
     </body>

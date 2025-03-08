@@ -16,149 +16,159 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
-            /* Hiệu ứng fade-in cho nội dung main */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
-            }
+            /* CSS chuyên dụng cho phần nội dung chính (main.content) */
 
-            /* Vùng main.content với giao diện sang trọng và hiệu ứng */
+            /* Container của nội dung chính */
             main.content {
-                background-color: #ffffff;
-                padding: 30px;
-                margin: 20px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+                background-color: #fff;
+                padding: 30px 40px;
+                margin: 10px;
                 border-radius: 8px;
-                font-family: 'Inter', sans-serif;
-                animation: fadeIn 0.8s ease-in-out; /* Áp dụng hiệu ứng fade-in */
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             }
 
-            /* Tiêu đề chính (h2) và tiêu đề phụ (h3) */
+            /* Tiêu đề */
             main.content h2 {
-                font-size: 2em;
-                font-weight: 600;
+                font-size: 1.8rem;
+                color: #2c3e50;
                 margin-bottom: 20px;
-                color: #333333;
+                font-weight: 600;
             }
 
             main.content h3 {
-                font-size: 1.6em;
-                margin: 25px 0 15px;
-                color: #555555;
+                font-size: 1.4rem;
+                color: #2c3e50;
+                margin-bottom: 20px;
+                font-weight: 500;
             }
 
-            /* Bảng hiển thị thông tin */
+            /* Bảng thông tin */
             main.content table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-bottom: 20px;
+                margin-bottom: 30px;
             }
 
-            /* Thống nhất kiểu chữ cho cả th và td */
             main.content table th,
             main.content table td {
                 padding: 12px 15px;
-                border-bottom: 1px solid #e0e0e0;
-                color: #444444;
-            }
-
-            /* Riêng th sẽ đậm hơn, đồng nhất cho cả hai bảng */
-            main.content table th {
-                font-weight: 600;
-                background-color: transparent;
+                border: 1px solid #ddd;
                 text-align: left;
             }
 
-            /* Hiệu ứng hover cho các dòng trong bảng */
-            main.content table tr:hover {
-                background-color: #f1f1f1;
-                transition: background-color 0.3s ease;
+            main.content table th {
+                background-color: #C4E8FE;
+                font-weight: 600;
+                color: black;
             }
 
-            /* Form tạo Warranty Card */
+            /* Form và các thành phần trong form */
             main.content form {
                 margin-top: 20px;
             }
 
             main.content form label {
                 display: block;
-                margin-bottom: 8px;
+                margin-top: 15px;
                 font-weight: 600;
-                color: #444444;
+                color: #555;
             }
 
-            /* Các trường nhập liệu, textarea, select */
             main.content form input[type="text"],
             main.content form input[type="datetime-local"],
             main.content form textarea,
             main.content form select {
                 width: 100%;
-                padding: 10px 12px;
-                margin-bottom: 15px;
-                border: 1px solid #cccccc;
+                padding: 10px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
                 border-radius: 4px;
                 font-size: 1rem;
-                box-sizing: border-box;
-                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                transition: border-color 0.3s ease;
             }
 
-            /* Hiệu ứng focus cho input, textarea, select */
             main.content form input[type="text"]:focus,
             main.content form input[type="datetime-local"]:focus,
             main.content form textarea:focus,
             main.content form select:focus {
-                border-color: #3B7DDD;
-                box-shadow: 0 0 5px rgba(59, 125, 221, 0.5);
+                border-color: #3498db;
                 outline: none;
             }
 
-            /* Trường chọn file */
+            main.content form textarea {
+                resize: vertical;
+                min-height: 80px;
+            }
+
+            /* File input và xem trước hình ảnh */
             main.content form input[type="file"] {
-                margin-bottom: 15px;
-            }
-
-            /* Nút submit với màu #3B7DDD và hiệu ứng */
-            main.content form input[type="submit"] {
-                background-color: #3B7DDD;
-                color: #ffffff;
-                padding: 12px 25px;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-size: 1rem;
-                transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
-            }
-
-            main.content form input[type="submit"]:hover {
-                background-color: #326ac3;
-                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-                transform: translateY(-2px);
-            }
-
-            /* Hiển thị ảnh preview với hiệu ứng fade-in */
-            main.content img#imagePreview {
-                display: none;
-                max-width: 100%;
-                height: auto;
                 margin-top: 10px;
-                border: 1px solid #cccccc;
+            }
+
+            main.content img#imagePreview {
+                margin-top: 10px;
+                max-width: 300px;
+                border: 1px solid #ddd;
                 border-radius: 4px;
-                opacity: 0;
-                transition: opacity 0.5s ease;
             }
 
-            /* Khi preview được kích hoạt, thêm class "show" để fade-in */
-            main.content img#imagePreview.show {
-                opacity: 1;
+            /* Nút submit và link chuyển trang */
+            main.content form input[type="submit"],
+            main.content form a.btn-update {
+                display: inline-block;
+                background-color: #3498db;
+                color: #fff;
+                border: none;
+                padding: 12px 20px;
+                border-radius: 4px;
+                font-size: 1rem;
+                text-decoration: none;
+                cursor: pointer;
+                margin-top: 20px;
+                transition: background-color 0.3s ease;
             }
 
+            main.content form input[type="submit"]:hover,
+            main.content form a.btn-update:hover {
+                background-color: #2980b9;
+            }
 
+            main.content form a.btn-update {
+                background-color: #7f8c8d;
+                margin-left: 10px;
+            }
+
+            /* Đảm bảo cả hai bảng có chung class để áp dụng cùng một quy tắc */
+            table.info-table {
+                width: 100%;
+                border-collapse: collapse;
+                table-layout: fixed; /* Cố định cách chia cột */
+                margin-bottom: 30px;
+            }
+
+            table.info-table th,
+            table.info-table td {
+                border: 1px solid #ddd;
+                padding: 12px 15px;
+                text-align: left;
+            }
+
+            /* Cột th màu xám và có độ rộng nhất định */
+            table.info-table th {
+                width: 200px; /* bạn có thể thay đổi tùy ý */
+                /* Nếu muốn chữ không xuống dòng: white-space: nowrap; */
+            }
+            /* Responsive cho màn hình nhỏ */
+            @media (max-width: 768px) {
+                main.content {
+                    padding: 20px;
+                    margin: 10px;
+                }
+                main.content table th,
+                main.content table td {
+                    padding: 10px;
+                }
+            }
         </style>
     </head>
     <body>
@@ -172,31 +182,30 @@
                     <c:if test="${not empty errorMessage}">
                         <div style="color: red; font-weight: bold;">${errorMessage}</div>
                     </c:if>
+
                     <h3>Customer Information</h3>
-                    <table border="1">
+                    <table class="info-table"> 
                         <tr><th>Name</th><td>${customer.name}</td></tr>
                         <tr><th>Gender</th><td>${customer.gender}</td></tr>
                         <tr><th>Email</th><td>${customer.email}</td></tr>
                         <tr><th>Phone</th><td>${customer.phone}</td></tr>
-                        <tr><th>Address</th><td>${customer.address}</td></tr>
-                    </table>
-
+                        <tr><th>Address</th><td>${customer.address}</td></tr></table>
                     <h3>Product Information</h3>
-                    <table border="1">
+                    <table class="info-table">
                         <tr><th>Product Name</th><td>${unknownProduct.productName}</td></tr>
                         <tr><th>Product Code</th><td>${unknownProduct.productCode}</td></tr>
                         <tr><th>Description</th><td>${unknownProduct.description}</td></tr>
                         <tr><th>Received Date</th><td>${unknownProduct.receivedDate}</td></tr>
                     </table>
 
+
+
+
                     <h3>Enter Warranty Card Details</h3>
                     <form action="addWUP" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="customerId" value="${customer.customerID}" />
                         <input type="hidden" name="productId" value="${unknownProduct.unknownProductId}" />
                         <input type="hidden" name="warrantyProductId" value="${warrantyProductId}" />
-
-                        <label>Warranty Card Code:</label>
-                        <input id="warrantyCardCode" type="text" name="warrantyCardCode" value="${param.warrantyCardCode}" required/><br/>
 
                         <label>Issue Description:</label>
                         <textarea id="issueDescription" name="issueDescription" required>${param.issueDescription}</textarea>
@@ -256,7 +265,7 @@
                         <img id="imagePreview" src="#" alt="Preview Image" style="display: none; max-width: 300px; margin-top: 10px;" />
                         <input type="submit" value="Create Warranty Card"/>
                         <a href="listUnknown" class="btn-update">
-                            <i class="fas fa-backward  "></i>Back
+                            <i></i>Back
                         </a>
 
                     </form>
@@ -422,11 +431,10 @@
                         var imagePreview = document.getElementById("imagePreview");
                         imagePreview.src = e.target.result;
                         imagePreview.style.display = "block";
-                    }
+                    };  // Thêm dấu chấm phẩy ở đây
                     reader.readAsDataURL(file);
                 }
             }
-
         </script>
     </body>
 </html>
