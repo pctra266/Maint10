@@ -101,9 +101,7 @@
             }
 
             .clear-btn {
-                position: absolute;
-                top: 5px;
-                right: 5px;
+                position:  relative;
                 background: rgba(220, 53, 69, 0.8);
                 color: white;
                 border: none;
@@ -182,7 +180,6 @@
 
                         <label for="newImage">Product Image:</label>
                         <div class="image-preview-container">
-                            <button type="button" id="clearImageBtn" class="clear-btn" onclick="clearImage()">✖</button>
                             <img src="${product.image}" id="currentImage" alt="No Image">
                         </div>
                         <input type="file" name="image" id="newImage" accept="image/*" onchange="previewImage(event)">
@@ -285,7 +282,6 @@
                                 document.getElementById("clearImageBtn").style.display = "block";
                             }
                         };
-
         </script>
     </body>
 </html>

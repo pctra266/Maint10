@@ -6,9 +6,8 @@ GO
 ********************************************************************************/
 IF EXISTS (SELECT name FROM master.dbo.sysdatabases WHERE name = N'MaintainManagement')
 BEGIN
-    ALTER DATABASE MaintainManagement SET OFFLINE WITH ROLLBACK IMMEDIATE;
-    ALTER DATABASE MaintainManagement SET ONLINE;
-    DROP DATABASE MaintainManagement;
+ALTER DATABASE MaintainManagement SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+DROP DATABASE MaintainManagement;
 END
 
 GO
@@ -207,7 +206,7 @@ CREATE TABLE ComponentRequestResponsible (
     StaffID INT NOT NULL REFERENCES Staff(StaffID),
     ComponentRequestID INT NOT NULL REFERENCES ComponentRequest(ComponentRequestID),
     [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel')),
-	CreateDate DATETIME DEFAULT GETDATE(),
+	CreateDate DATETIME DEFAULT GETDATE()
 );
 
 -- WarrantyCardDetail Table
@@ -283,8 +282,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
     INSERT INTO WarrantyProduct (UnknownProductID)
-    SELECT UnknownProductID
-    FROM inserted;
+    SELECT UnknownProductID FROM inserted WHERE UnknownProductID IS NOT NULL;
 END
 GO
 

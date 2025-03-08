@@ -32,20 +32,17 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         WarrantyCardDAO d = new WarrantyCardDAO();
-
         try {
             // Retrieve form data
             String customerId = request.getParameter("customerId");
             String productId = request.getParameter("productId");
             int warrantyProductId = Integer.parseInt(request.getParameter("warrantyProductId"));
-            String warrantyCardCode = request.getParameter("warrantyCardCode");
             int handlerId = Integer.parseInt(request.getParameter("staffId"));
             String issueDescription = request.getParameter("issueDescription");
             String warrantyStatus = request.getParameter("warrantyStatus");
@@ -63,9 +60,7 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             List<Staff> technicians = staffDAO.getAllTechnicians();
 
             // Store form data in request attributes
-            
             request.setAttribute("warrantyProductId", warrantyProductId);
-            request.setAttribute("warrantyCardCode", warrantyCardCode);
             request.setAttribute("staffId", handlerId);
             request.setAttribute("issueDescription", issueDescription);
             request.setAttribute("warrantyStatus", warrantyStatus);
@@ -95,7 +90,7 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             }
 
             String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-            boolean isAdded = d.createWarrantyCard(handlerId, warrantyProductId, warrantyCardCode,
+            boolean isAdded = d.createWarrantyCard(handlerId, warrantyProductId,
                     issueDescription, warrantyStatus,
                     returnDate, doneDate, completeDate, cancelDate, imagePath);
 

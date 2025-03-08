@@ -168,7 +168,6 @@ public class ViewProduct extends HttpServlet {
             doGet(request, response);
             return;
         }
-
         // Kiểm tra định dạng ảnh
         String fileName = imagePart.getSubmittedFileName();
         if (fileName == null || fileName.isEmpty()) {
@@ -250,7 +249,7 @@ public class ViewProduct extends HttpServlet {
             }
             imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
         }
-
+ 
         try {
             Product updatedProduct = new Product(
                     productId,
@@ -263,7 +262,6 @@ public class ViewProduct extends HttpServlet {
                     imagePath,
                     typeId
             );
-
             boolean success = productDAO.updateProduct(updatedProduct);
             if (success) {
                 response.sendRedirect("viewProduct");
@@ -306,7 +304,6 @@ public class ViewProduct extends HttpServlet {
     private void deleteProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int productId = Integer.parseInt(request.getParameter("id"));
-
         if (productDAO.deactivateProduct(productId)) {
             response.sendRedirect("viewProduct");
         } else {

@@ -93,6 +93,7 @@ VALUES
 
 INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, [Status])
 VALUES 
+<<<<<<< Updated upstream
     ('P001',  'Samsung Galaxy S23',        9,  1,  100,  24, 'Active'),
     ('P002',  'Apple iPhone 14',           10, 1,  150,  24, 'Active'),
     ('P003',  'Sony WH-1000XM5',           11, 2,  200,  12, 'Active'),
@@ -117,6 +118,33 @@ VALUES
     ('P022',  'Oculus Quest 2',            12, 10, 70,   12, 'Active' ),
     ('P023',  'Razer Blade 15',            1,  3,  50,   24, 'Active' ),
     ('P024',  'Dell Alienware m15',        5,  3,  40,   36, 'Active' );
+=======
+    ('SGS23A',  'Samsung Galaxy S23',        9,  1,  100,  24, 'Active', 'img/Product/phone1.png'),
+    ('IP14M',   'Apple iPhone 14',           10, 1,  150,  24, 'Active', 'img/Product/phone2.png'),
+    ('SWHXM5',  'Sony WH-1000XM5',           11, 2,  200,  12, 'Active', 'img/Product/phone1.png'),
+    ('DXPS13',  'Dell XPS 13',               5,  3,  80,   36, 'Active', 'img/Product/lap1.png'),
+    ('MSP9T',   'Microsoft Surface Pro 9',   12, 4,  60,   36, 'Active', 'img/Product/lap2.png'),
+    ('MBA2M',   'Apple MacBook Air M2',      10, 3,  120,  24, 'Active', 'img/Product/lap1.png'),
+    ('BQ45H',   'Bose QuietComfort 45',      13, 2,  140,  12, 'Active', 'img/Product/phone2.png'),
+    ('HPSX36',  'HP Spectre x360',           5,  3,  90,   24, 'Active', 'img/Product/lap2.png'),
+    ('LGOC2X',  'LG OLED C2',                14, 5,  50,   36, 'Active', 'img/Product/phone1.png'),
+    ('PS5PRO',  'Sony PlayStation 5',        11, 6,  180,  12, 'Active', 'img/Product/phone2.png'),
+    ('S8KTVQ',  'Samsung QLED 8K TV',        9,  5,  70,   36, 'Active', 'img/Product/phone1.png'),
+    ('IPD11P',  'Apple iPad Pro 11"',        10, 4,  160,  24, 'Active', 'img/Product/phone2.png'),
+    ('FBC5X',   'Fitbit Charge 5',           15, 7,  200,  12, 'Active', 'img/Product/phone1.png'),
+    ('GPH11B',  'GoPro Hero 11',             8,  8,  50,   24, 'Active', 'img/Product/phone2.png'),
+    ('NSWOL2',  'Nintendo Switch OLED',      11, 6,  90,   12, 'Active', 'img/Product/phone1.png'),
+    ('APAP2N',  'Apple AirPods Pro 2',       10, 9,  150,  24, 'Active', 'img/Product/phone2.png'),
+    ('OP10PX',  'OnePlus 10 Pro',            16, 1,  100,  18, 'Active', 'img/Product/phone1.png'),
+    ('XBSX24',  'Microsoft Xbox Series X',   12, 6,  120,  12, 'Active', 'img/Product/phone2.png'),
+    ('HMP50P',  'Huawei Mate 50 Pro',        15, 1,  60,   36, 'Active', 'img/Product/phone1.png'),
+    ('GPX7XL',  'Google Pixel 7',            16, 1,  80,   24, 'Active', 'img/Product/phone2.png'),
+    ('XM11PR',  'Xiaomi Mi 11',              16, 1,  90,   24, 'Active', 'img/Product/phone1.png'),
+    ('OQ2VRG',  'Oculus Quest 2',            12, 10, 70,   12, 'Active', 'img/Product/phone2.png'),
+    ('RZB15G',  'Razer Blade 15',            1,  3,  50,   24, 'Active', 'img/Product/lap1.png'),
+    ('DAW15M',  'Dell Alienware m15',        5,  3,  40,   36, 'Active', 'img/Product/lap2.png');
+
+>>>>>>> Stashed changes
 
 
 
