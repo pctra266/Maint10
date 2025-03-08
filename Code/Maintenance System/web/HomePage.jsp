@@ -21,11 +21,32 @@
 
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-        <title>Component Warehouse</title>
+        <title>Main10</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+        <style>
+             .omnitrix-button {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #00aaff 40%, #444 60%);
+            border: 4px solid black;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .omnitrix-button::before {
+            content: '';
+            width: 10%;
+            height: 10%;
+            background: radial-gradient(circle, #00aaff 50%, transparent 50%);
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+            position: absolute;
+        }
+        </style>
     </head>
 
     <body>
@@ -33,19 +54,30 @@
             <jsp:include page="/includes/navbar-left.jsp" />
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
-                <main class="content">
-                         ${check}
+                <main style="content">
+                    <div><h1 class="text-center">Click to become Main10</h1></div>
+                    <div style="display: flex; justify-content: center; align-content: center" class="text-center">
+                        
+                    
+                    <div style=""></div>
+                        ${check}
+                    <button class="omnitrix-button" onclick="playMusic()">Main10</button>
+                    <div id="player" style="display: none;"></div>
+                    </div>
+                    
 
-                    
-                    
-                    
-                    
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
 
             </div>
 
         </div>
+                   <script>
+        function playMusic() {
+            let playerDiv = document.getElementById("player");
+            playerDiv.innerHTML = '<iframe width="560" height="315" src="https://www.youtube.com/embed/_iIUGEOreiw?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
+        }
+    </script>
 
         <script src="js/app.js"></script>
 
