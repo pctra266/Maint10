@@ -273,7 +273,7 @@ button:hover {
                         
                         <div class="image-upload-container">
                             <div class="image-box">
-                                <img src="${staff.getImgage()}" id="currentImage" alt="Profile Image">
+                                <img src="${staff.getImage()}" id="currentImage" alt="Profile Image">
                             </div>
                             <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
                         </div>    

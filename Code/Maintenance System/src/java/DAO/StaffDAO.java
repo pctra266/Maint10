@@ -393,7 +393,12 @@ public class StaffDAO extends DBContext {
     }
 
     public boolean isUpdatePhoneExists(String phone, String staffID) {
-        String query = "SELECT Phone FROM Staff WHERE Phone = ? AND StaffID <> ?";
+        String query = "SELECT * FROM Staff";
+        if(phone.endsWith("com")){
+            query +=" WHERE Email = ? And StaffID <> ?";
+        }else{
+            query +=" WHERE Phone = ? And StaffID <> ?";
+        }
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
             pstmt.setString(1, phone);
             pstmt.setString(2, staffID);
@@ -405,8 +410,11 @@ public class StaffDAO extends DBContext {
         }
         return false;
     }
+    
+    
+    
 
-    public void importStaff(List<Staff> staffList) throws SQLException {
+    public void importStaff(List<Staff> staffList) {
         String selectSQL = "SELECT * FROM Staff WHERE StaffID = ?";
         String insertSQL = "INSERT INTO Staff (UsernameS, PasswordS, Name, RoleID, Gender, DateOfBirth, Email, Phone, Address, Image) "
                 + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";

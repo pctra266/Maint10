@@ -374,6 +374,13 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
+                if (dao.isUpdatePhoneExists(Updateemail, UpdatestaffID)) {
+                    request.setAttribute("errorMessage", "emial da co");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
                 
                 if (Updatedate != null && !Updatedate.isEmpty()) {
                     LocalDate datenow = LocalDate.parse(Updatedate); // Chuyển String thành LocalDate

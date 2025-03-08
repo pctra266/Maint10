@@ -52,8 +52,8 @@ public class WarrantyCardList extends HttpServlet {
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if (!("repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
-            type = "all";
+        if (!("all".equalsIgnoreCase(type)||"repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+            type = "myCard";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
         // Lấy page-size từ request, mặc định là PAGE_SIZE
