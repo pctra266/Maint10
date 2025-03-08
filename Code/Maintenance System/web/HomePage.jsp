@@ -55,7 +55,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main style="content">
-                    <div><h1 class="text-center">Click to become Main10</h1></div>
+                    <div><h1 class="text-center">Click and wait to become Main10</h1></div>
                     <div style="display: flex; justify-content: center; align-content: center" class="text-center">
                         
                     
