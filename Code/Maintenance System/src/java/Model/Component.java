@@ -21,20 +21,11 @@ public class Component {
     private int typeId;
     private String type;
     private String brand;
+    private List<String> images;
+    private List<String> videos;
     private double price;          // Giá
-    private String image;          // Thông tin hoặc đường dẫn hình ảnh
 
-    public Component(int componentID, String componentCode, String componentName, int quantity, boolean status, String type, String brand, double price, String image) {
-        this.componentID = componentID;
-        this.componentCode = componentCode;
-        this.componentName = componentName;
-        this.quantity = quantity;
-        this.status = status;
-        this.type = type;
-        this.brand = brand;
-        this.price = price;
-        this.image = image;
-    }
+    
 
     // Constructor mặc định
     public Component() {
@@ -91,13 +82,6 @@ public class Component {
         this.price = price;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
 
     public String getComponentCode() {
         return componentCode;
@@ -130,9 +114,26 @@ public class Component {
         this.brand = brand;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public List<String> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<String> videos) {
+        this.videos = videos;
+    }
+
     @Override
     public String toString() {
-        return "Component{" + "componentID=" + componentID + ", componentCode=" + componentCode + ", componentName=" + componentName + ", quantity=" + quantity + ", status=" + status + ", type=" + type + ", brand=" + brand + ", price=" + price + ", image=" + image + '}';
+        return "Component{" + "componentID=" + componentID + ", componentCode=" + componentCode + ", componentName=" + componentName + ", quantity=" + quantity + ", status=" + status + ", brandId=" + brandId + ", typeId=" + typeId + ", type=" + type + ", brand=" + brand + ", images=" + images + ", videos=" + videos + ", price=" + price + '}';
     }
+
     
 }

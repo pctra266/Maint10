@@ -140,4 +140,10 @@ public class Customer {
     public void setImage(String image) {
         this.image = image;
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" + "customerID=" + customerID + ", usernameC=" + usernameC + ", passwordC=" + passwordC + ", name=" + name + ", Gender=" + Gender + ", dateOfBirth=" + dateOfBirth + ", email=" + email + ", phone=" + phone + ", address=" + address + ", image=" + image + '}';
+    }
+    
 }

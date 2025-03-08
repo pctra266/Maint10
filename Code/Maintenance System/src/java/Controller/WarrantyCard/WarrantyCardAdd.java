@@ -6,9 +6,11 @@ package Controller.WarrantyCard;
 
 import DAO.CustomerDAO;
 import DAO.WarrantyCardDAO;
+import DAO.WarrantyCardProcessDAO;
 import Model.Customer;
 import Model.ProductDetail;
 import Model.Staff;
+import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
 import Utils.OtherUtils;
 import java.io.IOException;
@@ -22,6 +24,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -37,6 +41,7 @@ public class WarrantyCardAdd extends HttpServlet {
 
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
+    private final WarrantyCardProcessDAO WarrantyCardProcessDAO = new WarrantyCardProcessDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -52,20 +57,42 @@ public class WarrantyCardAdd extends HttpServlet {
         String productCode = request.getParameter("productCode");
         String issue = request.getParameter("issue");
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
-        Part imagePart = request.getPart("newImage");
-        String image = OtherUtils.saveImage(imagePart, request, "img/warranty-card");
+        List<String> mediaPaths = new ArrayList<>();
         boolean canAdd = true;
-        if (image == null) {
-        } else if (image.equalsIgnoreCase("Invalid picture")) {
-            canAdd = false;
-            request.setAttribute("pictureAlert", "Invalid picture");
+        if (returnDate!=null && returnDate.before(new Date())) {
+            request.setAttribute("createFail", "Return Date must be today or later.");
+            request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardCreate.jsp").forward(request, response);
+            return;
         }
+        for (Part part : request.getParts()) {
+            if ("mediaFiles".equals(part.getName()) && part.getSize() > 0) {
+                String mimeType = part.getContentType();
+                String mediaPath;
+                if (mimeType != null && mimeType.startsWith("video/")) {
+                    mediaPath = OtherUtils.saveVideo(part, request, "media/warranty-card");
+                } else {
+                    mediaPath = OtherUtils.saveImage(part, request, "media/warranty-card");
+                }
+                if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                    mediaPaths.add(mediaPath);
+                } else {
+                    canAdd = false;
+                    request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                }
+            }
+        }
+        System.out.println(mediaPaths);
         if (issue != null) {
             HttpSession session = request.getSession();
             Staff staff = (Staff) session.getAttribute("staff");
             Customer customer = (Customer) session.getAttribute("customer");
             int handlerID = (staff != null) ? staff.getStaffID() : (customer != null ? customer.getCustomerID() : -1);
-            if (canAdd && warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, image, handlerID)) {
+            WarrantyCardProcess wcp = new WarrantyCardProcess();
+            if (canAdd && wcp.checkAndSetWarrantyCardId(warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, mediaPaths, handlerID))) {      
+                wcp.setHandlerID(handlerID);
+                wcp.setAction("create");
+                wcp.setNote(staff!=null?"Created by staff":"Created by customer");
+                WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
             } else {

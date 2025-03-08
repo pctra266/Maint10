@@ -98,17 +98,7 @@
                         <input type="hidden" name="page" value="${pagination.currentPage}">
                         <input type="hidden" name="sort" value="${pagination.sort}">
                         <input type="hidden" name="order" value="${pagination.order}">
-                        <c:if test="${fn:length(pagination.searchFields) > 0}">
-                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
-                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
-                            </c:forEach>
-                        </c:if>
-
-                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
-                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
-                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
-                            </c:forEach>
-                        </c:if>       
+                         
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -127,13 +117,24 @@
                                 </button>
                             </div>
                         </div>
+                                     <c:if test="${fn:length(pagination.searchFields) > 0}">
+                            <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
+                                <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
+                            </c:forEach>
+                        </c:if>
+
+                        <c:if test="${fn:length(pagination.rangeFields) > 0}">
+                            <c:forEach var="i" begin="0" end="${fn:length(pagination.rangeFields) - 1}">
+                                <input type="hidden" name="${pagination.rangeFields[i]}" value="${pagination.rangeValues[i]}">
+                            </c:forEach>
+                        </c:if> 
                     </form>
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
                                 <th style="width:8%">
-                                    Card Code
+                                    Card Code 
                                 </th>
                                 <th style="width:10%">
                                     <form action="WarrantyCard" method="get">
@@ -216,11 +217,8 @@
                                     </form>
 
                                 </th>
-                                <th style="width:15%">
-                                    Image
-                                </th>
 
-                                <th style="width:15%">
+                                <th style="width:25%">
                                     Issue
                                 </th>
 
@@ -240,7 +238,6 @@
                                     <td>${card.warrantyStatus}</td>
                                     <td>${card.getFormatCreatedDate()}</td>
                                     <td>${card.getFormatReturnDate()}</td>
-                                    <td><img src="${card.image}" width="100%" height="auto" alt="alt"/></td>
                                     <td>${card.issueDescription}</td>
                                     <td class="table-action">
                                         <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}">

@@ -120,7 +120,7 @@ public class LoginFilter implements Filter {
                     && !uri.contains("ForgotPasswordForm.jsp") && !uri.contains("HomePage.jsp") && !uri.contains("Home")
                     && !uri.endsWith(".css") && !uri.endsWith(".js")
                     && !uri.endsWith(".png") && !uri.endsWith(".jpg")) {
-                res.sendRedirect("Home");
+                res.sendRedirect("/MaintenanceSystem/Home");
                 return;
             }
         }

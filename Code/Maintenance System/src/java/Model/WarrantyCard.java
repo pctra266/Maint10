@@ -2,6 +2,7 @@ package Model;
 
 import java.util.Date;
 import Utils.FormatUtils;
+import java.util.List;
 
 public class WarrantyCard {
 
@@ -20,7 +21,8 @@ public class WarrantyCard {
     private Date donedDate;     //Ngay sua xong
     private Date completedDate; //Ngay tra may
     private Date canceldDate;  //Ngay huy?
-    private String image;
+    private List<String> images;
+    private List<String> videos;
     private String productName;
     private int customerID;
     private String customerName;
@@ -114,13 +116,7 @@ public class WarrantyCard {
         this.canceldDate = canceldDate;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
+   
 
     public void setWarrantyCardID(int warrantyCardID) {
         this.warrantyCardID = warrantyCardID;
@@ -207,8 +203,26 @@ public class WarrantyCard {
         this.customerPhone = customerPhone;
     }
 
+    public List<String> getImages() {
+        return images;
+    }
+
+    public void setImages(List<String> images) {
+        this.images = images;
+    }
+
+    public List<String> getVideos() {
+        return videos;
+    }
+
+    public void setVideos(List<String> videos) {
+        this.videos = videos;
+    }
+
     @Override
     public String toString() {
-        return "\n WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", handlerID=" + handlerID + ", warrantyCardCode=" + warrantyCardCode + ", warrantyProductID=" + warrantyProductID + ", productDetailID=" + productDetailID + ", unknownProductID=" + unknownProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", image=" + image + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
+        return "WarrantyCard{" + "warrantyCardID=" + warrantyCardID + ", handlerID=" + handlerID + ", warrantyCardCode=" + warrantyCardCode + ", warrantyProductID=" + warrantyProductID + ", productDetailID=" + productDetailID + ", unknownProductID=" + unknownProductID + ", productDetailCode=" + productDetailCode + ", productCode=" + productCode + ", issueDescription=" + issueDescription + ", warrantyStatus=" + warrantyStatus + ", createdDate=" + createdDate + ", returnDate=" + returnDate + ", donedDate=" + donedDate + ", completedDate=" + completedDate + ", canceldDate=" + canceldDate + ", images=" + images + ", videos=" + videos + ", productName=" + productName + ", customerID=" + customerID + ", customerName=" + customerName + ", customerPhone=" + customerPhone + '}';
     }
+
+    
 }

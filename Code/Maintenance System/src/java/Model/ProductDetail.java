@@ -8,6 +8,7 @@ package Model;
  *
  * @author ADMIN
  */
+import Utils.FormatUtils;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -134,6 +135,10 @@ public class ProductDetail {
 
     public void setPurchaseDate(Date purchaseDate) {
         this.purchaseDate = purchaseDate;
+    }
+    
+    public String getFormatPurchaseDate() {
+        return FormatUtils.formatDate(purchaseDate);
     }
 
     public int getCustomerID() {

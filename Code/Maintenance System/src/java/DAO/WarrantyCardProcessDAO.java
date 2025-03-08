@@ -29,11 +29,12 @@ public class WarrantyCardProcessDAO extends DBContext {
     }
 
     public boolean addWarrantyCardProcess(WarrantyCardProcess process) {
-        String sql = "INSERT INTO WarrantyCardProcess (WarrantyCardID, HandlerID, [Action]) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO WarrantyCardProcess (WarrantyCardID, HandlerID, [Action], Note) VALUES (?, ?, ?, ?)";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, process.getWarrantyCardID());
             ps.setInt(2, process.getHandlerID());
             ps.setString(3, process.getAction());
+            ps.setString(4, process.getNote());
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
         } catch (SQLException e) {
@@ -44,6 +45,6 @@ public class WarrantyCardProcessDAO extends DBContext {
     
     public static void main(String[] args) {
         WarrantyCardProcessDAO d = new WarrantyCardProcessDAO();
-        System.out.println(d.getLatestProcessByWarrantyCardId(61));
+        System.out.println(d.getLatestProcessByWarrantyCardId(95));
     }
 }

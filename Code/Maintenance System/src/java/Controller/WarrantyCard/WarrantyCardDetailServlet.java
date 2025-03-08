@@ -2,6 +2,8 @@ package Controller.WarrantyCard;
 
 import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
+import DAO.CustomerDAO;
+import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
 import DAO.WarrantyCardProcessDAO; // New DAO for WarrantyCardProcess
@@ -29,7 +31,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final ComponentDAO componentDAO = new ComponentDAO();
     private final ComponentRequestDAO componentRequestDAO = new ComponentRequestDAO();
-    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO(); // New DAO
+    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO(); 
+    private final StaffDAO staffDAO = new StaffDAO(); 
+    private final CustomerDAO customerDAO = new CustomerDAO(); 
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -55,6 +59,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
         }
+        request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
+        request.setAttribute("customer", customerDAO.getCustomerByID(wc.getCustomerID()));
+        request.setAttribute("handler", staffDAO.getStaffById(wc.getHandlerID()));
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
         request.setAttribute("availableComponents", availableComponents);
@@ -157,7 +164,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     case "completed" ->
                         canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
                     case "cancel" ->
-                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
+                        canProcess = latestProcess != null && !"cancel".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
                     case "refuse" ->
                         canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
                 }

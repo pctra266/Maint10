@@ -3,6 +3,7 @@ package Model;
 import java.sql.Timestamp;
 
 public class WarrantyCardProcess {
+
     private int warrantyCardProcessID;
     private int warrantyCardID;
     private int handlerID;
@@ -45,6 +46,15 @@ public class WarrantyCardProcess {
         return handlerID;
     }
 
+    public boolean checkAndSetWarrantyCardId(int id) {
+        if (id <= 0) {
+            return false;
+        } else {
+            setWarrantyCardID(id);
+            return true;
+        }
+    }
+
     public void setHandlerID(int handlerID) {
         this.handlerID = handlerID;
     }
@@ -75,13 +85,13 @@ public class WarrantyCardProcess {
 
     @Override
     public String toString() {
-        return "WarrantyCardProcess{" +
-                "warrantyCardProcessID=" + warrantyCardProcessID +
-                ", warrantyCardID=" + warrantyCardID +
-                ", handlerID=" + handlerID +
-                ", action='" + action + '\'' +
-                ", actionDate=" + actionDate +
-                ", note='" + note + '\'' +
-                '}';
+        return "WarrantyCardProcess{"
+                + "warrantyCardProcessID=" + warrantyCardProcessID
+                + ", warrantyCardID=" + warrantyCardID
+                + ", handlerID=" + handlerID
+                + ", action='" + action + '\''
+                + ", actionDate=" + actionDate
+                + ", note='" + note + '\''
+                + '}';
     }
 }

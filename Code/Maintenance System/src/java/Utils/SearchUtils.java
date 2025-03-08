@@ -122,5 +122,8 @@ public class SearchUtils {
     public static boolean isSimilar(String input, String target) {
         return isPhoneticallySimilar(input, target)||islevenshteinDistanceSimilar(input, target, 1);
     }
-
+    
+    public static void main(String[] args) {
+        System.out.println(SearchUtils.preprocessSearchQuery("124"));
+    }
 }

@@ -65,7 +65,7 @@ public class PurchaseProduct extends HttpServlet {
             throws ServletException, IOException {
         HttpSession session = request.getSession();
         //truyen tham so cho nut back
-        session.setAttribute("createWarrantyCardFom", "/MaintenanceSystem/purchaseproduct");
+        session.setAttribute("createWarrantyCardFrom", request.getContextPath()+request.getServletPath());
 
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
