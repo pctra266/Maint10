@@ -83,7 +83,6 @@ public class WarrantyCardAdd extends HttpServlet {
                 }
             }
         }
-        System.out.println(mediaPaths);
         if (issue != null) {
             HttpSession session = request.getSession();
             Staff staff = (Staff) session.getAttribute("staff");
@@ -101,7 +100,7 @@ public class WarrantyCardAdd extends HttpServlet {
                     warrantyCardDAO.updateWarrantyCard(wc);
                     wcp.setAction("receive");
                     wcp.setHandlerID(handlerID);
-                    //wcp.setNote("Chua nghi ra");
+                    wcp.setNote(null);
                     WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
                 }
                 response.sendRedirect("../WarrantyCard?create=true");

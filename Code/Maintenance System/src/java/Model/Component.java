@@ -4,6 +4,7 @@
  */
 package Model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,9 +30,9 @@ public class Component {
 
     // Constructor mặc định
     public Component() {
+        images = new ArrayList<>();
+        videos = new ArrayList<>();
     }
-
-    // Getter và Setter cho từng thuộc tính
 
     public int getBrandId() {
         return brandId;

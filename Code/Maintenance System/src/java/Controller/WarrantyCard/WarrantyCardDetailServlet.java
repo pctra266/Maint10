@@ -64,6 +64,8 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         request.setAttribute("handler", staffDAO.getStaffById(wc.getHandlerID()));
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);
+        request.setAttribute("images", wc.getImages());
+        request.setAttribute("videos", wc.getVideos());
         request.setAttribute("availableComponents", availableComponents);
         request.setAttribute("latestProcess", latestProcess); // Pass to JSP
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardDetail.jsp").forward(request, response);

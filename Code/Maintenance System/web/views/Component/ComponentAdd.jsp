@@ -22,6 +22,40 @@
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <style>
+            .media-preview {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .media-item {
+                position: relative;
+                display: inline-block;
+            }
+            .media-item img, .media-item video {
+                max-width: 200px;
+                margin: 5px;
+            }
+            .remove-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: red;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+            .is-invalid {
+                border-color: red;
+            }
+            .invalid-feedback {
+                color: red;
+                font-size: 0.9rem;
+            }
+        </style>
     </head>
 
     <body>
@@ -131,9 +165,12 @@
                         </div>
 
                         <!-- Upload file ảnh -->
-                        <div class="col-md-4 row">
-                            <img src="${component.image}" id="currentImage" alt="${component.componentName}" style="max-width: 100%; height: auto;">
-                            <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
+                        <div class="col-md-4 row ">
+                            <div class="">
+                                <label for="mediaFiles" class="form-label">Upload Images/Videos</label>
+                                <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
+                                <div id="previewContainer" class="media-preview mt-3"></div>   
+                            </div>
                         </div>
                     </form>
 
@@ -150,14 +187,52 @@
 
         <!--        // Hàm để xem trước ảnh khi người dùng chọn tệp mới-->
         <script>
-                                function previewImage(event) {
-                                    const reader = new FileReader();
-                                    reader.onload = function () {
-                                        const output = document.getElementById('currentImage');
-                                        output.src = reader.result;
-                                    };
-                                    reader.readAsDataURL(event.target.files[0]);
-                                }
+                                    let selectedFiles = []; // Lưu danh sách file để preview và xóa
+
+                                    // Preview và xóa file
+                                    function previewMedia(event) {
+                                        const files = Array.from(event.target.files);
+                                        selectedFiles = files;
+                                        const previewContainer = document.getElementById('previewContainer');
+                                        previewContainer.innerHTML = '';
+
+                                        selectedFiles.forEach((file, index) => {
+                                            const reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                const div = document.createElement('div');
+                                                div.className = 'media-item';
+
+                                                if (file.type.startsWith('image/')) {
+                                                    const img = document.createElement('img');
+                                                    img.src = e.target.result;
+                                                    div.appendChild(img);
+                                                } else if (file.type.startsWith('video/')) {
+                                                    const video = document.createElement('video');
+                                                    video.src = e.target.result;
+                                                    video.controls = true;
+                                                    div.appendChild(video);
+                                                }
+
+                                                const removeBtn = document.createElement('button');
+                                                removeBtn.className = 'remove-btn';
+                                                removeBtn.innerText = 'X';
+                                                removeBtn.onclick = () => removeMedia(index);
+                                                div.appendChild(removeBtn);
+
+                                                previewContainer.appendChild(div);
+                                            };
+                                            reader.readAsDataURL(file);
+                                        });
+                                    }
+
+                                    function removeMedia(index) {
+                                        selectedFiles.splice(index, 1);
+                                        const input = document.getElementById('mediaFiles');
+                                        const dataTransfer = new DataTransfer();
+                                        selectedFiles.forEach(file => dataTransfer.items.add(file));
+                                        input.files = dataTransfer.files;
+                                        previewMedia({target: input});
+                                    }
         </script>
     </script>
 </body>

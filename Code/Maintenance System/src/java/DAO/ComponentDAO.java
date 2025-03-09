@@ -101,7 +101,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getAllComponents() {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.Status, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, c.Image "
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.Status, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, "
                 + "FROM Component c "
                 + "JOIN Brand cb ON c.BrandID = cb.BrandID "
                 + "JOIN ComponentType ct ON c.TypeID = ct.TypeID ";
@@ -120,7 +120,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getComponentsByPage(int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -161,7 +161,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public Component getComponentByID(int componentID) {
-        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM [dbo].[Component] c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -198,70 +198,96 @@ public class ComponentDAO extends DBContext {
     }
 
     public boolean add(Component component) {
-        String query = "INSERT INTO Component (ComponentName, ComponentCode, Quantity, Price, Image, BrandID, TypeID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO Component (ComponentName, ComponentCode, Quantity, Price, BrandID, TypeID) VALUES (?, ?, ?, ?, ?, ?)";
+        String mediaQuery = "INSERT INTO Media (ObjectID, ObjectType, MediaURL, MediaType) VALUES (?, 'Component', ?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             statement.setString(1, component.getComponentName());
             statement.setString(2, component.getComponentCode());
             statement.setInt(3, component.getQuantity());
             statement.setDouble(4, component.getPrice());
-
-            if (component.getImage() != null && !component.getImage().isEmpty()) {
-                statement.setString(5, component.getImage());
-            } else {
-                statement.setNull(5, java.sql.Types.NVARCHAR);
-            }
-
-            // Set the BrandID and TypeID
-            statement.setInt(6, getBrandID(component.getBrand()));
-            statement.setInt(7, getTypeID(component.getType()));
+            statement.setInt(5, getBrandID(component.getBrand()));
+            statement.setInt(6, getTypeID(component.getType()));
 
             int rowsInserted = statement.executeUpdate();
-            return rowsInserted > 0; // Return true if the insert was successful
-
+            if (rowsInserted > 0) {
+                // Lấy ComponentID vừa thêm
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int componentID = generatedKeys.getInt(1);
+                        // Thêm ảnh và video vào bảng Media
+                        try (PreparedStatement mediaStmt = connection.prepareStatement(mediaQuery)) {
+                            for (String image : component.getImages()) {
+                                mediaStmt.setInt(1, componentID);
+                                mediaStmt.setString(2, image);
+                                mediaStmt.setString(3, "image");
+                                mediaStmt.addBatch();
+                            }
+                            for (String video : component.getVideos()) {
+                                mediaStmt.setInt(1, componentID);
+                                mediaStmt.setString(2, video);
+                                mediaStmt.setString(3, "video");
+                                mediaStmt.addBatch();
+                            }
+                            mediaStmt.executeBatch();
+                        }
+                    }
+                }
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Return false if an error occurs
         }
+        return false;
     }
 
     public boolean update(Component component) {
-        String query;
-        if (component.getImage() != null) {
-            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ?, Image = ? WHERE ComponentID = ?";
-        } else {
-            query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
-        }
+        String query = "UPDATE Component SET ComponentCode = ?, ComponentName = ?, Quantity = ?, Price = ?, BrandID = ?, TypeID = ? WHERE ComponentID = ?";
+        String deleteMediaQuery = "DELETE FROM Media WHERE ObjectID = ? AND ObjectType = 'Component'";
+        String insertMediaQuery = "INSERT INTO Media (ObjectID, ObjectType, MediaURL, MediaType) VALUES (?, 'Component', ?, ?)";
 
         try (PreparedStatement statement = connection.prepareStatement(query)) {
-            // Set common values
             statement.setString(1, component.getComponentCode());
             statement.setString(2, component.getComponentName());
             statement.setInt(3, component.getQuantity());
             statement.setDouble(4, component.getPrice());
-
-            // Set BrandID and TypeID
-            statement.setInt(5, getBrandID(component.getBrand())); // Assuming you have a method to get BrandID
-            statement.setInt(6, getTypeID(component.getType()));   // Assuming you have a method to get TypeID
-
-            if (component.getImage() != null) {
-                statement.setString(7, component.getImage()); // Set value for Image
-                statement.setInt(8, component.getComponentID()); // Set value for ComponentID
-            } else {
-                statement.setInt(7, component.getComponentID()); // Set value for ComponentID
-            }
+            statement.setInt(5, getBrandID(component.getBrand()));
+            statement.setInt(6, getTypeID(component.getType()));
+            statement.setInt(7, component.getComponentID());
 
             int rowsAffected = statement.executeUpdate();
-            return rowsAffected > 0; // Return true if the update was successful
-
+            if (rowsAffected > 0) {
+                // Xóa media cũ
+                try (PreparedStatement deleteStmt = connection.prepareStatement(deleteMediaQuery)) {
+                    deleteStmt.setInt(1, component.getComponentID());
+                    deleteStmt.executeUpdate();
+                }
+                // Thêm media mới
+                try (PreparedStatement insertStmt = connection.prepareStatement(insertMediaQuery)) {
+                    for (String image : component.getImages()) {
+                        insertStmt.setInt(1, component.getComponentID());
+                        insertStmt.setString(2, image);
+                        insertStmt.setString(3, "image");
+                        insertStmt.addBatch();
+                    }
+                    for (String video : component.getVideos()) {
+                        insertStmt.setInt(1, component.getComponentID());
+                        insertStmt.setString(2, video);
+                        insertStmt.setString(3, "video");
+                        insertStmt.addBatch();
+                    }
+                    insertStmt.executeBatch();
+                }
+                return true;
+            }
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; // Return false if an error occurs
         }
+        return false;
     }
 
     public Component getLast() {
-        String query = "SELECT TOP 1 c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT TOP 1 c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -282,7 +308,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> searchComponentsByPage(String keyword, int page, int pageSize) {
         List<Component> components = new ArrayList<>();
-        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String sql = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -348,7 +374,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> getComponentsByPageSorted(int page, int pageSize, String sort, String order) {
-        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -373,7 +399,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByPageSorted(String search, int page, int pageSize, String sort, String order) {
-        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        String query = "SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -469,7 +495,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByFieldsPage(String searchCode, String searchName, int page, int pageSize, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -540,7 +566,7 @@ public class ComponentDAO extends DBContext {
     }
 
     public List<Component> searchComponentsByFieldsPageSorted(String searchCode, String searchName, int page, int pageSize, String sort, String order, Integer typeId, Integer brandId, Integer minQuantity, Integer maxQuantity, Double minPrice, Double maxPrice) {
-        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price, c.Image, "
+        StringBuilder query = new StringBuilder("SELECT c.ComponentID, c.Status, c.ComponentCode, c.ComponentName, c.Quantity, c.Price,  "
                 + "b.BrandName, t.TypeName "
                 + "FROM Component c "
                 + "JOIN Brand b ON c.BrandID = b.BrandID "
@@ -739,8 +765,6 @@ public class ComponentDAO extends DBContext {
         System.out.println(d.getComponentsByPage(page, pageSize));
         System.out.println(d.getAllComponents());
         System.out.println(d.getProductsByComponentId(3));
-        Component component = new Component(1, "", "", 11, true, "Display", "Apple", 2222, null);
-        System.out.println(d.update(component));
         System.out.println(d.getPriceMin());
         System.out.println(d.getPriceMax());
         System.out.println(d.getQuantityMax());
@@ -757,8 +781,42 @@ public class ComponentDAO extends DBContext {
         component.setStatus(rs.getBoolean("Status"));
         component.setQuantity(rs.getInt("Quantity"));
         component.setPrice(rs.getDouble("Price"));
-        component.setImage(rs.getString("Image"));
+        // Lấy danh sách ảnh và video từ bảng Media
+        loadComponentMedia(component);
+
         return component;
+    }
+
+    private void loadComponentMedia(Component component) {
+        String query = "SELECT MediaURL, MediaType FROM Media WHERE ObjectID = ? AND ObjectType = 'Component'";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, component.getComponentID());
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                String mediaURL = rs.getString("MediaURL");
+                String mediaType = rs.getString("MediaType");
+                if ("image".equalsIgnoreCase(mediaType)) {
+                    component.getImages().add(mediaURL);
+                } else if ("video".equalsIgnoreCase(mediaType)) {
+                    component.getVideos().add(mediaURL);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean deleteMedia(int componentID, String mediaURL) {
+        String query = "DELETE FROM Media WHERE ObjectID = ? AND ObjectType = 'Component' AND MediaURL = ?";
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
+            ps.setInt(1, componentID);
+            ps.setString(2, mediaURL);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
 }

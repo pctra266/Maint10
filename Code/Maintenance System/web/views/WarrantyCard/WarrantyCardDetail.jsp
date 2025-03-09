@@ -21,67 +21,9 @@
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
         <title>Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">
+        <link href="css/media-show.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-        <style>
-            .media-gallery {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 10px;
-                margin-top: 10px;
-            }
-            .media-item {
-                position: relative;
-                cursor: pointer;
-            }
-            .media-item img, .media-item video {
-                height: auto;
-                border-radius: 5px;
-                transition: transform 0.2s;
-            }
-            .media-item:hover img, .media-item:hover video {
-                transform: scale(1.1);
-            }
-            .modal {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0, 0, 0, 0.8);
-                justify-content: center;
-                align-items: center;
-                z-index: 1000;
-            }
-            .modal-content {
-                width: 90vw;
-                height: 100vh;
-                position: relative;
-                overflow: hidden;
-                border-radius: 5px;
-            }
-            .modal-content img, .modal-content video {
-                width: auto;
-                height: auto;
-                max-width: 100%;
-                max-height: 100%;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                transition: transform 0.1s ease;
-                cursor: grab;
-                user-select: none; /* Ngăn chọn ảnh/video */
-            }
-            .modal-close {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                color: white;
-                font-size: 30px;
-                cursor: pointer;
-            }
-        </style>
+
     </head>
     <body>
         <div class="wrapper">
@@ -303,20 +245,8 @@
 
                         </div>
                         <%--For showing images --%>
-                        <c:set var="count" value="${fn:length(card.images)+fn:length(card.videos)}"/>
                         <div class="col-md-4">
-                            <div class="media-gallery">
-                                <c:forEach var="image" items="${card.images}">
-                                    <div class="media-item">
-                                        <img src="${image}" style="max-width: ${count<3?25.5/count:8.5}rem" alt="Warranty Image" onclick="showModal(this.src, 'image')">
-                                    </div>
-                                </c:forEach>
-                                <c:forEach var="video" items="${card.videos}">
-                                    <div class="media-item">
-                                        <video src="${video}" style="max-width: ${count<3?25.5/count:8.5}rem" controls onclick="showModal(this.src, 'video')"></video>
-                                    </div>
-                                </c:forEach>
-                            </div>
+                               <jsp:include page="../../includes/media-show.jsp" />
 
                         </div>
 
@@ -331,11 +261,7 @@
                             </div>
                         </c:if>
                     </div>
-                    <!-- Modal for Zoom -->
-                    <div id="mediaModal" class="modal">
-                        <span class="modal-close" onclick="hideModal()">&times;</span>
-                        <div id="modalContent" class="modal-content"></div>
-                    </div>
+                  
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />
             </div>
@@ -343,109 +269,8 @@
 
         <script src="js/app.js"></script>
         <script src="js/format-input.js"></script>
+        <script src="js/media-show.js"></script>
         <script>
-                            var zoomLevel = 1; // Mức zoom ban đầu
-                            var minZoom = 0.5; // Giới hạn thu nhỏ tối thiểu
-                            var maxZoom = 3; // Giới hạn phóng to tối đa
-                            var isDragging = false;
-                            var startX, startY, translateX = 0, translateY = 0;
-
-                            function showModal(src, type) {
-                                var modal = document.getElementById('mediaModal');
-                                var modalContent = document.getElementById('modalContent');
-                                modalContent.innerHTML = '';
-                                zoomLevel = 1; // Reset zoom
-                                translateX = 0; // Reset vị trí
-                                translateY = 0;
-
-                                var mediaElement;
-                                if (type === 'image') {
-                                    mediaElement = document.createElement('img');
-                                    mediaElement.src = src;
-                                    mediaElement.draggable = false;
-                                } else if (type === 'video') {
-                                    mediaElement = document.createElement('video');
-                                    mediaElement.src = src;
-                                    mediaElement.controls = true;
-                                    mediaElement.draggable = false;
-                                    mediaElement.play();
-                                }
-                                modalContent.appendChild(mediaElement);
-                                modal.style.display = 'flex';
-
-                                // Zoom bằng lăn chuột
-                                modalContent.onwheel = function (e) {
-                                    e.preventDefault();
-                                    var delta = e.deltaY > 0 ? -0.1 : 0.1;
-                                    zoomLevel += delta;
-                                    zoomLevel = Math.min(Math.max(zoomLevel, minZoom), maxZoom);
-                                    applyTransform(mediaElement);
-                                };
-
-                                // Kéo thả bằng chuột
-                                mediaElement.onmousedown = function (e) {
-                                    e.preventDefault(); // Ngăn hành vi kéo mặc định của trình duyệt
-                                    if (zoomLevel > 0) { // Chỉ kéo khi đã phóng to
-                                        isDragging = true;
-                                        // Tính toán vị trí ban đầu dựa trên tọa độ hiện tại của chuột và kích thước phần tử
-                                        startX = e.clientX - translateX;
-                                        startY = e.clientY - translateY;
-                                        mediaElement.style.cursor = 'grabbing';
-                                    }
-                                };
-
-                                document.onmousemove = function (e) {
-                                    if (isDragging) {
-                                        translateX = e.clientX - startX;
-                                        translateY = e.clientY - startY;
-                                        applyTransform(mediaElement);
-                                    }
-                                };
-
-                                document.onmouseup = function () {
-                                    isDragging = false;
-                                    mediaElement.style.cursor = 'grab';
-                                };
-
-                                // Ngăn sự kiện kéo mặc định của trình duyệt
-                                mediaElement.ondragstart = function (e) {
-                                    e.preventDefault();
-                                    return false;
-                                };
-                            }
-
-                            function applyTransform(element) {
-                                // Chỉ áp dụng transform khi zoom hoặc kéo, không ghi đè translate(-50%, -50%) ban đầu
-                                if (zoomLevel !== 1 || translateX !== 0 || translateY !== 0) {
-                                    element.style.transform = 'translate(-50%, -50%) translate(' + translateX + 'px, ' + translateY + 'px) scale(' + zoomLevel + ')';
-                                } else {
-                                    element.style.transform = 'translate(-50%, -50%)'; // Giữ căn giữa mặc định
-                                }
-                            }
-
-                            function hideModal() {
-                                var modal = document.getElementById('mediaModal');
-                                var modalContent = document.getElementById('modalContent');
-                                var video = modalContent.getElementsByTagName('video')[0];
-                                if (video)
-                                    video.pause();
-                                modal.style.display = 'none';
-                                zoomLevel = 1;
-                                translateX = 0;
-                                translateY = 0;
-                                var mediaElement = modalContent.querySelector('img') || modalContent.querySelector('video');
-                                if (mediaElement) {
-                                    mediaElement.style.transform = 'translate(-50%, -50%)'; // Reset về căn giữa CSS
-                                }
-                            }
-
-                            document.getElementById('mediaModal').onclick = function (e) {
-                                if (e.target === this)
-                                    hideModal();
-                            };
-
-
-
                             // Enable Save button on input change in table
                             document.querySelectorAll('.form-select, .form-control').forEach(input => {
                                 input.addEventListener('input', function () {

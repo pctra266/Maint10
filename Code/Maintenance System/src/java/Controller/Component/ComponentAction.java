@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -100,16 +102,40 @@ public class ComponentAction extends HttpServlet {
             maxUploadSizeImageMB = 5; // Giá trị mặc định
             request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
         }
-        
+
         String newName = request.getParameter("Name");
         String newCode = request.getParameter("Code");
         String newBrand = request.getParameter("Brand");
         String newType = request.getParameter("Type");
         Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
-        Part imagePart = request.getPart("newImage");
-
+        List<String> imagePaths = new ArrayList<>();
+        List<String> videoPaths = new ArrayList<>();
         boolean canAdd = true;
+        for (Part part : request.getParts()) {
+            if ("mediaFiles".equals(part.getName()) && part.getSize() > 0) {
+                String mimeType = part.getContentType();
+                String mediaPath;
+                if (mimeType != null && mimeType.startsWith("video/")) {
+                    mediaPath = OtherUtils.saveVideo(part, request, "media/component");
+                    if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                        videoPaths.add(mediaPath);
+                    } else {
+                        canAdd = false;
+                        request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                    }
+                } else {
+                    mediaPath = OtherUtils.saveImage(part, request, "media/component");
+                    if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                        imagePaths.add(mediaPath);
+                    } else {
+                        canAdd = false;
+                        request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                    }
+                }
+
+            }
+        }
 
         // Kiểm tra dữ liệu đầu vào
         request.setAttribute("brandList", componentDAO.getListBrand());
@@ -160,15 +186,7 @@ public class ComponentAction extends HttpServlet {
         } else {
             request.setAttribute("price", newPrice);
         }
-        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
-        if (imagePath == null) {
-        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
-            canAdd = false;
-            request.setAttribute("pictureAlert", "Invalid picture");
-        } else if (imagePath.startsWith("File is too large")) {
-            canAdd = false;
-            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
-        }
+
         // Nếu dữ liệu hợp lệ, lưu ảnh và thêm Component
         // Khong hop le thi tra lai trang Add
         if (canAdd) {
@@ -179,9 +197,8 @@ public class ComponentAction extends HttpServlet {
             component.setBrand(newBrand);
             component.setPrice(newPrice);
             component.setQuantity(newQuantity);
-            if (imagePath != null) {
-                component.setImage(imagePath);
-            }
+            component.setImages(imagePaths);
+            component.setVideos(videoPaths);
             boolean add = componentDAO.add(component);
             Component addedComponent = componentDAO.getLast();
             if (add) {
@@ -199,23 +216,48 @@ public class ComponentAction extends HttpServlet {
 
     private void handleEditComponent(HttpServletRequest request, HttpServletResponse response, Component component)
             throws ServletException, IOException {
-            Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+        Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
 
         // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
         if (maxUploadSizeImageMB == null) {
             maxUploadSizeImageMB = 5; // Giá trị mặc định
             request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
         }
-        
+
         String newName = request.getParameter("Name");
         Integer newQuantity = FormatUtils.tryParseInt(request.getParameter("Quantity"));
         Double newPrice = FormatUtils.tryParseDouble(request.getParameter("Price"));
         String newBrand = request.getParameter("Brand");
         String newType = request.getParameter("Type");
         String newCode = request.getParameter("Code");
-        Part imagePart = request.getPart("newImage");
-
         boolean canUpdate = true;
+        List<String> videoPaths = component.getVideos();
+        List<String> imagePaths = component.getImages();
+
+        for (Part part : request.getParts()) {
+            if ("mediaFiles".equals(part.getName()) && part.getSize() > 0) {
+                String mimeType = part.getContentType();
+                String mediaPath;
+                if (mimeType != null && mimeType.startsWith("video/")) {
+                    mediaPath = OtherUtils.saveVideo(part, request, "media/component");
+                    if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                        videoPaths.add(mediaPath);
+                    } else {
+                        canUpdate = false;
+                        request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                    }
+                } else {
+                    mediaPath = OtherUtils.saveImage(part, request, "media/component");
+                    if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                        imagePaths.add(mediaPath);
+                    } else {
+                        canUpdate = false;
+                        request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                    }
+                }
+
+            }
+        }
         request.setAttribute("brandList", componentDAO.getListBrand());
         request.setAttribute("typeList", componentDAO.getListType());
 
@@ -250,15 +292,7 @@ public class ComponentAction extends HttpServlet {
             request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
             canUpdate = false;
         }
-        String imagePath = OtherUtils.saveImage(imagePart, request, "img/Component"); // Lưu ảnh
-        if (imagePath == null) {
-        } else if (imagePath.equalsIgnoreCase("Invalid picture")) {
-            canUpdate = false;
-            request.setAttribute("pictureAlert", "Invalid picture");
-        } else if (imagePath.startsWith("File is too large")) {
-            canUpdate = false;
-            request.setAttribute("pictureAlert", "Picture too large, max size is:" + maxUploadSizeImageMB + " MB");
-        }
+        
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
@@ -268,11 +302,8 @@ public class ComponentAction extends HttpServlet {
             component.setBrand(newBrand);
             component.setQuantity(newQuantity);
             component.setPrice(newPrice);
-
-            // Lưu ảnh mới nếu có
-            if (imagePath != null) {
-                component.setImage(imagePath);
-            }
+            component.setVideos(videoPaths);
+            component.setImages(imagePaths);
 
             boolean update = componentDAO.update(component);
             if (update) {
@@ -287,6 +318,8 @@ public class ComponentAction extends HttpServlet {
         // Trả về trang chi tiết Component
         request.setAttribute("list", componentDAO.getProductsByComponentId(component.getComponentID()));
         request.setAttribute("component", component);
+        request.setAttribute("images", component.getImages());
+        request.setAttribute("videos", component.getVideos());
         request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
     }
 
@@ -327,6 +360,8 @@ public class ComponentAction extends HttpServlet {
                 request.setAttribute("typeList", componentDAO.getListType());
                 request.setAttribute("brandList", componentDAO.getListBrand());
                 request.setAttribute("component", component);
+                request.setAttribute("images", component.getImages());
+                request.setAttribute("videos", component.getVideos());
                 request.getRequestDispatcher("/views/Component/ComponentDetail.jsp").forward(request, response);
             }
             case "/ComponentWarehouse/Delete" -> {

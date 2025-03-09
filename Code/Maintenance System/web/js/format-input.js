@@ -1,3 +1,5 @@
+//nhap so vao form thi cach cu 3 so thi cach ra cho de nhin
+
 document.addEventListener("DOMContentLoaded", function () {
     // Định dạng ngay khi trang tải xong
     document.querySelectorAll(".format-int").forEach(function (input) {
