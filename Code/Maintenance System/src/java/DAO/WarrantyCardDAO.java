@@ -82,7 +82,7 @@ public class WarrantyCardDAO extends DBContext {
         }
     }
 
-    public int createWarrantyCard(String productCode, String issue, java.util.Date returnDate, List<String> mediaPaths, int handlerID) {
+    public int createWarrantyCard(String productCode, String issue, java.util.Date returnDate, List<String> mediaPaths) {
         try {
             // Tìm ProductDetailID theo ProductCode
             String findProductDetailQuery = "SELECT ProductDetailID FROM ProductDetail WHERE ProductCode = ?";
@@ -829,6 +829,7 @@ public class WarrantyCardDAO extends DBContext {
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
+        System.out.println(        d.getTotalCards("", "", "", 1));
 
     }
 

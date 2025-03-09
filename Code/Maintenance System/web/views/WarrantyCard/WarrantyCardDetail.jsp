@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -33,7 +34,6 @@
                 cursor: pointer;
             }
             .media-item img, .media-item video {
-                max-width: 8.5rem;
                 height: auto;
                 border-radius: 5px;
                 transition: transform 0.2s;
@@ -303,16 +303,17 @@
 
                         </div>
                         <%--For showing images --%>
+                        <c:set var="count" value="${fn:length(card.images)+fn:length(card.videos)}"/>
                         <div class="col-md-4">
                             <div class="media-gallery">
                                 <c:forEach var="image" items="${card.images}">
                                     <div class="media-item">
-                                        <img src="${image}" alt="Warranty Image" onclick="showModal(this.src, 'image')">
+                                        <img src="${image}" style="max-width: ${count<3?25.5/count:8.5}rem" alt="Warranty Image" onclick="showModal(this.src, 'image')">
                                     </div>
                                 </c:forEach>
                                 <c:forEach var="video" items="${card.videos}">
                                     <div class="media-item">
-                                        <video src="${video}" controls onclick="showModal(this.src, 'video')"></video>
+                                        <video src="${video}" style="max-width: ${count<3?25.5/count:8.5}rem" controls onclick="showModal(this.src, 'video')"></video>
                                     </div>
                                 </c:forEach>
                             </div>

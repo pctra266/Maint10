@@ -10,6 +10,7 @@ import DAO.WarrantyCardProcessDAO;
 import Model.Customer;
 import Model.ProductDetail;
 import Model.Staff;
+import Model.WarrantyCard;
 import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
 import Utils.OtherUtils;
@@ -56,10 +57,11 @@ public class WarrantyCardAdd extends HttpServlet {
             throws ServletException, IOException {
         String productCode = request.getParameter("productCode");
         String issue = request.getParameter("issue");
+        String action = request.getParameter("action");
         Date returnDate = FormatUtils.parseDate(request.getParameter("returnDate"));
         List<String> mediaPaths = new ArrayList<>();
         boolean canAdd = true;
-        if (returnDate!=null && returnDate.before(new Date())) {
+        if (returnDate != null && returnDate.before(new Date())) {
             request.setAttribute("createFail", "Return Date must be today or later.");
             request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardCreate.jsp").forward(request, response);
             return;
@@ -88,11 +90,20 @@ public class WarrantyCardAdd extends HttpServlet {
             Customer customer = (Customer) session.getAttribute("customer");
             int handlerID = (staff != null) ? staff.getStaffID() : (customer != null ? customer.getCustomerID() : -1);
             WarrantyCardProcess wcp = new WarrantyCardProcess();
-            if (canAdd && wcp.checkAndSetWarrantyCardId(warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, mediaPaths, handlerID))) {      
+            if (canAdd && wcp.checkAndSetWarrantyCardId(warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, mediaPaths))) {
                 wcp.setHandlerID(handlerID);
                 wcp.setAction("create");
-                wcp.setNote(staff!=null?"Created by staff":"Created by customer");
+                wcp.setNote(staff != null ? "Created by staff" : "Created by customer");
                 WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
+                if ("receive".equals(action)) {
+                    WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(wcp.getWarrantyCardID());
+                    wc.setHandlerID(handlerID);
+                    warrantyCardDAO.updateWarrantyCard(wc);
+                    wcp.setAction("receive");
+                    wcp.setHandlerID(handlerID);
+                    //wcp.setNote("Chua nghi ra");
+                    WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
+                }
                 response.sendRedirect("../WarrantyCard?create=true");
                 return;
             } else {
