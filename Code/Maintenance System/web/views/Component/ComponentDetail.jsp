@@ -71,7 +71,7 @@
                             <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
                         </button>
                     </form>
-                    <h2>Component Detail ${detailComponentFrom}</h2>
+                    <h2>Component Detail</h2>
                     <!--                                Alert khi du lieu truyen sang sever sai-->
                     <c:if test="${not empty codeAlert}">
                         <div class="alert alert-danger alert-dismissible" role="alert">

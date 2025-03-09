@@ -344,11 +344,6 @@ public class ComponentAction extends HttpServlet {
         switch (action) {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
-                HttpSession session = request.getSession();
-                String from = request.getParameter("from");
-                if (from != null && !from.isBlank()) {
-                    session.setAttribute("detailComponentFrom", from);
-                }
                 String paraProduct = request.getParameter("product");
                 Integer productID = FormatUtils.tryParseInt(paraProduct);
                 if (productID != null) {

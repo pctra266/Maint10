@@ -45,7 +45,7 @@ public class ComponentWarehouse extends HttpServlet {
         HttpSession session = request.getSession();
         session.setAttribute("detailComponentFrom", request.getContextPath()+request.getServletPath());
         
-// Handle cleanup action from the "Close" button
+        // Handle cleanup action from the "Close" button
         String action = request.getParameter("action");
         if ("clearErrorComponents".equals(action)) {
             session.removeAttribute("errorComponents");

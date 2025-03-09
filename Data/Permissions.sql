@@ -1,3 +1,5 @@
+USE MaintainManagement
+
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Description]) VALUES
 ('VIEW_COMPONENTS_WAREHOUSE', 'Access to Warehouse/Component to view list component only'),
 ('DELETE_COMPONENT', 'Set status of a component to off in warehouse'),
