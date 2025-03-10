@@ -9,75 +9,121 @@
 <html lang="en">
 
     <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <meta name="description" content="Responsive Admin &amp; Dashboard Template based on Bootstrap 5">
-        <meta name="author" content="AdminKit">
-        <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
-
-        <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-
-        <link rel="canonical" href="https://demo-basic.adminkit.io/" />
-
-        <title>Main10</title>
-
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Home Page </title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-        <style>
-             .omnitrix-button {
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #00aaff 40%, #444 60%);
-            border: 4px solid black;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .omnitrix-button::before {
-            content: '';
-            width: 10%;
-            height: 10%;
-            background: radial-gradient(circle, #00aaff 50%, transparent 50%);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            position: absolute;
-        }
-        </style>
     </head>
 
-    <body>
+    <body class="d-flex flex-column">
         <div class="wrapper">
-            <jsp:include page="/includes/navbar-left.jsp" />
             <div class="main">
-                <jsp:include page="/includes/navbar-top.jsp" />
-                <main style="content">
-                    <div><h1 class="text-center">Click and wait to become Main10</h1></div>
-                    <div style="display: flex; justify-content: center; align-content: center" class="text-center">
-                        
-                    
-                    <div style=""></div>
-                        ${check}
-                    <button class="omnitrix-button" onclick="playMusic()">Main10</button>
-                    <div id="player" style="display: none;"></div>
-                    </div>
-                    
+                <nav class="navbar navbar-expand navbar-light navbar-bg">
+                    <a href="#">Insert Logo here</a>
+                    <ul class="navbar-nav d-none d-lg-flex"> <!-- start ul 1 -->
+                        <li class="nav-item ms-3">
+                                <a class="nav-link d-flex align-items-center" href="#">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-1">
+                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                                    </svg>
+                                    Home
+                                </a>
+                        </li>
+                        <li class="nav-item ms-1">
+                                <a class="nav-link d-flex align-items-center" href="#"  >
+                                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award align-middle">
+                                   <circle cx="12" cy="8" r="7"></circle>
+                                   <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline>
+                                   </svg>
+                                About
+                            </a>
+                        </li>
+                        <li class="nav-item ms-1">
+                                <a class="nav-link d-flex align-items-center" href="#"  >
+                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book align-middle">
+                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                 </svg>
+                                Blog
+                            </a>
+                        </li>
+<!--                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Look Up Online
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-start dropdown-mega" aria-labelledby="megaDropdown">
+                                <div class="d-md-flex align-items-start justify-content-start">
+                                    <div class="dropdown-mega-list">
+                                        <a class="dropdown-item" href="LookUpOnline.jsp">Warranty Card</a>
+                                        <a class="dropdown-item" href="#">Product</a>
+                                    </div>
 
+                                </div>
+                            </div>
+                        </li>-->
+                    </ul> <!-- end ul 1 -->
+                    <ul class="navbar-nav navbar-align"><!-- start ul2 -->
+                        <div class="navbar-collapse collapse">
+                            <li class="navbar-nav navbar-align">
+                                <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
+                                    <a href="#">Back to dashboard</a>
+                                </c:if>
+                            </li>
+                            <li class="navbar-nav navbar-align">
+                                <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
+                                    <a href="LoginForm.jsp">Login</a>
+                                </c:if>
+                            </li>
+                            <li class="navbar-nav navbar-align">
+                                <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
+                                    <a href="logout">Logout</a>
+                                </c:if>
+                            </li>
+                        </div>
+                    </ul><!-- end ul2 -->
+                </nav>
+                <main class="content" style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center;">
+                     <!--Main Slider--> 
+                    <div class="main-slider d-flex align-items-center justify-content-center text-white vh-100"
+                         >
+                        <div class="container text-center">
+                            <h2>Enter your product code</h2>
+                            <form class="search">
+                                <div class="input-group w-50 mx-auto">
+                                    <input type="text" class="form-control" placeholder="Product code">
+                                    <div class="input-group-append">
+                                        <button class="btn btn-primary" type="submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                     <!--Main Slider--> 
                 </main>
-                <jsp:include page="/includes/footer.jsp" />
+
+                     <footer class="footer bg-white text-white text-center py-3 mt-auto">
+                         <div class="container-fluid">
+                             <div class="row text-muted">
+                                 <div class="col-6 text-start">
+                                     <p class="mb-0">
+                                         <a href="#" target="_blank" class="text-muted"><strong>Main10</strong></a> ©
+                                     </p>
+                                 </div>
+                                 <div class="col-6 text-end">
+                                     <ul class="list-inline">
+                                         <li class="list-inline-item">
+                                             <a class="text-muted" href="#">Support</a>
+                                         </li>
+                                     </ul>
+                                 </div>
+                             </div>
+                         </div>
+                     </footer>
 
             </div>
 
         </div>
-                   <script>
-        function playMusic() {
-            let playerDiv = document.getElementById("player");
-            playerDiv.innerHTML = '<iframe width="560" height="315" src="https://www.youtube.com/embed/_iIUGEOreiw?autoplay=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>';
-        }
-    </script>
 
         <script src="js/app.js"></script>
 
