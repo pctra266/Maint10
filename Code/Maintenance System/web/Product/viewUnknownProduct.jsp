@@ -14,7 +14,6 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
         <style>
             /* CSS cho nội dung trong main */
             main.content {
@@ -117,7 +116,40 @@
                 background-color: #fafafa;
             }
 
-            /* Lưu ý: CSS này không tác động đến phần phân trang */
+            /* CSS cho phân trang */
+            .pagination {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 30px 0;
+            }
+
+            .pagination a {
+                margin: 0 8px;
+                padding: 10px 15px;
+                font-size: 16px;
+                color: #333;
+                background-color: #ffffff;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                text-decoration: none;
+                transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .pagination a:hover {
+                background-color: #007bff;
+                color: #fff;
+                transform: translateY(-3px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .pagination a.active {
+                background: linear-gradient(135deg, #007bff, #00c6ff);
+                color: #fff;
+                border-color: #007bff;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+
         </style>
     </head>
 
@@ -127,29 +159,45 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-
                     <h2>List of Unknown Products</h2>
 
+                    <!-- Form tìm kiếm -->
                     <form action="listUnknown" method="get">
-                        <input type="text" id="productCode" name="productCode" placeholder="Product Code" value="${param.productCode}" oninput="validateProductCode(this)">
+                        <input type="text" id="productCode" name="productCode" 
+                               placeholder="Product Code" 
+                               value="${param.productCode}" 
+                               oninput="validateProductCode(this)">
                         <span id="productCodeError" style="color: red;"></span>
 
-                        <input type="text" id="productName" name="productName" placeholder="Product Name" value="${param.productName}" oninput="validateProductName(this)">
+                        <input type="text" id="productName" name="productName" 
+                               placeholder="Product Name" 
+                               value="${param.productName}" 
+                               oninput="validateProductName(this)">
                         <span id="productNameError" style="color: red;"></span>
 
-                        <input type="text" id="description" name="description" placeholder="Description" 
-                               value="${param.description}" oninput="validateDescription(this)">
+                        <input type="text" id="description" name="description" 
+                               placeholder="Description" 
+                               value="${param.description}" 
+                               oninput="validateDescription(this)">
                         <span id="descriptionError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
 
                         <input type="date" name="receivedDate" value="${param.receivedDate}">
 
-                        <input type="text" id="customerName" name="customerName" placeholder="Customer Name"
-                               value="${param.customerName}" oninput="validateCustomerName(this)">
+                        <input type="text" id="customerName" name="customerName" 
+                               placeholder="Customer Name"
+                               value="${param.customerName}" 
+                               oninput="validateCustomerName(this)">
                         <span id="customerNameError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
 
-                        <input type="text" id="phone" name="phone" placeholder="Phone"
-                               value="${param.phone}" oninput="validatePhone(this)">
+                        <input type="text" id="phone" name="phone" 
+                               placeholder="Phone"
+                               value="${param.phone}" 
+                               oninput="validatePhone(this)">
                         <span id="phoneError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
+
+                        <!-- Giữ lại page và pageSize (nếu có) -->
+                        <input type="hidden" name="page" value="${currentPage}" />
+                        <input type="hidden" name="pageSize" value="${pageSize}" />
 
                         <button type="submit">Search</button>
                     </form>
@@ -159,6 +207,41 @@
                         All Product
                     </button>
 
+                    <!-- Form chọn số phần tử trên mỗi trang -->
+                    <form action="listUnknown" method="get" class="page-size-form">
+                        <!-- Giữ lại các tham số tìm kiếm -->
+                        <input type="hidden" name="productCode" value="${param.productCode}" />
+                        <input type="hidden" name="productName" value="${param.productName}" />
+                        <input type="hidden" name="description" value="${param.description}" />
+                        <input type="hidden" name="receivedDate" value="${param.receivedDate}" />
+                        <input type="hidden" name="customerName" value="${param.customerName}" />
+                        <input type="hidden" name="phone" value="${param.phone}" />
+                        <input type="hidden" name="page" value="1" />
+
+                        <label for="pageSizeSelect">Products per page:</label>
+                        <select id="pageSizeSelect" name="pageSize" onchange="toggleCustomInput(this.value)">
+                            <option value="5"  <c:if test="${pageSize == 5}">selected</c:if>>5</option>
+                            <option value="10" <c:if test="${pageSize == 10}">selected</c:if>>10</option>
+                            <option value="15" <c:if test="${pageSize == 15}">selected</c:if>>15</option>
+                            <option value="20" <c:if test="${pageSize == 20}">selected</c:if>>20</option>
+                            <option value="25" <c:if test="${pageSize == 25}">selected</c:if>>25</option>
+                                <option value="custom"
+                                <c:if test="${pageSize != 5 && pageSize != 10 && pageSize != 15 && pageSize != 20 && pageSize != 25}">
+                                    selected
+                                </c:if>
+                                >Custom</option>
+                        </select>
+
+                        <!-- Ô nhập customPageSize, chỉ hiển thị khi dropdown = custom -->
+                        <input type="number" name="customPageSize" id="customPageSizeInput" 
+                               min="1"
+                               value="<c:out value='${pageSize != 5 && pageSize != 10 && pageSize != 15 && pageSize != 20 && pageSize != 25 ? pageSize : ""}'/>"
+                               style="display: none;" />
+
+                        <button type="submit">Apply</button>
+                    </form>
+
+                    <!-- Bảng danh sách sản phẩm -->
                     <table border="1">
                         <thead>
                             <tr>
@@ -193,32 +276,96 @@
                         </tbody>
                     </table>
 
-                    <div>
+                    <!-- Phân trang sử dụng c:url để tránh khoảng trắng -->
+                    <div class="pagination">
                         <c:if test="${totalPages > 1}">
-                            <c:forEach begin="1" end="${totalPages}" var="i">
-                                <a href="listUnknown?page=${i}&productCode=${param.productCode}&productName=${param.productName}&description=${param.description}&receivedDate=${param.receivedDate}&customerName=${param.customerName}&phone=${param.phone}"
-                                   class="${currentPage == i ? 'active' : ''}">${i}</a>
+                            <!-- First -->
+                            <c:url var="firstUrl" value="listUnknown">
+                                <c:param name="page" value="1" />
+                                <c:param name="pageSize" value="${pageSize}" />
+                                <c:param name="productCode" value="${param.productCode}" />
+                                <c:param name="productName" value="${param.productName}" />
+                                <c:param name="description" value="${param.description}" />
+                                <c:param name="receivedDate" value="${param.receivedDate}" />
+                                <c:param name="customerName" value="${param.customerName}" />
+                                <c:param name="phone" value="${param.phone}" />
+                            </c:url>
+                            <a href="${firstUrl}">First</a>
+
+                            <!-- Previous -->
+                            <c:url var="prevUrl" value="listUnknown">
+                                <c:param name="page" value="${currentPage - 1 <= 0 ? 1 : currentPage - 1}" />
+                                <c:param name="pageSize" value="${pageSize}" />
+                                <c:param name="productCode" value="${param.productCode}" />
+                                <c:param name="productName" value="${param.productName}" />
+                                <c:param name="description" value="${param.description}" />
+                                <c:param name="receivedDate" value="${param.receivedDate}" />
+                                <c:param name="customerName" value="${param.customerName}" />
+                                <c:param name="phone" value="${param.phone}" />
+                            </c:url>
+                            <a href="${prevUrl}">Previous</a>
+
+                            <!-- Các số trang -->
+                            <c:forEach var="i" begin="1" end="${totalPages}">
+                                <c:url var="pageUrl" value="listUnknown">
+                                    <c:param name="page" value="${i}" />
+                                    <c:param name="pageSize" value="${pageSize}" />
+                                    <c:param name="productCode" value="${param.productCode}" />
+                                    <c:param name="productName" value="${param.productName}" />
+                                    <c:param name="description" value="${param.description}" />
+                                    <c:param name="receivedDate" value="${param.receivedDate}" />
+                                    <c:param name="customerName" value="${param.customerName}" />
+                                    <c:param name="phone" value="${param.phone}" />
+                                </c:url>
+                                <a href="${pageUrl}" class="${currentPage == i ? 'active' : ''}">${i}</a>
                             </c:forEach>
+
+                            <!-- Next -->
+                            <c:url var="nextUrl" value="listUnknown">
+                                <c:param name="page" value="${currentPage + 1 > totalPages ? totalPages : currentPage + 1}" />
+                                <c:param name="pageSize" value="${pageSize}" />
+                                <c:param name="productCode" value="${param.productCode}" />
+                                <c:param name="productName" value="${param.productName}" />
+                                <c:param name="description" value="${param.description}" />
+                                <c:param name="receivedDate" value="${param.receivedDate}" />
+                                <c:param name="customerName" value="${param.customerName}" />
+                                <c:param name="phone" value="${param.phone}" />
+                            </c:url>
+                            <a href="${nextUrl}">Next</a>
+
+                            <!-- Last -->
+                            <c:url var="lastUrl" value="listUnknown">
+                                <c:param name="page" value="${totalPages}" />
+                                <c:param name="pageSize" value="${pageSize}" />
+                                <c:param name="productCode" value="${param.productCode}" />
+                                <c:param name="productName" value="${param.productName}" />
+                                <c:param name="description" value="${param.description}" />
+                                <c:param name="receivedDate" value="${param.receivedDate}" />
+                                <c:param name="customerName" value="${param.customerName}" />
+                                <c:param name="phone" value="${param.phone}" />
+                            </c:url>
+                            <a href="${lastUrl}">Last</a>
                         </c:if>
                     </div>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
+
         <script src="js/app.js"></script>
 
         <script>
-                        function validateProductCode(input) {
-                            let regex = /^[a-zA-Z0-9]*$/; // Chỉ cho phép chữ cái và số
-                            let errorMessage = document.getElementById("productCodeError");
+                            function validateProductCode(input) {
+                                let regex = /^[a-zA-Z0-9]*$/; // Chỉ cho phép chữ cái và số
+                                let errorMessage = document.getElementById("productCodeError");
 
-                            if (!regex.test(input.value)) {
-                                input.value = input.value.replace(/[^a-zA-Z0-9]/g, ""); // Xóa ký tự không hợp lệ
-                                errorMessage.textContent = "Product Code chỉ được chứa chữ cái và số!";
-                            } else {
-                                errorMessage.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+                                if (!regex.test(input.value)) {
+                                    input.value = input.value.replace(/[^a-zA-Z0-9]/g, ""); // Xóa ký tự không hợp lệ
+                                    errorMessage.textContent = "Product Code chỉ được chứa chữ cái và số!";
+                                } else {
+                                    errorMessage.textContent = ""; // Xóa thông báo lỗi nếu hợp lệ
+                                }
                             }
-                        }
         </script>
         <script>
             function validateProductName(input) {
@@ -315,6 +462,24 @@
                     errorMessage.textContent = "";
                 }
             }
+        </script>
+
+        <script>
+            // Hiển thị/Ẩn ô customPageSize khi dropdown thay đổi
+            function toggleCustomInput(value) {
+                var customInput = document.getElementById("customPageSizeInput");
+                if (value === "custom") {
+                    customInput.style.display = "inline-block";
+                } else {
+                    customInput.style.display = "none";
+                }
+            }
+
+            // Khi load trang, kiểm tra nếu đang ở "custom" thì show input
+            window.onload = function () {
+                var pageSizeSelect = document.getElementById("pageSizeSelect");
+                toggleCustomInput(pageSizeSelect.value);
+            };
         </script>
 
     </body>

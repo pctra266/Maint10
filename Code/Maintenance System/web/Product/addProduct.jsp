@@ -1,261 +1,291 @@
 <%-- 
-    Document   : addProduct
-    Created on : Jan 20, 2025, 9:01:02 PM
+    Document   : updateProduct1
+    Created on : Feb 6, 2025, 5:07:44 AM
     Author     : sonNH
 --%>
-
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="UTF-8">
         <title>Add Product</title>
-
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-        
         <style>
-            /* Base Styles */
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f9f9f9;
-                color: #333;
-                margin: 0;
-                padding: 0;
-            }
-
-            .wrapper {
+           
+            /* Bọc toàn bộ form để chia layout 2 cột */
+            .add-product-form {
                 display: flex;
-                min-height: 100vh;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 2rem;
+                margin-top: 1rem;
+                margin-bottom: 1rem;
             }
 
-            .main {
-                flex: 1;
-                padding: 40px 20px;
-                background-color: #ffffff;
-            }
-
-            h2 {
-                font-size: 2rem;
-                color: #444;
-                text-align: center;
-                margin-bottom: 0px;
-            }
-
+            /* Phần bên trái: form nhập thông tin */
             .form-container {
-                max-width: 600px;
-                margin: auto;
-                padding: 30px;
-                background: #fff;
-                border-radius: 8px;
-                box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+                flex: 1;
+                max-width: 50%;
                 box-sizing: border-box;
+                padding: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
             }
 
+            /* Tiêu đề */
+            .form-container h3 {
+                margin-top: 0;
+            }
+
+            /* Mỗi nhóm form (label + input) */
             .form-group {
-                margin-bottom: 10px;
+                margin-bottom: 1rem;
             }
 
-            label {
-                font-size: 1rem;
-                font-weight: bold;
-                margin-bottom: 8px;
-                display: inline-block;
-                color: #555;
-            }
-
-            input, select {
-                width: 100%;
-                padding: 12px;
-                margin-top: 8px;
-                border: 1px solid #ccc;
-                border-radius: 6px;
-                font-size: 1rem;
-                box-sizing: border-box;
-                background-color: #f9f9f9;
-                transition: border-color 0.3s ease;
-            }
-
-            input:focus, select:focus {
-                border-color: #007bff;
-                outline: none;
-            }
-
-            input[type="number"] {
-                -moz-appearance: textfield;
-            }
-
-            button {
-                background-color: #007bff;
-                color: white;
-                padding: 12px;
-                border: none;
-                width: 100%;
-                cursor: pointer;
-                border-radius: 6px;
-                font-size: 1rem;
-                transition: background-color 0.3s ease;
-                margin-top: 20px;
-            }
-
-            button:hover {
-                background-color: #0056b3;
-            }
-
-            /* Back Button */
-            form > button.add-product {
-                background-color: #3B7DDD;
-                color: white;
-                padding: 10px;
-                text-align: center;
+            /* Label */
+            .form-group label {
                 display: block;
+                margin-bottom: 0.5rem;
+                font-weight: 600;
+            }
+
+            /* Input, select */
+            .form-group input,
+            .form-group select {
                 width: 100%;
-                border-radius: 6px;
-                font-size: 1rem;
-                transition: background-color 0.3s ease;
-            }
-
-            form > button.add-product:hover {
-                background-color: green;
-            }
-
-            /* File Input */
-            input[type="file"] {
-                background-color: #fff;
-                padding: 10px;
-                border-radius: 6px;
+                padding: 0.5rem;
                 border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+                font-size: 1rem;
+            }
+
+            /* Thông báo lỗi (nếu có) */
+            .error-message {
+                display: block;
+                margin-top: 0.3rem;
+                color: red;
+                font-size: 0.875rem;
+                font-style: italic;
+            }
+
+            /* Phần bên phải: hiển thị ảnh */
+            .image-container {
+                flex: 1;
+                max-width: 50%;
+                box-sizing: border-box;
+                padding: 1rem;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                text-align: center;
+            }
+
+            /* Ô preview ảnh */
+            .preview-box {
+                position: relative;
+                width: 100%;
+                height: 400px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+                background-color: #f9f9f9;
+            }
+
+            .preview-box img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+            /* Mũi tên chuyển ảnh - đặt bên trong preview-box */
+            .arrow {
                 cursor: pointer;
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                font-size: 2rem;
+                background-color: rgba(255, 255, 255, 0.8);
+                border-radius: 50%;
+                width: 2rem;
+                height: 2rem;
+                line-height: 2rem;
+                text-align: center;
+                border: 1px solid #ccc;
+                color: #333;
+                user-select: none;
+                z-index: 10;
             }
 
-            /* Form Section Spacing */
-            form + form {
-                margin-top: 30px;
+            .left-arrow {
+                left: 0.5rem;
             }
 
-            /* Responsive Design */
-            @media (max-width: 768px) {
-                .form-container {
-                    width: 100%;
-                    padding: 20px;
-                }
-
-                h2 {
-                    font-size: 1.8rem;
-                }
+            .right-arrow {
+                right: 0.5rem;
             }
 
-            @media (max-width: 480px) {
-                .form-container {
-                    padding: 15px;
-                }
-
-                button {
-                    padding: 10px;
-                }
+            /* Input chọn ảnh */
+            #newImage {
+                margin-bottom: 1rem;
             }
 
+            /* Khu vực thumbnail */
+            .thumbnail-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+                margin-top: 0.5rem;
+            }
+
+            .thumbnail-wrapper {
+                position: relative;
+            }
+
+            .thumbnail-container img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                cursor: pointer;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            /* Nút Submit và Back */
+            .button-container {
+                margin-top: 1rem;
+                display: flex;
+                justify-content: center;
+                gap: 1rem;
+            }
+
+            .submit-btn,
+            .back-btn {
+                padding: 0.5rem 1rem;
+                cursor: pointer;
+                border: none;
+                border-radius: 4px;
+                font-size: 1rem;
+            }
+
+            .submit-btn {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+            .back-btn {
+                background-color: #6c757d;
+                color: #fff;
+            }
+
+            /* Tùy chọn: hiển thị lỗi nếu chưa chọn ảnh */
+            #newImage.error {
+                border-color: red;
+            }
         </style>
     </head>
     <body>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
-
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
-
                 <main class="content">
-                    <div class="form-container">
-                        <h2>Add Product</h2>
-
-                        <c:if test="${not empty errorMessage}">
-                            <div style="color: red; text-align: center; margin-bottom: 10px;">
-                                ${errorMessage}
-                            </div>
-                        </c:if>
-
-                        <form action="viewProduct" method="post" enctype="multipart/form-data">
+                    <form id="productForm" class="add-product-form" action="viewProduct" method="post" enctype="multipart/form-data">
+                        <!-- Phần nhập thông tin sản phẩm -->
+                        <div class="form-container">
+                            <c:if test="${not empty errorMessage}">
+                                <div style="color: red; font-weight: bold;">
+                                    ${errorMessage}
+                                </div>
+                            </c:if>
+                            <h3>Add Product</h3>
                             <input type="hidden" name="action" value="add">
-
-                            <!-- Nhập code -->
+                            <input type="hidden" name="status" value="${status != null ? status : 'active'}">
                             <div class="form-group">
                                 <label for="code">Product Code:</label>
-                                <input type="text" id="code" name="code" value="${code}" required>
+                                <input type="text" id="code" name="code" required value="${code != null ? code : ''}">
                             </div>
-
-                            <!-- Nhập name -->
                             <div class="form-group">
                                 <label for="name">Product Name:</label>
-                                <input type="text" id="name" name="name" value="${name}" required>
+                                <input type="text" id="name" name="name" required value="${name != null ? name : ''}">
                             </div>
-
-                            <!-- Chọn brand -->
                             <div class="form-group">
                                 <label for="brand">Brand:</label>
-                                <select id="brand" name="brandId">
+                                <select id="brand" name="brandId" required>
                                     <option value="">Select Brand</option>
                                     <c:forEach var="p" items="${listBrand}">
-                                        <option value="${p.brandId}" ${p.brandId == brandId ? 'selected' : ''}>
+                                        <option value="${p.brandId}" ${brandId != null && brandId == p.brandId ? 'selected' : ''}>
                                             ${p.brandName}
                                         </option>
                                     </c:forEach>
                                 </select>
                             </div>
-
-                            <!-- Nhập type -->
                             <div class="form-group">
-                                <select name="type">
-                                    <option value="">All Types</option>
+                                <label for="type">Product Type:</label>
+                                <select id="type" name="type" required>
+                                    <option value="">Select Type</option>
                                     <c:forEach var="t" items="${listType}">
-                                        <option value="${t.productTypeId}"${ productTypeId == t.productTypeId ? 'selected' : ''}>
+                                        <option value="${t.productTypeId}" ${productTypeId != null && productTypeId == t.productTypeId ? 'selected' : ''}>
                                             ${t.typeName}
                                         </option>
                                     </c:forEach>
                                 </select>
                             </div>
-
-                            <!-- Nhập quantity -->
                             <div class="form-group">
                                 <label for="quantity">Quantity:</label>
-                                <input type="number" id="quantity" name="quantity" value="${quantity}" min="1" required>
+                                <input type="number" id="quantity" name="quantity" min="1" required value="${quantity != null ? quantity : ''}">
                             </div>
-
-                            <!-- Nhập warranty -->
                             <div class="form-group">
                                 <label for="warranty">Warranty Period (months):</label>
-                                <input type="number" id="warranty" name="warrantyPeriod" value="${warrantyPeriod}" min="1" required>
+                                <input type="number" id="warranty" name="warrantyPeriod" min="1" required value="${warrantyPeriod != null ? warrantyPeriod : ''}">
+                            </div>
+                        </div>
+
+                        <!-- Phần chọn và preview ảnh -->
+                        <div class="image-container">
+                            <!-- Preview box với mũi tên -->
+                            <div class="preview-box">
+                                <img id="currentImage" alt="Preview Image" src="${not empty uploadedImages ? uploadedImages[0] : ''}">
+                                <div class="arrow left-arrow" onclick="prevImage()">&#10094;</div>
+                                <div class="arrow right-arrow" onclick="nextImage()">&#10095;</div>
+                            </div>
+                            <!-- Input chọn file -->
+                            <input name="image" type="file" id="newImage" multiple accept="image/*">
+
+                            <!-- Danh sách thumbnail (với input ẩn giữ lại thông tin ảnh) -->
+                            <div class="thumbnail-container" id="thumbnailContainer">
+                                <c:if test="${not empty uploadedImages}">
+                                    <c:forEach var="image" items="${uploadedImages}">
+                                        <div class="thumbnail-wrapper">
+                                            <img src="${image}" class="thumbnail" alt="Uploaded Image">
+                                            <input type="hidden" name="existingImages" value="${image}">
+                                        </div>
+                                    </c:forEach>
+                                </c:if>
                             </div>
 
-                            <!-- Chọn status -->
-                            <input type="hidden" name="status" value="Active">
-
-
-                            <!-- Chọn image -->
-                            <div class="form-group">
-                                <label for="newImage">Product Image:</label>
-                                <img id="currentImage" alt="No Image" style="max-width: 100%; height: auto;">
-                                <input type="file" name="image" id="newImage" accept="image/*" onchange="previewImage(event)">
+                            <!-- Nút submit và back nằm dưới phần chọn ảnh -->
+                            <div class="button-container">
+                                <button type="submit" class="submit-btn">Add Product</button>
+                                <button type="button" class="back-btn" onclick="location.href = 'viewProduct'">Back</button>
                             </div>
-
-                            <button type="submit" class="submit-btn">Add Product</button>
-                        </form>
-
-                        <form action="viewProduct">
-                            <button class="add-product" type="submit">Back</button>
-                        </form>
-
-                    </div>
+                        </div>
+                    </form>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-        <script src="js/app.js"></script>
 
+        <script src="js/app.js"></script>
         <script>
                                     document.addEventListener("DOMContentLoaded", function () {
-                                        let form = document.querySelector("form[action='viewProduct']");
+                                        let form = document.querySelector(".add-product-form");
                                         let codeInput = document.getElementById("code");
                                         let nameInput = document.getElementById("name");
                                         let brandInput = document.getElementById("brand");
@@ -264,20 +294,15 @@
                                         let warrantyInput = document.getElementById("warranty");
                                         let imageInput = document.getElementById("newImage");
 
-                                        // Hàm hiển thị lỗi
                                         function showError(input, message) {
                                             let errorSpan = input.parentNode.querySelector(".error-message");
                                             if (!errorSpan) {
                                                 errorSpan = document.createElement("span");
                                                 errorSpan.className = "error-message";
-                                                errorSpan.style.color = "red";
-                                                errorSpan.style.fontSize = "14px";
                                                 input.parentNode.appendChild(errorSpan);
                                             }
                                             errorSpan.innerText = message;
                                         }
-
-                                        // Hàm xoá lỗi
                                         function clearError(input) {
                                             let errorSpan = input.parentNode.querySelector(".error-message");
                                             if (errorSpan) {
@@ -285,7 +310,7 @@
                                             }
                                         }
 
-                                        // Kiểm tra Product Code chỉ có chữ và số
+                                        // Chỉ cho chữ và số ở Product Code
                                         codeInput.addEventListener("input", function () {
                                             let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
                                             if (this.value !== validValue) {
@@ -296,11 +321,10 @@
                                             }
                                         });
 
-                                        // Kiểm tra định dạng Product Name
+                                        // Chỉ cho chữ, số và khoảng trắng ở Product Name
                                         nameInput.addEventListener("input", function () {
-                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, ''); // Chỉ cho phép chữ cái, số, và dấu cách
-                                            validValue = validValue.replace(/\s{2,}/g, ' '); // Chỉ cho phép 1 dấu cách giữa các từ
-
+                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, '');
+                                            validValue = validValue.replace(/\s{2,}/g, ' ');
                                             if (this.value !== validValue) {
                                                 this.value = validValue;
                                                 showError(nameInput, "Only letters, numbers, and single spaces between words are allowed!");
@@ -311,88 +335,102 @@
                                             }
                                         });
 
-
-                                        // Kiểm tra khi nhấn submit
+                                        // Khi submit: kiểm tra các trường bắt buộc (không bắt kiểm tra file vì ảnh cũ đã được lưu lại)
                                         form.addEventListener("submit", function (event) {
                                             let isValid = true;
-
                                             if (codeInput.value.trim() === "") {
                                                 showError(codeInput, "Product Code is required!");
                                                 isValid = false;
                                             }
-
                                             if (nameInput.value.trim() === "") {
                                                 showError(nameInput, "Product Name is required!");
                                                 isValid = false;
                                             }
-
                                             if (brandInput.value === "") {
                                                 showError(brandInput, "Please select a Brand!");
                                                 isValid = false;
                                             }
-
                                             if (typeInput.value.trim() === "") {
                                                 showError(typeInput, "Product Type is required!");
                                                 isValid = false;
                                             }
-
                                             if (quantityInput.value.trim() === "" || quantityInput.value <= 0) {
                                                 showError(quantityInput, "Quantity must be at least 1!");
                                                 isValid = false;
                                             }
-
                                             if (warrantyInput.value.trim() === "" || warrantyInput.value <= 0) {
                                                 showError(warrantyInput, "Warranty Period must be at least 1 month!");
                                                 isValid = false;
                                             }
-
-                                            if (imageInput.files.length === 0) {
-                                                showError(imageInput, "Please upload a Product Image!");
-                                                isValid = false;
-                                            }
-
                                             if (!isValid) {
-                                                event.preventDefault(); // Ngăn form gửi nếu có lỗi
+                                                event.preventDefault();
                                             }
                                         });
                                     });
 
-                                    function previewImage(event) {
-                                        const reader = new FileReader();
-                                        reader.onload = function () {
-                                            document.getElementById('currentImage').src = reader.result;
-                                        };
-                                        reader.readAsDataURL(event.target.files[0]);
-                                    }
+                                    // Xử lý preview ảnh và mũi tên chuyển ảnh
+                                    let currentImageIndex = 0;
+                                    let imageFiles = [];
 
-                                    document.getElementById("newImage").addEventListener("change", previewImage);
-
-
-                                    document.getElementById("newImage").addEventListener("change", function () {
-                                        let file = this.files[0]; // Lấy file được chọn
-                                        if (file) {
-                                            let maxSize = 5 * 1024 * 1024; // 5MB
-                                            if (file.size > maxSize) {
+                                    document.getElementById("newImage").addEventListener("change", function (event) {
+                                        let files = event.target.files;
+                                        let maxSize = 5 * 1024 * 1024; // 5MB
+                                        for (let i = 0; i < files.length; i++) {
+                                            if (files[i].size > maxSize) {
                                                 alert("File không được vượt quá 5MB!");
-                                                this.value = ""; // Reset input file nếu file quá lớn
+                                                this.value = "";
+                                                return;
                                             }
                                         }
+                                        previewImages(event);
                                     });
 
-                                    // Kiểm tra khi nhấn submit
-                                    form.addEventListener("submit", function (event) {
-                                        let isValid = true;
+                                    function previewImages(event) {
+                                        let files = event.target.files;
+                                        if (files.length === 0)
+                                            return;
+                                        imageFiles = [...files];
+                                        currentImageIndex = 0;
+                                        showImage(currentImageIndex);
 
-                                        if (nameInput.value.trim() === "") {
-                                            showError(nameInput, "Product Name cannot be empty or only spaces!");
-                                            isValid = false;
+                                        let thumbnailContainer = document.getElementById("thumbnailContainer");
+                                        thumbnailContainer.innerHTML = "";
+                                        for (let i = 0; i < files.length; i++) {
+                                            let reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                let img = document.createElement("img");
+                                                img.src = e.target.result;
+                                                img.onclick = function () {
+                                                    showImage(i);
+                                                };
+                                                thumbnailContainer.appendChild(img);
+                                            };
+                                            reader.readAsDataURL(files[i]);
                                         }
+                                    }
 
-                                        if (!isValid) {
-                                            event.preventDefault(); // Ngăn form gửi nếu có lỗi
+                                    function showImage(index) {
+                                        if (index >= 0 && index < imageFiles.length) {
+                                            let reader = new FileReader();
+                                            reader.onload = function (e) {
+                                                document.getElementById("currentImage").src = e.target.result;
+                                            };
+                                            reader.readAsDataURL(imageFiles[index]);
+                                            currentImageIndex = index;
                                         }
-                                    });
+                                    }
+
+                                    function prevImage() {
+                                        if (currentImageIndex > 0) {
+                                            showImage(currentImageIndex - 1);
+                                        }
+                                    }
+
+                                    function nextImage() {
+                                        if (currentImageIndex < imageFiles.length - 1) {
+                                            showImage(currentImageIndex + 1);
+                                        }
+                                    }
         </script>
-
     </body>
 </html>

@@ -85,7 +85,6 @@ CREATE TABLE Role_Permissions (
 );
 
 
-
 CREATE TABLE Brand (
     BrandID INT IDENTITY(1,1) PRIMARY KEY,
     BrandName NVARCHAR(50) NOT NULL UNIQUE
@@ -268,7 +267,6 @@ CREATE TABLE Media (
     UploadedDate DATETIME DEFAULT GETDATE()
 );
 
-
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);
@@ -285,4 +283,7 @@ BEGIN
     SELECT UnknownProductID FROM inserted WHERE UnknownProductID IS NOT NULL;
 END
 GO
+
+
+
 

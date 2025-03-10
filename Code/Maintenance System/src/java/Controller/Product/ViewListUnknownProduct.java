@@ -16,16 +16,21 @@ import jakarta.servlet.http.HttpServletResponse;
 public class ViewListUnknownProduct extends HttpServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        // DAO
         ProductDAO unknownProductDAO = new ProductDAO();
 
-        // Nhận các tham số tìm kiếm
+        // Lấy các tham số tìm kiếm (nếu có)
         String productCode = request.getParameter("productCode");
         String productName = request.getParameter("productName");
         String description = request.getParameter("description");
         String receivedDate = request.getParameter("receivedDate");
         String customerName = request.getParameter("customerName");
         String customerPhone = request.getParameter("phone");
+
+        // Xử lý chuỗi rỗng -> null
         if (productCode != null && productCode.trim().isEmpty()) {
             productCode = null;
         }
@@ -41,36 +46,78 @@ public class ViewListUnknownProduct extends HttpServlet {
         if (customerName != null && customerName.trim().isEmpty()) {
             customerName = null;
         }
+        if (customerPhone != null && customerPhone.trim().isEmpty()) {
+            customerPhone = null;
+        }
 
-        // Nhận số trang từ request, mặc định là 1
+        // Lấy số trang hiện tại
         int page = 1;
-        int pageSize = 5; // Số sản phẩm trên mỗi trang
-        if (request.getParameter("page") != null) {
-            try {
+        try {
+            if (request.getParameter("page") != null) {
                 page = Integer.parseInt(request.getParameter("page"));
-            } catch (NumberFormatException e) {
-                page = 1;
+            }
+        } catch (NumberFormatException e) {
+            page = 1;
+        }
+
+        // Mặc định pageSize = 5
+        int pageSize = 5;
+        String selectedPageSize = request.getParameter("pageSize");
+        String customPageSize = request.getParameter("customPageSize");
+
+        if (selectedPageSize != null) {
+            if ("custom".equals(selectedPageSize)) {
+                // Người dùng chọn "Custom"
+                if (customPageSize != null && !customPageSize.trim().isEmpty()) {
+                    try {
+                        pageSize = Integer.parseInt(customPageSize);
+                    } catch (NumberFormatException e) {
+                        pageSize = 5; // fallback nếu parse sai
+                    }
+                }
+            } else {
+                // Người dùng chọn 5, 10, 15, 20, 25
+                try {
+                    pageSize = Integer.parseInt(selectedPageSize);
+                } catch (NumberFormatException e) {
+                    pageSize = 5;
+                }
             }
         }
 
-        // Đếm tổng số bản ghi để tính tổng số trang
-        int totalRecords = unknownProductDAO.countUnknownProducts(productCode, productName, description, receivedDate, customerName, customerPhone);
+        // Đếm tổng số bản ghi
+        int totalRecords = unknownProductDAO.countUnknownProducts(
+                productCode, productName, description, receivedDate,
+                customerName, customerPhone);
+
+        // Tính tổng số trang
         int totalPages = (int) Math.ceil((double) totalRecords / pageSize);
-        // Lấy danh sách sản phẩm không rõ nguồn gốc với phân trang
-        List<UnknownProduct> unknownProducts = unknownProductDAO.searchUnknownProducts(productCode, productName, description, receivedDate, customerName,customerPhone, page, pageSize);
+
+        // Lấy danh sách sản phẩm không rõ nguồn gốc (có phân trang)
+        List<UnknownProduct> unknownProducts = unknownProductDAO.searchUnknownProducts(
+                productCode, productName, description, receivedDate,
+                customerName, customerPhone, page, pageSize);
 
         // Gửi dữ liệu về JSP
         request.setAttribute("listUnknownProduct", unknownProducts);
         request.setAttribute("currentPage", page);
         request.setAttribute("totalPages", totalPages);
+        request.setAttribute("pageSize", pageSize);            // Để hiển thị lại trên dropdown
+        request.setAttribute("customPageSize", customPageSize); // Nếu có, để hiển thị lại giá trị custom
+
+        // Gửi lại các tham số tìm kiếm để giữ nguyên form
         request.setAttribute("productCode", productCode);
         request.setAttribute("productName", productName);
         request.setAttribute("description", description);
         request.setAttribute("receivedDate", receivedDate);
         request.setAttribute("customerName", customerName);
+        request.setAttribute("customerPhone", customerPhone);
 
+        // Forward
         request.getRequestDispatcher("Product/viewUnknownProduct.jsp").forward(request, response);
     }
+    
+    
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

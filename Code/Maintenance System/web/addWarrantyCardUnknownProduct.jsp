@@ -14,7 +14,14 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+            integrity="sha512-ac6U9Cqcbn6K6q/73mITJGF0fjLWWZwUczEzKNnZHRrRLz63HJfiAgPRQd3kNn6BW9rBS71hbPkdoL7q2/EvWA=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+            />
+        <link rel="stylesheet" href="style.css">
         <style>
             /* CSS chuyên dụng cho phần nội dung chính (main.content) */
 
@@ -169,6 +176,93 @@
                     padding: 10px;
                 }
             }
+            .toolbox {
+                background-color: #f0f0f0; /* màu nền nhẹ */
+                border: 1px solid #ddd;    /* viền nhẹ */
+                border-radius: 5px;        /* bo góc */
+                padding: 15px;             /* khoảng cách bên trong */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* tạo bóng nhẹ */
+                max-width: 2000px;          /* giới hạn chiều rộng nếu cần */
+                margin: 20px auto;         /* căn giữa container trên trang */
+            }
+
+            .toolbox label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .toolbox textarea {
+                width: 100%;
+                min-height: 100px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                resize: vertical; /* cho phép thay đổi kích thước theo chiều dọc */
+            }
+
+            /* Tổng thể vùng editor */
+            .editor-container {
+                width:100%;              /* Độ rộng mong muốn */
+                border: 1px solid #ccc;    /* Viền ngoài */
+                border-radius: 5px;        /* Bo góc */
+                margin: auto;         /* Căn giữa trang */
+                font-family: sans-serif;   /* Font chữ cơ bản */
+                background-color: #f9f9f9; /* Nền nhẹ */
+            }
+
+            /* Thanh công cụ (toolbar) */
+            .editor-toolbar {
+                display: flex;
+                flex-wrap: wrap;           /* Nếu thiếu chỗ, icon sẽ xuống dòng */
+                border-bottom: 1px solid #ddd;
+                background-color: #fafafa;
+                padding: 5px 10px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            /* Nút công cụ (tool-btn) */
+            .tool-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                margin-right: 8px;
+                font-size: 16px;
+                color: #555;
+                padding: 6px;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .tool-btn:hover {
+                background-color: #e0e0e0;
+                color: #000;
+            }
+
+            .tool-btn:focus {
+                outline: none; /* Tắt khung focus mặc định, tuỳ chọn */
+            }
+
+            /* Vùng soạn thảo */
+            .editor-content {
+                min-height: 200px;         /* Chiều cao tối thiểu */
+                padding: 10px;
+                font-size: 14px;
+                line-height: 1.4;
+                background-color: #fff;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+
+            /* Hiển thị placeholder khi contenteditable rỗng */
+            .editor-content:empty:before {
+                content: attr(data-placeholder);
+                color: #aaa;
+            }
+            .editor-content:focus:before {
+                content: "";
+            }
+
         </style>
     </head>
     <body>
@@ -189,7 +283,8 @@
                         <tr><th>Gender</th><td>${customer.gender}</td></tr>
                         <tr><th>Email</th><td>${customer.email}</td></tr>
                         <tr><th>Phone</th><td>${customer.phone}</td></tr>
-                        <tr><th>Address</th><td>${customer.address}</td></tr></table>
+                        <tr><th>Address</th><td>${customer.address}</td></tr>
+                    </table>
                     <h3>Product Information</h3>
                     <table class="info-table">
                         <tr><th>Product Name</th><td>${unknownProduct.productName}</td></tr>
@@ -198,17 +293,32 @@
                         <tr><th>Received Date</th><td>${unknownProduct.receivedDate}</td></tr>
                     </table>
 
-
-
-
                     <h3>Enter Warranty Card Details</h3>
                     <form action="addWUP" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="customerId" value="${customer.customerID}" />
                         <input type="hidden" name="productId" value="${unknownProduct.unknownProductId}" />
                         <input type="hidden" name="warrantyProductId" value="${warrantyProductId}" />
+                        <label for="issueDescription">Issue Description:</label>
+                        
+                        <div class="editor-container">
+                            <div class="editor-toolbar">
+                                <button type="button" class="tool-btn" title="Bold"><i class="fas fa-bold"></i></button>
+                                <button type="button" class="tool-btn" title="Italic"><i class="fas fa-italic"></i></button>
+                                <button type="button" class="tool-btn" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+                                <button type="button" class="tool-btn" title="Underline"><i class="fas fa-underline"></i></button>
+                                <button type="button" class="tool-btn" title="Bulleted List"><i class="fas fa-list-ul"></i></button>
+                                <button type="button" class="tool-btn" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                                <button type="button" class="tool-btn" title="Align Left"><i class="fas fa-align-left"></i></button>
+                                <button type="button" class="tool-btn" title="Align Center"><i class="fas fa-align-center"></i></button>
+                                <button type="button" class="tool-btn" title="Align Right"><i class="fas fa-align-right"></i></button>
+                                <button type="button" class="tool-btn" title="Link"><i class="fas fa-link"></i></button>
+                                <button type="button" class="tool-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
+                                <button type="button" class="tool-btn" title="Source"><i class="fas fa-code"></i></button>
+                            </div>
 
-                        <label>Issue Description:</label>
-                        <textarea id="issueDescription" name="issueDescription" required>${param.issueDescription}</textarea>
+                            <!-- Vùng soạn thảo (contenteditable) -->
+                            <textarea id="issueDescription" name="issueDescription" required>${param.issueDescription}</textarea>
+                        </div>
 
                         <label>Assigned Staff:</label>
                         <select id="staffID" name="staffId" required>
@@ -259,10 +369,11 @@
                         </select>
                         <br/>
 
-                        <label>Upload Warranty Image:</label>
-                        <input type="file" name="warrantyImage" accept="image/*" required onchange="previewImage(event)" />
+                        <label>Upload Warranty Media (Images/Videos):</label>
+                        <input type="file" name="warrantyMedia" accept="image/*,video/*" multiple required onchange="previewMedia(event)" />
                         <br/>
-                        <img id="imagePreview" src="#" alt="Preview Image" style="display: none; max-width: 300px; margin-top: 10px;" />
+                        <div id="mediaPreview"></div>
+
                         <input type="submit" value="Create Warranty Card"/>
                         <a href="listUnknown" class="btn-update">
                             <i></i>Back
@@ -422,19 +533,53 @@
                 });
             });
         </script>
+
         <script>
-            function previewImage(event) {
-                var file = event.target.files[0];
-                if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function (e) {
-                        var imagePreview = document.getElementById("imagePreview");
-                        imagePreview.src = e.target.result;
-                        imagePreview.style.display = "block";
-                    };  // Thêm dấu chấm phẩy ở đây
-                    reader.readAsDataURL(file);
+            function toggleDateInput(id) {
+                var select = document.getElementsByName(id + "Option")[0];
+                var input = document.getElementById(id);
+                if (select.value === "select") {
+                    input.style.display = "inline";
+                } else {
+                    input.style.display = "none";
+                    input.value = "";
                 }
             }
+            function previewMedia(event) {
+                var preview = document.getElementById('mediaPreview');
+                preview.innerHTML = "";
+                var files = event.target.files;
+                var maxSize = 5 * 1024 * 1024; // 5MB tính theo bytes
+
+                for (var i = 0; i < files.length; i++) {
+                    var file = files[i];
+                    // Kiểm tra kích thước file
+                    if (file.size > maxSize) {
+                        alert("File " + file.name + " vượt quá giới hạn 5MB.");
+                        continue; // bỏ qua file này, không hiển thị preview
+                    }
+
+                    var fileType = file.type;
+                    var element;
+                    if (fileType.startsWith("image/")) {
+                        element = document.createElement("img");
+                        element.style.maxWidth = "300px";
+                        element.style.margin = "10px";
+                        element.src = URL.createObjectURL(file);
+                    } else if (fileType.startsWith("video/")) {
+                        element = document.createElement("video");
+                        element.style.maxWidth = "300px";
+                        element.style.margin = "10px";
+                        element.controls = true;
+                        element.src = URL.createObjectURL(file);
+                    }
+                    if (element) {
+                        preview.appendChild(element);
+                    }
+                }
+            }
+
         </script>
+
     </body>
 </html>

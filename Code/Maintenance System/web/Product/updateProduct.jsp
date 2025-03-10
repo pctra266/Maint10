@@ -13,114 +13,89 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <style>
-            main.content {
-                background-color: #f8f9fa;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-                max-width: 800px;
-                margin: 20px auto;
-                font-family: 'Inter', sans-serif;
-            }
 
-            main.content form {
+        <style>
+            .container {
+                display: flex;
+                justify-content: space-between;
+                max-width: 3000px;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+            .form-container {
+                width: 100%;
+                padding-right: 20px;
+            }
+            .form-container form label {
+                display: block;
+                margin-top: 10px;
+            }
+            .form-container form input,
+            .form-container form select {
+                width: 100%;
+                padding: 8px;
+                margin-top: 5px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+            .image-container {
+                width: 50%;
                 display: flex;
                 flex-direction: column;
-                gap: 5px;
+                align-items: center;
             }
-
-            main.content label {
-                font-weight: 600;
-                color: #333;
-                margin-bottom: 5px;
-            }
-
-            main.content input,
-            main.content select {
-                padding: 10px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                font-size: 16px;
-                transition: all 0.3s ease-in-out;
-            }
-
-            main.content input:focus,
-            main.content select:focus {
-                border-color: #007bff;
-                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-                outline: none;
-            }
-
-            main.content img {
-                display: block;
-                margin: 10px auto;
-                max-width: 100%;
-                border-radius: 8px;
-            }
-
-            #submitBtn {
-                padding: 12px;
-                background: linear-gradient(135deg, #007bff, #0056b3);
-                border: none;
-                border-radius: 8px;
-                font-size: 16px;
-                color: #fff;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            }
-
-            main.content.submit-btn button:hover {
-                background: linear-gradient(135deg, #0056b3, #003c7a);
-                transform: scale(1.05);
-            }
-
-            main.content .add-product {
-                background: #28a745;
-            }
-
-            main.content .add-product:hover {
-                background: #218838;
-            }
-
-            main.content h2{
-                text-align: center;
-            }
-
-            .image-preview-container {
+            .image-preview-wrapper {
                 position: relative;
-                display: inline-block;
+                width: 100%;
+                max-width: 300px;     /* Giới hạn bề ngang */
+                max-height: 300px;    /* Giới hạn bề cao */
+                overflow: hidden;     /* Ẩn phần ảnh vượt khung */
+                margin-bottom: 20px;  /* Tạo khoảng trống bên dưới */
             }
-
-            .image-preview-container img {
-                display: block;
-                max-width: 100%;
+            /* Ảnh sẽ co/zoom vừa khung mà không vượt quá kích thước */
+            #imagePreviewContainer img {
+                width: 100%;
                 height: auto;
-                border-radius: 8px;
+                object-fit: cover;    /* Cắt ảnh cho vừa khung, tránh vỡ layout */
+                display: block;
+                border-radius: 10px;
             }
-
-            .clear-btn {
-                position:  relative;
-                background: rgba(220, 53, 69, 0.8);
+            .arrow {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                background: rgba(0, 0, 0, 0.5);
                 color: white;
                 border: none;
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                font-size: 14px;
-                font-weight: bold;
+                padding: 10px;
                 cursor: pointer;
-                display: none; /* Mặc định ẩn */
-                transition: all 0.3s ease;
             }
-
-            .clear-btn:hover {
-                background: rgba(200, 35, 50, 1);
-                transform: scale(1.1);
+            .prev {
+                left: 0;
             }
-            
+            .next {
+                right: 0;
+            }
+            main.buttons {
+                margin-top: 20px;
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+            }
+            main button {
+                padding: 10px 15px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                cursor: pointer;
+                border-radius: 5px;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
         </style>
+
     </head>
     <body>
         <div class="wrapper">
@@ -134,60 +109,80 @@
                             ${errorMessage}
                         </div>
                     </c:if>
-
-                    <h2>Update Product</h2>
-
-                    <form action="viewProduct" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="action" value="update">
-
-                        <input type="hidden" name="pid" value="${product.productId}">
-                        <input type="hidden" name="status" value="${product.status}">
-                        <input type="hidden" name="existingImage" value="${product.image}">
-
-                        <label for="productCode">Product Code:</label>
-                        <input type="text" id="productCode" name="productCode" value="${product.code}" required oninput="validateProductCode()">
-                        <span id="productCodeError" style="color: red;"></span>
-
-                        <label for="productName">Product Name:</label>
-                        <input type="text" id="productName" name="productName" value="${product.productName}" required oninput="validateProductName()">
-                        <span id="productNameError" style="color: red;"></span>
-
-                        <label for="brandId">Brand:</label>
-                        <select name="brandId" id="brandId" required>
-                            <c:forEach var="brand" items="${listBrand}">
-                                <option value="${brand.brandId}" ${product.brandId == brand.brandId ? 'selected' : ''}>
-                                    ${brand.brandName}
-                                </option>
-                            </c:forEach>
-                        </select>
-
-                        <!-- Nhập type -->
-                        <label for="typeId">Type:</label> 
-                        <select name="type" id="typeId" required>
-                            <option value="">All Types</option>
-                            <c:forEach var="t" items="${listType}">
-                                <option value="${t.productTypeId}"${ product.productTypeId == t.productTypeId ? 'selected' : ''}>
-                                    ${t.typeName}
-                                </option>
-                            </c:forEach>
-                        </select>
-
-                        <label for="quantity">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" value="${product.quantity}" min="1" required>
-
-                        <label for="warrantyPeriod">Warranty Period (Months):</label>
-                        <input type="number" id="warrantyPeriod" name="warrantyPeriod" min="1" value="${product.warrantyPeriod}" required>
-
-                        <label for="newImage">Product Image:</label>
-                        <div class="image-preview-container">
-                            <img src="${product.image}" id="currentImage" alt="No Image">
+                    <c:if test="${not empty successMessage}">
+                        <div style="color: red; text-align: center; margin-bottom: 10px;">
+                            ${successMessage}
                         </div>
-                        <input type="file" name="image" id="newImage" accept="image/*" onchange="previewImage(event)">
+                    </c:if>
 
-                        <button type="submit" id="submitBtn">Update Product</button>
-                    </form>
+                    <div class="container">
+                        <!-- Cột form nhập thông tin -->
+                        <div class="form-container">
+                            <h2>Update Product</h2>
+                            <form action="viewProduct" method="post" enctype="multipart/form-data">
+                                <input type="hidden" name="action" value="update">
+                                <input type="hidden" name="pid" value="${product.productId}">
+                                <input type="hidden" name="status" value="${product.status}">
 
-                    <button type="button" id="submitBtn" onclick="goBack()">Back</button>
+                                <label for="productCode">Product Code:</label>
+                                <input type="text" id="productCode" name="productCode" value="${product.code}" required oninput="validateProductCode()">
+                                <span id="productCodeError" style="color: red;"></span>
+
+                                <label for="productName">Product Name:</label>
+                                <input type="text" id="productName" name="productName" value="${product.productName}" required oninput="validateProductName()">
+                                <span id="productNameError" style="color: red;"></span>
+
+                                <label for="brandId">Brand:</label>
+                                <select name="brandId" id="brandId" required>
+                                    <c:forEach var="brand" items="${listBrand}">
+                                        <option value="${brand.brandId}" ${product.brandId == brand.brandId ? 'selected' : ''}>
+                                            ${brand.brandName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+
+                                <label for="typeId">Type:</label> 
+                                <select name="type" id="typeId" required>
+                                    <option value="">All Types</option>
+                                    <c:forEach var="t" items="${listType}">
+                                        <option value="${t.productTypeId}"${ product.productTypeId == t.productTypeId ? 'selected' : ''}>
+                                            ${t.typeName}
+                                        </option>
+                                    </c:forEach>
+                                </select>
+
+                                <label for="quantity">Quantity:</label>
+                                <input type="number" id="quantity" name="quantity" value="${product.quantity}" min="1" required>
+
+                                <label for="warrantyPeriod">Warranty Period (Months):</label>
+                                <input type="number" id="warrantyPeriod" name="warrantyPeriod" min="1" value="${product.warrantyPeriod}" required>
+
+                                <!-- Input file vẫn nằm trong form để submit được dữ liệu -->
+                                <label for="newImage">Product Images:</label>
+                                <input type="file" name="image" id="newImage" accept="image/jpeg, image/png" multiple onchange="previewImages(event)">
+
+                            </form>
+                        </div>
+                        <!-- Cột hiển thị ảnh kèm mũi tên điều hướng -->
+                        <div class="image-container">
+                            <div class="image-preview-wrapper">
+                                <div id="imagePreviewContainer">
+                                    <c:if test="${not empty product.images}">
+                                        <c:forEach var="img" items="${product.images}">
+                                            <img src="${img}" alt="Product Image" class="image-preview">
+                                        </c:forEach>
+                                    </c:if>
+                                </div>
+                                <button class="arrow prev" onclick="previousImage()">&#10094;</button>
+                                <button class="arrow next" onclick="nextImage()">&#10095;</button>
+                            </div>
+                            <div class="buttons">
+                                <button type="button" class="back-btn" onclick="location.href = 'viewProduct'">Back</button>
+
+                                <button type="submit" id="submitBtn">Update Product</button>
+                            </div>
+                        </div>
+                    </div>
 
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
@@ -195,93 +190,104 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                        function previewImage(event) {
-                            const reader = new FileReader();
-                            reader.onload = function () {
-                                document.getElementById('currentImage').src = reader.result;
-                            };
-                            reader.readAsDataURL(event.target.files[0]);
-                        }
+                                    function validateProductCode() {
+                                        const productCode = document.getElementById("productCode").value.trim();
+                                        const errorSpan = document.getElementById("productCodeError");
+                                        const regex = /^[a-zA-Z0-9]+$/; // Chỉ cho phép chữ cái và số
 
-                        function validateProductCode() {
-                            const productCode = document.getElementById("productCode").value.trim();
-                            const errorSpan = document.getElementById("productCodeError");
-                            const regex = /^[a-zA-Z0-9]+$/; // Chỉ cho phép chữ cái và số
+                                        if (!productCode) {
+                                            errorSpan.textContent = "Product code không được để trống hoặc chỉ chứa dấu cách.";
+                                        } else if (!regex.test(productCode)) {
+                                            errorSpan.textContent = "Product code chỉ được chứa chữ cái và số, không có dấu cách hoặc ký tự đặc biệt.";
+                                        } else {
+                                            errorSpan.textContent = "";
+                                        }
+                                        validateForm();
+                                    }
 
-                            if (!productCode) {
-                                errorSpan.textContent = "Product code không được để trống hoặc chỉ chứa dấu cách.";
-                            } else if (!regex.test(productCode)) {
-                                errorSpan.textContent = "Product code chỉ được chứa chữ cái và số, không có dấu cách hoặc ký tự đặc biệt.";
-                            } else {
-                                errorSpan.textContent = "";
-                            }
-                            validateForm();
-                        }
+                                    function validateProductName() {
+                                        const productName = document.getElementById("productName").value.trim();
+                                        const errorSpan = document.getElementById("productNameError");
+                                        const regex = /^[a-zA-Z0-9]+(\s[a-zA-Z0-9]+)*$/; // Chỉ cho phép chữ cái, số và khoảng trắng hợp lệ
 
-                        function validateProductName() {
-                            const productName = document.getElementById("productName").value.trim();
-                            const errorSpan = document.getElementById("productNameError");
-                            const regex = /^[a-zA-Z0-9]+(\s[a-zA-Z0-9]+)*$/; // Chỉ cho phép chữ cái, số và khoảng trắng hợp lệ
+                                        if (!productName) {
+                                            errorSpan.textContent = "Product name không được để trống hoặc chỉ chứa dấu cách.";
+                                        } else if (!regex.test(productName)) {
+                                            errorSpan.textContent = "Product name chỉ được chứa chữ cái, số và mỗi từ chỉ có 1 dấu cách giữa.";
+                                        } else {
+                                            errorSpan.textContent = "";
+                                        }
+                                        validateForm();
+                                    }
 
-                            if (!productName) {
-                                errorSpan.textContent = "Product name không được để trống hoặc chỉ chứa dấu cách.";
-                            } else if (!regex.test(productName)) {
-                                errorSpan.textContent = "Product name chỉ được chứa chữ cái, số và mỗi từ chỉ có 1 dấu cách giữa.";
-                            } else {
-                                errorSpan.textContent = "";
-                            }
-                            validateForm();
-                        }
+                                    function validateForm() {
+                                        const productCodeError = document.getElementById("productCodeError").textContent;
+                                        const productNameError = document.getElementById("productNameError").textContent;
+                                        const submitBtn = document.getElementById("submitBtn");
 
-                        function validateForm() {
-                            const productCodeError = document.getElementById("productCodeError").textContent;
-                            const productNameError = document.getElementById("productNameError").textContent;
-                            const submitBtn = document.getElementById("submitBtn");
+                                        if (productCodeError || productNameError) {
+                                            submitBtn.disabled = true;
+                                        } else {
+                                            submitBtn.disabled = false;
+                                        }
+                                    }
 
-                            if (productCodeError || productNameError) {
-                                submitBtn.disabled = true;
-                            } else {
-                                submitBtn.disabled = false;
-                            }
-                        }
+                                    document.getElementById("newImage").addEventListener("change", function () {
+                                        let file = this.files[0]; // Lấy file được chọn
+                                        if (file) {
+                                            let maxSize = 5 * 1024 * 1024; // 5MB
+                                            if (file.size > maxSize) {
+                                                alert("File không được vượt quá 5MB!");
+                                                this.value = ""; // Reset input file nếu file quá lớn
+                                            }
+                                        }
+                                    });
 
-                        document.getElementById("newImage").addEventListener("change", function () {
-                            let file = this.files[0]; // Lấy file được chọn
-                            if (file) {
-                                let maxSize = 5 * 1024 * 1024; // 5MB
-                                if (file.size > maxSize) {
-                                    alert("File không được vượt quá 5MB!");
-                                    this.value = ""; // Reset input file nếu file quá lớn
-                                }
-                            }
-                        });
+                                    function previewImages(event) {
+                                        const files = event.target.files;
+                                        const previewContainer = document.getElementById('imagePreviewContainer');
+                                        previewContainer.innerHTML = ""; // Xóa các ảnh preview cũ
 
-                        function goBack() {
-                            // Quay về trang trước đó
-                            window.history.back();
-                        }
+                                        if (files) {
+                                            Array.from(files).forEach(file => {
+                                                const reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    const img = document.createElement("img");
+                                                    img.src = e.target.result;
+                                                    img.className = "image-preview";
+                                                    previewContainer.appendChild(img);
+                                                };
+                                                reader.readAsDataURL(file);
+                                            });
+                                        }
+                                    }
 
-                        function previewImage(event) {
-                            const reader = new FileReader();
-                            reader.onload = function () {
-                                document.getElementById('currentImage').src = reader.result;
-                                document.getElementById('clearImageBtn').style.display = "block"; // Hiện nút "X"
-                            };
-                            reader.readAsDataURL(event.target.files[0]);
-                        }
-
-                        function clearImage() {
-                            document.getElementById("currentImage").src = "images/no-image.png"; // Ảnh mặc định
-                            document.getElementById("newImage").value = ""; // Xóa file đã chọn
-                            document.getElementById("clearImageBtn").style.display = "none"; // Ẩn nút "X"
-                        }
-
-                        // Hiển thị nút "X" khi có ảnh cũ
-                        window.onload = function () {
-                            if (document.getElementById("currentImage").src) {
-                                document.getElementById("clearImageBtn").style.display = "block";
-                            }
-                        };
+                                    // Chức năng điều hướng ảnh
+                                    let currentImageIndex = 0;
+                                    function showImage(index) {
+                                        const images = document.querySelectorAll('#imagePreviewContainer img');
+                                        if (images.length === 0)
+                                            return;
+                                        if (index < 0) {
+                                            currentImageIndex = images.length - 1;
+                                        } else if (index >= images.length) {
+                                            currentImageIndex = 0;
+                                        } else {
+                                            currentImageIndex = index;
+                                        }
+                                        images.forEach((img, idx) => {
+                                            img.style.display = (idx === currentImageIndex) ? 'block' : 'none';
+                                        });
+                                    }
+                                    function previousImage() {
+                                        showImage(currentImageIndex - 1);
+                                    }
+                                    function nextImage() {
+                                        showImage(currentImageIndex + 1);
+                                    }
+                                    window.onload = function () {
+                                        showImage(0);
+                                    };
         </script>
     </body>
 </html>

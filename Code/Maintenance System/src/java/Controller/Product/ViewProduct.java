@@ -4,7 +4,6 @@ import DAO.ProductDAO;
 import Model.Brand;
 import Model.Product;
 import Model.ProductType;
-import Utils.OtherUtils;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
@@ -13,6 +12,10 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.io.File;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collection;
 
 @MultipartConfig(
         fileSizeThreshold = 2 * 1024 * 1024, // 2MB
@@ -65,8 +68,8 @@ public class ViewProduct extends HttpServlet {
         String sortQuantity = request.getParameter("sortQuantity") != null ? request.getParameter("sortQuantity").trim() : "";
         String sortWarranty = request.getParameter("sortWarranty") != null ? request.getParameter("sortWarranty").trim() : "";
 
-        Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.parseInt(brandIdParam) : null;
-        Integer typeId = (typeIdParam != null && !typeIdParam.isEmpty()) ? Integer.parseInt(typeIdParam) : null;
+        Integer brandId = (brandIdParam != null && !brandIdParam.isEmpty()) ? Integer.valueOf(brandIdParam) : null;
+        Integer typeId = (typeIdParam != null && !typeIdParam.isEmpty()) ? Integer.valueOf(typeIdParam) : null;
 
         searchName = searchName.replaceAll("\\s+", " ");
 
@@ -77,16 +80,33 @@ public class ViewProduct extends HttpServlet {
         }
 
         int page = 1;
-        int recordsPerPage = 8;
+        int recordsPerPage = 5; // Mặc định là 5
 
+        // Lấy số trang hiện tại
         if (request.getParameter("page") != null) {
-            page = Integer.parseInt(request.getParameter("page"));
+            try {
+                page = Integer.parseInt(request.getParameter("page"));
+                if (page < 1) {
+                    page = 1;
+                }
+            } catch (NumberFormatException e) {
+                page = 1;
+            }
         }
 
+        // Xử lý recordsPerPage:
+        // Nếu có tham số thì chuyển về số nguyên và kiểm tra phải là số nguyên dương
         if (request.getParameter("recordsPerPage") != null) {
-            recordsPerPage = Integer.parseInt(request.getParameter("recordsPerPage"));
-            if (recordsPerPage < 1) {
-                recordsPerPage = 8;
+            try {
+                int tempRecords = Integer.parseInt(request.getParameter("recordsPerPage"));
+                if (tempRecords < 1) {
+                    recordsPerPage = 5;
+                } else {
+                    // Cho phép giá trị là 5, 10, 15, 20, 25 hoặc giá trị tùy chỉnh khác do người dùng nhập
+                    recordsPerPage = tempRecords;
+                }
+            } catch (NumberFormatException e) {
+                recordsPerPage = 5;
             }
         }
 
@@ -114,11 +134,6 @@ public class ViewProduct extends HttpServlet {
         request.setAttribute("listType", listType);
         request.setAttribute("recordsPerPage", recordsPerPage);
 
-//        PrintWriter out = response.getWriter();
-//        for (ProductType p : listType) {
-//            out.println(p.getProductTypeId());
-//            out.println(p.getTypeName());
-//        }
         request.getRequestDispatcher("Product/viewProduct.jsp").forward(request, response);
     }
 
@@ -130,32 +145,86 @@ public class ViewProduct extends HttpServlet {
         request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
     }
 
-    // ========== [3] Hiển thị thông tin cập nhật sản phẩm ==========
-    private void loadProductForUpdate(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int productId = Integer.parseInt(request.getParameter("id"));
-        Product product = productDAO.getProductById(productId);
-
-        request.setAttribute("product", product);
-        request.setAttribute("listBrand", productDAO.getAllBrands());
-        request.setAttribute("listType", productDAO.getAllProductTypes());
-
-        request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
-    }
-
     // ========== [4] Thêm sản phẩm ==========
     private void addProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
+        List<Brand> listBrand = productDAO.getAllBrands();
+        List<ProductType> listType = productDAO.getAllProductTypes();
+        // Lấy dữ liệu từ request
         String code = request.getParameter("code");
         String name = request.getParameter("name");
         int brandId = Integer.parseInt(request.getParameter("brandId"));
-        int typeId = Integer.parseInt(request.getParameter("type"));
+        int typeId = Integer.parseInt(request.getParameter("type")); // product type
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
         String status = request.getParameter("status");
-        Part imagePart = request.getPart("image");
 
-        // Kiểm tra mã sản phẩm đã tồn tại chưa
+        List<String> tempImages = new ArrayList<>();
+
+        // Nhận giá trị ảnh cũ từ hidden input (nếu có)
+        String[] existingImages = request.getParameterValues("existingImages");
+        if (existingImages != null) {
+            for (String img : existingImages) {
+                tempImages.add(img);
+            }
+        }
+
+        String applicationPath = request.getServletContext().getRealPath("");
+        String tempUploadDir = applicationPath + File.separator + "img" + File.separator + "tempUploads";
+        File tempUploadDirFile = new File(tempUploadDir);
+        if (!tempUploadDirFile.exists()) {
+            tempUploadDirFile.mkdirs();
+        }
+
+        // ========== [A] Xử lý và validate ảnh mới ========== 
+        boolean hasNewValidImage = false;
+        for (Part part : request.getParts()) {
+            String fileName = part.getSubmittedFileName();
+            if (fileName != null && !fileName.isEmpty()) {
+                String lowerCaseFileName = fileName.toLowerCase();
+                if (lowerCaseFileName.endsWith(".jpg") || lowerCaseFileName.endsWith(".jpeg") || lowerCaseFileName.endsWith(".png")) {
+                    hasNewValidImage = true;
+                    // Lưu ảnh tạm thời
+                    String tempFilePath = tempUploadDir + File.separator + fileName;
+                    part.write(tempFilePath);
+                    // Sử dụng đường dẫn tương đối để hiển thị trong JSP
+                    tempImages.add("img/tempUploads/" + fileName);
+                } else {
+                    request.setAttribute("errorMessage", "Ảnh phải có định dạng JPG, JPEG hoặc PNG.");
+                    request.setAttribute("code", code);
+                    request.setAttribute("name", name);
+                    request.setAttribute("brandId", brandId);
+                    request.setAttribute("productTypeId", typeId);
+                    request.setAttribute("quantity", quantity);
+                    request.setAttribute("warrantyPeriod", warrantyPeriod);
+                    request.setAttribute("status", status);
+                    request.setAttribute("uploadedImages", tempImages);
+                    request.setAttribute("listBrand", listBrand);
+                    request.setAttribute("listType", listType);
+                    request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
+                    return;
+                }
+            }
+        }
+
+        // Kiểm tra nếu không có ảnh mới và không có ảnh cũ
+        if (!hasNewValidImage && tempImages.isEmpty()) {
+            request.setAttribute("errorMessage", "Vui lòng tải lên ít nhất một ảnh sản phẩm.");
+            request.setAttribute("code", code);
+            request.setAttribute("name", name);
+            request.setAttribute("brandId", brandId);
+            request.setAttribute("productTypeId", typeId);
+            request.setAttribute("quantity", quantity);
+            request.setAttribute("warrantyPeriod", warrantyPeriod);
+            request.setAttribute("status", status);
+            request.setAttribute("listBrand", listBrand);
+            request.setAttribute("listType", listType);
+            request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
+            return;
+        }
+
+        // ========== [B] Kiểm tra mã sản phẩm đã tồn tại ==========
         if (productDAO.isProductCodeExists(code)) {
             request.setAttribute("errorMessage", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
             request.setAttribute("code", code);
@@ -165,46 +234,17 @@ public class ViewProduct extends HttpServlet {
             request.setAttribute("quantity", quantity);
             request.setAttribute("warrantyPeriod", warrantyPeriod);
             request.setAttribute("status", status);
-            doGet(request, response);
-            return;
-        }
-        // Kiểm tra định dạng ảnh
-        String fileName = imagePart.getSubmittedFileName();
-        if (fileName == null || fileName.isEmpty()) {
-            request.setAttribute("errorMessage", "Vui lòng tải lên ảnh sản phẩm.");
-            request.setAttribute("code", code);
-            request.setAttribute("name", name);
-            request.setAttribute("brandId", brandId);
-            request.setAttribute("productTypeId", typeId);
-            request.setAttribute("quantity", quantity);
-            request.setAttribute("warrantyPeriod", warrantyPeriod);
-            request.setAttribute("status", status);
-            doGet(request, response);
+            request.setAttribute("uploadedImages", tempImages);
+            request.setAttribute("listBrand", listBrand);
+            request.setAttribute("listType", listType);
+            request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
             return;
         }
 
-        String lowerCaseFileName = fileName.toLowerCase();
-        if (!(lowerCaseFileName.endsWith(".jpg") || lowerCaseFileName.endsWith(".jpeg") || lowerCaseFileName.endsWith(".png"))) {
-            request.setAttribute("errorMessage", "Ảnh phải có định dạng JPG, JPEG hoặc PNG.");
-            request.setAttribute("code", code);
-            request.setAttribute("name", name);
-            request.setAttribute("brandId", brandId);
-            request.setAttribute("productTypeId", typeId);
-            request.setAttribute("quantity", quantity);
-            request.setAttribute("warrantyPeriod", warrantyPeriod);
-            request.setAttribute("status", status);
-            doGet(request, response);
-            return;
-        }
-
-        // Lưu ảnh nếu hợp lệ
-        String imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-        Product product = new Product(code, name, brandId, quantity, warrantyPeriod, status, imagePath, typeId);
-
+        // ========== [C] Thêm sản phẩm vào database ==========
+        Product product = new Product(code, name, brandId, quantity, warrantyPeriod, status, typeId);
         boolean success = productDAO.addProduct(product);
-        if (success) {
-            response.sendRedirect("viewProduct");
-        } else {
+        if (!success) {
             request.setAttribute("errorMessage", "Thêm sản phẩm thất bại. Vui lòng thử lại.");
             request.setAttribute("code", code);
             request.setAttribute("name", name);
@@ -213,91 +253,147 @@ public class ViewProduct extends HttpServlet {
             request.setAttribute("quantity", quantity);
             request.setAttribute("warrantyPeriod", warrantyPeriod);
             request.setAttribute("status", status);
-            doGet(request, response);
+            request.setAttribute("uploadedImages", tempImages);
+            request.setAttribute("listBrand", listBrand);
+            request.setAttribute("listType", listType);
+            request.getRequestDispatcher("Product/addProduct.jsp").forward(request, response);
+            return;
         }
 
+        // Lấy Product ID vừa insert
+        int productId = productDAO.getProductIdByCode(code);
+
+        // ========== [D] Di chuyển ảnh từ tempUploads sang thư mục Product và lưu vào database ==========
+        String uploadDir = applicationPath + File.separator + "img" + File.separator + "Product";
+        File uploadDirFile = new File(uploadDir);
+        if (!uploadDirFile.exists()) {
+            uploadDirFile.mkdirs();
+        }
+
+        for (String tempImage : tempImages) {
+            File tempFile = new File(applicationPath + File.separator + tempImage);
+            if (tempFile.exists()) {
+                File newFile = new File(uploadDir + File.separator + tempFile.getName());
+                if (tempFile.renameTo(newFile)) {
+                    String fileUrl = "img\\Product\\" + tempFile.getName();
+                    productDAO.insertMedia(productId, "Product", fileUrl, "image");
+                }
+            }
+        }
+
+        // Sau khi xử lý xong, chuyển hướng tới trang danh sách sản phẩm hoặc thông báo thành công
+        response.sendRedirect("viewProduct");
+    }
+
+    // ========== [3] Hiển thị thông tin cập nhật sản phẩm ==========
+    private void loadProductForUpdate(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int productId = Integer.parseInt(request.getParameter("id"));
+        Product product = productDAO.getProductById(productId);
+        request.setAttribute("product", product);
+        request.setAttribute("listBrand", productDAO.getAllBrands());
+        request.setAttribute("listType", productDAO.getAllProductTypes());
+
+        request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
     }
 
     // ========== [5] Cập nhật sản phẩm ==========
     private void updateProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int productId = Integer.parseInt(request.getParameter("pid"));
-        String productCode = request.getParameter("productCode");
-        String name = request.getParameter("productName");
-        int brandId = Integer.parseInt(request.getParameter("brandId"));
-        int typeId = Integer.parseInt(request.getParameter("type"));
-        int quantity = Integer.parseInt(request.getParameter("quantity"));
-        int warranty = Integer.parseInt(request.getParameter("warrantyPeriod"));
-        String status = request.getParameter("status");
-        String existingImage = request.getParameter("existingImage");
+        try {
+            int productId = Integer.parseInt(request.getParameter("pid"));
+            String productCode = request.getParameter("productCode");
+            String productName = request.getParameter("productName");
+            int brandId = Integer.parseInt(request.getParameter("brandId"));
+            int productTypeId = Integer.parseInt(request.getParameter("type")); // trường 'type' từ JSP
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            int warrantyPeriod = Integer.parseInt(request.getParameter("warrantyPeriod"));
+            String status = request.getParameter("status");
 
-        Part imagePart = request.getPart("image");
-        String imagePath = existingImage;
+            // Xử lý nhiều file upload
+            Collection<Part> parts = request.getParts();
+            List<String> imagePaths = new ArrayList<>();
 
-        if (productDAO.isProductCodeExists(productCode, productId)) {
-            request.setAttribute("errorMessage", "Mã sản phẩm đã tồn tại. Vui lòng nhập mã khác.");
-            reloadProductData(request, response, productDAO, productId, name, brandId, productCode, typeId, quantity, warranty, status, imagePath);
-            return;
-        }
+            // Các biến kiểm tra lỗi
+            String errorMessage = "";
+            boolean error = false;
 
-        if (imagePart != null && imagePart.getSize() > 0) {
-            String fileName = imagePart.getSubmittedFileName().toLowerCase();
-            if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png") && !fileName.endsWith(".jpeg")) {
-                request.setAttribute("errorMessage", "Only JPG, JPEG, and PNG files are allowed!");
-                reloadProductData(request, response, productDAO, productId, name, brandId, productCode, typeId, quantity, warranty, status, imagePath);
+            // Lấy đường dẫn lưu ảnh trên server: thư mục /img/Product trong webapp
+            String uploadPath = getServletContext().getRealPath("/img/Product");
+            File uploadDir = new File(uploadPath);
+            if (!uploadDir.exists()) {
+                uploadDir.mkdirs();
+            }
+
+            // Duyệt qua các Part, chỉ xử lý các file từ input có name "image"
+            for (Part part : parts) {
+                if (part.getName().equals("image") && part.getSize() > 0) {
+                    String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();
+                    String lowerFileName = fileName.toLowerCase();
+                    // Kiểm tra đuôi file, chỉ cho phép JPG và PNG
+                    if (!(lowerFileName.endsWith(".jpg") || lowerFileName.endsWith(".png"))) {
+                        errorMessage = "Chỉ cho phép tải lên file ảnh có đuôi JPG hoặc PNG.";
+                        error = true;
+                        break;
+                    }
+                    part.write(uploadPath + File.separator + fileName);
+                    // Lưu đường dẫn tương đối (để hiển thị trên trang web)
+                    imagePaths.add("img/Product/" + fileName);
+                }
+            }
+
+            // Nếu không có ảnh nào được chọn
+            if (!error && imagePaths.isEmpty()) {
+                errorMessage = "Vui lòng chọn ít nhất một ảnh cho sản phẩm.";
+                error = true;
+            }
+
+            // Nếu có lỗi thì load lại dữ liệu cũ và forward sang trang update
+            if (error) {
+                Product currentProduct = productDAO.getProductById(productId);
+                request.setAttribute("product", currentProduct);
+                request.setAttribute("listBrand", productDAO.getAllBrands());
+                request.setAttribute("listType", productDAO.getAllProductTypes());
+                request.setAttribute("errorMessage", errorMessage);
+                request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
                 return;
             }
-            imagePath = OtherUtils.saveImage(imagePart, request, "img/photos");
-        }
- 
-        try {
-            Product updatedProduct = new Product(
-                    productId,
-                    productCode,
-                    name,
-                    brandId,
-                    quantity,
-                    warranty,
-                    status,
-                    imagePath,
-                    typeId
-            );
-            boolean success = productDAO.updateProduct(updatedProduct);
-            if (success) {
-                response.sendRedirect("viewProduct");
+
+            // Tạo đối tượng Product từ dữ liệu nhận được
+            Product product = new Product();
+            product.setProductId(productId);
+            product.setCode(productCode);
+            product.setProductName(productName);
+            product.setBrandId(brandId);
+            product.setProductTypeId(productTypeId);
+            product.setQuantity(quantity);
+            product.setWarrantyPeriod(warrantyPeriod);
+            product.setStatus(status);
+
+            boolean updated = productDAO.updateProduct(product);
+            if (updated) {
+                // Nếu có ảnh mới được upload, cập nhật vào bảng Media
+                if (!imagePaths.isEmpty()) {
+                    productDAO.updateProductImages(productId, imagePaths);
+                }
+                Product currentProduct = productDAO.getProductById(productId);
+                request.setAttribute("product", currentProduct);
+                request.setAttribute("listBrand", productDAO.getAllBrands());
+                request.setAttribute("listType", productDAO.getAllProductTypes());
+                request.setAttribute("successMessage", "Update Successfull!");
+                request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
             } else {
-                request.setAttribute("errorMessage", "Failed to update product");
-                reloadProductData(request, response, productDAO, productId, name, brandId, productCode, typeId, quantity, warranty, status, imagePath);
+                // Nếu cập nhật thất bại, load lại dữ liệu cũ và thông báo lỗi
+                Product currentProduct = productDAO.getProductById(productId);
+                request.setAttribute("product", currentProduct);
+                request.setAttribute("errorMessage", "Cập nhật sản phẩm thất bại!");
+                request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
             }
-        } catch (NumberFormatException e) {
-            request.setAttribute("errorMessage", "Invalid input format!");
-            reloadProductData(request, response, productDAO, productId, name, brandId, productCode, typeId, quantity, warranty, status, imagePath);
+
+        } catch (Exception e) {
+            request.setAttribute("errorMessage", "Dữ liệu gửi lên không hợp lệ!");
+            request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
         }
-    }
-
-    private void reloadProductData(HttpServletRequest request, HttpServletResponse response, ProductDAO p,
-            Integer productId, String productName, Integer brandId, String productCode,
-            Integer productTypeId, Integer quantity, Integer warranty, String status, String imagePath)
-            throws ServletException, IOException {
-        List<ProductType> productTypes = p.getAllProductTypes();
-        List<Brand> listBrand = p.getAllBrands();
-
-        Product product = new Product(
-                productId,
-                productCode,
-                productName,
-                brandId,
-                quantity,
-                warranty,
-                status,
-                imagePath,
-                productTypeId
-        );
-
-        request.setAttribute("product", product);
-        request.setAttribute("listBrand", listBrand);
-        request.setAttribute("listType", productTypes);
-        request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
     }
 
     // ========== [6] Xóa sản phẩm ==========

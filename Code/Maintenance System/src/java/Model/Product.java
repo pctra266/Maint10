@@ -1,8 +1,6 @@
-/**
- *
- * @author sonNH
- */
 package Model;
+
+import java.util.List;
 
 public class Product {
 
@@ -12,7 +10,7 @@ public class Product {
     private int quantity;
     private int warrantyPeriod;
     private String status;
-    private String image;
+    private List<String> images; // Đổi từ String sang List<String>
     private int brandId;
     private String brandName;
     private int productTypeId;
@@ -21,43 +19,56 @@ public class Product {
     public Product() {
     }
 
-    public Product(int productId, String code, String productName, int quantity, int warrantyPeriod, String status, String image, int brandId, String brandName, int productTypeId, String productTypeName) {
+    public Product(int productId, String code, String productName, int quantity, int warrantyPeriod, String status,
+            List<String> images, int brandId, String brandName, int productTypeId, String productTypeName) {
         this.productId = productId;
         this.code = code;
         this.productName = productName;
         this.quantity = quantity;
         this.warrantyPeriod = warrantyPeriod;
         this.status = status;
-        this.image = image;
+        this.images = images;
         this.brandId = brandId;
         this.brandName = brandName;
         this.productTypeId = productTypeId;
         this.productTypeName = productTypeName;
     }
 
-    public Product(String code, String productName, int brandId, int quantity, int warrantyPeriod, String status, String image, int productTypeId) {
+    public Product(String code, String productName, int brandId, int quantity, int warrantyPeriod, String status, List<String> images, int productTypeId) {
         this.code = code;
         this.productName = productName;
         this.quantity = quantity;
         this.warrantyPeriod = warrantyPeriod;
         this.status = status;
-        this.image = image;
+        this.images = images;
         this.brandId = brandId;
         this.productTypeId = productTypeId;
     }
 
-    public Product(int productId, String code, String productName, int brandId, int quantity, int warrantyPeriod, String status, String image, int productTypeId) {
+    public Product(String code, String productName, int brandId, int quantity, int warrantyPeriod, String status, int productTypeId) {
+        this.code = code;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.warrantyPeriod = warrantyPeriod;
+        this.status = status;
+        this.brandId = brandId;
+        this.productTypeId = productTypeId;
+    }
+
+    public Product(int productId, String code, String productName, int brandId, int quantity, int warrantyPeriod,
+            String status, List<String> images, int productTypeId) {
         this.productId = productId;
         this.code = code;
         this.productName = productName;
         this.quantity = quantity;
         this.warrantyPeriod = warrantyPeriod;
         this.status = status;
-        this.image = image;
+        this.images = images;
         this.brandId = brandId;
         this.productTypeId = productTypeId;
     }
 
+    // Getters and Setters
     public int getProductId() {
         return productId;
     }
@@ -106,12 +117,12 @@ public class Product {
         this.status = status;
     }
 
-    public String getImage() {
-        return image;
+    public List<String> getImages() { // Thay đổi từ getImage() sang getImages()
+        return images;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setImages(List<String> images) { // Thay đổi từ setImage(String image) sang setImages(List<String> images)
+        this.images = images;
     }
 
     public int getBrandId() {
@@ -145,7 +156,4 @@ public class Product {
     public void setProductTypeName(String productTypeName) {
         this.productTypeName = productTypeName;
     }
-
-
-
 }

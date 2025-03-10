@@ -60,7 +60,7 @@ public class ImportExcel extends HttpServlet {
                     count++;
                 }
             }
-            int expectedColumnCount = 8; //code, productName, brandID, typeID, quantity, warrantyPeriod, status, image
+            int expectedColumnCount = 7; //code, productName, brandID, typeID, quantity, warrantyPeriod, status, image
 
             if (count != expectedColumnCount) {
                 request.setAttribute("errorMessage", "Excel file has extra columns. Please check again.");
@@ -103,7 +103,6 @@ public class ImportExcel extends HttpServlet {
                 int quantity = parseIntCell(row.getCell(4));
                 int warrantyPeriod = parseIntCell(row.getCell(5));
                 String status = formatter.formatCellValue(row.getCell(6)).trim();
-                String image = formatter.formatCellValue(row.getCell(7)).trim();
 
                 // Kiểm tra duplicate code trong file Excel
                 if (fileProductCodes.contains(code)) {
@@ -115,9 +114,9 @@ public class ImportExcel extends HttpServlet {
                 }
                 // Kiểm tra xem sản phẩm có bị duplicate theo database không
                 if (productDao.isProductCodeExists(code)) {
-                    listDuplicateProducts.add(new Product(code, productName, brandID, quantity, warrantyPeriod, status, image, typeID));
+                    listDuplicateProducts.add(new Product(code, productName, brandID, quantity, warrantyPeriod, status, typeID));
                 } else {
-                    listNewProducts.add(new Product(code, productName, brandID, quantity, warrantyPeriod, status, image, typeID));
+                    listNewProducts.add(new Product(code, productName, brandID, quantity, warrantyPeriod, status, typeID));
                 }
             }
         }

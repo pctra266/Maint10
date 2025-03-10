@@ -788,32 +788,9 @@ public class WarrantyCardDAO extends DBContext {
                 mediaList.add(rs.getString("MediaURL"));
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
         return mediaList;
-    }
-
-    public boolean createWarrantyCardForUnknownProduct(WarrantyCard warrantyCard) {
-        String sql = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
-
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
-            stmt.setString(1, warrantyCard.getWarrantyCardCode());
-            stmt.setInt(2, warrantyCard.getUnknownProductID());
-            stmt.setString(3, warrantyCard.getIssueDescription());
-            stmt.setString(4, warrantyCard.getWarrantyStatus());
-            stmt.setString(5, warrantyCard.getFormatReturnDate());
-            stmt.setString(6, warrantyCard.getFormatDonedDate());
-            stmt.setString(7, warrantyCard.getFormatCompletedDate());
-            stmt.setString(8, warrantyCard.getFormatCanceldDate());
-            stmt.setString(9, warrantyCard.getFormatCreatedDate());
-            //stmt.setString(10, warrantyCard.getImage());
-            int rowsAffected = stmt.executeUpdate();
-            return rowsAffected > 0;
-
-        } catch (SQLException e) {
-        }
-        return false;
     }
 
     private Timestamp parseDate(String dateStr) {
@@ -836,42 +813,73 @@ public class WarrantyCardDAO extends DBContext {
     public boolean createWarrantyCard(
             int handlerID, int warrantyProductID,
             String issueDescription, String warrantyStatus,
-            String returnDate, String doneDate, String completeDate, String cancelDate,
-            String imagePath) {
-
+            String returnDate, String doneDate, String completeDate, String cancelDate) {
         String sql = "INSERT INTO WarrantyCard (HandlerID, WarrantyCardCode, WarrantyProductID, "
-                + "IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate, Image) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE(), ?)";
-
+                + "IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
         String warrantyCardCode = generateWarrantyCardCode();
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-
             stmt.setInt(1, handlerID);
             stmt.setString(2, warrantyCardCode);
             stmt.setInt(3, warrantyProductID);
             stmt.setString(4, issueDescription);
             stmt.setString(5, warrantyStatus);
-
             stmt.setTimestamp(6, parseDate(returnDate) != null ? parseDate(returnDate) : null);
             stmt.setTimestamp(7, parseDate(doneDate) != null ? parseDate(doneDate) : null);
             stmt.setTimestamp(8, parseDate(completeDate) != null ? parseDate(completeDate) : null);
             stmt.setTimestamp(9, parseDate(cancelDate) != null ? parseDate(cancelDate) : null);
-
-            stmt.setString(10, imagePath);
-
             int rowsInserted = stmt.executeUpdate();
             return rowsInserted > 0;
-
         } catch (SQLException e) {
             System.out.println(e);
             return false;
         }
     }
-   
+
+    public Integer getWarrantyCardID(int warrantyProductID) {
+        Integer warrantyCardID = null;
+        String sql = "SELECT TOP 1 WarrantyCardID FROM WarrantyCard WHERE WarrantyProductID = ?";
+
+        // Sử dụng try-with-resources để tự động đóng Connection, PreparedStatement và ResultSet
+        try (
+                PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, warrantyProductID);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    warrantyCardID = rs.getInt("WarrantyCardID");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+
+        return warrantyCardID;
+    }
+
+    public boolean addMedia(int objectId, String objectType, String mediaUrl, String mediaType) {
+        PreparedStatement ps = null;
+        String sql = "INSERT INTO Media (ObjectID, ObjectType, MediaURL, MediaType) VALUES (?, ?, ?, ?)";
+
+        try {
+            ps = connection.prepareStatement(sql);
+            ps.setInt(1, objectId);
+            ps.setString(2, objectType);
+            ps.setString(3, mediaUrl);
+            ps.setString(4, mediaType);
+
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return false;
+    }
 
     public static void main(String[] args) {
         WarrantyCardDAO d = new WarrantyCardDAO();
-        System.out.println(        d.getTotalCards("", "", "", 1));
+        System.out.println(d.getTotalCards("", "", "", 1));
 
     }
 

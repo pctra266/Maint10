@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.PreparedStatement;
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -638,6 +641,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Product> getProductsByComponentId(int componentId) {
         List<Product> productList = new ArrayList<>();
+        Map<Integer, Product> productMap = new HashMap<>();
         String sql = "SELECT p.*, pt.TypeName, c.ComponentCode, c.ComponentName, b.BrandName, t.TypeName "
                 + "FROM Product p "
                 + "JOIN ProductComponents pc ON p.ProductID = pc.ProductID "
@@ -651,21 +655,38 @@ public class ComponentDAO extends DBContext {
             ps.setInt(1, componentId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                Product product = new Product();
-                product.setProductId(rs.getInt("ProductID"));
-                product.setCode(rs.getString("Code"));
-                product.setProductName(rs.getString("ProductName"));
-                product.setBrandId(rs.getInt("BrandID"));
-                product.setProductTypeId(rs.getInt("ProductTypeID"));
-                product.setProductTypeName(rs.getString("TypeName"));
-                product.setQuantity(rs.getInt("Quantity"));
-                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                product.setStatus(rs.getString("Status"));
-                product.setImage(rs.getString("Image"));
-
-                productList.add(product);
+                int productId = rs.getInt("ProductID");
+                if (!productMap.containsKey(productId)) {
+                    Product product = new Product();
+                    product.setProductId(productId);
+                    product.setCode(rs.getString("Code"));
+                    product.setProductName(rs.getString("ProductName"));
+                    product.setBrandId(rs.getInt("BrandID"));
+                    product.setProductTypeId(rs.getInt("ProductTypeID"));
+                    product.setProductTypeName(rs.getString("TypeName"));
+                    product.setQuantity(rs.getInt("Quantity"));
+                    product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                    product.setStatus(rs.getString("Status"));
+                    product.setImages(new ArrayList<>()); // Khởi tạo danh sách ảnh
+                    productMap.put(productId, product);
+                    productList.add(product);
+                }
             }
         } catch (SQLException e) {
+            System.out.println(e);
+        }
+        // Lấy danh sách ảnh từ bảng Media
+        String mediaSql = "SELECT ProductID, ImagePath FROM Media WHERE ProductID IN ("
+                + productMap.keySet().stream().map(String::valueOf).collect(Collectors.joining(",")) + ")";
+
+        try (PreparedStatement ps = connection.prepareStatement(mediaSql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int productId = rs.getInt("ProductID");
+                String imagePath = rs.getString("ImagePath");
+                productMap.get(productId).getImages().add(imagePath);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
         return productList;
     }
@@ -683,7 +704,7 @@ public class ComponentDAO extends DBContext {
             return affectedRows > 0; // Nếu có dòng bị xóa, trả về true
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e);
             return false;
         }
     }

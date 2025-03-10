@@ -13,7 +13,11 @@ import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.sql.Statement;
 
 /**
  *
@@ -21,144 +25,129 @@ import java.util.List;
  */
 public class ProductDAO extends DBContext {
 
+    private void getProductImages(Map<Integer, Product> productMap) {
+        // Tạo danh sách productId cho truy vấn SQL
+        String idList = productMap.keySet().stream().map(String::valueOf).collect(Collectors.joining(","));
+        // Nếu không có productId, thoát ngay
+        if (idList.isEmpty()) {
+            return;
+        }
+        String sql = "SELECT ObjectID, MediaURL FROM Media WHERE ObjectID IN (" + idList + ") and ObjectType = 'Product' ";
+        try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int productId = rs.getInt("ObjectID");  // Đọc từ cột ObjectID
+                String imagePath = rs.getString("MediaURL");  // Đọc từ cột MediaURL
+
+                // Thêm ảnh vào danh sách ảnh của sản phẩm tương ứng
+                productMap.get(productId).getImages().add(imagePath);
+            }
+        } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy ảnh sản phẩm: " + e.getMessage());
+        }
+    }
+
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.Code,p.ProductTypeID,pt.TypeName ,p.ProductName, cb.BrandName, p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
+        Map<Integer, Product> productMap = new HashMap<>();
+
+        // Truy vấn thông tin sản phẩm trước
+        String sql = "SELECT p.ProductID, p.Code, p.ProductTypeID, pt.TypeName, p.ProductName, "
+                + "cb.BrandName, p.Quantity, p.WarrantyPeriod, p.Status "
                 + "FROM Product p "
                 + "JOIN Brand cb ON p.BrandID = cb.BrandID "
-                + "join ProductType pt on p.ProductTypeID = pt.ProductTypeID"
+                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
                 + "WHERE p.Status != 'inactive'";
 
         try (PreparedStatement ps = connection.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
-                Product product = new Product();
-                product.setProductId(rs.getInt("ProductID"));
-                product.setCode(rs.getString("Code"));
-                product.setProductName(rs.getString("ProductName"));
-                product.setBrandName(rs.getString("BrandName"));
-                product.setQuantity(rs.getInt("Quantity"));
-                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                product.setImage(rs.getString("Image"));
-                product.setProductTypeId(rs.getInt("ProductTypeID"));
-                product.setProductTypeName(rs.getString("TypeName"));
-                products.add(product);
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        return products;
-    }
+                int productId = rs.getInt("ProductID");
 
-    public List<Product> getAllProducts(int page, int pageSize) {
-        List<Product> products = new ArrayList<>();
-        String sql = "SELECT p.ProductID, p.Code, p.ProductTypeID, pt.TypeName, p.ProductName, "
-                + "cb.BrandName, p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
-                + "FROM Product p "
-                + "JOIN Brand cb ON p.BrandID = cb.BrandID "
-                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
-                + "WHERE p.Status != 'inactive' "
-                + // Thêm dấu cách trước WHERE để tránh lỗi
-                "ORDER BY p.ProductID "
-                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, (page - 1) * pageSize); // Tính toán OFFSET
-            ps.setInt(2, pageSize); // FETCH NEXT số lượng bản ghi cần lấy
-
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
+                // Nếu chưa có sản phẩm trong Map, tạo mới và thêm vào danh sách
+                if (!productMap.containsKey(productId)) {
                     Product product = new Product();
-                    product.setProductId(rs.getInt("ProductID"));
+                    product.setProductId(productId);
                     product.setCode(rs.getString("Code"));
-                    product.setProductTypeId(rs.getInt("ProductTypeID"));
-                    product.setProductTypeName(rs.getString("TypeName"));
                     product.setProductName(rs.getString("ProductName"));
                     product.setBrandName(rs.getString("BrandName"));
                     product.setQuantity(rs.getInt("Quantity"));
                     product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                    product.setImage(rs.getString("Image"));
+                    product.setStatus(rs.getString("Status"));
+                    product.setProductTypeId(rs.getInt("ProductTypeID"));
+                    product.setProductTypeName(rs.getString("TypeName"));
+                    product.setImages(new ArrayList<>()); // Khởi tạo danh sách ảnh
+                    productMap.put(productId, product);
                     products.add(product);
                 }
             }
         } catch (SQLException e) {
             System.err.println("Lỗi khi lấy danh sách sản phẩm: " + e.getMessage());
+            return products;
         }
+
+        // Nếu không có sản phẩm nào thì không cần truy vấn ảnh
+        if (productMap.isEmpty()) {
+            return products;
+        }
+
+        // Truy vấn ảnh sản phẩm từ Media
+        getProductImages(productMap);
+
         return products;
     }
 
-// feedback ===================================================================================================
-    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, String warrantyCardCode, String warrantyStatus, int page, int pageSize) {
-        ArrayList<ProductDetail> list = new ArrayList<>();
-        String query = """
-          select wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
-                                      from Customer c 
-                                      left join ProductDetail pd on c.CustomerID = pd.CustomerID
-                                      join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
-                                      join Product p on pd.ProductID = p.ProductID
-                                      where c.CustomerID = ?""";
-        if (warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()) {
-            query += " and WarrantyCardCode like ?";
-        }
-        if (warrantyStatus != null && !warrantyStatus.trim().isEmpty()) {
-            query += " and warrantyStatus like ?";
-        }
-        query += " order by wc.CreatedDate desc ";
-        query += " offset ? rows  fetch next ? rows only;";
-        try (PreparedStatement ps = connection.prepareStatement(query);) {
-            int count = 1;
-            ps.setString(count++, customerID);
-            if (warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()) {
-                ps.setString(count++, "%" + warrantyCardCode + "%");
-            }
-            if (warrantyStatus != null && !warrantyStatus.trim().isEmpty()) {
-                ps.setString(count++, warrantyStatus);
-            }
-            int offset = (page - 1) * pageSize;
-            ps.setInt(count++, offset);
-            ps.setInt(count++, pageSize);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ProductDetail productDetail = new ProductDetail();
-                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                productDetail.setProductName(rs.getString("ProductName"));
-                productDetail.setIssueDescription(rs.getString("IssueDescription"));
-                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                productDetail.setCreatedDate(rs.getDate("CreatedDate"));
-                list.add(productDetail);
+    public List<Product> getAllProducts(int page, int pageSize) {
+        List<Product> products = new ArrayList<>();
+        Map<Integer, Product> productMap = new HashMap<>();
+
+        String sql = "SELECT p.ProductID, p.Code, p.ProductTypeID, pt.TypeName, p.ProductName, "
+                + "cb.BrandName, p.Quantity, p.WarrantyPeriod, p.Status "
+                + "FROM Product p "
+                + "JOIN Brand cb ON p.BrandID = cb.BrandID "
+                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
+                + "WHERE p.Status != 'inactive' "
+                + "ORDER BY p.ProductID "
+                + "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, (page - 1) * pageSize);
+            ps.setInt(2, pageSize);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int productId = rs.getInt("ProductID");
+
+                    // Nếu chưa có sản phẩm trong Map, thêm mới vào
+                    if (!productMap.containsKey(productId)) {
+                        Product product = new Product();
+                        product.setProductId(productId);
+                        product.setCode(rs.getString("Code"));
+                        product.setProductTypeId(rs.getInt("ProductTypeID"));
+                        product.setProductTypeName(rs.getString("TypeName"));
+                        product.setProductName(rs.getString("ProductName"));
+                        product.setBrandName(rs.getString("BrandName"));
+                        product.setQuantity(rs.getInt("Quantity"));
+                        product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                        product.setStatus(rs.getString("Status"));
+                        product.setImages(new ArrayList<>()); // Khởi tạo danh sách ảnh
+                        productMap.put(productId, product);
+                        products.add(product);
+                    }
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Lỗi khi lấy danh sách sản phẩm: " + e.getMessage());
+            return products;
         }
-        return list;
-    }
 
-    public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
-        ArrayList<ProductDetail> list = new ArrayList<>();
-        String query = """
-        select wc.WarrantyCardID, wc.WarrantyCardCode, p.ProductName, wc.IssueDescription, wc.WarrantyStatus 
-                              from Customer c 
-                              left join ProductDetail pd on c.CustomerID = pd.CustomerID
-                              join WarrantyCard wc on pd.ProductDetailID = wc.ProductDetailID
-                              join Product p on pd.ProductID = p.ProductID
-                              where c.CustomerID = ?""";
-
-        try (PreparedStatement ps = connection.prepareStatement(query);) {
-            int count = 1;
-            ps.setString(count++, customerID);
-
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                ProductDetail productDetail = new ProductDetail();
-                productDetail.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                productDetail.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                productDetail.setProductName(rs.getString("ProductName"));
-                productDetail.setIssueDescription(rs.getString("IssueDescription"));
-                productDetail.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                list.add(productDetail);
-            }
-        } catch (SQLException e) {
+        // Nếu danh sách rỗng, không cần lấy ảnh
+        if (productMap.isEmpty()) {
+            return products;
         }
-        return list;
+
+        // Lấy ảnh sản phẩm từ Media (tái sử dụng hàm getProductImages)
+        getProductImages(productMap);
+
+        return products;
     }
 
     public int totalProductByCustomerId(String customerID, String warrantyCardCode, String warrantyStatus) {
@@ -211,45 +200,47 @@ public class ProductDAO extends DBContext {
 
     public List<Product> searchProducts(String searchName, String searchCode, Integer brandId, Integer productTypeId, String sortQuantity, String sortWarranty, int offset, int limit) {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT  p.ProductID, p.Code, p.ProductName, cb.BrandName, p.ProductTypeID, pt.TypeName, p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
-                + "FROM Product p JOIN Brand cb ON p.BrandID = cb.BrandID JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID WHERE  p.Status != 'inactive'";
+        Map<Integer, Product> productMap = new HashMap<>();
+        StringBuilder sql = new StringBuilder("SELECT p.ProductID, p.Code, p.ProductName, cb.BrandName, p.ProductTypeID, pt.TypeName, "
+                + "p.Quantity, p.WarrantyPeriod, p.Status "
+                + "FROM Product p "
+                + "JOIN Brand cb ON p.BrandID = cb.BrandID "
+                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
+                + "WHERE p.Status != 'inactive'");
 
         // Thêm các điều kiện tìm kiếm
         if (searchName != null && !searchName.trim().isEmpty()) {
-            sql += " AND p.ProductName LIKE ?";
+            sql.append(" AND p.ProductName LIKE ?");
         }
         if (searchCode != null && !searchCode.trim().isEmpty()) {
-            sql += " AND p.Code LIKE ?";
+            sql.append(" AND p.Code LIKE ?");
         }
         if (brandId != null) {
-            sql += " AND p.BrandID = ?";
+            sql.append(" AND p.BrandID = ?");
         }
         if (productTypeId != null) {
-            sql += " AND p.ProductTypeID = ?";
+            sql.append(" AND p.ProductTypeID = ?");
         }
 
         // Thêm điều kiện sắp xếp
+        sql.append(" ORDER BY ");
         if (sortQuantity != null && !sortQuantity.isEmpty()) {
-            sql += " ORDER BY p.Quantity " + (sortQuantity.equals("asc") ? "ASC" : "DESC");
+            sql.append("p.Quantity ").append(sortQuantity.equals("asc") ? "ASC" : "DESC");
         }
         if (sortWarranty != null && !sortWarranty.isEmpty()) {
             if (sortQuantity == null || sortQuantity.isEmpty()) {
-                sql += " ORDER BY p.WarrantyPeriod " + (sortWarranty.equals("asc") ? "ASC" : "DESC");
+                sql.append("p.WarrantyPeriod ").append(sortWarranty.equals("asc") ? "ASC" : "DESC");
             } else {
-                sql += ", p.WarrantyPeriod " + (sortWarranty.equals("asc") ? "ASC" : "DESC");
+                sql.append(", p.WarrantyPeriod ").append(sortWarranty.equals("asc") ? "ASC" : "DESC");
             }
         }
         // Nếu không có điều kiện sắp xếp, sắp xếp theo ProductID
-        if (sortQuantity == null || sortQuantity.isEmpty()) {
-            if (sortWarranty == null || sortWarranty.isEmpty()) {
-                sql += " ORDER BY p.ProductID ASC";
-            }
+        if ((sortQuantity == null || sortQuantity.isEmpty()) && (sortWarranty == null || sortWarranty.isEmpty())) {
+            sql.append("p.ProductID ASC");
         }
+        sql.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
-        // Thêm phân trang
-        sql += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(sql.toString())) {
             int index = 1;
 
             // Thêm các tham số tìm kiếm vào PreparedStatement
@@ -267,22 +258,42 @@ public class ProductDAO extends DBContext {
             }
             ps.setInt(index++, offset);
             ps.setInt(index++, limit);
-            ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
-                Product product = new Product();
-                product.setProductId(rs.getInt("ProductID"));
-                product.setCode(rs.getString("Code"));
-                product.setProductName(rs.getString("ProductName"));
-                product.setBrandName(rs.getString("BrandName"));
-                product.setProductTypeId(rs.getInt("ProductTypeID"));
-                product.setQuantity(rs.getInt("Quantity"));
-                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                product.setImage(rs.getString("Image"));
-                product.setProductTypeName(rs.getString("TypeName"));
-                products.add(product);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int productId = rs.getInt("ProductID");
+
+                    // Nếu chưa có sản phẩm trong Map, thêm mới vào
+                    if (!productMap.containsKey(productId)) {
+                        Product product = new Product();
+                        product.setProductId(productId);
+                        product.setCode(rs.getString("Code"));
+                        product.setProductName(rs.getString("ProductName"));
+                        product.setBrandName(rs.getString("BrandName"));
+                        product.setProductTypeId(rs.getInt("ProductTypeID"));
+                        product.setQuantity(rs.getInt("Quantity"));
+                        product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                        product.setStatus(rs.getString("Status"));
+                        product.setProductTypeName(rs.getString("TypeName"));
+                        product.setImages(new ArrayList<>()); // Khởi tạo danh sách ảnh
+                        productMap.put(productId, product);
+                        products.add(product);
+                    }
+                }
             }
         } catch (SQLException e) {
+            System.err.println("Lỗi khi tìm kiếm sản phẩm: " + e.getMessage());
+            return products;
         }
+
+        // Nếu danh sách rỗng, không cần lấy ảnh
+        if (productMap.isEmpty()) {
+            return products;
+        }
+
+        // Lấy ảnh sản phẩm từ Media (tái sử dụng hàm getProductImages)
+        getProductImages(productMap);
+
         return products;
     }
 
@@ -323,48 +334,76 @@ public class ProductDAO extends DBContext {
         return 0;
     }
 
-    public boolean updateProduct(Product product) {
-        String sql = "UPDATE product SET productName = ?,Code = ? ,brandId = ?, ProductTypeID = ?, quantity = ?, warrantyPeriod = ?, image = ? WHERE productId = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, product.getProductName());
-            stmt.setString(2, product.getCode());
-            stmt.setInt(3, product.getBrandId());
-            stmt.setInt(4, product.getProductTypeId());
-            stmt.setInt(5, product.getQuantity());
-            stmt.setInt(6, product.getWarrantyPeriod());
-            stmt.setString(7, product.getImage());
-            stmt.setInt(8, product.getProductId());
-
-            int rowsUpdated = stmt.executeUpdate();
-            return rowsUpdated > 0;
-        } catch (SQLException e) {
-            System.out.println(e);
+    public boolean updateProduct(Product product) throws SQLException {
+        String sql = "UPDATE Product SET Code = ?, ProductName = ?, BrandID = ?, ProductTypeID = ?, Quantity = ?, WarrantyPeriod = ?, [Status] = ? WHERE ProductID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, product.getCode());
+            ps.setString(2, product.getProductName());
+            ps.setInt(3, product.getBrandId());
+            ps.setInt(4, product.getProductTypeId());
+            ps.setInt(5, product.getQuantity());
+            ps.setInt(6, product.getWarrantyPeriod());
+            ps.setString(7, product.getStatus());
+            ps.setInt(8, product.getProductId());
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
         }
-        return false;
+    }
+
+    public boolean updateProductImages(int productId, List<String> imagePaths) throws SQLException {
+        String deleteSql = "DELETE FROM Media WHERE ObjectID = ? AND ObjectType = 'Product'";
+        try (PreparedStatement psDelete = connection.prepareStatement(deleteSql)) {
+            psDelete.setInt(1, productId);
+            psDelete.executeUpdate();
+        }
+        String insertSql = "INSERT INTO Media (ObjectID, ObjectType, MediaURL, MediaType) VALUES (?, 'Product', ?, 'image')";
+        try (PreparedStatement psInsert = connection.prepareStatement(insertSql)) {
+            for (String imagePath : imagePaths) {
+                psInsert.setInt(1, productId);
+                psInsert.setString(2, imagePath);
+                psInsert.executeUpdate();
+            }
+        }
+        return true;
     }
 
     public Product getProductById(int productId) {
-        Product product = new Product();
-        String sql = "SELECT p.ProductID, p.Code, p.ProductName, p.BrandID, b.BrandName, p.ProductTypeID, pt.TypeName, p.Quantity, p.WarrantyPeriod, p.[Status], p.Image "
+        Product product = null;
+        String sql = "SELECT p.ProductID, p.Code, p.ProductName, p.BrandID, b.BrandName, "
+                + "p.ProductTypeID, pt.TypeName, p.Quantity, p.WarrantyPeriod, p.Status, "
+                + "m.MediaURL "
                 + "FROM Product p "
                 + "JOIN Brand b ON p.BrandID = b.BrandID "
                 + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
+                + "LEFT JOIN Media m ON p.ProductID = m.ObjectID AND m.ObjectType = 'Product' "
                 + "WHERE p.ProductID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, productId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                product.setProductId(rs.getInt("ProductID"));
-                product.setCode(rs.getString("Code"));
-                product.setProductName(rs.getString("ProductName"));
-                product.setBrandId(rs.getInt("BrandId"));
-                product.setBrandName(rs.getString("BrandName"));
-                product.setQuantity(rs.getInt("Quantity"));
-                product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
-                product.setImage(rs.getString("Image"));
-                product.setStatus(rs.getString("Status"));
-                product.setProductTypeId(rs.getInt("ProductTypeID"));
-                product.setProductTypeName(rs.getString("TypeName"));
+        try (
+                PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<String> mediaUrls = new ArrayList<>();
+                while (rs.next()) {
+                    if (product == null) {
+                        product = new Product();
+                        product.setProductId(rs.getInt("ProductID"));
+                        product.setCode(rs.getString("Code"));
+                        product.setProductName(rs.getString("ProductName"));
+                        product.setBrandId(rs.getInt("BrandID"));
+                        product.setBrandName(rs.getString("BrandName"));
+                        product.setProductTypeId(rs.getInt("ProductTypeID"));
+                        product.setProductTypeName(rs.getString("TypeName"));
+                        product.setQuantity(rs.getInt("Quantity"));
+                        product.setWarrantyPeriod(rs.getInt("WarrantyPeriod"));
+                        product.setStatus(rs.getString("Status"));
+                    }
+                    String mediaUrl = rs.getString("MediaURL");
+                    if (mediaUrl != null) {
+                        mediaUrls.add(mediaUrl);
+                    }
+                }
+                if (product != null) {
+                    product.setImages(mediaUrls);
+                }
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -414,7 +453,7 @@ public class ProductDAO extends DBContext {
     }
 
     public boolean addProduct(Product product) {
-        String sql = "INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, Status, Image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, Status) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (
                 PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setString(1, product.getCode());
@@ -424,12 +463,40 @@ public class ProductDAO extends DBContext {
             ps.setInt(5, product.getQuantity());
             ps.setInt(6, product.getWarrantyPeriod());
             ps.setString(7, product.getStatus());
-            ps.setString(8, product.getImage());
             int rowsInserted = ps.executeUpdate();
             return rowsInserted > 0;
         } catch (SQLException e) {
         }
         return false;
+    }
+
+    public Integer getProductIdByCode(String productCode) {
+        String sql = "SELECT ProductID FROM Product WHERE Code = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, productCode);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("ProductID");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null; // Return null if not found
+    }
+
+    public void insertMedia(int objectID, String objectType, String mediaURL, String mediaType) {
+        String sql = "INSERT INTO Media(ObjectID, ObjectType, MediaURL, MediaType, UploadedDate) VALUES(?,?,?,?,GETDATE())";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setInt(1, objectID);
+            ps.setString(2, objectType);
+            ps.setString(3, mediaURL);
+            ps.setString(4, mediaType);
+            ps.executeUpdate();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
     public boolean deactivateProduct(int productId) {
@@ -471,11 +538,12 @@ public class ProductDAO extends DBContext {
     }
 
     public void insertListProducts(List<Product> productList) {
-        String sql = "INSERT INTO Product (Code, ProductName, BrandID, p.ProductTypeID, Quantity, WarrantyPeriod, Status, Image) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        try (
-                PreparedStatement ps = connection.prepareStatement(sql)) {
+        String sql = "INSERT INTO Product (Code, ProductName, BrandID, ProductTypeID, Quantity, WarrantyPeriod, Status) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            connection.setAutoCommit(false); // Bắt đầu transaction
 
+            // Chèn từng sản phẩm vào bảng Product
             for (Product product : productList) {
                 ps.setString(1, product.getCode());
                 ps.setString(2, product.getProductName());
@@ -484,12 +552,23 @@ public class ProductDAO extends DBContext {
                 ps.setInt(5, product.getQuantity());
                 ps.setInt(6, product.getWarrantyPeriod());
                 ps.setString(7, product.getStatus());
-                ps.setString(8, product.getImage());
-
-                ps.addBatch(); // Thêm vào batch để tối ưu hóa hiệu suất
+                ps.addBatch();
             }
-            ps.executeBatch(); // Thực thi batch để chèn nhiều bản ghi cùng lúc
+            ps.executeBatch(); // Thực thi batch chèn sản phẩm
+            connection.commit(); // Xác nhận transaction sau khi hoàn tất
         } catch (SQLException e) {
+            try {
+                connection.rollback(); // Hoàn tác nếu có lỗi
+            } catch (SQLException rollbackEx) {
+                System.out.println("Rollback failed: " + rollbackEx);
+            }
+            System.out.println(e);
+        } finally {
+            try {
+                connection.setAutoCommit(true);
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            }
         }
     }
 
@@ -505,7 +584,6 @@ public class ProductDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
-
         return types;
     }
 
@@ -764,6 +842,11 @@ public class ProductDAO extends DBContext {
 
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
+        Product p1 = p.getProductById(1);
+        List<String> s = p1.getImages();
+        for (String s1 : s) {
+            System.out.println(s1);
+        }
 
     }
 

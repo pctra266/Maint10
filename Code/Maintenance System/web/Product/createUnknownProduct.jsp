@@ -145,6 +145,92 @@
                 font-style: italic;
             }
 
+            .toolbox {
+                background-color: #f0f0f0; /* màu nền nhẹ */
+                border: 1px solid #ddd;    /* viền nhẹ */
+                border-radius: 5px;        /* bo góc */
+                padding: 15px;             /* khoảng cách bên trong */
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* tạo bóng nhẹ */
+                max-width: 2000px;          /* giới hạn chiều rộng nếu cần */
+                margin: 20px auto;         /* căn giữa container trên trang */
+            }
+
+            .toolbox label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 8px;
+            }
+
+            .toolbox textarea {
+                width: 100%;
+                min-height: 100px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                resize: vertical; /* cho phép thay đổi kích thước theo chiều dọc */
+            }
+
+            /* Tổng thể vùng editor */
+            .editor-container {
+                width:100%;              /* Độ rộng mong muốn */
+                border: 1px solid #ccc;    /* Viền ngoài */
+                border-radius: 5px;        /* Bo góc */
+                margin: auto;         /* Căn giữa trang */
+                font-family: sans-serif;   /* Font chữ cơ bản */
+                background-color: #f9f9f9; /* Nền nhẹ */
+            }
+
+            /* Thanh công cụ (toolbar) */
+            .editor-toolbar {
+                display: flex;
+                flex-wrap: wrap;           /* Nếu thiếu chỗ, icon sẽ xuống dòng */
+                border-bottom: 1px solid #ddd;
+                background-color: #fafafa;
+                padding: 5px 10px;
+                border-top-left-radius: 5px;
+                border-top-right-radius: 5px;
+            }
+
+            /* Nút công cụ (tool-btn) */
+            .tool-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                margin-right: 8px;
+                font-size: 16px;
+                color: #555;
+                padding: 6px;
+                transition: background-color 0.2s ease, color 0.2s ease;
+            }
+
+            .tool-btn:hover {
+                background-color: #e0e0e0;
+                color: #000;
+            }
+
+            .tool-btn:focus {
+                outline: none; /* Tắt khung focus mặc định, tuỳ chọn */
+            }
+
+            /* Vùng soạn thảo */
+            .editor-content {
+                min-height: 200px;         /* Chiều cao tối thiểu */
+                padding: 10px;
+                font-size: 14px;
+                line-height: 1.4;
+                background-color: #fff;
+                border-bottom-left-radius: 5px;
+                border-bottom-right-radius: 5px;
+            }
+
+            /* Hiển thị placeholder khi contenteditable rỗng */
+            .editor-content:empty:before {
+                content: attr(data-placeholder);
+                color: #aaa;
+            }
+            .editor-content:focus:before {
+                content: "";
+            }
         </style>
     </head>
 
@@ -184,7 +270,26 @@
                             <input type="text" id="customerPhone" name="customerPhone" readonly>
 
                             <label for="description">Description:</label>
-                            <textarea id="description" name="description">${param.description}</textarea>
+                            <div class="editor-container">
+                                <div class="editor-toolbar">
+                                    <button type="button" class="tool-btn" title="Bold"><i class="fas fa-bold"></i></button>
+                                    <button type="button" class="tool-btn" title="Italic"><i class="fas fa-italic"></i></button>
+                                    <button type="button" class="tool-btn" title="Strikethrough"><i class="fas fa-strikethrough"></i></button>
+                                    <button type="button" class="tool-btn" title="Underline"><i class="fas fa-underline"></i></button>
+                                    <button type="button" class="tool-btn" title="Bulleted List"><i class="fas fa-list-ul"></i></button>
+                                    <button type="button" class="tool-btn" title="Numbered List"><i class="fas fa-list-ol"></i></button>
+                                    <button type="button" class="tool-btn" title="Align Left"><i class="fas fa-align-left"></i></button>
+                                    <button type="button" class="tool-btn" title="Align Center"><i class="fas fa-align-center"></i></button>
+                                    <button type="button" class="tool-btn" title="Align Right"><i class="fas fa-align-right"></i></button>
+                                    <button type="button" class="tool-btn" title="Link"><i class="fas fa-link"></i></button>
+                                    <button type="button" class="tool-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
+                                    <button type="button" class="tool-btn" title="Source"><i class="fas fa-code"></i></button>
+                                </div>
+
+                                <!-- Vùng soạn thảo (contenteditable) -->
+                                <textarea id="description" name="description">${param.description}</textarea>
+                            </div>
+
 
                             <label for="receivedDate">Received Date:</label>
                             <input type="datetime-local" id="receivedDate" name="receivedDate" value="${param.receivedDate}" required step="1">
