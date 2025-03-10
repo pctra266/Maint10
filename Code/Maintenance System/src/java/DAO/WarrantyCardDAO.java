@@ -280,12 +280,13 @@ public class WarrantyCardDAO extends DBContext {
      * @param fetch
      * @return
      */
-    public List<WarrantyCard> getWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String createDate, String sortBy, String sortOrder, int offset, int fetch) {
+    public List<WarrantyCard> getWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String status, String createDate, String sortBy, String sortOrder, int offset, int fetch) {
 
         String searchWarrantyCardCode = (warrantyCard != null) ? "%" + warrantyCard.trim().replaceAll("\\s+", "%") + "%" : "%";
 
         String searchProductName = (productName != null) ? "%" + productName.trim().replaceAll("\\s+", "%") + "%" : "%";
 
+        String searchStatus = (status != null) ? "%" + status.trim().replaceAll("\\s+", "%") + "%" : "%";
         List<WarrantyCard> warrantyCards = new ArrayList<>();
         String query = SELECT_STRING + "WHERE c.CustomerID=?";
         if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
@@ -297,6 +298,10 @@ public class WarrantyCardDAO extends DBContext {
         }
         if (createDate != null && !createDate.trim().isEmpty()) {
             query += " AND  wc.CreatedDate = ?";
+        }
+
+        if (searchStatus != null && !searchStatus.trim().isEmpty()) {
+            query += " AND  wc.WarrantyStatus LIKE ?";
         }
 
         // Fix lỗi OFFSET khi không có ORDER BY
@@ -326,6 +331,9 @@ public class WarrantyCardDAO extends DBContext {
             if (createDate != null && !createDate.trim().isEmpty()) {
                 ps.setDate(index++, java.sql.Date.valueOf(createDate.trim()));
             }
+            if (searchStatus != null && !searchStatus.trim().isEmpty()) {
+                ps.setString(index++, searchStatus);
+            }
             ps.setInt(index++, offset);
             ps.setInt(index++, fetch);
             ResultSet rs = ps.executeQuery();
@@ -338,26 +346,60 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCards;
     }
 
-    public int getPageWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String createDate) {
-        String sql = """
-                     SELECT COUNT(*) 
-                      FROM WarrantyCard wc 
-                      JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID 
-                      LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID 
-                      LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID 
-                      LEFT JOIN Product p ON pd.ProductID = p.ProductID 
-                      LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID 
-                      WHERE c.CustomerID=?""";
+    // 
+    public int getPageWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String status, String createDate) {
+        String searchWarrantyCardCode = (warrantyCard != null) ? "%" + warrantyCard.trim().replaceAll("\\s+", "%") + "%" : "%";
 
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        String searchProductName = (productName != null) ? "%" + productName.trim().replaceAll("\\s+", "%") + "%" : "%";
+
+        String searchStatus = (status != null) ? "%" + status.trim().replaceAll("\\s+", "%") + "%" : "%";
+        String query = "SELECT COUNT(*) \n"
+                + " FROM WarrantyCard wc \n"
+                + " JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID \n"
+                + " LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID \n"
+                + " LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID \n"
+                + " LEFT JOIN Product p ON pd.ProductID = p.ProductID \n"
+                + " LEFT JOIN Customer c ON COALESCE(pd.CustomerID, up.CustomerID) = c.CustomerID \n"
+                + " WHERE c.CustomerID=?";
+        if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
+            query += " AND wc.WarrantyCardCode LIKE ?";
+        }
+        if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+            query += " AND (COALESCE(p.ProductName, up.ProductName) LIKE ?) ";
+
+        }
+        if (createDate != null && !createDate.trim().isEmpty()) {
+            query += " AND  wc.CreatedDate = ?";
+        }
+
+        if (searchStatus != null && !searchStatus.trim().isEmpty()) {
+            query += " AND  wc.WarrantyStatus LIKE ?";
+        }
+
+        try (PreparedStatement ps = connection.prepareStatement(query)) {
             ps.setInt(1, customerID);
+            int index = 1;
+            ps.setInt(index++, customerID);
+            if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
+                ps.setString(index++, searchWarrantyCardCode);
+            }
+
+            if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+                ps.setString(index++, searchProductName);
+            }
+            if (createDate != null && !createDate.trim().isEmpty()) {
+                ps.setDate(index++, java.sql.Date.valueOf(createDate.trim()));
+            }
+            if (searchStatus != null && !searchStatus.trim().isEmpty()) {
+                ps.setString(index++, searchStatus);
+            }
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            e.printStackTrace();
         }
         return 0;
     }

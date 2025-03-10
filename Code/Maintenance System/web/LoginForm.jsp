@@ -15,7 +15,7 @@
 
         <link rel="canonical" href="https://demo-basic.adminkit.io/pages-sign-in.html" />
 
-        <title>Sign In </title>
+        <title>Sign In | AdminKit Demo</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -63,12 +63,17 @@
                                 </div>
                             </div>
                             <div class="text-center mb-3">
-                                 <a href="ForgotPasswordForm.jsp"> Forgot password? </a>
+                                <a href="ForgotPasswordForm.jsp">Forgot password? |</a>
+                                <a href="https://accounts.google.com/o/oauth2/auth?scope=email profile openid
+                                   &redirect_uri=http://localhost:9999/MaintenanceSystem/login-google&response_type=code
+                                   &client_id=64066072674-psh6a6q5kh91ch90urkb8tqbh0o6drhr.apps.googleusercontent.com&approval_prompt=force">Login With Google</a>
+
+
                             </div>
+
                         </div>
                     </div>
                 </div>
-            </div>
         </main>
 
         <script src="js/app.js"></script>
