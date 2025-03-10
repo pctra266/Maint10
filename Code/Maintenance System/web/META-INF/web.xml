@@ -140,6 +140,10 @@
         <servlet-name>YourWarrantyCardDetail</servlet-name>
         <servlet-class>Controller.WarrantyCard.YourWarrantyCardDetail</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>LoginGoogle</servlet-name>
+        <servlet-class>Controller.Account.LoginGoogle</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -291,5 +295,9 @@
     <servlet-mapping>
         <servlet-name>YourWarrantyCardDetail</servlet-name>
         <url-pattern>/yourWarrantyCardDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginGoogle</servlet-name>
+        <url-pattern>/login-google</url-pattern>
     </servlet-mapping>
 </web-app>

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
 package Controller.WarrantyCard;
 
 import DAO.WarrantyCardDAO;
@@ -71,6 +75,7 @@ public class YourWarrantyCard extends HttpServlet {
         WarrantyCardDAO warrantyCardDao = new WarrantyCardDAO();
         String searchWarrantyCardCode = request.getParameter("warrantyCardCode");
         String searchProductName = request.getParameter("productName");
+        String searchStatus = request.getParameter("status");
         String searchCreateDate = request.getParameter("createDate");
         String pageParam = request.getParameter("page");
         String pageSizeParam = request.getParameter("page-size");
@@ -88,9 +93,10 @@ public class YourWarrantyCard extends HttpServlet {
 
         if (searchWarrantyCardCode != null && searchWarrantyCardCode.trim().isEmpty()
                 || searchProductName != null && searchProductName.trim().isEmpty()
+                || searchStatus != null && searchStatus.trim().isEmpty()
                 || searchCreateDate != null && searchCreateDate.trim().isEmpty()) {
-            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchCreateDate, sort, order, offset, pageSize);
-            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchCreateDate);
+            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchStatus,searchCreateDate, sort, order, offset, pageSize);
+            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName ,searchStatus,searchCreateDate);
             totalPages = (int) Math.ceil((double) totalWarrantyCard / pageSize);
 
             // Lay thong tin phan trang
@@ -108,16 +114,16 @@ public class YourWarrantyCard extends HttpServlet {
             request.setAttribute("pagination", pagination);
 
         } else {
-            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchCreateDate, sort, order, offset, pageSize);
-            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchCreateDate);
+            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate, sort, order, offset, pageSize);
+            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate);
             totalPages = (int) Math.ceil((double) totalWarrantyCard / pageSize);
 
             // Lay thong tin phan trang
             Pagination pagination = new Pagination();
             pagination.setPageSize(pageSize);
             pagination.setCurrentPage(page);
-            pagination.setSearchFields(new String[]{"warrantyCardCode", "productName", "createDate"});
-            pagination.setSearchValues(new String[]{searchWarrantyCardCode, searchProductName, searchCreateDate});
+            pagination.setSearchFields(new String[]{"warrantyCardCode", "productName","status" ,"createDate"});
+            pagination.setSearchValues(new String[]{searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate});
             pagination.setSort(sort);
             pagination.setOrder(order);
             pagination.setUrlPattern("/yourwarrantycard");
@@ -133,6 +139,7 @@ public class YourWarrantyCard extends HttpServlet {
         request.setAttribute("searchCreateDate", searchCreateDate);
         request.setAttribute("size", pageSize);
         request.setAttribute("sort", sort);
+        request.setAttribute("status", searchStatus);
         request.setAttribute("order", order);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("listWarrantyCard", listWarrantyCard );
