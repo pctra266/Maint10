@@ -379,10 +379,17 @@ public class StaffDAO extends DBContext {
         return true;
     }
 
-    public boolean isPhoneExists(String phone) {
-        String query = "SELECT Phone FROM Staff WHERE Phone = ?";
+    public boolean isExists(String str) {
+        String query = "SELECT * FROM Staff";
+        if(str.contains("@")){
+            query +=" WHERE Email = ?";
+        }else if(str.matches("\\d+")){
+            query +=" WHERE Phone = ?";
+        }else{
+            query +=" WHERE UsernameS = ?";
+        }
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, phone);
+            pstmt.setString(1, str);
             try (ResultSet rs = pstmt.executeQuery()) {
                 return rs.next();
             }
@@ -392,15 +399,17 @@ public class StaffDAO extends DBContext {
         return false;
     }
 
-    public boolean isUpdatePhoneExists(String phone, String staffID) {
+    public boolean isUpdatePhoneExists(String str, String staffID) {
         String query = "SELECT * FROM Staff";
-        if(phone.endsWith("com")){
+        if(str.contains("@")){
             query +=" WHERE Email = ? And StaffID <> ?";
-        }else{
+        }else if(str.matches("\\d+")){
             query +=" WHERE Phone = ? And StaffID <> ?";
+        }else{
+            query +=" WHERE UsernameS = ? And StaffID <> ?";
         }
         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
-            pstmt.setString(1, phone);
+            pstmt.setString(1, str);
             pstmt.setString(2, staffID);
             try (ResultSet rs = pstmt.executeQuery()) {
                 return rs.next();
@@ -411,16 +420,15 @@ public class StaffDAO extends DBContext {
         return false;
     }
     
-    
-    
 
-    public void importStaff(List<Staff> staffList) {
+    public int[] importStaff(List<Staff> staffList) throws SQLException {
         String selectSQL = "SELECT * FROM Staff WHERE StaffID = ?";
         String insertSQL = "INSERT INTO Staff (UsernameS, PasswordS, Name, RoleID, Gender, DateOfBirth, Email, Phone, Address, Image) "
                 + "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         String updateSQL = "UPDATE Staff SET UsernameS=?, PasswordS=?, Name=?, RoleID=?, Gender=?, DateOfBirth=?, "
                 + "Email=?, Phone=?, Address=?, Image=? WHERE StaffID=?";
-
+        int countInsert=0;
+        int countUpdate=0;
         try {
             PreparedStatement selectStmt = connection.prepareStatement(selectSQL);
             PreparedStatement insertStmt = connection.prepareStatement(insertSQL);
@@ -435,7 +443,7 @@ public class StaffDAO extends DBContext {
                             || !staff.getName().equals(rs.getString("Name"))
                             || staff.getRole() != rs.getInt("RoleID")
                             || !staff.getGender().equals(rs.getString("Gender"))
-                            || !staff.getDate().equals(rs.getDate("DateOfBirth"))
+                            || !staff.getDate().equals(rs.getString("DateOfBirth"))
                             || !staff.getEmail().equals(rs.getString("Email"))
                             || !staff.getPhone().equals(rs.getString("Phone"))
                             || !staff.getAddress().equals(rs.getString("Address"))
@@ -455,6 +463,7 @@ public class StaffDAO extends DBContext {
                         updateStmt.setInt(11, staff.getStaffID());
 
                         updateStmt.executeUpdate();
+                        countUpdate++;
 
                     }
                 } else { // Nếu chưa tồn tại, INSERT mới
@@ -470,6 +479,7 @@ public class StaffDAO extends DBContext {
                     insertStmt.setString(10, staff.getImage());
 
                     insertStmt.executeUpdate();
+                    countInsert++;
                 }
             }
             connection.commit();
@@ -477,6 +487,7 @@ public class StaffDAO extends DBContext {
         } catch (SQLException e) {
             System.out.println(e);
         }
+        return  new int[]{countInsert, countUpdate};
     }
 
     public Staff getStaffById(int staffId) {

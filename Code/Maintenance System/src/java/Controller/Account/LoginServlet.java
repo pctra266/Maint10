@@ -55,11 +55,11 @@ public class LoginServlet extends HttpServlet {
         if (staff != null) {
             session.setAttribute("staff", staff);
             saveCookies(response, username, password, rememberme);
-            response.sendRedirect("HomePage.jsp");
+            response.sendRedirect("profile");
         } else if (customer != null) {
             session.setAttribute("customer", customer);
             saveCookies(response, username, password, rememberme);
-            response.sendRedirect("HomePage.jsp");
+            response.sendRedirect("profile");
         }
     }
 

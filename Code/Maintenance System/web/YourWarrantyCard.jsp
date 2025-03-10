@@ -22,7 +22,7 @@
                     <form action="yourwarrantycard" method="get" style="text-align: center; margin-bottom: 20px;">
                         <input type="text" name="warrantyCardCode" placeholder="Search by Warranty Card Code" value="${searchWarrantyCardCode}" />
                         <input type="text" name="productName" placeholder="Search by ProductName" value="${searchProductName}" />
-
+                        <input type="text" name="status" placeholder="Search by Status" value="${status}" />
                         <input type="date" name="createDate" placeholder="Search by Create Date" value="${searchCreateDate}" />
                         <button type="submit">Search</button>
 
@@ -44,22 +44,23 @@
                             <tr>
                                 <th>
                                     Warranty Card Code
-                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
                                 </th>
                                 <th>
                                     Product
-                                    <a href="yourwarrantycard?sort=productName&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=productName&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=productName&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=productName&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
                                 </th>
                                 <th>
                                     Create Date
-                                    <a href="yourwarrantycard?sort=createDate&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=createDate&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=createDate&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=createDate&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
                                 </th>
                                 <th>
                                     Status
-
+                                    <a href="yourwarrantycard?sort=status&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=status&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
                                 </th>
                                 <th>
                                     Issue Description
@@ -84,7 +85,9 @@
                                             <td>
                                                 <fmt:formatDate value="${warrantyCard.createdDate}" pattern="dd-MM-yyyy" />
                                             </td>
-                                            <td>${warrantyCard.warrantyStatus}</td>
+                                            <td style="color: ${warrantyCard.warrantyStatus eq 'waiting' ? 'red' : (warrantyCard.warrantyStatus eq 'completed' ? 'green' : 'black')}">
+                                                ${warrantyCard.warrantyStatus}
+                                            </td>
                                             <td>${warrantyCard.issueDescription}</td>
                                             <td><a href="yourWarrantyCardDetail?warrantyCardID=${warrantyCard.warrantyCardID}">Detail</a></td>
                                         </tr>

@@ -101,7 +101,7 @@ public class ComponentDAO extends DBContext {
 
     public List<Component> getAllComponents() {
         List<Component> components = new ArrayList<>();
-        String query = "SELECT c.ComponentID, c.ComponentCode, c.Status, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price, "
+        String query = "SELECT c.ComponentID, c.ComponentCode, c.Status, c.ComponentName, cb.BrandName, ct.TypeName, c.Quantity, c.Price "
                 + "FROM Component c "
                 + "JOIN Brand cb ON c.BrandID = cb.BrandID "
                 + "JOIN ComponentType ct ON c.TypeID = ct.TypeID ";
@@ -746,6 +746,7 @@ public class ComponentDAO extends DBContext {
         Double maxPrice = d.getPriceMax();
         Integer maxQuantity = d.getQuantityMax();
         Integer minQuantity = d.getQuantityMin();
+        System.out.println(d.getAllComponents());
         System.out.println("--------------");
         System.out.println(d.isComponentCodeExist("MB-LEN-X12"));
         System.out.println(d.getListType());
@@ -818,5 +819,6 @@ public class ComponentDAO extends DBContext {
             return false;
         }
     }
+    
 
 }
