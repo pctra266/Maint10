@@ -265,6 +265,23 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
                 }
+                if (dao.isExists(usename) ) {
+                    request.setAttribute("errorMessage", "Usename đã được sử dụng.");
+                    request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (!email.endsWith(".com")) {
+                    request.setAttribute("errorMessage", "Email khong hop le.");
+                    request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                    return;
+                }
+                if (dao.isExists(email) ) {
+                    request.setAttribute("errorMessage", "Email đã được đăng ký.");
+                    request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                    return;
+                }
+                
                 if (!phone.matches("\\d+")) {
                     request.setAttribute("errorMessage", "Số điện thoại chỉ được chứa số.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
@@ -276,11 +293,12 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
                 }
-                if (dao.isPhoneExists(phone) ) {
+                if (dao.isExists(phone) ) {
                     request.setAttribute("errorMessage", "Số điện thoại đã được đăng ký.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
                 }
+                
                 if (date != null && !date.isEmpty()) {
                     LocalDate datenow = LocalDate.parse(date); // Chuyển String thành LocalDate
                     LocalDate today = LocalDate.now(); // Ngày hiện tại
@@ -350,6 +368,14 @@ public class StaffController extends HttpServlet {
                     return;
                 }
                 
+                if (dao.isUpdatePhoneExists(Updateusename, UpdatestaffID)) {
+                    request.setAttribute("errorMessage", "UseName đã được sử dụng");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+                
                 if (!Updatephone.matches("\\d+")) {
                     request.setAttribute("errorMessage", "Số điện thoại chỉ được chứa số.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
@@ -361,7 +387,7 @@ public class StaffController extends HttpServlet {
                 
 
                 if (!Updatephone.matches("0\\d{9}")) {
-                    request.setAttribute("errorMessage", "Số điện thoại phải nhập đủ 10 số.");
+                    request.setAttribute("errorMessage", "Số điện thoại phải nhập đủ 10 số và số đầu là 0.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
@@ -374,8 +400,16 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
+                if  (!(Updateemail.endsWith(".com") || Updateemail.endsWith(".com.vn") || Updateemail.endsWith(".vn") || Updateemail.endsWith(".edu.vn"))) {
+                    request.setAttribute("errorMessage", "Email khong hop le.");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+                
                 if (dao.isUpdatePhoneExists(Updateemail, UpdatestaffID)) {
-                    request.setAttribute("errorMessage", "emial da co");
+                    request.setAttribute("errorMessage", "Email đã được đăng ký");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
@@ -437,7 +471,7 @@ public class StaffController extends HttpServlet {
     }
 
     private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
-    if (imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName() == null|| imagePart.getSubmittedFileName().isEmpty()) return "img/Staff/default-image.png";
+    if (imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName() == null|| imagePart.getSubmittedFileName().isEmpty()) return "img/Staff/avata.jpg";
 
     // Đường dẫn đến thư mục Web Pages/img/Staff
     String devUploadPath = request.getServletContext().getRealPath("/").replace("build\\web\\", "web/") + "img/Staff";

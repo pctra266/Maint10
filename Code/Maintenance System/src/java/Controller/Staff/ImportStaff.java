@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -49,40 +50,65 @@ public class ImportStaff extends HttpServlet {
     throws ServletException, IOException {
         Part filePart = request.getPart("file"); // Lấy file từ form
         List<Staff> staffList = new ArrayList<>();
-        
+        List<Integer> allStaffIds = new ArrayList<>();
+        List<Integer> duplicateIds = new ArrayList<>();
+        List<Integer> empty = new ArrayList<>();
+        List<Integer> emptyColum = new ArrayList<>(); 
         if (filePart != null) {
             String fileName = filePart.getSubmittedFileName();
             File file = new File(getServletContext().getRealPath("/") + fileName);
             filePart.write(file.getAbsolutePath()); // Lưu file tạm
-
+            boolean rowerror = true;
             try (FileInputStream fis = new FileInputStream(file);
                  Workbook workbook = new XSSFWorkbook(fis)) {
                 Sheet sheet = workbook.getSheetAt(0); // Lấy sheet đầu tiên
-                
+                DataFormatter formatter = new DataFormatter();
                 for (int i = 1; i <= sheet.getLastRowNum(); i++) { 
+                    rowerror = true;
                     Row row = sheet.getRow(i);
+                    if(row==null){
+                        empty.add(i+1);
+                        continue;
+                    }
+                    for(int j = 0 ; j < 10; j++){
+                        String cellValue = formatter.formatCellValue(row.getCell(j)).trim();
+                        if(cellValue.isEmpty()){
+                            emptyColum.add(i+1);
+                            rowerror = false;
+                            break;
+                        }
+                    }
+                    if(rowerror == false){
+                        continue;
+                    }
+                    
                     if (row != null) {
                         Staff staff = new Staff();
                         staff.setStaffID((int) row.getCell(0).getNumericCellValue());
-                        staff.setUsernameS(row.getCell(1).getStringCellValue());
-                        staff.setPasswordS(row.getCell(2).getStringCellValue());
-                        staff.setName(row.getCell(3).getStringCellValue());
+                        staff.setUsernameS(formatter.formatCellValue(row.getCell(1)).trim());
+                        staff.setPasswordS(formatter.formatCellValue(row.getCell(2)).trim());
+                        staff.setName(formatter.formatCellValue(row.getCell(3)).trim());
                         staff.setRole((int) row.getCell(4).getNumericCellValue());
-                        staff.setGender(row.getCell(5).getStringCellValue());
-//                        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); 
-//                        Date date = row.getCell(6).getDateCellValue();
-//                        staff.setDate(sdf.format(date)); 
-                        staff.setDate(row.getCell(6).getStringCellValue()); 
-
-                        staff.setEmail(row.getCell(7).getStringCellValue());
-                        staff.setPhone(row.getCell(8).getStringCellValue());
-                        staff.setAddress(row.getCell(9).getStringCellValue());
-                        staff.setImage(row.getCell(10).getStringCellValue());
+                        staff.setGender(formatter.formatCellValue(row.getCell(5)).trim());
+                        staff.setDate(formatter.formatCellValue(row.getCell(6)).trim()); 
+                        staff.setEmail(formatter.formatCellValue(row.getCell(7)).trim());
+                        staff.setPhone(formatter.formatCellValue(row.getCell(8)).trim());
+                        staff.setAddress(formatter.formatCellValue(row.getCell(9)).trim());
+                        staff.setImage(formatter.formatCellValue(row.getCell(10)).trim());
+                        int staffID = (int)row.getCell(0).getNumericCellValue();
+                        if(!allStaffIds.contains(staffID)){
+                            allStaffIds.add(staffID);
+                        }else
+                        {
+                            duplicateIds.add(i+1);
+                            continue;
+                        }
+                        // Thêm vào danh sách
                         staffList.add(staff);
-                        PrintWriter out = response.getWriter();
-                        out.print("Read staff: " + staff.getStaffID() + " - " + staff.getUsernameS());
                     }
+                    
                 }
+                
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -99,12 +125,20 @@ public class ImportStaff extends HttpServlet {
 //            out.println("Password: " + s.getPasswordS());
 //            out.println("Role: " + s.getRole());
 //        }
-
+        
         StaffDAO dao = new StaffDAO();
-        
-        
+        if(empty.size()>0){
+            request.setAttribute("errorRow", "Cac dong bi trong: "+ empty);
+        }
+        if(emptyColum.size()>0){
+            request.setAttribute("errorColum", "Cac dong bi thieu du lieu: "+ emptyColum);
+        }
+        if(duplicateIds.size()>0){
+            request.setAttribute("error", "Cac dong StaffID bi trung trong file Excel la: "+duplicateIds);
+        }
         try {
-            dao.importStaff(staffList);
+            int[] i = dao.importStaff(staffList);
+            request.setAttribute("message1", "Update: "+i[1]+"\nInsert: "+i[0]);
             request.setAttribute("message", "Nhập dữ liệu thành công!");
         } catch (Exception e) {
             request.setAttribute("message", "Lỗi khi lưu vào database: " + e.getMessage());
@@ -184,6 +218,8 @@ public class ImportStaff extends HttpServlet {
         request.setAttribute("page_size", page_size);
         request.setAttribute("list", staffList);
 
+        
+        
         request.getRequestDispatcher("Staff.jsp").forward(request, response);
     
     } 

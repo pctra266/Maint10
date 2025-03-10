@@ -56,6 +56,14 @@
                 border-radius: 5px;
                 display: block; 
             }
+            .alert1 {
+                padding: 10px;
+                background-color: red; 
+                color: white;
+                margin-bottom: 15px;
+                border-radius: 5px;
+                display: block; 
+            }
             .btn-primary {
                 background-color: #007bff;
                 color: white;
@@ -238,10 +246,23 @@
                             <button type="submit" class="btn">Import</button>
                         </form>
                         
+                        <c:if test="${not empty error}">
+                            <div class="alert1">${error}</div>
+                        </c:if>  
+                        <c:if test="${not empty errorRow}">
+                            <div class="alert1">${errorRow}</div>
+                        </c:if>  
+                        <c:if test="${not empty errorColum}">
+                            <div class="alert1">${errorColum}</div>
+                        </c:if>  
+                            
                         <c:if test="${not empty message}">
                             <div class="alert">${message}</div>
                         </c:if>
-                            
+                        <c:if test="${not empty message1}">
+                            <div class="alert">${message1}</div>
+                        </c:if>
+                               
                         <thead>
                             <tr>
                                 <th>ID #</th>
