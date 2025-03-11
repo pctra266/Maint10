@@ -276,33 +276,26 @@
                     </div>
                         </div> <!-- end div 3 -->
                     
-                   <div class="bg-white">
-                        <h2>Content Section</h2>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.
-                    </div><!-- end div 4 -->
+<!--                   <div style="height: 50vh" class="bg-white">
+                       
+                    </div> end div 4 -->
                 </main>
-                     <footer class="footer bg-white text-white text-center py-3 mt-auto">
-                         <div class="container-fluid">
-                             <div class="row text-muted">
-                                 <div class="col-6 text-start">
-                                     <p class="mb-0">
-                                         <a href="#" target="_blank" class="text-muted"><strong>Main10</strong></a> ©
-                                     </p>
-                                 </div>
-                                 <div class="col-6 text-end">
-                                     <ul class="list-inline">
-                                         <li class="list-inline-item">
-                                             <a class="text-muted" href="#">Support</a>
-                                         </li>
-                                     </ul>
-                                 </div>
-                             </div>
-                         </div>
-                     </footer>
+                      <footer class="footer bg-primary text-white text-center py-4 mt-auto">
+                          <div class="container">
+                              <div class="row">
+                                  <div class="col-md-12 text-center">
+                                      <p class="mb-1">
+                                          <strong>Main10</strong> - Fast Repairs, Reliable Maintenance!
+                                      </p>
+                                      <p class="mb-1">Address: 123 Đường ABC, Quận XYZ, TP.HCM</p>
+                                      <p class="mb-1">Hotline: 0123 456 789 | Email: support@main10.com</p>
+                                      <p class="mb-0">© 2025 Main10. All rights reserved.</p>
+                                  </div>
+                              </div>
+                          </div>
+                      </footer>
+
+
             </div>
         </div>
 
