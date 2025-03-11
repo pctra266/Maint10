@@ -13,15 +13,28 @@
         <title>Home Page </title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        
+        
+        <style>
+            .logo-img {
+            height: 50px; /* Điều chỉnh chiều cao ảnh logo */
+            width: auto; /* Giữ tỉ lệ ảnh */
+        }
+        </style>
+        
     </head>
 
     <body class="d-flex flex-column">
         <div class="wrapper">
             <div class="main">
+                
                 <nav class="navbar navbar-expand navbar-light navbar-bg">
-                    <a href="#">Insert Logo here</a>
+                    <a href="Home" class="navbar-brand">
+                            <img src="${pageContext.request.contextPath}/img/logo/logoText2.png" alt="Main10 Logo" class="logo-img">
+                        </a>
+
                     <ul class="navbar-nav d-none d-lg-flex"> <!-- start ul 1 -->
-                        <li class="nav-item ms-3">
+                        <li class="nav-item">
                                 <a class="nav-link d-flex align-items-center" href="#">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-1">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -83,25 +96,115 @@
                         </div>
                     </ul><!-- end ul2 -->
                 </nav>
-                <main class="content" style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center;">
-                     <!--Main Slider--> 
-                    <div class="main-slider d-flex align-items-center justify-content-center text-white vh-100"
-                         >
-                        <div class="container text-center">
-                            <h2>Enter your product code</h2>
-                            <form class="search">
-                                <div class="input-group w-50 mx-auto">
-                                    <input type="text" class="form-control" placeholder="Product code">
-                                    <div class="input-group-append">
-                                        <button class="btn btn-primary" type="submit">Search</button>
-                                    </div>
+                        
+                  <main style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
+                    <div >
+                        <div class="container ">
+                            <div>
+                                <div>
+                                    <h1 >Warranty information lookup</h1>
+                                    <h6 >Fill in your information to view detailed warranty information for your product</h6>
                                 </div>
-                            </form>
+                                <div class="card-body">
+                                    
+                                    <form > <!-- form here -->
+                                        <div class="input-group mx-auto">
+                                            <input type="search" class="form-control" placeholder="Information code">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit">Search</button>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 15px" >
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by phone number
+                                                </span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by email
+                                                </span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by product code
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </form> <!-- end form -->
+                                </div>
+                                
                         </div>
                     </div>
-                     <!--Main Slider--> 
+                        </div> <!-- end div 1 -->
+                       
+                       
+                   <div class="bg-white">
+                        <h2>Content Section</h2>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                    </div><!-- end div 2 -->
+                    
+                    <div >
+                        <div class="container ">
+                            <div>
+                                <div>
+                                    <h1 >Warranty information lookup</h1>
+                                    <h6 >Fill in your information to view detailed warranty information for your product</h6>
+                                </div>
+                                <div class="card-body">
+                                    
+                                    <form > <!-- form here -->
+                                        <div class="input-group mx-auto">
+                                            <input type="search" class="form-control" placeholder="Information code">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit">Search</button>
+                                            </div>
+                                        </div>
+                                        <div style="margin-top: 15px" >
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by phone number
+                                                </span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by email
+                                                </span>
+                                            </label>
+                                            <label class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <span class="form-check-label">
+                                                    Search by product code
+                                                </span>
+                                            </label>
+                                        </div>
+                                    </form> <!-- end form -->
+                                </div>
+                                
+                        </div>
+                    </div>
+                        </div> <!-- end div 3 -->
+                    
+                   <div class="bg-white">
+                        <h2>Content Section</h2>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
+                    </div><!-- end div 4 -->
+                    
+                    
                 </main>
-
                      <footer class="footer bg-white text-white text-center py-3 mt-auto">
                          <div class="container-fluid">
                              <div class="row text-muted">
@@ -122,7 +225,6 @@
                      </footer>
 
             </div>
-
         </div>
 
         <script src="js/app.js"></script>
