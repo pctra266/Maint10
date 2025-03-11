@@ -78,16 +78,18 @@
                     </ul> <!-- end ul 1 -->
                     <ul class="navbar-nav navbar-align"><!-- start ul2 -->
                         <div class="navbar-collapse collapse">
-                            <li class="navbar-nav navbar-align">
+                            <li class="navbar-nav navbar-align m-xl-2">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
                                     <a href="#">Back to dashboard</a>
                                 </c:if>
                             </li>
+                            
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
                                     <a href="LoginForm.jsp">Login</a>
                                 </c:if>
                             </li>
+                            
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
                                     <a href="logout">Logout</a>
