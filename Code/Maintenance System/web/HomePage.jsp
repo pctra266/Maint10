@@ -28,7 +28,7 @@
         <div class="wrapper">
             <div class="main">
                 
-                <nav class="navbar navbar-expand navbar-light navbar-bg">
+                <nav class="navbar navbar-expand navbar-light navbar-bg fixed-top ">
                     <a href="Home" class="navbar-brand">
                             <img src="${pageContext.request.contextPath}/img/logo/logoText2.png" alt="Main10 Logo" class="logo-img">
                         </a>
@@ -98,10 +98,10 @@
                 </nav>
                         
                   <main style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
-                      <div style="height: 40%" class="bg-primary bg-opacity-50  rounded shadow-lg p-5">
+                      <div style="height: 95vh" class="bg-primary bg-opacity-50  rounded shadow-lg p-5">
                         <div class="container  ">
                             <div>
-                                <div style="padding: 5% 1% 1% 1%" class="text-center">
+                                <div style="padding: 15% 1% 1% 1%" class="text-center">
                                     <h1 style="font-size: 60px; color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
                                          2px -2px 0 rgba(0, 0, 0, 0.25),
@@ -174,52 +174,103 @@
                         </div> <!-- end div 1 -->
                        
                        
-                        <div class="bg-white" style="margin: none">
-                        <h2>Content Section</h2>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        <p>The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.</p>
-                        The morning sun cast a golden glow over the quiet town, where birds chirped lazily on telephone wires. A gentle breeze rustled the leaves of the old oak tree in the park, sending a few drifting to the ground. Nearby, a child laughed as they chased a stray balloon, their tiny feet pattering against the cobblestone path. In the distance, the aroma of freshly baked bread wafted from a small bakery, luring in early customers. Life moved at its own slow, steady pace here, untouched by the rush of the outside world.
-                    </div><!-- end div 2 -->
+                        <div style="height: 100vh" class="bg-white">
+                            <div style="padding-bottom: 7%; padding-top: 5% " class="container">
+                                <div style="margin-bottom: 2%;margin-top: 1%;" class="row">
+
+                                    <div class="col-6 ">
+                                        <div class="d-flex align-items-center">
+                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px; " >I</h1>
+                                            <h1 style="font-size: 30px" class="fw-bold"> Our Service</h1>
+                                        </div>
+                                        <h5>These are some of the essential services provided by my system </h5>
+                                    </div>
+                                    </div>
+                                <div class="row">
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabssa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                        <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
+                            </div>
+                        </div><!-- end div 2 -->
                     
-                    <div class="bg-primary bg-opacity-25" >
-                        <div class="container ">
+                    <div style="height: 50vh" class="bg-primary bg-opacity-50 d-flex justify-content-center align-items-center " >
+                        <div class="container text-center d-flex align-items-center ">
                             <div>
-                                <div class="text-center" >
-                                    <h1  >Warranty information lookup</h1>
-                                    <h6 >Fill in your information to view detailed warranty information for your product</h6>
+                                <div style="padding: 1% 1% 1% 1%" class="text-center">
+                                    <h1 style="font-size: 60px; color: white; 
+                                         text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
+                                         2px -2px 0 rgba(0, 0, 0, 0.25),
+                                         -2px 2px 0 rgba(0, 0, 0, 0.25),
+                                         2px 2px 0 rgba(0, 0, 0, 0.25);"  
+                                        class="fw-bolder" >
+                                        Warranty Consultation Registration
+                                    </h1>
+                                    <h6 style="font-size: 20px; color: white; 
+                                         text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
+                                         2px -2px 0 rgba(0, 0, 0, 0.25),
+                                         -2px 2px 0 rgba(0, 0, 0, 0.25),
+                                         2px 2px 0 rgba(0, 0, 0, 0.25);"
+                                         class="fw-bold" >Need assistance with your device? Our warranty consultation service is here to help. Contact now, and our team will reach out to support you as soon as possible.
+                                    </h6>
                                 </div>
                                 <div>
                                     
-                                    <form > <!-- form here -->
-                                        <div class="input-group mx-auto">
-                                            <input type="search" class="form-control" placeholder="Information code">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary" type="submit">Search</button>
-                                            </div>
-                                        </div>
-                                        <div style="margin-top: 15px" >
-                                            <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
-                                                <span class="form-check-label">
-                                                    Search by phone number
-                                                </span>
-                                            </label>
-                                            <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
-                                                <span class="form-check-label">
-                                                    Search by email
-                                                </span>
-                                            </label>
-                                            <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
-                                                <span class="form-check-label">
-                                                    Search by product code
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </form> <!-- end form -->
+                                    <form > 
+                                        <button style="height: 50px" class="btn btn-primary " type="submit">Contact Support</button>
+                                    </form> 
                                 </div>
                         </div>
                     </div>
