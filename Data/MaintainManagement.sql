@@ -230,15 +230,6 @@ CREATE TABLE WarrantyCardProcess (
     Note NVARCHAR(MAX)
 );
 
--- Payment Table
-CREATE TABLE Payment (
-    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    PaymentDate DATE NOT NULL,
-    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
-    Amount FLOAT NOT NULL CHECK (Amount >= 0),
-    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail'))
-);
-
 -- Feedback Table
 CREATE TABLE Feedback (
     FeedbackID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -266,6 +257,15 @@ CREATE TABLE Media (
     MediaURL NVARCHAR(MAX) NOT NULL, -- URL ảnh hoặc video
     MediaType NVARCHAR(10) NOT NULL CHECK (MediaType IN ('image', 'video')), -- Phân loại
     UploadedDate DATETIME DEFAULT GETDATE()
+);
+
+-- Payment Table
+CREATE TABLE Payment (
+    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    PaymentDate DATE NOT NULL,
+    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
+    Amount FLOAT NOT NULL CHECK (Amount >= 0),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail'))
 );
 
 CREATE TABLE Invoice (
