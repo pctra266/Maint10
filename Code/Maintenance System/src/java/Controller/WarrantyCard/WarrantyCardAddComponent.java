@@ -53,7 +53,7 @@ public class WarrantyCardAddComponent extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
-
+        String componentNameParam = request.getParameter("componentName");
         String componentIdParam = request.getParameter("componentID");
         String status = request.getParameter("status");
         String quantityParam = request.getParameter("quantity");
@@ -61,15 +61,22 @@ public class WarrantyCardAddComponent extends HttpServlet {
         Integer componentId = FormatUtils.tryParseInt(componentIdParam);
         Integer quantity = FormatUtils.tryParseInt(quantityParam);
         Double price = FormatUtils.tryParseDouble(priceParam);
-
-        if (componentId != null && isValidStatus(status) && quantity != null && quantity >= 0 && price != null && price >= 0) {
-            Component component = componentDAO.getComponentByID(componentId);
-            if (component != null) {
+        
+        //Bat loi 
+        StringBuilder error = new StringBuilder();
+        if(componentNameParam.isBlank()) { error.append("Component name should not blank. ");}
+        if(quantity==null ||quantity<1) {error.append("Quantity should be a positive integer. ");}
+        if(price==null ||price<0) {error.append("Price should be zero or a positive float. ");}
+        if (!componentNameParam.isBlank()&& isValidStatus(status) && quantity != null && quantity > 0 && price != null && price >= 0) {
+            Component component = null;
+            if(componentId!=null)  component = componentDAO.getComponentByID(componentId);
+           
                 WarrantyCardDetail newDetail = new WarrantyCardDetail();
                 newDetail.setWarrantyCardID(warrantyCardId);
                 newDetail.setComponent(component);
                 newDetail.setStatus(status);
                 newDetail.setQuantity(quantity);
+                newDetail.setComponentName(componentNameParam);
                 if ("warranty_repaired".equals(status) || "warranty_replaced".equals(status)) {
                     newDetail.setPrice(0.0); // Force price to 0
                 } else {
@@ -83,9 +90,9 @@ public class WarrantyCardAddComponent extends HttpServlet {
                     request.setAttribute("error", "Failed to add component.");
                     doGet(request, response); // Reload the page with error
                 }
-            }
+            
         } else {
-            request.setAttribute("error", "Invalid input data.");
+            request.setAttribute("error", "Invalid input data. "+error);
             doGet(request, response);
         }
     }

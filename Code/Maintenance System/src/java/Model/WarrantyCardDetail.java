@@ -13,7 +13,9 @@ public class WarrantyCardDetail{
     private int warrantyCardDetailID;
     private int warrantyCardID;
     private Component component;
+    private String componentName;
     private String status;
+    private String note;
     private double price;
     private int quantity;
 
@@ -27,14 +29,6 @@ public class WarrantyCardDetail{
     // Constructor không tham số
     public WarrantyCardDetail() {}
 
-    // Constructor đầy đủ tham số
-    public WarrantyCardDetail(int warrantyCardID, Component component, String status, double price, int quantity) {
-        this.warrantyCardID = warrantyCardID;
-        this.component = component;
-        setStatus(status); // Kiểm tra hợp lệ khi set status
-        setPrice(price);   // Kiểm tra hợp lệ khi set price
-        setQuantity(quantity); // Kiểm tra hợp lệ khi set quantity
-    }
 
     // Getter & Setter
     public int getWarrantyCardDetailID() {
@@ -65,6 +59,26 @@ public class WarrantyCardDetail{
         return status;
     }
 
+    public String getComponentName() {
+        if (component!=null) return component.getComponentName();
+        return componentName;
+    }
+
+    public void setComponentName(String componentName) {
+        if (component!=null)  this.componentName = component.getComponentName();
+        this.componentName = componentName;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+    
+    
+    
     public void setStatus(String status) {
         if (status.equals(FIXING) ||status.equals(WARRANTY_REPLACED) ||status.equals(WARRANTY_REPAIRED) || status.equals(REPAIRED) || status.equals(REPLACE) ) {
             this.status = status;
@@ -97,13 +111,8 @@ public class WarrantyCardDetail{
 
     @Override
     public String toString() {
-        return "WarrantyCardDetail{" +
-                "warrantyCardDetailID=" + warrantyCardDetailID +
-                ", warrantyCardID=" + warrantyCardID +
-                ", component=" + component +
-                ", status='" + status + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
-                '}';
+        return "\n WarrantyCardDetail{" + "warrantyCardDetailID=" + warrantyCardDetailID + ", warrantyCardID=" + warrantyCardID + ", component=" + component + ", componentName=" + componentName + ", status=" + status + ", note=" + note + ", price=" + price + ", quantity=" + quantity + '}';
     }
+
+    
 }

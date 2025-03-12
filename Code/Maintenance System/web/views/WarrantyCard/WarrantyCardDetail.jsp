@@ -121,7 +121,7 @@
                                         <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Request Component</button>
                                     </form>
                                 </div>
-                                <table class="table table-hover my-0">
+                                <table class="table table-hover my-0 ">
                                     <thead>
                                         <tr>
                                             <th>#</th>
@@ -129,6 +129,7 @@
                                             <th>Status</th>
                                             <th>Price</th>
                                             <th>Quantity</th>
+                                            <th>Note</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
@@ -136,13 +137,13 @@
                                         <c:forEach var="detail" items="${cardDetails}" varStatus="status">
                                             <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
                                                 <td>${status.index + 1}</td>
-                                                <td>${detail.component.componentName}</td>
+                                                <td>${detail.componentName}</td>
                                                 <td>
-                                                    <form action="WarrantyCard/Detail" method="post" id="updateForm-${status.index}">
+                                                    <form action="WarrantyCard/Detail"  method="post" id="updateForm-${status.index}">
                                                         <input type="hidden" name="action" value="update">
                                                         <input type="hidden" name="warrantyCardDetailID" value="${detail.warrantyCardDetailID}">
                                                         <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                                        <select name="status" class="form-select status-select">
+                                                        <select name="status" class="form-select status-select ${ updateAlert0!=null && detail.status == 'fixing'? "border-warning border-2":"" }">
                                                             <option value="fixing" ${detail.status == 'fixing' ? 'selected' : ''}>Fixing</option>
                                                             <option value="warranty_repaired" ${detail.status == 'warranty_repaired' ? 'selected' : ''}>Repaired (Warranty)</option>
                                                             <option value="warranty_replaced" ${detail.status == 'warranty_replaced' ? 'selected' : ''}>Replaced (Warranty)</option>
@@ -151,14 +152,17 @@
                                                         </select>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="price" class="form-control form-control-sm price-input" value="${detail.price}" min="0" step="0.01" ${detail.status == 'warranty_repaired' || detail.status == 'warranty_replaced' ? 'readonly' : ''}>
+                                                    <input type="text" name="price" class="form-control form-control-sm price-input format-float" value="${detail.price}" min="0" step="0.01" ${detail.status == 'warranty_repaired' || detail.status == 'warranty_replaced' ? 'readonly' : ''}>
                                                 </td>
                                                 <td>
-                                                    <input type="number" name="quantity" class="form-control form-control-sm" value="${detail.quantity}" min="0">
+                                                    <input type="text" name="quantity" class="form-control form-control-sm format-int" value="${detail.quantity}" min="0">
+                                                </td>
+                                                <td>
+                                                    <textarea type="text" name="note" class="form-control form-control-sm">${detail.note}</textarea>
                                                     </form>
                                                 </td>
                                                 <td class="table-action">
-                                                    <button type="submit" form="updateForm-${status.index}" class="btn btn-sm me-1 save" disabled title="Save">
+                                                    <button type="submit" form="updateForm-${status.index}" class="btn btn-sm me-1 save"  title="Save">
                                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save align-middle"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                                     </button>
                                                     <form action="WarrantyCard/Detail" method="post" class="d-inline" id="deleteForm-${status.index}">
@@ -277,9 +281,6 @@
                                     this.closest('tr').querySelector('.save').disabled = false;
                                 });
                             });
-                            document.querySelectorAll('.save').forEach(button => {
-                                button.disabled = true;
-                            });
 
                             // Table: Disable price input for warranty states
                             document.querySelectorAll('.status-select').forEach(select => {
@@ -293,12 +294,17 @@
 
                             window.onload = function () {
                                 const purchasedDateStr = "${pd.getFormatPurchaseDate()}"; // Giả sử định dạng "dd/MM/yyyy"
-                                const warrantyPeriod = ${pd.warrantyPeriod}; // Số tháng bảo hành
+                                const warrantyPeriod = ${pd.warrantyPeriod==null?0:pd.warrantyPeriod}; // Số tháng bảo hành
                                 const statusDiv = document.getElementById('warrantyStatus');
 
                                 // Kiểm tra purchasedDateStr có hợp lệ không
                                 console.log("purchasedDateStr:", purchasedDateStr); // Debug giá trị
-
+                                if(purchasedDateStr.length<1){
+                                    statusDiv.innerText = "Not covered by warranty";
+                                    statusDiv.style.color = "orange";
+                                    return;
+                                }
+                                
                                 if (!purchasedDateStr || purchasedDateStr.trim() === '' || !purchasedDateStr.includes('-')) {
                                     statusDiv.innerText = "Status: Cannot determine warranty status (invalid purchase date)";
                                     statusDiv.style.color = "orange";

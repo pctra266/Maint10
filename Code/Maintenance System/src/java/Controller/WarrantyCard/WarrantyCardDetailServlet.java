@@ -31,9 +31,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final ComponentDAO componentDAO = new ComponentDAO();
     private final ComponentRequestDAO componentRequestDAO = new ComponentRequestDAO();
-    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO(); 
-    private final StaffDAO staffDAO = new StaffDAO(); 
-    private final CustomerDAO customerDAO = new CustomerDAO(); 
+    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
+    private final StaffDAO staffDAO = new StaffDAO();
+    private final CustomerDAO customerDAO = new CustomerDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -98,120 +98,135 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         }
 
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
-        if ("update".equals(action)) {
-            String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
-            String status = request.getParameter("status");
-            String quantityParam = request.getParameter("quantity");
-            String priceParam = request.getParameter("price");
-            Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
-            Integer quantity = FormatUtils.tryParseInt(quantityParam);
-            Double price = FormatUtils.tryParseDouble(priceParam);
-
-            if (warrantyCardDetailId != null) {
-                WarrantyCardDetail detail = wcdDao.getWarrantyCardDetailById(warrantyCardDetailId);
-                if (detail != null) {
-                    boolean updated = false;
-                    if (status != null && isValidStatus(status)) {
-                        detail.setStatus(status);
-                        if ("warranty_repaired".equals(status) || "warranty_replaced".equals(status)) {
-                            detail.setPrice(0.0);
+        if (null != action) {
+            switch (action) {
+                case "update" -> {
+                    String noteParam = request.getParameter("note");
+                    String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
+                    String status = request.getParameter("status");
+                    String quantityParam = request.getParameter("quantity");
+                    String priceParam = request.getParameter("price");
+                    Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
+                    Integer quantity = FormatUtils.tryParseInt(quantityParam);
+                    Double price = FormatUtils.tryParseDouble(priceParam);
+                    if (warrantyCardDetailId != null) {
+                        WarrantyCardDetail detail = wcdDao.getWarrantyCardDetailById(warrantyCardDetailId);
+                        if (detail != null) {
+                            boolean updated = false;
+                            if (status != null && isValidStatus(status)) {
+                                detail.setStatus(status);
+                                if ("warranty_repaired".equals(status) || "warranty_replaced".equals(status)) {
+                                    detail.setPrice(0.0);
+                                }
+                                updated = true;
+                            }
+                            if (quantity != null && quantity >= 0) {
+                                detail.setQuantity(quantity);
+                                updated = true;
+                            }
+                            if (price != null && price >= 0 && !("warranty_repaired".equals(detail.getStatus()) || "warranty_replaced".equals(detail.getStatus()))) {
+                                detail.setPrice(price);
+                                updated = true;
+                            }
+                            if (updated) {
+                                detail.setNote(noteParam);
+                                boolean success = wcdDao.updateWarrantyCardDetail(detail);
+                                if (success) {
+                                    request.setAttribute("updateAlert1", "Update successful!");
+                                } else {
+                                    request.setAttribute("updateAlert0", "Failed to update.");
+                                }
+                            }
                         }
-                        updated = true;
                     }
-                    if (quantity != null && quantity >= 0) {
-                        detail.setQuantity(quantity);
-                        updated = true;
-                    }
-                    if (price != null && price >= 0 && !("warranty_repaired".equals(detail.getStatus()) || "warranty_replaced".equals(detail.getStatus()))) {
-                        detail.setPrice(price);
-                        updated = true;
-                    }
-                    if (updated) {
-                        boolean success = wcdDao.updateWarrantyCardDetail(detail);
-                        if (success) {
-                            request.setAttribute("updateAlert1", "Update successful!");
+                }
+                case "delete" -> {
+                    String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
+                    Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
+                    if (warrantyCardDetailId != null) {
+                        boolean deleted = wcdDao.deleteWarrantyCardDetail(warrantyCardDetailId);
+                        if (deleted) {
+                            request.setAttribute("updateAlert1", "Component deleted successfully!");
                         } else {
-                            request.setAttribute("updateAlert0", "Failed to update.");
+                            request.setAttribute("updateAlert0", "Failed to delete component.");
                         }
                     }
                 }
-            }
-        } else if ("delete".equals(action)) {
-            String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
-            Integer warrantyCardDetailId = FormatUtils.tryParseInt(warrantyCardDetailIdParam);
-
-            if (warrantyCardDetailId != null) {
-                boolean deleted = wcdDao.deleteWarrantyCardDetail(warrantyCardDetailId);
-                if (deleted) {
-                    request.setAttribute("updateAlert1", "Component deleted successfully!");
-                } else {
-                    request.setAttribute("updateAlert0", "Failed to delete component.");
-                }
-            }
-        } else if ("process".equals(action)) {
-            String processAction = request.getParameter("processAction");
-            if (processAction != null && isValidProcessAction(processAction)) {
-                boolean canProcess = false;
-                switch (processAction) {
-                    case "receive" ->
-                        canProcess = latestProcess != null && ("create".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()) || "refuse".equals(latestProcess.getAction()));
-                    case "fixing" ->
-                        canProcess = latestProcess != null && ("receive".equals(latestProcess.getAction()));
-                    case "refix" ->
-                        canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
-                    case "outsource" ->
-                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
-                    case "fixed" ->
-                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()) || "outsource".equals(latestProcess.getAction()));
-                    case "completed" ->
-                        canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
-                    case "cancel" ->
-                        canProcess = latestProcess != null && !"cancel".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
-                    case "refuse" ->
-                        canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
-                }
-
-                if (canProcess) {
-                    WarrantyCardProcess newProcess = new WarrantyCardProcess();
-                    newProcess.setWarrantyCardID(warrantyCardId);
-                    newProcess.setHandlerID(staff.getStaffID());
-                    newProcess.setAction(processAction);
-                    boolean success = wcpDao.addWarrantyCardProcess(newProcess);
-                    if (success) {
-                        System.out.println("check1");
-                        WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-                        if ("completed".equals(processAction) || "cancel".equals(processAction)||"refix".equals(processAction)) {
-                            wc.setWarrantyStatus(processAction);
-                            if("completed".equals(processAction)){
-                                wc.setCompletedDate(Date.from(Instant.now()));
+                case "process" -> {
+                    String errorProcess = ""; 
+                    String processAction = request.getParameter("processAction");
+                    if (processAction != null && isValidProcessAction(processAction)) {
+                        boolean canProcess = false;
+                        switch (processAction) {
+                            case "receive" ->
+                                canProcess = latestProcess != null && ("create".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()) || "refuse".equals(latestProcess.getAction()));
+                            case "fixing" ->
+                                canProcess = latestProcess != null && ("receive".equals(latestProcess.getAction()));
+                            case "refix" ->
+                                canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
+                            case "outsource" ->
+                                canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
+                            case "fixed" -> {
+                                canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()) || "outsource".equals(latestProcess.getAction()));
+                                if (!canChangeToFixed(warrantyCardId)) {
+                                    canProcess = false;
+                                    errorProcess+="One or more component is being fixed, check again!";
+                                }
                             }
-                            if("cancel".equals(processAction)){
-                                wc.setCanceldDate(Date.from(Instant.now()));
-                            }
+                            case "completed" ->
+                                canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
+                            case "cancel" ->
+                                canProcess = latestProcess != null && !"cancel".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
+                            case "refuse" ->
+                                canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
                         }
-                        if ("fixed".equals(processAction)) {
-                            wc.setWarrantyStatus("done");
-                            wc.setDonedDate(Date.from(Instant.now()));
-                        }
-                        if ("fixing".equals(processAction)) {
-                            wc.setWarrantyStatus("fixing");
-                        }
-                        if ("refuse".equals(processAction)) {
-                            wc.setWarrantyStatus("waiting");
-                            wc.setHandlerID(null);
-                        }
-                        if ("receive".equals(processAction)) {
-                            System.out.println("check2");
-                            wc.setHandlerID(staff.getStaffID());
-                        }
-                        warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
 
-                        request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
-                    } else {
-                        request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
+                        if (canProcess) {
+                            WarrantyCardProcess newProcess = new WarrantyCardProcess();
+                            newProcess.setWarrantyCardID(warrantyCardId);
+                            newProcess.setHandlerID(staff.getStaffID());
+                            newProcess.setAction(processAction);
+                            boolean success = wcpDao.addWarrantyCardProcess(newProcess);
+                            if (success) {
+                                System.out.println("check1");
+                                WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+                                if ("completed".equals(processAction) || "cancel".equals(processAction) || "refix".equals(processAction)) {
+                                    wc.setWarrantyStatus(processAction);
+                                    if ("completed".equals(processAction)) {
+                                        wc.setCompletedDate(Date.from(Instant.now()));
+                                    }
+                                    if ("cancel".equals(processAction)) {
+                                        wc.setCanceldDate(Date.from(Instant.now()));
+                                    }
+                                }
+                                if ("fixed".equals(processAction)) {
+
+                                    wc.setWarrantyStatus("done");
+                                    wc.setDonedDate(Date.from(Instant.now()));
+                                }
+                                if ("fixing".equals(processAction)) {
+                                    wc.setWarrantyStatus("fixing");
+                                }
+                                if ("refuse".equals(processAction)) {
+                                    wc.setWarrantyStatus("waiting");
+                                    wc.setHandlerID(null);
+                                }
+                                if ("receive".equals(processAction)) {
+                                    System.out.println("check2");
+                                    wc.setHandlerID(staff.getStaffID());
+                                }
+                                warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
+
+                                request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
+                            } else {
+                                request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
+                            }
+                        } else {
+                            request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.\n" + errorProcess);
+                        }
                     }
-                } else {
-                    request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.");
+                }
+                default -> {
                 }
             }
         }
@@ -235,5 +250,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     private boolean isValidProcessAction(String action) {
         return "receive".equals(action) || "refuse".equals(action) || "fixing".equals(action) || "refix".equals(action) || "outsource".equals(action)
                 || "fixed".equals(action) || "completed".equals(action) || "cancel".equals(action);
+    }
+
+    private boolean canChangeToFixed(Integer warrantyCardId) {
+        List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(warrantyCardId);
+        for (WarrantyCardDetail cardDetail : cardDetails) {
+            if (cardDetail.getStatus().equals("fixing")) {
+                return false;
+            }
+        }
+        return true;
     }
 }

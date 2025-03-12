@@ -60,7 +60,6 @@
                                 </option>
                             </c:forEach>
                         </datalist>
-                        <div class="invalid-feedback" id="componentError">Component name not found in the list.</div>
                         <input type="hidden" name="componentID" id="selectedComponentID">
                     </div>
                     <div class="mb-3">
@@ -83,7 +82,7 @@
                     </div>
                     <div class="d-flex justify-content-end">
                         <a href="WarrantyCard/Detail?ID=${warrantyCardID}" class="btn btn-secondary me-2">Cancel</a>
-                        <button type="submit" class="btn btn-primary" id="addComponentSubmit" disabled="disabled">Add Component</button>
+                        <button type="submit" class="btn btn-primary" id="addComponentSubmit" >Add Component</button>
                     </div>
                 </form>
             </main>
@@ -118,7 +117,7 @@
 
         componentInput.addEventListener('input', function () {
             const inputValue = this.value.trim();
-            let selectedId = '';
+            let selectedId = null;
 
             const isValid = options.some(option => {
                 if (option.value === inputValue) {
@@ -129,23 +128,11 @@
             });
 
             selectedComponentID.value = selectedId;
-
-            if (isValid || inputValue === '') {
-                this.classList.remove('is-invalid');
-                errorMessage.style.display = 'none';
-                submitButton.disabled = !isValid;
-                if (isValid) updatePriceField();
-            } else {
-                this.classList.add('is-invalid');
-                errorMessage.style.display = 'block';
-                submitButton.disabled = true;
-            }
         });
 
         statusSelect.addEventListener('change', updatePriceField);
 
         // Initial state
-        submitButton.disabled = true;
         updatePriceField();
     </script>
 </body>

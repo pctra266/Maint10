@@ -22,6 +22,7 @@ public class FormatUtils {
      */
     public static Integer tryParseInt(String str) {
         try {
+            str = str.replace(" ", "");
             return Integer.valueOf(str);
         } catch (NumberFormatException | NullPointerException e) {
             return null;
@@ -30,6 +31,8 @@ public class FormatUtils {
 
     public static Double tryParseDouble(String str) {
         try {
+            str = str.replace(" ", "");
+            str = str.replace(",", ".");
             return Double.valueOf(str);
         } catch (NumberFormatException | NullPointerException e) {
             return null;
@@ -58,6 +61,7 @@ public class FormatUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm");
         return sdf.format(date);
     }
+
     public static String formatDate(Date date) {
         if (date == null) {
             return "";

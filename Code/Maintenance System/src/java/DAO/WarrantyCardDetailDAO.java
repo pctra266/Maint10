@@ -22,11 +22,12 @@ import java.util.List;
 public class WarrantyCardDetailDAO extends DBContext {
 
     final static ComponentDAO cdao = new ComponentDAO();
+    static final String SELEC_STRING = "select wcd.ComponentID, wcd.Price, wcd.Quantity, wcd.Status, wcd.WarrantyCardDetailID, wcd.WarrantyCardID, wcd.ComponentName, wcd.Note ";
 
     public List<WarrantyCardDetail> getWarrantyCardDetailOfCard(int wcID) {
         List<WarrantyCardDetail> list = new ArrayList<>();
-        String sql = """
-                      select wcd.ComponentID, wcd.Price, wcd.Quantity, wcd.Status, wcd.WarrantyCardDetailID, wcd.WarrantyCardID from WarrantyCard wc
+        String sql = SELEC_STRING + """
+                      from WarrantyCard wc
                       join WarrantyCardDetail wcd on wc.WarrantyCardID=wcd.WarrantyCardID
                       where wc.WarrantyCardID=?""";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -42,8 +43,8 @@ public class WarrantyCardDetailDAO extends DBContext {
     }
 
     public WarrantyCardDetail getWarrantyCardDetailById(Integer warrantyCardDetailId) {
-        String sql = """
-                      select ComponentID, Price, Quantity, Status, WarrantyCardDetailID, WarrantyCardID from WarrantyCardDetail
+        String sql = SELEC_STRING + """
+                       from WarrantyCardDetail wcd
                       where WarrantyCardDetailID=?""";
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, warrantyCardDetailId);
@@ -59,13 +60,21 @@ public class WarrantyCardDetailDAO extends DBContext {
     // Thêm ProductDetail mới
 
     public boolean addWarrantyCardDetailDAO(WarrantyCardDetail wcd) {
-        String sql = "INSERT INTO WarrantyCardDetail ([WarrantyCardID], [ComponentID], [Status], Quantity, Price) VALUES (?,?, ?, ?, ?)";
+        String sql = "INSERT INTO WarrantyCardDetail ([WarrantyCardID], [ComponentID], [Status], Quantity, Price, ComponentName, Note) VALUES (?,?, ?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             statement.setInt(1, wcd.getWarrantyCardID());
-            statement.setInt(2, wcd.getComponent().getComponentID());
+            if (wcd.getComponent() != null) {
+                statement.setInt(2, wcd.getComponent().getComponentID());
+                statement.setString(6, wcd.getComponent().getComponentName());
+            } else {
+                statement.setNull(2, java.sql.Types.INTEGER);
+                statement.setString(6, wcd.getComponentName());
+            }
             statement.setString(3, wcd.getStatus());
             statement.setInt(4, wcd.getQuantity());
             statement.setDouble(5, wcd.getPrice());
+            statement.setString(6, wcd.getComponentName());
+            statement.setString(7, wcd.getNote());
 
             int rowsInserted = statement.executeUpdate();
             return rowsInserted > 0;
@@ -76,13 +85,20 @@ public class WarrantyCardDetailDAO extends DBContext {
 
     // Cập nhật ProductDetail
     public boolean updateWarrantyCardDetail(WarrantyCardDetail wcd) {
-        String sql = "UPDATE WarrantyCardDetail SET ComponentID = ?, [Status] =?, Quantity = ?, Price = ? WHERE WarrantyCardDetailID = ?";
+        String sql = "UPDATE WarrantyCardDetail SET ComponentID = ?, [Status] =?, Quantity = ?, Price = ?, ComponentName = ?, Note = ? WHERE WarrantyCardDetailID = ?";
         try (PreparedStatement statement = connection.prepareStatement(sql)) {
-            statement.setInt(1, wcd.getComponent().getComponentID());
+            if (wcd.getComponent() != null) {
+                statement.setInt(1, wcd.getComponent().getComponentID());
+                statement.setString(5, wcd.getComponent().getComponentName());
+            } else {
+                statement.setNull(1, java.sql.Types.INTEGER);
+                statement.setString(5, wcd.getComponentName());
+            }
             statement.setString(2, wcd.getStatus());
             statement.setInt(3, wcd.getQuantity());
             statement.setDouble(4, wcd.getPrice());
-            statement.setInt(5, wcd.getWarrantyCardDetailID());
+            statement.setString(6, wcd.getNote());
+            statement.setInt(7, wcd.getWarrantyCardDetailID());
 
             int rowsUpdated = statement.executeUpdate();
             return rowsUpdated > 0;
@@ -113,6 +129,8 @@ public class WarrantyCardDetailDAO extends DBContext {
         wcd.setStatus(rs.getString("Status"));
         wcd.setQuantity(rs.getInt("Quantity"));
         wcd.setPrice(rs.getDouble("Price"));
+        wcd.setComponentName(rs.getString("ComponentName"));
+        wcd.setNote(rs.getString("Note"));
         return wcd;
     }
 
@@ -122,12 +140,14 @@ public class WarrantyCardDetailDAO extends DBContext {
         ComponentDAO cdao = new ComponentDAO();
         wcd.setWarrantyCardDetailID(2);
         wcd.setWarrantyCardID(1);
-        wcd.setComponent(cdao.getComponentByID(3));
         wcd.setStatus("replace");
         wcd.setQuantity(1);
         wcd.setPrice(1.5);
-        System.out.println(wcdd.addWarrantyCardDetailDAO(wcd));
-        System.out.println(wcdd.getWarrantyCardDetailById(2));
+        wcd.setComponentName("kjkjk");
+        wcd.setNote("asfihiosdfjio");
+       // System.out.println(wcdd.updateWarrantyCardDetail(wcd));
+        System.out.println(wcdd.getWarrantyCardDetailById(1).getNote());
+        System.out.println(wcdd.getWarrantyCardDetailOfCard(71));
     }
 
 }

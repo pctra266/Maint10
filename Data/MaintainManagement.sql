@@ -212,10 +212,12 @@ CREATE TABLE ComponentRequestResponsible (
 CREATE TABLE WarrantyCardDetail (
     WarrantyCardDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
-    ComponentID INT NOT NULL REFERENCES Component(ComponentID),
+    ComponentID INT NULL REFERENCES Component(ComponentID),
+	ComponentName NVARCHAR(100),
     Status NVARCHAR(20) NOT NULL CHECK (Status IN ('warranty_repaired','warranty_replaced', 'repaired', 'replace','fixing')),
     Price FLOAT NOT NULL CHECK (Price >= 0),
-    Quantity INT NOT NULL CHECK (Quantity >= 0)
+    Quantity INT NOT NULL CHECK (Quantity >= 0),
+    Note NVARCHAR(MAX)
 );
 
 -- WarrantyCardProcess Table

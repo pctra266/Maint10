@@ -14,7 +14,7 @@
 <!-- Modal for Zoom -->
 <div id="mediaModal" class="modal">
     <span class="modal-close" onclick="hideModal()">×</span>
-    <div id="modalContent" class="modal-content"></div>
+    <div id="modalContent" class="modal-content" style="background-color: #333333"></div>
     <button type="button"  id="prevButton" class="modal-nav prev" onclick="showPrevious()"><</button>
     <button type="button" id="nextButton" class="modal-nav next" onclick="showNext()">></button>
 </div>
