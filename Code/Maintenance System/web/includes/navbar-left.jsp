@@ -1,17 +1,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <nav id="sidebar" class="sidebar js-sidebar collapsed">
     <div class="sidebar-content js-simplebar" data-simplebar="init"><div class="simplebar-wrapper" style="margin: 0px;"><div class="simplebar-height-auto-observer-wrapper"><div class="simplebar-height-auto-observer"></div></div><div class="simplebar-mask"><div class="simplebar-offset" style="right: 0px; bottom: 0px;"><div class="simplebar-content-wrapper" tabindex="0" role="region" aria-label="scrollable content" style="height: 100%; overflow: hidden scroll;"><div class="simplebar-content" style="padding: 0px;">
-                            <a class="sidebar-brand" href="HomePage.jsp">
-                                <span class="sidebar-brand-text align-middle">
-                                    MainTen
-                                </span>
-                                <svg class="sidebar-brand-icon align-middle" width="32px" height="32px" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" color="#FFFFFF" style="margin-left: -3px">
-                                <path d="M12 4L20 8.00004L12 12L4 8.00004L12 4Z"></path>
-                                <path d="M20 12L12 16L4 12"></path>
-                                <path d="M20 16L12 20L4 16"></path>
-                                </svg>
+                            <a class="sidebar-brand" href="Home">
+                                <img style="height: 10vh;" src="${pageContext.request.contextPath}/img/logo/logoDesign3.png" alt="Main10 Logo" class="logo-img bg-primary bg-opacity-50 ">
                             </a>
-
                             <c:if test="${not empty sessionScope.staff}">
                                 <!-- N?u là nhân viên, hi?n th? thông tin nhân viên -->
                                 <div class="sidebar-user">
