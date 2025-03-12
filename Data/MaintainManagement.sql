@@ -231,7 +231,6 @@ CREATE TABLE WarrantyCardProcess (
 -- Payment Table
 CREATE TABLE Payment (
     PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     PaymentDate DATE NOT NULL,
     PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
     Amount FLOAT NOT NULL CHECK (Amount >= 0),
@@ -266,6 +265,27 @@ CREATE TABLE Media (
     MediaType NVARCHAR(10) NOT NULL CHECK (MediaType IN ('image', 'video')), -- Phân loại
     UploadedDate DATETIME DEFAULT GETDATE()
 );
+
+CREATE TABLE Invoice (
+    InvoiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    InvoiceNumber NVARCHAR(20) NOT NULL UNIQUE,
+    InvoiceType NVARCHAR(50) NOT NULL 
+        CHECK (InvoiceType IN ('RepairContractorToTechnician', 'TechnicianToCustomer')),
+    WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
+    Amount FLOAT NOT NULL CHECK (Amount >= 0),
+    IssuedDate DATETIME DEFAULT GETDATE(),
+    DueDate DATETIME,  -- Ngày đến hạn thanh toán
+    Status NVARCHAR(20) NOT NULL 
+        CHECK (Status IN ('pending', 'paid', 'overdue')),  -- pending: chờ thanh toán; paid: đã thanh toán; overdue: quá hạn
+    CreatedBy INT NOT NULL REFERENCES Staff(StaffID),  -- Người tạo hóa đơn (Repair Contractor hoặc Technician)
+    ReceivedBy INT NULL REFERENCES Staff(StaffID),     -- Người nhận hóa đơn (đối với hóa đơn RepairContractorToTechnician là Technician)
+    CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
+);
+
+ALTER TABLE Payment
+ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
+
+
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
