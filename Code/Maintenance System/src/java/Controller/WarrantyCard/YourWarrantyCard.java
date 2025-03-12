@@ -81,6 +81,10 @@ public class YourWarrantyCard extends HttpServlet {
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
+        String createStatus = request.getParameter("create");
+        if (createStatus != null && createStatus.equals("true")) {
+            request.setAttribute("createStatus", "Card created successfully");
+        }
 
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         Integer pageSize;

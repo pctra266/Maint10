@@ -37,7 +37,14 @@
                             </label>
                         </div>
                     </form>
-
+                    <c:if test="${not empty createStatus}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${createStatus}</strong>
+                            </div>
+                        </div>
+                    </c:if>   
                     <!-- Bảng hiển thị sản phẩm -->
                     <table class="table table-hover my-0">
                         <thead>

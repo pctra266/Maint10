@@ -94,16 +94,17 @@ public class WarrantyCardAdd extends HttpServlet {
                 wcp.setAction("create");
                 wcp.setNote(staff != null ? "Created by staff" : "Created by customer");
                 WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
-                if ("receive".equals(action)) {
+                if (customer==null && "receive".equals(action)) {
                     WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(wcp.getWarrantyCardID());
                     wc.setHandlerID(handlerID);
                     warrantyCardDAO.updateWarrantyCard(wc);
                     wcp.setAction("receive");
                     wcp.setHandlerID(handlerID);
-                    wcp.setNote(null);
+                    wcp.setNote("technician received");
                     WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
                 }
-                response.sendRedirect("../WarrantyCard?create=true");
+                if (staff!= null) response.sendRedirect("../WarrantyCard?create=true");
+                else response.sendRedirect("../yourwarrantycard?create=true");
                 return;
             } else {
                 request.setAttribute("createFail", "Fail to create card");
