@@ -122,6 +122,21 @@
         </div>
 
         <script src="js/app.js"></script>
+        <script>
+    var socket = new WebSocket("ws://localhost:8080/MaintenanceSystem/notification");
+
+    socket.onmessage = function(event) {
+        alert("Thông báo: " + event.data);
+    };
+        // Khi trang được load, kiểm tra có thông báo không
+    window.onload = function() {
+        let message = sessionStorage.getItem("notification");
+        if (message) {
+            alert("Thông báo: " + message);
+            sessionStorage.removeItem("notification"); // Xóa sau khi hiển thị
+        }
+    };
+</script>
 
     </body>
 </html>
