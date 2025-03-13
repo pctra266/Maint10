@@ -555,6 +555,23 @@ public class ComponentRequestDAO {
             }
         }
         
+        public void updateStatusComponentRequestDetail(String componentRequestId, String status){
+            String query = """
+                           update ComponentRequestDetail
+                           set Status = ?
+                           where ComponentRequestID = ?
+                           
+                           """;
+            try {
+                conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               ps.setString(1, status);
+               ps.setString(2, componentRequestId);
+               ps.executeUpdate();
+            } catch (Exception e) {
+            }
+        }
+        
         public int getLastComponentRequestId(){
             String query ="""
                           SELECT ComponentRequestID FROM ComponentRequest

@@ -13,6 +13,7 @@ import Model.ComponentRequestDetail;
 import Model.Pagination;
 import Model.ProductDetail;
 import Model.Staff;
+import Utils.NotificationWebSocket;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;
@@ -289,7 +290,9 @@ public class ComponentRequestController extends HttpServlet {
                     staffId = "3";
                 }
                 crrDao.createComponentRequestResponsible(staffId, componentRequestID, componentStatus);
+                
                 componentRequestDao.updateStatusComponentRequest(componentRequestID, componentStatus);
+                componentRequestDao.updateStatusComponentRequestDetail(componentRequestID,componentStatus);
                 this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
                 break;
             case "listComponentRequestInStaffRole":
@@ -393,7 +396,8 @@ public class ComponentRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        //send notification
+         
         //action
         String action = request.getParameter("action");
 
@@ -455,6 +459,8 @@ public class ComponentRequestController extends HttpServlet {
                         mess = "Create fail";
                     } else {
                         mess = "Create Successfully !";
+                        NotificationWebSocket.sendMessageToAll("one request has seen");
+                        
                         int componentRequestIDNum = componentRequestDao.getLastComponentRequestId();
                         if (componentRequestIDNum != 0) {
                             try {
