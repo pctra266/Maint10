@@ -75,6 +75,22 @@ public class WarrantyCardDAO extends DBContext {
             ps.setInt(10, wc.getWarrantyCardID());
 
             int rowsAffected = ps.executeUpdate();
+            if(rowsAffected>0){
+            String deleteMediaQuery = "DELETE FROM Media WHERE ObjectID = ? AND ObjectType = 'WarrantyCard'";
+            try(PreparedStatement psd = connection.prepareStatement(deleteMediaQuery)){
+                psd.setInt(1, wc.getWarrantyCardID());
+                psd.executeUpdate();
+            }catch(SQLException e){
+                e.printStackTrace();
+            }
+                for (String url : wc.getImages()) {
+                    addMedia(wc.getWarrantyCardID(), "WarrantyCard", url, "image");
+                }
+                for (String url : wc.getVideos()) {
+                    addMedia(wc.getWarrantyCardID(), "WarrantyCard", url, "video");
+                }
+            }
+
             return rowsAffected > 0;
         } catch (SQLException e) {
             System.out.println(e);

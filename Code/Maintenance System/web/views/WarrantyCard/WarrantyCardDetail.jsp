@@ -3,6 +3,7 @@
     Created on : Feb 19, 2025, 12:05:43 PM
     Author     : ADMIN
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -23,7 +24,40 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="css/media-show.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
+        <style>
+            .media-preview {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+            .media-item {
+                position: relative;
+                display: inline-block;
+            }
+            .media-item img, .media-item video {
+                max-width: 200px;
+                margin: 5px;
+            }
+            .remove-btn {
+                position: absolute;
+                top: 0;
+                right: 0;
+                background: red;
+                color: white;
+                border: none;
+                border-radius: 50%;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+            }
+            .is-invalid {
+                border-color: red;
+            }
+            .invalid-feedback {
+                color: red;
+                font-size: 0.9rem;
+            }
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -210,6 +244,19 @@
                                 <div class="col-md-12">
                                     <div id="warrantyStatus"></div>
                                 </div>
+                                <!-- Upload file ảnh -->
+                                <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="action" value="uploadImages">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <div class="col-md-12">
+                                        <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
+                                        <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
+                                        <div id="previewContainer" class="media-preview mt-3"></div>   
+                                    </div>
+                                    <div class="col-md-3">
+                                        <button type="submit" class="btn btn-primary">Upload</button>
+                                    </div> 
+                                </form>
                                 <div class="col-md-12">
                                     <div>Issue Description:</div>
                                 </div>
@@ -250,113 +297,220 @@
                         </div>
                         <%--For showing images --%>
                         <div class="col-md-4">
-                               <jsp:include page="../../includes/media-show.jsp" />
+                            <c:set var="count" value="${fn:length(images)+fn:length(videos)}"/>
+                            <div class="row" id="mediaListContainer">
+                                <c:forEach var="image" items="${images}">
+                                    <div class="media-item-show col-md-${count<3?12/count:4}">
+                                        <img src="${pageContext.request.contextPath}/${image}" alt="Warranty Image" onclick="showModal('${image}', 'image')">
+                                    </div>
+                                </c:forEach>
+                                <c:forEach var="video" items="${videos}">
+                                    <div class="media-item-show col-md-${count<3?12/count:4}">
+                                        <video src="${pageContext.request.contextPath}/${video}" controls onclick="showModal('${video}', 'video')"></video>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <!-- Modal for Zoom -->
+                            <div id="mediaModal" class="modal">
+                                <span class="modal-close" onclick="hideModal()">×</span>
+                                <div id="modalContent" class="modal-content" style="background-color: #333333"></div>
+                                <button type="button" id="prevButton" class="modal-nav prev" onclick="showPrevious()"><</button>
+                                <button type="button" id="nextButton" class="modal-nav next" onclick="showNext()">></button>
+                                <c:if test="${not empty card}">
+                                    <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
+                                        <i class="fa fa-trash"></i> 
+                                    </button>
+                                </c:if>
+                            </div>
 
                         </div>
 
                         <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
-                            <div class="col-md-12 d-flex justify-content-center mt-2">
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="receive">
-                                    <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
-                                </form>                    
-                            </div>
-                        </c:if>
-                    </div>
-                  
-                </main>
-                <jsp:include page="../../includes/footer.jsp" />
+                            < div class = "col-md-12 d-flex justify-content-center mt-2" >
+                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                <input type="hidden" name="action" value="process">
+                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                <input type="hidden" name="processAction" value="receive">
+                                <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
+                            </form>                    
+                        </div>
+                    </c:if>
             </div>
-        </div>
 
-        <script src="js/app.js"></script>
-        <script src="js/format-input.js"></script>
-        <script src="js/media-show.js"></script>
-        <script>
-                            // Enable Save button on input change in table
-                            document.querySelectorAll('.form-select, .form-control').forEach(input => {
-                                input.addEventListener('input', function () {
-                                    this.closest('tr').querySelector('.save').disabled = false;
-                                });
-                            });
+        </main>
+        <jsp:include page="../../includes/footer.jsp" />
+    </div>
 
-                            // Table: Disable price input for warranty states
-                            document.querySelectorAll('.status-select').forEach(select => {
-                                const priceInput = select.closest('tr').querySelector('.price-input');
-                                select.addEventListener('change', function () {
-                                    priceInput.readOnly = (this.value === 'warranty_repaired' || this.value === 'warranty_replaced');
-                                    if (this.value === 'warranty_repaired' || this.value === 'warranty_replaced')
-                                        priceInput.value = 0;
-                                });
-                            });
+    <script src="js/app.js"></script>
+    <script src="js/format-input.js"></script>
+    <script src="js/media-show.js"></script>
+    <script>
+                                          document.addEventListener('DOMContentLoaded', function () {
+                                            var images = [
+            <c:forEach var="image" items="${images}" varStatus="loop">
+                                            "${image}"${loop.last ? '' : ','}
+            </c:forEach>
+                                            ];
+                                            var videos = [
+            <c:forEach var="video" items="${videos}" varStatus="loop">
+                                            "${video}"${loop.last ? '' : ','}
+            </c:forEach>
+                                            ];
+                                            initMediaList(images, videos);
+                                        });
+                                         function deleteCurrentMedia() {
+                                            if (confirm('Are you sure you want to delete this media?')) {
+                                                const mediaToDelete = mediaList[currentIndex].src;
+                                                fetch('${pageContext.request.contextPath}/WarrantyCard/Detail', {
+                                                    method: 'POST',
+                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                                    body: 'ID=${card.warrantyCardID}&action=deleteMedia&deleteMedia=' + encodeURIComponent(mediaToDelete)
+                                                }).then(response => {
+                                                    if (response.ok) {
+                                                        mediaList.splice(currentIndex, 1);
+                                                        if (mediaList.length === 0) {
+                                                            hideModal();
+                                                        } else {
+                                                            currentIndex = Math.min(currentIndex, mediaList.length - 1);
+                                                            displayMedia(currentIndex);
+                                                        }
+                                                    } else {
+                                                        alert('Failed to delete media.');
+                                                    }
+                                                    //An the img co src bang voi mediaToDelete
+                                                    let allImgs = document.querySelectorAll('img');
+                                                    allImgs.forEach(img => {
+                                                        if (img.src.endsWith(mediaToDelete)) {
+                                                            let parent = img.parentElement; // Lấy thẻ cha của <img>
+                                                            if (parent) {
+                                                                parent.remove(); // Xóa luôn thẻ bọc ngoài
+                                                            }
+                                                        }
+                                                    }); 
+                                                    //
+                                                }).catch(error => {
+                                                    console.error('Error deleting media:', error);
+                                                    alert('An error occurred while deleting the media.');
+                                                });
+                                            }
+                                        }
+                                        // Table: Disable price input for warranty states
+                                        document.querySelectorAll('.status-select').forEach(select => {
+                                            const priceInput = select.closest('tr').querySelector('.price-input');
+                                            select.addEventListener('change', function () {
+                                                priceInput.readOnly = (this.value === 'warranty_repaired' || this.value === 'warranty_replaced');
+                                                if (this.value === 'warranty_repaired' || this.value === 'warranty_replaced')
+                                                    priceInput.value = 0;
+                                            });
+                                        });
 
-                            window.onload = function () {
-                                const purchasedDateStr = "${pd.getFormatPurchaseDate()}"; // Giả sử định dạng "dd/MM/yyyy"
-                                const warrantyPeriod = ${pd.warrantyPeriod==null?0:pd.warrantyPeriod}; // Số tháng bảo hành
-                                const statusDiv = document.getElementById('warrantyStatus');
+                                        window.onload = function () {
+                                            const purchasedDateStr = "${pd.getFormatPurchaseDate()}"; // Giả sử định dạng "dd/MM/yyyy"
+                                            const warrantyPeriod = ${pd.warrantyPeriod==null?0:pd.warrantyPeriod}; // Số tháng bảo hành
+                                            const statusDiv = document.getElementById('warrantyStatus');
+                                            // Kiểm tra purchasedDateStr có hợp lệ không
+                                            console.log("purchasedDateStr:", purchasedDateStr); // Debug giá trị
+                                            if (purchasedDateStr.length < 1) {
+                                                statusDiv.innerText = "Not covered by warranty";
+                                                statusDiv.style.color = "orange";
+                                                return;
+                                            }
 
-                                // Kiểm tra purchasedDateStr có hợp lệ không
-                                console.log("purchasedDateStr:", purchasedDateStr); // Debug giá trị
-                                if(purchasedDateStr.length<1){
-                                    statusDiv.innerText = "Not covered by warranty";
-                                    statusDiv.style.color = "orange";
-                                    return;
-                                }
-                                
-                                if (!purchasedDateStr || purchasedDateStr.trim() === '' || !purchasedDateStr.includes('-')) {
-                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid purchase date)";
-                                    statusDiv.style.color = "orange";
-                                    return;
-                                }
+                                            if (!purchasedDateStr || purchasedDateStr.trim() === '' || !purchasedDateStr.includes('-')) {
+                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid purchase date)";
+                                                statusDiv.style.color = "orange";
+                                                return;
+                                            }
 
-                                // Tách chuỗi thủ công thay vì dùng destructuring
-                                const dateParts = purchasedDateStr.split('-');
-                                if (dateParts.length !== 3) {
-                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date format)";
-                                    statusDiv.style.color = "orange";
-                                    return;
-                                }
+                                            // Tách chuỗi thủ công thay vì dùng destructuring
+                                            const dateParts = purchasedDateStr.split('-');
+                                            if (dateParts.length !== 3) {
+                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date format)";
+                                                statusDiv.style.color = "orange";
+                                                return;
+                                            }
 
-                                // Gán giá trị truyền thống
-                                const day = parseInt(dateParts[0], 10);
-                                const month = parseInt(dateParts[1], 10);
-                                const year = parseInt(dateParts[2], 10);
+                                            // Gán giá trị truyền thống
+                                            const day = parseInt(dateParts[0], 10);
+                                            const month = parseInt(dateParts[1], 10);
+                                            const year = parseInt(dateParts[2], 10);
+                                            // Kiểm tra các giá trị có hợp lệ không
+                                            if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date components)";
+                                                statusDiv.style.color = "orange";
+                                                return;
+                                            }
 
-                                // Kiểm tra các giá trị có hợp lệ không
-                                if (isNaN(day) || isNaN(month) || isNaN(year)) {
-                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date components)";
-                                    statusDiv.style.color = "orange";
-                                    return;
-                                }
+                                            // Tạo Date object (month - 1 vì JS đếm từ 0)
+                                            const purchasedDate = new Date(year, month - 1, day);
+                                            // Kiểm tra Date có hợp lệ không
+                                            if (isNaN(purchasedDate.getTime())) {
+                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date)";
+                                                statusDiv.style.color = "orange";
+                                                return;
+                                            }
 
-                                // Tạo Date object (month - 1 vì JS đếm từ 0)
-                                const purchasedDate = new Date(year, month - 1, day);
+                                            // Tính ngày hết bảo hành
+                                            const warrantyEndDate = new Date(purchasedDate);
+                                            warrantyEndDate.setMonth(purchasedDate.getMonth() + warrantyPeriod);
+                                            // So sánh với ngày hiện tại
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0);
+                                            if (today <= warrantyEndDate) {
+                                                statusDiv.innerText = "Status: Still under warranty";
+                                                statusDiv.style.color = "green";
+                                            } else {
+                                                statusDiv.innerText = "Status: Out of warranty";
+                                                statusDiv.style.color = "red";
+                                            }
+                                        };
+                                        let selectedFiles = []; // Lưu danh sách file để preview và xóa
 
-                                // Kiểm tra Date có hợp lệ không
-                                if (isNaN(purchasedDate.getTime())) {
-                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date)";
-                                    statusDiv.style.color = "orange";
-                                    return;
-                                }
+                                        // Preview và xóa file
+                                        function previewMedia(event) {
+                                            const files = Array.from(event.target.files);
+                                            selectedFiles = files;
+                                            const previewContainer = document.getElementById('previewContainer');
+                                            previewContainer.innerHTML = '';
 
-                                // Tính ngày hết bảo hành
-                                const warrantyEndDate = new Date(purchasedDate);
-                                warrantyEndDate.setMonth(purchasedDate.getMonth() + warrantyPeriod);
+                                            selectedFiles.forEach((file, index) => {
+                                                const reader = new FileReader();
+                                                reader.onload = function (e) {
+                                                    const div = document.createElement('div');
+                                                    div.className = 'media-item';
 
-                                // So sánh với ngày hiện tại
-                                const today = new Date();
-                                today.setHours(0, 0, 0, 0);
+                                                    if (file.type.startsWith('image/')) {
+                                                        const img = document.createElement('img');
+                                                        img.src = e.target.result;
+                                                        div.appendChild(img);
+                                                    } else if (file.type.startsWith('video/')) {
+                                                        const video = document.createElement('video');
+                                                        video.src = e.target.result;
+                                                        video.controls = true;
+                                                        div.appendChild(video);
+                                                    }
 
-                                if (today <= warrantyEndDate) {
-                                    statusDiv.innerText = "Status: Still under warranty";
-                                    statusDiv.style.color = "green";
-                                } else {
-                                    statusDiv.innerText = "Status: Out of warranty";
-                                    statusDiv.style.color = "red";
-                                }
-                            };
-        </script>
-    </body>
+                                                    const removeBtn = document.createElement('button');
+                                                    removeBtn.className = 'remove-btn';
+                                                    removeBtn.innerText = 'X';
+                                                    removeBtn.onclick = () => removeMedia(index);
+                                                    div.appendChild(removeBtn);
+
+                                                    previewContainer.appendChild(div);
+                                                };
+                                                reader.readAsDataURL(file);
+                                            });
+                                        }
+
+                                        function removeMedia(index) {
+                                            selectedFiles.splice(index, 1);
+                                            const input = document.getElementById('mediaFiles');
+                                            const dataTransfer = new DataTransfer();
+                                            selectedFiles.forEach(file => dataTransfer.items.add(file));
+                                            input.files = dataTransfer.files;
+                                            previewMedia({target: input});
+                                        }
+                                      
+    </script>
+</body>
 </html>

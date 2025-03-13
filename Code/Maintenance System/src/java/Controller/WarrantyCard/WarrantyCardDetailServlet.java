@@ -13,18 +13,29 @@ import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
 import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
+import Utils.OtherUtils;
 import java.io.IOException;
 import java.util.List;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.Part;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 50, // 50MB
+        maxRequestSize = 1024 * 1024 * 100 // 100MB
+)
 public class WarrantyCardDetailServlet extends HttpServlet {
 
     private final WarrantyCardDetailDAO wcdDao = new WarrantyCardDetailDAO();
@@ -82,6 +93,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String warrantyCardIdParam = request.getParameter("ID");
+        System.out.println("warrantyCardIdParam: " + warrantyCardIdParam + action);
         Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIdParam);
 
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
@@ -100,6 +112,72 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
         if (null != action) {
             switch (action) {
+                case "deleteMedia" -> {
+                    WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+                    List<String> videoPaths = new ArrayList<>(wc.getVideos()); // Sao chép danh sách để chỉnh sửa
+                    List<String> imagePaths = new ArrayList<>(wc.getImages());
+                    String deleteMedia = request.getParameter("deleteMedia"); // Thêm tham số để xóa media
+                    if (deleteMedia != null && !deleteMedia.isEmpty()) {
+                        String filePath = request.getServletContext().getRealPath("") + deleteMedia; // Đường dẫn file trên server
+                        if (imagePaths.remove(deleteMedia)) {
+                            wc.setImages(imagePaths);
+                            if (warrantyCardDAO.updateWarrantyCard(wc)) {
+                                try {
+                                    Files.deleteIfExists(Paths.get(filePath));
+                                } catch (IOException e) {
+                                    e.printStackTrace(); // Log lỗi nếu không xóa được file
+                                }
+                                response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID()+ "&deleteMedia=true");
+                                return;
+                            }
+                        } else if (videoPaths.remove(deleteMedia)) {
+                            wc.setVideos(videoPaths);
+                            if (warrantyCardDAO.updateWarrantyCard(wc)) {
+                                try {
+                                    Files.deleteIfExists(Paths.get(filePath));
+                                } catch (IOException e) {
+                                    e.printStackTrace(); // Log lỗi nếu không xóa được file
+                                }
+                            }
+                            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID() + "&deleteMedia=true");
+                            return;
+                        }
+                    }
+
+                }
+                case "uploadImages" -> {
+                    WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+                    List<String> videoPaths = new ArrayList<>(wc.getVideos()); // Sao chép danh sách để chỉnh sửa
+                    List<String> imagePaths = new ArrayList<>(wc.getImages());
+                    boolean canUpdate = true;
+                    for (Part part : request.getParts()) {
+                        if ("mediaFiles".equals(part.getName()) && part.getSize() > 0) {
+                            String mimeType = part.getContentType();
+                            String mediaPath;
+                            if (mimeType != null && mimeType.startsWith("video/")) {
+                                mediaPath = OtherUtils.saveVideo(part, request, "media/component");
+                                if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                                    videoPaths.add(mediaPath);
+                                } else {
+                                    canUpdate = false;
+                                    request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                                }
+                            } else {
+                                mediaPath = OtherUtils.saveImage(part, request, "media/component");
+                                if (mediaPath != null && !mediaPath.startsWith("Invalid") && !mediaPath.startsWith("File is too large")) {
+                                    imagePaths.add(mediaPath);
+                                } else {
+                                    canUpdate = false;
+                                    request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
+                                }
+                            }
+                        }
+                    }
+                    wc.setImages(imagePaths);
+                    wc.setVideos(videoPaths);
+                    warrantyCardDAO.updateWarrantyCard(wc);
+                    response.sendRedirect(request.getContextPath() + request.getServletPath() + "?ID=" + wc.getWarrantyCardID());
+                }
                 case "update" -> {
                     String noteParam = request.getParameter("note");
                     String warrantyCardDetailIdParam = request.getParameter("warrantyCardDetailID");
@@ -153,7 +231,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     }
                 }
                 case "process" -> {
-                    String errorProcess = ""; 
+                    String errorProcess = "";
                     String processAction = request.getParameter("processAction");
                     if (processAction != null && isValidProcessAction(processAction)) {
                         boolean canProcess = false;
@@ -170,7 +248,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()) || "outsource".equals(latestProcess.getAction()));
                                 if (!canChangeToFixed(warrantyCardId)) {
                                     canProcess = false;
-                                    errorProcess+="One or more component is being fixed, check again!";
+                                    errorProcess += "One or more component is being fixed, check again!";
                                 }
                             }
                             case "completed" ->

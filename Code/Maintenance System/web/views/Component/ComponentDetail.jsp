@@ -333,7 +333,7 @@
                                                                 parent.remove(); // Xóa luôn thẻ bọc ngoài
                                                             }
                                                         }
-                                                    });
+                                                    }); 
                                                     //
                                                 }).catch(error => {
                                                     console.error('Error deleting media:', error);
