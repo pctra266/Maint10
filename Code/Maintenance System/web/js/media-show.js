@@ -1,4 +1,4 @@
-// media-show.js
+// media-show.js (giữ nguyên các hàm cũ, chỉ thêm log để debug nếu cần)
 var zoomLevel = 1;
 var minZoom = 0.5;
 var maxZoom = 3;
@@ -11,6 +11,7 @@ function initMediaList(images, videos) {
     mediaList = [];
     images.forEach(image => mediaList.push({ src: image, type: "image" }));
     videos.forEach(video => mediaList.push({ src: video, type: "video" }));
+    console.log("mediaList initialized:", mediaList); // Debug
 }
 
 function showModal(src, type) {
@@ -22,6 +23,7 @@ function showModal(src, type) {
     translateY = 0;
 
     currentIndex = mediaList.findIndex(item => item.src === src);
+    console.log("Showing modal for src:", src, "currentIndex:", currentIndex); // Debug
 
     if (currentIndex === -1 || mediaList.length === 0) {
         console.error("Media not found or mediaList is empty");
@@ -42,6 +44,7 @@ function displayMedia(index) {
     modalContent.innerHTML = '';
     var mediaElement;
 
+    console.log("Displaying media at index:", index, "item:", mediaList[index]); // Debug
     if (mediaList[index].type === 'image') {
         mediaElement = document.createElement('img');
         mediaElement.src = mediaList[index].src;

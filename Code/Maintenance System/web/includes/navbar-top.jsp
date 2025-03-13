@@ -72,7 +72,7 @@
                 </li>
             </c:if>
 
-            
+         
             <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
                 <a href="LoginForm.jsp">Login</a>
             </c:if>
