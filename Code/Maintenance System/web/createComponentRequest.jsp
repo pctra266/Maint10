@@ -115,7 +115,11 @@
                         <input type="hidden" name="productCode" value="${productCode}"> 
                         <input type="hidden"  name="warrantyCardID" value="${warrantyCardID}">
                         <!-- bang moi -->
+                        <div style="display: flex; justify-content: space-between; align-items: center;"><a>
                         <h3>Selected Components</h3>
+                        </a><a class="btn btn-secondary" href="#">Supplement Request</a>
+                    </div>
+                        
                         <table class="table table-hover my-0">
                             <thead>
                                 <tr>

@@ -30,7 +30,7 @@
                 
                 <nav class="navbar navbar-expand navbar-light navbar-bg fixed-top ">
                     <a href="Home" class="navbar-brand">
-                            <img src="${pageContext.request.contextPath}/img/logo/logoText2.png" alt="Main10 Logo" class="logo-img">
+                            <img src="${pageContext.request.contextPath}/img/logo/logoText.png" alt="Main10 Logo" class="logo-img">
                         </a>
 
                     <ul class="navbar-nav d-none d-lg-flex"> <!-- start ul 1 -->
