@@ -8,6 +8,8 @@ import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
 import DAO.WarrantyCardProcessDAO; // New DAO for WarrantyCardProcess
 import Model.Component;
+import Model.ComponentRequest;
+import Model.ComponentRequestDetail;
 import Model.Staff;
 import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
@@ -29,6 +31,8 @@ import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
 @MultipartConfig(
@@ -66,10 +70,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(id);
         List<Component> availableComponents = componentDAO.getAllComponents();
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(id); // Fetch latest process
-
+        Map<ComponentRequest, List<ComponentRequestDetail>> componentRequests = new HashMap<>();
+        List<ComponentRequest> listComponentRequest = componentRequestDAO.getAllComponentRequestsOfCard(id);
+        for (ComponentRequest cr : listComponentRequest) {
+                componentRequests.put(cr, componentRequestDAO.getListComponentRequestDetailById(cr.getComponentRequestID()+""));
+        }
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
         }
+        request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
         request.setAttribute("customer", customerDAO.getCustomerByID(wc.getCustomerID()));
         request.setAttribute("handler", staffDAO.getStaffById(wc.getHandlerID()));

@@ -94,7 +94,8 @@
                     <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                         <!-- Process Buttons -->
                         <div class="mb-3">
-                            <h3>Process Actions ${l}</h3>
+                            <h2>Now process: ${latestProcess.action} </h2>
+                            <h3>Process Actions</h3>
                             <form action="WarrantyCard/Detail" method="post" class="d-inline">
                                 <input type="hidden" name="action" value="process">
                                 <input type="hidden" name="ID" value="${card.warrantyCardID}">
@@ -139,9 +140,9 @@
                             </form>
                         </div>
 
-                        <h2>Repair List</h2>
+                        <h3>Repair List</h3>
                         <div class="row">
-                            <div class="col-md-8">  
+                            <div class="col-md-8 row">  
                                 <div class="row">
                                     <div class="mb-2 col-auto">
                                         <a href="WarrantyCard/AddComponent?ID=${card.warrantyCardID}" class="btn btn-primary">
@@ -212,305 +213,327 @@
                                         </c:forEach>
                                     </tbody>
                                 </table>
+                                <h2 class="mt-4">Warranty Code: ${card.warrantyCardCode}</h2>
+                                <div class="col-md-6 row g-2">
+                                    <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
+                                    <div class="col-md-12"><div>Name: ${customer.name}</div></div>
+                                    <div class="col-md-12"><div>Phone: ${customer.phone}</div></div>
+                                    <div class="col-md-12"><div>Email: ${customer.email}</div></div>
+                                    <div class="col-md-12"><h3>HANDLER INFORMATION</h3></div>
+                                    <div class="col-md-12"><div>Name: ${handler.name}</div></div>
+                                    <div class="col-md-12"><div>Phone: ${handler.phone}</div></div>
+                                    <div class="col-md-12"><div>Employee ID: ${handler.usernameS}</div></div>
+                                    <div class="col-md-12"><h3>PRODUCT</h3></div>
+                                    <div class="col-md-12"><div>Product Code: ${card.productDetailCode}</div></div>
+                                    <div class="col-md-12"><div>Product Name: ${card.productName}</div></div>
+                                    <div class="col-md-12"><div>Purchased Date: ${pd.getFormatPurchaseDate()}</div></div>
+                                    <div class="col-md-12">
+                                        <div>Warranty Period (Months): ${pd.warrantyPeriod}</div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div id="warrantyStatus"></div>
+                                    </div>
+                                    <!-- Upload file ảnh -->
+                                    <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="uploadImages">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <div class="col-md-12">
+                                            <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
+                                            <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
+                                            <div id="previewContainer" class="media-preview mt-3"></div>   
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary">Upload</button>
+                                        </div> 
+                                    </form>
+                                    <div class="col-md-12">
+                                        <div>Issue Description:</div>
+                                        <input type="hidden" class="form-control" value="${card.warrantyCardID}" readonly>  
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" readonly>${card.issueDescription}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 ">
+                                    <div class="row g-2 mt-4">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th>Canceled Date</th>
+                                                    <td>${card.getFormatCanceldDate()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Created Date</th>
+                                                    <td>${card.getFormatCreatedDate()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Estimated Return Date</th>
+                                                    <td>${card.getFormatReturnDate()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Repaired Date</th>
+                                                    <td>${card.getFormatDonedDate()}</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Completed Date</th>
+                                                    <td>${card.getFormatCompletedDate()}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="col-md-4">
-                                For see component request
-
-                            </div>
-                        </div>
-
-                    </c:if>
-
-                    <h2 class="mt-4">Warranty Code: ${card.warrantyCardCode}</h2>
-                    <div class="row ms-0">
-                        <div class="col-md-8 row ">
-                            <div class="col-md-6 row g-2">
-                                <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
-                                <div class="col-md-12"><div>Name: ${customer.name}</div></div>
-                                <div class="col-md-12"><div>Phone: ${customer.phone}</div></div>
-                                <div class="col-md-12"><div>Email: ${customer.email}</div></div>
-                                <div class="col-md-12"><h3>HANDLER INFORMATION</h3></div>
-                                <div class="col-md-12"><div>Name: ${handler.name}</div></div>
-                                <div class="col-md-12"><div>Phone: ${handler.phone}</div></div>
-                                <div class="col-md-12"><div>Employee ID: ${handler.usernameS}</div></div>
-                                <div class="col-md-12"><h3>PRODUCT</h3></div>
-                                <div class="col-md-12"><div>Product Code: ${card.productDetailCode}</div></div>
-                                <div class="col-md-12"><div>Product Name: ${card.productName}</div></div>
-                                <div class="col-md-12"><div>Purchased Date: ${pd.getFormatPurchaseDate()}</div></div>
-                                <div class="col-md-12">
-                                    <div>Warranty Period (Months): ${pd.warrantyPeriod}</div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div id="warrantyStatus"></div>
-                                </div>
-                                <!-- Upload file ảnh -->
-                                <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="action" value="uploadImages">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <div class="col-md-12">
-                                        <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
-                                        <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
-                                        <div id="previewContainer" class="media-preview mt-3"></div>   
-                                    </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary">Upload</button>
-                                    </div> 
-                                </form>
-                                <div class="col-md-12">
-                                    <div>Issue Description:</div>
-                                </div>
-                            </div>
-                            <div class="col-md-6 ">
-                                <div class="row g-2 mt-4">
-                                    <table class="table table-bordered">
+                                <h3>Component request:</h3>
+                                <c:forEach var="request" items="${componentRequests.keySet()}">
+                                    <table class="table table-bordered ">
+                                        <thead>
+                                            <tr>
+                                                <td width="60%">${request.componentRequestID}</td>
+                                                <td width="20%">Quantity</td>
+                                                <td width="20%">Status</td>
+                                            </tr>
+                                        </thead>
                                         <tbody>
-                                            <tr>
-                                                <th>Canceled Date</th>
-                                                <td>${card.getFormatCanceldDate()}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Created Date</th>
-                                                <td>${card.getFormatCreatedDate()}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Estimated Return Date</th>
-                                                <td>${card.getFormatReturnDate()}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Repaired Date</th>
-                                                <td>${card.getFormatDonedDate()}</td>
-                                            </tr>
-                                            <tr>
-                                                <th>Completed Date</th>
-                                                <td>${card.getFormatCompletedDate()}</td>
-                                            </tr>
+                                            <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
+                                                <tr>
+                                                    <td>${requestDetail.componentName}</td>
+                                                    <td>${requestDetail.quantity}</td>
+                                                    <c:if test="${status.index==0}">
+                                                        <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
+                                                            ${request.status}
+                                                        </td>
+                                                    </c:if>
+                                                </tr>   
+                                            </c:forEach>
                                         </tbody>
                                     </table>
+                                </c:forEach>
+                                <%--For showing images --%>
+                                <h3>Medias:</h3>
+                                <c:set var="count" value="${fn:length(images)+fn:length(videos)}"/>
+                                <div class="row" id="mediaListContainer">
+                                    <c:forEach var="image" items="${images}">
+                                        <div class="media-item-show col-md-${count<3?12/count:4}">
+                                            <img src="${pageContext.request.contextPath}/${image}" alt="Warranty Image" onclick="showModal('${image}', 'image')">
+                                        </div>
+                                    </c:forEach>
+                                    <c:forEach var="video" items="${videos}">
+                                        <div class="media-item-show col-md-${count<3?12/count:4}">
+                                            <video src="${pageContext.request.contextPath}/${video}" controls onclick="showModal('${video}', 'video')"></video>
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <!-- Modal for Zoom -->
+                                <div id="mediaModal" class="modal">
+                                    <span class="modal-close" onclick="hideModal()">×</span>
+                                    <div id="modalContent" class="modal-content" style="background-color: #333333"></div>
+                                    <button type="button" id="prevButton" class="modal-nav prev" onclick="showPrevious()"><</button>
+                                    <button type="button" id="nextButton" class="modal-nav next" onclick="showNext()">></button>
+                                    <c:if test="${not empty card}">
+                                        <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
+                                            <i class="fa fa-trash"></i> 
+                                        </button>
+                                    </c:if>
                                 </div>
                             </div>
-                            <input type="hidden" class="form-control" value="${card.warrantyCardID}" readonly>  
-                            <div class="col-md-12">
-                                <textarea class="form-control" readonly>${card.issueDescription}</textarea>
-                            </div>
-
-                        </div>
-                        <%--For showing images --%>
-                        <div class="col-md-4">
-                            <c:set var="count" value="${fn:length(images)+fn:length(videos)}"/>
-                            <div class="row" id="mediaListContainer">
-                                <c:forEach var="image" items="${images}">
-                                    <div class="media-item-show col-md-${count<3?12/count:4}">
-                                        <img src="${pageContext.request.contextPath}/${image}" alt="Warranty Image" onclick="showModal('${image}', 'image')">
-                                    </div>
-                                </c:forEach>
-                                <c:forEach var="video" items="${videos}">
-                                    <div class="media-item-show col-md-${count<3?12/count:4}">
-                                        <video src="${pageContext.request.contextPath}/${video}" controls onclick="showModal('${video}', 'video')"></video>
-                                    </div>
-                                </c:forEach>
-                            </div>
-                            <!-- Modal for Zoom -->
-                            <div id="mediaModal" class="modal">
-                                <span class="modal-close" onclick="hideModal()">×</span>
-                                <div id="modalContent" class="modal-content" style="background-color: #333333"></div>
-                                <button type="button" id="prevButton" class="modal-nav prev" onclick="showPrevious()"><</button>
-                                <button type="button" id="nextButton" class="modal-nav next" onclick="showNext()">></button>
-                                <c:if test="${not empty card}">
-                                    <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
-                                        <i class="fa fa-trash"></i> 
-                                    </button>
-                                </c:if>
-                            </div>
-
                         </div>
 
-                        <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
-                            < div class = "col-md-12 d-flex justify-content-center mt-2" >
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="receive">
-                                <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
-                            </form>                    
-                        </div>
                     </c:if>
+
+                    <div class="row ms-0">
+                        <div class="col-md-8 row ">
+
+
+
+
+                            <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
+                                <div class = "col-md-12 d-flex justify-content-center mt-2" >
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="receive">
+                                        <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
+                                    </form>                    
+                                </div>
+                            </c:if>
+                        </div>
+
+                </main>
+                <jsp:include page="../../includes/footer.jsp" />
             </div>
 
-        </main>
-        <jsp:include page="../../includes/footer.jsp" />
-    </div>
-
-    <script src="js/app.js"></script>
-    <script src="js/format-input.js"></script>
-    <script src="js/media-show.js"></script>
-    <script>
-                                          document.addEventListener('DOMContentLoaded', function () {
-                                            var images = [
-            <c:forEach var="image" items="${images}" varStatus="loop">
-                                            "${image}"${loop.last ? '' : ','}
-            </c:forEach>
-                                            ];
-                                            var videos = [
-            <c:forEach var="video" items="${videos}" varStatus="loop">
-                                            "${video}"${loop.last ? '' : ','}
-            </c:forEach>
-                                            ];
-                                            initMediaList(images, videos);
-                                        });
-                                         function deleteCurrentMedia() {
-                                            if (confirm('Are you sure you want to delete this media?')) {
-                                                const mediaToDelete = mediaList[currentIndex].src;
-                                                fetch('${pageContext.request.contextPath}/WarrantyCard/Detail', {
-                                                    method: 'POST',
-                                                    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-                                                    body: 'ID=${card.warrantyCardID}&action=deleteMedia&deleteMedia=' + encodeURIComponent(mediaToDelete)
-                                                }).then(response => {
-                                                    if (response.ok) {
-                                                        mediaList.splice(currentIndex, 1);
-                                                        if (mediaList.length === 0) {
-                                                            hideModal();
-                                                        } else {
-                                                            currentIndex = Math.min(currentIndex, mediaList.length - 1);
-                                                            displayMedia(currentIndex);
-                                                        }
-                                                    } else {
-                                                        alert('Failed to delete media.');
-                                                    }
-                                                    //An the img co src bang voi mediaToDelete
-                                                    let allImgs = document.querySelectorAll('img');
-                                                    allImgs.forEach(img => {
-                                                        if (img.src.endsWith(mediaToDelete)) {
-                                                            let parent = img.parentElement; // Lấy thẻ cha của <img>
-                                                            if (parent) {
-                                                                parent.remove(); // Xóa luôn thẻ bọc ngoài
+            <script src="js/app.js"></script>
+            <script src="js/format-input.js"></script>
+            <script src="js/media-show.js"></script>
+            <script>
+                                            document.addEventListener('DOMContentLoaded', function () {
+                                                var images = [
+                <c:forEach var="image" items="${images}" varStatus="loop">
+                                                "${image}"${loop.last ? '' : ','}
+                </c:forEach>
+                                                ];
+                                                var videos = [
+                <c:forEach var="video" items="${videos}" varStatus="loop">
+                                                "${video}"${loop.last ? '' : ','}
+                </c:forEach>
+                                                ];
+                                                initMediaList(images, videos);
+                                            });
+                                            function deleteCurrentMedia() {
+                                                if (confirm('Are you sure you want to delete this media?')) {
+                                                    const mediaToDelete = mediaList[currentIndex].src;
+                                                    fetch('${pageContext.request.contextPath}/WarrantyCard/Detail', {
+                                                        method: 'POST',
+                                                        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                                                        body: 'ID=${card.warrantyCardID}&action=deleteMedia&deleteMedia=' + encodeURIComponent(mediaToDelete)
+                                                    }).then(response => {
+                                                        if (response.ok) {
+                                                            mediaList.splice(currentIndex, 1);
+                                                            if (mediaList.length === 0) {
+                                                                hideModal();
+                                                            } else {
+                                                                currentIndex = Math.min(currentIndex, mediaList.length - 1);
+                                                                displayMedia(currentIndex);
                                                             }
+                                                        } else {
+                                                            alert('Failed to delete media.');
                                                         }
-                                                    }); 
-                                                    //
-                                                }).catch(error => {
-                                                    console.error('Error deleting media:', error);
-                                                    alert('An error occurred while deleting the media.');
+                                                        //An the img co src bang voi mediaToDelete
+                                                        let allImgs = document.querySelectorAll('img');
+                                                        allImgs.forEach(img => {
+                                                            if (img.src.endsWith(mediaToDelete)) {
+                                                                let parent = img.parentElement; // Lấy thẻ cha của <img>
+                                                                if (parent) {
+                                                                    parent.remove(); // Xóa luôn thẻ bọc ngoài
+                                                                }
+                                                            }
+                                                        });
+                                                        //
+                                                    }).catch(error => {
+                                                        console.error('Error deleting media:', error);
+                                                        alert('An error occurred while deleting the media.');
+                                                    });
+                                                }
+                                            }
+                                            // Table: Disable price input for warranty states
+                                            document.querySelectorAll('.status-select').forEach(select => {
+                                                const priceInput = select.closest('tr').querySelector('.price-input');
+                                                select.addEventListener('change', function () {
+                                                    priceInput.readOnly = (this.value === 'warranty_repaired' || this.value === 'warranty_replaced');
+                                                    if (this.value === 'warranty_repaired' || this.value === 'warranty_replaced')
+                                                        priceInput.value = 0;
+                                                });
+                                            });
+
+                                            window.onload = function () {
+                                                const purchasedDateStr = "${pd.getFormatPurchaseDate()}"; // Giả sử định dạng "dd/MM/yyyy"
+                                                const warrantyPeriod = ${pd.warrantyPeriod==null?0:pd.warrantyPeriod}; // Số tháng bảo hành
+                                                const statusDiv = document.getElementById('warrantyStatus');
+                                                // Kiểm tra purchasedDateStr có hợp lệ không
+                                                console.log("purchasedDateStr:", purchasedDateStr); // Debug giá trị
+                                                if (purchasedDateStr.length < 1) {
+                                                    statusDiv.innerText = "Not covered by warranty";
+                                                    statusDiv.style.color = "orange";
+                                                    return;
+                                                }
+
+                                                if (!purchasedDateStr || purchasedDateStr.trim() === '' || !purchasedDateStr.includes('-')) {
+                                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid purchase date)";
+                                                    statusDiv.style.color = "orange";
+                                                    return;
+                                                }
+
+                                                // Tách chuỗi thủ công thay vì dùng destructuring
+                                                const dateParts = purchasedDateStr.split('-');
+                                                if (dateParts.length !== 3) {
+                                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date format)";
+                                                    statusDiv.style.color = "orange";
+                                                    return;
+                                                }
+
+                                                // Gán giá trị truyền thống
+                                                const day = parseInt(dateParts[0], 10);
+                                                const month = parseInt(dateParts[1], 10);
+                                                const year = parseInt(dateParts[2], 10);
+                                                // Kiểm tra các giá trị có hợp lệ không
+                                                if (isNaN(day) || isNaN(month) || isNaN(year)) {
+                                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date components)";
+                                                    statusDiv.style.color = "orange";
+                                                    return;
+                                                }
+
+                                                // Tạo Date object (month - 1 vì JS đếm từ 0)
+                                                const purchasedDate = new Date(year, month - 1, day);
+                                                // Kiểm tra Date có hợp lệ không
+                                                if (isNaN(purchasedDate.getTime())) {
+                                                    statusDiv.innerText = "Status: Cannot determine warranty status (invalid date)";
+                                                    statusDiv.style.color = "orange";
+                                                    return;
+                                                }
+
+                                                // Tính ngày hết bảo hành
+                                                const warrantyEndDate = new Date(purchasedDate);
+                                                warrantyEndDate.setMonth(purchasedDate.getMonth() + warrantyPeriod);
+                                                // So sánh với ngày hiện tại
+                                                const today = new Date();
+                                                today.setHours(0, 0, 0, 0);
+                                                if (today <= warrantyEndDate) {
+                                                    statusDiv.innerText = "Status: Still under warranty";
+                                                    statusDiv.style.color = "green";
+                                                } else {
+                                                    statusDiv.innerText = "Status: Out of warranty";
+                                                    statusDiv.style.color = "red";
+                                                }
+                                            };
+                                            let selectedFiles = []; // Lưu danh sách file để preview và xóa
+
+                                            // Preview và xóa file
+                                            function previewMedia(event) {
+                                                const files = Array.from(event.target.files);
+                                                selectedFiles = files;
+                                                const previewContainer = document.getElementById('previewContainer');
+                                                previewContainer.innerHTML = '';
+
+                                                selectedFiles.forEach((file, index) => {
+                                                    const reader = new FileReader();
+                                                    reader.onload = function (e) {
+                                                        const div = document.createElement('div');
+                                                        div.className = 'media-item';
+
+                                                        if (file.type.startsWith('image/')) {
+                                                            const img = document.createElement('img');
+                                                            img.src = e.target.result;
+                                                            div.appendChild(img);
+                                                        } else if (file.type.startsWith('video/')) {
+                                                            const video = document.createElement('video');
+                                                            video.src = e.target.result;
+                                                            video.controls = true;
+                                                            div.appendChild(video);
+                                                        }
+
+                                                        const removeBtn = document.createElement('button');
+                                                        removeBtn.className = 'remove-btn';
+                                                        removeBtn.innerText = 'X';
+                                                        removeBtn.onclick = () => removeMedia(index);
+                                                        div.appendChild(removeBtn);
+
+                                                        previewContainer.appendChild(div);
+                                                    };
+                                                    reader.readAsDataURL(file);
                                                 });
                                             }
-                                        }
-                                        // Table: Disable price input for warranty states
-                                        document.querySelectorAll('.status-select').forEach(select => {
-                                            const priceInput = select.closest('tr').querySelector('.price-input');
-                                            select.addEventListener('change', function () {
-                                                priceInput.readOnly = (this.value === 'warranty_repaired' || this.value === 'warranty_replaced');
-                                                if (this.value === 'warranty_repaired' || this.value === 'warranty_replaced')
-                                                    priceInput.value = 0;
-                                            });
-                                        });
 
-                                        window.onload = function () {
-                                            const purchasedDateStr = "${pd.getFormatPurchaseDate()}"; // Giả sử định dạng "dd/MM/yyyy"
-                                            const warrantyPeriod = ${pd.warrantyPeriod==null?0:pd.warrantyPeriod}; // Số tháng bảo hành
-                                            const statusDiv = document.getElementById('warrantyStatus');
-                                            // Kiểm tra purchasedDateStr có hợp lệ không
-                                            console.log("purchasedDateStr:", purchasedDateStr); // Debug giá trị
-                                            if (purchasedDateStr.length < 1) {
-                                                statusDiv.innerText = "Not covered by warranty";
-                                                statusDiv.style.color = "orange";
-                                                return;
+                                            function removeMedia(index) {
+                                                selectedFiles.splice(index, 1);
+                                                const input = document.getElementById('mediaFiles');
+                                                const dataTransfer = new DataTransfer();
+                                                selectedFiles.forEach(file => dataTransfer.items.add(file));
+                                                input.files = dataTransfer.files;
+                                                previewMedia({target: input});
                                             }
 
-                                            if (!purchasedDateStr || purchasedDateStr.trim() === '' || !purchasedDateStr.includes('-')) {
-                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid purchase date)";
-                                                statusDiv.style.color = "orange";
-                                                return;
-                                            }
-
-                                            // Tách chuỗi thủ công thay vì dùng destructuring
-                                            const dateParts = purchasedDateStr.split('-');
-                                            if (dateParts.length !== 3) {
-                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date format)";
-                                                statusDiv.style.color = "orange";
-                                                return;
-                                            }
-
-                                            // Gán giá trị truyền thống
-                                            const day = parseInt(dateParts[0], 10);
-                                            const month = parseInt(dateParts[1], 10);
-                                            const year = parseInt(dateParts[2], 10);
-                                            // Kiểm tra các giá trị có hợp lệ không
-                                            if (isNaN(day) || isNaN(month) || isNaN(year)) {
-                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date components)";
-                                                statusDiv.style.color = "orange";
-                                                return;
-                                            }
-
-                                            // Tạo Date object (month - 1 vì JS đếm từ 0)
-                                            const purchasedDate = new Date(year, month - 1, day);
-                                            // Kiểm tra Date có hợp lệ không
-                                            if (isNaN(purchasedDate.getTime())) {
-                                                statusDiv.innerText = "Status: Cannot determine warranty status (invalid date)";
-                                                statusDiv.style.color = "orange";
-                                                return;
-                                            }
-
-                                            // Tính ngày hết bảo hành
-                                            const warrantyEndDate = new Date(purchasedDate);
-                                            warrantyEndDate.setMonth(purchasedDate.getMonth() + warrantyPeriod);
-                                            // So sánh với ngày hiện tại
-                                            const today = new Date();
-                                            today.setHours(0, 0, 0, 0);
-                                            if (today <= warrantyEndDate) {
-                                                statusDiv.innerText = "Status: Still under warranty";
-                                                statusDiv.style.color = "green";
-                                            } else {
-                                                statusDiv.innerText = "Status: Out of warranty";
-                                                statusDiv.style.color = "red";
-                                            }
-                                        };
-                                        let selectedFiles = []; // Lưu danh sách file để preview và xóa
-
-                                        // Preview và xóa file
-                                        function previewMedia(event) {
-                                            const files = Array.from(event.target.files);
-                                            selectedFiles = files;
-                                            const previewContainer = document.getElementById('previewContainer');
-                                            previewContainer.innerHTML = '';
-
-                                            selectedFiles.forEach((file, index) => {
-                                                const reader = new FileReader();
-                                                reader.onload = function (e) {
-                                                    const div = document.createElement('div');
-                                                    div.className = 'media-item';
-
-                                                    if (file.type.startsWith('image/')) {
-                                                        const img = document.createElement('img');
-                                                        img.src = e.target.result;
-                                                        div.appendChild(img);
-                                                    } else if (file.type.startsWith('video/')) {
-                                                        const video = document.createElement('video');
-                                                        video.src = e.target.result;
-                                                        video.controls = true;
-                                                        div.appendChild(video);
-                                                    }
-
-                                                    const removeBtn = document.createElement('button');
-                                                    removeBtn.className = 'remove-btn';
-                                                    removeBtn.innerText = 'X';
-                                                    removeBtn.onclick = () => removeMedia(index);
-                                                    div.appendChild(removeBtn);
-
-                                                    previewContainer.appendChild(div);
-                                                };
-                                                reader.readAsDataURL(file);
-                                            });
-                                        }
-
-                                        function removeMedia(index) {
-                                            selectedFiles.splice(index, 1);
-                                            const input = document.getElementById('mediaFiles');
-                                            const dataTransfer = new DataTransfer();
-                                            selectedFiles.forEach(file => dataTransfer.items.add(file));
-                                            input.files = dataTransfer.files;
-                                            previewMedia({target: input});
-                                        }
-                                      
-    </script>
-</body>
+            </script>
+    </body>
 </html>
