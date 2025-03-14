@@ -61,6 +61,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         Staff staff = (Staff) session.getAttribute("staff");
+        //back
+        session.setAttribute("createComponentRequestFrom", request.getContextPath()+request.getServletPath()+"?ID="+id);
+        
         Integer handlerID = null;
         if (staff != null) {
             handlerID = staff.getStaffID();
