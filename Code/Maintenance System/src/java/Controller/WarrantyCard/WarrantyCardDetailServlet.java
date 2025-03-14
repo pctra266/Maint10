@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 @WebServlet(name = "WarrantyCardDetail", urlPatterns = {"/WarrantyCard/Detail"})
 @MultipartConfig(
@@ -62,8 +63,8 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Staff staff = (Staff) session.getAttribute("staff");
         //back
-        session.setAttribute("createComponentRequestFrom", request.getContextPath()+request.getServletPath()+"?ID="+id);
-        
+        session.setAttribute("createComponentRequestFrom", request.getContextPath() + request.getServletPath() + "?ID=" + id);
+
         Integer handlerID = null;
         if (staff != null) {
             handlerID = staff.getStaffID();
@@ -76,7 +77,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         Map<ComponentRequest, List<ComponentRequestDetail>> componentRequests = new HashMap<>();
         List<ComponentRequest> listComponentRequest = componentRequestDAO.getAllComponentRequestsOfCard(id);
         for (ComponentRequest cr : listComponentRequest) {
-                componentRequests.put(cr, componentRequestDAO.getListComponentRequestDetailById(cr.getComponentRequestID()+""));
+            componentRequests.put(cr, componentRequestDAO.getListComponentRequestDetailById(cr.getComponentRequestID() + ""));
         }
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
@@ -139,7 +140,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 } catch (IOException e) {
                                     e.printStackTrace(); // Log lỗi nếu không xóa được file
                                 }
-                                response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID()+ "&deleteMedia=true");
+                                response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID() + "&deleteMedia=true");
                                 return;
                             }
                         } else if (videoPaths.remove(deleteMedia)) {
@@ -254,8 +255,17 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 canProcess = latestProcess != null && ("receive".equals(latestProcess.getAction()));
                             case "refix" ->
                                 canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
-                            case "outsource" ->
+                            case "outsource" -> {
+                                // Kiểm tra điều kiện để cho phép outsourcing
                                 canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
+                                if (canProcess) {
+                                    // Chuyển hướng đến trang chọn Repair Contractor
+                                    response.sendRedirect(request.getContextPath() + "/WarrantyCard/OutsourceRequest?ID=" + warrantyCardId);
+                                    return; // Thoát khỏi phương thức để không tiếp tục xử lý
+                                } else {
+                                    request.setAttribute("updateAlert0", "Cannot perform outsource at this stage.");
+                                }
+                            }
                             case "fixed" -> {
                                 canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()) || "outsource".equals(latestProcess.getAction()));
                                 if (!canChangeToFixed(warrantyCardId)) {
@@ -271,7 +281,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
                         }
 
-                        if (canProcess) {
+                        if (canProcess && !"outsource".equals(processAction)) {
                             WarrantyCardProcess newProcess = new WarrantyCardProcess();
                             newProcess.setWarrantyCardID(warrantyCardId);
                             newProcess.setHandlerID(staff.getStaffID());
@@ -337,10 +347,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                 || "fixing".equals(status);
     }
 
-    private boolean isValidProcessAction(String action) {
-        return "receive".equals(action) || "refuse".equals(action) || "fixing".equals(action) || "refix".equals(action) || "outsource".equals(action)
-                || "fixed".equals(action) || "completed".equals(action) || "cancel".equals(action);
-    }
+   private boolean isValidProcessAction(String action) {
+    return action != null && Set.of("outsource",
+        "create", "receive", "refuse", "fixing", "refix", "wait_components", "received_components",
+        "request_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
+        "receive_outsource", "fixed_outsource", "cancel_outsource", "back_outsource",
+        "receive_from_outsource", "fixed", "completed", "cancel"
+    ).contains(action);
+}
+
 
     private boolean canChangeToFixed(Integer warrantyCardId) {
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(warrantyCardId);

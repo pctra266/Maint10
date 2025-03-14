@@ -181,6 +181,15 @@ CREATE TABLE WarrantyCard (
     CreatedDate DATETIME DEFAULT GETDATE(),
 );
 
+CREATE TABLE ContractorCard (
+    ContractorCardID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	WarrantyCardID int references WarrantyCard(WarrantyCardID),
+	StaffID int references Staff(StaffID),
+	ContractorID int references Staff(StaffID),
+	[Status] NVARCHAR(20) CHECK (Status in ('waiting', 'receive', 'cancel', 'done')),
+	Note NVARCHAR(MAX)
+);
+
 -- ComponentRequest Table
 CREATE TABLE ComponentRequest (
     ComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
