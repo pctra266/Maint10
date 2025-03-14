@@ -54,6 +54,7 @@
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Warranty Card</h2>
+
                     <c:if test="${not empty createStatus}">
                         <div class="alert alert-success alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -62,6 +63,7 @@
                             </div>
                         </div>
                     </c:if>
+
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
                             <input type="hidden" name="page-size" value="${pagination.pageSize}" />
@@ -87,6 +89,9 @@
 
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <button type="button" class="btn btn-success" onclick="window.location.href = 'searchWarrantyCard.jsp'">
+                            <i class="fa fa-file-pdf"></i> Export PDF
+                        </button>
                         <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
                         </form>

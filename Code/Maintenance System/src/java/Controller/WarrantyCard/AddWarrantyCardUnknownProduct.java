@@ -42,7 +42,6 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             String customerIdStr = request.getParameter("customerId");
             String productIdStr = request.getParameter("productId");
             int warrantyProductId = Integer.parseInt(request.getParameter("warrantyProductId"));
-            int handlerId = Integer.parseInt(request.getParameter("staffId"));
             String issueDescription = request.getParameter("issueDescription");
             String warrantyStatus = request.getParameter("warrantyStatus");
             String returnDate = request.getParameter("returnDate");
@@ -59,7 +58,6 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
 
             // Lưu các dữ liệu form vào request để hiển thị lại khi có lỗi
             request.setAttribute("warrantyProductId", warrantyProductId);
-            request.setAttribute("staffId", handlerId);
             request.setAttribute("issueDescription", issueDescription);
             request.setAttribute("warrantyStatus", warrantyStatus);
             request.setAttribute("returnDate", returnDate);
@@ -83,21 +81,20 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                 request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                 return;
             }
-
-            PrintWriter out = response.getWriter();
-            out.println("Customer ID: " + customerIdStr);
-            out.println("Product ID: " + productIdStr);
-            out.println("Warranty Product ID: " + warrantyProductId);
-            out.println("Handler ID: " + handlerId);
-            out.println("Issue Description: " + issueDescription);
-            out.println("Warranty Status: " + warrantyStatus);
-            out.println("Return Date: " + returnDate);
-            out.println("Done Date: " + doneDate);
-            out.println("Complete Date: " + completeDate);
-            out.println("Cancel Date: " + cancelDate);
+//
+//            PrintWriter out = response.getWriter();
+//            out.println("Customer ID: " + customerIdStr);
+//            out.println("Product ID: " + productIdStr);
+//            out.println("Warranty Product ID: " + warrantyProductId);
+//            out.println("Issue Description: " + issueDescription);
+//            out.println("Warranty Status: " + warrantyStatus);
+//            out.println("Return Date: " + returnDate);
+//            out.println("Done Date: " + doneDate);
+//            out.println("Complete Date: " + completeDate);
+//            out.println("Cancel Date: " + cancelDate);
 
             // Tạo Warranty Card và lấy ID vừa tạo (giả sử createWarrantyCard trả về ID hoặc -1 nếu thất bại)
-            boolean add = warrantyCardDAO.createWarrantyCard(handlerId, warrantyProductId, issueDescription, warrantyStatus, returnDate, doneDate, completeDate, cancelDate);
+            boolean add = warrantyCardDAO.createWarrantyCard(warrantyProductId, issueDescription, warrantyStatus, returnDate, doneDate, completeDate, cancelDate);
 
             if (!add) {
                 request.setAttribute("errorMessage", "Failed to create warranty card. Please try again.");
@@ -155,8 +152,6 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             response.sendRedirect("listUnknown");
 
         } catch (ServletException | IOException | NumberFormatException e) {
-//            request.setAttribute("errorMessage", "Error processing request: " + e.getMessage());
-//            request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
         }
     }
 }

@@ -26,6 +26,7 @@ public class Customer {
     public Customer() {
     }
 
+    
     public Customer(int customerID, String usernameC, String passwordC, String name, String Gender, Date dateOfBirth, String email, String phone, String address, String image) {
         this.customerID = customerID;
         this.usernameC = usernameC;

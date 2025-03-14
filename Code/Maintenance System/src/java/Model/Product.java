@@ -15,8 +15,45 @@ public class Product {
     private String brandName;
     private int productTypeId;
     private String productTypeName;
+    private String purchaseDate;
+
+    public Product(int productId, String code, String productName, int quantity, int warrantyPeriod, String status, List<String> images, int brandId, String brandName, int productTypeId, String productTypeName, String purchaseDate) {
+        this.productId = productId;
+        this.code = code;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.warrantyPeriod = warrantyPeriod;
+        this.status = status;
+        this.images = images;
+        this.brandId = brandId;
+        this.brandName = brandName;
+        this.productTypeId = productTypeId;
+        this.productTypeName = productTypeName;
+        this.purchaseDate = purchaseDate;
+    }
+
+    public String getPurchaseDate() {
+        return purchaseDate;
+    }
+
+    public void setPurchaseDate(String purchaseDate) {
+        this.purchaseDate = purchaseDate;
+    }
 
     public Product() {
+    }
+
+    public Product(int productId, String code, String productName, int quantity, int warrantyPeriod, String status, String brandName, String productTypeName, String purchaseDate) {
+        this.productId = productId;
+        this.code = code;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.warrantyPeriod = warrantyPeriod;
+        this.status = status;
+        this.brandName = brandName;
+        this.productTypeName = productTypeName;
+        this.purchaseDate = purchaseDate;
+
     }
 
     public Product(int productId, String code, String productName, int quantity, int warrantyPeriod, String status,

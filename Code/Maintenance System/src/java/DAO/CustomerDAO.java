@@ -766,6 +766,8 @@ public class CustomerDAO extends DBContext {
         }
     }
 
+  
+
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();
         List<Customer> listCustomer = dao.getAllCustomer();

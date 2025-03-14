@@ -3,7 +3,6 @@
     Created on : Feb 21, 2025, 11:49:16 PM
     Author     : sonNH
 --%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -299,7 +298,7 @@
                         <input type="hidden" name="productId" value="${unknownProduct.unknownProductId}" />
                         <input type="hidden" name="warrantyProductId" value="${warrantyProductId}" />
                         <label for="issueDescription">Issue Description:</label>
-                        
+
                         <div class="editor-container">
                             <div class="editor-toolbar">
                                 <button type="button" class="tool-btn" title="Bold"><i class="fas fa-bold"></i></button>
@@ -316,18 +315,8 @@
                                 <button type="button" class="tool-btn" title="Source"><i class="fas fa-code"></i></button>
                             </div>
 
-                            <!-- Vùng soạn thảo (contenteditable) -->
                             <textarea id="issueDescription" name="issueDescription" required>${param.issueDescription}</textarea>
                         </div>
-
-                        <label>Assigned Staff:</label>
-                        <select id="staffID" name="staffId" required>
-                            <c:forEach var="staff" items="${staffList}">
-                                <option value="${staff.staffID}" <c:if test="${param.staffId eq staff.staffID}">selected</c:if>>
-                                    ${staff.name}
-                                </option>
-                            </c:forEach>
-                        </select><br/>
 
                         <label>Expected Return Date:</label>
                         <select name="returnDateOption" onchange="toggleDateInput('returnDate')" required>
@@ -375,6 +364,7 @@
                         <div id="mediaPreview"></div>
 
                         <input type="submit" value="Create Warranty Card"/>
+                        
                         <a href="listUnknown" class="btn-update">
                             <i></i>Back
                         </a>
@@ -580,6 +570,5 @@
             }
 
         </script>
-
     </body>
 </html>
