@@ -186,6 +186,8 @@ CREATE TABLE ContractorCard (
 	WarrantyCardID int references WarrantyCard(WarrantyCardID),
 	StaffID int references Staff(StaffID),
 	ContractorID int references Staff(StaffID),
+	--waiting tuong ung voi request-outsource, receive ~ accept_outsource, 
+	--cancel ~ reject_outsource/refuse_outsource/cancel_outsouce( khong sua duoc)
 	[Status] NVARCHAR(20) CHECK (Status in ('waiting', 'receive', 'cancel', 'done')),
 	Note NVARCHAR(MAX)
 );
