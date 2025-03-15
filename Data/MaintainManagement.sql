@@ -301,7 +301,7 @@ CREATE TABLE Invoice (
 ALTER TABLE Payment
 ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
 
-CREATE TABLE footer_settings (
+CREATE TABLE FooterSetting (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     slogan VARCHAR(255) NOT NULL,
     address VARCHAR(255) NOT NULL,
@@ -311,7 +311,7 @@ CREATE TABLE footer_settings (
     lastUpdated  DATETIME DEFAULT GETDATE()
 );
 
-CREATE TABLE warranty_texts (
+CREATE TABLE ContactText (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     subtitle TEXT NOT NULL,
