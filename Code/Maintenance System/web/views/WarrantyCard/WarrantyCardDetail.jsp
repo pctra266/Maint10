@@ -94,7 +94,13 @@
                     <!-- Process Buttons -->
                     <div class="mb-3">
                         <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
-                            <h2>Now process: ${latestProcess.action} </h2>
+                            <div class="com-md-12 d-flex justify-content-between">
+                                <h2>Now process: ${latestProcess.action} </h2>
+                                <form action="searchwc" method="post">
+                                    <input type="hidden" class="form-control" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
+                                    <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
+                                </form>
+                            </div>
                             <h3>Process Actions</h3>
                             <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">
                                 <form action="WarrantyCard/Detail" method="post" class="d-inline">
@@ -278,7 +284,7 @@
                                         <div class="col-md-12">
                                             <textarea class="form-control" readonly>${card.issueDescription}</textarea>
                                         </div>
-                                    </div>    
+                                    </div>  
                                 </div>
 
                             </div>
