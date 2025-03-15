@@ -1,5 +1,7 @@
 package DAO;
 
+import Model.ReportComponent;
+import Model.ReportStaff;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -223,7 +225,24 @@ public class StaffDAO extends DBContext {
         }
         return true;
     }
+    public int getAllStaff() {
+        String sql = "select *from Staff";
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int count = 0;
+        try {
+            stm = connection.prepareStatement(sql);          
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                count++;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
 
+        }
+
+        return count;
+    }
     public ArrayList<Staff> getAllStaff(String searchname, String search, int pageIndex, int pageSize, String column, String sortOrder) {
         ArrayList<Staff> list = new ArrayList<>();
         String sql = "select *from Staff";
@@ -628,6 +647,471 @@ public class StaffDAO extends DBContext {
         return technicians;
     }
 
+    // Report Staff
+    public ArrayList<Staff> getAllReport(){
+        ArrayList<Staff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT \n" +
+                    "    s.StaffID,\n" +
+                    "    s.Name,\n" +
+                    "    s.Gender,\n" +
+                    "    s.Image,\n" +
+                    "    r.RoleName,\n" +
+                    "    COUNT(DISTINCT wp.WarrantyCardID) AS UniqueWarrantyCards\n" +
+                    "FROM Staff s\n" +
+                    "JOIN WarrantyCardProcess wp ON wp.HandlerID = s.StaffID\n" +
+                    "JOIN [Role] r ON r.RoleID = s.RoleID\n" +
+                    "LEFT JOIN WarrantyCardProcess wp_latest \n" +
+                    "    ON wp.WarrantyCardID = wp_latest.WarrantyCardID \n" +
+                    "    AND wp_latest.ActionDate = (\n" +
+                    "        SELECT MAX(ActionDate) \n" +
+                    "        FROM WarrantyCardProcess \n" +
+                    "        WHERE WarrantyCardID = wp.WarrantyCardID\n" +
+                    "    )\n" +
+                    "WHERE (wp_latest.Action IS NULL OR wp_latest.Action <> 'completed')\n" +
+                    "GROUP BY \n" +
+                    "    s.StaffID, \n" +
+                    "    s.Name, \n" +
+                    "    s.Gender, \n" +
+                    "    s.Image, \n" +
+                    "    r.RoleName;";
+        try {
+        stm = connection.prepareStatement(sql);
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            int staffID = rs.getInt("StaffID");
+            String name = rs.getString("Name");
+            String gender = rs.getString("Gender");
+            String image = rs.getString("Image");
+            String role = rs.getString("RoleName");
+            int count = rs.getInt("UniqueWarrantyCards");
+            list.add(new Staff(staffID, name, gender, image, count, role));
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
+    public ArrayList<Staff> getAllReportOut(){
+        ArrayList<Staff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT s.StaffID, s.Name, s.Gender, s.Image, r.RoleName\n" +
+                    "FROM Staff s\n" +
+                    "JOIN [Role] r ON r.RoleID = s.RoleID\n" +
+                    "WHERE NOT EXISTS (\n" +
+                    "    SELECT 1 FROM (\n" +
+                    "         SELECT wp.WarrantyCardID, MAX(wp.ActionDate) AS LastActionDate\n" +
+                    "         FROM WarrantyCardProcess wp\n" +
+                    "         WHERE wp.HandlerID = s.StaffID\n" +
+                    "         GROUP BY wp.WarrantyCardID\n" +
+                    "    ) AS LastRecords\n" +
+                    "    JOIN WarrantyCardProcess wp_last ON wp_last.WarrantyCardID = LastRecords.WarrantyCardID AND wp_last.ActionDate = LastRecords.LastActionDate\n" +
+                    "    WHERE wp_last.Action <> 'completed'\n" +
+                    ")\n" +
+                    "ORDER BY s.StaffID ASC;";
+        try {
+        stm = connection.prepareStatement(sql);
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            int staffID = rs.getInt("StaffID");
+            String name = rs.getString("Name");
+            String gender = rs.getString("Gender");
+            String image = rs.getString("Image");
+            String role = rs.getString("RoleName");
+            int count = 0;
+            list.add(new Staff(staffID, name, gender, image, count, role));
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
+    public ArrayList<ReportStaff> getAllStaffRepairByID(String id){
+        ArrayList<ReportStaff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT s.StaffID, s.Name, s.Gender, s.Image, r.RoleName, wp.Action, wp.ActionDate, w.WarrantyCardCode\n" +
+                    "FROM Staff s\n" +
+                    "JOIN [Role] r ON r.RoleID = s.RoleID\n" +
+                    "JOIN WarrantyCardProcess wp ON wp.HandlerID = s.StaffID\n" +
+                    "JOIN WarrantyCard w ON w.WarrantyCardID = wp.WarrantyCardID\n" +
+                    "WHERE s.StaffID = ? AND NOT EXISTS (\n" +
+                    "    SELECT 1 FROM WarrantyCardProcess wp_latest\n" +
+                    "    WHERE wp.WarrantyCardID = wp_latest.WarrantyCardID AND wp_latest.Action = 'completed' AND wp_latest.ActionDate = (\n" +
+                    "        SELECT MAX(ActionDate) FROM WarrantyCardProcess \n" +
+                    "		WHERE WarrantyCardID = wp.WarrantyCardID\n" +
+                    "    )\n" +
+                    ");";
+        try {
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, id);
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            int staffID = rs.getInt("StaffID");
+            String name = rs.getString("Name");
+            String gender = rs.getString("Gender");
+            String image = rs.getString("Image");
+            String role = rs.getString("RoleName");
+            String action = rs.getString("Action");
+            String actiondate = rs.getString("ActionDate");
+            String warrantycardcode = rs.getString("WarrantyCardCode");
+            list.add(new ReportStaff(staffID, name, gender, image, role, action, actiondate, warrantycardcode));
+            
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
+    public int getAllStaffNewStaff(){
+        ArrayList<ReportStaff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        int count = 0;
+        String sql = "  SELECT * \n" +
+                            "FROM [MaintainManagement].[dbo].[StaffLog]\n" +
+                            "WHERE MONTH([Time]) = MONTH(GETDATE()) \n" +
+                            "AND YEAR([Time]) = YEAR(GETDATE())\n" +
+                            "AND Status = 'Create'";
+        try {
+        stm = connection.prepareStatement(sql);
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            count++;
+            
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return count;
+    }
+    
+    public ArrayList<ReportComponent> getTop10ComponentInventory() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT TOP 10 ComponentID, ComponentName, Quantity, Price, (Quantity * Price) AS InventoryValue " +
+                     "FROM Component " +
+                     "ORDER BY Quantity DESC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("ComponentID");
+                String componentName = rs.getString("ComponentName");
+                String quantity = rs.getString("Quantity");
+                String price = rs.getString("Price");
+                String inventoryValue = rs.getString("InventoryValue");
+
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+    public ArrayList<ReportComponent> ComponentsStatisticsByType() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT ct.TypeName, COUNT(*) AS NumComponents,SUM(c.Quantity) AS TotalQuantity,SUM(c.Quantity * c.Price) AS TotalValue\n" +
+                        "FROM Component c\n" +
+                        "JOIN ComponentType ct ON c.TypeID = ct.TypeID\n" +
+                        "GROUP BY ct.TypeName\n" +
+                        "ORDER BY TotalQuantity DESC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("TypeName");
+                String componentName = rs.getString("NumComponents");
+                String quantity = rs.getString("TotalQuantity");
+                String price = rs.getString("TotalValue");
+                String inventoryValue = "";
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+    public ArrayList<ReportComponent> ComponentsSummaryReport() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT COUNT(*) AS TotalComponents,SUM(Quantity) AS TotalQuantity,SUM(Quantity * Price) AS TotalInventoryValue\n" +
+                    "FROM Component;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("TotalComponents");
+                String componentName = "";
+                String quantity = rs.getString("TotalQuantity");
+                String price = "";
+                String inventoryValue = rs.getString("TotalInventoryValue");
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+    public ArrayList<ReportComponent> ComponentsStatisticsByBrand() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT b.BrandName,COUNT(*) AS NumComponents, SUM(c.Quantity) AS TotalQuantity, SUM(c.Quantity * c.Price) AS TotalValue\n" +
+                    "FROM Component c\n" +
+                    "JOIN Brand b ON c.BrandID = b.BrandID\n" +
+                    "GROUP BY b.BrandName\n" +
+                    "ORDER BY TotalQuantity DESC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("BrandName");
+                String componentName = rs.getString("NumComponents");
+                String quantity = rs.getString("TotalQuantity");
+                String price = rs.getString("TotalValue");
+                String inventoryValue = "";
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+    public ArrayList<ReportComponent> LowInventoryPartsReport() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT ComponentID,ComponentName,Quantity,Price,(Quantity * Price) AS InventoryValue\n" +
+                    "FROM Component\n" +
+                    "WHERE Quantity < 10\n" +
+                    "ORDER BY Quantity ASC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("ComponentID");
+                String componentName = rs.getString("ComponentName");
+                String quantity = rs.getString("Quantity");
+                String price = rs.getString("Price");
+                String inventoryValue = rs.getString("InventoryValue");
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+     public ArrayList<ReportComponent> OutofStockPartsReport() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT ComponentID,ComponentName,Quantity,Price,(Quantity * Price) AS InventoryValue\n" +
+                    "FROM Component\n" +
+                    "WHERE Quantity = 10;\n";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("ComponentID");
+                String componentName = rs.getString("ComponentName");
+                String quantity = rs.getString("Quantity");
+                String price = rs.getString("Price");
+                String inventoryValue = rs.getString("InventoryValue");
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+      public ArrayList<ReportComponent> MostUsedComponentsInProducts() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT TOP 10 c.ComponentID, c.ComponentName, SUM(pc.Quantity) AS TotalUsed\n" +
+                    "FROM Component c\n" +
+                    "JOIN ProductComponents pc ON c.ComponentID = pc.ComponentID\n" +
+                    "GROUP BY c.ComponentID, c.ComponentName\n" +
+                    "ORDER BY TotalUsed DESC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("ComponentID");
+                String componentName = rs.getString("ComponentName");
+                String quantity = rs.getString("TotalUsed");
+                String price = "";
+                String inventoryValue = "";
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+       public ArrayList<ReportComponent> AveragePriceByComponentType() {
+        ArrayList<ReportComponent> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT \n" +
+                    "    ct.TypeName,\n" +
+                    "    AVG(c.Price) AS AveragePrice\n" +
+                    "FROM Component c\n" +
+                    "JOIN ComponentType ct ON c.TypeID = ct.TypeID\n" +
+                    "GROUP BY ct.TypeName\n" +
+                    "ORDER BY AveragePrice DESC;";
+
+        try {
+            stm = connection.prepareStatement(sql);
+            rs = stm.executeQuery();
+
+            while (rs.next()) {
+                String componentID = rs.getString("TypeName");
+                String componentName = "";
+                String quantity = rs.getString("AveragePrice");
+                String price = "";
+                String inventoryValue = "";
+                ReportComponent component = new ReportComponent(componentID, componentName, quantity, price, inventoryValue);
+                list.add(component);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+
+
+
+    
+    
     public static void main(String[] args) {
         StaffDAO staffDAO = new StaffDAO();
         System.out.println(staffDAO.getStaffByUsenamePassword("tech01", "Cw2LaFmhUP2i/jGdPuB5aVCxAQg="));

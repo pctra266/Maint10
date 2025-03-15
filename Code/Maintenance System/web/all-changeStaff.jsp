@@ -184,7 +184,15 @@
                                 <option value="Time" ${column=='Time' ? 'selected' : ''}>Time</option>
                             </select>
                         </div>
-
+                        
+                        <div class="col-md-3">
+                            <select onchange="this.form.submit()" name="status" id="status" class="form-select shadow-sm">
+                                <option value="">Sort By Status</option>
+                                <option value="Create" ${status=='Name' ? 'selected' : ''}>Create</option>
+                                <option value="Update" ${status=='Update' ? 'selected' : ''}>Update</option>
+                            </select>
+                        </div>
+                            
                         <div class="col-md-3">
                             <select onchange="this.form.submit()" name="sortOrder" id="sortOrder" class="form-select shadow-sm">
                                 <option value="">Sort Order</option>

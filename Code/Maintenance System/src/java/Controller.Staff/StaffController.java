@@ -152,9 +152,11 @@ public class StaffController extends HttpServlet {
                 String UpdateStaffID = request.getParameter("staffID");
                 Staff staff = dao.getInformationByID(UpdateStaffID);
                 request.setAttribute("staff", staff);
+                request.setAttribute("action", action);
                 
                 request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                 break;
+                
             default:
                 break;
         } 
@@ -183,7 +185,6 @@ public class StaffController extends HttpServlet {
             }
         }
                
-        PrintWriter out = response.getWriter();
         
         String search = request.getParameter("search");
         String searchname = request.getParameter("searchname");
@@ -215,34 +216,34 @@ public class StaffController extends HttpServlet {
         int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);  
         Pagination pagination = new Pagination();
                 
-                pagination.setUrlPattern( "/StaffController");
-                pagination.setCurrentPage(pageIndex);
-                pagination.setPageSize(pagesize);
-                pagination.setTotalPages(totalPageCount);
-                pagination.setTotalPagesToShow(5); // Hiển thị tối đa 5 trang liền kề
-                pagination.setSort(column == null ? "" : column);
-                pagination.setOrder(sortOrder == null ? "" : sortOrder);
-                
-                List<String> searchFields = new ArrayList();
-                List<String> searchValues = new ArrayList();
-                if(searchname != null && !searchname.isEmpty()){
-                    searchFields.add("searchname");
-                    searchValues.add(searchname);
-                }
-                if(search != null && !search.isEmpty()){
-                    searchFields.add("search");
-                    searchValues.add(search);
-                }
-                if(page_size != null && !page_size.isEmpty()){
-                    searchFields.add("page_size");
-                    searchValues.add(page_size);
-                }
-                pagination.setSearchFields(searchFields.toArray(new String[searchFields.size()]));
-                pagination.setSearchValues(searchValues.toArray(new String[searchValues.size()]));
+        pagination.setUrlPattern( "/StaffController");
+        pagination.setCurrentPage(pageIndex);
+        pagination.setPageSize(pagesize);
+        pagination.setTotalPages(totalPageCount);
+        pagination.setTotalPagesToShow(5); // Hiển thị tối đa 5 trang liền kề
+        pagination.setSort(column == null ? "" : column);
+        pagination.setOrder(sortOrder == null ? "" : sortOrder);
 
-                
-                // Gán các thuộc tính cần thiết cho JSP
-                request.setAttribute("pagination", pagination);
+        List<String> searchFields = new ArrayList();
+        List<String> searchValues = new ArrayList();
+        if(searchname != null && !searchname.isEmpty()){
+            searchFields.add("searchname");
+            searchValues.add(searchname);
+        }
+        if(search != null && !search.isEmpty()){
+            searchFields.add("search");
+            searchValues.add(search);
+        }
+        if(page_size != null && !page_size.isEmpty()){
+            searchFields.add("page_size");
+            searchValues.add(page_size);
+        }
+        pagination.setSearchFields(searchFields.toArray(new String[searchFields.size()]));
+        pagination.setSearchValues(searchValues.toArray(new String[searchValues.size()]));
+
+
+        // Gán các thuộc tính cần thiết cho JSP
+        request.setAttribute("pagination", pagination);
         switch(action){
             
             case "AddStaff":
@@ -323,8 +324,10 @@ public class StaffController extends HttpServlet {
                    request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                    return;
                 }
-                
+                StaffLogDAO log = new StaffLogDAO();
                 boolean add = dao.addStaff(usename, password, name, role, gender, date, email, phone, address, imagePath);
+                String id = log.SearchID(usename);
+                boolean create = log.createStaff(id, usename, password, name, gender, date, role, email, phone, address, email);
                 String staffID = dao.updateStaff_Role(phone);
                 boolean add_role = dao.addStaff_Role(staffID, role);
                 list = dao.getAllStaff(searchname, search, pageIndex, pagesize, column, sortOrder);
@@ -449,11 +452,11 @@ public class StaffController extends HttpServlet {
                 
                 
                 StaffDAO staff = new StaffDAO();
-                StaffLogDAO  stafflog = new StaffLogDAO();
+                StaffLogDAO stafflog = new StaffLogDAO();
                 boolean update = stafflog.addStaff(UpdatestaffID, Updateusename, Updatepassword, Updatename,Updategender, Updatedate, Updaterole, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean uppdate = staff.updateStaff(UpdatestaffID, Updateusename, Updatepassword, Updaterole,Updategender,Updatedate,Updatename, Updateemail, Updatephone, Updateaddress, UpdateimagePath);
                 boolean update_role = staff.updateStaff_Role(UpdatestaffID, Updaterole);
-                if (update) {
+                if (uppdate) {
                     request.setAttribute("message", "Thay đổi thành công!");
                 } else {
                     request.setAttribute("message", "Thay đổi thất bại!");
@@ -463,7 +466,14 @@ public class StaffController extends HttpServlet {
                 request.setAttribute("totalPageCount", totalPageCount);
                 request.getRequestDispatcher("Staff.jsp").forward(request, response);
                 break;
-
+            case "Infor":
+                String staffid = request.getParameter("staffid");
+                Staff staff1 = dao.getInformationByID(staffid);
+                request.setAttribute("staff", staff1);
+                request.setAttribute("action", action);
+                
+                request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                break;
             default:
                 break;
         } 
