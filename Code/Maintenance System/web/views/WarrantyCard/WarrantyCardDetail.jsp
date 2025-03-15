@@ -96,48 +96,70 @@
                         <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                             <h2>Now process: ${latestProcess.action} </h2>
                             <h3>Process Actions</h3>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="fixing">
-                                <button type="submit" class="btn btn-primary me-2" ${latestProcess != null && latestProcess.action == 'receive' ? '' : 'disabled'}>Fixing</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="refix">
-                                <button type="submit" class="btn btn-warning me-2" ${latestProcess != null && (latestProcess.action == 'fixed' || latestProcess.action == 'completed' || latestProcess.action == 'cancel') ? '' : 'disabled'}>Refix</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="outsource">
-                                <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action != 'completed' && (latestProcess.action == 'fixing'||latestProcess.action == 'refix') ? '' : 'disabled'}>Outsource</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="fixed">
-                                <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action != 'completed' && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="completed">
-                                <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'}>Completed</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="cancel">
-                                <button type="submit" class="btn btn-danger me-2" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' && latestProcess.action != 'cancel' ? '' : 'disabled'}>Cancel</button>
-                            </form>
-                            <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                <input type="hidden" name="action" value="process">
-                                <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                <input type="hidden" name="processAction" value="refuse">
-                                <button type="submit" class="btn btn-instagram" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' ? '' : 'disabled'}>Refuse</button>
-                            </form>
+                            <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="fixing">
+                                    <button type="submit" class="btn btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'receive' || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource')? '' : 'disabled'}>Fixing</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="refix">
+                                    <button type="submit" class="btn btn-warning me-2" ${latestProcess != null && (latestProcess.action == 'fixed' || latestProcess.action == 'completed' || latestProcess.action == 'cancel') ? '' : 'disabled'}>Refix</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="outsource">
+                                    <button type="submit" class="btn btn-info me-2" ${latestProcess != null  && (latestProcess.action == 'fixing'||latestProcess.action == 'refix') ? '' : 'disabled'}>Outsource</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="fixed">
+                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="completed">
+                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'}>Completed</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="cancel">
+                                    <button type="submit" class="btn btn-danger me-2" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' && latestProcess.action != 'cancel' ? '' : 'disabled'}>Cancel</button>
+                                </form>
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="refuse">
+                                    <button type="submit" class="btn btn-instagram" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' ? '' : 'disabled'}>Refuse</button>
+                                </form>
+                            </c:if>
+                            <c:if test="${latestProcess.action.endsWith('outsource') && latestProcess.action!='receive_from_outsource' && latestProcess.action!='refuse_outsource' && latestProcess.action!='cancel_outsource' }">
+                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="processOutsource">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="cancel_outsource">
+                                    <button type="submit" class="btn btn-instagram" ${latestProcess != null && (latestProcess.action == 'request_outsource' && latestProcess.action != 'accept_outsource')? '' : 'disabled'}>Cancel request</button>
+                                </form>
+                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="processOutsource">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="send_outsource">
+                                    <button type="submit" class="btn btn-primary" ${latestProcess != null && latestProcess.action == 'accept_outsource' ? '' : 'disabled'}>Hand over</button>
+                                </form>
+                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="processOutsource">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <input type="hidden" name="processAction" value="receive_from_outsource">
+                                    <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action == 'back_outsource'? '' : 'disabled'}>Receive</button>
+                                </form>
+                            </c:if>
                         </div>
                     </c:if>
 
@@ -219,46 +241,46 @@
                             <h2 class="mt-4">Warranty Code: ${card.warrantyCardCode}</h2>
                             <div class="col-md-6 ">
                                 <div class="row g-2 ms-2">
-                                <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
-                                <div class="col-md-12"><div>Name: ${customer.name}</div></div>
-                                <div class="col-md-12"><div>Phone: ${customer.phone}</div></div>
-                                <div class="col-md-12"><div>Email: ${customer.email}</div></div>
-                                <div class="col-md-12"><h3>HANDLER INFORMATION</h3></div>
-                                <div class="col-md-12"><div>Name: ${handler.name}</div></div>
-                                <div class="col-md-12"><div>Phone: ${handler.phone}</div></div>
-                                <div class="col-md-12"><div>Employee ID: ${handler.usernameS}</div></div>
-                                <div class="col-md-12"><h3>PRODUCT</h3></div>
-                                <div class="col-md-12"><div>Product Code: ${card.productDetailCode}</div></div>
-                                <div class="col-md-12"><div>Product Name: ${card.productName}</div></div>
-                                <div class="col-md-12"><div>Purchased Date: ${pd.getFormatPurchaseDate()}</div></div>
-                                <div class="col-md-12">
-                                    <div>Warranty Period (Months): ${pd.warrantyPeriod}</div>
-                                </div>
-                                <div class="col-md-12">
-                                    <div id="warrantyStatus"></div>
-                                </div>
-                                <!-- Upload file ảnh -->
-                                <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
-                                    <input type="hidden" name="action" value="uploadImages">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
+                                    <div class="col-md-12"><div>Name: ${customer.name}</div></div>
+                                    <div class="col-md-12"><div>Phone: ${customer.phone}</div></div>
+                                    <div class="col-md-12"><div>Email: ${customer.email}</div></div>
+                                    <div class="col-md-12"><h3>HANDLER INFORMATION</h3></div>
+                                    <div class="col-md-12"><div>Name: ${handler.name}</div></div>
+                                    <div class="col-md-12"><div>Phone: ${handler.phone}</div></div>
+                                    <div class="col-md-12"><div>Employee ID: ${handler.usernameS}</div></div>
+                                    <div class="col-md-12"><h3>PRODUCT</h3></div>
+                                    <div class="col-md-12"><div>Product Code: ${card.productDetailCode}</div></div>
+                                    <div class="col-md-12"><div>Product Name: ${card.productName}</div></div>
+                                    <div class="col-md-12"><div>Purchased Date: ${pd.getFormatPurchaseDate()}</div></div>
                                     <div class="col-md-12">
-                                        <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
-                                        <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
-                                        <div id="previewContainer" class="media-preview mt-3"></div>   
+                                        <div>Warranty Period (Months): ${pd.warrantyPeriod}</div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <button type="submit" class="btn btn-primary">Upload</button>
-                                    </div> 
-                                </form>
-                                <div class="col-md-12">
-                                    <div>Issue Description:</div>
-                                    <input type="hidden" class="form-control" value="${card.warrantyCardID}" readonly>  
                                     <div class="col-md-12">
-                                        <textarea class="form-control" readonly>${card.issueDescription}</textarea>
+                                        <div id="warrantyStatus"></div>
                                     </div>
-                                </div>    
+                                    <!-- Upload file ảnh -->
+                                    <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="action" value="uploadImages">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <div class="col-md-12">
+                                            <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
+                                            <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
+                                            <div id="previewContainer" class="media-preview mt-3"></div>   
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="submit" class="btn btn-primary">Upload</button>
+                                        </div> 
+                                    </form>
+                                    <div class="col-md-12">
+                                        <div>Issue Description:</div>
+                                        <input type="hidden" class="form-control" value="${card.warrantyCardID}" readonly>  
+                                        <div class="col-md-12">
+                                            <textarea class="form-control" readonly>${card.issueDescription}</textarea>
+                                        </div>
+                                    </div>    
                                 </div>
-                                
+
                             </div>
                             <div class="col-md-6 ">
                                 <div class="row g-2 mt-4">

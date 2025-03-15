@@ -52,7 +52,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
         String warrantyCardIdParam = request.getParameter("ID");
         Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIdParam);
         String noteParam = request.getParameter("note");
-
+        String processAction = request.getParameter("processAction");
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
@@ -65,7 +65,9 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             doGet(request, response);
             return;
         }
+        WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
 
+        //gui sang cho contractor
         String action = request.getParameter("action");
         if ("requestOutsource".equals(action)) {
             String contractorIdParam = request.getParameter("contractorID");
@@ -80,8 +82,8 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                 newProcess.setHandlerID(staff.getStaffID());
                 newProcess.setAction("request_outsource");
                 newProcess.setNote("Outsourced to Repair Contractor ID: " + contractorId + " (" + contractor.getName() + ")");
-
                 boolean success = wcpDao.addWarrantyCardProcess(newProcess);
+
                 if (success) {
                     //them vao contractor card
                     ContractorCard contractorCard = new ContractorCard();
@@ -100,6 +102,41 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             } else {
                 request.setAttribute("updateAlert0", "Invalid Repair Contractor selected.");
             }
+        } //process outsource cua technician
+        else if ("processOutsource".equals(action)) {
+
+            if (processAction != null && isValidProcessAction(processAction)) {
+                boolean canProcess = false;
+                switch (processAction) {
+                    case "cancel_outsource" -> {
+                        canProcess = latestProcess != null && ("request_outsource".equals(latestProcess.getAction()) || "accept_outsource".equals(latestProcess.getAction()));
+                    }
+                    case "send_outsource" -> {
+                        canProcess = latestProcess != null && "accept_outsource".equals(latestProcess.getAction());
+                    }
+                    case "receive_from_outsource" -> {
+                        canProcess = latestProcess != null && "back_outsource".equals(latestProcess.getAction());
+                    }
+                }
+                if (canProcess) {
+                    WarrantyCardProcess newProcess = new WarrantyCardProcess();
+                    newProcess.setWarrantyCardID(warrantyCardId);
+                    newProcess.setHandlerID(staff.getStaffID());
+                    newProcess.setAction(processAction);
+                    boolean success = wcpDao.addWarrantyCardProcess(newProcess);
+                    if (success) {
+                        request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
+                    } else {
+                        request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
+                    }
+                } else {
+                    request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.\n" );
+                }
+
+            }
+            //tra ve trang detailCard
+            WarrantyCardDetailServlet servlet = new WarrantyCardDetailServlet();
+            servlet.processRequest(request, response);
         }
 
         // Nếu có lỗi, quay lại trang OutsourceRequest

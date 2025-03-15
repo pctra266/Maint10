@@ -106,7 +106,6 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             throws ServletException, IOException {
         String action = request.getParameter("action");
         String warrantyCardIdParam = request.getParameter("ID");
-        System.out.println("warrantyCardIdParam: " + warrantyCardIdParam + action);
         Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIdParam);
 
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
@@ -252,12 +251,12 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             case "receive" ->
                                 canProcess = latestProcess != null && ("create".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()) || "refuse".equals(latestProcess.getAction()));
                             case "fixing" ->
-                                canProcess = latestProcess != null && ("receive".equals(latestProcess.getAction()));
+                                canProcess = latestProcess != null && ("receive".equals(latestProcess.getAction()) || "receive_from_outsource".equals(latestProcess.getAction()) || "refuse_outsource".equals(latestProcess.getAction()) || "cancel_outsource".equals(latestProcess.getAction()));
                             case "refix" ->
                                 canProcess = latestProcess != null && ("fixed".equals(latestProcess.getAction()) || "completed".equals(latestProcess.getAction()) || "cancel".equals(latestProcess.getAction()));
                             case "outsource" -> {
                                 // Kiểm tra điều kiện để cho phép outsourcing
-                                canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
+                                canProcess = latestProcess != null && ("fixing".equals(latestProcess.getAction()) || "refix".equals(latestProcess.getAction()));
                                 if (canProcess) {
                                     // Chuyển hướng đến trang chọn Repair Contractor
                                     response.sendRedirect(request.getContextPath() + "/WarrantyCard/OutsourceRequest?ID=" + warrantyCardId);
@@ -275,10 +274,15 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             }
                             case "completed" ->
                                 canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
-                            case "cancel" ->
+                            case "cancel" -> {
                                 canProcess = latestProcess != null && !"cancel".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
+                            }
                             case "refuse" ->
-                                canProcess = latestProcess != null && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
+                                canProcess = latestProcess != null && !"refuse".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
+                        }
+                        //
+                        if (latestProcess != null && latestProcess.getAction().endsWith("outsource") && !latestProcess.getAction().equals("refuse_outsource") && !"receive_from_outsource".equals(latestProcess.getAction()) && !"refuse_outsource".equals(latestProcess.getAction()) && !"cancel_outsource".equals(latestProcess.getAction())) {
+                            canProcess = false;
                         }
 
                         if (canProcess && !"outsource".equals(processAction)) {
@@ -288,7 +292,6 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             newProcess.setAction(processAction);
                             boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                             if (success) {
-                                System.out.println("check1");
                                 WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
                                 if ("completed".equals(processAction) || "cancel".equals(processAction) || "refix".equals(processAction)) {
                                     wc.setWarrantyStatus(processAction);
@@ -312,7 +315,6 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                     wc.setHandlerID(null);
                                 }
                                 if ("receive".equals(processAction)) {
-                                    System.out.println("check2");
                                     wc.setHandlerID(staff.getStaffID());
                                 }
                                 warrantyCardDAO.updateWarrantyCard(wc); // Update WarrantyCard status
@@ -347,15 +349,14 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                 || "fixing".equals(status);
     }
 
-   private boolean isValidProcessAction(String action) {
-    return action != null && Set.of("outsource",
-        "create", "receive", "refuse", "fixing", "refix", "wait_components", "received_components",
-        "request_outsource","unfixable_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
-        "receive_outsource", "fixed_outsource", "cancel_outsource", "back_outsource",
-        "receive_from_outsource", "fixed", "completed", "cancel"
-    ).contains(action);
-}
-
+    private boolean isValidProcessAction(String action) {
+        return action != null && Set.of("outsource",
+                "create", "receive", "refuse", "fixing", "refix", "wait_components", "received_components",
+                "request_outsource", "cancel_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
+                "receive_outsource", "fixed_outsource", "unfixable_outsource", "back_outsource",
+                "receive_from_outsource", "fixed", "completed", "cancel"
+        ).contains(action);
+    }
 
     private boolean canChangeToFixed(Integer warrantyCardId) {
         List<WarrantyCardDetail> cardDetails = wcdDao.getWarrantyCardDetailOfCard(warrantyCardId);

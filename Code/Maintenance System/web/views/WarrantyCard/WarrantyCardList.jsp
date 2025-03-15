@@ -54,7 +54,6 @@
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <h2>Warranty Card</h2>
-
                     <c:if test="${not empty createStatus}">
                         <div class="alert alert-success alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
