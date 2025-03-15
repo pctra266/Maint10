@@ -86,6 +86,21 @@ public class SupplementRequestDAO {
         }
         return null;
     }
+    public boolean updateStatus(int requestID, String newStatus) {
+    String query = "UPDATE MissingComponentRequest SET Status = ? WHERE MissingComponentRequestID = ?";
+    
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        ps.setString(1, newStatus);
+        ps.setInt(2, requestID);
+        
+        return ps.executeUpdate() > 0;
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
     public static void main(String[] args) {
         SupplementRequestDAO dao  = new SupplementRequestDAO();
 //        SupplementRequest supplementRequest = new SupplementRequest();

@@ -109,7 +109,28 @@ public class SupplementRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        try {
+               String action = request.getParameter("action");
+
+    try {
+        switch (action != null ? action : "") {
+            case "updateSupplementRequest":
+                updateSupplementRequest(request, response);
+                break;
+
+            case "createSupplementRequest":
+                createSupplementRequest(request, response);
+                break;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("404Page.jsp");
+    }
+       
+    }
+    
+    private void createSupplementRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+         try {
             // session to get customer and customerId
         HttpSession session = request.getSession();
         Customer currentCustomer = null;
@@ -174,6 +195,31 @@ public class SupplementRequestController extends HttpServlet {
         response.sendRedirect("supplementRequest.jsp?error=true");
     }
     }
+    
+    private void updateSupplementRequest(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+            try {
+        int requestID = Integer.parseInt(request.getParameter("requestID"));
+        String status = request.getParameter("status");
+
+        // Kiểm tra trạng thái hợp lệ
+        if (!status.equals("approved") && !status.equals("cancel")) {
+            response.sendRedirect("listSupplementRequest.jsp?error=Invalid status");
+            return;
+        }
+
+        // Gọi DAO để cập nhật trạng thái
+        boolean updated = supplementRqDAO.updateStatus(requestID, status);
+
+        if (updated) {
+            response.sendRedirect("supplementRequest?action=listSupplementRequest&success=Status updated successfully");
+        } else {
+            response.sendRedirect("supplementRequest?action=listSupplementRequest&error=Failed to update status");
+        }
+    } catch (NumberFormatException e) {
+        response.sendRedirect("listSupplementRequest.jsp?error=Invalid request ID");
+    }
+        }
     
 
     /** 

@@ -19,6 +19,18 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                <main class="content">
+                   <c:if test="${not empty param.error}">
+                       <div class="alert alert-danger" role="alert">
+                           ${param.error}
+                       </div>
+                   </c:if>
+
+                   <c:if test="${not empty param.success}">
+                       <div class="alert alert-success" role="alert">
+                           ${param.success}
+                       </div>
+                   </c:if>
+
         <table class="table table-hover my-0">
     <thead>
         <tr>
@@ -43,20 +55,27 @@
                 <td>${request.note}</td>
                 <td>
                     <form action="supplementRequest" method="post">
-                        <input type="hidden" name="action" value="updateStatus">
+                        <input type="hidden" name="action" value="updateSupplementRequest">
                         <input type="hidden" name="requestID" value="${request.requestID}">
                         <input type="hidden" name="status" value="approved">
-                        <button class="btn btn-primary" type="submit">Approve</button>
+                        <button class="btn btn-primary" type="submit" 
+                                onclick="return confirm('Are you sure you want to approve this request?');">
+                            Approve
+                        </button>
                     </form>
                 </td>
                 <td>
                     <form action="supplementRequest" method="post">
-                        <input type="hidden" name="action" value="updateStatus">
+                        <input type="hidden" name="action" value="updateSupplementRequest">
                         <input type="hidden" name="requestID" value="${request.requestID}">
-                        <input type="hidden" name="status" value="canceled">
-                        <button class="btn btn-danger" type="submit">Cancel</button>
+                        <input type="hidden" name="status" value="cancel">
+                        <button class="btn btn-danger" type="submit"
+                                onclick="return confirm('Are you sure you want to cancel this request?');">
+                            Cancel
+                        </button>
                     </form>
                 </td>
+
             </tr>
         </c:forEach>
     </tbody>
