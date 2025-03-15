@@ -40,6 +40,7 @@
 
         <div class="card-body">
             <form action="supplementRequest" method="POST" >
+                <input type="hidden" name="action" value="createSupplementRequest">
                 <div class="row g-3">
                     <div class="col-md-6">
                         <label for="Name" class="form-label">Component Name</label>

@@ -36,10 +36,13 @@
         <tr>
             <th>Supplement Request ID</th>
             <th>Component Name</th>
+            <th>Component Source</th>
             <th>Component Type</th>
+            <th>Component Brand</th>
             <th>Request Date</th>
             <th>Status</th>
             <th>Note</th>
+            <th>Create Component</th> 
             <th>Approve</th>
             <th>Cancel</th>
         </tr>
@@ -50,9 +53,22 @@
                 <td>${request.requestID}</td>
                 <td>${request.componentName}</td>
                 <td>${request.componentType}</td>
+                <td>${request.type}</td>
+                <td>${request.brand}</td>
                 <td>${request.requestDate}</td>
                 <td>${request.status}</td>
                 <td>${request.note}</td>
+                <td>
+                    <c:if test="${request.componentType eq 'product'}">
+                         <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
+                             <input name="Name" value="${request.componentName}" type="hidden">
+                             <input name="Type"  value="${request.type}" type="hidden">
+                             <input name="Brand"  value="${request.brand}" type="hidden">
+                             <button type="submit"class="btn btn-primary"> Add Component</button>
+                        </form>
+                        
+                    </c:if>
+                </td>
                 <td>
                     <form action="supplementRequest" method="post">
                         <input type="hidden" name="action" value="updateSupplementRequest">
@@ -75,11 +91,11 @@
                         </button>
                     </form>
                 </td>
-
             </tr>
         </c:forEach>
     </tbody>
 </table>
+
                         </main>
 
 

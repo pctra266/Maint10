@@ -18,6 +18,8 @@ public class SupplementRequest {
     private String componentType;
     private Integer typeID;
     private Integer brandID;
+    private String type;
+    private String brand;
     private int requestedBy;
     private Date requestDate;
     private String status;
@@ -39,6 +41,22 @@ public class SupplementRequest {
         this.note = note;
     }
 
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getBrand() {
+        return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
+    }
+    
     public int getRequestID() {
         return requestID;
     }

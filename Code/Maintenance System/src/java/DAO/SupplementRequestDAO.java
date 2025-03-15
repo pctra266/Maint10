@@ -20,8 +20,17 @@ public class SupplementRequestDAO {
             ps = conn.prepareStatement(query);
             ps.setString(1, request.getComponentName());
             ps.setString(2, request.getComponentType());
-            ps.setObject(3, request.getTypeID(), Types.INTEGER);
-            ps.setObject(4, request.getBrandID(), Types.INTEGER);
+            if (request.getTypeID() == 0) {
+                ps.setNull(3, Types.INTEGER);
+            } else {
+                ps.setInt(3, request.getTypeID());
+            }
+
+            if (request.getBrandID() == 0) {
+                ps.setNull(4, Types.INTEGER);
+            } else {
+                ps.setInt(4, request.getBrandID());
+            }
             ps.setInt(5, request.getRequestedBy());
             ps.setString(6, "waiting");
             ps.setString(7, request.getNote());
@@ -35,24 +44,33 @@ public class SupplementRequestDAO {
 
     public List<SupplementRequest> getAllSupplementRequests() {
         List<SupplementRequest> list = new ArrayList<>();
-        String query = "SELECT * FROM MissingComponentRequest ORDER BY RequestDate DESC";
+        String query = """
+                    SELECT mcq.MissingComponentRequestID,mcq.ComponentName,mcq.ComponentType,mcq.TypeID,mcq.BrandID,mcq.RequestedBy,mcq.RequestDate,mcq.Status,mcq.Note,cb.BrandName,ct.TypeName 
+                    FROM MissingComponentRequest mcq
+                    left JOIN Brand cb ON mcq.BrandID = cb.BrandID
+                    left JOIN ComponentType ct ON mcq.TypeID = ct.TypeID  ORDER BY RequestDate DESC
+                       """;
         try {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                list.add(new SupplementRequest(
-                        rs.getInt("MissingComponentRequestID"),
-                        rs.getString("ComponentName"),
-                        rs.getString("ComponentType"),
-                        (Integer) rs.getObject("TypeID"),
-                        (Integer) rs.getObject("BrandID"),
-                        rs.getInt("RequestedBy"),
-                        rs.getTimestamp("RequestDate"),
-                        rs.getString("Status"),
-                        rs.getString("Note")
-                ));
+                 SupplementRequest request = new SupplementRequest(); // Constructor rỗng
+
+                request.setRequestID(rs.getInt("MissingComponentRequestID"));
+                request.setComponentName(rs.getString("ComponentName"));
+                request.setComponentType(rs.getString("ComponentType"));
+                request.setTypeID((Integer) rs.getObject("TypeID"));
+                request.setBrandID((Integer) rs.getObject("BrandID"));
+                request.setType(rs.getString("TypeName"));
+                request.setBrand(rs.getString("BrandName"));
+                request.setRequestedBy(rs.getInt("RequestedBy"));
+                request.setRequestDate(rs.getTimestamp("RequestDate"));
+                request.setStatus(rs.getString("Status"));
+                request.setNote(rs.getString("Note"));
+
+                list.add(request); // Cuối cùng mới thêm vào list
             }
         } catch (Exception e) {
             e.printStackTrace();
