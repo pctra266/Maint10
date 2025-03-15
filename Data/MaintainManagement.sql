@@ -219,6 +219,18 @@ CREATE TABLE ComponentRequestResponsible (
     [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel')),
 	CreateDate DATETIME DEFAULT GETDATE()
 );
+-- MissingComponentRequest Table
+CREATE TABLE MissingComponentRequest (
+    MissingComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ComponentName NVARCHAR(100) NOT NULL,
+    TypeID INT NULL REFERENCES ComponentType(TypeID), -- Loại linh kiện (nếu biết)
+    BrandID INT NULL REFERENCES Brand(BrandID), -- Thương hiệu (nếu biết)
+    RequestedBy INT NOT NULL REFERENCES Staff(StaffID), -- Người yêu cầu
+    RequestDate DATETIME DEFAULT GETDATE(), -- Ngày yêu cầu
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('waiting', 'approved', 'cancel')),
+    Note NVARCHAR(MAX)
+);
+
 
 -- WarrantyCardDetail Table
 CREATE TABLE WarrantyCardDetail (
