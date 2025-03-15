@@ -17,6 +17,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "WarrantyCardOutsourceServlet", urlPatterns = {"/WarrantyCard/OutsourceRequest"})
 public class WarrantyCardOutsourceServlet extends HttpServlet {
@@ -72,11 +73,11 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
 
             // Kiểm tra contractorID hợp lệ và có RoleID = 4
             Staff contractor = staffDAO.getStaffById(contractorId);
-            if (contractorId != null && contractor != null && contractor.getRole()== 4) {
+            if (contractorId != null && contractor != null && contractor.getRole() == 4) {
                 // Tạo bản ghi WarrantyCardProcess với Action = request_outsource
                 WarrantyCardProcess newProcess = new WarrantyCardProcess();
                 newProcess.setWarrantyCardID(warrantyCardId);
-                newProcess.setHandlerID(staff.getStaffID()); 
+                newProcess.setHandlerID(staff.getStaffID());
                 newProcess.setAction("request_outsource");
                 newProcess.setNote("Outsourced to Repair Contractor ID: " + contractorId + " (" + contractor.getName() + ")");
 
@@ -103,6 +104,15 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
 
         // Nếu có lỗi, quay lại trang OutsourceRequest
         doGet(request, response);
+    }
+
+    private boolean isValidProcessAction(String action) {
+        return action != null && Set.of("outsource",
+                "create", "receive", "refuse", "fixing", "refix", "wait_components", "received_components",
+                "request_outsource", "unfixable_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
+                "receive_outsource", "fixed_outsource", "cancel_outsource", "back_outsource",
+                "receive_from_outsource", "fixed", "completed", "cancel"
+        ).contains(action);
     }
 
     @Override

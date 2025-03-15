@@ -350,7 +350,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
    private boolean isValidProcessAction(String action) {
     return action != null && Set.of("outsource",
         "create", "receive", "refuse", "fixing", "refix", "wait_components", "received_components",
-        "request_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
+        "request_outsource","unfixable_outsource", "accept_outsource", "refuse_outsource", "send_outsource", "lost",
         "receive_outsource", "fixed_outsource", "cancel_outsource", "back_outsource",
         "receive_from_outsource", "fixed", "completed", "cancel"
     ).contains(action);

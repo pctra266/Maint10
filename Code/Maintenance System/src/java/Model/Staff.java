@@ -143,6 +143,15 @@ public class Staff {
     public void setImage(String image) {
         this.image = image;
     } 
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+    
     
     public boolean hasPermissions(String per){
         for (String p : permissions) {

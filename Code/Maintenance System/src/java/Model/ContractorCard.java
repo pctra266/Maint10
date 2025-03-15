@@ -1,5 +1,7 @@
 package Model;
 
+import java.sql.Timestamp;
+
 public class ContractorCard {
     private int contractorCardID;
     private int warrantyCardID;
@@ -7,6 +9,7 @@ public class ContractorCard {
     private int contractorID;
     private String status;
     private String note;
+    private Timestamp date;
 
     public ContractorCard() {}
 
@@ -59,6 +62,16 @@ public class ContractorCard {
     public void setNote(String note) {
         this.note = note;
     }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
+    }
+    
+    
 
     @Override
     public String toString() {

@@ -101,6 +101,7 @@ public class ContractorCardDAO extends DBContext {
                 contractorCard.setContractorID(rs.getInt("ContractorID"));
                 contractorCard.setStatus(rs.getString("Status"));
                 contractorCard.setNote(rs.getString("Note"));
+                contractorCard.setDate(rs.getTimestamp("Date"));
                 list.add(contractorCard);
             }
         } catch (SQLException e) {

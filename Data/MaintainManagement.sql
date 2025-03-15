@@ -186,8 +186,9 @@ CREATE TABLE ContractorCard (
 	WarrantyCardID int references WarrantyCard(WarrantyCardID),
 	StaffID int references Staff(StaffID),
 	ContractorID int references Staff(StaffID),
+	[Date] DATETIME DEFAULT GETDATE(),
 	--waiting tuong ung voi request-outsource, receive ~ accept_outsource, 
-	--cancel ~ reject_outsource/refuse_outsource/cancel_outsouce( khong sua duoc)
+	--cancel ~ reject_outsource/refuse_outsource/unfixable_outsouce( khong sua duoc)
 	[Status] NVARCHAR(20) CHECK (Status in ('waiting', 'receive', 'cancel', 'done')),
 	Note NVARCHAR(MAX)
 );
@@ -237,8 +238,8 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
     [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
-	'request_outsource', 'accept_outsource', 'refuse_outsource' , 'send_outsource','lost', 'receive_outsource', 'fixed_outsource', 
-	'cancel_outsource', 'back_outsource', 'receive_from_outsource' ,'fixed', 'completed', 'cancel')),
+	'request_outsource', 'cancel_outsource', 'accept_outsource', 'refuse_outsource' , 'send_outsource','lost', 'receive_outsource', 'fixed_outsource', 
+	'unfixable_outsource', 'back_outsource', 'receive_from_outsource' ,'fixed', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
