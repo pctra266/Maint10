@@ -112,7 +112,23 @@
                                     <td><a class="btn btn-primary" href="componentRequest?action=createComponentRequest&warrantyCardID=${o.warrantyCardID}&productCode=${o.productCode}">Create Component Request</a></td>
                                 </tr>
                             </c:forEach>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <form action="supplementRequest" method="get">
+                                            <input type="hidden" name="action" value="createSupplementRequest">
+                                            <button class="btn btn-secondary" type="submit">Supplement Request</button>
+                                        </form>
+                                    </td>
+                                    </tr>
                         </tbody>
+                        
                         
                         </table>
                          </form>   

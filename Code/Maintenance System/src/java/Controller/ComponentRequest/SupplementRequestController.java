@@ -93,6 +93,7 @@ public class SupplementRequestController extends HttpServlet {
     }
     private void showCreateSupplementRequest(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
+    request.setAttribute("ComponentType", request.getParameter("ComponentType"));
     request.setAttribute("brandList", componentDAO.getListBrand());
     request.setAttribute("typeList", componentDAO.getListType());
     request.getRequestDispatcher("supplementRequest.jsp").forward(request, response);
