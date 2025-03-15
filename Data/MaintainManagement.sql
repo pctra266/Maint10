@@ -331,6 +331,16 @@ CREATE TABLE ContactText (
     lastUpdated DATETIME DEFAULT GETDATE()
 );
 
+CREATE TABLE CustomerContact (
+    ContactID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100)  NULL,
+    Email NVARCHAR(100) NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Message NVARCHAR(MAX) NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);

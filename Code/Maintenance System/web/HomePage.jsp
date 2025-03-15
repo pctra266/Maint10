@@ -269,10 +269,7 @@
                                     </h6>
                                 </div>
                                 <div>
-                                    
-                                    <form > 
-                                        <button style="height: 50px" class="btn btn-primary " type="submit">Contact Support</button>
-                                    </form> 
+                                    <a style="height: 50px; justify-content: center; align-content: center" class="btn btn-primary " href="customerContactForm.jsp">Contact Support</a>
                                 </div>
                         </div>
                     </div>
