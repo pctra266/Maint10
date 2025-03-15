@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.HomePage;
 
 import DAO.HomePage_FooterDAO;
 import java.io.IOException;
@@ -16,10 +16,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ADMIN
+ * @author Tra Pham
  */
-@WebServlet(name="Home", urlPatterns={"/Home"})
-public class Home extends HttpServlet {
+@WebServlet(name="customizeHomepage", urlPatterns={"/customizeHomepage"})
+public class customizeHomepage extends HttpServlet {
    private final HomePage_FooterDAO footerDao = new HomePage_FooterDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -31,7 +31,7 @@ public class Home extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         request.setAttribute("footer", footerDao.getFooter());
-        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -69,5 +69,6 @@ public class Home extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+
 
 }

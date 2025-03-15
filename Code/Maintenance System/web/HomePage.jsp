@@ -287,11 +287,11 @@
                               <div class="row">
                                   <div class="col-md-12 text-center">
                                       <p class="mb-1">
-                                          <strong>Main10</strong> - Fast Repairs, Reliable Maintenance!
+                                          <strong>Main10</strong> - ${footer.slogan}
                                       </p>
-                                      <p class="mb-1">Address: 123 Đường ABC, Quận XYZ, TP.HCM</p>
-                                      <p class="mb-1">Hotline: 0123 456 789 | Email: support@main10.com</p>
-                                      <p class="mb-0">© 2025 Main10. All rights reserved.</p>
+                                      <p class="mb-1">Address: ${footer.address}</p>
+                                      <p class="mb-1">Hotline: ${footer.hotline} | Email: ${footer.email}</p>
+                                      <p class="mb-0">© ${footer.copyrightYear} Main10. All rights reserved.</p>
                                   </div>
                               </div>
                           </div>

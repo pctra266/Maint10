@@ -266,7 +266,7 @@ CREATE TABLE FeedbackLog (
 CREATE TABLE Media (
     MediaID INT IDENTITY(1,1) PRIMARY KEY,
     ObjectID INT NOT NULL, -- Liên kết trực tiếp đến ID của bảng liên quan
-    ObjectType NVARCHAR(50) NOT NULL CHECK (ObjectType IN ('Component', 'Product', 'WarrantyCard', 'Feedback')),
+    ObjectType NVARCHAR(50) NOT NULL CHECK (ObjectType IN ('Component', 'Product', 'WarrantyCard', 'Feedback','Cover','OurService')),
     MediaURL NVARCHAR(MAX) NOT NULL, -- URL ảnh hoặc video
     MediaType NVARCHAR(10) NOT NULL CHECK (MediaType IN ('image', 'video')), -- Phân loại
     UploadedDate DATETIME DEFAULT GETDATE()
@@ -300,7 +300,15 @@ CREATE TABLE Invoice (
 ALTER TABLE Payment
 ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
 
-
+CREATE TABLE footer_settings (
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    slogan VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    hotline VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    copyrightYear VARCHAR(255) NOT NULL,
+    lastUpdated  DATETIME DEFAULT GETDATE()
+);
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);

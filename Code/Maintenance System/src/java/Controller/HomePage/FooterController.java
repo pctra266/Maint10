@@ -3,9 +3,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
 
-package Controller;
+package Controller.HomePage;
 
 import DAO.HomePage_FooterDAO;
+import Model.Footer;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,10 +17,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author ADMIN
+ * @author Tra Pham
  */
-@WebServlet(name="Home", urlPatterns={"/Home"})
-public class Home extends HttpServlet {
+@WebServlet(name="FooterController", urlPatterns={"/FooterController"})
+public class FooterController extends HttpServlet {
    private final HomePage_FooterDAO footerDao = new HomePage_FooterDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -30,8 +31,26 @@ public class Home extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        request.setAttribute("footer", footerDao.getFooter());
-        request.getRequestDispatcher("HomePage.jsp").forward(request, response);
+        String slogan = request.getParameter("slogan");
+        String address = request.getParameter("address");
+        String hotline = request.getParameter("hotline");
+        String email = request.getParameter("email");
+        String copyrightYear = request.getParameter("copyrightYear");
+        
+        Footer footer = new Footer();
+        footer.setSlogan(slogan);
+        footer.setAddress(address);
+        footer.setHotline(hotline);
+        footer.setEmail(email);
+        footer.setCopyrightYear(copyrightYear);
+        boolean success = footerDao.updateFooter(footer);
+        if(success){
+            request.setAttribute("messFooter", "update successfully");
+        }else{
+            request.setAttribute("messFooter", "update fail");
+        }
+        request.setAttribute("footer", footer);
+        request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
