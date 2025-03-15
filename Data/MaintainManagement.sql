@@ -223,6 +223,7 @@ CREATE TABLE ComponentRequestResponsible (
 CREATE TABLE MissingComponentRequest (
     MissingComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     ComponentName NVARCHAR(100) NOT NULL,
+	ComponentType NVARCHAR(20) NOT NULL CHECK (ComponentType IN ('product', 'unknown product')), -- Phân loại sản phẩm
     TypeID INT NULL REFERENCES ComponentType(TypeID), -- Loại linh kiện (nếu biết)
     BrandID INT NULL REFERENCES Brand(BrandID), -- Thương hiệu (nếu biết)
     RequestedBy INT NOT NULL REFERENCES Staff(StaffID), -- Người yêu cầu
