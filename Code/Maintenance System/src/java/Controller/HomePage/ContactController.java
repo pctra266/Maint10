@@ -5,6 +5,7 @@
 
 package Controller.HomePage;
 
+import DAO.HomePage_ContactDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -19,7 +20,7 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name="ContactController", urlPatterns={"/ContactController"})
 public class ContactController extends HttpServlet {
-   
+   private HomePage_ContactDAO contactDao = new HomePage_ContactDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -29,19 +30,16 @@ public class ContactController extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ContactController</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ContactController at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        String title = request.getParameter("title");
+        String subtitle = request.getParameter("subtitle");
+
+        boolean success = contactDao.updateContactText(title, subtitle);
+         if(success){
+            request.setAttribute("messContactText", "update successfully");
+        }else{
+            request.setAttribute("messContactText", "update fail");
         }
+        request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
     } 
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

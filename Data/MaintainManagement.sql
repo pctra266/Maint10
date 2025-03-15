@@ -310,6 +310,13 @@ CREATE TABLE footer_settings (
     lastUpdated  DATETIME DEFAULT GETDATE()
 );
 
+CREATE TABLE warranty_texts (
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subtitle TEXT NOT NULL,
+    lastUpdated DATETIME DEFAULT GETDATE()
+);
+
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
 CREATE NONCLUSTERED INDEX IX_WarrantyCard_WarrantyCardCode ON WarrantyCard(WarrantyCardCode);

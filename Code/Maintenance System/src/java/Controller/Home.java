@@ -5,6 +5,7 @@
 
 package Controller;
 
+import DAO.HomePage_ContactDAO;
 import DAO.HomePage_FooterDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,6 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @WebServlet(name="Home", urlPatterns={"/Home"})
 public class Home extends HttpServlet {
    private final HomePage_FooterDAO footerDao = new HomePage_FooterDAO();
+   private final HomePage_ContactDAO contactDao = new HomePage_ContactDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -30,6 +32,7 @@ public class Home extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        request.setAttribute("contactText", contactDao.getContactText());
         request.setAttribute("footer", footerDao.getFooter());
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);
     } 

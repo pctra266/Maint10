@@ -33,4 +33,15 @@
         <button type="submit">Update</button>
         </form>
     </body>
+    ${messContactText}
+    <h1>Customize Warranty Consultation Text</h1>
+    <form action="ContactController" method="post">
+        <label for="title">H1 Title:</label>
+        <input type="text" name="title" value="${contactText.title}" required><br>
+
+        <label for="subtitle">H6 Subtitle:</label>
+        <textarea name="subtitle" required> ${contactText.subtitle}</textarea><br>
+
+        <button type="submit">Update</button>
+    </form>
 </html>

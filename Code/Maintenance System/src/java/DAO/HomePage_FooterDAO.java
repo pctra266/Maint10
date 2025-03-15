@@ -23,7 +23,7 @@ public class HomePage_FooterDAO {
         
         String query = """
                        select id,slogan, address, hotline, email, copyrightYear
-                       from footer_settings
+                       from FooterSetting
                        where id = 1
                        """;
         try{
@@ -49,7 +49,7 @@ public class HomePage_FooterDAO {
     }
  public boolean updateFooter(Footer footer) {
     String query = """
-                   UPDATE footer_settings 
+                   UPDATE FooterSetting 
                    SET slogan = ?, address = ?, hotline = ?, email = ?, copyrightYear = ?, lastUpdated = GETDATE() 
                    WHERE id = 1
                    """;

@@ -249,8 +249,8 @@
                         </div><!-- end div 2 -->
                     
                     <div style="height: 50vh" class="bg-primary bg-opacity-50 d-flex justify-content-center align-items-center " >
-                        <div class="container text-center d-flex align-items-center ">
-                            <div>
+                        <div class="container text-center d-flex align-items-center justify-content-center">
+                            <div class="text-center">
                                 <div style="padding: 1% 1% 1% 1%" class="text-center">
                                     <h1 style="font-size: 60px; color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
@@ -258,14 +258,14 @@
                                          -2px 2px 0 rgba(0, 0, 0, 0.25),
                                          2px 2px 0 rgba(0, 0, 0, 0.25);"  
                                         class="fw-bolder" >
-                                        Warranty Consultation Registration
+                                        ${contactText.title}
                                     </h1>
                                     <h6 style="font-size: 20px; color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
                                          2px -2px 0 rgba(0, 0, 0, 0.25),
                                          -2px 2px 0 rgba(0, 0, 0, 0.25),
                                          2px 2px 0 rgba(0, 0, 0, 0.25);"
-                                         class="fw-bold" >Need assistance with your device? Our warranty consultation service is here to help. Contact now, and our team will reach out to support you as soon as possible.
+                                         class="fw-bold" >${contactText.subtitle}
                                     </h6>
                                 </div>
                                 <div>
