@@ -98,10 +98,24 @@
                         <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                             <div class="com-md-12 d-flex justify-content-between">
                                 <h2>Now process: ${latestProcess.action} </h2>
-                                <form action="searchwc" method="post">
-                                    <input type="hidden" class="form-control" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
-                                    <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
-                                </form>
+                                <!-- Nút Show Invoices chuyển hướng đến trang mới -->
+                                <div class="d-flex ">
+                                    <div>
+                                        <form>
+                                            <a href="Invoice/List?ID=${card.warrantyCardID}" class="btn btn-info me-2 h-100">Invoice list</a>
+
+                                        </form>
+
+                                    </div>
+                                    <div>
+                                        <form action="searchwc" class="h-100" method="post">
+                                            <input type="hidden" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
+                                            <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
+                                        </form>
+                                    </div>
+
+                                </div>
+
                             </div>
                             <h3>Process Actions</h3>
                             <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">

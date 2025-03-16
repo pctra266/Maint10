@@ -292,7 +292,8 @@ CREATE TABLE Payment (
     PaymentDate DATE NOT NULL,
     PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
     Amount FLOAT NOT NULL CHECK (Amount >= 0),
-    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail'))
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
+	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
 );
 
 CREATE TABLE Invoice (
@@ -311,8 +312,6 @@ CREATE TABLE Invoice (
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
 
-ALTER TABLE Payment
-ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
 
 CREATE TABLE FooterSetting (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,

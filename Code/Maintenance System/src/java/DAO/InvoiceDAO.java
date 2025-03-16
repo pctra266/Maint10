@@ -15,6 +15,21 @@ import java.util.List;
 
 public class InvoiceDAO extends DBContext {
 
+    private final String SELECT = """
+                                  SELECT i.[InvoiceID]
+                                        ,i.[InvoiceNumber]
+                                        ,i.[InvoiceType]
+                                        ,i.[WarrantyCardID]
+                                        ,i.[Amount]
+                                        ,i.[IssuedDate]
+                                        ,i.[DueDate]
+                                        ,i.[Status]
+                                        ,i.[CreatedBy]
+                                        ,i.[ReceivedBy]
+                                        ,i.[CustomerID]
+                                    FROM [dbo].[Invoice] i
+                                  """;
+
     public boolean addInvoice(Invoice invoice) {
         String sql = "INSERT INTO Invoice (InvoiceNumber, InvoiceType, WarrantyCardID, Amount,  DueDate, Status, CreatedBy, ReceivedBy, CustomerID) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -23,7 +38,7 @@ public class InvoiceDAO extends DBContext {
             stmt.setString(2, invoice.getInvoiceType());
             stmt.setInt(3, invoice.getWarrantyCardID());
             stmt.setDouble(4, invoice.getAmount());
-            stmt.setDate(5, new java.sql.Date(invoice.getDueDate().getTime()) );
+            stmt.setDate(5, new java.sql.Date(invoice.getDueDate().getTime()));
             stmt.setString(6, invoice.getStatus());
             stmt.setInt(7, invoice.getCreatedBy());
             if (invoice.getReceivedBy() != null) {
@@ -45,7 +60,7 @@ public class InvoiceDAO extends DBContext {
     }
 
     public Invoice getInvoiceById(int invoiceID) {
-        String sql = "SELECT * FROM Invoice WHERE InvoiceID = ?";
+        String sql = SELECT + " WHERE InvoiceID = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, invoiceID);
             try (ResultSet rs = stmt.executeQuery()) {
@@ -61,8 +76,24 @@ public class InvoiceDAO extends DBContext {
 
     public List<Invoice> getAllInvoices() {
         List<Invoice> invoices = new ArrayList<>();
-        String sql = "SELECT * FROM Invoice";
+        String sql = SELECT;
         try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                invoices.add(mapResultSetToInvoice(rs));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return invoices;
+    }
+
+    public List<Invoice> getAllInvoicesOfCard(int card) {
+        List<Invoice> invoices = new ArrayList<>();
+        String sql = SELECT + "join WarrantyCard wc on i.WarrantyCardID = wc.WarrantyCardID\n"
+                + "  where i.WarrantyCardID=?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql);) {
+            stmt.setInt(1, card);
+            ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 invoices.add(mapResultSetToInvoice(rs));
             }
@@ -107,5 +138,10 @@ public class InvoiceDAO extends DBContext {
         invoice.setReceivedBy(rs.getObject("ReceivedBy") != null ? rs.getInt("ReceivedBy") : null);
         invoice.setCustomerID(rs.getObject("CustomerID") != null ? rs.getInt("CustomerID") : null);
         return invoice;
+    }
+
+    public static void main(String[] args) {
+        InvoiceDAO d = new InvoiceDAO();
+        System.out.println(d.getAllInvoicesOfCard(46));
     }
 }
