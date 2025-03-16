@@ -152,6 +152,10 @@
         <servlet-name>SearchWarrantyCard</servlet-name>
         <servlet-class>Controller.WarrantyCard.SearchWarrantyCard</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SendWarrantyCard</servlet-name>
+        <servlet-class>Controller.WarrantyCard.SendWarrantyCard</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -315,5 +319,9 @@
     <servlet-mapping>
         <servlet-name>SearchWarrantyCard</servlet-name>
         <url-pattern>/searchwc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SendWarrantyCard</servlet-name>
+        <url-pattern>/sendWC</url-pattern>
     </servlet-mapping>
 </web-app>

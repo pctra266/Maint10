@@ -1,5 +1,5 @@
-
 package Utils;
+
 import jakarta.websocket.*;
 import jakarta.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -8,6 +8,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint("/notification")
 public class NotificationWebSocket {
+
     private static final Set<Session> sessions = new CopyOnWriteArraySet<>();
 
     @OnOpen
@@ -31,7 +32,7 @@ public class NotificationWebSocket {
             try {
                 session.getBasicRemote().sendText(message);
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
         }
     }

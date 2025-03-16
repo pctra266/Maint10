@@ -9,8 +9,16 @@
 
 <%!
     // Arrays for number to English words conversion
-    private static final String[] belowTwenty = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
-    private static final String[] tens = {"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    private static final String[] belowTwenty = {
+        "", "One", "Two", "Three", "Four", "Five", "Six", 
+        "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", 
+        "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", 
+        "Eighteen", "Nineteen"
+    };
+    private static final String[] tens = {
+        "", "", "Twenty", "Thirty", "Forty", "Fifty", 
+        "Sixty", "Seventy", "Eighty", "Ninety"
+    };
     private static final String[] englishUnits = {"", "thousand", "million", "billion"};
 
     // Converts a positive number into English words.
@@ -68,130 +76,223 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            /* --- Global Styles --- */
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f9fafb;
-                color: #333;
+            /* Reset các kiểu mặc định */
+            * {
                 margin: 0;
                 padding: 0;
+                box-sizing: border-box;
             }
+            /* Cấu hình cơ bản cho body */
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f4f7fa;
+                color: #333;
+                line-height: 1.6;
+            }
+            /* Wrapper chính chia layout */
             .wrapper {
                 display: flex;
                 min-height: 100vh;
             }
+            /* Thanh điều hướng bên trái (nếu có) */
+            .navbar-left {
+                width: 220px;
+                background-color: #2c3e50;
+                color: #fff;
+                padding: 20px;
+            }
+            /* Khu vực main */
             .main {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                background-color: #f9fafb;
-            }
-            main.content {
-                flex: 1;
+                background-color: #fff;
                 padding: 20px;
+            }
+            /* Thanh điều hướng trên cùng */
+            .navbar-top {
+                background-color: #ecf0f1;
+                padding: 10px 20px;
+                border-bottom: 1px solid #dcdcdc;
+            }
+            /* Nội dung chính */
+            .content {
+                flex: 1;
                 margin-top: 20px;
             }
+            /* Container trung tâm */
             .container {
                 max-width: 1200px;
                 margin: 0 auto;
-                padding: 20px;
             }
+            /* Styling cho form tìm kiếm và các nút */
             form {
-                background-color: #fff;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 20px;
             }
-            form h2 {
-                margin-bottom: 15px;
-                color: #2c3e50;
-            }
-            .form-group {
-                margin-bottom: 15px;
-            }
-            .form-group label {
+            form label {
                 font-weight: 600;
-                display: block;
                 margin-bottom: 5px;
-                color: #2c3e50;
+                display: block;
             }
-            .form-group input {
+            form input[type="text"] {
                 width: 100%;
                 padding: 10px;
-                font-size: 14px;
-                border: 1px solid #dcdcdc;
+                margin: 5px 0 10px;
+                border: 1px solid #ccc;
                 border-radius: 4px;
             }
-            .btn {
-                display: inline-block;
-                padding: 10px 20px;
-                font-size: 14px;
-                font-weight: 600;
+            form button {
+                background-color: #3498db;
                 color: #fff;
-                background-color: #007bff;
+                padding: 10px 15px;
                 border: none;
                 border-radius: 4px;
                 cursor: pointer;
                 transition: background-color 0.3s ease;
             }
-            .btn:hover {
-                background-color: #0056b3;
+            form button:hover {
+                background-color: #2980b9;
             }
+            /* Styling cho phần PDF preview */
             .pdf-preview {
-                background-color: #fff;
+                background: #f9f9f9;
                 border: 1px solid #ddd;
-                border-radius: 8px;
                 padding: 20px;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                margin-bottom: 20px;
+                border-radius: 4px;
             }
             .pdf-header {
-                font-size: 20px;
-                font-weight: 700;
-                text-align: center;
+                font-size: 1.5rem;
+                font-weight: 600;
+                border-bottom: 2px solid #3498db;
+                padding-bottom: 10px;
                 margin-bottom: 15px;
-                color: #2c3e50;
+                text-align: center;
             }
-            .pdf-content p {
-                margin: 8px 0;
-                line-height: 1.6;
+            .pdf-content {
+                font-size: 0.95rem;
+                line-height: 1.5;
             }
+            /* Styling cho thông tin cửa hàng */
+            .store-info p {
+                margin-bottom: 8px;
+            }
+            /* Styling cho bảng danh sách linh kiện */
             table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 15px;
+                margin: 20px 0;
             }
-            table th,
-            table td {
-                padding: 12px;
-                text-align: left;
+            table, th, td {
                 border: 1px solid #ddd;
             }
-            table th {
-                background-color: #f5f5f5;
-                font-weight: 600;
+            th, td {
+                padding: 10px;
+                text-align: left;
             }
+            th {
+                background-color: #3498db;
+                color: #fff;
+            }
+            tr:nth-child(even) {
+                background-color: #f2f2f2;
+            }
+            /* Styling cho thông tin khách hàng */
+            .customer-info {
+                margin: 20px 0;
+                display: flex;
+                justify-content: space-between;
+            }
+            .customer-info p {
+                margin-bottom: 10px;
+            }
+            /* Styling cho phần chữ ký */
             .signature-section {
+                margin-top: 30px;
                 display: flex;
                 align-items: center;
-                gap: 20px;
-                margin-top: 20px;
+                justify-content: space-between;
+            }
+            .signature-section p {
+                font-weight: 600;
             }
             .signature-box {
                 border: 2px dashed #ccc;
-                width: 200px;
+                width: 150px;
                 height: 50px;
-                border-radius: 4px;
             }
+            /* Responsive cho thiết bị nhỏ hơn */
             @media (max-width: 768px) {
-                .container {
-                    padding: 10px;
+                .customer-info {
+                    flex-direction: column;
+                }
+                .store-info {
+                    flex-direction: column;
+                    align-items: center;
                 }
                 .signature-section {
                     flex-direction: column;
                     align-items: flex-start;
                 }
+                .navbar-left {
+                    width: 180px;
+                }
             }
+            /* Bao quanh tất cả form bằng 1 class .button-row */
+            .button-row {
+                display: flex;
+                flex-wrap: wrap;     /* Cho phép xuống dòng khi không đủ chỗ */
+                align-items: center; /* Căn giữa theo chiều dọc */
+                gap: 1rem;           /* Khoảng cách giữa các form */
+                position: relative;  /* Tránh xung đột z-index (nếu có) */
+                margin-top: 10px;
+            }
+            /* Form tìm kiếm (có label + input + button) trên cùng 1 hàng */
+            .search-form {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                margin: 0;
+            }
+            /* Label hiển thị inline thay vì block (để không đẩy input xuống) */
+            .search-form label {
+                display: inline-block;
+                margin: 0;
+                font-weight: 600;
+                white-space: nowrap; /* Không xuống dòng giữa chừng */
+            }
+            /* Giới hạn chiều rộng cho input, tránh đẩy form tràn cột .col-md-4 */
+            .search-form input[type="text"] {
+                width: 180px; /* tuỳ chỉnh theo ý bạn */
+                padding: 8px;
+            }
+            /* Hai form Export/Send đơn giản, chỉ có 1 nút */
+            .inline-form {
+                display: flex;
+                align-items: center;
+                margin: 0;
+            }
+            /* Style chung cho nút */
+            button {
+                padding: 8px 12px;
+                cursor: pointer;
+                white-space: nowrap; /* Nút không tự xuống dòng chữ */
+            }
+
+            .pdf-preview {
+                background: #f9f9f9;
+                border: 1px solid #ddd;
+                padding: 20px;
+                border-radius: 4px;
+                /* Thêm dòng này */
+                overflow-x: auto; /* Tự cuộn ngang khi nội dung quá rộng */
+            }
+
+            .pdf-preview table {
+                width: 100%;
+                border-collapse: collapse;
+                /* Có thể thêm table-layout: fixed; nếu muốn các cột co lại */
+            }
+
         </style>
     </head>
     <body>
@@ -200,20 +301,43 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <div class="container mt-4">
+                    <div class="container">
                         <div class="row">
-                            <!-- Left Column: Search Form -->
-                            <div class="col-md-4">
+                            <!-- Cột 1: Search Form -->
+                            <div class="col-md-5">
                                 <h2>Search Warranty Card</h2>
-                                <form action="searchwc" method="post">
-                                    <div class="form-group">
-                                        <label for="warrantyCode">Enter Warranty Card Code:</label>
-                                        <input type="text" class="form-control" id="warrantyCode" name="warrantyCode" placeholder="e.g., WC12345" required pattern="[A-Za-z0-9]+" title="Please enter only letters and numbers without spaces">
+                                <div class="search-section">
+                                    <!-- Label và Input (dùng form="searchForm" để gắn vào form bên dưới) -->
+                                    <label for="warrantyCode">Enter Warranty Card Code:</label>
+                                    <input type="text"
+                                           id="warrantyCode"
+                                           name="warrantyCode"
+                                           placeholder="e.g., WC12345"
+                                           required pattern="[A-Za-z0-9]+"
+                                           title="Please enter only letters and numbers without spaces"
+                                           form="searchForm" />
+                                    <!-- Hàng nút -->
+                                    <div class="button-row">
+                                        <!-- Form Search -->
+                                        <form id="searchForm" action="searchwc" method="post">
+                                            <button type="submit">Search</button>
+                                        </form>
+                                        <!-- Form Export PDF -->
+                                        <form action="exportpdf" method="get">
+                                            <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                            <button type="submit">Export PDF</button>
+                                        </form>
+                                        <!-- Form Send Email -->
+                                        <form action="sendEmail" method="post">
+                                            <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                            <input type="hidden" name="customerEmail" value="${customer.email}" />
+                                            <button type="submit">Send Warranty Card</button>
+                                        </form>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Search</button>
-                                </form>
+                                </div>
                             </div>
-                            <div class="col-md-8">
+                            <!-- Cột 2: Preview Warranty Card -->
+                            <div class="col-md-7">
                                 <div class="pdf-preview">
                                     <div class="pdf-header">Warranty Card Preview</div>
                                     <div class="pdf-content">
@@ -294,7 +418,6 @@
                                                     </tr>
                                                     <c:choose>
                                                         <c:when test="${not empty component}">
-                                                            <!-- Initialize grandTotal as a number -->
                                                             <c:set var="grandTotal" value="${0}" scope="page" />
                                                             <c:forEach var="detail" items="${component}">
                                                                 <tr>
@@ -305,17 +428,25 @@
                                                                     <td>${detail.pricePerPiece}</td>
                                                                     <td>${detail.numberOfUses}</td>
                                                                     <td>${detail.Note}</td>
-                                                                    <td>${detail.totalPrice}</td>
+                                                                    <td>
+                                                                        <!-- Bỏ dấu phẩy ngăn cách nghìn -->
+                                                                        <fmt:formatNumber value="${detail.totalPrice}"
+                                                                                          type="number"
+                                                                                          maxFractionDigits="0"
+                                                                                          groupingUsed="false" />
+                                                                    </td>
                                                                 </tr>
-                                                                <!-- Sum up total; works with numeric values -->
                                                                 <c:set var="grandTotal" value="${grandTotal + detail.totalPrice}" scope="page" />
                                                             </c:forEach>
-                                                            <!-- Row showing numeric total -->
                                                             <tr>
                                                                 <td colspan="7" style="text-align:right"><strong>Total:</strong></td>
-                                                                <td>${grandTotal}</td>
+                                                                <td>
+                                                                    <fmt:formatNumber value="${grandTotal}"
+                                                                                      type="number"
+                                                                                      maxFractionDigits="0"
+                                                                                      groupingUsed="false" />
+                                                                </td>
                                                             </tr>
-
                                                             <tr>
                                                                 <td colspan="8" style="text-align:right; white-space: nowrap;">
                                                                     <strong>Total (in words): </strong>
@@ -330,20 +461,22 @@
                                                                                 total = 0;
                                                                             }
                                                                         }
-                                                                        out.print(convertNumberToEnglishWords(total));
+                                                                        // Chuyển về chữ thường, chỉ viết hoa chữ cái đầu
+                                                                        String words = convertNumberToEnglishWords(total).toLowerCase();
+                                                                        if (words != null && words.length() > 0) {
+                                                                            words = Character.toUpperCase(words.charAt(0)) + words.substring(1);
+                                                                        }
+                                                                        out.print(words);
                                                                     %>
                                                                     dollars
                                                                 </td>
                                                             </tr>
-
                                                         </c:when>
-
                                                         <c:otherwise>
                                                             <tr>
                                                                 <td colspan="9">No data available.</td>
                                                             </tr>
                                                         </c:otherwise>
-
                                                     </c:choose>
                                                 </table>
                                                 <hr>
@@ -362,27 +495,13 @@
                                         </c:if>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div style="display: flex; gap: 10px; align-items: center;">
-                            <form action="exportpdf" method="get">
-                                <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
-                                <button type="submit" class="btn btn-success">Export PDF</button>
-                            </form>
-
-                            <form action="sendEmail" method="post">
-                                <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
-                                <input type="hidden" name="customerEmail" value="${customer.email}" />
-                                <button type="submit" class="btn btn-info">Gửi Email Hợp Đồng</button>
-                            </form>
-                        </div>
-
-
-                    </div>
+                            </div> <!-- end col-md-7 -->
+                        </div> <!-- end row -->
+                    </div> <!-- end container -->
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
-            </div>
-        </div>
+            </div> <!-- end main -->
+        </div> <!-- end wrapper -->
         <script src="js/app.js"></script>
     </body>
 </html>
