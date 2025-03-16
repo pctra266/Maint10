@@ -136,14 +136,41 @@ CREATE TABLE ProductComponents (
     Quantity INT NOT NULL CHECK (Quantity >= 1) --Component in a product if equal to 0, it should not be in this table
 );
 
+CREATE TABLE ExtendedWarranty (
+    ExtendedWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ExtendedWarrantyName NVARCHAR(100) NOT NULL, 
+    ExtendedPeriodInMonths INT NOT NULL,       
+    Price DECIMAL(18,2) NOT NULL,              
+    ExtendedWarrantyDescription NVARCHAR(500) NULL,
+);
+--  PackageWarranty table
+CREATE TABLE PackageWarranty (
+    PackageWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyStartDate DATETIME NOT NULL,          
+    WarrantyEndDate DATETIME NOT NULL,            
+    Note NVARCHAR(500) NULL, 
+	IsActive BIT DEFAULT 1 NOT NULL,
+);
+
+CREATE TABLE ExtendedWarrantyDetail(
+	ExtendedWarrantyDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ExtendedWarrantyID INT NOT NULL REFERENCES ExtendedWarranty(ExtendedWarrantyID),
+	PackageWarrantyID INT NOT NULL REFERENCES PackageWarranty(PackageWarrantyID),
+	StartExtendedWarranty DATETIME NOT NULL,
+	EndExtendedWarranty DATETIME NOT NULL,
+)
+
+
 -- ProductDetail Table
 CREATE TABLE ProductDetail (
     ProductDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
     ProductID INT NOT NULL REFERENCES Product(ProductID),
     ProductCode NVARCHAR(50) NOT NULL UNIQUE,
-    PurchaseDate DATETIME NOT NULL
+    PurchaseDate DATETIME NOT NULL,
+	PackageWarrantyID INT NULL UNIQUE REFERENCES PackageWarranty(PackageWarrantyID)
 );
+
 
 -- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
 CREATE TABLE UnknownProduct (
