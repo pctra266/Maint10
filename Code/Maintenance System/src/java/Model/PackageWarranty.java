@@ -11,7 +11,7 @@ public class PackageWarranty {
     private String customerName;
     private String email;
     private String productName;
-    
+    private String extendedWarrantyName;
     private int packageWarrantyID;
     private Date warrantyStartDate;
     private Date warrantyEndDate;
@@ -27,6 +27,14 @@ public class PackageWarranty {
     public PackageWarranty() {
     }
 
+    public String getExtendedWarrantyName() {
+        return extendedWarrantyName;
+    }
+
+    public void setExtendedWarrantyName(String extendedWarrantyName) {
+        this.extendedWarrantyName = extendedWarrantyName;
+    }
+    
     public boolean isIsActive() {
         return isActive;
     }

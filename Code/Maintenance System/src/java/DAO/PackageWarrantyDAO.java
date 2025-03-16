@@ -12,7 +12,7 @@ public class PackageWarrantyDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
-    // Lấy toàn bộ danh sách PackageWarranty theo câu truy vấn
+    
     public ArrayList<PackageWarranty> getListPackageWarranty() {
         ArrayList<PackageWarranty> list = new ArrayList<>();
         String query = """
@@ -31,7 +31,8 @@ public class PackageWarrantyDAO {
               
             	EWD.ExtendedWarrantyDetailID,
                 EWD.StartExtendedWarranty,
-                EWD.EndExtendedWarranty
+                EWD.EndExtendedWarranty,
+                EW.ExtendedWarrantyName
             
             FROM ProductDetail PD
                 JOIN Customer C ON PD.CustomerID = C.CustomerID
@@ -61,6 +62,7 @@ public class PackageWarrantyDAO {
                 pkg.setStartExtendedWarranty(rs.getDate("StartExtendedWarranty"));
                 pkg.setEndExtendedWarranty(rs.getDate("EndExtendedWarranty"));
                 
+                pkg.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
                 list.add(pkg);
             }
         } catch (SQLException e) {
@@ -117,5 +119,66 @@ public class PackageWarrantyDAO {
             e.printStackTrace();
         }
         return false;
+    }
+    public PackageWarranty getPackageWarrantyByID(String packageWarrantyID) {
+    PackageWarranty pkg = null;
+    String query = """
+        SELECT
+            PD.ProductCode,
+            C.[Name] AS CustomerName,
+            C.Email,
+            P.ProductName,
+            
+            PW.PackageWarrantyID,
+            PW.WarrantyStartDate,
+            PW.WarrantyEndDate,
+            PW.Note,
+            PW.IsActive,
+            
+            EW.ExtendedWarrantyName,
+            
+            EWD.ExtendedWarrantyDetailID,
+            EWD.StartExtendedWarranty,
+            EWD.EndExtendedWarranty
+        FROM ProductDetail PD
+            JOIN Customer C ON PD.CustomerID = C.CustomerID
+            JOIN Product P ON PD.ProductID = P.ProductID
+            LEFT JOIN PackageWarranty PW ON PD.PackageWarrantyID = PW.PackageWarrantyID
+            LEFT JOIN ExtendedWarrantyDetail EWD ON PW.PackageWarrantyID = EWD.PackageWarrantyID
+            LEFT JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID
+        WHERE PW.PackageWarrantyID = ?
+        """;
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        ps.setString(1, packageWarrantyID);
+        rs = ps.executeQuery();
+        if(rs.next()){
+            pkg = new PackageWarranty();
+            pkg.setProductCode(rs.getString("ProductCode"));
+            pkg.setCustomerName(rs.getString("CustomerName"));
+            pkg.setEmail(rs.getString("Email"));
+            pkg.setProductName(rs.getString("ProductName"));
+            
+            pkg.setPackageWarrantyID(rs.getInt("PackageWarrantyID"));
+            pkg.setWarrantyStartDate(rs.getDate("WarrantyStartDate"));
+            pkg.setWarrantyEndDate(rs.getDate("WarrantyEndDate"));
+            pkg.setNote(rs.getString("Note"));
+            pkg.setActive(rs.getBoolean("IsActive"));
+            
+            pkg.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+            pkg.setExtendedWarrantyDetailID(rs.getInt("ExtendedWarrantyDetailID"));
+            pkg.setStartExtendedWarranty(rs.getDate("StartExtendedWarranty"));
+            pkg.setEndExtendedWarranty(rs.getDate("EndExtendedWarranty"));
+        }
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+    return pkg;
+}
+
+    public static void main(String[] args) {
+        PackageWarrantyDAO dao = new PackageWarrantyDAO();
+        System.out.println(dao.getListPackageWarranty());
     }
 }
