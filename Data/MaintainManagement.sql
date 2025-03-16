@@ -168,7 +168,7 @@ CREATE TABLE ProductDetail (
     ProductID INT NOT NULL REFERENCES Product(ProductID),
     ProductCode NVARCHAR(50) NOT NULL UNIQUE,
     PurchaseDate DATETIME NOT NULL,
-	PackageWarrantyID INT NULL UNIQUE REFERENCES PackageWarranty(PackageWarrantyID)
+	PackageWarrantyID INT NOT NULL UNIQUE REFERENCES PackageWarranty(PackageWarrantyID)
 );
 
 
