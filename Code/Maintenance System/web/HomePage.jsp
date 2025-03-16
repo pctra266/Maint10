@@ -122,13 +122,13 @@
                                 </div>
                                 <div>
                                     
-                                    <form > <!-- form here -->
+                                    <form action="SearchWarrantyController" method="get" > <!-- form here -->
                                         
                                         <div style="height: 55px;" class="input-group mx-auto w-50">
                                             <div class="position-absolute bg-secondary opacity-25 rounded-3"
                                                  style="top: -10px; left: -10px; right: -10px; bottom: -10px; z-index: 0;">
                                             </div>
-                                            <input type="search" class="form-control" placeholder="Information code">
+                                            <input type="search" name="searchValue" class="form-control" placeholder="Information code">
                                             <div class="input-group-append">
                                                 <button style="height: 55px" class="btn btn-primary" type="submit">Search</button>
                                             </div>
@@ -136,7 +136,7 @@
                                         <div class="mx-auto text-center">
                                         <div style="margin-top: 15px" >
                                             <label class="form-check form-check-inline">
-                                                <input checked="" class="form-check-input" type="radio" name="searchType" value="">
+                                                <input  class="form-check-input" type="radio" name="searchType" value="phone">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -146,7 +146,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <input class="form-check-input" type="radio" name="searchType" value="email">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -156,7 +156,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <input class="form-check-input" type="radio" name="searchType" value="productCode" checked="">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
