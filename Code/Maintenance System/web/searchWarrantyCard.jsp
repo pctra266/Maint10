@@ -1,72 +1,59 @@
 <%-- 
     Document   : viewProduct
     Created on : Feb 21, 2025, 11:49:16 PM
-    Author     : sonNH
+    Author     : sonNH (Modified to English)
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%! 
-    private static final String[] CHU = {"không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"};
+<%!
+    // Arrays for number to English words conversion
+    private static final String[] belowTwenty = {"", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+    private static final String[] tens = {"", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+    private static final String[] englishUnits = {"", "thousand", "million", "billion"};
 
-    // Hàm chuyển đổi số sang chữ (dành cho số dương)
-    public String convertNumberToVietnameseWords(long number) {
+    // Converts a positive number into English words.
+    public String convertNumberToEnglishWords(long number) {
         if (number < 0) {
-            return "Không hợp lệ";
+            return "Not valid";
         }
         if (number == 0) {
-            return "không";
+            return "zero";
         }
-        String[] units = {"", " triệu", " tỷ"}; // mảng chứa đơn vị sau mỗi nhóm 3  số
-        int unitIndex = 0; // biến chỉ số đơn vị
-
-        String result = "";
-
+        String words = "";
+        int unitIndex = 0;
         while (number > 0) {
-            int n = (int)(number % 1000); // lấy ra 3 chữ số cuối cùng
-            if(n != 0) {
-                result = convertLessThanOneThousand(n) + units[unitIndex] + " " + result; // chuyển 3 chữ số này thành chữ và ghép dơn vị
-            }
-            number /= 1000; // bỏ đi 3 chữ số vừa xử lí, tăng đơn vị
-            unitIndex++;
-        }
-        return result.trim();// cắt khoảng trống 2 đầu của chuỗi
-    }
-
-    // Hàm chuyển đổi số nhỏ hơn 1000 sang chữ
-    public String convertLessThanOneThousand(int number) {
-        String result = "";
-        int hundred = number / 100; // lấy hàng trăm
-        int tenUnit = number % 100; // lấy hàng chục và đơn vị 
-
-        if (hundred > 0) {
-            result += CHU[hundred] + " trăm";
-
-            if(tenUnit < 10 && tenUnit > 0) {
-                result += " lẻ";
-            }
-
-        }
-        if (tenUnit >= 10) {
-            int ten = tenUnit / 10; // lấy số hàng chục
-            int unit = tenUnit % 10; // lấy số hàng đơn vị
-            if(ten == 1) { 
-                result += " mười";
-            } else {
-                result += " " + CHU[ten] + " mươi";
-            }
-            if(unit > 0) {
-                if(unit == 1 && ten > 1) {
-                    result += " mốt";
-                } else if(unit == 5) {
-                    result += " lăm";
-                } else {
-                    result += " " + CHU[unit];
+            int n = (int)(number % 1000); // extract last three digits
+            if (n != 0) {
+                String s = convertLessThanOneThousandEnglish(n);
+                if (!s.isEmpty()) {
+                    words = s + " " + englishUnits[unitIndex] + " " + words;
                 }
             }
-        } else if(tenUnit > 0) {
-            result += " " + CHU[tenUnit];
+            number /= 1000;
+            unitIndex++;
+        }
+        return words.trim();
+    }
+
+    // Converts a number less than 1000 into English words.
+    public String convertLessThanOneThousandEnglish(int number) {
+        String result = "";
+        if (number >= 100) {
+            result += belowTwenty[number / 100] + " hundred";
+            number %= 100;
+            if (number > 0) {
+                result += " ";
+            }
+        }
+        if (number >= 20) {
+            result += tens[number / 10];
+            if (number % 10 > 0) {
+                result += " " + belowTwenty[number % 10];
+            }
+        } else if (number > 0) {
+            result += belowTwenty[number];
         }
         return result;
     }
@@ -215,13 +202,13 @@
                 <main class="content">
                     <div class="container mt-4">
                         <div class="row">
-                            <!-- Cột trái: Form tìm kiếm -->
+                            <!-- Left Column: Search Form -->
                             <div class="col-md-4">
                                 <h2>Search Warranty Card</h2>
                                 <form action="searchwc" method="post">
                                     <div class="form-group">
                                         <label for="warrantyCode">Enter Warranty Card Code:</label>
-                                        <input type="text" class="form-control" id="warrantyCode" name="warrantyCode" placeholder="Ví dụ: WC12345" required>
+                                        <input type="text" class="form-control" id="warrantyCode" name="warrantyCode" placeholder="e.g., WC12345" required pattern="[A-Za-z0-9]+" title="Please enter only letters and numbers without spaces">
                                     </div>
                                     <button type="submit" class="btn btn-primary">Search</button>
                                 </form>
@@ -230,26 +217,26 @@
                                 <div class="pdf-preview">
                                     <div class="pdf-header">Warranty Card Preview</div>
                                     <div class="pdf-content">
-                                        <!-- Mục 1: Thông tin cửa hàng/sửa chữa -->
+                                        <!-- Section 1: Store/Repair Information -->
                                         <div style="display: flex; justify-content: space-around" class="store-info">
                                             <div>
                                                 <p><strong>Store:</strong> ABC Electronics</p>
-                                                <p><strong>Address:</strong> 123 Đường XYZ, TP. HCM</p>
+                                                <p><strong>Address:</strong> 123 XYZ Street, Ho Chi Minh City</p>
                                                 <p><strong>Contact:</strong> 0901 234 567</p>
                                                 <p><strong>Email:</strong> support@abc-electronics.com</p>
                                             </div>
                                             <div>
-                                                <p><strong>Form:</strong> ABC Electronics</p>
-                                                <p><strong>Serial:</strong> 123 Đường XYZ, TP. HCM</p>
+                                                <p><strong>Branch:</strong> ABC Electronics</p>
+                                                <p><strong>Serial:</strong> 123 XYZ Street, Ho Chi Minh City</p>
                                                 <p><strong>No:</strong> 0901 234 567</p>
                                             </div>
                                         </div>
                                         <hr>
-                                        <!-- Kiểm tra nếu có lỗi -->
+                                        <!-- Check for errors -->
                                         <c:if test="${not empty error}">
                                             <p style="color: red;">${error}</p>
                                         </c:if>
-                                        <!-- Thông tin hóa đơn bảo hành -->
+                                        <!-- Warranty Card Information -->
                                         <c:if test="${not empty warrantyCard}">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -263,7 +250,7 @@
                                                     <p><strong>Staff Email:</strong> ${staff.email}</p>
                                                 </div>
                                                 <hr>
-                                                <!-- Mục 2: Thông tin khách hàng -->
+                                                <!-- Section 2: Customer Information -->
                                                 <div class="customer-info" style="display: flex; justify-content: space-between">
                                                     <div>
                                                         <p><strong>Customer Name:</strong> ${customer.name}</p>
@@ -293,7 +280,7 @@
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                <!-- Mục 4: Danh sách linh kiện bảo hành -->
+                                                <!-- Section 4: Component List -->
                                                 <table border="1">
                                                     <tr>
                                                         <th>Component Code</th>
@@ -307,7 +294,7 @@
                                                     </tr>
                                                     <c:choose>
                                                         <c:when test="${not empty component}">
-                                                            <!-- Khởi tạo grandTotal dưới dạng số -->
+                                                            <!-- Initialize grandTotal as a number -->
                                                             <c:set var="grandTotal" value="${0}" scope="page" />
                                                             <c:forEach var="detail" items="${component}">
                                                                 <tr>
@@ -320,50 +307,51 @@
                                                                     <td>${detail.Note}</td>
                                                                     <td>${detail.totalPrice}</td>
                                                                 </tr>
-                                                                <!-- Cộng dồn giá; nếu detail.totalPrice là kiểu double/float thì vẫn được -->
+                                                                <!-- Sum up total; works with numeric values -->
                                                                 <c:set var="grandTotal" value="${grandTotal + detail.totalPrice}" scope="page" />
                                                             </c:forEach>
-                                                            <!-- Dòng hiển thị tổng số dạng số -->
+                                                            <!-- Row showing numeric total -->
                                                             <tr>
                                                                 <td colspan="7" style="text-align:right"><strong>Total:</strong></td>
                                                                 <td>${grandTotal}</td>
                                                             </tr>
-                                                            <!-- Dòng hiển thị tổng số dạng chữ -->
+
                                                             <tr>
-                                                                <td colspan="7" style="text-align:right"><strong>Total (Bằng chữ): </strong></td>
-                                                                <td>
+                                                                <td colspan="8" style="text-align:right; white-space: nowrap;">
+                                                                    <strong>Total (in words): </strong>
                                                                     <%
                                                                         Object gtObj = pageContext.getAttribute("grandTotal");
                                                                         long total = 0;
                                                                         if (gtObj != null) {
                                                                             try {
-                                                                                // 1) Parse thành double
                                                                                 double doubleVal = Double.parseDouble(gtObj.toString());
-                                                                                // 2) Ép về long nếu chỉ cần lấy phần nguyên
                                                                                 total = (long) doubleVal;
                                                                             } catch (Exception e) {
                                                                                 total = 0;
                                                                             }
                                                                         }
-                                                                        out.print(convertNumberToVietnameseWords(total));
+                                                                        out.print(convertNumberToEnglishWords(total));
                                                                     %>
-                                                                    nghìn đồng
+                                                                    dollars
                                                                 </td>
                                                             </tr>
+
                                                         </c:when>
+
                                                         <c:otherwise>
                                                             <tr>
-                                                                <td colspan="9">Không có dữ liệu.</td>
+                                                                <td colspan="9">No data available.</td>
                                                             </tr>
                                                         </c:otherwise>
+
                                                     </c:choose>
                                                 </table>
                                                 <hr>
                                                 <div style="display: flex; justify-content: space-between">
                                                     <h4>Signature Confirmation</h4>
-                                                    <h4>Ha Noi, ${day}/${month}/${year}</h4>
+                                                    <h4>Hanoi, ${day}/${month}/${year}</h4>
                                                 </div>
-                                                <!-- Mục 8: Chữ ký/Xác nhận -->
+                                                <!-- Section 8: Signatures/Confirmation -->
                                                 <div style="display: flex; gap: 20px; align-items: center" class="signature-section">
                                                     <p><strong>Customer:</strong></p>
                                                     <div class="signature-box"></div>
@@ -376,10 +364,20 @@
                                 </div>
                             </div>
                         </div>
-                        <form action="exportpdf" method="get">
-                            <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
-                            <button type="submit" class="btn btn-success">Export PDF</button>
-                        </form>
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <form action="exportpdf" method="get">
+                                <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                <button type="submit" class="btn btn-success">Export PDF</button>
+                            </form>
+
+                            <form action="sendEmail" method="post">
+                                <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                <input type="hidden" name="customerEmail" value="${customer.email}" />
+                                <button type="submit" class="btn btn-info">Gửi Email Hợp Đồng</button>
+                            </form>
+                        </div>
+
+
                     </div>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
