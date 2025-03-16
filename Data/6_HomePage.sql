@@ -7,3 +7,6 @@ VALUES
 INSERT INTO ContactText (title, subtitle) 
 VALUES ('Warranty Consultation Registration', 
         'Need assistance with your device? Our warranty consultation service is here to help. Contact now, and our team will reach out to support you as soon as possible.');
+
+INSERT INTO Media (ObjectID, ObjectType, MediaURL, MediaType,UploadedDate) VALUES (1, 'Cover', '/img/backgrounds/bg1.jpg','image', GETDATE())
+

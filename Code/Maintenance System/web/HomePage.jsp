@@ -5,6 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="coverDAO" class="DAO.HomePage_CoverDAO" scope="page" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,8 +99,8 @@
                         </div>
                     </ul><!-- end ul2 -->
                 </nav>
-                        
-                  <main style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
+                     <c:set var="backgroundImage" value="${coverDAO.getBackgroundImage()}" />
+                  <main style="background-image: url('${pageContext.request.contextPath}${backgroundImage}'); background-size: cover; background-position: center; background-attachment: fixed;">
                       <div style="height: 95vh" class="bg-primary bg-opacity-50  rounded shadow-lg p-5">
                         <div class="container  ">
                             <div>
