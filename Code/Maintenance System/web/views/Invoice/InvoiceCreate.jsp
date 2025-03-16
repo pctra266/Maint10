@@ -16,47 +16,107 @@
             <div class="main">
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
-                    <h2>Create Invoice for Warranty Card: ${warrantyCard.warrantyCardCode}</h2>
+                    <div class="col-md-12 row d-flex justify-content-center">
+                        <div class="col-md-6">
+                            <h1 class="text-center">Create Invoice for Card: ${warrantyCard.warrantyCardCode}</h1>
 
-                    <!-- Alerts -->
-                    <c:if test="${not empty updateAlert1}">
-                        <div class="alert alert-success alert-dismissible" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <div class="alert-message"><strong>${updateAlert1}</strong></div>
-                        </div>
-                    </c:if>
-                    <c:if test="${not empty updateAlert0}">
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <div class="alert-message"><strong>${updateAlert0}</strong></div>
-                        </div>
-                    </c:if>
+                            <!-- Alerts -->
+                            <c:if test="${not empty updateAlert1}">
+                                <div class="alert alert-success alert-dismissible" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message"><strong>${updateAlert1}</strong></div>
+                                </div>
+                            </c:if>
+                            <c:if test="${not empty updateAlert0}">
+                                <div class="alert alert-danger alert-dismissible" role="alert">
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                    <div class="alert-message"><strong>${updateAlert0}</strong></div>
+                                </div>
+                            </c:if>
 
-                    <form action="Invoice/Create" method="post">
-                        <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
-                        <input type="hidden" name="invoiceType" value="TechnicianToCustomer" id="amount" class="form-control" step="0.01" min="0" required>
-                        <div class="mb-3">
-                            <label for="dueDate" class="form-label">Due Date:</label>
-                            <input type="date" name="dueDate" id="dueDate" class="form-control">
+                            <form action="Invoice/Create" method="post" onsubmit="return validateDueDate()">
+                                <input type="hidden" name="ID" value="${warrantyCard.warrantyCardID}">
+                                <input type="hidden" name="invoiceType" value="TechnicianToCustomer" id="amount" class="form-control" step="0.01" min="0" required>
+                                <div class="mb-3">
+                                    <label for="staffName" class="form-label">Staff:</label>
+                                    <input type="text" readonly="true"  id="staffName" class="form-control" value="${staff.name}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="customerName" class="form-label">Customer:</label>
+                                    <input type="text" readonly="true" id="customerName" class="form-control" value="${warrantyCard.customerName}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="price" class="form-label">Amount:</label>
+                                    <input type="text" readonly="true" id="price" class="form-control" value="${price}">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dueDate" class="form-label">Due Date:</label>
+                                    <input type="date" name="dueDate" id="dueDate" class="form-control" required onchange="checkDueDate(this)">
+                                    <div id="dueDateError" class="invalid-feedback" style="display: none;">Due Date must be today or later.</div>
+                                </div>
+                                <div class="d-flex justify-content-center gap-3">
+                                    <button type="submit" class="btn btn-primary" style="width:7rem">Create Invoice</button>
+                                    <a href="WarrantyCard/Detail?ID=${warrantyCard.warrantyCardID}" style="width:7rem" class="btn btn-secondary d-flex justify-content-center align-items-md-center">Cancel</a>
+                                </div>
+                            </form>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Create Invoice</button>
-                        <a href="WarrantyCard/Detail?ID=${warrantyCard.warrantyCardID}" class="btn btn-secondary">Cancel</a>
-                    </form>
+                    </div>
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
         <script>
-            function toggleFields() {
-                const invoiceType = document.getElementById("invoiceType").value;
-                const receivedByField = document.getElementById("receivedByField");
-                const customerIDField = document.getElementById("customerIDField");
+                                        // Thiết lập Due Date mặc định và min
+                                        window.onload = function () {
+                                            const dueDateInput = document.getElementById('dueDate');
+                                            const today = new Date();
+                                            const defaultDueDate = new Date(today);
+                                            defaultDueDate.setDate(today.getDate() + 3); // Mặc định +3 ngày
 
-                receivedByField.style.display = invoiceType === "RepairContractorToTechnician" ? "block" : "none";
-                customerIDField.style.display = invoiceType === "TechnicianToCustomer" ? "block" : "none";
-            }
+                                            const year = today.getFullYear();
+                                            const month = String(today.getMonth() + 1).padStart(2, '0');
+                                            const day = String(today.getDate()).padStart(2, '0');
+                                            const todayFormatted = year + "-" + month + "-" + day;
+                                            dueDateInput.min = todayFormatted; // Ngày tối thiểu là hôm nay
+
+                                            const defaultYear = defaultDueDate.getFullYear();
+                                            const defaultMonth = String(defaultDueDate.getMonth() + 1).padStart(2, '0');
+                                            const defaultDay = String(defaultDueDate.getDate()).padStart(2, '0');
+                                            const defaultFormatted = defaultYear + "-" + defaultMonth + "-" + defaultDay;
+                                            dueDateInput.value = defaultFormatted; // Giá trị mặc định
+                                        };
+
+                                        // Kiểm tra Due Date khi thay đổi
+                                        function checkDueDate(input) {
+                                            const dueDate = new Date(input.value);
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0); // Đặt giờ về 0 để so sánh ngày
+                                            const errorDiv = document.getElementById('dueDateError');
+
+                                            if (dueDate < today) {
+                                                input.classList.add('is-invalid');
+                                                errorDiv.style.display = 'block';
+                                            } else {
+                                                input.classList.remove('is-invalid');
+                                                errorDiv.style.display = 'none';
+                                            }
+                                        }
+
+                                        // Kiểm tra trước khi submit form
+                                        function validateDueDate() {
+                                            const dueDateInput = document.getElementById('dueDate');
+                                            const dueDate = new Date(dueDateInput.value);
+                                            const today = new Date();
+                                            today.setHours(0, 0, 0, 0);
+
+                                            if (dueDate < today) {
+                                                dueDateInput.classList.add('is-invalid');
+                                                document.getElementById('dueDateError').style.display = 'block';
+                                                return false; // Ngăn submit
+                                            }
+                                            return true; // Cho phép submit
+                                        }
         </script>
     </body>
 </html>

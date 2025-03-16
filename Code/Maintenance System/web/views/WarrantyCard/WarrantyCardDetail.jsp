@@ -129,42 +129,10 @@
                                     <input type="hidden" name="processAction" value="fixed">
                                     <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
                                 </form>
-                              
-                                <button data-bs-toggle="modal" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'} data-bs-target="#centeredModalPrimary_Invoice">
-                                    Create Invoice
-                                </button>
-                                <div class="modal fade" id="centeredModalPrimary_Invoice" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" id="invoiceModalLabel">Create Invoice</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <form action="Invoice/Create" method="post" id="createInvoiceForm">
-                                                    <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}">
-                                                    <input type="hidden" name="invoiceType" value="TechnicianToCustomer">
-                                                    <input type="hidden" name="amount" value="${price}">
-
-                                                    <div class="mb-3">
-                                                        <label for="customerID" class="form-label">Customer ID:</label>
-                                                        <input type="number" name="customerID" id="customerID" class="form-control" value="${card.customerID}" readonly>
-                                                    </div>
-
-                                                    <div class="mb-3">
-                                                        <label for="dueDate" class="form-label">Due Date:</label>
-                                                        <input type="date" name="dueDate" id="dueDate" class="form-control" required>
-                                                    </div>
-
-                                                    <div class="modal-footer">
-                                                        <button type="submit" class="btn btn-primary">Create Invoice</button>
-                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <form action="Invoice/Create" method="get" class="d-inline">
+                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                    <button type="submit" class="btn btn-info me-2">Create Invoice</button>
+                                </form>
                                 <form action="vnpayajax" id="frmCreateOrder" method="post" class="d-inline">     
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
                                     <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount"  name="amount" type="number" value="${price}" />
@@ -608,7 +576,7 @@
                                             previewMedia({target: input});
                                         }
                                         // Thiết lập Due Date mặc định khi modal mở
-                                        document.getElementById('centeredModalPrimary_Invoice').addEventListener('shown.bs.modal', function () {
+                                        document.getElementById('centeredModalPrimary_Invoice_1').addEventListener('shown.bs.modal', function () {
                                             const dueDateInput = document.getElementById('dueDate');
                                             const today = new Date();
                                             const defaultDueDate = new Date(today);
