@@ -57,7 +57,29 @@ public class MarketingServiceItemController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        
+        if (action == null || action.trim().isEmpty()) {
+            List<MarketingServiceItem> items = itemDAO.getItemsBySectionID(1);
+            request.setAttribute("items", items);
+            request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
+        } else if (action.equals("edit")) {
+            int serviceID = Integer.parseInt(request.getParameter("serviceID"));
+            MarketingServiceItem item = itemDAO.getItemByID(serviceID);
+            request.setAttribute("item", item);
+            request.getRequestDispatcher("editServiceItem.jsp").forward(request, response);
+        } else if (action.equals("new")) {
+            request.getRequestDispatcher("addServiceItem.jsp").forward(request, response);
+        } else if (action.equals("delete")) {
+            int serviceID = Integer.parseInt(request.getParameter("serviceID"));
+            boolean deleted = itemDAO.deleteItem(serviceID);
+            String message = deleted ? "Item deleted successfully." : "Delete failed.";
+            request.setAttribute("message", message);
+            
+            List<MarketingServiceItem> items = itemDAO.getItemsBySectionID(1);
+            request.setAttribute("items", items);
+            request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
+    }
     }
 
     /** 
@@ -91,6 +113,11 @@ public class MarketingServiceItemController extends HttpServlet {
             item.setSortOrder(Integer.parseInt(request.getParameter("sortOrder")));
             boolean updated = itemDAO.updateItem(item);
             String message = updated ? "Item updated successfully." : "Update failed.";
+            request.setAttribute("message", message);
+        } else if (action.equals("delete")) {
+            int serviceID = Integer.parseInt(request.getParameter("serviceID"));
+            boolean deleted = itemDAO.deleteItem(serviceID);
+            String message = deleted ? "Item deleted successfully." : "Delete failed.";
             request.setAttribute("message", message);
         }
         

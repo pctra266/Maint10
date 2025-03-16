@@ -119,7 +119,7 @@
             </tbody>
         </table>
         <br>
-        <a href="editServiceItem.jsp?action=new">Add New Service Item</a>
+        <a href="addServiceItem.jsp">Add New Service Item</a>
         <br><br>
         <a href="MarketingServiceSectionController">Back to Section</a>
     </body>
