@@ -7,6 +7,8 @@ package Controller.WarrantyPackage;
 
 import DAO.PackageWarrantyDAO;
 import Model.PackageWarranty;
+import Model.Pagination;
+import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -21,8 +23,9 @@ import java.util.ArrayList;
  *
  * @author Tra Pham
  */
-@WebServlet(name="PackageWarrantyController", urlPatterns={"/PackageWarrantyController"})
+@WebServlet(name="PackageWarrantyController", urlPatterns={"/packageWarranty"})
 public class PackageWarrantyController extends HttpServlet {
+    private final int PAGE_SIZE = 5;
    private final PackageWarrantyDAO pkgDao = new PackageWarrantyDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
@@ -61,11 +64,62 @@ public class PackageWarrantyController extends HttpServlet {
     throws ServletException, IOException {
         String action = request.getParameter("action");
         
-        if(action == null || action.trim().isEmpty()){
-            // Lấy danh sách tất cả PackageWarranty và forward đến JSP danh sách
-            ArrayList<PackageWarranty> list = pkgDao.getListPackageWarranty();
-            request.setAttribute("packageWarranties", list);
-            request.getRequestDispatcher("packageWarrantyList.jsp").forward(request, response);
+        if(action == null || action.trim().isEmpty() || "view".equalsIgnoreCase(action)){
+            // param paging
+        String sort = request.getParameter("sort");
+        request.setAttribute("sort", sort);
+        String order = request.getParameter("order");
+        request.setAttribute("order", order);
+        
+        // param
+        String searchProductCode = request.getParameter("searchProductCode");
+        request.setAttribute("searchProductCode", searchProductCode);
+        String searchCustomerName = request.getParameter("searchCustomerName");
+        request.setAttribute("searchCustomerName", searchCustomerName);
+        String searchEmail = request.getParameter("searchEmail");
+        request.setAttribute("searchEmail", searchEmail);
+        String searchProductName = request.getParameter("searchProductName");
+        request.setAttribute("searchProductName", searchProductName);
+        String searchExtendedWarrantyName = request.getParameter("searchExtendedWarrantyName");
+        request.setAttribute("searchExtendedWarrantyName", searchExtendedWarrantyName);
+        String filterExtendWarranty = request.getParameter("filterExtendWarranty");
+        request.setAttribute("filterExtendWarranty", filterExtendWarranty);
+            System.out.println("filter: "+ filterExtendWarranty);
+        // Paging
+        int total = pkgDao.totalPackageWarranty(searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty);
+        request.setAttribute("sort", sort);
+        String pageParam = request.getParameter("page");
+        String pageSizeParam = request.getParameter("page-size");
+        int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
+        Integer pageSize;
+        pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : PAGE_SIZE;
+        int totalPages = (int) Math.ceil((double) total / pageSize);
+        if (page > totalPages) {
+            page = totalPages;
+        }
+        page = page < 1 ? 1 : page;
+        
+        // phan trang
+        Pagination pagination = new Pagination();
+        
+        pagination.setListPageSize(total); 
+        pagination.setCurrentPage(page);
+        pagination.setTotalPages(totalPages);
+        pagination.setTotalPagesToShow(5); 
+        pagination.setPageSize(pageSize);
+        pagination.setSort(sort);
+        pagination.setOrder(order);
+        pagination.setUrlPattern("/packageWarranty");
+        // take list
+        pagination.setSearchFields(new String[]{"searchProductCode", "searchCustomerName", "searchEmail", "searchProductName", "searchExtendedWarrantyName","filterExtendWarranty"});
+        pagination.setSearchValues(new String[]{searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty});
+        
+
+        ArrayList<PackageWarranty> list = pkgDao.getAllPackageWarranties(searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty, sort, order, page, pageSize);
+        request.setAttribute("packageWarrantyList", list);
+        request.setAttribute("pagination", pagination);
+        
+        request.getRequestDispatcher("packageWarrantyList.jsp").forward(request, response);
         } else if(action.equals("edit")){
             // Lấy thông tin một PackageWarranty theo ID để chỉnh sửa
             String id = request.getParameter("packageWarrantyID");

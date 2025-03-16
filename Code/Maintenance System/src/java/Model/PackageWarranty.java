@@ -4,9 +4,11 @@
  */
 package Model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PackageWarranty {
+    private final  SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy");
     private String productCode;
     private String customerName;
     private String email;
@@ -93,6 +95,9 @@ public class PackageWarranty {
         this.packageWarrantyID = packageWarrantyID;
     }
 
+    public String getWarrantyStartDate1() {
+        return outputFormat.format(warrantyStartDate);
+    }
     public Date getWarrantyStartDate() {
         return warrantyStartDate;
     }
@@ -103,6 +108,9 @@ public class PackageWarranty {
 
     public Date getWarrantyEndDate() {
         return warrantyEndDate;
+    }
+    public String getWarrantyEndDate1() {
+        return outputFormat.format(warrantyEndDate);
     }
 
     public void setWarrantyEndDate(Date warrantyEndDate) {
@@ -140,6 +148,12 @@ public class PackageWarranty {
     public void setEndExtendedWarranty(Date endExtendedWarranty) {
         this.endExtendedWarranty = endExtendedWarranty;
     }
+
+    @Override
+    public String toString() {
+        return "PackageWarranty{" + "productCode=" + productCode + ", customerName=" + customerName + ", email=" + email + ", productName=" + productName + ", extendedWarrantyName=" + extendedWarrantyName + ", packageWarrantyID=" + packageWarrantyID + ", warrantyStartDate=" + warrantyStartDate + ", warrantyEndDate=" + warrantyEndDate + ", note=" + note + ", isActive=" + isActive + ", extendedWarrantyDetailID=" + extendedWarrantyDetailID + ", startExtendedWarranty=" + startExtendedWarranty + ", endExtendedWarranty=" + endExtendedWarranty + '}';
+    }
+    
 }
 
 

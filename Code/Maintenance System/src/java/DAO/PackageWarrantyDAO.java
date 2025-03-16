@@ -12,6 +12,180 @@ public class PackageWarrantyDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
+    public ArrayList<PackageWarranty> getAllPackageWarranties(String searchProductCode, String searchCustomerName, 
+            String searchEmail, String searchProductName, String searchExtendedWarrantyName,String filterExtendWarranty,
+            String sort, String order, int page, int pageSize) {
+        ArrayList<PackageWarranty> list = new ArrayList<>();
+        String query = """
+            SELECT
+                PD.ProductCode,
+                C.[Name] AS CustomerName,
+                C.Email,
+                P.ProductName,
+                
+                PW.PackageWarrantyID,
+                PW.WarrantyStartDate,
+                PW.WarrantyEndDate,
+                PW.Note,
+                PW.IsActive,
+                
+                EW.ExtendedWarrantyName,
+                
+                EWD.ExtendedWarrantyDetailID,
+                EWD.StartExtendedWarranty,
+                EWD.EndExtendedWarranty
+            FROM ProductDetail PD
+                JOIN Customer C ON PD.CustomerID = C.CustomerID
+                JOIN Product P ON PD.ProductID = P.ProductID
+                LEFT JOIN PackageWarranty PW ON PD.PackageWarrantyID = PW.PackageWarrantyID
+                LEFT JOIN ExtendedWarrantyDetail EWD ON PW.PackageWarrantyID = EWD.PackageWarrantyID
+                LEFT JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID
+            WHERE 1=1
+            """;
+        if (searchProductCode != null && !searchProductCode.trim().isEmpty()) {
+            query += " and PD.ProductCode like ?";
+        }
+        if (searchCustomerName != null && !searchCustomerName.trim().isEmpty()) {
+            query += " and C.[Name] like ?";
+        }
+        if (searchEmail != null && !searchEmail.trim().isEmpty()) {
+            query += " and C.Email like ?";
+        }
+        if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+            query += " and P.ProductName like ?";
+        }
+        if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+            query += " and EW.ExtendedWarrantyName like ?";
+        }
+        if(filterExtendWarranty != null && !filterExtendWarranty.trim().isEmpty()){
+            if("hasExtend".equalsIgnoreCase(filterExtendWarranty)){
+                query += " and ExtendedWarrantyName is not null";
+            }else{
+                query += " and ExtendedWarrantyName is null";
+            }
+            
+        }
+        // Sắp xếp: nếu sort và order được cung cấp, dùng chúng, ngược lại sắp xếp theo PackageWarrantyID desc
+        if (sort != null && !sort.trim().isEmpty() && order != null && !order.trim().isEmpty()) {
+            query += " order by " + sort + " " + order;
+        } else {
+            query += " order by PW.PackageWarrantyID desc";
+        }
+        query += " offset ? rows fetch next ? rows only";
+        
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if (searchProductCode != null && !searchProductCode.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchProductCode.trim() + "%");
+            }
+            if (searchCustomerName != null && !searchCustomerName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchCustomerName.trim() + "%");
+            }
+            if (searchEmail != null && !searchEmail.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchEmail.trim() + "%");
+            }
+            if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchProductName.trim() + "%");
+            }
+            if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchExtendedWarrantyName.trim() + "%");
+            }
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                PackageWarranty pkg = new PackageWarranty();
+                pkg.setProductCode(rs.getString("ProductCode"));
+                pkg.setCustomerName(rs.getString("CustomerName"));
+                pkg.setEmail(rs.getString("Email"));
+                pkg.setProductName(rs.getString("ProductName"));
+                
+                pkg.setPackageWarrantyID(rs.getInt("PackageWarrantyID"));
+                pkg.setWarrantyStartDate(rs.getDate("WarrantyStartDate"));
+                pkg.setWarrantyEndDate(rs.getDate("WarrantyEndDate"));
+                pkg.setNote(rs.getString("Note"));
+                pkg.setActive(rs.getBoolean("IsActive"));
+                
+                pkg.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+                pkg.setExtendedWarrantyDetailID(rs.getInt("ExtendedWarrantyDetailID"));
+                pkg.setStartExtendedWarranty(rs.getDate("StartExtendedWarranty"));
+                pkg.setEndExtendedWarranty(rs.getDate("EndExtendedWarranty"));
+                
+                list.add(pkg);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    
+    // Tính tổng số PackageWarranty theo các điều kiện tìm kiếm
+    public int totalPackageWarranty(String searchProductCode, String searchCustomerName, 
+            String searchEmail, String searchProductName, String searchExtendedWarrantyName, String filterExtendWarranty) {
+        String query = """
+            SELECT count(*)
+            FROM ProductDetail PD
+                JOIN Customer C ON PD.CustomerID = C.CustomerID
+                JOIN Product P ON PD.ProductID = P.ProductID
+                LEFT JOIN PackageWarranty PW ON PD.PackageWarrantyID = PW.PackageWarrantyID
+                LEFT JOIN ExtendedWarrantyDetail EWD ON PW.PackageWarrantyID = EWD.PackageWarrantyID
+                LEFT JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID
+            WHERE 1=1
+            """;
+        if (searchProductCode != null && !searchProductCode.trim().isEmpty()) {
+            query += " and PD.ProductCode like ?";
+        }
+        if (searchCustomerName != null && !searchCustomerName.trim().isEmpty()) {
+            query += " and C.[Name] like ?";
+        }
+        if (searchEmail != null && !searchEmail.trim().isEmpty()) {
+            query += " and C.Email like ?";
+        }
+        if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+            query += " and P.ProductName like ?";
+        }
+        if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+            query += " and EW.ExtendedWarrantyName like ?";
+        }
+        if(filterExtendWarranty != null && !filterExtendWarranty.trim().isEmpty()){
+            if("hasExtend".equalsIgnoreCase(filterExtendWarranty)){
+                query += " and ExtendedWarrantyName is not null";
+            }else{
+                query += " and ExtendedWarrantyName is null";
+            }
+            
+        }
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if (searchProductCode != null && !searchProductCode.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchProductCode.trim() + "%");
+            }
+            if (searchCustomerName != null && !searchCustomerName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchCustomerName.trim() + "%");
+            }
+            if (searchEmail != null && !searchEmail.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchEmail.trim() + "%");
+            }
+            if (searchProductName != null && !searchProductName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchProductName.trim() + "%");
+            }
+            if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+                ps.setString(count++, "%" + searchExtendedWarrantyName.trim() + "%");
+            }
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
     
     public ArrayList<PackageWarranty> getListPackageWarranty() {
         ArrayList<PackageWarranty> list = new ArrayList<>();
@@ -179,6 +353,6 @@ public class PackageWarrantyDAO {
 
     public static void main(String[] args) {
         PackageWarrantyDAO dao = new PackageWarrantyDAO();
-        System.out.println(dao.getListPackageWarranty());
+//        System.out.println(dao.getAllPackageWarranties("1","","","","","","",1,5));
     }
 }
