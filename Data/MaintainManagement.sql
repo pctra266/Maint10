@@ -142,6 +142,7 @@ CREATE TABLE ExtendedWarranty (
     ExtendedPeriodInMonths INT NOT NULL,       
     Price DECIMAL(18,2) NOT NULL,              
     ExtendedWarrantyDescription NVARCHAR(500) NULL,
+	IsDelete BIT DEFAULT 0 NOT NULL,
 );
 --  PackageWarranty table
 CREATE TABLE PackageWarranty (
