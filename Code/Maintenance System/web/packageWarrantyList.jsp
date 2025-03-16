@@ -23,12 +23,14 @@
                 <main class="content">
                     <h1  class="text-center">Package Warranty List</h1>
                     <form method="get" action="packageWarranty">
+                         <input type="hidden" name="page" value="${pagination.currentPage}" />
+                        <input type="hidden" name="sort" value="${pagination.sort}" />
+                        <input type="hidden" name="order" value="${pagination.order}" />
                         <input type="hidden" name="action" value="view">
                         <div class="row"  style="justify-content: space-between">
                             <div style="margin-top: 15px;width: 500px"  class="col-sm-6 col-md-6" >
                                 <input style="margin-top: 15px"  class="form-control" type="search" name="searchProductCode" placeholder="Product Code" value="${searchProductCode}">
                                 <input style="margin-top: 15px"  class="form-control" type="search" name="searchEmail" placeholder="Email" value="${searchEmail}">
-                                <input style="margin-top: 15px"  class="form-control" type="search" name="searchExtendedWarrantyName" placeholder="Extended Warranty Name" value="${searchExtendedWarrantyName}">
                                  <div class="col-md-3" style="margin-top: 1rem;">
                                 <label >Show 
                                     <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -44,10 +46,10 @@
                             <div style="margin-top: 15px;width: 500px"  class="col-sm-6 col-md-6" >
                                 <input style="margin-top: 15px"  class="form-control" type="search" name="searchCustomerName" placeholder="Customer Name" value="${searchCustomerName}">
                                 <input style="margin-top: 15px"  class="form-control" type="search" name="searchProductName" placeholder="Product Name" value="${searchProductName}">
-                                <select style="margin-top: 15px" class="form-select" name="filterExtendWarranty" onchange="this.form.submit()">
-                                    <option value="">Current Extend Warranty</option>
-                                    <option ${(filterExtendWarranty=='hasExtend')?"selected":""} value="hasExtend">Has Extend Warranty</option>
-                                    <option ${(filterExtendWarranty=='noneExtend')?"selected":""} value="noneExtend">None Extend Warranty</option>
+                                <select style="margin-top: 15px" class="form-select" name="filterStatusPackage" onchange="this.form.submit()">
+                                    <option value="">Package Status</option>
+                                    <option ${(filterStatusPackage=='active')?"selected":""} value="active">Active warranty</option>
+                                    <option ${(filterStatusPackage=='deactive')?"selected":""} value="deactive">Expired warranty</option>
                                 </select>
                             <div style="float: right">
                                 <button type="submit" style="margin-top: 15px" class="btn btn-primary">Search</button>
@@ -63,14 +65,14 @@
                         <thead>
                             <tr>
                                 <th>Product Code</th>
+                                <th>Product Name</th>
                                 <th>Customer Name</th>
                                 <th>Email</th>
-                                <th>Product Name</th>
+                                
                                 <th>Warranty Start</th>
                                 <th>Warranty End</th>
                                 <th>Note</th>
-                                <!--<th>Is Active</th>-->
-                                <th>Extended Warranty Name</th>
+                                <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -78,21 +80,21 @@
                             <c:forEach var="pkg" items="${packageWarrantyList}">
                                 <tr>
                                     <td>${pkg.productCode}</td>
+                                    <td>${pkg.productName}</td>
                                     <td>${pkg.customerName}</td>
                                     <td>${pkg.email}</td>
-                                    <td>${pkg.productName}</td>
+                                    
                                     <td>${pkg.warrantyStartDate1}</td>
                                     <td>${pkg.warrantyEndDate1}</td>
                                     <td>${pkg.note}</td>
-<!--                                    <td>
-                                        <c:choose>
-                                            <c:when test="${pkg.active}">Yes</c:when>
-                                            <c:otherwise>No</c:otherwise>
-                                        </c:choose>
-                                    </td>-->
-                                    <td>${pkg.extendedWarrantyName}</td>
                                     <td>
-                                        <a href="${pageContext.request.contextPath}/packageWarranty?action=edit&amp;packageWarrantyID=${pkg.packageWarrantyID}" class="btn btn-primary">Edit</a>
+                                        <c:choose>
+                                            <c:when test="${pkg.active}">Active warranty</c:when>
+                                            <c:otherwise>Expired warranty</c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <a href="${pageContext.request.contextPath}/packageWarranty?action=edit&amp;packageWarrantyID=${pkg.packageWarrantyID}" class="btn btn-primary">Package Warranty</a>
                                     </td>
                                 </tr>
                             </c:forEach>

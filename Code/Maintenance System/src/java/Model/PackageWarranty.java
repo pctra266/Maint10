@@ -19,6 +19,24 @@ public class PackageWarranty {
     private Date warrantyEndDate;
     private String note;
     private boolean isActive;
+    private double defaultPrice;
+    private int defaultDerationMonth;
+
+    public double getDefaultPrice() {
+        return defaultPrice;
+    }
+
+    public void setDefaultPrice(double defaultPrice) {
+        this.defaultPrice = defaultPrice;
+    }
+
+    public int getDefaultDerationMonth() {
+        return defaultDerationMonth;
+    }
+
+    public void setDefaultDerationMonth(int defaultDerationMonth) {
+        this.defaultDerationMonth = defaultDerationMonth;
+    }
     
     
     private int extendedWarrantyDetailID;

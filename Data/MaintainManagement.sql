@@ -148,7 +148,9 @@ CREATE TABLE ExtendedWarranty (
 CREATE TABLE PackageWarranty (
     PackageWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyStartDate DATETIME NOT NULL,          
-    WarrantyEndDate DATETIME NOT NULL,            
+    WarrantyEndDate DATETIME NOT NULL,
+	DurationMonths INT NOT NULL DEFAULT 12,
+	Price DECIMAL(18,2) NOT NULL,
     Note NVARCHAR(500) NULL, 
 	IsActive BIT DEFAULT 1 NOT NULL,
 );

@@ -9,6 +9,7 @@ import DAO.PackageWarrantyDAO;
 import Model.PackageWarranty;
 import Model.Pagination;
 import Utils.FormatUtils;
+import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -72,21 +73,19 @@ public class PackageWarrantyController extends HttpServlet {
         request.setAttribute("order", order);
         
         // param
-        String searchProductCode = request.getParameter("searchProductCode");
+        String searchProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("searchProductCode"));
         request.setAttribute("searchProductCode", searchProductCode);
-        String searchCustomerName = request.getParameter("searchCustomerName");
+        String searchCustomerName = SearchUtils.preprocessSearchQuery(request.getParameter("searchCustomerName"));
         request.setAttribute("searchCustomerName", searchCustomerName);
-        String searchEmail = request.getParameter("searchEmail");
+        String searchEmail = SearchUtils.searchValidateNonSapce(request.getParameter("searchEmail"));
         request.setAttribute("searchEmail", searchEmail);
-        String searchProductName = request.getParameter("searchProductName");
+        String searchProductName = SearchUtils.searchValidateNonSapce(request.getParameter("searchProductName"));
         request.setAttribute("searchProductName", searchProductName);
-        String searchExtendedWarrantyName = request.getParameter("searchExtendedWarrantyName");
-        request.setAttribute("searchExtendedWarrantyName", searchExtendedWarrantyName);
-        String filterExtendWarranty = request.getParameter("filterExtendWarranty");
-        request.setAttribute("filterExtendWarranty", filterExtendWarranty);
-            System.out.println("filter: "+ filterExtendWarranty);
+        String filterStatusPackage = request.getParameter("filterStatusPackage");
+        request.setAttribute("filterStatusPackage", filterStatusPackage);
+            System.out.println("filter: " + filterStatusPackage);
         // Paging
-        int total = pkgDao.totalPackageWarranty(searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty);
+        int total = pkgDao.totalPackageWarranty(searchProductCode, searchCustomerName, searchEmail, searchProductName, filterStatusPackage);
         request.setAttribute("sort", sort);
         String pageParam = request.getParameter("page");
         String pageSizeParam = request.getParameter("page-size");
@@ -111,11 +110,11 @@ public class PackageWarrantyController extends HttpServlet {
         pagination.setOrder(order);
         pagination.setUrlPattern("/packageWarranty");
         // take list
-        pagination.setSearchFields(new String[]{"searchProductCode", "searchCustomerName", "searchEmail", "searchProductName", "searchExtendedWarrantyName","filterExtendWarranty"});
-        pagination.setSearchValues(new String[]{searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty});
+        pagination.setSearchFields(new String[]{"searchProductCode", "searchCustomerName", "searchEmail", "searchProductName","filterStatusPackage"});
+        pagination.setSearchValues(new String[]{searchProductCode, searchCustomerName, searchEmail, searchProductName, filterStatusPackage});
         
 
-        ArrayList<PackageWarranty> list = pkgDao.getAllPackageWarranties(searchProductCode, searchCustomerName, searchEmail, searchProductName, searchExtendedWarrantyName,filterExtendWarranty, sort, order, page, pageSize);
+        ArrayList<PackageWarranty> list = pkgDao.getAllPackageWarranties(searchProductCode, searchCustomerName, searchEmail, searchProductName, filterStatusPackage, sort, order, page, pageSize);
         request.setAttribute("packageWarrantyList", list);
         request.setAttribute("pagination", pagination);
         
