@@ -301,6 +301,14 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    
+                    <c:if test="${not empty successMessage}">
+                        <div class="alert alert-success">
+                            ${successMessage}
+                        </div>
+                    </c:if>
+
+
                     <div class="container">
                         <div class="row">
                             <!-- Cột 1: Search Form -->
@@ -328,8 +336,9 @@
                                             <button type="submit">Export PDF</button>
                                         </form>
                                         <!-- Form Send Email -->
-                                        <form action="sendEmail" method="post">
+                                        <form action="sendWC" method="post">
                                             <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                            <input type="hidden" name="customerName" value="${customer.name}" />
                                             <input type="hidden" name="customerEmail" value="${customer.email}" />
                                             <button type="submit">Send Warranty Card</button>
                                         </form>

@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller.WarrantyCard;
 
+import Email.Email;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,65 +17,43 @@ import jakarta.servlet.http.HttpServletResponse;
  * @author sonNH
  */
 public class SendWarrantyCard extends HttpServlet {
-   
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet SendWarrantyCard</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet SendWarrantyCard at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    } 
-
-    /** 
-     * Handles the HTTP <code>POST</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
+            throws ServletException, IOException {
     }
 
-    /** 
-     * Returns a short description of the servlet.
-     * @return a String containing servlet description
-     */
     @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // Lấy tham số từ form
+        String warrantyCardCode = request.getParameter("warrantyCardCode");
+        String customerEmail = request.getParameter("customerEmail");
+        String customerName = request.getParameter("customerName");
+
+        // Tạo tiêu đề email
+        String subject = "Your Warranty Card " + warrantyCardCode;
+
+        // Tạo nội dung email dạng HTML, có thể tùy chỉnh thêm thông tin phiếu bảo hành
+        String htmlContent = "<h1>Warranty Card</h1>"
+                + "<p>Dear " + customerName + "</p>"
+                + "<p>Please find attached your warranty card with the code: <strong>"
+                + warrantyCardCode + "</strong>.</p>"
+                + "<p>Thank you for choosing our service.</p>";
+
+        // Nếu bạn đã tạo file PDF của phiếu bảo hành, cung cấp đường dẫn đến file đó.
+        // Ví dụ: file PDF được lưu tại server (chú ý: cần đảm bảo đường dẫn hợp lệ và quyền truy cập)
+        String filePath = "C:/Users/sonNH/Downloads/WarrantyCard" + warrantyCardCode + ".pdf";
+
+        // Tạo instance của Email util
+        Email emailUtil = new Email();
+
+        // Gửi email với nội dung HTML và đính kèm file PDF
+        emailUtil.sendEmailWithHtmlAndAttachment(customerEmail, subject, htmlContent, filePath);
+
+        request.setAttribute("successMessage", "Send To Customer Successfully");
+        request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
+
+    }
 
 }

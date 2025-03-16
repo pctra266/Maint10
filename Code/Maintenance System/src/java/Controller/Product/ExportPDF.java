@@ -1,17 +1,11 @@
-// Package cho Controller sản phẩm
-package Controller.Product; // Định nghĩa package chứa file code này
+package Controller.Product;
 
-// Import các lớp DAO để truy xuất dữ liệu từ cơ sở dữ liệu
-import DAO.StaffDAO; // Import lớp StaffDAO để lấy thông tin nhân viên
-import DAO.WarrantyCardDAO; // Import lớp WarrantyCardDAO để lấy thông tin phiếu bảo hành
-
-// Import các thư viện Java cần thiết
-import java.io.IOException; // Để xử lý ngoại lệ I/O
-import java.text.SimpleDateFormat; // Để định dạng ngày tháng theo mẫu
-import java.util.List; // Để sử dụng cấu trúc dữ liệu List
-import java.util.Map; // Để sử dụng cấu trúc dữ liệu Map
-
-// Import các lớp từ thư viện iText để tạo file PDF
+import DAO.StaffDAO;
+import DAO.WarrantyCardDAO;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
 import com.itextpdf.text.BaseColor; // Để sử dụng màu sắc trong PDF
 import com.itextpdf.text.Document; // Đại diện cho tài liệu PDF
 import com.itextpdf.text.DocumentException; // Xử lý ngoại lệ khi làm việc với PDF
@@ -26,27 +20,20 @@ import com.itextpdf.text.pdf.PdfPCellEvent; // Giao diện xử lý sự kiện 
 import com.itextpdf.text.pdf.PdfContentByte; // Để vẽ các đối tượng đồ họa trong PDF
 import com.itextpdf.text.pdf.PdfPTable; // Để tạo bảng trong PDF
 import com.itextpdf.text.pdf.PdfWriter; // Để ghi tài liệu PDF vào OutputStream
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import Model.Customer;
+import Model.Product;
+import Model.Staff;
+import Model.WarrantyCard;
+import Model.UnknownProduct;
+import java.time.LocalDate;
 
-// Import các thư viện của Jakarta Servlet
-import jakarta.servlet.ServletException; // Để xử lý ngoại lệ liên quan đến Servlet
-import jakarta.servlet.http.HttpServlet; // Lớp cơ sở cho các servlet xử lý HTTP
-import jakarta.servlet.http.HttpServletRequest; // Đại diện cho yêu cầu HTTP từ client
-import jakarta.servlet.http.HttpServletResponse; // Đại diện cho phản hồi HTTP gửi về cho client
-
-// Import các model để ánh xạ dữ liệu từ cơ sở dữ liệu
-import Model.Customer; // Model chứa thông tin khách hàng
-import Model.Product; // Model chứa thông tin sản phẩm
-import Model.Staff; // Model chứa thông tin nhân viên
-import Model.WarrantyCard; // Model chứa thông tin phiếu bảo hành
-import Model.UnknownProduct; // Model cho sản phẩm không xác định
-import java.time.LocalDate; // Để làm việc với ngày hiện tại theo định dạng LocalDate
-
-// Định nghĩa lớp ExportPDF kế thừa từ HttpServlet để xử lý yêu cầu HTTP
 public class ExportPDF extends HttpServlet {
 
-    // Khởi tạo đối tượng DAO để truy xuất thông tin phiếu bảo hành
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
-    // Khởi tạo đối tượng DAO để truy xuất thông tin nhân viên
     private final StaffDAO staffDAO = new StaffDAO();
 
     // Lớp nội bộ dùng để vẽ đường viền nét đứt cho PdfPCell
@@ -141,10 +128,10 @@ public class ExportPDF extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/pdf"); // Đặt loại nội dung của phản hồi là file PDF
-        response.setHeader("Content-Disposition", "attachment; filename=\"WarrantyCard.pdf\""); // Đặt header để trình duyệt tải file PDF với tên "WarrantyCard.pdf"
-
         String warrantyCardCode = request.getParameter("warrantyCardCode"); // Lấy tham số "warrantyCardCode" từ yêu cầu
+        response.setContentType("application/pdf"); // Đặt loại nội dung của phản hồi là file PDF
+        response.setHeader("Content-Disposition", "attachment; filename=\"WarrantyCard" + warrantyCardCode + ".pdf\""); // Đặt header để trình duyệt tải file PDF với tên "WarrantyCard.pdf"
+
         WarrantyCard wr = warrantyCardDAO.searchWarrantyCardByCode(warrantyCardCode); // Tìm phiếu bảo hành dựa trên mã
         if (wr == null) { // Nếu không tìm thấy phiếu bảo hành
             return; // Dừng xử lý, không tạo PDF
