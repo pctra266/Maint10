@@ -179,73 +179,30 @@
                        
                         <div style="height: 100vh" class="bg-white">
                             <div style="padding-bottom: 7%; padding-top: 5% " class="container">
-                                <div style="margin-bottom: 2%;margin-top: 1%;" class="row">
-
-                                    <div class="col-6 ">
+                                <div style="margin-bottom: 2%; margin-top: 1%;" class="row">
+                                    <div class="col-6">
                                         <div class="d-flex align-items-center">
-                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px; " >I</h1>
-                                            <h1 style="font-size: 30px" class="fw-bold"> Our Service</h1>
+                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px;">I</h1>
+                                            <h1 style="font-size: 30px" class="fw-bold"> ${section.title}</h1>
                                         </div>
-                                        <h5>These are some of the essential services provided by my system </h5>
+                                        <h5>${section.subTitle}</h5>
                                     </div>
-                                    </div>
+                                </div>
                                 <div class="row">
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabssa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                        <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
+                                    <c:forEach var="item" items="${serviceItems}">
+                                        <div style="margin-bottom:2% " class="col-12 col-md-6 col-lg-3">
+                                            <div class="card h-100">
+                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}">
+                                                <div class="card-header px-4 pt-4">
+                                                    <h5 class="card-title mb-0">${item.title}</h5>
+                                                </div>
+                                                <div class="card-body px-4 pt-2">
+                                                    <p>${item.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div><!-- end div 2 -->
                     

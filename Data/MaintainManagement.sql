@@ -340,6 +340,27 @@ CREATE TABLE CustomerContact (
     CreatedAt DATETIME DEFAULT GETDATE()
 );
 
+CREATE TABLE MarketingServiceSection (
+    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Title NVARCHAR(255),
+    SubTitle NVARCHAR(255),
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE MarketingServiceItem (
+    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    SectionID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    ImageURL NVARCHAR(MAX),
+    SortOrder INT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_MarketingServiceItem_SectionID
+        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
+);
+
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);
