@@ -23,6 +23,8 @@
         <title>Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="css/media-show.css" rel="stylesheet">
+        <%--vnpay --%>
+        <script src="js/jquery-1.11.3.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
             .media-preview {
@@ -127,11 +129,48 @@
                                     <input type="hidden" name="processAction" value="fixed">
                                     <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
                                 </form>
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
+                              
+                                <button data-bs-toggle="modal" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'} data-bs-target="#centeredModalPrimary_Invoice">
+                                    Create Invoice
+                                </button>
+                                <div class="modal fade" id="centeredModalPrimary_Invoice" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="invoiceModalLabel">Create Invoice</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="Invoice/Create" method="post" id="createInvoiceForm">
+                                                    <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}">
+                                                    <input type="hidden" name="invoiceType" value="TechnicianToCustomer">
+                                                    <input type="hidden" name="amount" value="${price}">
+
+                                                    <div class="mb-3">
+                                                        <label for="customerID" class="form-label">Customer ID:</label>
+                                                        <input type="number" name="customerID" id="customerID" class="form-control" value="${card.customerID}" readonly>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="dueDate" class="form-label">Due Date:</label>
+                                                        <input type="date" name="dueDate" id="dueDate" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Create Invoice</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form action="vnpayajax" id="frmCreateOrder" method="post" class="d-inline">     
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="completed">
-                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'}>Completed</button>
+                                    <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount"  name="amount" type="number" value="${price}" />
+                                    <input type="hidden" id="bankCode" name="bankCode" value="">
+                                    <input type="hidden" id="language" name="language" value="en">
+                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'} href>Payment</button>
                                 </form>
                                 <form action="WarrantyCard/Detail" method="post" class="d-inline">
                                     <input type="hidden" name="action" value="process">
@@ -175,9 +214,13 @@
                                 <h3>Repair List</h3>
                                 <div class="row">
                                     <div class="mb-2 col-auto">
-                                        <a href="WarrantyCard/AddComponent?ID=${card.warrantyCardID}" class="btn btn-primary">
-                                            <i class="fas fa-plus"></i> Add New Component
-                                        </a>
+                                        <form action="WarrantyCard/AddComponent">
+                                            <input type="hidden" name="ID" value="${card.warrantyCardID}"/>
+                                            <button  class="btn btn-primary" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}>
+                                                <i class="fas fa-plus"></i> Add New Component
+                                            </button>
+                                        </form>
+
                                     </div>
                                     <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto">
                                         <input type="hidden" name="action" value="createComponentRequest" readonly> 
@@ -564,7 +607,47 @@
                                             input.files = dataTransfer.files;
                                             previewMedia({target: input});
                                         }
+                                        // Thiết lập Due Date mặc định khi modal mở
+                                        document.getElementById('centeredModalPrimary_Invoice').addEventListener('shown.bs.modal', function () {
+                                            const dueDateInput = document.getElementById('dueDate');
+                                            const today = new Date();
+                                            const defaultDueDate = new Date(today);
+                                            defaultDueDate.setDate(today.getDate() + 3); // Thêm 3 ngày
+
+                                            const year = defaultDueDate.getFullYear();
+                                            const month = String(defaultDueDate.getMonth() + 1).padStart(2, '0');
+                                            const day = String(defaultDueDate.getDate()).padStart(2, '0');
+                                            const formattedDate = year + "-" + month + "-" + day;
+
+                                            dueDateInput.value = formattedDate;
+                                        });
 
             </script>
+            <%-- vnpay --%>
+            <script type="text/javascript">
+                $("#frmCreateOrder").submit(function () {
+                    var postData = $("#frmCreateOrder").serialize();
+                    var submitUrl = $("#frmCreateOrder").attr("action");
+                    $.ajax({
+                        type: "POST",
+                        url: submitUrl,
+                        data: postData,
+                        dataType: 'JSON',
+                        success: function (x) {
+                            if (x.code === '00') {
+                                if (window.vnpay) {
+                                    vnpay.open({width: 768, height: 600, url: x.data});
+                                } else {
+                                    location.href = x.data;
+                                }
+                                return false;
+                            } else {
+                                alert(x.Message);
+                            }
+                        }
+                    });
+                    return false;
+                });
+            </script>       
     </body>
 </html>

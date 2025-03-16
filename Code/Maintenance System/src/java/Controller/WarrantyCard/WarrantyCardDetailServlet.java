@@ -82,6 +82,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
         }
+        request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
         request.setAttribute("customer", customerDAO.getCustomerByID(wc.getCustomerID()));

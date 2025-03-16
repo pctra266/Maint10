@@ -145,7 +145,7 @@ public class WarrantyCardDetailDAO extends DBContext {
         wcd.setPrice(1.5);
         wcd.setComponentName("kjkjk");
         wcd.setNote("asfihiosdfjio");
-       // System.out.println(wcdd.updateWarrantyCardDetail(wcd));
+        // System.out.println(wcdd.updateWarrantyCardDetail(wcd));
         System.out.println(wcdd.getWarrantyCardDetailById(1).getNote());
         System.out.println(wcdd.getWarrantyCardDetailOfCard(71));
     }
