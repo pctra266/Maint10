@@ -9,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import Model.ExtendedWarranty;
+import Model.PackageWarranty;
+import java.util.Calendar;
 
 public class ExtendedWarrantyDAO {
     Connection conn = null;
@@ -125,6 +127,92 @@ public class ExtendedWarrantyDAO {
         }
         return false;
     }
+    public boolean extendWarrantyDetail(String packageWarrantyID, String extendedWarrantyID) {
+    int extPeriod = 0;
+    String queryExt = "SELECT ExtendedPeriodInMonths FROM ExtendedWarranty WHERE ExtendedWarrantyID = ?";
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(queryExt);
+        ps.setString(1, extendedWarrantyID);
+        rs = ps.executeQuery();
+        if(rs.next()){
+            extPeriod = rs.getInt("ExtendedPeriodInMonths");
+        } else {
+            return false; // Không tìm thấy ExtendedWarranty
+        }
+        System.out.println("da den day");
+        // Lấy bản ghi ExtendedWarrantyDetail nếu có
+        String queryCheck = "SELECT ExtendedWarrantyDetailID, EndExtendedWarranty FROM ExtendedWarrantyDetail WHERE PackageWarrantyID = ? and ExtendedWarrantyID = ?";
+        ps = conn.prepareStatement(queryCheck);
+        ps.setString(1, packageWarrantyID);
+        ps.setString(2, extendedWarrantyID);
+        rs = ps.executeQuery();
+        java.util.Date now = new java.util.Date();
+        if(rs.next()){
+            System.out.println("22222222222222");
+            // Nếu bản ghi đã tồn tại, cập nhật EndExtendedWarranty = current EndExtendedWarranty + extPeriod tháng
+            int extDetailID = rs.getInt("ExtendedWarrantyDetailID");
+            java.sql.Date currentEnd = rs.getDate("EndExtendedWarranty");
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(currentEnd);
+            cal.add(Calendar.MONTH, extPeriod);
+            java.sql.Date newEnd = new java.sql.Date(cal.getTimeInMillis());
+            
+            String queryUpdate = "UPDATE ExtendedWarrantyDetail SET EndExtendedWarranty = ? WHERE ExtendedWarrantyDetailID = ?";
+            ps = conn.prepareStatement(queryUpdate);
+            ps.setDate(1, newEnd);
+            ps.setInt(2, extDetailID);
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0;
+        } else {
+            System.out.println("333333333333333333");
+            // Nếu chưa tồn tại, tạo mới ExtendedWarrantyDetail với StartExtendedWarranty = now và EndExtendedWarranty = now + extPeriod tháng
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(now);
+            cal.add(Calendar.MONTH, extPeriod);
+            java.sql.Date endDate = new java.sql.Date(cal.getTimeInMillis());
+            String queryInsert = "INSERT INTO ExtendedWarrantyDetail (ExtendedWarrantyID, PackageWarrantyID, StartExtendedWarranty, EndExtendedWarranty) VALUES (?, ?, ?, ?)";
+            ps = conn.prepareStatement(queryInsert);
+            ps.setString(1, extendedWarrantyID);
+            ps.setString(2, packageWarrantyID);
+            ps.setDate(3, new java.sql.Date(now.getTime()));
+            ps.setDate(4, endDate);
+            int rowsInserted = ps.executeUpdate();
+            return rowsInserted > 0;
+        }
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+public ArrayList<PackageWarranty> getExtendedWarrantyDetailList(String packageWarrantyID) {
+    ArrayList<PackageWarranty> list = new ArrayList<>();
+    String query = """
+        SELECT EWD.ExtendedWarrantyDetailID, EW.ExtendedWarrantyName, 
+               EWD.StartExtendedWarranty, EWD.EndExtendedWarranty
+        FROM ExtendedWarrantyDetail EWD
+        JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID
+        WHERE EWD.PackageWarrantyID = ?
+        """;
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        ps.setString(1, packageWarrantyID);
+        rs = ps.executeQuery();
+        while(rs.next()){
+            PackageWarranty ewd = new PackageWarranty();
+            ewd.setExtendedWarrantyDetailID(rs.getInt("ExtendedWarrantyDetailID"));
+            ewd.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+            ewd.setStartExtendedWarranty(rs.getDate("StartExtendedWarranty"));
+            ewd.setEndExtendedWarranty(rs.getDate("EndExtendedWarranty"));
+            list.add(ewd);
+        }
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+}
+
     
     public static void main(String[] args) {
         ExtendedWarrantyDAO dao = new ExtendedWarrantyDAO();

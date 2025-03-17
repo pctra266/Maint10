@@ -161,12 +161,12 @@ public class PackageWarrantyDAO {
         return 0;
     }
     
-    public ArrayList<PackageWarranty> getListPackageWarranty() {
+    public ArrayList<PackageWarranty> getAllPackageWarranties() {
         ArrayList<PackageWarranty> list = new ArrayList<>();
         String query = """
             SELECT
                 PD.ProductCode,
-                C.[Name] AS CustomerName,
+                C.Name AS CustomerName,
                 C.Email,
                 P.ProductName,
                 
@@ -175,21 +175,19 @@ public class PackageWarrantyDAO {
                 PW.WarrantyEndDate,
                 PW.Note,
                 PW.IsActive,
-                PW.Price,
-                PW.DurationMonths,
+                PW.Price AS DefaultPrice,
+                PW.DurationMonths AS DefaultDerationMonth,
                 
-              
-            	EWD.ExtendedWarrantyDetailID,
+                EW.ExtendedWarrantyName,
+                
                 EWD.StartExtendedWarranty,
-                EWD.EndExtendedWarranty,
-                EW.ExtendedWarrantyName
-            
+                EWD.EndExtendedWarranty
             FROM ProductDetail PD
                 JOIN Customer C ON PD.CustomerID = C.CustomerID
                 JOIN Product P ON PD.ProductID = P.ProductID
                 LEFT JOIN PackageWarranty PW ON PD.PackageWarrantyID = PW.PackageWarrantyID
                 LEFT JOIN ExtendedWarrantyDetail EWD ON PW.PackageWarrantyID = EWD.PackageWarrantyID
-                LEFT JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID;
+                LEFT JOIN ExtendedWarranty EW ON EWD.ExtendedWarrantyID = EW.ExtendedWarrantyID
             """;
         try {
             conn = new DBContext().connection;
@@ -207,12 +205,62 @@ public class PackageWarrantyDAO {
                 pkg.setWarrantyEndDate(rs.getDate("WarrantyEndDate"));
                 pkg.setNote(rs.getString("Note"));
                 pkg.setActive(rs.getBoolean("IsActive"));
+                pkg.setDefaultPrice(rs.getDouble("DefaultPrice"));
+                pkg.setDefaultDerationMonth(rs.getInt("DefaultDerationMonth"));
+                
+                pkg.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+                pkg.setStartExtendedWarranty(rs.getDate("StartExtendedWarranty"));
+                pkg.setEndExtendedWarranty(rs.getDate("EndExtendedWarranty"));
+                
                 list.add(pkg);
             }
-        } catch (SQLException e) {
+        } catch(Exception e) {
             e.printStackTrace();
         }
         return list;
+    }
+    
+    // Hàm cập nhật thông tin gia hạn mặc định và extended warranty detail
+    // Chỉ cập nhật: WarrantyStartDate, WarrantyEndDate, Note, IsActive của PackageWarranty
+    // và StartExtendedWarranty, EndExtendedWarranty của ExtendedWarrantyDetail
+    public boolean updatePackageWarranty(PackageWarranty pkg) {
+        boolean resultPW = false, resultEWD = false;
+        String queryPW = """
+            UPDATE PackageWarranty
+            SET WarrantyStartDate = ?, WarrantyEndDate = ?, Note = ?, IsActive = ?
+            WHERE PackageWarrantyID = ?
+            """;
+        String queryEWD = """
+            UPDATE ExtendedWarrantyDetail
+            SET StartExtendedWarranty = ?, EndExtendedWarranty = ?
+            WHERE PackageWarrantyID = ?
+            """;
+        try {
+            conn = new DBContext().connection;
+            
+            // Cập nhật PackageWarranty
+            ps = conn.prepareStatement(queryPW);
+            ps.setDate(1, new java.sql.Date(pkg.getWarrantyStartDate().getTime()));
+            ps.setDate(2, new java.sql.Date(pkg.getWarrantyEndDate().getTime()));
+            ps.setString(3, pkg.getNote());
+            ps.setBoolean(4, pkg.isActive());
+            ps.setInt(5, pkg.getPackageWarrantyID());
+            int rowsPW = ps.executeUpdate();
+            resultPW = rowsPW > 0;
+            
+            // Cập nhật ExtendedWarrantyDetail
+            ps = conn.prepareStatement(queryEWD);
+            ps.setDate(1, new java.sql.Date(pkg.getStartExtendedWarranty().getTime()));
+            ps.setDate(2, new java.sql.Date(pkg.getEndExtendedWarranty().getTime()));
+            ps.setInt(3, pkg.getPackageWarrantyID());
+            int rowsEWD = ps.executeUpdate();
+            resultEWD = rowsEWD > 0;
+            
+            return resultPW && resultEWD;
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
     
     // Cập nhật IsActive trong PackageWarranty
@@ -320,6 +368,28 @@ public class PackageWarrantyDAO {
     }
     return pkg;
 }
+//    public boolean updatePackageWarranty(PackageWarranty pkg) {
+//    String query = """
+//        UPDATE PackageWarranty
+//        SET WarrantyStartDate = ?, WarrantyEndDate = ?, Note = ?, IsActive = ?
+//        WHERE PackageWarrantyID = ?
+//        """;
+//    try {
+//        conn = new DBContext().connection;
+//        ps = conn.prepareStatement(query);
+//        ps.setDate(1, new java.sql.Date(pkg.getWarrantyStartDate().getTime()));
+//        ps.setDate(2, new java.sql.Date(pkg.getWarrantyEndDate().getTime()));
+//        ps.setString(3, pkg.getNote());
+//        ps.setBoolean(4, pkg.isActive());
+//        ps.setInt(5, pkg.getPackageWarrantyID());
+//        int rows = ps.executeUpdate();
+//        return rows > 0;
+//    } catch(SQLException e) {
+//        e.printStackTrace();
+//    }
+//    return false;
+//}
+
 
     public static void main(String[] args) {
         PackageWarrantyDAO dao = new PackageWarrantyDAO();

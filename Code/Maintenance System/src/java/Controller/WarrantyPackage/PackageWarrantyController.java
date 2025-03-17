@@ -5,6 +5,7 @@
 
 package Controller.WarrantyPackage;
 
+import DAO.ExtendedWarrantyDAO;
 import DAO.PackageWarrantyDAO;
 import Model.PackageWarranty;
 import Model.Pagination;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 public class PackageWarrantyController extends HttpServlet {
     private final int PAGE_SIZE = 5;
    private final PackageWarrantyDAO pkgDao = new PackageWarrantyDAO();
+   private final ExtendedWarrantyDAO extDao = new ExtendedWarrantyDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -124,6 +126,8 @@ public class PackageWarrantyController extends HttpServlet {
             String id = request.getParameter("packageWarrantyID");
             PackageWarranty pkg = pkgDao.getPackageWarrantyByID(id);
             request.setAttribute("packageWarranty", pkg);
+            request.setAttribute("extendedWarrantyDetailList", extDao.getExtendedWarrantyDetailList(id));
+            request.setAttribute("extendedWarrantyList", extDao.getListExtendedWarranty());
             request.getRequestDispatcher("editPackageWarranty.jsp").forward(request, response);
         }
     } 
@@ -167,8 +171,8 @@ public class PackageWarrantyController extends HttpServlet {
             request.setAttribute("message", message);
         }
         // Sau khi xử lý POST, lấy lại danh sách và forward về danh sách
-        ArrayList<PackageWarranty> list = pkgDao.getListPackageWarranty();
-        request.setAttribute("packageWarranties", list);
+//        ArrayList<PackageWarranty> list = pkgDao.getListPackageWarranty();
+//        request.setAttribute("packageWarranties", list);
         request.getRequestDispatcher("packageWarrantyList.jsp").forward(request, response);
     }
 
