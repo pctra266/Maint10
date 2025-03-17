@@ -209,6 +209,71 @@ public ArrayList<PackageWarranty> getExtendedWarrantyDetailList(String packageWa
     }
     return list;
 }
+public int totalExtendedWarranty(String searchExtendedWarrantyName) {
+    String query = """
+                   SELECT COUNT(*)
+                   FROM ExtendedWarranty
+                   WHERE IsDelete = 0
+                   """;
+    if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+        query += " AND ExtendedWarrantyName LIKE ?";
+    }
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        int countParam = 1;
+        if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+            ps.setString(countParam++, "%" + searchExtendedWarrantyName.trim() + "%");
+        }
+        rs = ps.executeQuery();
+        if (rs.next()) {
+            return rs.getInt(1);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return 0;
+}
+
+public ArrayList<ExtendedWarranty> getListExtendedWarranty(String searchExtendedWarrantyName, int page, int pageSize) {
+    ArrayList<ExtendedWarranty> list = new ArrayList<>();
+    String query = """
+                   SELECT ExtendedWarrantyID, ExtendedWarrantyName, ExtendedPeriodInMonths, Price, ExtendedWarrantyDescription, IsDelete
+                   FROM ExtendedWarranty
+                   WHERE IsDelete = 0
+                   """;
+    if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+        query += " AND ExtendedWarrantyName LIKE ?";
+    }
+    query += " ORDER BY ExtendedWarrantyID DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        int countParam = 1;
+        if (searchExtendedWarrantyName != null && !searchExtendedWarrantyName.trim().isEmpty()) {
+            ps.setString(countParam++, "%" + searchExtendedWarrantyName.trim() + "%");
+        }
+        int offset = (page - 1) * pageSize;
+        ps.setInt(countParam++, offset);
+        ps.setInt(countParam++, pageSize);
+        rs = ps.executeQuery();
+        while (rs.next()) {
+            ExtendedWarranty ew = new ExtendedWarranty();
+            ew.setExtendedWarrantyID(rs.getInt("ExtendedWarrantyID"));
+            ew.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+            ew.setExtendedPeriodInMonths(rs.getInt("ExtendedPeriodInMonths"));
+            ew.setPrice(rs.getDouble("Price"));
+            ew.setExtendedWarrantyDescription(rs.getString("ExtendedWarrantyDescription"));
+            ew.setIsDelete(rs.getBoolean("IsDelete"));
+            list.add(ew);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return list;
+}
+
 
     
     public static void main(String[] args) {
