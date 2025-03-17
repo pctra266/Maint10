@@ -82,6 +82,19 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("1".equals(request.getParameter("addSuccess"))) {
             request.setAttribute("addAlert1", "Component added successfully!");
         }
+        if ("true".equals(request.getParameter("payment"))) {
+            request.setAttribute("addAlert1", "Payment successfully!");
+        }
+        if ("false".equals(request.getParameter("payment"))) {
+            request.setAttribute("addAlert0", "Payment fail!");
+        }
+        if ("false".equals(request.getParameter("invoice"))) {
+            request.setAttribute("addAlert0", "Error in payment!");
+        }
+        if ("false".equals(request.getParameter("invoiceCreate"))) {
+            request.setAttribute("addAlert0", "Product isn't fixed!");
+        }
+        request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
         request.setAttribute("customer", customerDAO.getCustomerByID(wc.getCustomerID()));
@@ -272,8 +285,6 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                     errorProcess += "One or more component is being fixed, check again!";
                                 }
                             }
-                            case "completed" ->
-                                canProcess = latestProcess != null && "fixed".equals(latestProcess.getAction());
                             case "cancel" -> {
                                 canProcess = latestProcess != null && !"cancel".equals(latestProcess.getAction()) && !"completed".equals(latestProcess.getAction()) && !"fixed".equals(latestProcess.getAction());
                             }
@@ -293,11 +304,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                             if (success) {
                                 WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-                                if ("completed".equals(processAction) || "cancel".equals(processAction) || "refix".equals(processAction)) {
+                                if ( "cancel".equals(processAction) || "refix".equals(processAction)) {
                                     wc.setWarrantyStatus(processAction);
-                                    if ("completed".equals(processAction)) {
-                                        wc.setCompletedDate(Date.from(Instant.now()));
-                                    }
+                    
                                     if ("cancel".equals(processAction)) {
                                         wc.setCanceldDate(Date.from(Instant.now()));
                                     }
