@@ -11,39 +11,35 @@ import java.util.Date;
  * @author Tra Pham
  */
 public class Payment {
-    private int PaymentID,WarrantyCardID ;
+    private Integer PaymentID,InvoiceID ;
     private Date PaymentDate;
     private String PaymentMethod;
     private double Amount;
     private String Status;
 
-    public Payment(int PaymentID, int WarrantyCardID, Date PaymentDate, String PaymentMethod, double Amount, String Status) {
+
+    public Payment() {
+    }
+
+    public Payment(Integer PaymentID,  Date PaymentDate, String PaymentMethod, double Amount, String Status, Integer InvoiceID) {
         this.PaymentID = PaymentID;
-        this.WarrantyCardID = WarrantyCardID;
+        this.InvoiceID = InvoiceID;
         this.PaymentDate = PaymentDate;
         this.PaymentMethod = PaymentMethod;
         this.Amount = Amount;
         this.Status = Status;
     }
+    
+    
 
-    public Payment() {
-    }
-
-    public int getPaymentID() {
+    public Integer getPaymentID() {
         return PaymentID;
     }
 
-    public void setPaymentID(int PaymentID) {
+    public void setPaymentID(Integer PaymentID) {
         this.PaymentID = PaymentID;
     }
 
-    public int getWarrantyCardID() {
-        return WarrantyCardID;
-    }
-
-    public void setWarrantyCardID(int WarrantyCardID) {
-        this.WarrantyCardID = WarrantyCardID;
-    }
 
     public Date getPaymentDate() {
         return PaymentDate;
@@ -77,10 +73,19 @@ public class Payment {
         this.Status = Status;
     }
 
+    public Integer getInvoiceID() {
+        return InvoiceID;
+    }
+
+    public void setInvoiceID(Integer InvoiceID) {
+        this.InvoiceID = InvoiceID;
+    }
+
     @Override
     public String toString() {
-        return "Payment{" + "PaymentID=" + PaymentID + ", WarrantyCardID=" + WarrantyCardID + ", PaymentDate=" + PaymentDate + ", PaymentMethod=" + PaymentMethod + ", Amount=" + Amount + ", Status=" + Status + '}';
+        return "Payment{" + "PaymentID=" + PaymentID + ", InvoiceID=" + InvoiceID + ", PaymentDate=" + PaymentDate + ", PaymentMethod=" + PaymentMethod + ", Amount=" + Amount + ", Status=" + Status + '}';
     }
+    
     
     
 }
