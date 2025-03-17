@@ -301,9 +301,8 @@
                                             <div class="name">${List.getName()}</div>
                                             <div class="position">Role: ${List.getStr()}</div>
                                             <div class="position">Product repair: ${List.getCount()}</div>
-                                            <form action="reportStaffController" method="post">
-                                                <input type="hidden" name="action" value="Allinfor">
-                                                <input type="hidden" name="staffid" value="${List.getStaffID()}">
+                                            <form action="reportStaffInfoController" method="post">
+                                                <input type="hidden" name="staffID" value="${List.getStaffID()}">
                                                 <button class="btn btn-primary" type="submit" style="width: 100px">All info</button>
                                             </form>
                                         </div>

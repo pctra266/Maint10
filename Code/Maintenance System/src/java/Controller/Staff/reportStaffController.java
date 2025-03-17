@@ -63,9 +63,9 @@ public class reportStaffController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffDAO dao = new StaffDAO();
-        List<Staff> list ;
         List<Staff> listactive ;
         List<Staff> listRelax;
+        List<ReportStaff> list ;
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewAll";
@@ -73,6 +73,7 @@ public class reportStaffController extends HttpServlet {
         
         switch(action){
             case "viewAll":
+                
                 listactive = dao.getAllReport();
                 listRelax = dao.getAllReportOut();
                 int count = dao.getAllStaffNewStaff();
@@ -96,6 +97,7 @@ public class reportStaffController extends HttpServlet {
                 request.setAttribute("averageactive", formattedAverageActive);
                 request.setAttribute("averagerelax", formattedAverageRelax);
                 request.getRequestDispatcher("ReportStaff.jsp").forward(request, response);
+                break;
             case "viewAllActive":
                 listactive = dao.getAllReport();
                 request.setAttribute("list", listactive);
@@ -108,6 +110,7 @@ public class reportStaffController extends HttpServlet {
                 request.setAttribute("action", action);
                 request.getRequestDispatcher("Stafflist.jsp").forward(request, response);
                 break;
+            
             default:
                 break;
         } 
@@ -128,6 +131,7 @@ public class reportStaffController extends HttpServlet {
         HttpSession session = request.getSession();
         Staff staffOnSession = (Staff) session.getAttribute("staff");
         List<Staff> listactive ;
+        List<ReportStaff> list ;
         List<Staff> listRelax;
         String action = request.getParameter("action");
         String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
@@ -146,15 +150,8 @@ public class reportStaffController extends HttpServlet {
                 request.setAttribute("listRelax", listRelax);
                 request.setAttribute("count", count);
                 request.getRequestDispatcher("ReportStaff.jsp").forward(request, response);
+                break;
             
-            case "Allinfor":
-                String staffid = request.getParameter("staffid");
-                List<ReportStaff> list ;
-                list = dao.getAllStaffRepairByID(staffid);
-                
-                request.setAttribute("info", list);
-                
-                request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response);
             default:
                 break;
         } 
