@@ -272,11 +272,6 @@
                             <h2>${total}</h2>
                             <p class="green"></p>
                         </div>
-                            <div class="card">
-                            <h3>Total staff</h3>
-                            <h2>${total}</h2>
-                            <p class="green"></p>
-                        </div>
                         <div class="card">
                             <h3>Staff active</h3>
                             <h2>${active}</h2>
