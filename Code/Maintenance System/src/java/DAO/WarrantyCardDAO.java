@@ -8,7 +8,6 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import Model.WarrantyCard;
-import Model.WarrantyCardDetail;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +25,6 @@ import java.util.Map;
  */
 public class WarrantyCardDAO extends DBContext {
 
-    private final WarrantyCardDetailDAO wcdDao = new WarrantyCardDetailDAO();
     private static final WarrantyCardDAO d = new WarrantyCardDAO();
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private static final int CODE_LENGTH = 10;
@@ -491,11 +489,7 @@ public class WarrantyCardDAO extends DBContext {
             }
             //Neu loc theo receive card
             if (type != null && "myCard".equals(type)) {
-                if (handlerId == null) {
-                    ps.setNull(paramIndex, java.sql.Types.INTEGER);
-                } else {
-                    ps.setInt(paramIndex, handlerId);
-                }
+                ps.setInt(paramIndex, handlerId);
             }
 
             try (ResultSet rs = ps.executeQuery()) {
@@ -599,11 +593,7 @@ public class WarrantyCardDAO extends DBContext {
             }
             //Neu loc theo receive card
             if (type != null && "myCard".equals(type)) {
-                if (handlerId == null) {
-                    ps.setNull(paramIndex++, java.sql.Types.INTEGER);
-                } else {
-                    ps.setInt(paramIndex++, handlerId);
-                }
+                ps.setInt(paramIndex++, handlerId);
             }
 
             ps.setInt(paramIndex++, (page - 1) * pageSize);
@@ -1023,15 +1013,6 @@ public class WarrantyCardDAO extends DBContext {
         return null;
     }
 
-    public int getPriceOfWarrantyCard(int id) {
-        List<WarrantyCardDetail> list = wcdDao.getWarrantyCardDetailOfCard(id);
-        int total = 0;
-        for (WarrantyCardDetail warrantyCardDetail : list) {
-            total += warrantyCardDetail.getPrice();
-        }
-        return total;
-    }
-
     public List<Map<String, Object>> getWarrantyCardDetails(int warrantyCardID) {
         List<Map<String, Object>> details = new ArrayList<>();
         String sql = "SELECT c.ComponentID, c.ComponentCode, c.ComponentName, b.BrandName, ct.TypeName, "
@@ -1066,8 +1047,7 @@ public class WarrantyCardDAO extends DBContext {
 
     public static void main(String[] args) {
         WarrantyCardDAO dao = new WarrantyCardDAO();
-        System.out.println(dao.getPriceOfWarrantyCard(45));
-
+        
     }
 
 }

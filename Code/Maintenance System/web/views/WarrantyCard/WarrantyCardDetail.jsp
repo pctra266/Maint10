@@ -85,12 +85,6 @@
                             <div class="alert-message"><strong>${updateAlert1}</strong></div>
                         </div>
                     </c:if>
-                    <c:if test="${not empty addAlert0}">
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <div class="alert-message"><strong>${addAlert0}</strong></div>
-                        </div>
-                    </c:if>             
                     <c:if test="${not empty updateAlert0}">
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -102,24 +96,10 @@
                         <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                             <div class="com-md-12 d-flex justify-content-between">
                                 <h2>Now process: ${latestProcess.action} </h2>
-                                <!-- Nút Show Invoices chuyển hướng đến trang mới -->
-                                <div class="d-flex ">
-                                    <div>
-                                        <form>
-                                            <a href="Invoice/List?ID=${card.warrantyCardID}" class="btn btn-info me-2 h-100">Invoice list</a>
-
-                                        </form>
-
-                                    </div>
-                                    <div>
-                                        <form action="searchwc" class="h-100" method="post">
-                                            <input type="hidden" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
-                                            <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
-                                        </form>
-                                    </div>
-
-                                </div>
-
+                                <form action="searchwc" method="post">
+                                    <input type="hidden" class="form-control" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
+                                    <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
+                                </form>
                             </div>
                             <h3>Process Actions</h3>
                             <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">
@@ -147,11 +127,12 @@
                                     <input type="hidden" name="processAction" value="fixed">
                                     <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
                                 </form>
-                                <form action="Invoice/Create" method="get" class="d-inline">
+                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                    <input type="hidden" name="action" value="process">
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action !='completed' && latestProcess.action !='cancel' ? '' : 'disabled'}>Create Invoice</button>
+                                    <input type="hidden" name="processAction" value="completed">
+                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'}>Completed</button>
                                 </form>
-                             
                                 <form action="WarrantyCard/Detail" method="post" class="d-inline">
                                     <input type="hidden" name="action" value="process">
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
@@ -194,19 +175,15 @@
                                 <h3>Repair List</h3>
                                 <div class="row">
                                     <div class="mb-2 col-auto">
-                                        <form action="WarrantyCard/AddComponent">
-                                            <input type="hidden" name="ID" value="${card.warrantyCardID}"/>
-                                            <button  class="btn btn-primary" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}>
-                                                <i class="fas fa-plus"></i> Add New Component
-                                            </button>
-                                        </form>
-
+                                        <a href="WarrantyCard/AddComponent?ID=${card.warrantyCardID}" class="btn btn-primary">
+                                            <i class="fas fa-plus"></i> Add New Component
+                                        </a>
                                     </div>
                                     <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto">
                                         <input type="hidden" name="action" value="createComponentRequest" readonly> 
                                         <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
                                         <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
-                                        <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}><i class="fas fa-add"></i> Request Component</button>
+                                        <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Request Component</button>
                                     </form>
                                 </div>
                                 <table class="table table-hover my-0 ">
@@ -587,22 +564,7 @@
                                             input.files = dataTransfer.files;
                                             previewMedia({target: input});
                                         }
-                                        // Thiết lập Due Date mặc định khi modal mở
-                                        document.getElementById('centeredModalPrimary_Invoice_1').addEventListener('shown.bs.modal', function () {
-                                            const dueDateInput = document.getElementById('dueDate');
-                                            const today = new Date();
-                                            const defaultDueDate = new Date(today);
-                                            defaultDueDate.setDate(today.getDate() + 3); // Thêm 3 ngày
-
-                                            const year = defaultDueDate.getFullYear();
-                                            const month = String(defaultDueDate.getMonth() + 1).padStart(2, '0');
-                                            const day = String(defaultDueDate.getDate()).padStart(2, '0');
-                                            const formattedDate = year + "-" + month + "-" + day;
-
-                                            dueDateInput.value = formattedDate;
-                                        });
 
             </script>
-          
     </body>
 </html>
