@@ -320,8 +320,35 @@
         <servlet-name>SearchWarrantyCard</servlet-name>
         <url-pattern>/searchwc</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>ajaxServlet</servlet-name>
+        <servlet-class>VnPay.ajaxServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>vnpayQuery</servlet-name>
+        <servlet-class>VnPay.vnpayQuery</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>vnpayRefund</servlet-name>
+        <servlet-class>VnPay.vnpayRefund</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ajaxServlet</servlet-name>
+        <url-pattern>/vnpayajax/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vnpayQuery</servlet-name>
+        <url-pattern>/vnpayquery/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vnpayRefund</servlet-name>
+        <url-pattern>/vnpayrefund/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SendWarrantyCard</servlet-name>
         <url-pattern>/sendWC</url-pattern>
     </servlet-mapping>
+
 </web-app>
