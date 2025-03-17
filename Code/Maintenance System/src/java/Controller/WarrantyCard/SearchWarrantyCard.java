@@ -5,7 +5,7 @@ import DAO.WarrantyCardDAO;
 import Model.Customer;
 import Model.Staff;
 import Model.WarrantyCard;
-import Model.UnknownProduct;  
+import Model.UnknownProduct;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -31,7 +31,7 @@ public class SearchWarrantyCard extends HttpServlet {
         WarrantyCard wr = warrantyCardDAO.searchWarrantyCardByCode(warrantyCardCode);
 
         if (wr == null) {
-            request.setAttribute("error", "Không tìm thấy phiếu bảo hành!");
+            request.setAttribute("errorMessage", "Warranty card not found!");
         } else {
             Staff staff = staffDAO.getStaffById(wr.getHandlerID());
             Customer customer = warrantyCardDAO.getCustomerByWarrantyProductID(wr.getWarrantyProductID());

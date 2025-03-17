@@ -128,14 +128,17 @@ public class ExportPDF extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String warrantyCardCode = request.getParameter("warrantyCardCode"); // Lấy tham số "warrantyCardCode" từ yêu cầu
-        response.setContentType("application/pdf"); // Đặt loại nội dung của phản hồi là file PDF
-        response.setHeader("Content-Disposition", "attachment; filename=\"WarrantyCard" + warrantyCardCode + ".pdf\""); // Đặt header để trình duyệt tải file PDF với tên "WarrantyCard.pdf"
-
+        String warrantyCardCode = request.getParameter("warrantyCardCode"); // Lấy tham số "warrantyCardCode"
         WarrantyCard wr = warrantyCardDAO.searchWarrantyCardByCode(warrantyCardCode); // Tìm phiếu bảo hành dựa trên mã
         if (wr == null) { // Nếu không tìm thấy phiếu bảo hành
-            return; // Dừng xử lý, không tạo PDF
+            request.setAttribute("errorMessage", "Warranty Card Does Not Exist");
+            // Đặt attribute "warrantyCode" để giữ lại giá trị người dùng nhập
+            request.setAttribute("warrantyCode", warrantyCardCode);
+            request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
         }
+
+        response.setContentType("application/pdf"); // Đặt loại nội dung của phản hồi là file PDF
+        response.setHeader("Content-Disposition", "attachment; filename=\"WarrantyCard" + warrantyCardCode + ".pdf\""); // Đặt header để trình duyệt tải file PDF với tên "WarrantyCard.pdf"
 
         Staff staff = staffDAO.getStaffById(wr.getHandlerID()); // Lấy thông tin nhân viên dựa trên handlerID của phiếu bảo hành
         Customer customer = warrantyCardDAO.getCustomerByWarrantyProductID(wr.getWarrantyProductID()); // Lấy thông tin khách hàng liên quan đến phiếu bảo hành
@@ -161,7 +164,7 @@ public class ExportPDF extends HttpServlet {
             Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12); // Font cho tiêu đề các phần (header)
             Font normalFont = FontFactory.getFont(FontFactory.HELVETICA, 11);      // Font cho văn bản thông thường
 
-            Paragraph title = new Paragraph("Warranty Card Preview", titleFont); // Tạo đoạn văn tiêu đề với nội dung "Warranty Card Preview"
+            Paragraph title = new Paragraph("Warranty Card", titleFont); // Tạo đoạn văn tiêu đề với nội dung "Warranty Card Preview"
             title.setAlignment(Element.ALIGN_CENTER); // Căn giữa tiêu đề
             document.add(title); // Thêm tiêu đề vào tài liệu PDF
             document.add(new Paragraph(" ")); // Thêm đoạn trống để tạo khoảng cách

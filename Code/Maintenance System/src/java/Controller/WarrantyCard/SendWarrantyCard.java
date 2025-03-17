@@ -1,22 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package Controller.WarrantyCard;
 
+import DAO.StaffDAO;
+import DAO.WarrantyCardDAO;
 import Email.Email;
+import Model.Customer;
+import Model.Staff;
+import Model.UnknownProduct;
+import Model.WarrantyCard;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author sonNH
  */
 public class SendWarrantyCard extends HttpServlet {
+
+    private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+    private final StaffDAO staffDAO = new StaffDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -26,8 +33,40 @@ public class SendWarrantyCard extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy tham số từ form
         String warrantyCardCode = request.getParameter("warrantyCardCode");
+        WarrantyCard wr = warrantyCardDAO.searchWarrantyCardByCode(warrantyCardCode);
+
+        if (wr == null) {
+            request.setAttribute("warrantyCardCode", warrantyCardCode);
+            request.setAttribute("errorMessage", "No Warranty Card to Send");
+            request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
+        }
+
+        Staff staff = staffDAO.getStaffById(wr.getHandlerID());
+        Customer customer = warrantyCardDAO.getCustomerByWarrantyProductID(wr.getWarrantyProductID());
+        Object product = warrantyCardDAO.getProductByWarrantyProductId(wr.getWarrantyProductID());
+
+        // Kiểm tra xem product là Product hay UnknownProduct
+        boolean isUnknownProduct = product instanceof UnknownProduct;
+        List<Map<String, Object>> component = warrantyCardDAO.getWarrantyCardDetails(wr.getWarrantyCardID());
+
+        LocalDate today = LocalDate.now();
+        int day = today.getDayOfMonth();
+        int month = today.getMonthValue();
+        int year = today.getYear();
+
+        request.setAttribute("day", day);
+        request.setAttribute("month", month);
+        request.setAttribute("year", year);
+        // Đưa dữ liệu vào request attribute
+        request.setAttribute("component", component);
+        // Đẩy dữ liệu sang JSP
+        request.setAttribute("warrantyCard", wr);
+        request.setAttribute("customer", customer);
+        request.setAttribute("product", product);
+        request.setAttribute("staff", staff);
+        request.setAttribute("isUnknownProduct", isUnknownProduct);
+
         String customerEmail = request.getParameter("customerEmail");
         String customerName = request.getParameter("customerName");
 
@@ -52,6 +91,7 @@ public class SendWarrantyCard extends HttpServlet {
         emailUtil.sendEmailWithHtmlAndAttachment(customerEmail, subject, htmlContent, filePath);
 
         request.setAttribute("successMessage", "Send To Customer Successfully");
+
         request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
 
     }

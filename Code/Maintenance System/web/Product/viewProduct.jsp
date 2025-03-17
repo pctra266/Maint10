@@ -228,6 +228,7 @@
 
                     <div class="controls-section">
                         <div style="display: flex; align-items: center; gap: 2%">
+                            
                             <div style="margin-left: 1%">
                                 <label for="recordsPerPageSelect">Products per page:</label>
                                 <select id="recordsPerPageSelect" onchange="toggleCustomRecords()">

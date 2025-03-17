@@ -159,6 +159,7 @@
                 border: 1px solid #ddd;
                 padding: 20px;
                 border-radius: 4px;
+                overflow-x: auto;
             }
             .pdf-header {
                 font-size: 1.5rem;
@@ -240,29 +241,27 @@
             /* Bao quanh tất cả form bằng 1 class .button-row */
             .button-row {
                 display: flex;
-                flex-wrap: wrap;     /* Cho phép xuống dòng khi không đủ chỗ */
-                align-items: center; /* Căn giữa theo chiều dọc */
-                gap: 1rem;           /* Khoảng cách giữa các form */
-                position: relative;  /* Tránh xung đột z-index (nếu có) */
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 1rem;
+                position: relative;
                 margin-top: 10px;
             }
-            /* Form tìm kiếm (có label + input + button) trên cùng 1 hàng */
+            /* Form tìm kiếm trên cùng 1 hàng */
             .search-form {
                 display: flex;
                 align-items: center;
                 gap: 0.5rem;
                 margin: 0;
             }
-            /* Label hiển thị inline thay vì block (để không đẩy input xuống) */
             .search-form label {
                 display: inline-block;
                 margin: 0;
                 font-weight: 600;
-                white-space: nowrap; /* Không xuống dòng giữa chừng */
+                white-space: nowrap;
             }
-            /* Giới hạn chiều rộng cho input, tránh đẩy form tràn cột .col-md-4 */
             .search-form input[type="text"] {
-                width: 180px; /* tuỳ chỉnh theo ý bạn */
+                width: 180px;
                 padding: 8px;
             }
             /* Hai form Export/Send đơn giản, chỉ có 1 nút */
@@ -271,28 +270,11 @@
                 align-items: center;
                 margin: 0;
             }
-            /* Style chung cho nút */
             button {
                 padding: 8px 12px;
                 cursor: pointer;
-                white-space: nowrap; /* Nút không tự xuống dòng chữ */
+                white-space: nowrap;
             }
-
-            .pdf-preview {
-                background: #f9f9f9;
-                border: 1px solid #ddd;
-                padding: 20px;
-                border-radius: 4px;
-                /* Thêm dòng này */
-                overflow-x: auto; /* Tự cuộn ngang khi nội dung quá rộng */
-            }
-
-            .pdf-preview table {
-                width: 100%;
-                border-collapse: collapse;
-                /* Có thể thêm table-layout: fixed; nếu muốn các cột co lại */
-            }
-
         </style>
     </head>
     <body>
@@ -301,13 +283,18 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    
+
                     <c:if test="${not empty successMessage}">
-                        <div class="alert alert-success">
+                        <div class="alert alert-success" style="display: flex; justify-content: center; height: 30px; align-items: center">
                             ${successMessage}
                         </div>
                     </c:if>
 
+                    <c:if test="${not empty errorMessage}">
+                        <div class="alert alert-danger" style="display: flex; justify-content: center; height: 30px; align-items: center">
+                            ${errorMessage}
+                        </div>
+                    </c:if>
 
                     <div class="container">
                         <div class="row">
@@ -315,33 +302,38 @@
                             <div class="col-md-5">
                                 <h2>Search Warranty Card</h2>
                                 <div class="search-section">
-                                    <!-- Label và Input (dùng form="searchForm" để gắn vào form bên dưới) -->
                                     <label for="warrantyCode">Enter Warranty Card Code:</label>
+                                    <!-- Giữ lại giá trị người dùng nhập từ tham số -->
                                     <input type="text"
-                                           id="warrantyCode"
-                                           name="warrantyCode"
+                                           id="warrantyCardCode"
+                                           name="warrantyCardCode"
                                            placeholder="e.g., WC12345"
                                            required pattern="[A-Za-z0-9]+"
                                            title="Please enter only letters and numbers without spaces"
-                                           form="searchForm" />
-                                    <!-- Hàng nút -->
+                                           form="searchForm"
+                                           value="${warrantyCardCode != null ? warrantyCardCode : param.warrantyCardCode}" />
+
                                     <div class="button-row">
                                         <!-- Form Search -->
                                         <form id="searchForm" action="searchwc" method="post">
                                             <button type="submit">Search</button>
                                         </form>
                                         <!-- Form Export PDF -->
-                                        <form action="exportpdf" method="get">
-                                            <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+                                        <form id="exportForm" action="exportpdf" method="get" onsubmit="return validateExportForm();">
+                                            <input type="hidden" id="hiddenWarrantyCode" name="warrantyCardCode"
+                                                   value="${warrantyCardCode != null ? warrantyCardCode : param.warrantyCardCode}" />
                                             <button type="submit">Export PDF</button>
                                         </form>
-                                        <!-- Form Send Email -->
-                                        <form action="sendWC" method="post">
-                                            <input type="hidden" name="warrantyCardCode" value="${warrantyCard.warrantyCardCode}" />
+
+                                        <!-- Form Send Warranty Card -->
+                                        <form action="sendWC" method="post" onsubmit="return validateInput();">
+                                            <input type="hidden" name="warrantyCardCode"
+                                                   value="${warrantyCardCode != null ? warrantyCardCode : param.warrantyCardCode}" />
                                             <input type="hidden" name="customerName" value="${customer.name}" />
                                             <input type="hidden" name="customerEmail" value="${customer.email}" />
                                             <button type="submit">Send Warranty Card</button>
                                         </form>
+
                                     </div>
                                 </div>
                             </div>
@@ -350,7 +342,7 @@
                                 <div class="pdf-preview">
                                     <div class="pdf-header">Warranty Card Preview</div>
                                     <div class="pdf-content">
-                                        <!-- Section 1: Store/Repair Information -->
+                                        <!-- Phần nội dung preview -->
                                         <div style="display: flex; justify-content: space-around" class="store-info">
                                             <div>
                                                 <p><strong>Store:</strong> ABC Electronics</p>
@@ -365,11 +357,9 @@
                                             </div>
                                         </div>
                                         <hr>
-                                        <!-- Check for errors -->
                                         <c:if test="${not empty error}">
                                             <p style="color: red;">${error}</p>
                                         </c:if>
-                                        <!-- Warranty Card Information -->
                                         <c:if test="${not empty warrantyCard}">
                                             <div class="row">
                                                 <div class="col-md-6">
@@ -383,7 +373,7 @@
                                                     <p><strong>Staff Email:</strong> ${staff.email}</p>
                                                 </div>
                                                 <hr>
-                                                <!-- Section 2: Customer Information -->
+                                                <!-- Thông tin khách hàng và sản phẩm -->
                                                 <div class="customer-info" style="display: flex; justify-content: space-between">
                                                     <div>
                                                         <p><strong>Customer Name:</strong> ${customer.name}</p>
@@ -413,7 +403,7 @@
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                <!-- Section 4: Component List -->
+                                                <!-- Danh sách linh kiện -->
                                                 <table border="1">
                                                     <tr>
                                                         <th>Component Code</th>
@@ -438,7 +428,6 @@
                                                                     <td>${detail.numberOfUses}</td>
                                                                     <td>${detail.Note}</td>
                                                                     <td>
-                                                                        <!-- Bỏ dấu phẩy ngăn cách nghìn -->
                                                                         <fmt:formatNumber value="${detail.totalPrice}"
                                                                                           type="number"
                                                                                           maxFractionDigits="0"
@@ -470,7 +459,6 @@
                                                                                 total = 0;
                                                                             }
                                                                         }
-                                                                        // Chuyển về chữ thường, chỉ viết hoa chữ cái đầu
                                                                         String words = convertNumberToEnglishWords(total).toLowerCase();
                                                                         if (words != null && words.length() > 0) {
                                                                             words = Character.toUpperCase(words.charAt(0)) + words.substring(1);
@@ -493,7 +481,6 @@
                                                     <h4>Signature Confirmation</h4>
                                                     <h4>Hanoi, ${day}/${month}/${year}</h4>
                                                 </div>
-                                                <!-- Section 8: Signatures/Confirmation -->
                                                 <div style="display: flex; gap: 20px; align-items: center" class="signature-section">
                                                     <p><strong>Customer:</strong></p>
                                                     <div class="signature-box"></div>
@@ -511,6 +498,47 @@
                 <jsp:include page="/includes/footer.jsp" />
             </div> <!-- end main -->
         </div> <!-- end wrapper -->
+
+        <!-- Script kiểm tra trước khi submit form Export PDF -->
+        <script>
+            function validateExportForm() {
+                var code = document.getElementById("warrantyCode").value.trim();
+                if (code === "") {
+                    alert("Please enter warranty card code before exporting PDF.");
+                    return false;
+                }
+                // Gán giá trị đã nhập vào hidden input
+                document.getElementById("hiddenWarrantyCode").value = code;
+                return true;
+            }
+        </script>
+        <script>
+            // Hàm kiểm tra mã phiếu bảo hành nhập vào có hợp lệ không
+            function validateInput() {
+                var code = document.getElementById("warrantyCardCode").value.trim();
+                var validRegex = /^[A-Za-z0-9]+$/; // chỉ cho phép chữ và số, không khoảng trắng hay ký tự đặc biệt
+                if (code === "") {
+                    alert("Please enter warranty card code.");
+                    return false;
+                }
+                if (!validRegex.test(code)) {
+                    alert("Invalid warranty card code. Please enter only letters and numbers without spaces.");
+                    return false;
+                }
+                return true;
+            }
+
+            // Hàm kiểm tra dành riêng cho form Export PDF, cập nhật giá trị hidden input
+            function validateExportForm() {
+                if (!validateInput()) {
+                    return false;
+                }
+                var code = document.getElementById("warrantyCardCode").value.trim();
+                document.getElementById("hiddenWarrantyCode").value = code;
+                return true;
+            }
+        </script>
+
         <script src="js/app.js"></script>
     </body>
 </html>
