@@ -746,6 +746,62 @@ public class StaffDAO extends DBContext {
         }
         return list;
     }
+    public ArrayList<ReportStaff> getAllStaffRepairByID(String id,int pageIndex, int pageSize){
+        ArrayList<ReportStaff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT s.StaffID, s.Name, s.Gender, s.Image, r.RoleName, wp.Action, wp.ActionDate, w.WarrantyCardCode\n" +
+                    "FROM Staff s\n" +
+                    "JOIN [Role] r ON r.RoleID = s.RoleID\n" +
+                    "JOIN WarrantyCardProcess wp ON wp.HandlerID = s.StaffID\n" +
+                    "JOIN WarrantyCard w ON w.WarrantyCardID = wp.WarrantyCardID\n" +
+                    "WHERE s.StaffID = ? \n" +
+                    "AND NOT EXISTS (\n" +
+                    "    SELECT 1 \n" +
+                    "    FROM WarrantyCardProcess wp_latest\n" +
+                    "    WHERE wp.WarrantyCardID = wp_latest.WarrantyCardID \n" +
+                    "    AND wp_latest.Action = 'completed' \n" +
+                    "    AND wp_latest.ActionDate = (\n" +
+                    "        SELECT MAX(ActionDate) \n" +
+                    "        FROM WarrantyCardProcess \n" +
+                    "        WHERE WarrantyCardID = wp.WarrantyCardID\n" +
+                    "    )\n" +
+                    ")\n" +
+                    "ORDER BY wp.ActionDate DESC\n" +
+                    "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY;";
+        try {
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, id);
+        int startIndex = (pageIndex - 1) * pageSize;
+            stm.setInt(2, startIndex);
+            stm.setInt(3, pageSize);
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            int staffID = rs.getInt("StaffID");
+            String name = rs.getString("Name");
+            String gender = rs.getString("Gender");
+            String image = rs.getString("Image");
+            String role = rs.getString("RoleName");
+            String action = rs.getString("Action");
+            String actiondate = rs.getString("ActionDate");
+            String warrantycardcode = rs.getString("WarrantyCardCode");
+            list.add(new ReportStaff(staffID, name, gender, image, role, action, actiondate, warrantycardcode));
+            
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
     public ArrayList<ReportStaff> getAllStaffRepairByID(String id){
         ArrayList<ReportStaff> list = new ArrayList<>();
         PreparedStatement stm = null;
@@ -765,6 +821,7 @@ public class StaffDAO extends DBContext {
         try {
         stm = connection.prepareStatement(sql);
         stm.setString(1, id);
+        
         rs = stm.executeQuery();
         
         while (rs.next()) {

@@ -165,6 +165,8 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    <input type="hidden" name="staffID" value="${param.staffID}">
+
                     <h1 class="text-center ">Staff Repair List</h1>   
                     <table class="table table-hover my-0">
                         <thead>
@@ -189,6 +191,7 @@
                         </thead>       
                         <tbody>
                             <c:forEach var="List" items="${info}">
+                                
                                 <tr>
                                     <td>${List.getName()}</td>                                                                      
                                     <td>${List.getRoleName()}</td>
@@ -209,7 +212,6 @@
                         </tbody>
                     </table>
 
-                    <jsp:include page="/includes/pagination.jsp" />           
                      
                 
                 </main>
