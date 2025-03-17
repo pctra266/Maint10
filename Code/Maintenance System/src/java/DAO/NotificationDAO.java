@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.sql.SQLException;
 
-public class NotificationDAO extends DBContext{
+public class NotificationDAO extends DBContext {
 
     public boolean addNotification(Notification notification) {
         String sql = "INSERT INTO Notifications (RecipientType, RecipientID, Message, CreatedDate, IsRead, Target) VALUES (?, ?, ?, ?, ?, ?)";
@@ -26,17 +27,16 @@ public class NotificationDAO extends DBContext{
         }
     }
 
-    public List<Notification> getUnreadNotifications(String recipientType, int recipientID, long lastCheckTimestamp, int timeoutSeconds) {
+    public List<Notification> getUnreadNotifications(String recipientType, int recipientID, int timeoutSeconds) {
         long startTime = System.currentTimeMillis();
         long timeoutMillis = timeoutSeconds * 1000;
 
         while (System.currentTimeMillis() - startTime < timeoutMillis) {
             List<Notification> notifications = new ArrayList<>();
-            String sql = "SELECT * FROM Notifications WHERE RecipientType = ? AND RecipientID = ? AND IsRead = 0 AND CreatedDate > ? ORDER BY CreatedDate DESC";
+            String sql = "SELECT * FROM Notifications WHERE RecipientType = ? AND RecipientID = ? AND IsRead = 0  ORDER BY CreatedDate DESC";
             try (PreparedStatement ps = connection.prepareStatement(sql)) {
                 ps.setString(1, recipientType);
                 ps.setInt(2, recipientID);
-                ps.setTimestamp(3, new java.sql.Timestamp(lastCheckTimestamp));
                 ResultSet rs = ps.executeQuery();
                 while (rs.next()) {
                     Notification notification = new Notification();
@@ -58,12 +58,26 @@ public class NotificationDAO extends DBContext{
 
             // Đợi 1 giây trước khi kiểm tra lại
             try {
-                Thread.sleep(1000);
+                Thread.sleep(3000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return new ArrayList<>();
             }
         }
         return new ArrayList<>(); // Timeout, trả về rỗng
+    }
+
+    public boolean markAsRead(int notificationID, String recipientType, int recipientID) {
+        String sql = "UPDATE Notifications SET IsRead = 1 WHERE NotificationID = ? AND RecipientType = ? AND RecipientID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, notificationID);
+            ps.setString(2, recipientType);
+            ps.setInt(3, recipientID);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0; // Trả về true nếu cập nhật thành công
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

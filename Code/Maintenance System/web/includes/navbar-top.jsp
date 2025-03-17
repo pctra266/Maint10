@@ -7,7 +7,7 @@
     <ul class="navbar-nav d-none d-lg-flex">
         <li class="nav-item px-2 dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="megaDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-               Look Up Online
+                Look Up Online
             </a>
             <div class="dropdown-menu dropdown-menu-start dropdown-mega" aria-labelledby="megaDropdown">
                 <div class="d-md-flex align-items-start justify-content-start">
@@ -78,79 +78,168 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    let lastCheck = new Date().getTime();
+    // L?u danh sách ID thông báo ?ã hi?n th? ?? tránh l?p
+    let displayedNotificationIDs = new Set();
 
-    function showNotification(message, target) {
-        const notificationList = document.getElementById("notificationList");
-        const notificationItem = document.createElement("a");
-        const nowDate = new Date();
-        notificationItem.className = "list-group-item";
-        notificationItem.href = target;
-        notificationItem.innerHTML = `
-            <div class="d-flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-tools text-primary me-2"></i>
-                </div>
-                <div class="flex-grow-1">
-                    <p class="mb-0">${message}</p>
-                    <small class="text-muted">`+nowDate.getHours()+`:`+nowDate.getMinutes()+`</small>
-                </div>
-            </div>
-        `;
-        notificationList.prepend(notificationItem);
-
-        const unreadCount = notificationList.children.length;
-        const header = document.getElementById("notificationHeader");
-        const countSpan = document.getElementById("notificationCount");
-        header.textContent = `${unreadCount} New Notification${unreadCount > 1 ? 's' : ''}`;
-        countSpan.textContent = unreadCount;
-        countSpan.style.display = unreadCount > 0 ? 'block' : 'none';
-    }
-
-    function checkNotifications() {
-        let recipientType, recipientID;
-
-        <c:if test="${not empty sessionScope.customer}">
-            recipientType = "Customer";
-            recipientID = ${sessionScope.customer.customerID};
-        </c:if>
-        <c:if test="${not empty sessionScope.staff}">
-            recipientType = "Staff";
-            recipientID = ${sessionScope.staff.staffID};
-        </c:if>
-
-        if (!recipientType || !recipientID) {
-            setTimeout(checkNotifications, 5000);
+    function showNotification(message, target, notificationID, createdDate) {
+        if (displayedNotificationIDs.has(notificationID)) {
             return;
         }
+        console.log("Message:", message);
+        console.log("CreatedDate:", createdDate);
 
-        $.ajax({
-            url: "${pageContext.request.contextPath}/Notification/GetUnread",
-            type: "GET",
-            data: { 
-                recipientType: recipientType,
-                recipientID: recipientID, 
-                lastCheck: lastCheck 
-            },
-            timeout: 35000,
-            success: function (data) {
-                console.log("Received data:", data);
-                if (data.length > 0) {
-                    data.forEach(function (notification) {
-                        showNotification(notification.message, notification.target);
-                    });
-                    lastCheck = new Date().getTime();
-                }
-                setTimeout(checkNotifications, 0);
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching notifications: ", status, error);
-                setTimeout(checkNotifications, 5000);
-            }
-        });
-    }
+        const notificationList = document.getElementById("notificationList");
+        const notificationItem = document.createElement("a");
+        const date = new Date(Number(createdDate));
+        notificationItem.className = "list-group-item";
+        notificationItem.href = target;
+        notificationItem.dataset.notificationId = notificationID;
 
-    $(document).ready(function () {
-        checkNotifications();
-    });
+        // T?o c?u trúc DOM th? công
+        const container = document.createElement("div");
+        container.className = "d-flex";
+
+        const iconDiv = document.createElement("div");
+        iconDiv.className = "flex-shrink-0";
+        const icon = document.createElement("i");
+        icon.className = "fas fa-tools text-primary me-2";
+        iconDiv.appendChild(icon);
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "flex-grow-1";
+
+        const messageP = document.createElement("p");
+        messageP.className = "mb-0";
+        messageP.textContent = message; // Dùng textContent ?? tránh l?i HTML
+
+        const timeSmall = document.createElement("small");
+        timeSmall.className = "text-muted";
+        timeSmall.textContent = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+
+                // G?n các ph?n t?
+                contentDiv.appendChild(messageP);
+                contentDiv.appendChild(timeSmall);
+                container.appendChild(iconDiv);
+                container.appendChild(contentDiv);
+                notificationItem.appendChild(container);
+
+                console.log("Generated HTML:", notificationItem.innerHTML); // Ki?m tra HTML
+                notificationList.prepend(notificationItem);
+                displayedNotificationIDs.add(notificationID);
+
+                notificationItem.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    markAsRead(notificationID, this);
+                });
+
+                const unreadCount = notificationList.children.length;
+                const header = document.getElementById("notificationHeader");
+                const countSpan = document.getElementById("notificationCount");
+                header.textContent = `${unreadCount} New Notification${unreadCount > 1 ? 's' : ''}`;
+                        countSpan.textContent = unreadCount;
+                        countSpan.style.display = unreadCount > 0 ? 'block' : 'none';
+                    }
+
+                    function checkNotifications() {
+                        let recipientType, recipientID;
+
+    <c:if test="${not empty sessionScope.customer}">
+                        recipientType = "Customer";
+                        recipientID = ${sessionScope.customer.customerID};
+    </c:if>
+    <c:if test="${not empty sessionScope.staff}">
+                        recipientType = "Staff";
+                        recipientID = ${sessionScope.staff.staffID};
+    </c:if>
+
+                        if (!recipientType || !recipientID) {
+                            setTimeout(checkNotifications, 5000);
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/Notification/GetUnread",
+                            type: "GET",
+                            data: {
+                                recipientType: recipientType,
+                                recipientID: recipientID
+                            },
+                            timeout: 35000,
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    data.forEach(function (notification) {
+                                        showNotification(
+                                                notification.message,
+                                                notification.target,
+                                                notification.notificationID,
+                                                notification.createdDate
+                                                );
+                                    });
+                                }
+                                setTimeout(checkNotifications, 0);
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Error fetching notifications: ", status, error);
+                                setTimeout(checkNotifications, 5000);
+                            }
+                        });
+                    }
+
+                    // Hàm ?ánh d?u m?t thông báo là ?ã ??c
+                    function markAsRead(notificationID, element) {
+                        let recipientType, recipientID;
+
+    <c:if test="${not empty sessionScope.customer}">
+                        recipientType = "Customer";
+                        recipientID = ${sessionScope.customer.customerID};
+    </c:if>
+    <c:if test="${not empty sessionScope.staff}">
+                        recipientType = "Staff";
+                        recipientID = ${sessionScope.staff.staffID};
+    </c:if>
+
+                        if (!recipientType || !recipientID) {
+                            return;
+                        }
+
+                        $.ajax({
+                            url: "${pageContext.request.contextPath}/Notification/MarkRead",
+                            type: "POST",
+                            data: {
+                                notificationID: notificationID,
+                                recipientType: recipientType,
+                                recipientID: recipientID
+                            },
+                            success: function (response) {
+                                if (response.success) {
+                                    // Xóa thông báo kh?i giao di?n
+                                    element.remove();
+                                    displayedNotificationIDs.delete(notificationID);
+
+                                    // C?p nh?t giao di?n
+                                    const notificationList = document.getElementById("notificationList");
+                                    const unreadCount = notificationList.children.length;
+                                    const header = document.getElementById("notificationHeader");
+                                    const countSpan = document.getElementById("notificationCount");
+                                    header.textContent = unreadCount > 0
+                                            ? `${unreadCount} New Notification${unreadCount > 1 ? 's' : ''}`
+                                                                        : "No New Notifications";
+                                                                countSpan.textContent = unreadCount;
+                                                                countSpan.style.display = unreadCount > 0 ? 'block' : 'none';
+
+                                                                // Chuy?n h??ng sau khi ?ánh d?u
+                                                                window.location.href = element.href;
+                                                            } else {
+                                                                console.error("Failed to mark notification as read");
+                                                            }
+                                                        },
+                                                        error: function (xhr, status, error) {
+                                                            console.error("Error marking notification as read: ", status, error);
+                                                        }
+                                                    });
+                                                }
+
+                                                $(document).ready(function () {
+                                                    checkNotifications();
+                                                });
 </script>

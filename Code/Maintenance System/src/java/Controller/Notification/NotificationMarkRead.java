@@ -6,7 +6,6 @@
 package Controller.Notification;
 
 import DAO.NotificationDAO;
-import Model.Notification;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,15 +14,17 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
  * @author ADMIN
  */
-@WebServlet(name="NotificationServlet", urlPatterns={"/Notification/GetUnread"})
-public class NotificationServlet extends HttpServlet {
-   private final NotificationDAO notificationDAO = new NotificationDAO();
+@WebServlet(name="NotificationMarkRead", urlPatterns={"/Notification/MarkRead"})
+public class NotificationMarkRead extends HttpServlet {
+   
+    private final NotificationDAO notificationDAO = new NotificationDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -39,10 +40,10 @@ public class NotificationServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet NotificationServlet</title>");  
+            out.println("<title>Servlet NotificationMarkRead</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NotificationServlet at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet NotificationMarkRead at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,18 +59,10 @@ public class NotificationServlet extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String recipientType = request.getParameter("recipientType");
-        int recipientID = Integer.parseInt(request.getParameter("recipientID"));
+    throws ServletException, IOException {
+        processRequest(request, response);
+    } 
 
-        List<Notification> notifications = notificationDAO.getUnreadNotifications(recipientType, recipientID, 30);
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        Gson gson = new Gson();
-        String json = gson.toJson(notifications);
-        response.getWriter().write(json);
-    }
     /** 
      * Handles the HTTP <code>POST</code> method.
      * @param request servlet request
@@ -79,10 +72,22 @@ public class NotificationServlet extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        processRequest(request, response);
-    }
+            throws ServletException, IOException {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
+        int notificationID = Integer.parseInt(request.getParameter("notificationID"));
+        String recipientType = request.getParameter("recipientType");
+        int recipientID = Integer.parseInt(request.getParameter("recipientID"));
+
+        boolean success = notificationDAO.markAsRead(notificationID, recipientType, recipientID);
+
+        // Trả về JSON phản hồi
+        Gson gson = new Gson();
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("success", success);
+        response.getWriter().write(gson.toJson(result));
+    }
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
