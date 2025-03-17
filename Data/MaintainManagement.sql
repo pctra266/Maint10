@@ -389,6 +389,15 @@ CREATE TABLE MarketingServiceItem (
     CONSTRAINT FK_MarketingServiceItem_SectionID
         FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
 );
+CREATE TABLE StaffBlogPosts (
+    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
+    StaffID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME NULL,
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
 
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
