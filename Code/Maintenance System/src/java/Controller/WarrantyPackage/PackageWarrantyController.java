@@ -122,7 +122,6 @@ public class PackageWarrantyController extends HttpServlet {
         
         request.getRequestDispatcher("packageWarrantyList.jsp").forward(request, response);
         } else if(action.equals("edit")){
-            // Lấy thông tin một PackageWarranty theo ID để chỉnh sửa
             String id = request.getParameter("packageWarrantyID");
             PackageWarranty pkg = pkgDao.getPackageWarrantyByID(id);
             request.setAttribute("packageWarranty", pkg);
@@ -142,38 +141,23 @@ public class PackageWarrantyController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        // Xử lý cập nhật PackageWarranty
         String action = request.getParameter("action");
         if(action.equals("edit")){
             PackageWarranty pkg = new PackageWarranty();
             pkg.setPackageWarrantyID(Integer.parseInt(request.getParameter("packageWarrantyID")));
-            // Các trường read-only như productCode, customerName, email, productName, extendedWarrantyName không cần cập nhật
-            
-            // Định dạng ngày (HTML input type="date" gửi về dạng yyyy-MM-dd)
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                pkg.setWarrantyStartDate(sdf.parse(request.getParameter("warrantyStartDate")));
-                pkg.setWarrantyEndDate(sdf.parse(request.getParameter("warrantyEndDate")));
-                pkg.setStartExtendedWarranty(sdf.parse(request.getParameter("startExtendedWarranty")));
-                pkg.setEndExtendedWarranty(sdf.parse(request.getParameter("endExtendedWarranty")));
-            } catch(Exception e) {
-                e.printStackTrace();
-            }
             pkg.setNote(request.getParameter("note"));
-            pkg.setActive(Boolean.parseBoolean(request.getParameter("isActive")));
-            
-            boolean updated0 = pkgDao.updateActive(pkg);
-            boolean updated1 = pkgDao.updateDefaultWarrantyPackage(pkg);
-            boolean updated2 = pkgDao.updateExtendedWarrantyDetail(pkg);
-            String message = updated0 ? "Package warranty updated successfully." : "Update failed.";
-            message = updated1 ? "Package warranty updated successfully." : "Update failed.";
-            message = updated2 ? "Package warranty updated successfully." : "Update failed.";
+            boolean updated = pkgDao.updatePackageWarranty(pkg);
+            String message = updated ? "Package warranty updated successfully." : "Update failed.";
             request.setAttribute("message", message);
         }
-        // Sau khi xử lý POST, lấy lại danh sách và forward về danh sách
-//        ArrayList<PackageWarranty> list = pkgDao.getListPackageWarranty();
-//        request.setAttribute("packageWarranties", list);
-        request.getRequestDispatcher("packageWarrantyList.jsp").forward(request, response);
+        //lay lai chi so
+         String id = request.getParameter("packageWarrantyID");
+            PackageWarranty pkg = pkgDao.getPackageWarrantyByID(id);
+            request.setAttribute("packageWarranty", pkg);
+            request.setAttribute("extendedWarrantyDetailList", extDao.getExtendedWarrantyDetailList(id));
+            request.setAttribute("extendedWarrantyList", extDao.getListExtendedWarranty());
+        //end lay lai chi so
+        request.getRequestDispatcher("editPackageWarranty.jsp").forward(request, response);
     }
 
     /** 

@@ -220,43 +220,26 @@ public class PackageWarrantyDAO {
         return list;
     }
     
-    // Hàm cập nhật thông tin gia hạn mặc định và extended warranty detail
-    // Chỉ cập nhật: WarrantyStartDate, WarrantyEndDate, Note, IsActive của PackageWarranty
-    // và StartExtendedWarranty, EndExtendedWarranty của ExtendedWarrantyDetail
+
     public boolean updatePackageWarranty(PackageWarranty pkg) {
-        boolean resultPW = false, resultEWD = false;
+        boolean resultPW = false;
         String queryPW = """
             UPDATE PackageWarranty
-            SET WarrantyStartDate = ?, WarrantyEndDate = ?, Note = ?, IsActive = ?
+            SET  Note = ?
             WHERE PackageWarrantyID = ?
             """;
-        String queryEWD = """
-            UPDATE ExtendedWarrantyDetail
-            SET StartExtendedWarranty = ?, EndExtendedWarranty = ?
-            WHERE PackageWarrantyID = ?
-            """;
+    
         try {
             conn = new DBContext().connection;
             
             // Cập nhật PackageWarranty
             ps = conn.prepareStatement(queryPW);
-            ps.setDate(1, new java.sql.Date(pkg.getWarrantyStartDate().getTime()));
-            ps.setDate(2, new java.sql.Date(pkg.getWarrantyEndDate().getTime()));
-            ps.setString(3, pkg.getNote());
-            ps.setBoolean(4, pkg.isActive());
-            ps.setInt(5, pkg.getPackageWarrantyID());
+            ps.setString(1, pkg.getNote());
+            ps.setInt(2, pkg.getPackageWarrantyID());
             int rowsPW = ps.executeUpdate();
             resultPW = rowsPW > 0;
             
-            // Cập nhật ExtendedWarrantyDetail
-            ps = conn.prepareStatement(queryEWD);
-            ps.setDate(1, new java.sql.Date(pkg.getStartExtendedWarranty().getTime()));
-            ps.setDate(2, new java.sql.Date(pkg.getEndExtendedWarranty().getTime()));
-            ps.setInt(3, pkg.getPackageWarrantyID());
-            int rowsEWD = ps.executeUpdate();
-            resultEWD = rowsEWD > 0;
-            
-            return resultPW && resultEWD;
+            return resultPW ;
         } catch(Exception e) {
             e.printStackTrace();
         }

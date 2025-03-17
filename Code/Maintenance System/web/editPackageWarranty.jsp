@@ -19,17 +19,9 @@
             
             <!-- Main content -->
             <main class="content">
-                <!-- Breadcrumb -->
-                <nav aria-label="breadcrumb">
-                  <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/home">Home</a></li>
-                    <li class="breadcrumb-item"><a href="${pageContext.request.contextPath}/PackageWarrantyController">Package Warranty List</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Edit Package Warranty</li>
-                  </ol>
-                </nav>
-                
                 <!-- Card: Edit Package Warranty -->
                 <div class="card shadow-sm mb-4">
+                    <a href="packageWarranty" style="margin: 1%; width: 5%" class="btn btn-primary">Back</a>
                     <div class="card-header">
                         <h2>Package Warranty</h2>
                     </div>
@@ -37,7 +29,7 @@
                         <c:if test="${not empty message}">
                             <div class="alert alert-info">${message}</div>
                         </c:if>
-                        <form action="${pageContext.request.contextPath}/PackageWarrantyController" method="post">
+                        <form action="${pageContext.request.contextPath}/packageWarranty" method="post">
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                             
@@ -76,7 +68,7 @@
                             
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">Update Package Warranty</button>
-                                <a href="${pageContext.request.contextPath}/PackageWarrantyController" class="btn btn-secondary">Cancel</a>
+                                <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -95,6 +87,7 @@
                             <input type="hidden" name="action" value="extendDefault">
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                             <button type="submit" class="btn btn-primary">Extend Default Warranty</button>
+                            <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>
@@ -165,6 +158,7 @@
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                            
                             <button type="submit" class="btn btn-primary">Extend Extended Warranty</button>
+                            <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>

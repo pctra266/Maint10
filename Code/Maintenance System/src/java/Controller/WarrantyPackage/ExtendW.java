@@ -41,21 +41,17 @@ public class ExtendW extends HttpServlet {
         String message = "";
         
         if(action.equals("extendDefault")){
-            // Gia hạn default: lấy gói bảo hành hiện tại
             PackageWarranty pkg = pkgDao.getPackageWarrantyByID(packageWarrantyID);
             if(pkg != null){
                 Date now = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(now);
-                // Giả sử DurationMonths là 12 (nếu còn trường này, bạn có thể dùng pkg.getDurationMonths())
                 int duration = 12;
                 if(now.compareTo(pkg.getWarrantyEndDate()) <= 0){
-                    // Nếu còn hiệu lực, cộng thêm duration tháng vào WarrantyEndDate
                     cal.setTime(pkg.getWarrantyEndDate());
                     cal.add(Calendar.MONTH, duration);
                     pkg.setWarrantyEndDate(cal.getTime());
                 } else {
-                    // Nếu đã hết hiệu lực, thiết lập lại WarrantyStartDate và WarrantyEndDate dựa trên ngày hiện tại
                     pkg.setWarrantyStartDate(now);
                     cal.setTime(now);
                     cal.add(Calendar.MONTH, duration);
@@ -63,23 +59,35 @@ public class ExtendW extends HttpServlet {
                 }
                 boolean updated = pkgDao.updatePackageWarranty(pkg);
                 message = updated ? "Default warranty extended successfully." : "Failed to extend default warranty.";
+                if(updated){
+                    pkg.setActive(true);
+                    pkgDao.updateActive(pkg);
+                }
             } else {
                 message = "Package warranty not found.";
             }
         } else if(action.equals("extendExtended")){
-            // Gia hạn extended: lấy packageWarrantyID và extendedWarrantyID được chọn từ form
+            PackageWarranty pkg = pkgDao.getPackageWarrantyByID(packageWarrantyID);
+            
             String extendedWarrantyID = request.getParameter("extendedWarrantyID");
             System.out.println("extendedWarrantyID la " + extendedWarrantyID);
-            // Phương thức extendWarrantyDetail sẽ xử lý:
-            // - Nếu ExtendedWarrantyDetail đã tồn tại cho gói bảo hành => cập nhật EndExtendedWarranty = EndExtendedWarranty + ExtendedPeriodInMonths (tính từ ExtendedWarranty)
-            // - Nếu chưa tồn tại => tạo mới bản ghi với StartExtendedWarranty = now và EndExtendedWarranty = now + ExtendedPeriodInMonths
             boolean extendedUpdated = extDao.extendWarrantyDetail(packageWarrantyID, extendedWarrantyID);
             message = extendedUpdated ? "Extended warranty extended successfully." : "Failed to extend extended warranty.";
-        }
+            if(extendedUpdated){
+                    pkg.setActive(true);
+                    pkgDao.updateActive(pkg);
+                }
         
-        request.setAttribute("mess", message);
-        // Sau khi xử lý, load lại trang gia hạn
-        response.sendRedirect("packageWarranty?action=edit&packageWarrantyID="+ packageWarrantyID);
+        }
+        request.setAttribute("message", message);
+        //lay lai chi so
+         String id = request.getParameter("packageWarrantyID");
+            PackageWarranty pkg = pkgDao.getPackageWarrantyByID(id);
+            request.setAttribute("packageWarranty", pkg);
+            request.setAttribute("extendedWarrantyDetailList", extDao.getExtendedWarrantyDetailList(id));
+            request.setAttribute("extendedWarrantyList", extDao.getListExtendedWarranty());
+        //end lay lai chi so
+        request.getRequestDispatcher("editPackageWarranty.jsp").forward(request, response);
     }
     
     @Override

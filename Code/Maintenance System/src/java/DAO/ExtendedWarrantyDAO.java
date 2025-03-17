@@ -138,10 +138,9 @@ public class ExtendedWarrantyDAO {
         if(rs.next()){
             extPeriod = rs.getInt("ExtendedPeriodInMonths");
         } else {
-            return false; // Không tìm thấy ExtendedWarranty
+            return false; 
         }
         System.out.println("da den day");
-        // Lấy bản ghi ExtendedWarrantyDetail nếu có
         String queryCheck = "SELECT ExtendedWarrantyDetailID, EndExtendedWarranty FROM ExtendedWarrantyDetail WHERE PackageWarrantyID = ? and ExtendedWarrantyID = ?";
         ps = conn.prepareStatement(queryCheck);
         ps.setString(1, packageWarrantyID);
@@ -150,7 +149,6 @@ public class ExtendedWarrantyDAO {
         java.util.Date now = new java.util.Date();
         if(rs.next()){
             System.out.println("22222222222222");
-            // Nếu bản ghi đã tồn tại, cập nhật EndExtendedWarranty = current EndExtendedWarranty + extPeriod tháng
             int extDetailID = rs.getInt("ExtendedWarrantyDetailID");
             java.sql.Date currentEnd = rs.getDate("EndExtendedWarranty");
             Calendar cal = Calendar.getInstance();
@@ -166,7 +164,6 @@ public class ExtendedWarrantyDAO {
             return rowsUpdated > 0;
         } else {
             System.out.println("333333333333333333");
-            // Nếu chưa tồn tại, tạo mới ExtendedWarrantyDetail với StartExtendedWarranty = now và EndExtendedWarranty = now + extPeriod tháng
             Calendar cal = Calendar.getInstance();
             cal.setTime(now);
             cal.add(Calendar.MONTH, extPeriod);
