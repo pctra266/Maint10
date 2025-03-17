@@ -152,10 +152,6 @@
         <servlet-name>SearchWarrantyCard</servlet-name>
         <servlet-class>Controller.WarrantyCard.SearchWarrantyCard</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>SendWarrantyCard</servlet-name>
-        <servlet-class>Controller.WarrantyCard.SendWarrantyCard</servlet-class>
-    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -320,7 +316,6 @@
         <servlet-name>SearchWarrantyCard</servlet-name>
         <url-pattern>/searchwc</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ajaxServlet</servlet-name>
         <servlet-class>VnPay.ajaxServlet</servlet-class>
@@ -344,10 +339,5 @@
     <servlet-mapping>
         <servlet-name>vnpayRefund</servlet-name>
         <url-pattern>/vnpayrefund/*</url-pattern>
-
-    <servlet-mapping>
-        <servlet-name>SendWarrantyCard</servlet-name>
-        <url-pattern>/sendWC</url-pattern>
-
     </servlet-mapping>
 </web-app>

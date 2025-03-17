@@ -4,11 +4,11 @@
  */
 
 package Controller.HomePage;
-import DAO.HomePage_MarketingServiceSectionDAO;
-import Model.MarketingServiceSection;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +18,14 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author Tra Pham
  */
-@WebServlet(name="MarketingServiceSectionController", urlPatterns={"/MarketingServiceSectionController"})
-public class MarketingServiceSectionController extends HttpServlet {
-   private HomePage_MarketingServiceSectionDAO sectionDAO = new HomePage_MarketingServiceSectionDAO();
+@WebServlet(name="CoverController", urlPatterns={"/changeCover"})
+@MultipartConfig(
+        fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 50, // 50MB
+        maxRequestSize = 1024 * 1024 * 100 // 100MB
+)
+public class CoverController extends HttpServlet {
+   
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -36,10 +41,10 @@ public class MarketingServiceSectionController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet MarketingServiceSectionController</title>");  
+            out.println("<title>Servlet CoverController</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet MarketingServiceSectionController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CoverController at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -54,8 +59,8 @@ public class MarketingServiceSectionController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-        protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
         processRequest(request, response);
     } 
 
@@ -68,24 +73,14 @@ public class MarketingServiceSectionController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        int sectionID = Integer.parseInt(request.getParameter("sectionID"));
-        String title = request.getParameter("title");
-        String subTitle = request.getParameter("subTitle");
-        
-        MarketingServiceSection section = new MarketingServiceSection();
-        section.setSectionID(sectionID);
-        section.setTitle(title);
-        section.setSubTitle(subTitle);
-        
-        boolean updated = sectionDAO.updateSection(section);
-        String message = updated ? "Section updated successfully!" : "Update failed!";
-        request.setAttribute("message", message);
-        
-        MarketingServiceSection updatedSection = sectionDAO.getSectionByID(sectionID);
-        request.setAttribute("section", updatedSection);
-        request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
+    throws ServletException, IOException {
+                Integer maxUploadSizeImageMB = (Integer) request.getServletContext().getAttribute("maxUploadSizeImageMB");
+
+        // Nếu maxSizeMB chưa có, đặt giá trị mặc định 5MB
+        if (maxUploadSizeImageMB == null) {
+            maxUploadSizeImageMB = 5; // Giá trị mặc định
+            request.getServletContext().setAttribute("maxUploadSizeImageMB", maxUploadSizeImageMB);
+        }
     }
 
     /** 

@@ -7,10 +7,6 @@ package Controller;
 
 import DAO.HomePage_ContactDAO;
 import DAO.HomePage_FooterDAO;
-import DAO.HomePage_MarketingServiceItemDAO;
-import DAO.HomePage_MarketingServiceSectionDAO;
-import Model.MarketingServiceItem;
-import Model.MarketingServiceSection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -18,7 +14,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
 
 /**
  *
@@ -28,8 +23,6 @@ import java.util.List;
 public class Home extends HttpServlet {
    private final HomePage_FooterDAO footerDao = new HomePage_FooterDAO();
    private final HomePage_ContactDAO contactDao = new HomePage_ContactDAO();
-   private final HomePage_MarketingServiceItemDAO itemDAO = new HomePage_MarketingServiceItemDAO();
-   private final HomePage_MarketingServiceSectionDAO sectionDAO = new HomePage_MarketingServiceSectionDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -41,10 +34,6 @@ public class Home extends HttpServlet {
     throws ServletException, IOException {
         request.setAttribute("contactText", contactDao.getContactText());
         request.setAttribute("footer", footerDao.getFooter());
-        MarketingServiceSection section = sectionDAO.getSectionByID(1);
-        request.setAttribute("section", section);
-         List<MarketingServiceItem> items = itemDAO.getItemsBySectionID(1);
-        request.setAttribute("serviceItems", items);
         request.getRequestDispatcher("HomePage.jsp").forward(request, response);
     } 
 

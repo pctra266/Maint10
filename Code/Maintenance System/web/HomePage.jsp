@@ -5,7 +5,6 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<jsp:useBean id="coverDAO" class="DAO.HomePage_CoverDAO" scope="page" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,8 +98,8 @@
                         </div>
                     </ul><!-- end ul2 -->
                 </nav>
-                     <c:set var="backgroundImage" value="${coverDAO.getBackgroundImage()}" />
-                  <main style="background-image: url('${pageContext.request.contextPath}${backgroundImage}'); background-size: cover; background-position: center; background-attachment: fixed;">
+                        
+                  <main style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
                       <div style="height: 95vh" class="bg-primary bg-opacity-50  rounded shadow-lg p-5">
                         <div class="container  ">
                             <div>
@@ -123,13 +122,13 @@
                                 </div>
                                 <div>
                                     
-                                    <form action="SearchWarrantyController" method="get" > <!-- form here -->
+                                    <form > <!-- form here -->
                                         
                                         <div style="height: 55px;" class="input-group mx-auto w-50">
                                             <div class="position-absolute bg-secondary opacity-25 rounded-3"
                                                  style="top: -10px; left: -10px; right: -10px; bottom: -10px; z-index: 0;">
                                             </div>
-                                            <input type="search" name="searchValue" class="form-control" placeholder="Information code">
+                                            <input type="search" class="form-control" placeholder="Information code">
                                             <div class="input-group-append">
                                                 <button style="height: 55px" class="btn btn-primary" type="submit">Search</button>
                                             </div>
@@ -137,7 +136,7 @@
                                         <div class="mx-auto text-center">
                                         <div style="margin-top: 15px" >
                                             <label class="form-check form-check-inline">
-                                                <input  class="form-check-input" type="radio" name="searchType" value="phone">
+                                                <input checked="" class="form-check-input" type="radio" name="searchType" value="">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -147,7 +146,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="email">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -157,7 +156,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="productCode" checked="">
+                                                <input class="form-check-input" type="radio" name="searchType" value="">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -179,30 +178,73 @@
                        
                         <div style="height: 100vh" class="bg-white">
                             <div style="padding-bottom: 7%; padding-top: 5% " class="container">
-                                <div style="margin-bottom: 2%; margin-top: 1%;" class="row">
-                                    <div class="col-6">
+                                <div style="margin-bottom: 2%;margin-top: 1%;" class="row">
+
+                                    <div class="col-6 ">
                                         <div class="d-flex align-items-center">
-                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px;">I</h1>
-                                            <h1 style="font-size: 30px" class="fw-bold"> ${section.title}</h1>
+                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px; " >I</h1>
+                                            <h1 style="font-size: 30px" class="fw-bold"> Our Service</h1>
                                         </div>
-                                        <h5>${section.subTitle}</h5>
+                                        <h5>These are some of the essential services provided by my system </h5>
                                     </div>
-                                </div>
+                                    </div>
                                 <div class="row">
-                                    <c:forEach var="item" items="${serviceItems}">
-                                        <div style="margin-bottom:2% " class="col-12 col-md-6 col-lg-3">
-                                            <div class="card h-100">
-                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}">
-                                                <div class="card-header px-4 pt-4">
-                                                    <h5 class="card-title mb-0">${item.title}</h5>
-                                                </div>
-                                                <div class="card-body px-4 pt-2">
-                                                    <p>${item.description}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </c:forEach>
-                                </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabssa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                       <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                                   <div class="col-12 col-md-6 col-lg-3">
+                                        <div class="card h-100">
+
+                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
+
+                                           <div class="card-header px-4 pt-4">
+                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
+                                           </div>
+                                           <div class="card-body px-4 pt-2">
+                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
+                                                   at massa.</p>
+                                           </div>
+                                       </div>
+                                   </div>
+                               </div>
                             </div>
                         </div><!-- end div 2 -->
                     
@@ -227,7 +269,10 @@
                                     </h6>
                                 </div>
                                 <div>
-                                    <a style="height: 50px; justify-content: center; align-content: center" class="btn btn-primary " href="customerContactForm.jsp">Contact Support</a>
+                                    
+                                    <form > 
+                                        <button style="height: 50px" class="btn btn-primary " type="submit">Contact Support</button>
+                                    </form> 
                                 </div>
                         </div>
                     </div>

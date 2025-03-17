@@ -136,44 +136,14 @@ CREATE TABLE ProductComponents (
     Quantity INT NOT NULL CHECK (Quantity >= 1) --Component in a product if equal to 0, it should not be in this table
 );
 
-CREATE TABLE ExtendedWarranty (
-    ExtendedWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	ExtendedWarrantyName NVARCHAR(100) NOT NULL, 
-    ExtendedPeriodInMonths INT NOT NULL,       
-    Price DECIMAL(18,2) NOT NULL,              
-    ExtendedWarrantyDescription NVARCHAR(500) NULL,
-	IsDelete BIT DEFAULT 0 NOT NULL,
-);
---  PackageWarranty table
-CREATE TABLE PackageWarranty (
-    PackageWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    WarrantyStartDate DATETIME NOT NULL,          
-    WarrantyEndDate DATETIME NOT NULL,
-	DurationMonths INT NOT NULL DEFAULT 12,
-	Price DECIMAL(18,2) NOT NULL,
-    Note NVARCHAR(500) NULL, 
-	IsActive BIT DEFAULT 1 NOT NULL,
-);
-
-CREATE TABLE ExtendedWarrantyDetail(
-	ExtendedWarrantyDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-	ExtendedWarrantyID INT NOT NULL REFERENCES ExtendedWarranty(ExtendedWarrantyID),
-	PackageWarrantyID INT NOT NULL REFERENCES PackageWarranty(PackageWarrantyID),
-	StartExtendedWarranty DATETIME NOT NULL,
-	EndExtendedWarranty DATETIME NOT NULL,
-)
-
-
 -- ProductDetail Table
 CREATE TABLE ProductDetail (
     ProductDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
     ProductID INT NOT NULL REFERENCES Product(ProductID),
     ProductCode NVARCHAR(50) NOT NULL UNIQUE,
-    PurchaseDate DATETIME NOT NULL,
-	PackageWarrantyID INT NOT NULL UNIQUE REFERENCES PackageWarranty(PackageWarrantyID)
+    PurchaseDate DATETIME NOT NULL
 );
-
 
 -- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
 CREATE TABLE UnknownProduct (
@@ -359,37 +329,6 @@ CREATE TABLE ContactText (
     subtitle TEXT NOT NULL,
     lastUpdated DATETIME DEFAULT GETDATE()
 );
-
-CREATE TABLE CustomerContact (
-    ContactID INT IDENTITY(1,1) PRIMARY KEY,
-    Name NVARCHAR(100)  NULL,
-    Email NVARCHAR(100) NULL,
-    Phone NVARCHAR(20) NOT NULL,
-    Message NVARCHAR(MAX) NULL,
-    CreatedAt DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE MarketingServiceSection (
-    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Title NVARCHAR(255),
-    SubTitle NVARCHAR(255),
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE MarketingServiceItem (
-    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    SectionID INT NOT NULL,
-    Title NVARCHAR(255) NOT NULL,
-    Description NVARCHAR(MAX),
-    ImageURL NVARCHAR(MAX),
-    SortOrder INT DEFAULT 1,
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_MarketingServiceItem_SectionID
-        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
-);
-
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);

@@ -1,5 +1,12 @@
 USE MaintainManagement
 
+INSERT INTO ProductDetail (CustomerID, ProductID, ProductCode, PurchaseDate)
+VALUES
+(1, 1, 'P103453', '2025-01-01'),
+(2, 2, 'P1345345', '2025-01-02'),
+(3, 3, 'P1434343', '2025-01-03'),
+(4, 1, 'P13435', '2025-01-04'),
+(5, 4, 'P134535', '2025-01-05')
 
 INSERT INTO WarrantyProduct (ProductDetailID, UnknownProductID)
 VALUES 
@@ -7,7 +14,7 @@ VALUES
 (6, NULL), (7, NULL), (8, NULL), (9, NULL), (10, NULL),
 (11, NULL), (12, NULL), (13, NULL), (14, NULL), (15, NULL),
 (16, NULL), (17, NULL), (18, NULL), (19, NULL), (23, NULL),
-(33, NULL), (43, NULL), (53, NULL),(NULL,25),(NULL,26),(NULL,27),(NULL,28),(NULL,29),
+(33, NULL), (43, NULL), (53, NULL), (63, NULL),(NULL,25),(NULL,26),(NULL,27),(NULL,28),(NULL,29),
 (NULL, 1), (NULL, 2), (NULL, 3), (NULL, 4), (NULL, 5),  
 (NULL, 6), (NULL, 7), (NULL, 8), (NULL, 9), (NULL, 10),  
 (NULL, 11), (NULL, 12), (NULL, 13), (NULL, 14), (NULL, 15),  
@@ -60,8 +67,8 @@ VALUES
 ('WC142', 42, 'Keyboard backlight not working', 'waiting', '2024-02-16'),
 ('WC143', 43, 'Sound card failure', 'waiting', '2024-02-17'),
 ('WC144', 44, 'Ethernet port not functioning', 'waiting', '2024-02-18'),
-('WC145', 45, 'Camera blurry images', 'waiting', '2024-02-19')
-
+('WC145', 45, 'Camera blurry images', 'waiting', '2024-02-19'),
+('WC146', 46, 'Lid not closing properly', 'waiting', '2024-02-20');
 INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, IssueDescription, WarrantyStatus, CreatedDate)
 VALUES
 ('WC201', 1, 'Screen malfunction', 'fixing', '2014-01-10'),

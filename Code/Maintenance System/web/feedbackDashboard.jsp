@@ -26,9 +26,6 @@
                     <div>
                          <form method="get" action="feedback" >
                             <input type="hidden" name="action" value="viewFeedbackDashboard">
-                         <input type="hidden" name="page" value="${pagination.currentPage}" />
-                        <input type="hidden" name="sort" value="${pagination.sort}" />
-                        <input type="hidden" name="order" value="${pagination.order}" />
                             <div class="row"  style="justify-content: space-between">
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                            <input style="margin-top: 15px" class="form-control" type="search" name="WarrantyCardCode" placeholder="Warranty Card Code"  value="${WarrantyCardCode}" >
