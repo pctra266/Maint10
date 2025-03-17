@@ -708,6 +708,48 @@ public class ComponentDAO extends DBContext {
             return false;
         }
     }
+    
+    public boolean existProductComponent(int componentId, int productId){
+        String sql = "select count (*) from ProductComponents WHERE ComponentID = ? AND ProductID = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+              ps.setInt(1, componentId);
+            ps.setInt(2, productId);
+            ResultSet rs = ps.executeQuery();
+            return rs.getInt(1) >0;
+        }
+        catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public boolean addProductComponent(int componentId, int productId, int quantity) {
+        String sql = """
+                     INSERT INTO [dbo].[ProductComponents]
+                                ([ProductID]
+                                ,[ComponentID]
+                                ,[Quantity])
+                          VALUES
+                                (?
+                                ,?
+                                ,?)
+                     """;
+
+        try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
+
+            pstmt.setInt(1, productId);
+            pstmt.setInt(2, componentId);
+            pstmt.setInt(3, quantity);
+
+            int affectedRows = pstmt.executeUpdate(); // Thực thi câu lệnh xóa
+
+            return affectedRows > 0; // Nếu có dòng bị xóa, trả về true
+
+        } catch (SQLException e) {
+            System.out.println(e);
+            return false;
+        }
+    }
 
     public Integer getBrandID(String brandName) {
         String query = "SELECT BrandID FROM Brand WHERE BrandName = ?";
@@ -840,6 +882,5 @@ public class ComponentDAO extends DBContext {
             return false;
         }
     }
-    
 
 }

@@ -338,6 +338,7 @@ public class ComponentAction extends HttpServlet {
             boolean update = componentDAO.update(component);
             if (update) {
                 response.sendRedirect(request.getContextPath() + "/ComponentWarehouse/Detail?ID=" + component.getComponentID() + "&updateSuccess=true");
+                return;
             } else {
                 request.setAttribute("updateAlert0", "Fail to edit");
             }

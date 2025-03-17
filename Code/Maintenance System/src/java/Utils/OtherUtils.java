@@ -86,7 +86,7 @@ public class OtherUtils {
         }
 
         // Tạo tên file duy nhất
-        String fileName = System.currentTimeMillis() + "_" + originalFileName;
+        String fileName = System.currentTimeMillis() + "_" + originalFileName.replace(' ', '_');
         String filePath = uploadPath + File.separator + fileName;
 
         // Lưu file lên server
@@ -186,7 +186,7 @@ public class OtherUtils {
         }
 
         // Tạo tên file duy nhất
-        String fileName = System.currentTimeMillis() + "_" + originalFileName;
+        String fileName = System.currentTimeMillis() + "_" + originalFileName.replace(' ', '_');
         String filePath = uploadPath + File.separator + fileName;
 
         // Lưu file lên server

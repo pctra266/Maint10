@@ -205,6 +205,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                     wc.setVideos(videoPaths);
                     warrantyCardDAO.updateWarrantyCard(wc);
                     response.sendRedirect(request.getContextPath() + request.getServletPath() + "?ID=" + wc.getWarrantyCardID());
+                    return;
                 }
                 case "update" -> {
                     String noteParam = request.getParameter("note");

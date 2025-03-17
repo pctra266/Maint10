@@ -587,20 +587,7 @@
                                             input.files = dataTransfer.files;
                                             previewMedia({target: input});
                                         }
-                                        // Thiết lập Due Date mặc định khi modal mở
-                                        document.getElementById('centeredModalPrimary_Invoice_1').addEventListener('shown.bs.modal', function () {
-                                            const dueDateInput = document.getElementById('dueDate');
-                                            const today = new Date();
-                                            const defaultDueDate = new Date(today);
-                                            defaultDueDate.setDate(today.getDate() + 3); // Thêm 3 ngày
-
-                                            const year = defaultDueDate.getFullYear();
-                                            const month = String(defaultDueDate.getMonth() + 1).padStart(2, '0');
-                                            const day = String(defaultDueDate.getDate()).padStart(2, '0');
-                                            const formattedDate = year + "-" + month + "-" + day;
-
-                                            dueDateInput.value = formattedDate;
-                                        });
+                                 
 
             </script>
           
