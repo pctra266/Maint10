@@ -3,113 +3,45 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package DAO;
-
 import Model.Payment;
 import java.util.ArrayList;
-import java.sql.SQLException;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
-import java.util.List;
 
 /**
  *
+ * @author Tra Pham
  */
-public class PaymentDAO extends DBContext {
+public class PaymentDAO {
     
-       public boolean addPayment(Payment payment) {
-        String query = "INSERT INTO Payment (PaymentDate, PaymentMethod, Amount, Status, InvoiceID) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setTimestamp(1, payment.getPaymentDate()!=null ? new java.sql.Timestamp(payment.getPaymentDate().getTime()):null);
-            stmt.setString(2, payment.getPaymentMethod());
-            stmt.setDouble(3, payment.getAmount());
-            stmt.setString(4, payment.getStatus());
-            if (payment.getInvoiceID() != null) {
-                stmt.setInt(5, payment.getInvoiceID());
-            } else {
-                stmt.setNull(5, java.sql.Types.INTEGER);
+    Connection conn = null;
+    PreparedStatement ps = null;
+    ResultSet rs = null;
+    
+ public ArrayList<Payment> getAllPayment(){
+        ArrayList<Payment> list = new ArrayList<>();
+        String query = "select *from Payment";
+        try{
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                list.add(new Payment(rs.getInt(1), rs.getInt(2), rs.getDate(3), 
+                        rs.getString(4), rs.getDouble(5), rs.getString(6)));
             }
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
+        }catch (Exception e){
         }
-        return false;
+        
+        return list;
     }
-
-    // Hàm ánh xạ ResultSet -> Payment
-    private Payment mapPayment(ResultSet rs) throws SQLException {
-        return new Payment(
-                rs.getInt("PaymentID"),
-                rs.getDate("PaymentDate"),
-                rs.getString("PaymentMethod"),
-                rs.getDouble("Amount"),
-                rs.getString("Status"),
-                rs.getObject("InvoiceID") != null ? rs.getInt("InvoiceID") : null // Xử lý giá trị null
-        );
-    }
-
-    // Lấy tất cả Payment
-    public List<Payment> getAllPayments() {
-        List<Payment> payments = new ArrayList<>();
-        String query = "SELECT PaymentID, PaymentDate, PaymentMethod, Amount, Status, InvoiceID FROM Payment";
-
-        try (PreparedStatement stmt = connection.prepareStatement(query); ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                payments.add(mapPayment(rs)); // Gọi hàm mapPayment
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+    public static void main(String[] args) {
+        
+        ArrayList<Payment> list = new PaymentDAO().getAllPayment();
+        for (Payment payment : list) {
+            System.out.println(payment);
         }
-        return payments;
     }
-
-    // Lấy Payment theo ID
-    public Payment getPaymentById(int paymentId) {
-        String query = "SELECT PaymentID, PaymentDate, PaymentMethod, Amount, Status, InvoiceID FROM Payment WHERE PaymentID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, paymentId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapPayment(rs); // Gọi hàm mapPayment
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    // Xóa Payment theo ID
-    public boolean deletePayment(int paymentId) {
-        String query = "DELETE FROM Payment WHERE PaymentID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setInt(1, paymentId);
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    // Cập nhật Payment
-    public boolean updatePayment(Payment payment) {
-        String query = "UPDATE Payment SET PaymentDate = ?, PaymentMethod = ?, Amount = ?, Status = ?, InvoiceID = ? WHERE PaymentID = ?";
-        try (PreparedStatement stmt = connection.prepareStatement(query)) {
-            stmt.setTimestamp(1, payment.getPaymentDate()!=null ? new java.sql.Timestamp(payment.getPaymentDate().getTime()):null);
-            stmt.setString(2, payment.getPaymentMethod());
-            stmt.setDouble(3, payment.getAmount());
-            stmt.setString(4, payment.getStatus());
-            if (payment.getInvoiceID() != null) {
-                stmt.setInt(5, payment.getInvoiceID());
-            } else {
-                stmt.setNull(5, java.sql.Types.INTEGER);
-            }
-            stmt.setInt(6, payment.getPaymentID());
-            return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
+ 
 }
