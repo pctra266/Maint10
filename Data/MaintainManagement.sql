@@ -316,16 +316,6 @@ CREATE TABLE Media (
     UploadedDate DATETIME DEFAULT GETDATE()
 );
 
--- Payment Table
-CREATE TABLE Payment (
-    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    PaymentDate DATE NOT NULL,
-    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
-    Amount FLOAT NOT NULL CHECK (Amount >= 0),
-    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
-	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
-);
-
 CREATE TABLE Invoice (
     InvoiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     InvoiceNumber NVARCHAR(20) NOT NULL UNIQUE,
@@ -340,6 +330,16 @@ CREATE TABLE Invoice (
     CreatedBy INT NOT NULL REFERENCES Staff(StaffID),  -- Người tạo hóa đơn (Repair Contractor hoặc Technician)
     ReceivedBy INT NULL REFERENCES Staff(StaffID),     -- Người nhận hóa đơn (đối với hóa đơn RepairContractorToTechnician là Technician)
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
+);
+
+-- Payment Table
+CREATE TABLE Payment (
+    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    PaymentDate DATE NOT NULL,
+    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
+    Amount FLOAT NOT NULL CHECK (Amount >= 0),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
+	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
 );
 
 
@@ -390,6 +390,19 @@ CREATE TABLE MarketingServiceItem (
         FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
 );
 
+CREATE TABLE Notifications (
+    NotificationID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    RecipientType NVARCHAR(20) NOT NULL 
+        CHECK (RecipientType IN ('Customer', 'Staff')), -- Loại người nhận
+    RecipientID INT NOT NULL, -- ID của người nhận (CustomerID hoặc StaffID của Inventory Manager)
+    Message NVARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    IsRead BIT DEFAULT 0, -- 0: chưa đọc, 1: đã đọc
+    Target Nvarchar(255) --- Luu noi ma thong bao muon chuyen den
+);
+
+-- Index để tối ưu truy vấn
+CREATE INDEX IDX_Notifications_Recipient ON Notifications (RecipientType, RecipientID, IsRead);
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);

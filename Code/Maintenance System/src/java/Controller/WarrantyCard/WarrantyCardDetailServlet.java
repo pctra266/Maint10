@@ -3,6 +3,7 @@ package Controller.WarrantyCard;
 import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.CustomerDAO;
+import DAO.NotificationDAO;
 import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
@@ -10,6 +11,7 @@ import DAO.WarrantyCardProcessDAO; // New DAO for WarrantyCardProcess
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
+import Model.Notification;
 import Model.Staff;
 import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
@@ -50,6 +52,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
     private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
     private final StaffDAO staffDAO = new StaffDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
+    private final NotificationDAO notificationDAO = new NotificationDAO();
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -304,15 +307,25 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                             if (success) {
                                 WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-                                if ( "cancel".equals(processAction) || "refix".equals(processAction)) {
+                                if ("cancel".equals(processAction) || "refix".equals(processAction)) {
                                     wc.setWarrantyStatus(processAction);
-                    
+
                                     if ("cancel".equals(processAction)) {
                                         wc.setCanceldDate(Date.from(Instant.now()));
                                     }
                                 }
                                 if ("fixed".equals(processAction)) {
-
+                                    //Thong bao
+                                    String message = "Your product " + wc.getProductName()+ " has been fixed!";
+                                    Notification notification = new Notification();
+                                    notification.setRecipientType("Customer");
+                                    notification.setRecipientID(wc.getCustomerID());
+                                    notification.setMessage(message);
+                                    notification.setCreatedDate(new Date());
+                                    notification.setIsRead(false);
+                                    notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID()); // URL chi tiết
+                                    notificationDAO.addNotification(notification);
+                                    
                                     wc.setWarrantyStatus("done");
                                     wc.setDonedDate(Date.from(Instant.now()));
                                 }
