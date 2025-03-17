@@ -211,7 +211,7 @@
                                                     <td>${p.productName}</td>
                                                     <td>${p.code}</td>
                                                     <td>
-                                                        <a href="updateproduct?id=${p.productId}">
+                                                        <a href="viewProduct?action=update&id=${p.productId}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eye align-middle"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                                         </a>
                                                         <a href="#" onclick="confirmDelete('${component.componentID}', '${p.productId}')">
