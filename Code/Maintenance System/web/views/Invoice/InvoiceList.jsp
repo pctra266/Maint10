@@ -8,6 +8,8 @@
         <title>Invoice List</title>
         <base href="${pageContext.request.contextPath}/">
         <link href="css/light.css" rel="stylesheet">
+        <%--vnpay --%>
+        <script src="js/jquery-1.11.3.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
     <body>
@@ -33,14 +35,13 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th>Invoice Number</th>
-                                                <th>Type</th>
                                                 <th>Amount</th>
                                                 <th>Issued Date</th>
                                                 <th>Due Date</th>
                                                 <th>Status</th>
                                                 <th>Created By</th>
-                                                <th>Received By</th>
-                                                <th>Customer ID</th>
+                                                <th>Customer</th>
+                                                <th>Action</>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -48,14 +49,24 @@
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
                                                     <td>${invoice.invoiceNumber}</td>
-                                                    <td>${invoice.invoiceType}</td>
                                                     <td>${invoice.amount}</td>
                                                     <td>${invoice.issuedDate}</td>
                                                     <td>${invoice.dueDate}</td>
                                                     <td>${invoice.status}</td>
                                                     <td>${invoice.createdBy}</td>
-                                                    <td>${invoice.receivedBy != null ? invoice.receivedBy : 'N/A'}</td>
-                                                    <td>${invoice.customerID != null ? invoice.customerID : 'N/A'}</td>
+                                                    <td>${warrantyCard.customerName}</td>
+                                                    <td>
+                                                        <form action="vnpayajax" id="frmCreateOrder-${invoice.invoiceID}" method="post" class="d-inline">     
+                                                            <input type="hidden" name="ID" value="${invoice.invoiceID}">
+                                                            <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." 
+                                                                   data-val-required="The Amount field is required." id="amount-${invoice.invoiceID}"  
+                                                                   name="amount" type="number" value="${price}" />
+                                                            <input type="hidden" id="bankCode-${invoice.invoiceID}" name="bankCode" value="">
+                                                            <input type="hidden" id="language-${invoice.invoiceID}" name="language" value="en">
+                                                            <button type="submit" class="btn btn-success me-2 payment-btn" data-id="${invoice.invoiceID}">Payment</button>
+                                                        </form>
+                                                    </td>
+
                                                 </tr>
                                             </c:forEach>
                                         </tbody>
@@ -72,5 +83,36 @@
             </div>
         </div>
         <script src="js/app.js"></script>
+        <%-- vnpay --%>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $(".payment-btn").click(function (e) {
+                    e.preventDefault(); // Ngăn chặn hành vi submit mặc định
+
+                    var invoiceID = $(this).data("id"); // Lấy ID từ nút
+                    var form = $("#frmCreateOrder-" + invoiceID); // Lấy form tương ứng
+                    var postData = form.serialize();
+                    var submitUrl = form.attr("action");
+
+                    $.ajax({
+                        type: "POST",
+                        url: submitUrl,
+                        data: postData,
+                        dataType: 'JSON',
+                        success: function (x) {
+                            if (x.code === '00') {
+                                if (window.vnpay) {
+                                    vnpay.open({width: 768, height: 600, url: x.data});
+                                } else {
+                                    location.href = x.data;
+                                }
+                            } else {
+                                alert(x.Message);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>       
     </body>
 </html>

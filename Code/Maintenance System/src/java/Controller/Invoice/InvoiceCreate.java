@@ -80,6 +80,12 @@ public class InvoiceCreate extends HttpServlet {
         }
 
         WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        WarrantyCardProcess latestProcess = wcpDAO.getLatestProcessByWarrantyCardId(warrantyCardId);
+        if(latestProcess==null || latestProcess.getAction().equals("completed") || latestProcess.getAction().equals("cancel") ){
+           response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            return; 
+        }
+
         int price = warrantyCardDAO.getPriceOfWarrantyCard(warrantyCardId);
         request.setAttribute("price", price);
         request.setAttribute("warrantyCard", wc);
@@ -109,8 +115,7 @@ public class InvoiceCreate extends HttpServlet {
         WarrantyCardProcess wcp = wcpDAO.getLatestProcessByWarrantyCardId(warrantyCardId);
 
         if (wcp == null || !wcp.getAction().equals("fixed")) {
-            request.setAttribute("updateAlert0", "Product isn't fixed");
-            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID="+warrantyCardId+"&invoiceCreate=false");
             return;
         }
 

@@ -77,7 +77,7 @@ public class InvoiceList extends HttpServlet {
         WarrantyCard warrantyCard = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
         // Lấy danh sách invoice từ database
         List<Invoice> invoices = invoiceDAO.getAllInvoicesOfCard(warrantyCardId);
-
+        request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(warrantyCardId));
         request.setAttribute("warrantyCard", warrantyCard);
         request.setAttribute("invoices", invoices);
         request.getRequestDispatcher("/views/Invoice/InvoiceList.jsp").forward(request, response);

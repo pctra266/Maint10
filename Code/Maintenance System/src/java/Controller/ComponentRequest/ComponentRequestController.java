@@ -7,12 +7,14 @@ package Controller.ComponentRequest;
 import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.ComponentRequestResponsibleDAO;
+import DAO.WarrantyCardProcessDAO;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
 import Model.Pagination;
 import Model.ProductDetail;
 import Model.Staff;
+import Model.WarrantyCardProcess;
 import Utils.NotificationWebSocket;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
@@ -37,6 +39,8 @@ public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
     private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
     private static final ComponentRequestResponsibleDAO crrDao = new ComponentRequestResponsibleDAO();
+        private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -84,6 +88,14 @@ public class ComponentRequestController extends HttpServlet {
         System.out.println("action la: " + action);
         //parameter
         String warrantyCardID = request.getParameter("warrantyCardID");
+        Integer cardID = FormatUtils.tryParseInt(warrantyCardID);
+        WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(cardID);
+        if (latestProcess == null || latestProcess.getAction().equals("fixed")
+                || latestProcess.getAction().equals("completed")
+                || latestProcess.getAction().equals("cancel")) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            return;
+        }
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("warrantyCardCode"));
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));

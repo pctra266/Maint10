@@ -23,8 +23,6 @@
         <title>Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="css/media-show.css" rel="stylesheet">
-        <%--vnpay --%>
-        <script src="js/jquery-1.11.3.min.js"></script>
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
             .media-preview {
@@ -87,6 +85,12 @@
                             <div class="alert-message"><strong>${updateAlert1}</strong></div>
                         </div>
                     </c:if>
+                    <c:if test="${not empty addAlert0}">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message"><strong>${addAlert0}</strong></div>
+                        </div>
+                    </c:if>             
                     <c:if test="${not empty updateAlert0}">
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -145,15 +149,9 @@
                                 </form>
                                 <form action="Invoice/Create" method="get" class="d-inline">
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <button type="submit" class="btn btn-info me-2">Create Invoice</button>
+                                    <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action !='completed' && latestProcess.action !='cancel' ? '' : 'disabled'}>Create Invoice</button>
                                 </form>
-                                <form action="vnpayajax" id="frmCreateOrder" method="post" class="d-inline">     
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." data-val-required="The Amount field is required." id="amount"  name="amount" type="number" value="${price}" />
-                                    <input type="hidden" id="bankCode" name="bankCode" value="">
-                                    <input type="hidden" id="language" name="language" value="en">
-                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && latestProcess.action == 'fixed' ? '' : 'disabled'} href>Payment</button>
-                                </form>
+                             
                                 <form action="WarrantyCard/Detail" method="post" class="d-inline">
                                     <input type="hidden" name="action" value="process">
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
@@ -208,7 +206,7 @@
                                         <input type="hidden" name="action" value="createComponentRequest" readonly> 
                                         <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
                                         <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Request Component</button>
+                                        <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}><i class="fas fa-add"></i> Request Component</button>
                                     </form>
                                 </div>
                                 <table class="table table-hover my-0 ">
@@ -605,31 +603,6 @@
                                         });
 
             </script>
-            <%-- vnpay --%>
-            <script type="text/javascript">
-                $("#frmCreateOrder").submit(function () {
-                    var postData = $("#frmCreateOrder").serialize();
-                    var submitUrl = $("#frmCreateOrder").attr("action");
-                    $.ajax({
-                        type: "POST",
-                        url: submitUrl,
-                        data: postData,
-                        dataType: 'JSON',
-                        success: function (x) {
-                            if (x.code === '00') {
-                                if (window.vnpay) {
-                                    vnpay.open({width: 768, height: 600, url: x.data});
-                                } else {
-                                    location.href = x.data;
-                                }
-                                return false;
-                            } else {
-                                alert(x.Message);
-                            }
-                        }
-                    });
-                    return false;
-                });
-            </script>       
+          
     </body>
 </html>

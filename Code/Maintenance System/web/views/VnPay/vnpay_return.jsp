@@ -88,7 +88,7 @@
                     <label><%=request.getParameter("vnp_PayDate")%></label>
                 </div> 
                 <div class="form-group">
-                    <label >Tình trạng giao dịch:</label>
+                    <label >${add}Tình trạng giao dịch:</label>
                     <label>
                         <%
                             if (signValue.equals(vnp_SecureHash)) {
@@ -102,6 +102,9 @@
                                 out.print("invalid signature");
                             }
                         %></label>
+                </div> 
+                <div class="form-group">
+                    <a href="/MaintenanceSystem/WarrantyCard/Detail?ID=${cardId}&payment=${status}" class="btn btn-primary">Back</a>
                 </div> 
             </div>
             <p>

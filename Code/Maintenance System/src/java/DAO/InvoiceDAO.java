@@ -73,6 +73,21 @@ public class InvoiceDAO extends DBContext {
         }
         return null;
     }
+    
+    public Invoice getInvoiceByCode(String code) {
+        String sql = SELECT + " WHERE InvoiceNumber = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, code);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return mapResultSetToInvoice(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public List<Invoice> getAllInvoices() {
         List<Invoice> invoices = new ArrayList<>();

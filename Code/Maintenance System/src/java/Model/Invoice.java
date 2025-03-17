@@ -8,6 +8,7 @@ package Model;
  *
  * @author ADMIN
  */
+import DAO.StaffDAO;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -126,7 +127,7 @@ public class Invoice {
     public Integer getCustomerID() {
         return customerID;
     }
-
+    
     public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }
