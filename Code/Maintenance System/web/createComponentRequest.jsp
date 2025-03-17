@@ -117,7 +117,7 @@
                         <!-- bang moi -->
                         <div style="display: flex; justify-content: space-between; align-items: center;"><a>
                         <h3>Selected Components</h3>
-                        </a><a class="btn btn-secondary" href="#">Supplement Request</a>
+                        </a><a class="btn btn-secondary" href="supplementRequest?action=createSupplementRequest&ComponentType=${productCode!=""?"product":"unknown product"}">Supplement Request</a>
                     </div>
                         
                         <table class="table table-hover my-0">

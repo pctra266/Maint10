@@ -4,6 +4,9 @@
  */
 
 package Controller.HomePage;
+import Model.CustomerContact;
+
+import DAO.CustomerContactDAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,14 +15,15 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  *
  * @author Tra Pham
  */
-@WebServlet(name="OurServiceController", urlPatterns={"/OurServiceController"})
-public class OurServiceController extends HttpServlet {
-   
+@WebServlet(name="CustomerContact", urlPatterns={"/customerContact"})
+public class CustomerContactController extends HttpServlet {
+   private CustomerContactDAO contactDAO = new CustomerContactDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -35,10 +39,10 @@ public class OurServiceController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet OurServiceController</title>");  
+            out.println("<title>Servlet CustomerContact</title>");  
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet OurServiceController at " + request.getContextPath () + "</h1>");
+            out.println("<h1>Servlet CustomerContact at " + request.getContextPath () + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -55,7 +59,9 @@ public class OurServiceController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+        List<CustomerContact> contactList = contactDAO.getAllCustomerContacts();
+        request.setAttribute("contactList", contactList);
+        request.getRequestDispatcher("customerContactList.jsp").forward(request, response);
     } 
 
     /** 
@@ -68,7 +74,48 @@ public class OurServiceController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        processRequest(request, response);
+                String action = request.getParameter("action");
+
+    try {
+        switch (action != null ? action : "") {
+            case "createCustomerContact":
+                createCustomerContact(request, response);
+                break;
+
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("404Page.jsp");
+    }
+        
+    }
+    
+    protected void createCustomerContact(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
+        String name = request.getParameter("Name");
+        String email = request.getParameter("Email");
+        String phone = request.getParameter("Phone");
+        String message = request.getParameter("Message");
+
+        if (name == null || phone == null || name.trim().isEmpty() || phone.trim().isEmpty()) {
+            request.setAttribute("error", "Name and Phone are required!");
+            request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+            return;
+        }
+
+        CustomerContact contact = new CustomerContact();
+        contact.setName(name);
+        contact.setEmail(email);
+        contact.setPhone(phone);
+        contact.setMessage(message);
+
+        if (contactDAO.addCustomerContact(contact)) {
+            request.setAttribute("success", "Contact request submitted successfully!");
+             request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+        } else {
+            request.setAttribute("error", "Failed to submit request. Please try again.");
+            request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+        }
     }
 
     /** 
