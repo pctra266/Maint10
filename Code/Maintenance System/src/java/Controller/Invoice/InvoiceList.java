@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-
 package Controller.Invoice;
 
 import DAO.InvoiceDAO;
@@ -25,48 +24,27 @@ import java.util.List;
  *
  * @author ADMIN
  */
-@WebServlet(name="InvoiceList", urlPatterns={"/Invoice/List"})
+@WebServlet(name = "InvoiceList", urlPatterns = {"/Invoice/List"})
 public class InvoiceList extends HttpServlet {
-     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+
+    private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final StaffDAO staffDAO = new StaffDAO();
     private final WarrantyCardProcessDAO wcpDAO = new WarrantyCardProcessDAO();
     private final InvoiceDAO invoiceDAO = new InvoiceDAO();
 
-    /** 
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet InvoiceList</title>");  
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet InvoiceList at " + request.getContextPath () + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    } 
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /** 
-     * Handles the HTTP <code>GET</code> method.
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+            throws ServletException, IOException {
         String warrantyCardIDParam = request.getParameter("ID");
-         Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIDParam);
+        Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIDParam);
 
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
@@ -83,8 +61,23 @@ public class InvoiceList extends HttpServlet {
         request.getRequestDispatcher("/views/Invoice/InvoiceList.jsp").forward(request, response);
     }
 
-    /** 
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+     * Handles the HTTP <code>GET</code> method.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        processRequest(request, response);
+
+    }
+
+    /**
      * Handles the HTTP <code>POST</code> method.
+     *
      * @param request servlet request
      * @param response servlet response
      * @throws ServletException if a servlet-specific error occurs
@@ -92,12 +85,13 @@ public class InvoiceList extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-    throws ServletException, IOException {
+            throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /** 
+    /**
      * Returns a short description of the servlet.
+     *
      * @return a String containing servlet description
      */
     @Override

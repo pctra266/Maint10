@@ -73,7 +73,7 @@ public class InvoiceDAO extends DBContext {
         }
         return null;
     }
-    
+
     public Invoice getInvoiceByCode(String code) {
         String sql = SELECT + " WHERE InvoiceNumber = ?";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
@@ -158,5 +158,35 @@ public class InvoiceDAO extends DBContext {
     public static void main(String[] args) {
         InvoiceDAO d = new InvoiceDAO();
         System.out.println(d.getAllInvoicesOfCard(46));
+    }
+
+    public boolean updateInvoice(Invoice invoice) {
+        String sql = "Update Invoice Set InvoiceNumber=?, InvoiceType=?, WarrantyCardID=?, Amount=?,  DueDate=?, Status=?, CreatedBy=?, ReceivedBy=?, CustomerID=? "
+                + "WHERE InvoiceID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, invoice.getInvoiceNumber());
+            stmt.setString(2, invoice.getInvoiceType());
+            stmt.setInt(3, invoice.getWarrantyCardID());
+            stmt.setDouble(4, invoice.getAmount());
+            stmt.setDate(5, new java.sql.Date(invoice.getDueDate().getTime()));
+            stmt.setString(6, invoice.getStatus());
+            stmt.setInt(7, invoice.getCreatedBy());
+            if (invoice.getReceivedBy() != null) {
+                stmt.setInt(8, invoice.getReceivedBy());
+            } else {
+                stmt.setNull(8, Types.INTEGER);
+            }
+            if (invoice.getCustomerID() != null) {
+                stmt.setInt(9, invoice.getCustomerID());
+            } else {
+                stmt.setNull(9, Types.INTEGER);
+            }
+            stmt.setInt(10, invoice.getInvoiceID());
+            int rowAffected = stmt.executeUpdate();
+            return rowAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
