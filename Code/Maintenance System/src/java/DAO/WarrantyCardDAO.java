@@ -1086,18 +1086,17 @@ System.out.println("Final Query: " + query);
     }
 
     public static void main(String[] args) {
-<<<<<<< HEAD
+
         WarrantyCardDAO d = new WarrantyCardDAO();
         List<WarrantyCard> list = d.getWarrantyCardByCustomerID(2, "", "", "", "", "wc.CreatedDate", "ASC", 0,10);
         for(WarrantyCard wc : list) {
             System.out.println(wc.getCreatedDate());
         }
         System.out.println(list.size());
-=======
+
         WarrantyCardDAO dao = new WarrantyCardDAO();
         System.out.println(dao.getPriceOfWarrantyCard(45));
 
->>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
     }
 
 }

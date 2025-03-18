@@ -345,13 +345,13 @@ CREATE TABLE Invoice (
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
 
-<<<<<<< HEAD
+
 
 
 
 ALTER TABLE Payment
 ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
-=======
+
 -- Payment Table
 CREATE TABLE Payment (
     PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -361,7 +361,7 @@ CREATE TABLE Payment (
     Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
 	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
 );
->>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
+
 
 
 CREATE TABLE FooterSetting (
@@ -389,6 +389,7 @@ CREATE TABLE CustomerContact (
     Message NVARCHAR(MAX) NULL,
     CreatedAt DATETIME DEFAULT GETDATE()
 );
+
 
 CREATE TABLE MarketingServiceSection (
     SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -419,6 +420,39 @@ CREATE TABLE StaffBlogPosts (
     UpdatedDate DATETIME NULL,
     FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
 );
+
+=======
+
+CREATE TABLE MarketingServiceSection (
+    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Title NVARCHAR(255),
+    SubTitle NVARCHAR(255),
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE MarketingServiceItem (
+    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    SectionID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    ImageURL NVARCHAR(MAX),
+    SortOrder INT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_MarketingServiceItem_SectionID
+        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
+);
+CREATE TABLE StaffBlogPosts (
+    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
+    StaffID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME NULL,
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
 
 CREATE TABLE Notifications (
     NotificationID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,

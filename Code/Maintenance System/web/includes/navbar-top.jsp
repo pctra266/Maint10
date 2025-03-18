@@ -13,12 +13,15 @@
                 <div class="d-md-flex align-items-start justify-content-start">
                     <div class="dropdown-mega-list">
                         <a class="dropdown-item" href="LookUpOnline.jsp">Warranty Card</a>
-<<<<<<< HEAD
+
                         <a class="dropdown-item" href="chatBox.jsp">ChatBox</a>
                        
-=======
+
                         <a class="dropdown-item" href="#">Product</a>
->>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
+
+
+                        <a class="dropdown-item" href="#">Product</a>
+
                     </div>
                 </div>
             </div>
@@ -39,7 +42,7 @@
                         No new notifications
                     </div>
                     <div class="list-group" id="notificationList">
-                        <!-- Thông báo s? ???c thêm ??ng b?ng JavaScript -->
+                        <!-- ThÃ´ng bÃ¡o s? ???c thÃªm ??ng b?ng JavaScript -->
                     </div>
                 </div>
             </li>
@@ -83,7 +86,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    // L?u danh sách ID thông báo ?ã hi?n th? ?? tránh l?p
+    // L?u danh sÃ¡ch ID thÃ´ng bÃ¡o ?Ã£ hi?n th? ?? trÃ¡nh l?p
     let displayedNotificationIDs = new Set();
 
     function showNotification(message, target, notificationID, createdDate) {
@@ -100,7 +103,7 @@
         notificationItem.href = target;
         notificationItem.dataset.notificationId = notificationID;
 
-        // T?o c?u trúc DOM th? công
+        // T?o c?u trÃºc DOM th? cÃ´ng
         const container = document.createElement("div");
         container.className = "d-flex";
 
@@ -115,13 +118,13 @@
 
         const messageP = document.createElement("p");
         messageP.className = "mb-0";
-        messageP.textContent = message; // Dùng textContent ?? tránh l?i HTML
+        messageP.textContent = message; // DÃ¹ng textContent ?? trÃ¡nh l?i HTML
 
         const timeSmall = document.createElement("small");
         timeSmall.className = "text-muted";
         timeSmall.textContent = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
 
-                // G?n các ph?n t?
+                // G?n cÃ¡c ph?n t?
                 contentDiv.appendChild(messageP);
                 contentDiv.appendChild(timeSmall);
                 container.appendChild(iconDiv);
@@ -190,7 +193,7 @@
                         });
                     }
 
-                    // Hàm ?ánh d?u m?t thông báo là ?ã ??c
+                    // HÃ m ?Ã¡nh d?u m?t thÃ´ng bÃ¡o lÃ  ?Ã£ ??c
                     function markAsRead(notificationID, element) {
                         let recipientType, recipientID;
 
@@ -217,7 +220,7 @@
                             },
                             success: function (response) {
                                 if (response.success) {
-                                    // Xóa thông báo kh?i giao di?n
+                                    // XÃ³a thÃ´ng bÃ¡o kh?i giao di?n
                                     element.remove();
                                     displayedNotificationIDs.delete(notificationID);
 
@@ -232,7 +235,7 @@
                                                                 countSpan.textContent = unreadCount;
                                                                 countSpan.style.display = unreadCount > 0 ? 'block' : 'none';
 
-                                                                // Chuy?n h??ng sau khi ?ánh d?u
+                                                                // Chuy?n h??ng sau khi ?Ã¡nh d?u
                                                                 window.location.href = element.href;
                                                             } else {
                                                                 console.error("Failed to mark notification as read");
