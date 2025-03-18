@@ -71,6 +71,19 @@ CREATE TABLE Customer (
 CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
 WHERE UsernameC IS NOT NULL;
 
+CREATE TABLE ChatMessages (
+    MessageID INT IDENTITY(1,1) PRIMARY KEY,
+    SenderID INT NOT NULL,  -- ID của người gửi (CustomerID hoặc StaffID)
+    SenderType NVARCHAR(10) , -- Loại người gửi
+    ReceiverID INT NOT NULL,  -- ID của người nhận (CustomerID hoặc StaffID)
+    ReceiverType NVARCHAR(10), -- Loại người nhận
+    MessageText NVARCHAR(MAX) NOT NULL,
+    Timestamp DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_ChatMessages_Sender_Customer FOREIGN KEY (SenderID) REFERENCES Customer(CustomerID),
+    CONSTRAINT FK_ChatMessages_Sender_Staff FOREIGN KEY (SenderID) REFERENCES Staff(StaffID),
+    CONSTRAINT FK_ChatMessages_Receiver_Customer FOREIGN KEY (ReceiverID) REFERENCES Customer(CustomerID),
+    CONSTRAINT FK_ChatMessages_Receiver_Staff FOREIGN KEY (ReceiverID) REFERENCES Staff(StaffID)
+);
 
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -283,6 +296,9 @@ CREATE TABLE Invoice (
     ReceivedBy INT NULL REFERENCES Staff(StaffID),     -- Người nhận hóa đơn (đối với hóa đơn RepairContractorToTechnician là Technician)
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
+
+
+
 
 ALTER TABLE Payment
 ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);

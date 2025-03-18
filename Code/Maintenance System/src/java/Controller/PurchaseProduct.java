@@ -129,8 +129,7 @@ public class PurchaseProduct extends HttpServlet {
         request.setAttribute("purchaseDate", purchaseDate);
         request.setAttribute("productName", productName);
         request.setAttribute("warrantyPeriod", warrantyPeriod);
-        request.setAttribute("sortBy", sortBy);
-        request.setAttribute("sortOrder", sortOrder);
+        //
 
         request.setAttribute("size", pageSize);
 

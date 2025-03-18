@@ -144,6 +144,26 @@
         <servlet-name>LoginGoogle</servlet-name>
         <servlet-class>Controller.Account.LoginGoogle</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ChatHistory</servlet-name>
+        <servlet-class>Controller.ChatBox.ChatHistory</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportWarrantyStatus</servlet-name>
+        <servlet-class>Controller.Report.ReportWarrantyStatus</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportWarrantyCardByTypeName</servlet-name>
+        <servlet-class>Controller.Report.ReportWarrantyCardByTypeName</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportWarrantyByBrand</servlet-name>
+        <servlet-class>Controller.Report.ReportWarrantyByBrand</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ReportRepairStatus</servlet-name>
+        <servlet-class>Controller.Report.ReportRepairStatus</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -299,5 +319,25 @@
     <servlet-mapping>
         <servlet-name>LoginGoogle</servlet-name>
         <url-pattern>/login-google</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChatHistory</servlet-name>
+        <url-pattern>/chatHistory</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportWarrantyStatus</servlet-name>
+        <url-pattern>/reportwarrantystatus</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportWarrantyCardByTypeName</servlet-name>
+        <url-pattern>/reportwarrantycardbytypename</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportWarrantyByBrand</servlet-name>
+        <url-pattern>/reportwarrantybybrand</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ReportRepairStatus</servlet-name>
+        <url-pattern>/reportrepairstatus</url-pattern>
     </servlet-mapping>
 </web-app>
