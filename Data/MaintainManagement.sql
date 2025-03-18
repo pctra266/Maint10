@@ -71,6 +71,19 @@ CREATE TABLE Customer (
 CREATE UNIQUE INDEX UX_UsernameC ON Customer(UsernameC)
 WHERE UsernameC IS NOT NULL;
 
+CREATE TABLE ChatMessages (
+    MessageID INT IDENTITY(1,1) PRIMARY KEY,
+    SenderID INT NOT NULL,  -- ID của người gửi (CustomerID hoặc StaffID)
+    SenderType NVARCHAR(10) , -- Loại người gửi
+    ReceiverID INT NOT NULL,  -- ID của người nhận (CustomerID hoặc StaffID)
+    ReceiverType NVARCHAR(10), -- Loại người nhận
+    MessageText NVARCHAR(MAX) NOT NULL,
+    Timestamp DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_ChatMessages_Sender_Customer FOREIGN KEY (SenderID) REFERENCES Customer(CustomerID),
+    CONSTRAINT FK_ChatMessages_Sender_Staff FOREIGN KEY (SenderID) REFERENCES Staff(StaffID),
+    CONSTRAINT FK_ChatMessages_Receiver_Customer FOREIGN KEY (ReceiverID) REFERENCES Customer(CustomerID),
+    CONSTRAINT FK_ChatMessages_Receiver_Staff FOREIGN KEY (ReceiverID) REFERENCES Staff(StaffID)
+);
 
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -332,6 +345,13 @@ CREATE TABLE Invoice (
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
 
+
+
+
+
+ALTER TABLE Payment
+ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
+
 -- Payment Table
 CREATE TABLE Payment (
     PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -341,6 +361,7 @@ CREATE TABLE Payment (
     Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
 	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
 );
+
 
 
 CREATE TABLE FooterSetting (
@@ -368,6 +389,7 @@ CREATE TABLE CustomerContact (
     Message NVARCHAR(MAX) NULL,
     CreatedAt DATETIME DEFAULT GETDATE()
 );
+
 
 CREATE TABLE MarketingServiceSection (
     SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -398,6 +420,39 @@ CREATE TABLE StaffBlogPosts (
     UpdatedDate DATETIME NULL,
     FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
 );
+
+=======
+
+CREATE TABLE MarketingServiceSection (
+    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Title NVARCHAR(255),
+    SubTitle NVARCHAR(255),
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE MarketingServiceItem (
+    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    SectionID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    ImageURL NVARCHAR(MAX),
+    SortOrder INT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_MarketingServiceItem_SectionID
+        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
+);
+CREATE TABLE StaffBlogPosts (
+    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
+    StaffID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME NULL,
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
 
 CREATE TABLE Notifications (
     NotificationID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,

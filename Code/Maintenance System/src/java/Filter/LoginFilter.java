@@ -117,7 +117,8 @@ public class LoginFilter implements Filter {
         if (session == null || (session.getAttribute("staff") == null && session.getAttribute("customer") == null)) {
 
             if (!uri.contains("login") && !uri.contains("forgotpassword") && !uri.contains("LoginForm.jsp")
-                    && !uri.contains("ForgotPasswordForm.jsp") && !uri.contains("HomePage.jsp") && !uri.contains("Home")
+                    && !uri.contains("ForgotPasswordForm.jsp") && !uri.contains("HomePage.jsp")&& 
+                    !uri.contains("chatBox.jsp")  && !uri.contains("Home")
                     && !uri.endsWith(".css") && !uri.endsWith(".js")
                     && !uri.endsWith(".png") && !uri.endsWith(".jpg")) {
                 res.sendRedirect("/MaintenanceSystem/Home");

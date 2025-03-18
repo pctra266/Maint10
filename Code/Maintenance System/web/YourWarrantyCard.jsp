@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Purchase Product</title>
+        <title>Your Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
@@ -16,14 +16,14 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <h1 class="text-center">Purchase Product List</h1>
+                    <h1 class="text-center">Your Warranty Card</h1>
 
                     <!-- Form tìm kiếm -->
                     <form action="yourwarrantycard" method="get" style="text-align: center; margin-bottom: 20px;">
-                        <input type="text" name="warrantyCardCode" placeholder="Search by Warranty Card Code" value="${searchWarrantyCardCode}" />
-                        <input type="text" name="productName" placeholder="Search by ProductName" value="${searchProductName}" />
-                        <input type="text" name="status" placeholder="Search by Status" value="${status}" />
-                        <input type="date" name="createDate" placeholder="Search by Create Date" value="${searchCreateDate}" />
+                        <input type="text" name="warrantyCardCode" placeholder="Search by Warranty Card Code" value="${warrantyCardCode}" />
+                        <input type="text" name="productName" placeholder="Search by ProductName" value="${productName}" />
+                        <input type="text" name="warrantyStatus" placeholder="Search by Status" value="${warrantyStatus}" />
+                        <input type="date" name="createdDate" placeholder="Search by Create Date" value="${createdDate}" />
                         <button type="submit">Search</button>
 
                         <div class="col-sm-6 col-md-6">
@@ -51,23 +51,23 @@
                             <tr>
                                 <th>
                                     Warranty Card Code
-                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=warrantyCardCode&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↓</a>
                                 </th>
                                 <th>
                                     Product
-                                    <a href="yourwarrantycard?sort=productName&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=productName&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=productName&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=productName&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↓</a>
                                 </th>
                                 <th>
                                     Create Date
-                                    <a href="yourwarrantycard?sort=createDate&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=createDate&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=createdDate&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=createdDate&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↓</a>
                                 </th>
                                 <th>
                                     Status
-                                    <a href="yourwarrantycard?sort=status&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↑</a>
-                                    <a href="yourwarrantycard?sort=status&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&status=${status}&createDate=${createDate}">↓</a>
+                                    <a href="yourwarrantycard?sort=warrantyStatus&order=asc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↑</a>
+                                    <a href="yourwarrantycard?sort=warrantyStatus&order=desc&page-size=${size}&warrantyCardCode=${warrantyCardCode}&productName=${productName}&warrantyStatus=${warrantyStatus}&createdDate=${createdDate}">↓</a>
                                 </th>
                                 <th>
                                     Issue Description
@@ -81,7 +81,7 @@
                         <tbody>
                             <c:choose>
                                 <c:when test="${empty listWarrantyCard}">
-                                    <tr><td colspan="5" style="text-align:center;">No purchase products found.</td></tr>
+                                    <tr><td colspan="5" style="text-align:center;">No warranty card found.</td></tr>
                                 </c:when>
                                 <c:otherwise>
                                     <c:forEach var="warrantyCard" items="${listWarrantyCard}">
