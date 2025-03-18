@@ -5,6 +5,8 @@ import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardDetailDAO;
 import DAO.WarrantyCardProcessDAO;
 import Model.Component;
+import Model.Staff;
+import Model.WarrantyCard;
 import Model.WarrantyCardDetail;
 import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
@@ -35,6 +37,11 @@ public class WarrantyCardAddComponent extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
+        //chan staff khac thay doi
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
+            return;
+        }
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
         if (latestProcess == null || latestProcess.getAction().equals("fixed")
                 || latestProcess.getAction().equals("completed")
@@ -47,8 +54,6 @@ public class WarrantyCardAddComponent extends HttpServlet {
         request.setAttribute("warrantyCardID", warrantyCardId);
         request.setAttribute("availableComponents", availableComponents);
         //Truyen du lieu cho nut back
-        HttpSession session = request.getSession();
-        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
 
         request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardAddComponent.jsp").forward(request, response);
     }
@@ -63,6 +68,13 @@ public class WarrantyCardAddComponent extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
+        System.out.println("ịaisjfj");
+        //chan staff khac thay doi
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
+            return;
+        }
+
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
         if (latestProcess == null || latestProcess.getAction().equals("fixed")
                 || latestProcess.getAction().equals("completed")
@@ -120,6 +132,15 @@ public class WarrantyCardAddComponent extends HttpServlet {
             request.setAttribute("error", "Invalid input data. " + error);
             doGet(request, response);
         }
+    }
+
+    private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
+        Staff staff = (Staff) session.getAttribute("staff");
+        WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 
     private boolean isValidStatus(String status) {

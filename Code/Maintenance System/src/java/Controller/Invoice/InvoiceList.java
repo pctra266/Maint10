@@ -9,6 +9,7 @@ import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardProcessDAO;
 import Model.Invoice;
+import Model.Staff;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -48,6 +50,10 @@ public class InvoiceList extends HttpServlet {
 
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+            return;
+        }
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
         }
 
@@ -98,5 +104,13 @@ public class InvoiceList extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
+    
+        private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
+        Staff staff = (Staff) session.getAttribute("staff");
+        WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        return !(staff == null || card.getHandlerID() != staff.getStaffID());
+    }
 }

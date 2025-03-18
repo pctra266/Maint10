@@ -6,6 +6,7 @@ import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardProcessDAO;
 import Model.Staff;
 import Model.ContractorCard;
+import Model.WarrantyCard;
 import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
 import jakarta.servlet.ServletException;
@@ -63,6 +64,11 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
         if (staff == null) {
             request.setAttribute("updateAlert0", "You must be logged in to perform this action.");
             doGet(request, response);
+            return;
+        }
+        
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
         }
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
@@ -150,6 +156,15 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                 "receive_outsource", "fixed_outsource", "cancel_outsource", "back_outsource",
                 "receive_from_outsource", "fixed", "completed", "cancel"
         ).contains(action);
+    }
+    
+        private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
+        Staff staff = (Staff) session.getAttribute("staff");
+        WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 
     @Override

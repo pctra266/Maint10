@@ -97,6 +97,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("false".equals(request.getParameter("invoiceCreate"))) {
             request.setAttribute("addAlert0", "Product isn't fixed!");
         }
+        if ("false".equals(request.getParameter("canChange"))) {
+            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
+        }
         request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
@@ -134,6 +137,11 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if (staff == null) {
             request.setAttribute("updateAlert0", "You must be logged in to perform this action.");
             processRequest(request, response);
+            return;
+        }
+        
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
         }
 
@@ -389,5 +397,14 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             }
         }
         return true;
+    }
+    
+        private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
+        Staff staff = (Staff) session.getAttribute("staff");
+        WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 }
