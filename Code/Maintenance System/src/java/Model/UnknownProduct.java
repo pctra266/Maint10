@@ -113,8 +113,6 @@ public class UnknownProduct {
     public void setCustomerPhone(String customerPhone) {
         this.customerPhone = customerPhone;
     }
-    
-    
 }
 
 

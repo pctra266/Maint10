@@ -4,6 +4,7 @@
     Author     : ADMIN
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -135,7 +136,8 @@ button:hover {
                 </c:if>
                 <form action="StaffController" method="post" enctype="multipart/form-data">    
                     <input type="hidden" name="action" value="Update">
-                            <input
+                    <c:if test="${action eq 'Update'}">
+                    <input
                                 id="staffID"
                                 type="hidden"
                                 class="add__input"
@@ -277,19 +279,173 @@ button:hover {
                             </div>
                             <input type="file" name="newImage" id="newImage" accept="image/*" onchange="previewImage(event)">
                         </div>    
-                           
-                        
-                        <div class="add__signin-next">  
-                            <c:if test="${not empty change}">
-                                <button type="submit" onclick="return change">Change</button>  
-                            </c:if>
+                    </c:if>
+                    <c:if test="${action eq 'Infor'}">
+                    <input
+                                id="staffID"
+                                type="hidden"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="staffID"
+                                value="${staff.getStaffID()}"
+                                readonly
+                            />
+
+
+                        <div class="add__signin-input">    
+                            <label for="password" class="add__input-label"
+                                >Use Name
+                            </label><br>
+                            <input
+                                id="usename"
+                                type="usename"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="usename"
+                                value="${staff.getUsernameS()}"
+                                readonly
+                            />
+
                         </div>
-                    </form>
-                    <div class="add__signin-next">                        
-                        <form action="StaffController" method="get">
-                            <button type="submit">Cancle</button>
-                        </form>                        
-                    </div>
+                        
+                            <input
+                                id="password"
+                                type="hidden"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="password"
+                                value="${staff.getPasswordS()}"
+                                readonly
+                            />
+
+
+                        <div class="add__signin-input">
+                            <label for="password" class="add__input-label"
+                                >Role</label
+                            ><br>
+                            <select
+                                id="role"
+                                type="role"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="role"
+                                readonly
+                                >
+                                <option value="1" ${staff.getRole() == '1' ? 'selected' : ''}>Admin</option>
+                                <option value="2" ${staff.getRole() == '2' ? 'selected' : ''}>Technician</option>
+                                <option value="3" ${staff.getRole() == '3' ? 'selected' : ''}>Inventory Manager</option>
+                                <option value="4" ${staff.getRole() == '4' ? 'selected' : ''}>Customer</option>
+                                <option value="5" ${staff.getRole() == '5' ? 'selected' : ''}>Repair Contractor</option>
+                                <option value="6" ${staff.getRole() == '6' ? 'selected' : ''}>Customer Service Agent</option>
+                            </select>
+
+                        </div>
+                        
+                        <div class="add__signin-input">
+                            <label for="gender" class="add__input-label">Gender</label><br>
+                            <select id="gender" class="add__input" name="gender" required>
+                                <option value="" ></option>
+                                <option value="Male" ${staff.getGender() == 'Male' ? 'selected' : ''}>Male</option>
+                                <option value="Female" ${staff.getGender() == 'Female' ? 'selected' : ''}>Female</option>
+                                <option value="Other" ${staff.getGender() == 'Other' ? 'selected' : ''}>Other</option>
+                            </select>
+                            
+                        </div>
+
+                        <div class="add__signin-input">
+                            <input id="date" type="date" class="add__input" name="date" value="${staff.getDate()}" readonly />
+                        </div>
+                            
+                        <div class="add__signin-input">
+                            <label for="password" class="add__input-label"
+                                >Name</label
+                            ><br>
+                            <input
+                                id="name"
+                                type="name"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="name"
+                                value="${staff.getName()}"
+                                readonly
+                            />
+
+                        </div>
+                        <div class="add__signin-input">
+                            <label for="email" class="add__input-label"
+                                >Email</label
+                            ><br>
+                            <input
+                                id="email"
+                                type="email"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="email"
+                                value="${staff.getEmail()}"
+                                readonly
+                            />
+
+                        </div>
+                        <div class="add__signin-input">
+                            <label for="password" class="add__input-label"
+                                >Phone</label
+                            ><br>
+                            <input
+                                id="phone"
+                                type="phone"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="phone"
+                                value="${staff.getPhone()}"
+                                readonly
+                            />
+
+                        </div>
+                        <div class="add__signin-input">
+                            <label for="password" class="add__input-label"
+                                >Address</label
+                            ><br>
+                            <input
+                                id="address"
+                                type="address"
+                                class="add__input"
+                                oninput="checkInput(this)"
+                                name="address"
+                                value="${staff.getAddress()}"
+                                readonly
+                            />
+
+                        </div>
+                        
+                        <div class="image-upload-container">
+                            <div class="image-box">
+                                <img src="${staff.getImage()}" id="currentImage" alt="Profile Image">
+                            </div>
+                        </div>    
+                    </c:if>
+                        <div class="add__signin-next">  
+                            <c:if test="${action eq 'Update'}">
+                                <button type="submit" onclick="return change">Change</button> 
+                            </c:if>
+
+                        </div>
+                        </form>
+                    <c:if test="${action eq 'Update'}">
+                        <div class="add__signin-next">                        
+                            <form action="StaffController" method="get">
+                                <button type="submit">Cancle</button>
+                            </form>                        
+                        </div>
+                    </c:if>
+                            
+                    <c:if test="${action eq 'Infor'}">
+                        <div class="add__signin-next">                        
+                            <form action="reportStaffController" method="get">
+                                <button type="submit">Back</button>
+                            </form>                        
+                        </div>
+                    </c:if>    
+                    
                     
                     
                 

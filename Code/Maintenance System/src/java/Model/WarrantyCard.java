@@ -28,6 +28,8 @@ public class WarrantyCard {
     private String customerName;
     private String customerPhone;
 
+ 
+
     public int getUnknownProductID() {
         return unknownProductID;
     }

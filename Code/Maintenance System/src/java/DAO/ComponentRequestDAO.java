@@ -27,6 +27,37 @@ public class ComponentRequestDAO {
     PreparedStatement ps = null;
     ResultSet rs = null;
     
+    public List<ComponentRequest> getAllComponentRequestsOfCard(int cardId){
+         List<ComponentRequest> list = new ArrayList<>();
+           String query = """
+                          select cr.ComponentRequestID,wc.WarrantyCardID ,wc.WarrantyCardCode, wc.CreatedDate as WCardCreateDate,cr.Date as CRequestCreateDate, cr.Status, cr.Note 
+                          	from ComponentRequest cr 
+                          	join WarrantyCard wc on cr.WarrantyCardID = wc.WarrantyCardID
+                          	where wc.WarrantyCardID=?""";
+
+      
+           try{
+               conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               ps.setInt(1, cardId);
+               rs = ps.executeQuery();
+               while(rs.next()){
+                   ComponentRequest componentRequest = new ComponentRequest();
+                   componentRequest.setComponentRequestID(rs.getInt("ComponentRequestID"));
+                   componentRequest.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                   componentRequest.setWarrantyCode(rs.getString("WarrantyCardCode"));
+                   componentRequest.setDate(rs.getDate("CRequestCreateDate"));
+                   componentRequest.setWarrantyCreateDate(rs.getDate("WCardCreateDate"));
+                   componentRequest.setStatus(rs.getString("Status"));
+                   componentRequest.setNote(rs.getString("Note"));
+                   
+                   list.add(componentRequest);
+               }
+           }catch (Exception e){
+           }
+
+           return list;
+    }
     public ArrayList<ComponentRequest> getAllComponentRequest(String warrantyCardCode,String componentRequestAction,int page, int pageSize){
            ArrayList<ComponentRequest> list = new ArrayList<>();
            String query = """
@@ -555,6 +586,23 @@ public class ComponentRequestDAO {
             }
         }
         
+        public void updateStatusComponentRequestDetail(String componentRequestId, String status){
+            String query = """
+                           update ComponentRequestDetail
+                           set Status = ?
+                           where ComponentRequestID = ?
+                           
+                           """;
+            try {
+                conn = new DBContext().connection;
+               ps = conn.prepareStatement(query);
+               ps.setString(1, status);
+               ps.setString(2, componentRequestId);
+               ps.executeUpdate();
+            } catch (Exception e) {
+            }
+        }
+        
         public int getLastComponentRequestId(){
             String query ="""
                           SELECT ComponentRequestID FROM ComponentRequest
@@ -676,7 +724,8 @@ public class ComponentRequestDAO {
 //            for (ProductDetail x : list2) {
 //                System.out.println(x);
 //        }
-            System.out.println(dao.getComponentRequestStatus("1"));
+       //     System.out.println(dao.getComponentRequestStatus("1"));
 //            dao.updateStatusComponentRequest("10", "cancel");
+            System.out.println(dao.getAllComponentRequestsOfCard(17));
     }
 }

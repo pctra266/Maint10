@@ -7,12 +7,17 @@ package Controller.ComponentRequest;
 import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.ComponentRequestResponsibleDAO;
+import DAO.NotificationDAO;
+import DAO.WarrantyCardProcessDAO;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
+import Model.Notification;
 import Model.Pagination;
 import Model.ProductDetail;
 import Model.Staff;
+import Model.WarrantyCardProcess;
+
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;
@@ -24,6 +29,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,6 +42,9 @@ public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
     private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
     private static final ComponentRequestResponsibleDAO crrDao = new ComponentRequestResponsibleDAO();
+        private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
+        private final NotificationDAO notificationDAO = new NotificationDAO();
+
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -83,6 +92,16 @@ public class ComponentRequestController extends HttpServlet {
         System.out.println("action la: " + action);
         //parameter
         String warrantyCardID = request.getParameter("warrantyCardID");
+//        Integer cardID = FormatUtils.tryParseInt(warrantyCardID) == null ? 0: FormatUtils.tryParseInt(warrantyCardID);
+//        
+//        WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(cardID);
+//        if (latestProcess == null || latestProcess.getAction().equals("fixed")
+//                || latestProcess.getAction().equals("completed")
+//                || latestProcess.getAction().equals("cancel")) {
+//            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
+//            return;
+//        }
+        
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("warrantyCardCode"));
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
@@ -289,7 +308,9 @@ public class ComponentRequestController extends HttpServlet {
                     staffId = "3";
                 }
                 crrDao.createComponentRequestResponsible(staffId, componentRequestID, componentStatus);
+                
                 componentRequestDao.updateStatusComponentRequest(componentRequestID, componentStatus);
+                componentRequestDao.updateStatusComponentRequestDetail(componentRequestID,componentStatus);
                 this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
                 break;
             case "listComponentRequestInStaffRole":
@@ -393,7 +414,8 @@ public class ComponentRequestController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        //send notification
+         
         //action
         String action = request.getParameter("action");
 
@@ -456,6 +478,17 @@ public class ComponentRequestController extends HttpServlet {
                     } else {
                         mess = "Create Successfully !";
                         int componentRequestIDNum = componentRequestDao.getLastComponentRequestId();
+                        String message = "WCC so can them link kien" + componentRequestIDNum;
+                                    Notification notification = new Notification();
+                                    notification.setRecipientType("Staff");
+                                    notification.setRecipientID(3);
+                                    notification.setMessage(message);
+                                    notification.setCreatedDate(new Date());
+                                    notification.setIsRead(false);
+                                    notification.setTarget(request.getContextPath() + "/componentRequest?action=detailComponentRequest&noti=true&componentRequestID=" + componentRequestIDNum); // URL chi tiết
+                                    notificationDAO.addNotification(notification);
+                        
+                        
                         if (componentRequestIDNum != 0) {
                             try {
                                 String componentRequestID = String.valueOf(componentRequestIDNum);

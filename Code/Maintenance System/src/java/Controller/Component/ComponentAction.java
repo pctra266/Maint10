@@ -17,6 +17,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -230,10 +232,40 @@ public class ComponentAction extends HttpServlet {
         String newBrand = request.getParameter("Brand");
         String newType = request.getParameter("Type");
         String newCode = request.getParameter("Code");
+        String deleteMedia = request.getParameter("deleteMedia"); // Thêm tham số để xóa media
         boolean canUpdate = true;
-        List<String> videoPaths = component.getVideos();
-        List<String> imagePaths = component.getImages();
+        List<String> videoPaths = new ArrayList<>(component.getVideos()); // Sao chép danh sách để chỉnh sửa
+        List<String> imagePaths = new ArrayList<>(component.getImages());
 
+        // Xử lý xóa media nếu có yêu cầu
+        if (deleteMedia != null && !deleteMedia.isEmpty()) {
+            String filePath = request.getServletContext().getRealPath("") + deleteMedia; // Đường dẫn file trên server
+            if (imagePaths.remove(deleteMedia)) {
+                component.setImages(imagePaths);
+                if (componentDAO.update(component)) {
+                    try {
+                        Files.deleteIfExists(Paths.get(filePath));
+                    } catch (IOException e) {
+                        e.printStackTrace(); // Log lỗi nếu không xóa được file
+                    }
+                    response.sendRedirect(request.getContextPath() + "/ComponentWarehouse/Detail?ID=" + component.getComponentID() + "&deleteMedia=true");
+                    return;
+                }
+            } else if (videoPaths.remove(deleteMedia)) {
+                component.setVideos(videoPaths);
+                if (componentDAO.update(component)) {
+                    try {
+                        Files.deleteIfExists(Paths.get(filePath));
+                    } catch (IOException e) {
+                        e.printStackTrace(); // Log lỗi nếu không xóa được file
+                    }
+                }
+                response.sendRedirect(request.getContextPath() + "/ComponentWarehouse/Detail?ID=" + component.getComponentID() + "&deleteMedia=true");
+                return;
+            }
+        }
+
+        // Xử lý upload file mới
         for (Part part : request.getParts()) {
             if ("mediaFiles".equals(part.getName()) && part.getSize() > 0) {
                 String mimeType = part.getContentType();
@@ -255,9 +287,9 @@ public class ComponentAction extends HttpServlet {
                         request.setAttribute("pictureAlert", mediaPath != null ? mediaPath : "Error uploading media");
                     }
                 }
-
             }
         }
+
         request.setAttribute("brandList", componentDAO.getListBrand());
         request.setAttribute("typeList", componentDAO.getListType());
 
@@ -269,8 +301,7 @@ public class ComponentAction extends HttpServlet {
         if (newCode == null || newCode.isBlank()) {
             request.setAttribute("codeAlert", "Code must not be empty!");
             canUpdate = false;
-        } else if (componentDAO.isComponentCodeExist(newCode)
-                && !newCode.trim().equals(component.getComponentCode())) {
+        } else if (componentDAO.isComponentCodeExist(newCode) && !newCode.trim().equals(component.getComponentCode())) {
             request.setAttribute("codeAlert", "Code exists, choose another!");
             canUpdate = false;
         }
@@ -292,7 +323,6 @@ public class ComponentAction extends HttpServlet {
             request.setAttribute("priceAlert", "Price must be a float greater than or equal to 0");
             canUpdate = false;
         }
-        
 
         // Nếu có thể cập nhật, thực hiện cập nhật
         if (canUpdate) {
@@ -307,12 +337,11 @@ public class ComponentAction extends HttpServlet {
 
             boolean update = componentDAO.update(component);
             if (update) {
-                request.setAttribute("updateAlert1", "Component updated successfully.");
+                response.sendRedirect(request.getContextPath() + "/ComponentWarehouse/Detail?ID=" + component.getComponentID() + "&updateSuccess=true");
+                return;
             } else {
                 request.setAttribute("updateAlert0", "Fail to edit");
             }
-        } else {
-            request.setAttribute("component", component);
         }
 
         // Trả về trang chi tiết Component
@@ -345,6 +374,15 @@ public class ComponentAction extends HttpServlet {
             case "/ComponentWarehouse/Detail" -> {
                 // Hiển thị chi tiết component
                 String paraProduct = request.getParameter("product");
+                String updateSuccess = request.getParameter("updateSuccess");
+                String deleteMedia = request.getParameter("deleteMedia");
+                if (updateSuccess != null && updateSuccess.equals("true")) {
+                    request.setAttribute("updateAlert1", "Component updated successfully.");
+                }
+                if (deleteMedia != null && deleteMedia.equals("true")) {
+                    request.setAttribute("updateAlert1", "Media deleted.");
+
+                }
                 Integer productID = FormatUtils.tryParseInt(paraProduct);
                 if (productID != null) {
                     if (componentDAO.removeProductComponent(component.getComponentID(), productID)) {

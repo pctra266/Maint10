@@ -5,6 +5,7 @@
 --%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<jsp:useBean id="coverDAO" class="DAO.HomePage_CoverDAO" scope="page" />
 <!DOCTYPE html>
 <html lang="en">
 
@@ -98,8 +99,8 @@
                         </div>
                     </ul><!-- end ul2 -->
                 </nav>
-                        
-                  <main style="background-image: url('${pageContext.request.contextPath}/img/backgrounds/bg1.jpg'); background-size: cover; background-position: center; background-attachment: fixed;">
+                     <c:set var="backgroundImage" value="${coverDAO.getBackgroundImage()}" />
+                  <main style="background-image: url('${pageContext.request.contextPath}${backgroundImage}'); background-size: cover; background-position: center; background-attachment: fixed;">
                       <div style="height: 95vh" class="bg-primary bg-opacity-50  rounded shadow-lg p-5">
                         <div class="container  ">
                             <div>
@@ -122,13 +123,13 @@
                                 </div>
                                 <div>
                                     
-                                    <form > <!-- form here -->
+                                    <form action="SearchWarrantyController" method="get" > <!-- form here -->
                                         
                                         <div style="height: 55px;" class="input-group mx-auto w-50">
                                             <div class="position-absolute bg-secondary opacity-25 rounded-3"
                                                  style="top: -10px; left: -10px; right: -10px; bottom: -10px; z-index: 0;">
                                             </div>
-                                            <input type="search" class="form-control" placeholder="Information code">
+                                            <input type="search" name="searchValue" class="form-control" placeholder="Information code">
                                             <div class="input-group-append">
                                                 <button style="height: 55px" class="btn btn-primary" type="submit">Search</button>
                                             </div>
@@ -136,7 +137,7 @@
                                         <div class="mx-auto text-center">
                                         <div style="margin-top: 15px" >
                                             <label class="form-check form-check-inline">
-                                                <input checked="" class="form-check-input" type="radio" name="searchType" value="">
+                                                <input  class="form-check-input" type="radio" name="searchType" value="phone">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -146,7 +147,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <input class="form-check-input" type="radio" name="searchType" value="email">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -156,7 +157,7 @@
                                                 </span>
                                             </label>
                                             <label class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="searchType" value="">
+                                                <input class="form-check-input" type="radio" name="searchType" value="productCode" checked="">
                                                 <span style=" color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.15),  
                                          2px -2px 0 rgba(0, 0, 0, 0.15),
@@ -178,79 +179,36 @@
                        
                         <div style="height: 100vh" class="bg-white">
                             <div style="padding-bottom: 7%; padding-top: 5% " class="container">
-                                <div style="margin-bottom: 2%;margin-top: 1%;" class="row">
-
-                                    <div class="col-6 ">
+                                <div style="margin-bottom: 2%; margin-top: 1%;" class="row">
+                                    <div class="col-6">
                                         <div class="d-flex align-items-center">
-                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px; " >I</h1>
-                                            <h1 style="font-size: 30px" class="fw-bold"> Our Service</h1>
+                                            <h1 class="text-primary" style="font-size: 40px; margin-right: 5px;">I</h1>
+                                            <h1 style="font-size: 30px" class="fw-bold"> ${section.title}</h1>
                                         </div>
-                                        <h5>These are some of the essential services provided by my system </h5>
+                                        <h5>${section.subTitle}</h5>
                                     </div>
-                                    </div>
+                                </div>
                                 <div class="row">
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabssa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                       <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                                   <div class="col-12 col-md-6 col-lg-3">
-                                        <div class="card h-100">
-
-                                           <img class="card-img-top" src="img/photos/unsplash-1.jpg" alt="Unsplash">
-
-                                           <div class="card-header px-4 pt-4">
-                                               <h5 class="card-title mb-0">Refactor backend templates</h5>
-                                           </div>
-                                           <div class="card-body px-4 pt-2">
-                                               <p>Curabitur ligula sapien, tincidunt non, euismod vitae, posuere imperdiet, leo. Maecenas malesuada. Praesent congue erat
-                                                   at massa.</p>
-                                           </div>
-                                       </div>
-                                   </div>
-                               </div>
+                                    <c:forEach var="item" items="${serviceItems}">
+                                        <div style="margin-bottom:2% " class="col-12 col-md-6 col-lg-3">
+                                            <div class="card h-100">
+                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}">
+                                                <div class="card-header px-4 pt-4">
+                                                    <h5 class="card-title mb-0">${item.title}</h5>
+                                                </div>
+                                                <div class="card-body px-4 pt-2">
+                                                    <p>${item.description}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </c:forEach>
+                                </div>
                             </div>
                         </div><!-- end div 2 -->
                     
                     <div style="height: 50vh" class="bg-primary bg-opacity-50 d-flex justify-content-center align-items-center " >
-                        <div class="container text-center d-flex align-items-center ">
-                            <div>
+                        <div class="container text-center d-flex align-items-center justify-content-center">
+                            <div class="text-center">
                                 <div style="padding: 1% 1% 1% 1%" class="text-center">
                                     <h1 style="font-size: 60px; color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
@@ -258,21 +216,18 @@
                                          -2px 2px 0 rgba(0, 0, 0, 0.25),
                                          2px 2px 0 rgba(0, 0, 0, 0.25);"  
                                         class="fw-bolder" >
-                                        Warranty Consultation Registration
+                                        ${contactText.title}
                                     </h1>
                                     <h6 style="font-size: 20px; color: white; 
                                          text-shadow: -2px -2px 0 rgba(0, 0, 0, 0.25),  
                                          2px -2px 0 rgba(0, 0, 0, 0.25),
                                          -2px 2px 0 rgba(0, 0, 0, 0.25),
                                          2px 2px 0 rgba(0, 0, 0, 0.25);"
-                                         class="fw-bold" >Need assistance with your device? Our warranty consultation service is here to help. Contact now, and our team will reach out to support you as soon as possible.
+                                         class="fw-bold" >${contactText.subtitle}
                                     </h6>
                                 </div>
                                 <div>
-                                    
-                                    <form > 
-                                        <button style="height: 50px" class="btn btn-primary " type="submit">Contact Support</button>
-                                    </form> 
+                                    <a style="height: 50px; justify-content: center; align-content: center" class="btn btn-primary " href="customerContactForm.jsp">Contact Support</a>
                                 </div>
                         </div>
                     </div>
@@ -287,11 +242,11 @@
                               <div class="row">
                                   <div class="col-md-12 text-center">
                                       <p class="mb-1">
-                                          <strong>Main10</strong> - Fast Repairs, Reliable Maintenance!
+                                          <strong>Main10</strong> - ${footer.slogan}
                                       </p>
-                                      <p class="mb-1">Address: 123 Đường ABC, Quận XYZ, TP.HCM</p>
-                                      <p class="mb-1">Hotline: 0123 456 789 | Email: support@main10.com</p>
-                                      <p class="mb-0">© 2025 Main10. All rights reserved.</p>
+                                      <p class="mb-1">Address: ${footer.address}</p>
+                                      <p class="mb-1">Hotline: ${footer.hotline} | Email: ${footer.email}</p>
+                                      <p class="mb-0">© ${footer.copyrightYear} Main10. All rights reserved.</p>
                                   </div>
                               </div>
                           </div>

@@ -20,7 +20,17 @@ public class Staff {
     private String address;
     private String image;
     private List<String> permissions;
-
+    private int count;
+    private String str;
+    
+    public Staff(int staffID, String name, String gender, String image, int count, String str) {
+        this.staffID = staffID;
+        this.name = name;
+        this.gender = gender;
+        this.image = image;
+        this.count = count;
+        this.str = str;
+    }
     public List<String> getPermission() {
         return permissions;
     }
@@ -143,6 +153,31 @@ public class Staff {
     public void setImage(String image) {
         this.image = image;
     } 
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public String getStr() {
+        return str;
+    }
+
+    public void setStr(String str) {
+        this.str = str;
+    }
+    
     
     public boolean hasPermissions(String per){
         for (String p : permissions) {

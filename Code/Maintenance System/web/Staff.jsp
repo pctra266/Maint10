@@ -223,6 +223,13 @@
                                     </button>
                                 </form>
                             </div>
+                            <div class="col-md-6 d-flex justify-content-start">
+                                <form action="reportStaffController" method="get">
+                                    <button type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 shadow">
+                                        <i class="fas fa-history"></i> Report
+                                    </button>
+                                </form>
+                            </div>
                         </div>
                                                 
                         <form action="ExportStaff" method="get" class="ms-1">

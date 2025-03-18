@@ -149,14 +149,44 @@ CREATE TABLE ProductComponents (
     Quantity INT NOT NULL CHECK (Quantity >= 1) --Component in a product if equal to 0, it should not be in this table
 );
 
+CREATE TABLE ExtendedWarranty (
+    ExtendedWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ExtendedWarrantyName NVARCHAR(100) NOT NULL, 
+    ExtendedPeriodInMonths INT NOT NULL,       
+    Price DECIMAL(18,2) NOT NULL,              
+    ExtendedWarrantyDescription NVARCHAR(500) NULL,
+	IsDelete BIT DEFAULT 0 NOT NULL,
+);
+--  PackageWarranty table
+CREATE TABLE PackageWarranty (
+    PackageWarrantyID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    WarrantyStartDate DATETIME NOT NULL,          
+    WarrantyEndDate DATETIME NOT NULL,
+	DurationMonths INT NOT NULL DEFAULT 12,
+	Price DECIMAL(18,2) NOT NULL,
+    Note NVARCHAR(500) NULL, 
+	IsActive BIT DEFAULT 1 NOT NULL,
+);
+
+CREATE TABLE ExtendedWarrantyDetail(
+	ExtendedWarrantyDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	ExtendedWarrantyID INT NOT NULL REFERENCES ExtendedWarranty(ExtendedWarrantyID),
+	PackageWarrantyID INT NOT NULL REFERENCES PackageWarranty(PackageWarrantyID),
+	StartExtendedWarranty DATETIME NOT NULL,
+	EndExtendedWarranty DATETIME NOT NULL,
+)
+
+
 -- ProductDetail Table
 CREATE TABLE ProductDetail (
     ProductDetailID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     CustomerID INT NOT NULL REFERENCES Customer(CustomerID),
     ProductID INT NOT NULL REFERENCES Product(ProductID),
     ProductCode NVARCHAR(50) NOT NULL UNIQUE,
-    PurchaseDate DATETIME NOT NULL
+    PurchaseDate DATETIME NOT NULL,
+	PackageWarrantyID INT NOT NULL UNIQUE REFERENCES PackageWarranty(PackageWarrantyID)
 );
+
 
 -- Bảng UnknowProduct: Sản phẩm không rõ nguồn gốc
 CREATE TABLE UnknownProduct (
@@ -194,6 +224,18 @@ CREATE TABLE WarrantyCard (
     CreatedDate DATETIME DEFAULT GETDATE(),
 );
 
+CREATE TABLE ContractorCard (
+    ContractorCardID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	WarrantyCardID int references WarrantyCard(WarrantyCardID),
+	StaffID int references Staff(StaffID),
+	ContractorID int references Staff(StaffID),
+	[Date] DATETIME DEFAULT GETDATE(),
+	--waiting tuong ung voi request-outsource, receive ~ accept_outsource, 
+	--cancel ~ reject_outsource/refuse_outsource/unfixable_outsouce( khong sua duoc)
+	[Status] NVARCHAR(20) CHECK (Status in ('waiting', 'receive', 'cancel', 'done')),
+	Note NVARCHAR(MAX)
+);
+
 -- ComponentRequest Table
 CREATE TABLE ComponentRequest (
     ComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -220,6 +262,19 @@ CREATE TABLE ComponentRequestResponsible (
     [Action] NVARCHAR(10) NOT NULL CHECK ([Action] IN ('request', 'approved', 'cancel')),
 	CreateDate DATETIME DEFAULT GETDATE()
 );
+-- MissingComponentRequest Table
+CREATE TABLE MissingComponentRequest (
+    MissingComponentRequestID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    ComponentName NVARCHAR(100) NOT NULL,
+	ComponentType NVARCHAR(20) NOT NULL CHECK (ComponentType IN ('product', 'unknown product')), -- Phân loại sản phẩm
+    TypeID INT NULL REFERENCES ComponentType(TypeID), -- Loại linh kiện (nếu biết)
+    BrandID INT NULL REFERENCES Brand(BrandID), -- Thương hiệu (nếu biết)
+    RequestedBy INT NOT NULL REFERENCES Staff(StaffID), -- Người yêu cầu
+    RequestDate DATETIME DEFAULT GETDATE(), -- Ngày yêu cầu
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('waiting', 'approved', 'cancel')),
+    Note NVARCHAR(MAX)
+);
+
 
 -- WarrantyCardDetail Table
 CREATE TABLE WarrantyCardDetail (
@@ -238,7 +293,9 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'fixing','refix','wait_components', 'received_components', 'outsource', 'fixed', 'completed','refuse', 'cancel')),
+    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
+	'request_outsource', 'cancel_outsource', 'accept_outsource', 'refuse_outsource' , 'send_outsource','lost', 'receive_outsource', 'fixed_outsource', 
+	'unfixable_outsource', 'back_outsource', 'receive_from_outsource' ,'fixed', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
     Note NVARCHAR(MAX)
 );
@@ -266,19 +323,10 @@ CREATE TABLE FeedbackLog (
 CREATE TABLE Media (
     MediaID INT IDENTITY(1,1) PRIMARY KEY,
     ObjectID INT NOT NULL, -- Liên kết trực tiếp đến ID của bảng liên quan
-    ObjectType NVARCHAR(50) NOT NULL CHECK (ObjectType IN ('Component', 'Product', 'WarrantyCard', 'Feedback')),
+    ObjectType NVARCHAR(50) NOT NULL CHECK (ObjectType IN ('Component', 'Product', 'WarrantyCard', 'Feedback','Cover','OurService')),
     MediaURL NVARCHAR(MAX) NOT NULL, -- URL ảnh hoặc video
     MediaType NVARCHAR(10) NOT NULL CHECK (MediaType IN ('image', 'video')), -- Phân loại
     UploadedDate DATETIME DEFAULT GETDATE()
-);
-
--- Payment Table
-CREATE TABLE Payment (
-    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    PaymentDate DATE NOT NULL,
-    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
-    Amount FLOAT NOT NULL CHECK (Amount >= 0),
-    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail'))
 );
 
 CREATE TABLE Invoice (
@@ -297,13 +345,94 @@ CREATE TABLE Invoice (
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
 
+<<<<<<< HEAD
 
 
 
 ALTER TABLE Payment
 ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
+=======
+-- Payment Table
+CREATE TABLE Payment (
+    PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    PaymentDate DATE NOT NULL,
+    PaymentMethod NVARCHAR(20) NOT NULL CHECK (PaymentMethod IN ('cash', 'bank_transfer')),
+    Amount FLOAT NOT NULL CHECK (Amount >= 0),
+    Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
+	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
+);
+>>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
 
 
+CREATE TABLE FooterSetting (
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    slogan VARCHAR(255) NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    hotline VARCHAR(50) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    copyrightYear VARCHAR(255) NOT NULL,
+    lastUpdated  DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE ContactText (
+    id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    subtitle TEXT NOT NULL,
+    lastUpdated DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE CustomerContact (
+    ContactID INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(100)  NULL,
+    Email NVARCHAR(100) NULL,
+    Phone NVARCHAR(20) NOT NULL,
+    Message NVARCHAR(MAX) NULL,
+    CreatedAt DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE MarketingServiceSection (
+    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    Title NVARCHAR(255),
+    SubTitle NVARCHAR(255),
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE()
+);
+
+CREATE TABLE MarketingServiceItem (
+    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    SectionID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Description NVARCHAR(MAX),
+    ImageURL NVARCHAR(MAX),
+    SortOrder INT DEFAULT 1,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME DEFAULT GETDATE(),
+    CONSTRAINT FK_MarketingServiceItem_SectionID
+        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
+);
+CREATE TABLE StaffBlogPosts (
+    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
+    StaffID INT NOT NULL,
+    Title NVARCHAR(255) NOT NULL,
+    Content NVARCHAR(MAX) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    UpdatedDate DATETIME NULL,
+    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
+);
+
+CREATE TABLE Notifications (
+    NotificationID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
+    RecipientType NVARCHAR(20) NOT NULL 
+        CHECK (RecipientType IN ('Customer', 'Staff')), -- Loại người nhận
+    RecipientID INT NOT NULL, -- ID của người nhận (CustomerID hoặc StaffID của Inventory Manager)
+    Message NVARCHAR(255) NOT NULL,
+    CreatedDate DATETIME DEFAULT GETDATE(),
+    IsRead BIT DEFAULT 0, -- 0: chưa đọc, 1: đã đọc
+    Target Nvarchar(255) --- Luu noi ma thong bao muon chuyen den
+);
+
+-- Index để tối ưu truy vấn
+CREATE INDEX IDX_Notifications_Recipient ON Notifications (RecipientType, RecipientID, IsRead);
 
 -- Tăng tốc truy vấn: Chỉ mục sẽ giúp tăng tốc các truy vấn có điều kiện lọc hoặc tìm kiếm theo các cột
 CREATE NONCLUSTERED INDEX IX_Customer_Phone ON Customer(Phone);

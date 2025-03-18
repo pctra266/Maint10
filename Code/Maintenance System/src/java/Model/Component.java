@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Model;
 
 import java.util.ArrayList;
@@ -134,7 +130,5 @@ public class Component {
     @Override
     public String toString() {
         return "Component{" + "componentID=" + componentID + ", componentCode=" + componentCode + ", componentName=" + componentName + ", quantity=" + quantity + ", status=" + status + ", brandId=" + brandId + ", typeId=" + typeId + ", type=" + type + ", brand=" + brand + ", images=" + images + ", videos=" + videos + ", price=" + price + '}';
-    }
-
-    
+    }  
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="6.0" xmlns="https://jakarta.ee/xml/ns/jakartaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
-    <filter>
+    <!--    <filter>
         <filter-name>LoginFilter</filter-name>
         <filter-class>Filter.LoginFilter</filter-class>
     </filter>
@@ -15,7 +15,7 @@
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    </filter-mapping>-->
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -145,6 +145,7 @@
         <servlet-class>Controller.Account.LoginGoogle</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
         <servlet-name>ChatHistory</servlet-name>
         <servlet-class>Controller.ChatBox.ChatHistory</servlet-class>
     </servlet>
@@ -163,6 +164,18 @@
     <servlet>
         <servlet-name>ReportRepairStatus</servlet-name>
         <servlet-class>Controller.Report.ReportRepairStatus</servlet-class>
+=======
+        <servlet-name>ExportPDF</servlet-name>
+        <servlet-class>Controller.Product.ExportPDF</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SearchWarrantyCard</servlet-name>
+        <servlet-class>Controller.WarrantyCard.SearchWarrantyCard</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>SendWarrantyCard</servlet-name>
+        <servlet-class>Controller.WarrantyCard.SendWarrantyCard</servlet-class>
+>>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -321,6 +334,7 @@
         <url-pattern>/login-google</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>ChatHistory</servlet-name>
         <url-pattern>/chatHistory</url-pattern>
     </servlet-mapping>
@@ -340,4 +354,45 @@
         <servlet-name>ReportRepairStatus</servlet-name>
         <url-pattern>/reportrepairstatus</url-pattern>
     </servlet-mapping>
+=======
+        <servlet-name>ExportPDF</servlet-name>
+        <url-pattern>/exportpdf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SearchWarrantyCard</servlet-name>
+        <url-pattern>/searchwc</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ajaxServlet</servlet-name>
+        <servlet-class>VnPay.ajaxServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>vnpayQuery</servlet-name>
+        <servlet-class>VnPay.vnpayQuery</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>vnpayRefund</servlet-name>
+        <servlet-class>VnPay.vnpayRefund</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ajaxServlet</servlet-name>
+        <url-pattern>/vnpayajax/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vnpayQuery</servlet-name>
+        <url-pattern>/vnpayquery/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>vnpayRefund</servlet-name>
+        <url-pattern>/vnpayrefund/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>SendWarrantyCard</servlet-name>
+        <url-pattern>/sendWC</url-pattern>
+
+    </servlet-mapping>
+
+>>>>>>> 793a40ea821c5a21df61558ab658bf289e8886f0
 </web-app>

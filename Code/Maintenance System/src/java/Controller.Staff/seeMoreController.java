@@ -53,6 +53,7 @@ public class seeMoreController extends HttpServlet {
                 String search = request.getParameter("search");
                 String searchname = request.getParameter("searchname");
                 String column = request.getParameter("column");
+                String status = request.getParameter("status");
                 String sortOrder = request.getParameter("sortOrder");
                 String page_size = request.getParameter("page_size");                               
                 String name = "";
@@ -81,7 +82,7 @@ public class seeMoreController extends HttpServlet {
                     }
                 }
                 int totalStaff;
-                list = dao.getAllStaff(name, search, pageIndex, pagesize, column, sortOrder);
+                list = dao.getAllStaff(name, search, pageIndex, pagesize, column,status, sortOrder);
 //                list = dao.getAllStaff(searchname, search, column, sortOrder);
                 totalStaff = dao.getAllStaff(name, search, column, sortOrder).size();
                 PrintWriter out = response.getWriter();
@@ -99,7 +100,7 @@ public class seeMoreController extends HttpServlet {
                 pagination.setOrder(sortOrder == null ? "" : sortOrder);
                 
                 List<String> searchFields = new ArrayList();
-                List<String> searchValues = new ArrayList<>();
+                List<String> searchValues = new ArrayList();
                 if(searchname != null && !searchname.isEmpty()){
                     searchFields.add("searchname");
                     searchValues.add(searchname);
@@ -123,6 +124,7 @@ public class seeMoreController extends HttpServlet {
                 request.setAttribute("search", search);
                 request.setAttribute("searchname", searchname);
                 request.setAttribute("column", column);
+                request.setAttribute("status", status);
                 request.setAttribute("sortOrder", sortOrder);
                 request.setAttribute("pageIndex", pageIndex);
                 request.setAttribute("page_size", page_size);
@@ -133,7 +135,7 @@ public class seeMoreController extends HttpServlet {
             default:
                 break;
         }   
-    } 
+    }
 
     /** 
      * Handles the HTTP <code>POST</code> method.
@@ -148,36 +150,36 @@ public class seeMoreController extends HttpServlet {
               
     }
     private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
-    if (imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName() == null|| imagePart.getSubmittedFileName().isEmpty()) return "img/Staff/default-image.png";
+        if (imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName() == null|| imagePart.getSubmittedFileName().isEmpty()) return "img/Staff/default-image.png";
 
-    // Đường dẫn đến thư mục Web Pages/img/Staff
-    String devUploadPath = request.getServletContext().getRealPath("/").replace("build\\web\\", "web/") + "img/Staff";
+        // Đường dẫn đến thư mục Web Pages/img/Staff
+        String devUploadPath = request.getServletContext().getRealPath("/").replace("build\\web\\", "web/") + "img/Staff";
 
-    // Đường dẫn đến thư mục build/web/img/Staff
-    String buildUploadPath = request.getServletContext().getRealPath("/") + "img/Staff";
+        // Đường dẫn đến thư mục build/web/img/Staff
+        String buildUploadPath = request.getServletContext().getRealPath("/") + "img/Staff";
 
 
-    File devUploadDir = new File(devUploadPath);
-    File buildUploadDir = new File(buildUploadPath);
+        File devUploadDir = new File(devUploadPath);
+        File buildUploadDir = new File(buildUploadPath);
 
-    if (!devUploadDir.exists()) devUploadDir.mkdirs(); // Tạo thư mục nếu chưa có
-    if (!buildUploadDir.exists()) buildUploadDir.mkdirs();
+        if (!devUploadDir.exists()) devUploadDir.mkdirs(); // Tạo thư mục nếu chưa có
+        if (!buildUploadDir.exists()) buildUploadDir.mkdirs();
 
-    String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
-    
-    if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")) {
-        String error = "Chỉ lấy file png và jpg";
-        return error;
+        String fileName = Paths.get(imagePart.getSubmittedFileName()).getFileName().toString();
+
+        if (!fileName.endsWith(".jpg") && !fileName.endsWith(".png")) {
+            String error = "Chỉ lấy file png và jpg";
+            return error;
+        }
+
+        File devFile = new File(devUploadPath, fileName);
+        File buildFile = new File(buildUploadPath, fileName);
+
+        // Ghi file vào cả hai thư mục
+        imagePart.write(devFile.getAbsolutePath());
+        Files.copy(devFile.toPath(), buildFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        return "img/Staff/"+ fileName; // Trả về đường dẫn lưu trong DB
     }
-    
-    File devFile = new File(devUploadPath, fileName);
-    File buildFile = new File(buildUploadPath, fileName);
-
-    // Ghi file vào cả hai thư mục
-    imagePart.write(devFile.getAbsolutePath());
-    Files.copy(devFile.toPath(), buildFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-    return "img/Staff/"+ fileName; // Trả về đường dẫn lưu trong DB
-}
     /** 
      * Returns a short description of the servlet.
      * @return a String containing servlet description
