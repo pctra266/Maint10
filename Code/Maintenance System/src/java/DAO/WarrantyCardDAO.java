@@ -311,7 +311,7 @@ public class WarrantyCardDAO extends DBContext {
         String searchProductName = (productName != null) ? "%" + productName.trim().replaceAll("\\s+", "%") + "%" : "%";
 
         String searchStatus = (status != null) ? "%" + status.trim().replaceAll("\\s+", "%") + "%" : "%";
-        List<WarrantyCard> warrantyCards = new ArrayList<>();
+        List<WarrantyCard> listWarrantyCard = new ArrayList<>();
         String query = SELECT_STRING + "WHERE c.CustomerID=?";
         if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
             query += " AND wc.WarrantyCardCode LIKE ?";
@@ -341,7 +341,7 @@ public class WarrantyCardDAO extends DBContext {
         }
 
         query += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";  // Phân trang an toàn với SQL Server
-
+System.out.println("Final Query: " + query);
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             int index = 1;
             ps.setInt(index++, customerID);
@@ -362,12 +362,31 @@ public class WarrantyCardDAO extends DBContext {
             ps.setInt(index++, fetch);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                warrantyCards.add(mapWarrantyCard(rs));
+        WarrantyCard warrantycard = new WarrantyCard();
+        warrantycard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+        
+        warrantycard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+        warrantycard.setIssueDescription(rs.getString("IssueDescription"));
+        warrantycard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+        warrantycard.setCreatedDate(rs.getDate("CreatedDate"));
+        warrantycard.setReturnDate(rs.getDate("ReturnDate"));
+        warrantycard.setDonedDate(rs.getDate("DoneDate"));
+        warrantycard.setHandlerID(rs.getInt("HandlerID"));
+        warrantycard.setCompletedDate(rs.getDate("CompleteDate"));
+        warrantycard.setCanceldDate(rs.getDate("CancelDate"));
+        warrantycard.setProductDetailCode(rs.getString("ProductCode"));
+        warrantycard.setCustomerID(rs.getInt("CustomerID"));
+      
+
+        warrantycard.setProductName(rs.getString("ProductName"));
+        warrantycard.setCustomerName(rs.getString("CustomerName"));
+        warrantycard.setCustomerPhone(rs.getString("CustomerPhone"));
+        listWarrantyCard.add(warrantycard);
             }
         } catch (SQLException e) {
         }
 
-        return warrantyCards;
+        return listWarrantyCard;
     }
 
     public int getPageWarrantyCardByCustomerID(int customerID, String warrantyCard, String productName, String status, String createDate) {
@@ -399,9 +418,11 @@ public class WarrantyCardDAO extends DBContext {
             query += " AND  wc.WarrantyStatus LIKE ?";
         }
 
-        try (PreparedStatement ps = connection.prepareStatement(query)) {
-            ps.setInt(1, customerID);
-            int index = 1;
+        try  {
+             int index = 1;
+            
+                    PreparedStatement ps = connection.prepareStatement(query);
+           
             ps.setInt(index++, customerID);
             if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
                 ps.setString(index++, searchWarrantyCardCode);
@@ -416,12 +437,12 @@ public class WarrantyCardDAO extends DBContext {
             if (searchStatus != null && !searchStatus.trim().isEmpty()) {
                 ps.setString(index++, searchStatus);
             }
-            try (ResultSet rs = ps.executeQuery()) {
+           ResultSet rs = ps.executeQuery() ;
                 if (rs.next()) {
                     return rs.getInt(1);
                 }
-            }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -1065,6 +1086,14 @@ public class WarrantyCardDAO extends DBContext {
     }
 
     public static void main(String[] args) {
+
+        WarrantyCardDAO d = new WarrantyCardDAO();
+        List<WarrantyCard> list = d.getWarrantyCardByCustomerID(2, "", "", "", "", "wc.CreatedDate", "ASC", 0,10);
+        for(WarrantyCard wc : list) {
+            System.out.println(wc.getCreatedDate());
+        }
+        System.out.println(list.size());
+
         WarrantyCardDAO dao = new WarrantyCardDAO();
         System.out.println(dao.getPriceOfWarrantyCard(45));
 

@@ -64,8 +64,8 @@
                                 </th>
                                 <th>
                                     Purchase Date
-                                    <a href="purchaseproduct?sort=PurchaseDate&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
-                                    <a href="purchaseproduct?sort=PurchaseDate&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
+                                    <a href="purchaseproduct?sort=purchaseDate&order=asc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↑</a>
+                                    <a href="purchaseproduct?sort=purchaseDate&order=desc&page-size=${size}&productCode=${productCode}&code=${code}&productName=${productName}&purchaseDate=${purchaseDate}">↓</a>
                                 </th>
                                 <th>
                                     Action

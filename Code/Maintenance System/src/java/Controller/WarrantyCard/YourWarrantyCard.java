@@ -73,10 +73,10 @@ public class YourWarrantyCard extends HttpServlet {
         
        
         WarrantyCardDAO warrantyCardDao = new WarrantyCardDAO();
-        String searchWarrantyCardCode = request.getParameter("warrantyCardCode");
-        String searchProductName = request.getParameter("productName");
-        String searchStatus = request.getParameter("status");
-        String searchCreateDate = request.getParameter("createDate");
+        String warrantyCardCode = request.getParameter("warrantyCardCode");
+        String productName = request.getParameter("productName");
+        String warrantyStatus = request.getParameter("warrantyStatus");
+        String createdDate = request.getParameter("createdDate");
         String pageParam = request.getParameter("page");
         String pageSizeParam = request.getParameter("page-size");
         String sort = request.getParameter("sort");
@@ -95,20 +95,17 @@ public class YourWarrantyCard extends HttpServlet {
         int totalPages = 1;
         int offset = (page - 1) * pageSize;
 
-        if (searchWarrantyCardCode != null && searchWarrantyCardCode.trim().isEmpty()
-                || searchProductName != null && searchProductName.trim().isEmpty()
-                || searchStatus != null && searchStatus.trim().isEmpty()
-                || searchCreateDate != null && searchCreateDate.trim().isEmpty()) {
-            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName, searchStatus,searchCreateDate, sort, order, offset, pageSize);
-            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName ,searchStatus,searchCreateDate);
+    
+            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), warrantyCardCode, productName, warrantyStatus,createdDate, sort, order, offset, pageSize);
+            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), warrantyCardCode, productName ,warrantyStatus,createdDate);
             totalPages = (int) Math.ceil((double) totalWarrantyCard / pageSize);
 
             // Lay thong tin phan trang
             Pagination pagination = new Pagination();
             pagination.setPageSize(pageSize);
             pagination.setCurrentPage(page);
-            pagination.setSearchFields(new String[]{"warrantyCardCode", "productName", "createDate"});
-            pagination.setSearchValues(new String[]{searchWarrantyCardCode, searchProductName, searchCreateDate});
+            pagination.setSearchFields(new String[]{"warrantyCardCode", "productName","warrantyStatus", "createDate"});
+            pagination.setSearchValues(new String[]{warrantyCardCode, productName,warrantyStatus,createdDate});
             pagination.setSort(sort);
             pagination.setOrder(order);
             pagination.setUrlPattern("/yourwarrantycard");
@@ -117,38 +114,22 @@ public class YourWarrantyCard extends HttpServlet {
             pagination.setListPageSize(totalWarrantyCard);
             request.setAttribute("pagination", pagination);
 
-        } else {
-            listWarrantyCard = warrantyCardDao.getWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate, sort, order, offset, pageSize);
-            totalWarrantyCard = warrantyCardDao.getPageWarrantyCardByCustomerID(customer.getCustomerID(), searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate);
-            totalPages = (int) Math.ceil((double) totalWarrantyCard / pageSize);
-
-            // Lay thong tin phan trang
-            Pagination pagination = new Pagination();
-            pagination.setPageSize(pageSize);
-            pagination.setCurrentPage(page);
-            pagination.setSearchFields(new String[]{"warrantyCardCode", "productName","status" ,"createDate"});
-            pagination.setSearchValues(new String[]{searchWarrantyCardCode, searchProductName,searchStatus, searchCreateDate});
-            pagination.setSort(sort);
-            pagination.setOrder(order);
-            pagination.setUrlPattern("/yourwarrantycard");
-            pagination.setTotalPagesToShow(5);
-            pagination.setTotalPages(totalPages);
-            pagination.setListPageSize(totalWarrantyCard);
-            request.setAttribute("pagination", pagination);
-        }
+        
         // Set Atribute
         
-        request.setAttribute("searchWarrantyCardCode", searchWarrantyCardCode);
-        request.setAttribute("searchProductName ", searchProductName );
-        request.setAttribute("searchCreateDate", searchCreateDate);
+        request.setAttribute("warrantyCardCode", warrantyCardCode);
+        request.setAttribute("productName", productName );
+        request.setAttribute("createDate", createdDate);
+        request.setAttribute("warrantyStatus", warrantyStatus);
         request.setAttribute("size", pageSize);
-        request.setAttribute("sort", sort);
-        request.setAttribute("status", searchStatus);
-        request.setAttribute("order", order);
         request.setAttribute("totalPages", totalPages);
         request.setAttribute("listWarrantyCard", listWarrantyCard );
         request.getRequestDispatcher("YourWarrantyCard.jsp").forward(request, response);
+        
+       
+    
 
+    
     }
 
     /**

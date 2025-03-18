@@ -60,28 +60,6 @@ public class ExtendedWarrantyController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-//         String action = request.getParameter("action");
-//        
-//        if(action == null || action.trim().isEmpty()){
-//            ArrayList<ExtendedWarranty> list = ewDao.getListExtendedWarranty();
-//            request.setAttribute("extendedWarranties", list);
-//            request.getRequestDispatcher("extendedWarrantyList.jsp").forward(request, response);
-//        } else if(action.equals("new")){
-//            request.getRequestDispatcher("addExtendedWarranty.jsp").forward(request, response);
-//        } else if(action.equals("edit")){
-//            String id = request.getParameter("extendedWarrantyID");
-//            ExtendedWarranty ew = ewDao.getExtendedWarrantyByID(id);
-//            request.setAttribute("extendedWarranty", ew);
-//            request.getRequestDispatcher("editExtendedWarranty.jsp").forward(request, response);
-//        } else if(action.equals("delete")){
-//            String id = request.getParameter("extendedWarrantyID");
-//            boolean deleted = ewDao.deleteExtendedWarranty(id);
-//            String message = deleted ? "Extended warranty deleted successfully." : "Delete failed.";
-//            request.setAttribute("message", message);
-//            ArrayList<ExtendedWarranty> list = ewDao.getListExtendedWarranty();
-//            request.setAttribute("extendedWarranties", list);
-//            request.getRequestDispatcher("extendedWarrantyList.jsp").forward(request, response);
-//        }
         String action = request.getParameter("action");
         if(action == null || action.trim().isEmpty()){
             action = "view";
@@ -179,34 +157,6 @@ public class ExtendedWarrantyController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-//        
-//        String action = request.getParameter("action");
-//        if(action.equals("new")){
-//            ExtendedWarranty ew = new ExtendedWarranty();
-//            ew.setExtendedWarrantyName(request.getParameter("extendedWarrantyName"));
-//            ew.setExtendedPeriodInMonths(Integer.parseInt(request.getParameter("extendedPeriodInMonths")));
-//            ew.setPrice(Double.parseDouble(request.getParameter("price")));
-//            ew.setExtendedWarrantyDescription(request.getParameter("extendedWarrantyDescription"));
-//            boolean created = ewDao.createExtendedWarranty(ew);
-//            String message = created ? "Extended warranty created successfully." : "Creation failed.";
-//            request.setAttribute("message", message);
-//        } else if(action.equals("edit")){
-//            ExtendedWarranty ew = new ExtendedWarranty();
-//            ew.setExtendedWarrantyID(Integer.parseInt(request.getParameter("extendedWarrantyID")));
-//            ew.setExtendedWarrantyName(request.getParameter("extendedWarrantyName"));
-//            ew.setExtendedPeriodInMonths(Integer.parseInt(request.getParameter("extendedPeriodInMonths")));
-//            ew.setPrice(Double.parseDouble(request.getParameter("price")));
-//            ew.setExtendedWarrantyDescription(request.getParameter("extendedWarrantyDescription"));
-//            boolean updated = ewDao.updateExtendedWarranty(ew);
-//            String message = updated ? "Extended warranty updated successfully." : "Update failed.";
-//            request.setAttribute("message", message);
-//        }
-//        
-//        ArrayList<ExtendedWarranty> list = ewDao.getListExtendedWarranty();
-//        request.setAttribute("extendedWarranties", list);
-//        request.getRequestDispatcher("extendedWarrantyList.jsp").forward(request, response);
-
-        // Xử lý POST cho các thao tác new, edit
         String action = request.getParameter("action");
         if(action.equals("new")){
             createAction(request, response);
@@ -217,7 +167,6 @@ public class ExtendedWarrantyController extends HttpServlet {
         }
     }
     
-    // Xử lý tạo mới ExtendedWarranty (POST)
     protected void createAction(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ExtendedWarranty ew = new ExtendedWarranty();
@@ -231,7 +180,6 @@ public class ExtendedWarrantyController extends HttpServlet {
         viewAction(request, response);
     }
     
-    // Xử lý cập nhật ExtendedWarranty (POST)
     protected void updateAction(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         ExtendedWarranty ew = new ExtendedWarranty();
