@@ -164,7 +164,8 @@
     <servlet>
         <servlet-name>ReportRepairStatus</servlet-name>
         <servlet-class>Controller.Report.ReportRepairStatus</servlet-class>
-
+    </servlet>
+    <servlet>
         <servlet-name>ExportPDF</servlet-name>
         <servlet-class>Controller.Product.ExportPDF</servlet-class>
     </servlet>
@@ -354,6 +355,7 @@
         <servlet-name>ReportRepairStatus</servlet-name>
         <url-pattern>/reportrepairstatus</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
 
         <servlet-name>ExportPDF</servlet-name>
         <url-pattern>/exportpdf</url-pattern>
@@ -391,7 +393,6 @@
     <servlet-mapping>
         <servlet-name>SendWarrantyCard</servlet-name>
         <url-pattern>/sendWC</url-pattern>
-
     </servlet-mapping>
 
 
