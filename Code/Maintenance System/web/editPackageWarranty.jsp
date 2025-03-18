@@ -5,23 +5,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Package Warranty</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/light.css">
+    <link rel="stylesheet" href="css/light.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="wrapper">
-        <!-- Navbar left -->
         <jsp:include page="/includes/navbar-left.jsp" />
         <div class="main">
-            <!-- Navbar top -->
             <jsp:include page="/includes/navbar-top.jsp" />
             
-            <!-- Main content -->
             <main class="content">
-                <!-- Card: Edit Package Warranty -->
                 <div class="card shadow-sm mb-4">
-                    <a href="packageWarranty" style="margin: 1%; width: 5%" class="btn btn-primary">Back</a>
+                    <a href="packageWarranty" style="margin: 1%; width: 7%" class="btn btn-primary">Back</a>
                     <div class="card-header">
                         <h2>Package Warranty</h2>
                     </div>
@@ -33,7 +28,6 @@
                             <input type="hidden" name="action" value="edit">
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                             
-                            <!-- Read-only fields -->
                             <div class="mb-3">
                                 <label class="form-label">Product Code:</label>
                                 <input type="text" class="form-control" value="${packageWarranty.productCode}" readonly>
@@ -55,8 +49,6 @@
                                 <input type="text" class="form-control" value="${packageWarranty.extendedWarrantyName}" readonly>
                             </div>
                             
-                            <!-- Editable fields (chỉ để chỉnh sửa thông tin nếu cần; 
-                                 chức năng gia hạn sẽ được xử lý riêng) -->
                             <div class="mb-3">
                                 <label for="note" class="form-label">Note:</label>
                                 <textarea class="form-control" id="note" name="note" rows="3">${packageWarranty.note}</textarea>
@@ -74,7 +66,6 @@
                     </div>
                 </div>
                 
-                <!-- Section 1: Extend Default Warranty -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header">
                         <h3>Extend Default Warranty</h3>
@@ -91,7 +82,6 @@
                         </form>
                     </div>
                 </div>
-                <!-- Section: Extended Warranty History -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header">
                         <h3>Extended Warranty History</h3>
@@ -119,7 +109,6 @@
                         </table>
                     </div>
                 </div>
-                <!-- Section 2: Extend Extended Warranty -->
                 <div class="card shadow-sm mb-4">
                     <div class="card-header">
                         <h3>Extend Extended Warranty</h3>
