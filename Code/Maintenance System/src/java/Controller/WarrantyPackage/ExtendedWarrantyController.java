@@ -21,7 +21,7 @@ import java.util.ArrayList;
  *
  * @author Tra Pham
  */
-@WebServlet(name="ExtendedWarrantyController", urlPatterns={"/ExtendedWarrantyController"})
+@WebServlet(name="ExtendedWarrantyController", urlPatterns={"/extendedWarranty"})
 public class ExtendedWarrantyController extends HttpServlet {
      private final int PAGE_SIZE = 5;
    private final ExtendedWarrantyDAO ewDao = new ExtendedWarrantyDAO();
@@ -78,7 +78,7 @@ public class ExtendedWarrantyController extends HttpServlet {
                 deleteAction(request, response);
                 break;
             default:
-                response.sendRedirect(request.getContextPath() + "/ExtendedWarrantyController?action=view");
+                response.sendRedirect(request.getContextPath() + "/extendedWarranty?action=view");
                 break;
         }
         
@@ -104,7 +104,7 @@ public class ExtendedWarrantyController extends HttpServlet {
         pagination.setPageSize(pageSize);
         pagination.setTotalPages(totalPages);
         pagination.setTotalPagesToShow(5);
-        pagination.setUrlPattern("/ExtendedWarrantyController");
+        pagination.setUrlPattern("/extendedWarranty");
         pagination.setSort(request.getParameter("sort"));
         pagination.setOrder(request.getParameter("order"));
    
