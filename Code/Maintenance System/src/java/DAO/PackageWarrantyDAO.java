@@ -226,7 +226,9 @@ public class PackageWarrantyDAO {
         String queryPW = """
             UPDATE PackageWarranty
             SET  Note = ?
+                         
             WHERE PackageWarrantyID = ?
+                         
             """;
     
         try {
@@ -246,7 +248,6 @@ public class PackageWarrantyDAO {
         return false;
     }
     
-    // Cập nhật IsActive trong PackageWarranty
     public boolean updateActive(PackageWarranty pkg) {
         String query = "UPDATE PackageWarranty SET IsActive = ? WHERE PackageWarrantyID = ?";
         try {
@@ -262,7 +263,6 @@ public class PackageWarrantyDAO {
         return false;
     }
     
-    // Cập nhật WarrantyStartDate và WarrantyEndDate trong PackageWarranty
     public boolean updateDefaultWarrantyPackage(PackageWarranty pkg) {
         String query = "UPDATE PackageWarranty SET WarrantyStartDate = ?, WarrantyEndDate = ? WHERE PackageWarrantyID = ?";
         try {
@@ -278,8 +278,7 @@ public class PackageWarrantyDAO {
         }
         return false;
     }
-    
-    // Cập nhật StartExtendedWarranty và EndExtendedWarranty trong ExtendedWarrantyDetail
+    // start + end in detail
     public boolean updateExtendedWarrantyDetail(PackageWarranty pkg) {
         String query = "UPDATE ExtendedWarrantyDetail SET StartExtendedWarranty = ?, EndExtendedWarranty = ? WHERE PackageWarrantyID = ?";
         try {
@@ -309,6 +308,7 @@ public class PackageWarrantyDAO {
             PW.WarrantyEndDate,
             PW.Note,
             PW.IsActive,
+            PW.DurationMonths,
             
             EW.ExtendedWarrantyName,
             
@@ -340,6 +340,7 @@ public class PackageWarrantyDAO {
             pkg.setWarrantyEndDate(rs.getDate("WarrantyEndDate"));
             pkg.setNote(rs.getString("Note"));
             pkg.setActive(rs.getBoolean("IsActive"));
+            pkg.setDefaultDerationMonth(rs.getInt("DurationMonths"));
             
             pkg.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
             pkg.setExtendedWarrantyDetailID(rs.getInt("ExtendedWarrantyDetailID"));

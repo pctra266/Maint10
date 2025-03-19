@@ -21,12 +21,10 @@ public class ExtendW extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Xem trang gia hạn, cần truyền packageWarrantyID làm tham số
         String packageWarrantyID = request.getParameter("packageWarrantyID");
         if(packageWarrantyID != null && !packageWarrantyID.trim().isEmpty()){
             PackageWarranty pkg = pkgDao.getPackageWarrantyByID(packageWarrantyID);
             request.setAttribute("packageWarranty", pkg);
-            // Load danh sách ExtendedWarranty cho phần extended (có thể dùng extDao.getListExtendedWarranty())
             request.setAttribute("extendedWarrantyList", extDao.getListExtendedWarranty());
         }
         request.getRequestDispatcher("extendWarranty.jsp").forward(request, response);
@@ -35,7 +33,6 @@ public class ExtendW extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Xác định action: extendDefault hoặc extendExtended
         String action = request.getParameter("action");
         String packageWarrantyID = request.getParameter("packageWarrantyID");
         String message = "";
@@ -43,10 +40,12 @@ public class ExtendW extends HttpServlet {
         if(action.equals("extendDefault")){
             PackageWarranty pkg = pkgDao.getPackageWarrantyByID(packageWarrantyID);
             if(pkg != null){
+                
                 Date now = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(now);
-                int duration = 12;
+                int duration = pkg.getDefaultDerationMonth();
+                // thoi gian hien tai nho hon end date => cong them
                 if(now.compareTo(pkg.getWarrantyEndDate()) <= 0){
                     cal.setTime(pkg.getWarrantyEndDate());
                     cal.add(Calendar.MONTH, duration);
@@ -57,7 +56,7 @@ public class ExtendW extends HttpServlet {
                     cal.add(Calendar.MONTH, duration);
                     pkg.setWarrantyEndDate(cal.getTime());
                 }
-                boolean updated = pkgDao.updatePackageWarranty(pkg);
+                boolean updated = pkgDao.updateDefaultWarrantyPackage(pkg);
                 message = updated ? "Default warranty extended successfully." : "Failed to extend default warranty.";
                 if(updated){
                     pkg.setActive(true);

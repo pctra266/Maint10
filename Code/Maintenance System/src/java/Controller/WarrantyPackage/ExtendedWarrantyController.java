@@ -173,6 +173,7 @@ public class ExtendedWarrantyController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String action = request.getParameter("action");
+        System.out.println("action la"+ action);
         if (action.equals("new")) {
             createAction(request, response);
         } else if (action.equals("edit")) {

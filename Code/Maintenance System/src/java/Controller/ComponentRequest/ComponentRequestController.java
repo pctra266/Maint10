@@ -8,7 +8,9 @@ import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.ComponentRequestResponsibleDAO;
 import DAO.NotificationDAO;
+import DAO.StaffDAO;
 import DAO.WarrantyCardProcessDAO;
+import Email.Email;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
@@ -478,7 +480,7 @@ public class ComponentRequestController extends HttpServlet {
                     } else {
                         mess = "Create Successfully !";
                         int componentRequestIDNum = componentRequestDao.getLastComponentRequestId();
-                        String message = "WCC so can them link kien" + componentRequestIDNum;
+                        String message = "Component Request " + componentRequestIDNum ;
                                     Notification notification = new Notification();
                                     notification.setRecipientType("Staff");
                                     notification.setRecipientID(3);
@@ -487,7 +489,20 @@ public class ComponentRequestController extends HttpServlet {
                                     notification.setIsRead(false);
                                     notification.setTarget(request.getContextPath() + "/componentRequest?action=detailComponentRequest&noti=true&componentRequestID=" + componentRequestIDNum); // URL chi tiết
                                     notificationDAO.addNotification(notification);
+                        Email email = new Email();
+                        StaffDAO staffDao = new StaffDAO();
+                        ComponentDAO compoDao = new ComponentDAO();
+                        String gmail = staffDao.getStaffById(3).getEmail();
+                        String content = "";
+                        // tao noi dung gui
+                        ArrayList<ComponentRequestDetail> listContent = componentRequestDao.getListComponentRequestDetailById(String.valueOf(componentRequestIDNum));
+                        content += "Please send total "+listContent.size()+" type of component for teachician including: \n";
+                        for (ComponentRequestDetail a : listContent) {
+                            Component x = compoDao.getComponentByID(a.getComponentID());
+                            content +="("+ x.getComponentCode()+") Name:"+ x.getComponentName()+"- Brand:" +x.getBrand()+" - Type:"+x.getType()+" - Quantity: "+a.getQuantity() +"\n";
+                        }
                         
+                        email.sendEmail(gmail, "Component Request", content);
                         
                         if (componentRequestIDNum != 0) {
                             try {

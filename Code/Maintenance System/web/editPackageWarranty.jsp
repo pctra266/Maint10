@@ -73,7 +73,7 @@
                     <div class="card-body">
                         <p><strong>Product Code:</strong> ${packageWarranty.productCode}</p>
                         <p><strong>Current Warranty Period:</strong> ${packageWarranty.warrantyStartDate} to ${packageWarranty.warrantyEndDate}</p>
-                        <p><em>Extension will add Duration of <strong>12 months</strong> (default) based on current date.</em></p>
+                        <p><em>Extension will add Duration of <strong>${packageWarranty.defaultDerationMonth}</strong> (default) based on current date.</em></p>
                         <form action="${pageContext.request.contextPath}/extendWarranty" method="post">
                             <input type="hidden" name="action" value="extendDefault">
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
