@@ -34,7 +34,7 @@ public class BlogDAO extends DBContext{
                 String content = rs.getString("Content");
                 String createdDate = rs.getString("CreatedDate");
                 String updatedDate = rs.getString("UpdatedDate");
-                Blog blog = new Blog(blogPostID, staff, title, content, createdDate, updatedDate);
+                Blog blog = new Blog(blogPostID, staff,"", title, content, createdDate, updatedDate);
                 list.add(blog);
                 
             }
@@ -93,7 +93,7 @@ public class BlogDAO extends DBContext{
                 String content = rs.getString("Content");
                 String createdDate = rs.getString("CreatedDate");
                 String updatedDate = rs.getString("UpdatedDate");
-                Blog blog = new Blog(blogPostID, staff, title, content, createdDate, updatedDate);
+                Blog blog = new Blog(blogPostID, staff,"", title, content, createdDate, updatedDate);
                 list.add(blog);
             }
         } catch (SQLException e) {
@@ -144,7 +144,7 @@ public class BlogDAO extends DBContext{
                 String content = rs.getString("Content");
                 String createdDate = rs.getString("CreatedDate");
                 String updatedDate = rs.getString("UpdatedDate");
-                Blog blog = new Blog(blogPostID, staff, title, content, createdDate, updatedDate);
+                Blog blog = new Blog(blogPostID, staff,"", title, content, createdDate, updatedDate);
                 list.add(blog);
             }
         } catch (SQLException e) {
@@ -178,6 +178,33 @@ public class BlogDAO extends DBContext{
         }
         return true;
     }
+    public boolean ChangeBlog(String id, String content) {
+        ArrayList<Blog> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "UPDATE StaffBlogPosts\n" +
+                    "SET Content = ?, \n" +
+                    "UpdatedDate = GETDATE()\n" +
+                    "WHERE BlogPostID = ?;";
+        
+        try{
+            stm = connection.prepareStatement(sql);
+            stm.setString(1, content);
+            stm.setString(2, id);
+            stm.executeUpdate();
+            
+        }catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return true;
+    }
     public ArrayList<Blog> getBlogByID(String blogID) {
     ArrayList<Blog> list = new ArrayList<>();
     PreparedStatement stm = null;
@@ -185,7 +212,7 @@ public class BlogDAO extends DBContext{
     
     String sql = "SELECT \n" +
                 "    BlogPostID, \n" +
-                "    Staff.[Name], \n" +
+                "    Staff.[Name],Staff.StaffID, \n" +
                 "    Title, \n" +
                 "    REPLACE(Content, CHAR(10), CHAR(10)) AS Content, \n" +
                 "    CreatedDate, \n" +
@@ -202,11 +229,12 @@ public class BlogDAO extends DBContext{
         if (rs.next()) {  
             int blogPostID = rs.getInt("BlogPostID");
             String staff = rs.getString("Name");
+            String staffID = rs.getString("StaffID");
             String title = rs.getString("Title");
             String content = rs.getString("Content");
             String createdDate = rs.getString("CreatedDate");
             String updatedDate = rs.getString("UpdatedDate");
-            Blog blog = new Blog(blogPostID, staff, title, content, createdDate, updatedDate);
+            Blog blog = new Blog(blogPostID, staff,staffID, title, content, createdDate, updatedDate);
             list.add(blog);
         }
     } catch (SQLException e) {

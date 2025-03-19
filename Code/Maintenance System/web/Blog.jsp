@@ -35,6 +35,7 @@
             flex: 0 0 75%;
             padding: 20px;
             background: #fff;
+            margin-top: -80px;
         }
         h2 {
             font-size: 24px;
@@ -46,6 +47,14 @@
             border-collapse: collapse;
             margin-top: 20px;
         }
+        .alert {
+                padding: 10px;
+                background-color: #009926; 
+                color: white;
+                margin-bottom: 15px;
+                border-radius: 5px;
+                display: block; 
+            }
         th, td {
             padding: 12px;
             text-align: left;
@@ -189,16 +198,23 @@
                                 <button type="submit">Create</button>
                             </form>
                         </c:if>
-                        <c:if test="${not empty info}">
-                            <form action="BlogController" method="post">
+                        <c:if test="${not empty info or not empty mes}">
+                            <form action="BlogController" method="get">
                                 <button type="submit">Back</button>
                             </form>
                         </c:if>
-                        <c:if test="${not empty mes}">
-                            <form action="BlogController" method="post">
+                        <c:if test="${empty list}">
+                            <form action="BlogController" method="get">
                                 <button type="submit">Back</button>
                             </form>
-                        </c:if>    
+                            <div style="margin-top: 20px;background: red; color: white; padding: 10px">Ten tac gia khong ton tai</div>
+                        </c:if>  
+                        <c:if test="${not empty update}">
+                            <div class="alert" style="margin-top: 20px">${update}</div>
+                        </c:if>
+                        
+                
+                        
                         <table>
                             <thead>
                                 <c:if test="${not empty list}">
@@ -252,9 +268,46 @@
                                         <pre>${Info.getContent()}</pre>
                                     </div>
 
-                        </div>           
+                        </div>  
+                    <c:if test="${not empty info}">
+                        <c:if test="${staffProfile.staffID == change}">
+                            <form action="BlogController" method="post">
+                                <input type="hidden" name="blogID" value="${Info.getBlogPostId()}">
+                                <input type="hidden" name="action" value="Change">
+                                <button type="submit">change</button>
+                            </form> 
+                        </c:if>
+                    </c:if>
+
                     </div>
-                </c:forEach>               
+                </c:forEach> 
+                <c:forEach var="Info" items="${changeBlog}">
+                    <div class="right-frame">
+                        <form action="BlogController" method="post">
+                            <div class="blog-post-detail">
+
+                                <h1 class="blog-title">${Info.getTitle()}</h1>
+                                <div class="blog-meta">
+                                    <span class="blog-created">CreatedDate: ${Info.getCreatedDate()}</span>
+                                    <c:choose>
+                                        <c:when test="${not empty Info.getUpdatedDate()}">
+                                            <span class="blog-updated">UpdatedDate: ${Info.getUpdatedDate()}</span>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <span class="blog-updated">UpdatedDate: Null</span>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </div>
+                                <textarea name="content" rows="5" cols="50">${Info.getContent()}</textarea>                          
+                                <input type="hidden" name="blogID" value="${Info.getBlogPostId()}">
+                                <input type="hidden" name="action" value="Save">   
+                                <button type="submit" >Save</button>
+                        </form> 
+                            </div>
+                            
+                    </div>
+                </c:forEach>
+                
                 <c:if test="${not empty mes}">
                     <form action="BlogController" method="post">
                         <input type="hidden" name="action" value="SubmitCreate">
