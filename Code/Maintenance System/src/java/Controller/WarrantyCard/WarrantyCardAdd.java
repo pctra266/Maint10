@@ -5,9 +5,12 @@
 package Controller.WarrantyCard;
 
 import DAO.CustomerDAO;
+import DAO.NotificationDAO;
+import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardProcessDAO;
 import Model.Customer;
+import Model.Notification;
 import Model.ProductDetail;
 import Model.Staff;
 import Model.WarrantyCard;
@@ -16,7 +19,6 @@ import Utils.FormatUtils;
 import Utils.OtherUtils;
 import java.io.IOException;
 import java.util.Date;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -43,6 +45,8 @@ public class WarrantyCardAdd extends HttpServlet {
     private final WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
     private final CustomerDAO customerDAO = new CustomerDAO();
     private final WarrantyCardProcessDAO WarrantyCardProcessDAO = new WarrantyCardProcessDAO();
+    private final StaffDAO staffDAO = new StaffDAO();
+    private final NotificationDAO notificationDAO = new NotificationDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -94,8 +98,8 @@ public class WarrantyCardAdd extends HttpServlet {
                 wcp.setAction("create");
                 wcp.setNote(staff != null ? "Created by staff" : "Created by customer");
                 WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
-                if (customer==null && "receive".equals(action)) {
-                    WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(wcp.getWarrantyCardID());
+                WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(wcp.getWarrantyCardID());
+                if (customer == null && "receive".equals(action)) {
                     wc.setHandlerID(handlerID);
                     warrantyCardDAO.updateWarrantyCard(wc);
                     wcp.setAction("receive");
@@ -103,8 +107,24 @@ public class WarrantyCardAdd extends HttpServlet {
                     wcp.setNote("technician received");
                     WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
                 }
-                if (staff!= null) response.sendRedirect("../WarrantyCard?create=true");
-                else response.sendRedirect("../yourwarrantycard?create=true");
+                if (staff != null) {
+                    response.sendRedirect("../WarrantyCard?create=true");
+                } else {
+                    if (customer != null) {
+                        for (Staff s : staffDAO.getStaffByRoleName("Technician")) {
+                            String message = "A warranty request created: " + wc.getWarrantyCardCode();
+                            Notification notification = new Notification();
+                            notification.setRecipientType("Staff");
+                            notification.setRecipientID(s.getStaffID());
+                            notification.setMessage(message);
+                            notification.setCreatedDate(new Date());
+                            notification.setIsRead(false);
+                            notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?noti=true&ID=" + wc.getWarrantyCardID()); // URL chi tiết
+                            notificationDAO.addNotification(notification);
+                        }
+                    }
+                    response.sendRedirect("../yourwarrantycard?create=true");
+                }
                 return;
             } else {
                 request.setAttribute("createFail", "Fail to create card");

@@ -66,7 +66,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             doGet(request, response);
             return;
         }
-        
+
         if (!checkRightHanderlerId(request, response, warrantyCardId)) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
@@ -136,7 +136,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                         request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
                     }
                 } else {
-                    request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.\n" );
+                    request.setAttribute("updateAlert0", "Cannot perform " + processAction + " at this stage.\n");
                 }
 
             }
@@ -157,15 +157,16 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                 "receive_from_outsource", "fixed", "completed", "cancel"
         ).contains(action);
     }
-    
-        private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+
+    private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
         HttpSession session = request.getSession();
         session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
         Staff staff = (Staff) session.getAttribute("staff");
         WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-                if(card.getHandlerID()==0) return true;
-
-        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        if (card.getHandlerID() == null || card.getHandlerID() == 0) {
+            return true;
+        }
+        System.out.println(staff.getStaffID() + " " + card.getHandlerID());
         return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 
