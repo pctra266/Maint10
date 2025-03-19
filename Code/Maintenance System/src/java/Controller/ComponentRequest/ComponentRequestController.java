@@ -323,7 +323,7 @@ public class ComponentRequestController extends HttpServlet {
                     notification.setMessage(message);
                     notification.setCreatedDate(new Date());
                     notification.setIsRead(false);
-                    notification.setTarget("componentRequest?action=getRequestDetails&componentRequestID="+componentRequestID) ; 
+                    notification.setTarget("#") ; 
                     notificationDAO.addNotification(notification);
                 }
                                         

@@ -48,6 +48,7 @@
                         <table class="table table-hover my-0">
                            <thead>
                                 <tr>
+                                    <th>ID</th>
                                     <th>Warranty Card Code</th>
                                     <th>Component Request Create Date</th>
                                     <th>Status</th>
@@ -59,6 +60,7 @@
                             <tbody>
                                 <c:forEach items="${listComponentRequest}" var="o">
                                     <tr>
+                                        <td>${o.componentRequestID}</td>
                                         <td>${o.warrantyCode}</td>
                                         <td>${o.date}</td>
                                         <td>${o.status}</td>
