@@ -139,7 +139,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             processRequest(request, response);
             return;
         }
-        
+
         if (!checkRightHanderlerId(request, response, warrantyCardId)) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
@@ -325,7 +325,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 }
                                 if ("fixed".equals(processAction)) {
                                     //Thong bao
-                                    String message = "Your product " + wc.getProductName()+ " has been fixed!";
+                                    String message = "Your product " + wc.getProductName() + " has been fixed!";
                                     Notification notification = new Notification();
                                     notification.setRecipientType("Customer");
                                     notification.setRecipientID(wc.getCustomerID());
@@ -334,7 +334,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                     notification.setIsRead(false);
                                     notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?noti=true&ID=" + wc.getWarrantyCardID()); // URL chi tiết
                                     notificationDAO.addNotification(notification);
-                                    
+
                                     wc.setWarrantyStatus("done");
                                     wc.setDonedDate(Date.from(Instant.now()));
                                 }
@@ -398,13 +398,17 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         }
         return true;
     }
-    
-        private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+
+    private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
         HttpSession session = request.getSession();
         session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
         Staff staff = (Staff) session.getAttribute("staff");
         WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-        System.out.println(staff.getStaffID()+" "+card.getHandlerID());
+        System.out.println(card);
+        if (card.getHandlerID() == 0) {
+            return true;
+        }
+        System.out.println(staff.getStaffID() + " " + card.getHandlerID());
         return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 }

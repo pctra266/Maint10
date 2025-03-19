@@ -69,11 +69,6 @@
                             <i class="fas fa-plus"></i> Add Component Type
                         </button>
                     </form>
-                    <form action="ComponentType/Search" method="get" style="display: inline;">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-search"></i> Advanced Search
-                        </button>
-                    </form>
                 </div>
 
                 <!-- Form tìm kiếm và phân trang -->
