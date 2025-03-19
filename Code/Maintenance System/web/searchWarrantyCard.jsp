@@ -302,7 +302,7 @@
                             <div class="col-md-5">
                                 <h2>Search Warranty Card</h2>
                                 <div class="search-section">
-                                    <label for="warrantyCode">Enter Warranty Card Code:</label>
+                                    <label for="warrantyCardCode">Enter Warranty Card Code:</label>
                                     <!-- Giữ lại giá trị người dùng nhập từ tham số -->
                                     <input type="text"
                                            id="warrantyCardCode"

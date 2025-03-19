@@ -3,6 +3,7 @@ package Model;
 import java.sql.Timestamp;
 
 public class ContractorCard {
+
     private int contractorCardID;
     private int warrantyCardID;
     private int staffID;
@@ -10,10 +11,27 @@ public class ContractorCard {
     private String status;
     private String note;
     private Timestamp date;
+    private String staffName;
+    private String warrantyCardCode;
 
-    public ContractorCard() {}
+    public String getStaffName() {
+        return staffName;
+    }
 
- 
+    public void setStaffName(String staffName) {
+        this.staffName = staffName;
+    }
+
+    public String getWarrantyCardCode() {
+        return warrantyCardCode;
+    }
+
+    public void setWarrantyCardCode(String warrantyCardCode) {
+        this.warrantyCardCode = warrantyCardCode;
+    }
+
+    public ContractorCard() {
+    }
 
     public int getContractorCardID() {
         return contractorCardID;
@@ -70,12 +88,10 @@ public class ContractorCard {
     public void setDate(Timestamp date) {
         this.date = date;
     }
-    
-    
 
     @Override
     public String toString() {
         return "ContractorCard{" + "contractorCardID=" + contractorCardID + ", warrantyCardID=" + warrantyCardID + ", staffID=" + staffID + ", contractorID=" + contractorID + ", status=" + status + ", note=" + note + '}';
     }
-    
+
 }

@@ -402,6 +402,7 @@
 
                     <div class="row ms-0">
                         <div class="col-md-8 row ">
+                            
                             <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
                                 <div class = "col-md-12 d-flex justify-content-center mt-2" >
                                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
@@ -412,6 +413,7 @@
                                     </form>                    
                                 </div>
                             </c:if>
+                            
                         </div>
 
                 </main>

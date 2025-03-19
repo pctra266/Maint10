@@ -145,7 +145,6 @@
         <servlet-class>Controller.Account.LoginGoogle</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>ChatHistory</servlet-name>
         <servlet-class>Controller.ChatBox.ChatHistory</servlet-class>
     </servlet>
@@ -176,7 +175,14 @@
     <servlet>
         <servlet-name>SendWarrantyCard</servlet-name>
         <servlet-class>Controller.WarrantyCard.SendWarrantyCard</servlet-class>
-
+    </servlet>
+    <servlet>
+        <servlet-name>WarrantyCardRepairContractor</servlet-name>
+        <servlet-class>Controller.WarrantyCard.WarrantyCardRepairContractor</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>WarrantyCardDetailContractor</servlet-name>
+        <servlet-class>Controller.WarrantyCard.WarrantyCardDetailContractor</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -335,7 +341,6 @@
         <url-pattern>/login-google</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>ChatHistory</servlet-name>
         <url-pattern>/chatHistory</url-pattern>
     </servlet-mapping>
@@ -356,7 +361,6 @@
         <url-pattern>/reportrepairstatus</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>ExportPDF</servlet-name>
         <url-pattern>/exportpdf</url-pattern>
     </servlet-mapping>
@@ -364,7 +368,6 @@
         <servlet-name>SearchWarrantyCard</servlet-name>
         <url-pattern>/searchwc</url-pattern>
     </servlet-mapping>
-
     <servlet>
         <servlet-name>ajaxServlet</servlet-name>
         <servlet-class>VnPay.ajaxServlet</servlet-class>
@@ -389,11 +392,16 @@
         <servlet-name>vnpayRefund</servlet-name>
         <url-pattern>/vnpayrefund/*</url-pattern>
     </servlet-mapping>
-
     <servlet-mapping>
         <servlet-name>SendWarrantyCard</servlet-name>
         <url-pattern>/sendWC</url-pattern>
     </servlet-mapping>
-
-
+    <servlet-mapping>
+        <servlet-name>WarrantyCardRepairContractor</servlet-name>
+        <url-pattern>/warrantyCardRepairContractor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>WarrantyCardDetailContractor</servlet-name>
+        <url-pattern>/warrantyCardDetailContractor</url-pattern>
+    </servlet-mapping>
 </web-app>

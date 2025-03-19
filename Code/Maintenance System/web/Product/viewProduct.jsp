@@ -214,6 +214,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger">
                             ${errorMessage}

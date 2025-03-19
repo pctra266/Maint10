@@ -97,9 +97,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("false".equals(request.getParameter("invoiceCreate"))) {
             request.setAttribute("addAlert0", "Product isn't fixed!");
         }
-        if ("false".equals(request.getParameter("canChange"))) {
-            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
-        }
+//        if ("false".equals(request.getParameter("canChange"))) {
+//            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
+//        }
         request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
