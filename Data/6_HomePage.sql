@@ -14,12 +14,6 @@ INSERT INTO MarketingServiceSection (Title, SubTitle)
 VALUES ('Our Services', 'We provide comprehensive repair and maintenance services for mobile phones and laptops.');
 
 INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Screen Replacement', 'Expert screen replacement services for smartphones and laptops using high-quality parts.', '/img/services/screen_replacement.jpg', 1);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Battery Replacement', 'Reliable battery replacement service ensuring longer device performance.', '/img/services/battery_replacement.jpg', 2);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
 VALUES (1, 'Software Troubleshooting', 'Professional software troubleshooting and system updates for all mobile and laptop devices.', '/img/services/software_troubleshooting.jpg', 3);
 
 INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)

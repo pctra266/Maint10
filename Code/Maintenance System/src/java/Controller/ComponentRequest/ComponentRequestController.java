@@ -297,7 +297,7 @@ public class ComponentRequestController extends HttpServlet {
 //                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode,page, pageSize);
 //                request.setAttribute("listComponentRequest", listComponentRequest);
 //                request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
-                this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+                this.viewListComponentRequest("",pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
 
                 break;
             case "detailComponentRequest":
@@ -313,7 +313,22 @@ public class ComponentRequestController extends HttpServlet {
                 
                 componentRequestDao.updateStatusComponentRequest(componentRequestID, componentStatus);
                 componentRequestDao.updateStatusComponentRequestDetail(componentRequestID,componentStatus);
-                this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+                //gui thong bao cho nhan vien
+                StaffDAO staffDAO = new StaffDAO();
+                    for (Staff s : staffDAO.getStaffByRoleName("Technician")) {
+                    String message = "Component Request  " +componentRequestID+"has been "+ componentStatus;
+                    Notification notification = new Notification();
+                    notification.setRecipientType("Staff");
+                    notification.setRecipientID(s.getStaffID());
+                    notification.setMessage(message);
+                    notification.setCreatedDate(new Date());
+                    notification.setIsRead(false);
+                    notification.setTarget("componentRequest?action=getRequestDetails&componentRequestID="+componentRequestID) ; 
+                    notificationDAO.addNotification(notification);
+                }
+                                        
+                this.viewListComponentRequest(componentStatus+" successfully !",pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+                
                 break;
             case "listComponentRequestInStaffRole":
                 //======phan trang
@@ -393,11 +408,12 @@ public class ComponentRequestController extends HttpServlet {
         }
     }
 
-    private void viewListComponentRequest(Pagination pagination, String warrantyCardCode, String componentRequestAction, int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
+    private void viewListComponentRequest(String mess,Pagination pagination, String warrantyCardCode, String componentRequestAction, int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //======phan trang
         pagination.setSearchFields(new String[]{"action", "warrantyCardCode", "componentRequestAction"});
         pagination.setSearchValues(new String[]{"viewListComponentRequest", warrantyCardCode, componentRequestAction});
+        request.setAttribute("mess", mess);
         request.setAttribute("pagination", pagination);
         //======end phan trang
         ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode, componentRequestAction, page, pageSize);

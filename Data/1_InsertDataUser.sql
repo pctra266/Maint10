@@ -13,7 +13,7 @@ INSERT INTO Staff (UsernameS, PasswordS, RoleID, [Name], Gender, DateOfBirth, Em
 VALUES
 ('admin01', 'T2D6i9+ldWGqevu6W6FAP1iXBbI=', 1, 'Robert Johnson', 'Male', '1985-03-15', 'admin1@example.com', '0123456789', '123 Admin Street', 'img/Staff/avata.jpg'),
 ('tech01', 'Cw2LaFmhUP2i/jGdPuB5aVCxAQg=', 2, 'Mark Thompson', 'Male', '1990-06-20', 'tech1@example.com', '0123456790', '456 Tech Street', 'img/Staff/avata.jpg'),
-('inv_manager1', 'G1VKaeAjqcN762tlQAIFfla2Hnc=', 3, 'Jessica Brown', 'Female', '1988-11-10', 'inv1@example.com', '0123456791', '789 Inventory Ave', 'img/Staff/avata.jpg'),
+('inv_manager1', 'G1VKaeAjqcN762tlQAIFfla2Hnc=', 3, 'Jessica Brown', 'Female', '1988-11-10', 'phamtra001@gmail.com', '0123456791', '789 Inventory Ave', 'img/Staff/avata.jpg'),
 ('cust_service1', 'mnIoccUReEqm3CnIyVEsEqXI418=', 5, 'Laura Clark', 'Female', '1992-08-25', 'cs1@example.com', '0123456792', '321 Service Blvd', 'img/Staff/avata.jpg'),
 ('repair_contractor1', 'cDW7EzjR1mP8REo1UF3mWlnuZdo=', 4, 'Daniel Scott', 'Male', '1987-05-18', 'repair1@example.com', '0123456793', '654 Repair St', 'img/Staff/avata.jpg'),
 ('admin02', 'O5eiLfa5pJNrHk7ck1tNBw6pUYE=', 1, 'Emily Carter', 'Female', '1989-12-02', 'admin2@example.com', '0123456794', '234 Admin Street', 'img/Staff/avata.jpg'),
