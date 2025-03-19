@@ -7,6 +7,7 @@ import DAO.WarrantyCardDAO;
 import Model.Customer;
 import Model.Staff;
 import Model.UnknownProduct;
+import Model.WarrantyCard;
 import Utils.OtherUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -81,29 +82,20 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                 request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                 return;
             }
-//
-//            PrintWriter out = response.getWriter();
-//            out.println("Customer ID: " + customerIdStr);
-//            out.println("Product ID: " + productIdStr);
-//            out.println("Warranty Product ID: " + warrantyProductId);
-//            out.println("Issue Description: " + issueDescription);
-//            out.println("Warranty Status: " + warrantyStatus);
-//            out.println("Return Date: " + returnDate);
-//            out.println("Done Date: " + doneDate);
-//            out.println("Complete Date: " + completeDate);
-//            out.println("Cancel Date: " + cancelDate);
+            WarrantyCard add = warrantyCardDAO.createWarrantyCard(warrantyProductId, issueDescription, warrantyStatus, returnDate, doneDate, completeDate, cancelDate);
 
-            // Tạo Warranty Card và lấy ID vừa tạo (giả sử createWarrantyCard trả về ID hoặc -1 nếu thất bại)
-            boolean add = warrantyCardDAO.createWarrantyCard(warrantyProductId, issueDescription, warrantyStatus, returnDate, doneDate, completeDate, cancelDate);
-
-            if (!add) {
+            if (add == null) {
                 request.setAttribute("errorMessage", "Failed to create warranty card. Please try again.");
                 request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                 return;
             }
 
-            int warrantyCardId = warrantyCardDAO.getWarrantyCardID(warrantyProductId);
-
+            int warrantyCardId = add.getWarrantyCardID();
+            
+            PrintWriter out = response.getWriter();
+            out.print(warrantyProductId);
+            
+            out.print(warrantyCardId);
             // Xác định các định dạng file hợp lệ
             String[] allowedImageExtensions = {".jpg", ".jpeg", ".png"};
             String[] allowedVideoExtensions = {".mp4", ".avi", ".mov", ".wmv"};
@@ -148,9 +140,9 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                     return;
                 }
             }
-
-            response.sendRedirect("listUnknown");
-
+            request.setAttribute("successMessage", "Create Warranty Card Success");
+            request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
+            
         } catch (ServletException | IOException | NumberFormatException e) {
         }
     }
