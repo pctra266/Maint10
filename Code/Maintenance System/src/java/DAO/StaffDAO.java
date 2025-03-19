@@ -372,9 +372,9 @@ public class StaffDAO extends DBContext {
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 String image = rs.getString("image");
-                if (image == null || image.isEmpty()) {
-                    image = "default-image.jpg"; // Đặt ảnh mặc định nếu không có ảnh trong DB
-                }
+//                if (image == null || image.isEmpty()) {
+//                    image = "default-image.jpg"; // Đặt ảnh mặc định nếu không có ảnh trong DB
+//                }
                 staff = new Staff(staffID, usernameS, passwordS, role, name, gender, date, email, phone, address, image);
             }
         } catch (SQLException e) {

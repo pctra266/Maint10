@@ -266,9 +266,26 @@ public class StaffController extends HttpServlet {
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
                     return;
                 }
+                if (usename.contains(" ")) {
+                    request.setAttribute("errorMessage", "Username không được chứa khoảng trắng");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
                 if (dao.isExists(usename) ) {
                     request.setAttribute("errorMessage", "Usename đã được sử dụng.");
                     request.getRequestDispatcher("add-staff.jsp").forward(request, response);
+                    return;
+                }
+                
+                if (name.matches(".*\\s{2,}.*")) {
+                    request.setAttribute("errorMessage", "Name chỉ được cách tối đa 1 dấu cách giữa các từ.");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+
+                if (address.matches(".*\\s{2,}.*")) {
+                    request.setAttribute("errorMessage", "Address chỉ được cách tối đa 1 dấu cách giữa các từ.");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
                 
@@ -367,6 +384,7 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "Không được bỏ trống bất kỳ trường nào.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -375,24 +393,50 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "UseName đã được sử dụng");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
-                
+                if (Updateusename.contains(" ")) {
+                    request.setAttribute("errorMessage", "Username không được chứa khoảng trắng");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
                 if (!Updatephone.matches("\\d+")) {
                     request.setAttribute("errorMessage", "Số điện thoại chỉ được chứa số.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
                 
-                
+                if (Updatename.matches(".*\\s{2,}.*")) {
+                    request.setAttribute("errorMessage", "Name chỉ được cách tối đa 1 dấu cách giữa các từ.");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+
+                if (Updateaddress.matches(".*\\s{2,}.*")) {
+                    request.setAttribute("errorMessage", "Address chỉ được cách tối đa 1 dấu cách giữa các từ.");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
 
                 if (!Updatephone.matches("0\\d{9}")) {
                     request.setAttribute("errorMessage", "Số điện thoại phải nhập đủ 10 số và số đầu là 0.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -400,6 +444,7 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "Số điện thoại đã được đăng ký.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -407,6 +452,7 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "Email khong hop le.");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -415,6 +461,7 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("errorMessage", "Email đã được đăng ký");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -430,6 +477,7 @@ public class StaffController extends HttpServlet {
                         request.setAttribute("errorMessage", "You must be at least 18 years old.");
                         Staff staff = dao.getInformationByID(UpdatestaffID);
                          request.setAttribute("staff", staff);
+                         request.setAttribute("action", "Update");
                         request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                         return;
                     }
@@ -438,6 +486,15 @@ public class StaffController extends HttpServlet {
                     request.setAttribute("ErrorImage", "File upload khong hop ");
                     Staff staff = dao.getInformationByID(UpdatestaffID);
                     request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
+                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
+                    return;
+                }
+                if(UpdateimagePath.equals("Kích thước file vượt quá giới hạn cho phép (10MB)")){
+                    request.setAttribute("ErrorImage", "File upload khong hop ");
+                    Staff staff = dao.getInformationByID(UpdatestaffID);
+                    request.setAttribute("staff", staff);
+                    request.setAttribute("action", "Update");
                     request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                     return;
                 }
@@ -445,6 +502,7 @@ public class StaffController extends HttpServlet {
                    request.setAttribute("ErrorImage", "Anh phai nho hon 1MB ");
                    Staff staff = dao.getInformationByID(UpdatestaffID);
                    request.setAttribute("staff", staff);
+                   request.setAttribute("action", "Update");
                    request.getRequestDispatcher("staff-information.jsp").forward(request, response);
                    return;
                 }
@@ -482,7 +540,10 @@ public class StaffController extends HttpServlet {
 
     private String saveImage(Part imagePart, HttpServletRequest request) throws IOException {
     if (imagePart == null || imagePart.getSize() == 0 || imagePart.getSubmittedFileName() == null|| imagePart.getSubmittedFileName().isEmpty()) return "img/Staff/avata.jpg";
-
+    long maxSize = 10 * 1024 * 1024; // 10MB
+    if (imagePart.getSize() > maxSize) {
+        return "Kích thước file vượt quá giới hạn cho phép (10MB)";
+    }
     // Đường dẫn đến thư mục Web Pages/img/Staff
     String devUploadPath = request.getServletContext().getRealPath("/").replace("build\\web\\", "web/") + "img/Staff";
 

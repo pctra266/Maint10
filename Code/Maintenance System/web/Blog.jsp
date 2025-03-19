@@ -203,12 +203,7 @@
                                 <button type="submit">Back</button>
                             </form>
                         </c:if>
-                        <c:if test="${empty list}">
-                            <form action="BlogController" method="get">
-                                <button type="submit">Back</button>
-                            </form>
-                            <div style="margin-top: 20px;background: red; color: white; padding: 10px">Ten tac gia khong ton tai</div>
-                        </c:if>  
+                          
                         <c:if test="${not empty update}">
                             <div class="alert" style="margin-top: 20px">${update}</div>
                         </c:if>

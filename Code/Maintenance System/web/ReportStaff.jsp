@@ -302,8 +302,8 @@
                                             <div class="position">Role: ${List.getStr()}</div>
                                             <div class="position">Product repair: ${List.getCount()}</div>
                                             <form action="reportStaffController" method="post">
-                                                <input type="hidden" name="action" value="Staffinfo">
                                                 <input type="hidden" name="staffID" value="${List.getStaffID()}">
+                                                <input type="hidden" name="action" value="Staffinfo">
                                                 <button class="btn btn-primary" type="submit" style="width: 100px">All info</button>
                                             </form>
                                         </div>

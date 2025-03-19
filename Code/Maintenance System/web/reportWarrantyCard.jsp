@@ -103,7 +103,7 @@
                         }
 
                         function loadProductTypeChart() {
-                            $.getJSON("http://localhost:9999/MaintenanceSystem/reportwarrantycardbytypename", function (data) {
+                            $.getJSON("reportwarrantycardbytypename", function (data) {
                                 let labels = data.map(item => item.typeName || "Unknown");
                                 let values = data.map(item => item.total);
 
@@ -116,7 +116,7 @@
                         }
 
                         function loadBrandChart() {
-                            $.getJSON("http://localhost:9999/MaintenanceSystem/reportwarrantybybrand", function (data) {
+                            $.getJSON("reportwarrantybybrand", function (data) {
                                 let labels = data.map(item => item.brandName);
                                 let values = data.map(item => item.total);
 
@@ -129,7 +129,7 @@
                         }
 
                         function loadRepairCardChart() {
-                            $.getJSON("http://localhost:9999/MaintenanceSystem/reportrepairstatus", function (data) {
+                            $.getJSON("reportrepairstatus", function (data) {
                                 let labels = data.map(item => item.status);
                                 let values = data.map(item => item.total);
 
