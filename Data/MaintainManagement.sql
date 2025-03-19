@@ -349,8 +349,6 @@ CREATE TABLE Invoice (
 
 
 
-ALTER TABLE Payment
-ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
 
 -- Payment Table
 CREATE TABLE Payment (
@@ -390,38 +388,6 @@ CREATE TABLE CustomerContact (
     CreatedAt DATETIME DEFAULT GETDATE()
 );
 
-
-CREATE TABLE MarketingServiceSection (
-    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Title NVARCHAR(255),
-    SubTitle NVARCHAR(255),
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE MarketingServiceItem (
-    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    SectionID INT NOT NULL,
-    Title NVARCHAR(255) NOT NULL,
-    Description NVARCHAR(MAX),
-    ImageURL NVARCHAR(MAX),
-    SortOrder INT DEFAULT 1,
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_MarketingServiceItem_SectionID
-        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
-);
-CREATE TABLE StaffBlogPosts (
-    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
-    StaffID INT NOT NULL,
-    Title NVARCHAR(255) NOT NULL,
-    Content NVARCHAR(MAX) NOT NULL,
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME NULL,
-    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
-);
-
-=======
 
 CREATE TABLE MarketingServiceSection (
     SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
