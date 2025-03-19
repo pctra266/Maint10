@@ -151,7 +151,13 @@ public class reportStaffController extends HttpServlet {
                 request.setAttribute("count", count);
                 request.getRequestDispatcher("ReportStaff.jsp").forward(request, response);
                 break;
-            
+            case "Staffinfo":
+                String staffID = request.getParameter("staffID");
+                list = dao.getAllStaffRepairByID(staffID);
+                request.setAttribute("info", list);
+                request.setAttribute("staffID", staffID);
+                request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response);    
+                break;
             default:
                 break;
         } 

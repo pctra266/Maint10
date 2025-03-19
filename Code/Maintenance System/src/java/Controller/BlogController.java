@@ -65,6 +65,7 @@ public class BlogController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         BlogDAO dao = new BlogDAO();
+        StaffDAO staffDAO = new StaffDAO();
         List<Blog> list ;
         String action = request.getParameter("action");
         if (action == null) {
@@ -166,11 +167,13 @@ public class BlogController extends HttpServlet {
         StaffDAO staffDAO = new StaffDAO();
         List<Blog> list ;
         List<Blog> info ;
+        List<Blog> changeBlog ;
         HttpSession session = request.getSession();
         Staff staffOnSession = (Staff) session.getAttribute("staff");
         String action = request.getParameter("action");
         String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
         Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+        String blogID = request.getParameter("blogID");
         request.setAttribute("staffProfile", staffProfile);
         if (action == null) {
             action = "viewAll";
@@ -250,9 +253,11 @@ public class BlogController extends HttpServlet {
         
         switch(action){
             case "More":
-                String blogID = request.getParameter("blogID");
                 info = dao.getBlogByID(blogID);
                 request.setAttribute("info", info);
+                String eqID = info.get(0).getStaffID();
+                int change = Integer.parseInt(eqID);
+                request.setAttribute("change", change);
                 request.getRequestDispatcher("Blog.jsp").forward(request, response);
                 break;
             case "Create":
@@ -266,6 +271,19 @@ public class BlogController extends HttpServlet {
                 String id = Integer.toString(staffID);
                 boolean insert = dao.InsertBlog(id, title, content);
                 request.setAttribute("list", list);
+                request.getRequestDispatcher("Blog.jsp").forward(request, response);
+                break;
+            case "Change":
+                changeBlog = dao.getBlogByID(blogID);
+                request.setAttribute("changeBlog", changeBlog);
+                request.getRequestDispatcher("Blog.jsp").forward(request, response);
+                break;
+            case "Save":
+                String contentChange = request.getParameter("content");
+                Boolean save = dao.ChangeBlog(blogID, contentChange);
+                info = dao.getBlogByID(blogID);
+                request.setAttribute("info", info);
+                request.setAttribute("update", "Thay doi thanh cong");
                 request.getRequestDispatcher("Blog.jsp").forward(request, response);
                 break;
             default:

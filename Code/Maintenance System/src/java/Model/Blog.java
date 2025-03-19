@@ -14,6 +14,7 @@ import java.util.Date;
 public class Blog {
     private int blogPostId;
     private String staff;
+    private String staffID;
     private String title;
     private String content;
     private String createdDate;
@@ -22,9 +23,10 @@ public class Blog {
     public Blog() {
     }
 
-    public Blog(int blogPostId, String staff, String title, String content, String createdDate, String updatedDate) {
+    public Blog(int blogPostId, String staff,String staffID, String title, String content, String createdDate, String updatedDate) {
         this.blogPostId = blogPostId;
         this.staff = staff;
+        this.staffID = staffID;
         this.title = title;
         this.content = content;
         this.createdDate = formatDate(createdDate);
@@ -57,8 +59,16 @@ public class Blog {
         return staff;
     }
 
-    public void setStaff(String staffId) {
+    public void setStaff(String staff) {
         this.staff = staff;
+    }
+
+    public String getStaffID() {
+        return staffID;
+    }
+
+    public void setStaffID(String staffID) {
+        this.staffID = staffID;
     }
 
     public String getTitle() {
@@ -92,5 +102,7 @@ public class Blog {
     public void setUpdatedDate(String updatedDate) {
         this.updatedDate = updatedDate;
     }
+
+    
     
 }
