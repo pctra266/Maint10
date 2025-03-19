@@ -37,35 +37,58 @@ public class WarrantyCardDetailContractor extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        ContractorCardDAO c = new ContractorCardDAO();
+        ContractorCardDAO contractorDAO = new ContractorCardDAO();
+        WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+
+        // Lấy tham số từ request
         String contractorCardID = request.getParameter("code");
         String status = request.getParameter("status");
+        String subStatus = request.getParameter("subStatus");
         String idStr = request.getParameter("cardId");
 
-        if (contractorCardID == null || status == null) {
+        if (contractorCardID == null || status == null || idStr == null || idStr.trim().isEmpty()) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write("Invalid parameters!");
             return;
         }
 
-        boolean success = c.updateContractorStatus(Integer.parseInt(contractorCardID), status);
-        WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.getWriter().write("Parameter warrantyCardId is required.");
-            return;
-        }
         int warrantyCardId = Integer.parseInt(idStr);
 
-        Map<String, Object> warrantyDetails = warrantyCardDAO.getWarrantyCardDetailsMap(warrantyCardId);
+        // Cập nhật trạng thái ở bảng Contractor
+        boolean success = contractorDAO.updateContractorStatus(Integer.parseInt(contractorCardID), status);
 
-        request.setAttribute("warrantyDetails", warrantyDetails);
-        if (success) {
-            request.setAttribute("successMessage", "Update Status Sucessfully");
-            request.getRequestDispatcher("detailWarrantyCardContractor.jsp").forward(request, response);
-        } else {
+        // Lấy StaffID từ session (giả sử bạn đã lưu thông tin đăng nhập)
+        String staffID = request.getParameter("staffId");
+        if (staffID == null) {
             request.setAttribute("errorMessage", "Update Status Failed");
-            request.getRequestDispatcher("detailWarrantyCardContractor.jsp").forward(request, response);
         }
 
+        // Xử lý cho bảng WarrantyCardProcess:
+        // Nếu subStatus không được truyền lên, tự động thiết lập theo quy tắc:
+        // - Nếu status = "receive" -> action = "accept_outsource"
+        // - Nếu status = "done" -> action = "fixed_outsource"
+        // - Nếu status = "cancel" -> action = "refuse_outsource"
+        if (subStatus == null || subStatus.trim().isEmpty()) {
+            if ("receive".equals(status)) {
+                subStatus = "accept_outsource";
+            } else if ("done".equals(status)) {
+                subStatus = "fixed_outsource";
+            } else if ("cancel".equals(status)) {
+                subStatus = "refuse_outsource";
+            }
+        }
+
+        boolean processUpdated = warrantyCardDAO.addWarrantyCardProcess(warrantyCardId, Integer.parseInt(staffID), subStatus, "");
+
+        Map<String, Object> warrantyDetails = warrantyCardDAO.getWarrantyCardDetailsMap(warrantyCardId);
+        request.setAttribute("warrantyDetails", warrantyDetails);
+
+        if (success && processUpdated) {
+            request.setAttribute("successMessage", "Update Status Successfully");
+        } else {
+            request.setAttribute("errorMessage", "Update Status Failed");
+        }
+
+        request.getRequestDispatcher("detailWarrantyCardContractor.jsp").forward(request, response);
     }
 }

@@ -289,7 +289,7 @@ CREATE TABLE WarrantyCardDetail (
 );
 
 -- WarrantyCardProcess Table
-CREATE TABLE WarrantyCardProcess (
+CREATE TABLE WarrantyCardProcess (	
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
@@ -344,10 +344,6 @@ CREATE TABLE Invoice (
     ReceivedBy INT NULL REFERENCES Staff(StaffID),     -- Người nhận hóa đơn (đối với hóa đơn RepairContractorToTechnician là Technician)
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
-
-
-
-
 
 
 -- Payment Table
