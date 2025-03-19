@@ -29,11 +29,12 @@
                             <div class="alert alert-info">${message}</div>
                         </c:if>
 
-                        <form method="get" action="${pageContext.request.contextPath}/ExtendedWarrantyController">
+                        <form method="get" action="${pageContext.request.contextPath}/extendedWarranty">
                             <input type="hidden" name="action" value="view">
+                            <input type="hidden" name="page" value="${pagination.currentPage}">
                             <div class="row"  style="justify-content: space-between">
                                 <div class="col-sm-6 col-md-6" style="width: 500px"><!-- comment -->
-                                    <input style="margin-top: 15px" type="text" name="searchExtendedWarrantyName" class="form-control" placeholder="Extended Warranty Name" value="${searchExtendedWarrantyName}">
+                                    <input style="margin-top: 15px" type="search" name="searchExtendedWarrantyName" class="form-control" placeholder="Extended Warranty Name" value="${searchExtendedWarrantyName}">
                                     <div style="margin-top: 15px" >
                                         <label >Show 
                                             <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -78,17 +79,17 @@
                                         <td>${ew.price}</td>
                                         <td>${ew.extendedWarrantyDescription}</td>
                                         <td>
-                                            <a href="${pageContext.request.contextPath}/ExtendedWarrantyController?action=edit&amp;extendedWarrantyID=${ew.extendedWarrantyID}" class="btn btn-primary">Update</a>
+                                            <a href="${pageContext.request.contextPath}/extendedWarranty?action=edit&amp;extendedWarrantyID=${ew.extendedWarrantyID}" class="btn btn-primary">Update</a>
                                         </td>
                                         <td>
-                                            <a href="${pageContext.request.contextPath}/ExtendedWarrantyController?action=delete&amp;extendedWarrantyID=${ew.extendedWarrantyID}" class="btn btn-danger" onclick="return confirm('Are you sure to delete this extended warranty?');">Delete</a>
+                                            <a href="${pageContext.request.contextPath}/extendedWarranty?action=delete&amp;extendedWarrantyID=${ew.extendedWarrantyID}" class="btn btn-danger" onclick="return confirm('Are you sure to delete this extended warranty?');">Delete</a>
                                         </td>
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
                                     <div >               
-                        <a href="${pageContext.request.contextPath}/ExtendedWarrantyController?action=new" class="btn btn-primary">Create Extended Warranty</a>
+                        <a href="${pageContext.request.contextPath}/extendedWarranty?action=new" class="btn btn-primary">Create Extended Warranty</a>
                          </div>
                         <jsp:include page="/includes/pagination.jsp" />
                     </div>

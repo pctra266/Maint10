@@ -15,10 +15,6 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     </head>
     <body>
-        <div class="wrapper">
-            <jsp:include page="/includes/navbar-left.jsp" />
-            <div class="main">
-                <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <div class="card">
                         <div class="card-header">
@@ -62,14 +58,12 @@
                                 </div>
                                 <div class="mt-4">
                                     <button class="btn btn-primary" type="submit">Submit</button>
+                                    <a class="btn btn-secondary" href="Home">Cancel</a>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </main>
-                <jsp:include page="/includes/footer.jsp" />
-            </div>
-        </div>
         <script src="js/app.js"></script>
         <script src="js/format-input.js"></script>
     </body>
