@@ -61,6 +61,17 @@ public class WarrantyCardDAO extends DBContext {
 
         return warrantyCards;
     }
+    
+    public boolean deleteWarrantyCard(WarrantyCard wc) {
+        String sql = "DELETE FROM WarrantyCard where WarrantyCardID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, wc.getWarrantyCardID());
+            return ps.executeUpdate()>0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 
     public boolean updateWarrantyCard(WarrantyCard wc) {
         String sql = "UPDATE WarrantyCard SET  WarrantyCardCode = ?, WarrantyProductID = ?, "

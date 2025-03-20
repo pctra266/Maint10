@@ -45,14 +45,21 @@ public class WarrantyCardList extends HttpServlet {
             throws ServletException, IOException {
         //truyen tham so cho nut back
         HttpSession session = request.getSession();
-        session.setAttribute("createWarrantyCardFrom", request.getContextPath()+request.getServletPath());
-        session.setAttribute("detailWarrantyCardFrom", request.getContextPath()+request.getServletPath());
+        session.setAttribute("createWarrantyCardFrom", request.getContextPath() + request.getServletPath());
+        session.setAttribute("detailWarrantyCardFrom", request.getContextPath() + request.getServletPath());
         Staff staff = (Staff) session.getAttribute("staff");
-        Integer staffID = staff==null?null:staff.getStaffID();
+        Integer staffID = staff == null ? null : staff.getStaffID();
         String pageParam = request.getParameter("page");
+        if ("true".equalsIgnoreCase(request.getParameter("delete"))) {
+            request.setAttribute("updateAlert1", "Delete success!");
+        }
+        if ("false".equalsIgnoreCase(request.getParameter("delete"))) {
+            request.setAttribute("updateAlert0", "This card should not be delete, it contains important information!");
+        }
+
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if (!("all".equalsIgnoreCase(type)||"new".equalsIgnoreCase(type)||"repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+        if (!("all".equalsIgnoreCase(type) || "new".equalsIgnoreCase(type) || "repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
             type = "myCard";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));
@@ -89,7 +96,7 @@ public class WarrantyCardList extends HttpServlet {
         pagination.setUrlPattern("/WarrantyCard");
         pagination.setSearchFields(new String[]{"search", "status", "type"});
         pagination.setSearchValues(new String[]{paraSearch, status, type});
-        request.setAttribute("pagination", pagination);        
+        request.setAttribute("pagination", pagination);
         request.setAttribute("totalCards", totalCards);
         request.setAttribute("cardList", cards);
         request.getRequestDispatcher("views/WarrantyCard/WarrantyCardList.jsp").forward(request, response);

@@ -4,6 +4,8 @@ import Model.WarrantyCardProcess;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WarrantyCardProcessDAO extends DBContext {
 
@@ -43,8 +45,44 @@ public class WarrantyCardProcessDAO extends DBContext {
         return false;
     }
     
+    public boolean deleteAllProcessOfCard(int id){
+        String sql = "delete from [WarrantyCardProcess] where WarrantyCardID = ? ";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, id);
+            int rowsAffected = ps.executeUpdate();
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public List<WarrantyCardProcess> getAllProcessesOfCard(int warrantyCardId) {
+        String sql = "SELECT * FROM WarrantyCardProcess WHERE WarrantyCardID = ?";
+        List<WarrantyCardProcess> list = new ArrayList<>();
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, warrantyCardId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                WarrantyCardProcess process = new WarrantyCardProcess();
+                process.setWarrantyCardProcessID(rs.getInt("WarrantyCardProcessID"));
+                process.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                process.setHandlerID(rs.getInt("HandlerID"));
+                process.setAction(rs.getString("Action"));
+                process.setActionDate(rs.getTimestamp("ActionDate"));
+                process.setNote(rs.getString("Note"));
+                list.add(process);
+            }
+            return list;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
+    
     public static void main(String[] args) {
         WarrantyCardProcessDAO d = new WarrantyCardProcessDAO();
-        System.out.println(d.getLatestProcessByWarrantyCardId(95));
+        System.out.println(d.getAllProcessesOfCard(41));
     }
 }

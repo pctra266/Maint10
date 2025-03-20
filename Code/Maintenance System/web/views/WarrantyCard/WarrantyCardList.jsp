@@ -62,6 +62,22 @@
                             </div>
                         </div>
                     </c:if>
+                    <c:if test="${not empty updateAlert0}">
+                        <div class="alert alert-warning alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${updateAlert0}</strong>
+                            </div>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty updateAlert1}">
+                        <div class="alert alert-success alert-dismissible" role="alert">
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            <div class="alert-message">
+                                <strong>${updateAlert1}</strong>
+                            </div>
+                        </div>
+                    </c:if>
 
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <form action="WarrantyCard" method="get" style="display: inline; margin-right: 10px; width: 8rem;">
