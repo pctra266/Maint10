@@ -16,12 +16,13 @@ import java.sql.Statement;
 public class ContractorCardDAO extends DBContext {
 
     public boolean addContractorCard(ContractorCard card) {
-        String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status, Note) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setInt(1, card.getWarrantyCardID());
             stmt.setInt(2, card.getStaffID());
             stmt.setInt(3, card.getContractorID());
             stmt.setString(4, card.getStatus());
+            stmt.setString(5, card.getNote());
 
             int affectedRows = stmt.executeUpdate();
             if (affectedRows > 0) {

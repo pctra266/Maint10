@@ -37,7 +37,10 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
-
+         if (!checkRightHanderlerId(request, response, id)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + id);
+            return;
+        }
         // Lấy danh sách Repair Contractors (RoleID = 4)
         List<Staff> contractors = staffDAO.getStaffByRoleName("Repair Contractor");
         request.setAttribute("contractors", contractors);
@@ -67,10 +70,6 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             return;
         }
 
-        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
-            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
-            return;
-        }
         WarrantyCardProcess latestProcess = wcpDao.getLatestProcessByWarrantyCardId(warrantyCardId);
 
         //gui sang cho contractor
@@ -78,7 +77,10 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
         if ("requestOutsource".equals(action)) {
             String contractorIdParam = request.getParameter("contractorID");
             Integer contractorId = FormatUtils.tryParseInt(contractorIdParam);
-
+            if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+                response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
+                return;
+            }
             // Kiểm tra contractorID hợp lệ và có RoleID = 4
             Staff contractor = staffDAO.getStaffById(contractorId);
             if (contractorId != null && contractor != null && contractor.getRole() == 4) {
@@ -89,7 +91,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                 newProcess.setAction("request_outsource");
                 newProcess.setNote("Outsourced to Repair Contractor ID: " + contractorId + " (" + contractor.getName() + ")");
                 boolean success = wcpDao.addWarrantyCardProcess(newProcess);
-
+                System.out.println(noteParam);
                 if (success) {
                     //them vao contractor card
                     ContractorCard contractorCard = new ContractorCard();
@@ -125,7 +127,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     }
                 }
                 if (canProcess) {
-                    System.out.println("can "+processAction);
+                    System.out.println("can " + processAction);
                     WarrantyCardProcess newProcess = new WarrantyCardProcess();
                     newProcess.setWarrantyCardID(warrantyCardId);
                     newProcess.setHandlerID(staff.getStaffID());
