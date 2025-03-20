@@ -54,7 +54,7 @@
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
                                                     <td>${invoice.invoiceNumber}</td>
-                                                    <td>${invoice.amount}</td>
+                                                    <td>${invoice.getAmountFormat()} VND</td>
                                                     <td>${invoice.issuedDate}</td>
                                                     <td>${invoice.dueDate}</td>
                                                     <td>${invoice.status}</td>
@@ -73,7 +73,7 @@
                                                         <form action="Invoice/PayCash" method="post"  onsubmit="return confirm('Confirm cash payment for Invoice #${invoice.invoiceNumber}?');">
                                                             <input type="hidden" name="invoiceID" value="${invoice.invoiceID}">
                                                             <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
-                                                            <button type="submit" class="btn btn-primary mt-2" ${invoice.status == 'paid' ? 'disabled' : ''}>Cash</button>
+                                                            <button type="submit" class="btn btn-primary mt-2" ${invoice.status == 'paid' || invoice.status == 'overdue' ? 'disabled' : ''}>Cash</button>
                                                         </form>
                                                     </td>
 

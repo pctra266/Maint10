@@ -47,7 +47,7 @@
                                 </div>
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Amount:</label>
-                                    <input type="text" readonly="true" id="price" class="form-control" value="${price}">
+                                    <input type="text" readonly="true" id="price" class="form-control format-int" value="${price} VND">
                                 </div>
                                 <div class="mb-3">
                                     <label for="dueDate" class="form-label">Due Date:</label>
@@ -66,6 +66,8 @@
             </div>
         </div>
         <script src="js/app.js"></script>
+        <script src="js/format-input.js"></script>
+
         <script>
                                         // Thiết lập Due Date mặc định và min
                                         window.onload = function () {

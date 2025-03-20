@@ -9,6 +9,7 @@ package Model;
  * @author ADMIN
  */
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Invoice {
@@ -130,7 +131,12 @@ public class Invoice {
     public void setCustomerID(Integer customerID) {
         this.customerID = customerID;
     }
-
+    
+     public String getAmountFormat() {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(amount);
+    }
+     
     @Override
     public String toString() {
         return "Invoice{" + "invoiceID=" + invoiceID + ", invoiceNumber=" + invoiceNumber + ", invoiceType=" + invoiceType + ", warrantyCardID=" + warrantyCardID + ", amount=" + amount + ", issuedDate=" + issuedDate + ", dueDate=" + dueDate + ", status=" + status + ", createdBy=" + createdBy + ", receivedBy=" + receivedBy + ", customerID=" + customerID + '}';
