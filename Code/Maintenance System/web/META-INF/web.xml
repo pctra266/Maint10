@@ -184,6 +184,10 @@
         <servlet-name>WarrantyCardDetailContractor</servlet-name>
         <servlet-class>Controller.WarrantyCard.WarrantyCardDetailContractor</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RepairCreateInvoice</servlet-name>
+        <servlet-class>Controller.WarrantyCard.RepairCreateInvoice</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
         <url-pattern>/StaffController</url-pattern>
@@ -403,5 +407,9 @@
     <servlet-mapping>
         <servlet-name>WarrantyCardDetailContractor</servlet-name>
         <url-pattern>/warrantyCardDetailContractor</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RepairCreateInvoice</servlet-name>
+        <url-pattern>/repairCreateInvoice</url-pattern>
     </servlet-mapping>
 </web-app>

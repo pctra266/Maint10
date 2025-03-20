@@ -127,7 +127,7 @@
                 background-color: #007bff;
                 color: #fff;
             }
-            
+
         </style>
     </head>
     <body>
@@ -261,8 +261,13 @@
                                         <button type="submit" class="btn btn-done">Done</button>
                                     </form>
                                     <!-- Nút Create Invoice -->
-                                    <form action="createInvoice" method="post">
-                                        <input type="hidden" name="code" value="${warrantyDetails.warrantyCardCode}">
+                                    <form action="repairCreateInvoice" method="post">
+                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                        <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                        <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
+                                       
+                                        
                                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
                                     </form>
                                 </div>
