@@ -849,6 +849,50 @@ public class StaffDAO extends DBContext {
         }
         return list;
     }
+    
+    public ArrayList<ReportStaff> getAllStaffRepairByCode(String id , String code){
+        ArrayList<ReportStaff> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT s.StaffID, s.Name, s.Gender, s.Image, r.RoleName, wp.Action, wp.ActionDate, w.WarrantyCardCode\n" +
+"FROM Staff s\n" +
+"JOIN [Role] r ON r.RoleID = s.RoleID\n" +
+"JOIN WarrantyCardProcess wp ON wp.HandlerID = s.StaffID\n" +
+"JOIN WarrantyCard w ON w.WarrantyCardID = wp.WarrantyCardID\n" +
+"WHERE s.StaffID = ? AND w.WarrantyCardCode = ?";
+                    
+        try {
+        stm = connection.prepareStatement(sql);
+        stm.setString(1, id);
+        stm.setString(2, code);
+        
+        rs = stm.executeQuery();
+        
+        while (rs.next()) {
+            int staffID = rs.getInt("StaffID");
+            String name = rs.getString("Name");
+            String gender = rs.getString("Gender");
+            String image = rs.getString("Image");
+            String role = rs.getString("RoleName");
+            String action = rs.getString("Action");
+            String actiondate = rs.getString("ActionDate");
+            String warrantycardcode = rs.getString("WarrantyCardCode");
+            list.add(new ReportStaff(staffID, name, gender, image, role, action, actiondate, warrantycardcode));
+            
+        }
+        
+        } catch (SQLException e) {
+            System.out.println(e);
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println(e);
+            }
+        }
+        return list;
+    }
     public int getAllStaffNewStaff(){
         ArrayList<ReportStaff> list = new ArrayList<>();
         PreparedStatement stm = null;

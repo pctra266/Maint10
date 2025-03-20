@@ -166,7 +166,25 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <input type="hidden" name="staffID" value="${param.staffID}">
-
+                    <form action="reportStaffController" method="post">
+                        <input type="hidden" name="staffID" value="${param.staffID}">
+                        <input type="hidden" name="action" value="Staffinfo">
+                        <input type="hidden" name="ifelse" value="Search">
+                        <input  name="WACode" required>
+                        <button type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 shadow">
+                            <i class="fas fa-history"></i> Search
+                        </button>
+                    </form>   
+                    <c:if test="${empty info and ifelse eq 'search'}">
+                        <div class="alert">${messa}</div>
+                        <form action="reportStaffController" method="post">
+                            <input type="hidden" name="staffID" value="${param.staffID}">
+                            <input type="hidden" name="action" value="Staffinfo">
+                            <button type="submit" class="btn btn-dark btn-lg d-flex align-items-center gap-2 shadow">
+                                <i class="fas fa-history"></i> Back
+                            </button>
+                        </form> 
+                    </c:if>
                     <h1 class="text-center ">Staff Repair List</h1>   
                     <table class="table table-hover my-0">
                         <thead>

@@ -153,10 +153,26 @@ public class reportStaffController extends HttpServlet {
                 break;
             case "Staffinfo":
                 String staffID = request.getParameter("staffID");
-                list = dao.getAllStaffRepairByID(staffID);
-                request.setAttribute("info", list);
-                request.setAttribute("staffID", staffID);
-                request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response);    
+                String ifelse = request.getParameter("ifelse");
+                String code ="" ;
+                if (ifelse == null) {
+                    ifelse = "viewAll";
+                }
+                if(ifelse.equals("Search")){
+                    code = request.getParameter("WACode");
+                    list = dao.getAllStaffRepairByCode(staffID, code);
+                    request.setAttribute("info", list);
+                    request.setAttribute("ifelse", "search");
+                    request.setAttribute("messa", "There is no product that the staff received with such code.");
+                    request.setAttribute("staffID", staffID); 
+                    request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response); 
+                }else{
+                    list = dao.getAllStaffRepairByID(staffID);
+                    request.setAttribute("info", list);
+                    request.setAttribute("staffID", staffID);   
+                    request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response);    
+                }
+                   
                 break;
             default:
                 break;
