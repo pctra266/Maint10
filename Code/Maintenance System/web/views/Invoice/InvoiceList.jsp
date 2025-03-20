@@ -44,7 +44,6 @@
                                                 <th>Issued Date</th>
                                                 <th>Due Date</th>
                                                 <th>Status</th>
-                                                <th>Created By</th>
                                                 <th>Customer</th>
                                                 <th>Action</>
                                             </tr>
@@ -58,7 +57,6 @@
                                                     <td>${invoice.issuedDate}</td>
                                                     <td>${invoice.dueDate}</td>
                                                     <td>${invoice.status}</td>
-                                                    <td>${invoice.createdBy}</td>
                                                     <td>${warrantyCard.customerName}</td>
                                                     <td class="d-flex flex-column">
                                                         <form action="vnpayajax" id="frmCreateOrder-${invoice.invoiceID}" method="post" >     
