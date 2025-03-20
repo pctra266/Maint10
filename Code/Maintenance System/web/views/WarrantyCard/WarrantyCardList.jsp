@@ -64,22 +64,27 @@
                     </c:if>
 
                     <div class="d-flex justify-content-center align-items-center mb-3">
-                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                        <form action="WarrantyCard" method="get" style="display: inline; margin-right: 10px; width: 8rem;">
                             <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="myCard">
                             <button type="submit" class="btn ${pagination.searchValues[2] eq 'myCard'?'btn-instagram':'btn-primary'}  btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">My card</button>
                         </form>
-                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                        <form action="WarrantyCard" method="get" style="display: inline; margin-right: 10px; width: 8rem;">
                             <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="repair">
                             <button type="submit" class="btn ${pagination.searchValues[2] eq 'repair'?'btn-instagram':'btn-primary'}  btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Repair</button>
                         </form>
-                        <form action="WarrantyCard" method="POST" style="display: inline; margin-right: 10px; width: 8rem;">
+                        <form action="WarrantyCard" method="get" style="display: inline; margin-right: 10px; width: 8rem;">
                             <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="warranty">
                             <button type="submit" class="btn ${pagination.searchValues[2] eq 'warranty'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">Warranty</button>
                         </form>
-                        <form action="WarrantyCard" method="POST" style="display: inline; width: 8rem;">
+                        <form action="WarrantyCard" method="get" style="display: inline; margin-right: 10px; width: 8rem;">
+                            <input type="hidden" name="page-size" value="${pagination.pageSize}" />
+                            <input type="hidden" name="type" value="new">
+                            <button type="submit" class="btn  ${pagination.searchValues[2] eq 'new'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">New</button>
+                        </form>
+                        <form action="WarrantyCard" method="get" style="display: inline; width: 8rem;">
                             <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                             <input type="hidden" name="type" value="all">
                             <button type="submit" class="btn  ${pagination.searchValues[2] eq 'all'?'btn-instagram':'btn-primary'} btn-lg" style="font-size: 18px; padding: 12px 20px; width: 100%;">All</button>

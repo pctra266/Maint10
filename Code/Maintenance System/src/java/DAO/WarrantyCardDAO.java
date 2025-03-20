@@ -581,7 +581,7 @@ public class WarrantyCardDAO extends DBContext {
         if (type != null && "myCard".equals(type)) {
             query.append(" AND wc.HandlerID = ?");
         }
-        if (type != null && !"myCard".equals(type)) {
+        if (type != null && !"myCard".equals(type) && !"all".equals(type)) {
             query.append(" AND wc.HandlerID is null");
         }
 

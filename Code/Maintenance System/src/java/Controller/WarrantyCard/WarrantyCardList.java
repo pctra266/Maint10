@@ -52,7 +52,7 @@ public class WarrantyCardList extends HttpServlet {
         String pageParam = request.getParameter("page");
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
         String type = request.getParameter("type");
-        if (!("all".equalsIgnoreCase(type)||"repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
+        if (!("all".equalsIgnoreCase(type)||"new".equalsIgnoreCase(type)||"repair".equalsIgnoreCase(type) || "warranty".equalsIgnoreCase(type))) {
             type = "myCard";
         }
         String paraSearch = SearchUtils.preprocessSearchQuery(request.getParameter("search"));

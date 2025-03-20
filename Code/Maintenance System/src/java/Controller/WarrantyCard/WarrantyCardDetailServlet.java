@@ -88,6 +88,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("true".equals(request.getParameter("payment"))) {
             request.setAttribute("addAlert1", "Payment successfully!");
         }
+        if ("false".equals(request.getParameter("canChange"))) {
+            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
+        }
         if ("false".equals(request.getParameter("payment"))) {
             request.setAttribute("addAlert0", "Payment fail!");
         }
