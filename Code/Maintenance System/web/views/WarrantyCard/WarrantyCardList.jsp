@@ -94,9 +94,9 @@
                         <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
                         </form>
-                        <form action="WarrantyCard/Search" method="get" style="display: inline;">
+<!--                        <form action="WarrantyCard/Search" method="get" style="display: inline;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
-                        </form>
+                        </form>-->
                     </div>
                     <form action="WarrantyCard" method="get" class="row align-items-center">
                         <input type="hidden" name="page" value="${pagination.currentPage}">

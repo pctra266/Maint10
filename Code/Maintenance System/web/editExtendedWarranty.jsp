@@ -45,7 +45,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="price" class="form-label">Price</label>
-                            <input type="number" min="0" class="form-control"  name="price" step="0.01" value="${extendedWarranty.price}" required>
+                            <input type="text" min="0" class="form-control format-float price-inputt"  name="price" step="0.01" value="${extendedWarranty.price}" required>
                             <c:if test="${errors != null && errors.priceError != null}">
                                 <span class="text-danger">${errors.priceError}</span>
                             </c:if>
@@ -66,6 +66,7 @@
                 <jsp:include page="/includes/footer.jsp" />
             </div>
             <script src="js/app.js"></script>
+             <script src="js/format-input.js"></script>
         </div>
     </body>
 </html>
