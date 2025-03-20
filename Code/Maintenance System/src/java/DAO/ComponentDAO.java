@@ -238,7 +238,7 @@ public class ComponentDAO extends DBContext {
                 }
                 return true;
             }
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return false;

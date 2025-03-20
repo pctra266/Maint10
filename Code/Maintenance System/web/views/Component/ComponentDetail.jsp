@@ -183,7 +183,8 @@
                                     <div id="previewContainer" class="media-preview mt-3"></div>
                                 </div>
                                 <div class="col-md-10">
-                                    <label for="validationDefault06" class="form-label">Products</label>
+                                    <div class="d-flex flex-column">
+                                        <label for="validationDefault06" class="form-label">Products</label>
                                     <c:if test="${not empty remove}">
                                         <div class="alert alert-success alert-dismissible" role="alert">
                                             <div class="alert-message text-center"><strong>${remove}</strong></div>
@@ -194,9 +195,11 @@
                                             <div class="alert-message text-center"><strong>${addSuccess}</strong></div>
                                         </div>
                                     </c:if>
-                                    <a href="ComponentWarehouse/AddProductToComponent?ID=${component.componentID}" class="btn btn-success mb-3">
+                                    <a href="ComponentWarehouse/AddProductToComponent?ID=${component.componentID}" class="btn btn-success mb-3 w-25">
                                         <i class="fas fa-plus"></i> Add Product
                                     </a>
+                                    </div>
+                                    
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>

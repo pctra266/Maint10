@@ -21,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -52,28 +53,47 @@ public class ImportComponents extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-        response.setHeader("Content-Disposition", "attachment; filename=componentscan'tadd.xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=components_cant_add.xlsx");
 
         Part filePart = request.getPart("file");
         List<Component> readComponents = new ArrayList<>();
+        List<String> errorRows = new ArrayList<>(); // Danh sách dòng bị lỗi
+        System.out.println("----------------------");
         if (filePart != null) {
             String fileName = filePart.getSubmittedFileName();
             File file = new File(getServletContext().getRealPath("/") + fileName);
             filePart.write(file.getAbsolutePath());
 
-            try (FileInputStream fis = new FileInputStream(file); Workbook workbook = new XSSFWorkbook(fis);) {
+            try (FileInputStream fis = new FileInputStream(file); Workbook workbook = new XSSFWorkbook(fis)) {
                 Sheet sheet = workbook.getSheetAt(0);
                 for (int i = 1; i <= sheet.getLastRowNum(); i++) {
                     Row row = sheet.getRow(i);
-                    Component component = new Component();
-                    component.setComponentCode(row.getCell(1).getStringCellValue());
-                    component.setComponentName(row.getCell(2).getStringCellValue());
-                    component.setBrand(row.getCell(3).getStringCellValue());
-                    component.setType(row.getCell(4).getStringCellValue());
-                    component.setQuantity((int) row.getCell(5).getNumericCellValue());
-                    component.setStatus(row.getCell(6).getBooleanCellValue());
-                    component.setPrice(row.getCell(7).getNumericCellValue());
-                    readComponents.add(component);
+                    if (row == null) {
+                        errorRows.add("Row " + (i + 1) + " is empty");
+                        continue; // Bỏ qua hàng trống hoàn toàn
+                    }
+
+                    try {
+                        // Kiểm tra ô trống
+                        if (isRowInvalid(row)) {
+                            System.out.println("tét");
+                            errorRows.add("Row " + (i + 1) + " has empty cell");
+                            continue;
+                        }
+
+                        Component component = new Component();
+                        component.setComponentCode(getStringCellValue(row.getCell(1)));
+                        component.setComponentName(getStringCellValue(row.getCell(2)));
+                        component.setBrand(getStringCellValue(row.getCell(3)));
+                        component.setType(getStringCellValue(row.getCell(4)));
+                        component.setQuantity(getNumericCellValue(row.getCell(5)));
+                        component.setStatus(getBooleanCellValue(row.getCell(6)));
+                        component.setPrice(getDoubleCellValue(row.getCell(7)));
+
+                        readComponents.add(component);
+                    } catch (Exception e) {
+                        errorRows.add("Input data error at line " + (i + 1));
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -83,11 +103,21 @@ public class ImportComponents extends HttpServlet {
                 }
             }
         }
+
+        // Nếu có lỗi -> Chuyển hướng về ComponentWarehouse và hiển thị lỗi
+        if (!errorRows.isEmpty()) {
+            HttpSession session = request.getSession();
+            session.setAttribute("errorMessages", errorRows);
+            response.sendRedirect("ComponentWarehouse"); // Chuyển về trang JSP để hiển thị lỗi
+            return;
+        }
+
+        // Xử lý nhập vào database
         int countAdded = 0;
         int countNotAdded = 0;
         List<Component> notAdded = new ArrayList<>();
+
         for (Component readComponent : readComponents) {
-            System.out.println("test");
             if (componentDAO.add(readComponent)) {
                 countAdded++;
             } else {
@@ -95,9 +125,65 @@ public class ImportComponents extends HttpServlet {
                 notAdded.add(readComponent);
             }
         }
-             HttpSession session = request.getSession();
-            session.setAttribute("errorComponents", notAdded);
+
+        HttpSession session = request.getSession();
+        session.setAttribute("errorComponents", notAdded);
         response.sendRedirect("ComponentWarehouse");
+    }
+
+// Kiểm tra dòng có ô nào bị trống
+    private boolean isRowInvalid(Row row) {
+        for (int j = 1; j <= 7; j++) {
+            Cell cell = row.getCell(j);
+            if (cell == null || cell.getCellType() == Cell.CELL_TYPE_BLANK) {
+                return true; // Phát hiện ô trống
+            }
+        }
+        return false;
+    }
+
+// Hàm lấy giá trị String từ ô (nếu có)
+    private String getStringCellValue(Cell cell) {
+        if (cell == null) {
+            return "";
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_STRING) {
+            return cell.getStringCellValue().trim();
+        }
+        return "";
+    }
+
+// Hàm lấy giá trị số nguyên từ ô
+    private int getNumericCellValue(Cell cell) {
+        if (cell == null) {
+            return 0;
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            return (int) cell.getNumericCellValue();
+        }
+        return 0;
+    }
+
+// Hàm lấy giá trị Boolean từ ô
+    private boolean getBooleanCellValue(Cell cell) {
+        if (cell == null) {
+            return false;
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_BOOLEAN) {
+            return cell.getBooleanCellValue();
+        }
+        return false;
+    }
+
+// Hàm lấy giá trị số thực từ ô
+    private double getDoubleCellValue(Cell cell) {
+        if (cell == null) {
+            return 0.0;
+        }
+        if (cell.getCellType() == Cell.CELL_TYPE_NUMERIC) {
+            return cell.getNumericCellValue();
+        }
+        return 0.0;
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
