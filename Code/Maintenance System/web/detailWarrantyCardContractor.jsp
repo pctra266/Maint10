@@ -127,7 +127,7 @@
                 background-color: #007bff;
                 color: #fff;
             }
-            
+
         </style>
     </head>
     <body>
@@ -205,6 +205,7 @@
                                     </div>
                                 </c:if>
                             </div>
+
                             <div class="section">
                                 <h2>Actions</h2>
                                 <div class="action-buttons">
@@ -218,6 +219,7 @@
                                                     <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                                     <input type="hidden" name="status" value="receive">
                                                     <input type="hidden" name="subStatus" value="accept_outsource">
+                                                    <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
                                                     <button type="submit" class="btn btn-receive">Receive</button>
                                                 </form>
                                             </c:if>
@@ -228,6 +230,8 @@
                                             <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                             <input type="hidden" name="status" value="cancel">
                                             <input type="hidden" name="subStatus" value="refuse_outsource">
+                                            <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+
                                             <button type="submit" class="btn btn-cancel">Refuse</button>
                                         </form>
                                     </c:if>
@@ -239,6 +243,8 @@
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                                 <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                                 <input type="hidden" name="status" value="receive">
+                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+
                                                 <p>Select Process:</p>
                                                 <input type="radio" name="subStatus" value="lost" id="lost">
                                                 <label for="lost">Lost Product</label><br>
@@ -258,11 +264,18 @@
                                         <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                         <input type="hidden" name="subStatus" value="fixed_outsource">
                                         <input type="hidden" name="status" value="done">
+                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+
                                         <button type="submit" class="btn btn-done">Done</button>
                                     </form>
                                     <!-- Nút Create Invoice -->
-                                    <form action="createInvoice" method="post">
-                                        <input type="hidden" name="code" value="${warrantyDetails.warrantyCardCode}">
+                                    <form action="repairCreateInvoice" method="post">
+                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                        <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                        <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
+
+
                                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
                                     </form>
                                 </div>

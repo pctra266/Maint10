@@ -54,10 +54,8 @@ public class WarrantyCardDetailContractor extends HttpServlet {
 
         int warrantyCardId = Integer.parseInt(idStr);
 
-        // Cập nhật trạng thái ở bảng Contractor
         boolean success = contractorDAO.updateContractorStatus(Integer.parseInt(contractorCardID), status);
 
-        // Lấy StaffID từ session (giả sử bạn đã lưu thông tin đăng nhập)
         String staffID = request.getParameter("staffId");
         if (staffID == null) {
             request.setAttribute("errorMessage", "Update Status Failed");
