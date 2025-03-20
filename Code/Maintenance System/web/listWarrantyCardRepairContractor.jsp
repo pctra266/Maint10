@@ -8,37 +8,190 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
-            table {
-                border-collapse: collapse;
-                width: 100%;
+            /* Reset các thiết lập cơ bản */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
             }
-            th, td {
-                border: 1px solid #ccc;
-                padding: 8px;
+
+            /* Thiết lập chung cho trang */
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f0f2f5;
+                color: #333;
             }
-            th {
-                background-color: #f2f2f2;
+
+            /* Wrapper chứa sidebar và nội dung chính */
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
             }
-            .pagination {
-                margin-top: 20px;
-                text-align: center;
+
+            /* Phần main chứa nội dung chính */
+            .main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
             }
-            .pagination button {
-                margin: 0 5px;
+
+            /* Navbar trên */
+            .navbar-top {
+                background: #fff;
+                padding: 15px 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
-            .search-form label {
-                margin-right: 5px;
+
+            /* Khu vực nội dung chính */
+            .content {
+                padding: 30px;
+                background: #fff;
+                margin: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
-            .search-form input,
-            .search-form select {
-                margin-right: 15px;
+
+            /* Heading chính */
+            h2 {
+                font-weight: 600;
+                margin-bottom: 20px;
             }
+
+            /* Form và các phần tử bên trong */
+            form {
+                margin-bottom: 20px;
+            }
+
             .flex-container {
                 display: flex;
+                flex-wrap: wrap;
                 gap: 20px;
                 align-items: center;
-                flex-wrap: wrap;
             }
+
+            .search-form {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 15px;
+                align-items: center;
+                margin-bottom: 20px;
+            }
+
+            .search-form label {
+                font-weight: 500;
+            }
+
+            .search-form input,
+            .search-form select {
+                padding: 8px 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                font-size: 14px;
+                outline: none;
+            }
+
+            .search-form input:focus,
+            .search-form select:focus {
+                border-color: #66afe9;
+            }
+
+            /* Styling cho bảng */
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            th, td {
+                padding: 12px 15px;
+                border: 1px solid #e0e0e0;
+                text-align: left;
+            }
+
+            th {
+                background-color: #f8f8f8;
+                font-weight: 600;
+            }
+
+            tr:nth-child(even) {
+                background-color: #fafafa;
+            }
+
+            /* Phân trang */
+            .pagination {
+                margin-top: 25px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .pagination button {
+                padding: 8px 16px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background-color 0.2s ease;
+            }
+
+            .pagination button:hover {
+                background-color: #0056b3;
+            }
+
+            /* Các nút trong form */
+            form button {
+                padding: 10px 16px;
+                border: none;
+                background-color: #28a745;
+                color: #fff;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 14px;
+                transition: background-color 0.2s ease;
+            }
+
+            form button:hover {
+                background-color: #218838;
+            }
+
+            /* Nút chi tiết */
+            .btn-detail {
+                padding: 6px 12px;
+                background-color: #17a2b8;
+                color: #fff;
+                text-decoration: none;
+                border-radius: 4px;
+                transition: background-color 0.2s ease;
+            }
+
+            .btn-detail:hover {
+                background-color: #138496;
+            }
+
+            /* Styling cho select và input custom page size */
+            #pageSize,
+            #customPageSize {
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background-color: #fff;
+            }
+
+            /* Responsive */
+            @media (max-width: 768px) {
+                .flex-container, .search-form {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .pagination {
+                    flex-direction: column;
+                    gap: 5px;
+                }
+            }
+
+
         </style>
     </head>
     <body>
@@ -51,23 +204,16 @@
                     <h2>List Warranty Card</h2>   
 
                     <form method="get" action="warrantyCardRepairContractor">
-
                         <div class="flex-container">
                             <div>
                                 <label for="pageSize">Products per page:</label>
                                 <select name="pageSize" id="pageSize" onchange="toggleCustomPageSize()">
-                                    <option value="5" 
-                                            <c:if test="${param.pageSize == '5'}">selected</c:if>>5</option>
-                                            <option value="10" 
-                                            <c:if test="${param.pageSize == '10'}">selected</c:if>>10</option>
-                                            <option value="15" 
-                                            <c:if test="${param.pageSize == '15'}">selected</c:if>>15</option>
-                                            <option value="20" 
-                                            <c:if test="${param.pageSize == '20'}">selected</c:if>>20</option>
-                                            <option value="25" 
-                                            <c:if test="${param.pageSize == '25'}">selected</c:if>>25</option>
-                                            <option value="custom"
-                                            <c:if test="${param.pageSize == 'custom'}">selected</c:if>>Custom</option>
+                                    <option value="5" <c:if test="${param.pageSize == '5'}">selected</c:if>>5</option>
+                                    <option value="10" <c:if test="${param.pageSize == '10'}">selected</c:if>>10</option>
+                                    <option value="15" <c:if test="${param.pageSize == '15'}">selected</c:if>>15</option>
+                                    <option value="20" <c:if test="${param.pageSize == '20'}">selected</c:if>>20</option>
+                                    <option value="25" <c:if test="${param.pageSize == '25'}">selected</c:if>>25</option>
+                                    <option value="custom" <c:if test="${param.pageSize == 'custom'}">selected</c:if>>Custom</option>
                                     </select>
 
                                     <input type="number" name="customPageSize" id="customPageSize" 
@@ -83,14 +229,22 @@
                         </div>
 
                         <div class="search-form">
+                            <!-- Warranty Card Code: Chỉ cho phép chữ cái, không có dấu cách, số hay kí tự đặc biệt -->
                             <label for="warrantyCardCode">Warranty Card Code:</label>
-                            <input type="text" name="warrantyCardCode" id="warrantyCardCode" value="${param.warrantyCardCode}" />
+                            <input type="text" name="warrantyCardCode" id="warrantyCardCode" 
+                                   value="${param.warrantyCardCode}" 
+                                   pattern="[A-Za-z]+" 
+                                   title="Chỉ được nhập chữ cái (không dấu cách, số hay kí tự đặc biệt)" />
 
+                            <!-- Staff Name: Cho phép chữ cái, các từ cách nhau đúng 1 dấu cách, không cho số, kí tự đặc biệt và không toàn khoảng trắng -->
                             <label for="staffName">Staff Name:</label>
-                            <input type="text" name="staffName" id="staffName" value="${param.staffName}" />
+                            <input type="text" name="staffName" id="staffName" 
+                                   value="${param.staffName}" 
+                                   pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" 
+                                   title="Nhập chữ cái, các từ cách nhau đúng 1 dấu cách, không nhập số hoặc kí tự đặc biệt và không toàn khoảng trắng" />
 
                             <label for="date">Date (yyyy-MM-dd):</label>
-                            <input type="text" name="date" id="date" value="${param.date}" />
+                            <input type="date" name="date" id="date" value="${param.date}" />
 
                             <label for="status">Status:</label>
                             <select name="status" id="status">
@@ -99,9 +253,13 @@
                                 <option value="cancel"  ${param.status eq 'cancel'  ? "selected" : ""}>cancel</option>
                                 <option value="done"    ${param.status eq 'done'    ? "selected" : ""}>done</option>
                             </select>
-                            
+
+                            <!-- Note: Không cho phép nhập kí tự đặc biệt và không toàn khoảng trắng -->
                             <label for="note">Note:</label>
-                            <input type="text" name="note" id="note" value="${param.note}" />
+                            <input type="text" name="note" id="note" 
+                                   value="${param.note}" 
+                                   pattern="^(?!\s+$)[A-Za-z0-9 ]+$" 
+                                   title="Không được nhập kí tự đặc biệt và không toàn khoảng trắng" />
                         </div>
                         <br/>
                         <br/>
@@ -157,8 +315,8 @@
                                 <button type="submit" name="currentPage" value="${totalPages}">End</button>
                             </c:if>
                         </div>
+                    </form>
 
-                    </form> <!-- end form -->
 
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
