@@ -142,11 +142,13 @@
                             <input type="hidden" name="productCode" value="${pd.productCode}">
                             <div class="col-md-6">
                                 <div class="row g-3">
-                                       <div class="col-md-12">
-                                    <label for="returnDate" class="form-label">Return Date</label>
-                                    <input type="date" class="form-control w-25" name="returnDate" id="returnDate">
-                                    <div class="invalid-feedback" id="returnDateFeedback"></div>
-                                </div>
+                                    <c:if test="${staff!=null}">
+                                        <div class="col-md-12">
+                                            <label for="returnDate" class="form-label">Return Date</label>
+                                            <input type="date" class="form-control w-25" name="returnDate" id="returnDate">
+                                            <div class="invalid-feedback" id="returnDateFeedback"></div>
+                                        </div>
+                                    </c:if>
                                 <div class="col-md-12">
                                     <textarea class="form-control" placeholder="Describe issue" name="issue" rows="2" style="height: 10rem;"></textarea>
                                 </div>
@@ -161,9 +163,12 @@
                             <div class="col-6 text-center d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary rounded-3 p-3 w-25" name="action" value="create" style="font-size: 1.3rem">Create</button>
                             </div>
+                            <c:if test="${staff!=null}">
+                                
                             <div class="col-6 text-center d-flex justify-content-start">
                                 <button type="submit" class="btn btn-primary rounded-3 p-3 w-25" name="action" value="receive" style="font-size: 1.3rem">Receive</button>
                             </div>
+                            </c:if>
                         </form>
                     </c:if>
                 </main>

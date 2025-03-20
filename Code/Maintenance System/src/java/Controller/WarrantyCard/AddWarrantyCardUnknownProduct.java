@@ -4,10 +4,12 @@ import DAO.CustomerDAO;
 import DAO.ProductDAO;
 import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
+import DAO.WarrantyCardProcessDAO;
 import Model.Customer;
 import Model.Staff;
 import Model.UnknownProduct;
 import Model.WarrantyCard;
+import Model.WarrantyCardProcess;
 import Utils.OtherUtils;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +20,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.PrintWriter;
 
@@ -27,6 +30,7 @@ import java.io.PrintWriter;
         maxRequestSize = 50 * 1024 * 1024 // 50MB
 )
 public class AddWarrantyCardUnknownProduct extends HttpServlet {
+        private final WarrantyCardProcessDAO WarrantyCardProcessDAO = new WarrantyCardProcessDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -88,13 +92,32 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
                 request.setAttribute("errorMessage", "Failed to create warranty card. Please try again.");
                 request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
                 return;
+            } else {
+                HttpSession session = request.getSession();
+                Staff staff = (Staff) session.getAttribute("staff");
+                int handlerID = (staff != null) ? staff.getStaffID() : (customer != null ? customer.getCustomerID() : -1);
+                WarrantyCardProcess wcp = new WarrantyCardProcess();
+                wcp.setWarrantyCardID(add.getWarrantyCardID());
+                wcp.setHandlerID(handlerID);
+                wcp.setAction("create");
+                wcp.setNote(staff != null ? "Created by staff (Repair)" : "Created by customer");
+                WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
+                WarrantyCard wc = warrantyCardDAO.getWarrantyCardById(wcp.getWarrantyCardID());
+                if (customer == null) {
+                    wc.setHandlerID(handlerID);
+                    warrantyCardDAO.updateWarrantyCard(wc);
+                    wcp.setAction("receive");
+                    wcp.setHandlerID(handlerID);
+                    wcp.setNote("technician received");
+                    WarrantyCardProcessDAO.addWarrantyCardProcess(wcp);
+                }
             }
 
             int warrantyCardId = add.getWarrantyCardID();
-            
+
             PrintWriter out = response.getWriter();
             out.print(warrantyProductId);
-            
+
             out.print(warrantyCardId);
             // Xác định các định dạng file hợp lệ
             String[] allowedImageExtensions = {".jpg", ".jpeg", ".png"};
@@ -142,7 +165,7 @@ public class AddWarrantyCardUnknownProduct extends HttpServlet {
             }
             request.setAttribute("successMessage", "Create Warranty Card Success");
             request.getRequestDispatcher("addWarrantyCardUnknownProduct.jsp").forward(request, response);
-            
+
         } catch (ServletException | IOException | NumberFormatException e) {
         }
     }
