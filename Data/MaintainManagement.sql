@@ -42,7 +42,7 @@ CREATE TABLE StaffLog (
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50),
     PasswordS NVARCHAR(50),
-	RoleID INT REFERENCES [Role](RoleID)
+	RoleID INT REFERENCES [Role](RoleID),
     [Name] NVARCHAR(100),
     Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     DateOfBirth DATE,
@@ -294,7 +294,7 @@ CREATE TABLE WarrantyCardProcess (
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
+    [Action] NVARCHAR(30) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
 	'request_outsource', 'cancel_outsource', 'accept_outsource', 'refuse_outsource' , 'send_outsource','lost', 'receive_outsource', 'fixed_outsource', 
 	'unfixable_outsource', 'back_outsource', 'receive_from_outsource' ,'fixed', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),

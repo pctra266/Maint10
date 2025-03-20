@@ -125,12 +125,14 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     }
                 }
                 if (canProcess) {
+                    System.out.println("can "+processAction);
                     WarrantyCardProcess newProcess = new WarrantyCardProcess();
                     newProcess.setWarrantyCardID(warrantyCardId);
                     newProcess.setHandlerID(staff.getStaffID());
                     newProcess.setAction(processAction);
                     boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                     if (success) {
+                        System.out.println("can2");
                         request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
                     } else {
                         request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
@@ -143,6 +145,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             //tra ve trang detailCard
             WarrantyCardDetailServlet servlet = new WarrantyCardDetailServlet();
             servlet.processRequest(request, response);
+            return;
         }
 
         // Nếu có lỗi, quay lại trang OutsourceRequest
