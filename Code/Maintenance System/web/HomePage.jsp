@@ -81,7 +81,7 @@
                         <div class="navbar-collapse collapse">
                             <li class="navbar-nav navbar-align m-xl-2">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
-                                    <a href="#">Back to dashboard</a>
+                                    <a href="profile">Back to dashboard</a>
                                 </c:if>
                             </li>
                             

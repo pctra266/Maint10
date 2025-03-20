@@ -44,7 +44,6 @@
                                                 <th>Issued Date</th>
                                                 <th>Due Date</th>
                                                 <th>Status</th>
-                                                <th>Created By</th>
                                                 <th>Customer</th>
                                                 <th>Action</>
                                             </tr>
@@ -54,11 +53,10 @@
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
                                                     <td>${invoice.invoiceNumber}</td>
-                                                    <td>${invoice.amount}</td>
+                                                    <td>${invoice.getAmountFormat()} VND</td>
                                                     <td>${invoice.issuedDate}</td>
                                                     <td>${invoice.dueDate}</td>
                                                     <td>${invoice.status}</td>
-                                                    <td>${invoice.createdBy}</td>
                                                     <td>${warrantyCard.customerName}</td>
                                                     <td class="d-flex flex-column">
                                                         <form action="vnpayajax" id="frmCreateOrder-${invoice.invoiceID}" method="post" >     
@@ -73,7 +71,7 @@
                                                         <form action="Invoice/PayCash" method="post"  onsubmit="return confirm('Confirm cash payment for Invoice #${invoice.invoiceNumber}?');">
                                                             <input type="hidden" name="invoiceID" value="${invoice.invoiceID}">
                                                             <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
-                                                            <button type="submit" class="btn btn-primary mt-2" ${invoice.status == 'paid' ? 'disabled' : ''}>Cash</button>
+                                                            <button type="submit" class="btn btn-primary mt-2" ${invoice.status == 'paid' || invoice.status == 'overdue' ? 'disabled' : ''}>Cash</button>
                                                         </form>
                                                     </td>
 

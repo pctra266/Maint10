@@ -42,6 +42,7 @@ CREATE TABLE StaffLog (
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50),
     PasswordS NVARCHAR(50),
+	RoleID INT REFERENCES [Role](RoleID)
     [Name] NVARCHAR(100),
     Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     DateOfBirth DATE,

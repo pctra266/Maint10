@@ -65,7 +65,12 @@
                 </div>    
                 <div class="form-group">
                     <label >Số tiền:</label>
-                    <label><%=request.getParameter("vnp_Amount")%></label>
+                    <%
+    String amountParam = request.getParameter("vnp_Amount");
+    long amount = amountParam != null ? Long.parseLong(amountParam) / 100 : 0; // Nếu đơn vị là VND thì cần chia 100
+    java.text.DecimalFormat formatter = new java.text.DecimalFormat("#,###");
+                    %>
+                    <label><%= formatter.format(amount)%> VND</label>
                 </div>  
                 <div class="form-group">
                     <label >Mô tả giao dịch:</label>
