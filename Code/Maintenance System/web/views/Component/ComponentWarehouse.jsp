@@ -67,9 +67,18 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
                         <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
                         </form>
+                        <form action="Brand" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Brand</button>
+                        </form>
+                        <form action="ComponentType" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Component Type</button>
+                        </form>     
+                        </div>
+                       
                         <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
                         </form>

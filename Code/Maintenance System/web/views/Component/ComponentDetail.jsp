@@ -74,14 +74,7 @@
                         </div>
                     </c:if>
                     <!--                                Alert khi du lieu truyen sang sever sai-->
-                    <c:if test="${not empty codeAlert}">
-                        <div class="alert alert-danger alert-dismissible" role="alert">
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                            <div class="alert-message">
-                                <strong>${codeAlert}</strong>
-                            </div>
-                        </div>
-                    </c:if>
+              
                     <c:if test="${not empty nameAlert}">
                         <div class="alert alert-danger alert-dismissible" role="alert">
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
