@@ -15,7 +15,7 @@ import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
 import Model.Notification;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.ProductDetail;
 import Model.Staff;
 import Model.WarrantyCardProcess;

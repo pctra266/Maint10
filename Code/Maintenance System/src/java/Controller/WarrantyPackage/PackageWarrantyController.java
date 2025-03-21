@@ -8,7 +8,7 @@ package Controller.WarrantyPackage;
 import DAO.ExtendedWarrantyDAO;
 import DAO.PackageWarrantyDAO;
 import Model.PackageWarranty;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;

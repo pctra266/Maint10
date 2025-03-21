@@ -6,7 +6,7 @@ package Controller.Customer;
 
 import DAO.CustomerDAO;
 import Model.Customer;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.Encryption;
 import Utils.Format;
 import Utils.FormatUtils;

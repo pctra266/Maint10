@@ -6,7 +6,7 @@ package Controller.WarrantyPackage;
 
 import DAO.ExtendedWarrantyDAO;
 import Model.ExtendedWarranty;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.SearchUtils;
 import java.io.IOException;
 import java.io.PrintWriter;

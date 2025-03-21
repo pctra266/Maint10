@@ -7,7 +7,7 @@ package Controller.Feedback;
 import DAO.FeedbackDAO;
 import DAO.FeedbackLogDAO;
 import Model.FeedbackLog;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import Utils.FormatUtils;
 import java.io.IOException;

@@ -12,7 +12,7 @@ import Model.Customer;
 import Model.Staff;
 import Model.Feedback;
 import Model.FeedbackLog;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.ProductDetail;
 import Utils.FormatUtils;
 import java.io.IOException;

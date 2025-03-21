@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import Utils.SearchUtils;
 import jakarta.servlet.http.HttpSession;

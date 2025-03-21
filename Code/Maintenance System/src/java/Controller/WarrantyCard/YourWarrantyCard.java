@@ -6,7 +6,7 @@ package Controller.WarrantyCard;
 
 import DAO.WarrantyCardDAO;
 import Model.Customer;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.WarrantyCard;
 import Utils.FormatUtils;
 import java.io.IOException;

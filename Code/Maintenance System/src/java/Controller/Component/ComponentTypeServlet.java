@@ -2,7 +2,7 @@ package Controller.Component;
 
 import DAO.ComponentTypeDAO;
 import Model.ComponentType;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;

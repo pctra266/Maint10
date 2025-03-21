@@ -17,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.ArrayList;
 import Model.Blog;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import jakarta.servlet.http.HttpSession;
 

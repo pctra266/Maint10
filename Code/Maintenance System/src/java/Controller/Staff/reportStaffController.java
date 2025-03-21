@@ -7,7 +7,7 @@ package Controller.Staff;
 
 import DAO.StaffDAO;
 import Model.ReportStaff;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;

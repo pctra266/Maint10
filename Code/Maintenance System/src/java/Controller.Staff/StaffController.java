@@ -9,7 +9,7 @@ import DAO.StaffDAO;
 import DAO.StaffLogDAO;
 import Model.Staff;
 import Model.StaffLog;
-import Model.Pagination;
+import Utils.Pagination;
 import com.sun.jdi.connect.spi.Connection;
 import java.io.IOException;
 import jakarta.servlet.ServletException;

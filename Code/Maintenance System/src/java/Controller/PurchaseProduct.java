@@ -7,7 +7,7 @@ package Controller;
 import DAO.ProductDAO;
 import DAO.ProductDetailDAO;
 import Model.Customer;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.ProductDetail;
 import Utils.FormatUtils;
 import java.io.IOException;

@@ -6,7 +6,7 @@ package Controller.Component;
 
 import DAO.ComponentDAO;
 import Model.Component;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import java.io.IOException;
 import java.io.PrintWriter;

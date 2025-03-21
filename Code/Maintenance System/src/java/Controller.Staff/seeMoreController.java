@@ -7,7 +7,7 @@ package Controller;
 
 import DAO.StaffDAO;
 import DAO.StaffLogDAO;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import Model.StaffLog;
 import java.io.IOException;

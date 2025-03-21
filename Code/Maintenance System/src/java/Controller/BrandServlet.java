@@ -6,7 +6,7 @@ package Controller;
 
 import DAO.BrandDAO;
 import Model.Brand;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;
