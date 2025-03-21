@@ -3,6 +3,7 @@
     Created on : Jan 17, 2025, 8:24:34 PM
     Author     : ADMIN
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="coverDAO" class="DAO.HomePage_CoverDAO" scope="page" />
@@ -175,9 +176,19 @@
                         </div>
                     </div>
                         </div> <!-- end div 1 -->
+                       <c:set var="heightStyle" value="200vh" />
+                        <c:if test="${fn:length(serviceItems) <= 4}">
+                            <c:set var="heightStyle" value="100vh" />
+                        </c:if>
+                        <c:if test="${fn:length(serviceItems) > 4 and fn:length(serviceItems) <= 8}">
+                            <c:set var="heightStyle" value="150vh" />
+                        </c:if>
+                        <c:if test="${fn:length(serviceItems) == 0}">
+                            <c:set var="heightStyle" value="0vh" />
+                        </c:if>
+
                        
-                       
-                        <div style="height: 100vh" class="bg-white">
+                        <div style="height: ${heightStyle}" class="bg-white">
                             <div style="padding-bottom: 7%; padding-top: 5% " class="container">
                                 <div style="margin-bottom: 2%; margin-top: 1%;" class="row">
                                     <div class="col-6">
@@ -192,7 +203,7 @@
                                     <c:forEach var="item" items="${serviceItems}">
                                         <div style="margin-bottom:2% " class="col-12 col-md-6 col-lg-3">
                                             <div class="card h-100">
-                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}">
+                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}" style=" height: 150px; width: 276px; object-fit: cover;">
                                                 <div class="card-header px-4 pt-4">
                                                     <h5 class="card-title mb-0">${item.title}</h5>
                                                 </div>
