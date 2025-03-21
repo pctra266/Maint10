@@ -352,15 +352,20 @@ public class FeedbackDAO {
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID, String warrantyCardCode, String warrantyStatus,String typeMaintain, int page, int pageSize) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-          SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName as UnknownProductName, p.ProductName 
-          FROM WarrantyProduct wp
-          LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
-          LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
+          SELECT 
+              wc.WarrantyCardID,
+              wc.WarrantyCardCode,
+              wc.CreatedDate,
+              wc.IssueDescription,
+              wc.WarrantyStatus,
+              up.ProductName AS UnknownProductName,
+              p.ProductName AS ProductName
+          FROM WarrantyCard wc
+          JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID
           LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
-          LEFT JOIN Customer c ON c.CustomerID = 
-              COALESCE(pd.CustomerID, up.CustomerID)
-          	left join Product p on pd.ProductID = p.ProductID
-          	where c.CustomerID = ?""";
+          LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
+          LEFT JOIN Product p ON pd.ProductID = p.ProductID
+          WHERE COALESCE(pd.CustomerID, up.CustomerID) = ?""";
         if (warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()) {
             query += " and WarrantyCardCode like ?";
         }
@@ -410,15 +415,20 @@ public class FeedbackDAO {
     public ArrayList<ProductDetail> getListProductByCustomerID(String customerID) {
         ArrayList<ProductDetail> list = new ArrayList<>();
         String query = """
-        SELECT wc.WarrantyCardID, wc.WarrantyCardCode,wc.CreatedDate, wc.IssueDescription, wc.WarrantyStatus, up.ProductName as UnknownProductName, p.ProductName 
-        FROM WarrantyProduct wp
-        LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
-        LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
-        LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
-        LEFT JOIN Customer c ON c.CustomerID = 
-            COALESCE(pd.CustomerID, up.CustomerID)
-        	left join Product p on pd.ProductID = p.ProductID
-        	where c.CustomerID = ?""";
+        SELECT 
+                      wc.WarrantyCardID,
+                      wc.WarrantyCardCode,
+                      wc.CreatedDate,
+                      wc.IssueDescription,
+                      wc.WarrantyStatus,
+                      up.ProductName AS UnknownProductName,
+                      p.ProductName AS ProductName
+                  FROM WarrantyCard wc
+                  JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID
+                  LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
+                  LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
+                  LEFT JOIN Product p ON pd.ProductID = p.ProductID
+                  WHERE COALESCE(pd.CustomerID, up.CustomerID) = ?""";
 
         try {
             conn = new DBContext().connection;
@@ -445,14 +455,12 @@ public class FeedbackDAO {
     public int totalProductByCustomerId(String customerID, String warrantyCardCode, String warrantyStatus, String typeMaintain) {
         String query = """
                        select count(*) 
-                    FROM WarrantyProduct wp
-                       LEFT JOIN WarrantyCard wc ON wc.WarrantyProductID = wp.WarrantyProductID
-                       LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
-                       LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
-                       LEFT JOIN Customer c ON c.CustomerID = 
-                           COALESCE(pd.CustomerID, up.CustomerID)
-                       	left join Product p on pd.ProductID = p.ProductID
-                       	where c.CustomerID = ?""";
+                    FROM WarrantyCard wc
+                    JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID
+                    LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID
+                    LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID
+                    LEFT JOIN Product p ON pd.ProductID = p.ProductID
+                    WHERE COALESCE(pd.CustomerID, up.CustomerID) = ?""";
         if (warrantyCardCode != null && !warrantyCardCode.trim().isEmpty()) {
             query += " and WarrantyCardCode like ?";
         }

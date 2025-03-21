@@ -90,14 +90,15 @@ public class FeedbackController extends HttpServlet {
             currentCustomer = (Customer) session.getAttribute("customer");
         } catch (Exception e) {
         }
-        String customerId = "1";
-        if (currentCustomer != null) {
-            customerId = String.valueOf(currentCustomer.getCustomerID());
+        String customerId = "";
+        try{
+           customerId  = String.valueOf(currentCustomer.getCustomerID());
+        }catch(Exception e){
+            System.out.println("loi in cusId: " + e);
         }
-//        if(currentCustomer == null){
-//            response.sendRedirect("LoginForm.jsp");
-//            return ;
-//        }
+        
+        
+        
 
         try {
             currentStaff = (Staff) session.getAttribute("staff");
@@ -179,6 +180,11 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
             case "viewListFeedbackByCustomerId":
+                if(customerId == null || customerId.isEmpty()){
+                        response.sendRedirect("401Page.jsp");
+                        return ;
+                    }
+                
                 ArrayList<Feedback> listFeedbackByCustomerId = daoFeedback.getListFeedbackByCustomerId(customerId, page, pageSize);
                 pagination.setListPageSize(total1); // total select count(*)
                 pagination.setCurrentPage(page);
@@ -195,6 +201,10 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("viewListFeedbackByCustomerId.jsp").forward(request, response);
                 break;
             case "viewFeedbackDashboard":
+                if(customerId == null || customerId.isEmpty()){
+                        response.sendRedirect("401Page.jsp");
+                        return ;
+                    }
                 ArrayList<ProductDetail> listProductCreateFeedback = daoFeedback.getListProductByCustomerID(customerId,warrantyCardCode,warrantyStatus,typeMaintain, page, pageSize);
                 request.setAttribute("listProductCreateFeedback", listProductCreateFeedback);
                 pagination.setListPageSize(total1); // total select count(*)
