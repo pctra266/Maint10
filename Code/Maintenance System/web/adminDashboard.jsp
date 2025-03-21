@@ -49,53 +49,52 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-    <h2>Set Image & Video File Size Limit</h2>
-    
+                    <div class="card">
+                        <div class="card-header">
+                        <h2 class="text-center">Set Image & Video File Size Limit</h2>
+                        </div>
+                        <div class="card-header">
+                            <div class="alert-primary">
+            ${successMessage}
+        </div>
     <c:set var="maxUploadSizeImageMB" value="${applicationScope.maxUploadSizeImageMB}" />
     <c:if test="${empty maxUploadSizeImageMB}">
         <c:set var="maxUploadSizeImageMB" value="5" />
         <c:set var="applicationScope.maxUploadSizeImageMB" value="5" />
     </c:if>
 
-    <p><strong>Current image limit:</strong> ${maxUploadSizeImageMB} MB</p>
+    
 
     <form action="updateMaxSize" method="post">
-        <label>Select maximum file size for images:</label>
-        <select id="maxSizeSelectImage" name="maxSizeImage" onchange="toggleCustomInput('Image')">
+        <label>Select maximum file size for images (<strong>Current image limit:</strong> ${maxUploadSizeImageMB} MB):</label>
+        <select style="margin-top: 15px; margin-bottom: 15px" class="form-control" id="maxSizeSelectImage" name="maxSizeImage" onchange="toggleCustomInput('Image')">
             <option value="5" ${maxUploadSizeImageMB == 5 ? "selected" : ""}>5 MB</option>
             <option value="10" ${maxUploadSizeImageMB == 10 ? "selected" : ""}>10 MB</option>
             <option value="custom" ${!(maxUploadSizeImageMB == 5 || maxUploadSizeImageMB == 10) ? "selected" : ""} >Customize</option>
         </select>
         
-        <input type="number" id="customSizeImage" name="customSizeImage" min="1" max="10" placeholder="Enter size(MB)" value="${maxUploadSizeImageMB}" style="display:none;">
-        <br><br>
-
+        <input class="form-control" type="number" id="customSizeImage" name="customSizeImage" min="1" max="10" placeholder="Enter size(MB)" value="${maxUploadSizeImageMB}" style="display:none;">
         <c:set var="maxUploadSizeVideoMB" value="${applicationScope.maxUploadSizeVideoMB}" />
         <c:if test="${empty maxUploadSizeVideoMB}">
             <c:set var="maxUploadSizeVideoMB" value="10" />
             <c:set var="applicationScope.maxUploadSizeVideoMB" value="10" />
         </c:if>
 
-        <p><strong>Current video limit:</strong> ${maxUploadSizeVideoMB} MB</p>
+        
 
-        <label>Select maximum file size for videos:</label>
-        <select id="maxSizeSelectVideo" name="maxSizeVideo" onchange="toggleCustomInput('Video')">
+        <label>Select maximum file size for videos (<strong>Current video limit:</strong> ${maxUploadSizeVideoMB} MB):</label>
+        <select style="margin-top: 15px; margin-bottom: 15px" class="form-control" id="maxSizeSelectVideo" name="maxSizeVideo" onchange="toggleCustomInput('Video')">
             <option value="5" ${maxUploadSizeVideoMB == 5 ? "selected" : ""}>5 MB</option>
             <option value="10" ${maxUploadSizeVideoMB == 10 ? "selected" : ""}>10 MB</option>
             <option value="custom" ${!(maxUploadSizeVideoMB == 5 || maxUploadSizeVideoMB == 10) ? "selected" : ""} >Customize</option>
         </select>
         
-            <input type="number" id="customSizeVideo" name="customSizeVideo" min="1" max="10" placeholder="Enter size(MB)" value="${maxUploadSizeVideoMB}" style="display:none;">
-        <br><br>
-        <div>
-            ${errorMessage}
+            <input  class="form-control" type="number" id="customSizeVideo" name="customSizeVideo" min="1" max="10" placeholder="Enter size(MB)" value="${maxUploadSizeVideoMB}" style="display:none;">
+        <input style="margin-top: 15px" class="btn btn-primary" type="submit" value="Update">
         </div>
-        
-        <input type="submit" value="Update">
+        </div>
     </form>
-        <div>
-            ${successMessage}
-        </div>
+        
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

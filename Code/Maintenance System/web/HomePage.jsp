@@ -37,7 +37,7 @@
 
                     <ul class="navbar-nav d-none d-lg-flex"> <!-- start ul 1 -->
                         <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="#">
+                                <a class="nav-link d-flex align-items-center" href="Home">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-1">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -45,7 +45,7 @@
                                     Home
                                 </a>
                         </li>
-                        <li class="nav-item ms-1">
+<!--                        <li class="nav-item ms-1">
                                 <a class="nav-link d-flex align-items-center" href="#"  >
                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award align-middle">
                                    <circle cx="12" cy="8" r="7"></circle>
@@ -53,9 +53,9 @@
                                    </svg>
                                 About
                             </a>
-                        </li>
+                        </li>-->
                         <li class="nav-item ms-1">
-                                <a class="nav-link d-flex align-items-center" href="#"  >
+                                <a class="nav-link d-flex align-items-center" href="BlogController" >
                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book align-middle">
                                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -82,19 +82,19 @@
                         <div class="navbar-collapse collapse">
                             <li class="navbar-nav navbar-align m-xl-2">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
-                                    <a href="profile">Back to dashboard</a>
+                                    <a class="btn btn-primary btn-sm" href="profile">Back to dashboard</a>
                                 </c:if>
                             </li>
                             
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
-                                    <a href="LoginForm.jsp">Login</a>
+                                    <a class="btn btn-primary btn-sm"  href="LoginForm.jsp">Login</a>
                                 </c:if>
                             </li>
                             
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
-                                    <a href="logout">Logout</a>
+                                    <a class="btn btn-primary btn-sm"  href="logout">Logout</a>
                                 </c:if>
                             </li>
                         </div>
