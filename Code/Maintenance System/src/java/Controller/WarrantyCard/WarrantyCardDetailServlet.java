@@ -407,11 +407,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
         Staff staff = (Staff) session.getAttribute("staff");
         WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-        System.out.println(card);
         if (card.getHandlerID()==null || card.getHandlerID() == 0) {
             return true;
         }
-        System.out.println(staff.getStaffID() + " " + card.getHandlerID());
         return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 }

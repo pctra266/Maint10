@@ -171,7 +171,6 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
         if (card.getHandlerID() == null || card.getHandlerID() == 0) {
             return true;
         }
-        System.out.println(staff.getStaffID() + " " + card.getHandlerID());
         return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 
