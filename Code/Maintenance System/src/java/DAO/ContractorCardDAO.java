@@ -14,6 +14,28 @@ import java.sql.Statement;
  * @author ADMIN
  */
 public class ContractorCardDAO extends DBContext {
+    
+       public ContractorCard getLastContractorCardOfWarrantyCard(int id) {
+        String sql = "SELECT TOP 1 * FROM ContractorCard WHERE WarrantyCardID = ? order by Date desc";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            ContractorCard contractorCard = new ContractorCard();
+            if (rs.next()) {
+                contractorCard.setContractorCardID(rs.getInt("ContractorCardID"));
+                contractorCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                contractorCard.setStaffID(rs.getInt("StaffID"));
+                contractorCard.setContractorID(rs.getInt("ContractorID"));
+                contractorCard.setStatus(rs.getString("Status"));
+                contractorCard.setNote(rs.getString("Note"));
+                return contractorCard;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     public boolean addContractorCard(ContractorCard card) {
         String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status, Note) VALUES (?, ?, ?, ?, ?)";

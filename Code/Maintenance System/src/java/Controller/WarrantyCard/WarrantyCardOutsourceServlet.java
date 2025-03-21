@@ -134,7 +134,10 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     newProcess.setAction(processAction);
                     boolean success = wcpDao.addWarrantyCardProcess(newProcess);
                     if (success) {
-                        System.out.println("can2");
+                        if("cancel_outsource".equals(processAction)) {
+                            ContractorCard cc = contractorCardDAO.getLastContractorCardOfWarrantyCard(warrantyCardId);
+                            contractorCardDAO.updateContractorStatus(cc.getContractorCardID(), "cancel");
+                        }
                         request.setAttribute("updateAlert1", processAction.substring(0, 1).toUpperCase() + processAction.substring(1) + " action successful!");
                     } else {
                         request.setAttribute("updateAlert0", "Failed to process " + processAction + ".");
