@@ -309,6 +309,8 @@ CREATE TABLE Feedback (
     Note NVARCHAR(MAX),
 	DateCreated DATETIME NOT NULL,
 	IsDeleted BIT DEFAULT 0 NOT NULL,
+	ImageURL NVARCHAR(500),
+	VideoURL NVARCHAR(500)
 );
 -- FeedbackLog Table
 CREATE TABLE FeedbackLog (
