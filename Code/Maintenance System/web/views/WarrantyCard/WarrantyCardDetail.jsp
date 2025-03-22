@@ -113,7 +113,7 @@
                                     </div>
                                     <div>
                                         <form action="searchwc" class="h-100" method="post">
-                                            <input type="hidden" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
+                                            <input type="hidden" id="warrantyCardCode" name="warrantyCardCode" value="${card.warrantyCardCode}" >
                                             <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
                                         </form>
                                     </div>
@@ -202,7 +202,7 @@
                                         </form>
 
                                     </div>
-                                    <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto">
+                                    <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto" target="blank">
                                         <input type="hidden" name="action" value="createComponentRequest" readonly> 
                                         <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
                                         <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
