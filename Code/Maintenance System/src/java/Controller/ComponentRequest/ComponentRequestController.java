@@ -44,6 +44,9 @@ public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
     private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
     private static final ComponentRequestResponsibleDAO crrDao = new ComponentRequestResponsibleDAO();
+    private static final ComponentDAO compoDao = new ComponentDAO();
+    private static final Email email = new Email();
+    private static final StaffDAO staffDao = new StaffDAO();
         private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
         private final NotificationDAO notificationDAO = new NotificationDAO();
 
@@ -251,7 +254,10 @@ public class ComponentRequestController extends HttpServlet {
                     selectedComponents = new ArrayList<>();
                 }
                 String componentID = request.getParameter("componentID");
-                Component componentToAdd = getComponentById("", componentID);
+                
+//                Component componentToAdd = getComponentById("", componentID);
+                Component componentToAdd = compoDao.getComponentByID(Integer.parseInt(componentID));
+                
                 if (componentToAdd != null && !isComponentInList(selectedComponents, componentToAdd)) {
                     componentToAdd.setQuantity(1);
                     selectedComponents.add(componentToAdd);
@@ -505,19 +511,19 @@ public class ComponentRequestController extends HttpServlet {
                                     notification.setIsRead(false);
                                     notification.setTarget(request.getContextPath() + "/componentRequest?action=detailComponentRequest&noti=true&componentRequestID=" + componentRequestIDNum); // URL chi tiết
                                     notificationDAO.addNotification(notification);
-                        Email email = new Email();
-                        StaffDAO staffDao = new StaffDAO();
-                        ComponentDAO compoDao = new ComponentDAO();
+                       
+                        
+//                        
                         String gmail = staffDao.getStaffById(3).getEmail();
                         String content = "";
-                        // tao noi dung gui
+//                        // tao noi dung gui
                         ArrayList<ComponentRequestDetail> listContent = componentRequestDao.getListComponentRequestDetailById(String.valueOf(componentRequestIDNum));
                         content += "Please send total "+listContent.size()+" type of component for teachician including: \n";
                         for (ComponentRequestDetail a : listContent) {
                             Component x = compoDao.getComponentByID(a.getComponentID());
                             content +="("+ x.getComponentCode()+") Name:"+ x.getComponentName()+"- Brand:" +x.getBrand()+" - Type:"+x.getType()+" - Quantity: "+a.getQuantity() +"\n";
                         }
-                        
+//                        
                         email.sendEmail(gmail, "Component Request", content);
                         
                         if (componentRequestIDNum != 0) {
