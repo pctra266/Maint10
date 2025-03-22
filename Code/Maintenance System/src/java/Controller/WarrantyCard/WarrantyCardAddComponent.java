@@ -68,7 +68,6 @@ public class WarrantyCardAddComponent extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
-        System.out.println("ịaisjfj");
         //chan staff khac thay doi
         if (!checkRightHanderlerId(request, response, warrantyCardId)) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);

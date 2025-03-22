@@ -93,6 +93,13 @@ public class WarrantyCardAdd extends HttpServlet {
             Customer customer = (Customer) session.getAttribute("customer");
             int handlerID = (staff != null) ? staff.getStaffID() : (customer != null ? customer.getCustomerID() : -1);
             WarrantyCardProcess wcp = new WarrantyCardProcess();
+            if (customer != null) {
+                if (!customerDAO.isCustomerHavingProduct(customer.getCustomerID(), productCode)) {
+                    request.setAttribute("createCustomerFail", "This product isn't belong to you.");
+                    request.getRequestDispatcher("/views/WarrantyCard/WarrantyCardCreate.jsp").forward(request, response);
+                return;
+                }
+            }
             if (canAdd && wcp.checkAndSetWarrantyCardId(warrantyCardDAO.createWarrantyCard(productCode, issue, returnDate, mediaPaths))) {
                 wcp.setHandlerID(handlerID);
                 wcp.setAction("create");

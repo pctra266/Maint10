@@ -248,7 +248,14 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             }
                             if (updated) {
                                 detail.setNote(noteParam);
-                                boolean success = wcdDao.updateWarrantyCardDetail(detail);
+                                boolean success;
+                                if (quantity > 0) {
+                                     success = wcdDao.updateWarrantyCardDetail(detail);
+                                }
+                                else {
+                                    success = wcdDao.deleteWarrantyCardDetail(warrantyCardDetailId);
+                                }
+
                                 if (success) {
                                     request.setAttribute("updateAlert1", "Update successful!");
                                 } else {
@@ -407,7 +414,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
         Staff staff = (Staff) session.getAttribute("staff");
         WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
-        if (card.getHandlerID()==null || card.getHandlerID() == 0) {
+        if (card.getHandlerID() == null || card.getHandlerID() == 0) {
             return true;
         }
         return !(staff == null || card.getHandlerID() != staff.getStaffID());
