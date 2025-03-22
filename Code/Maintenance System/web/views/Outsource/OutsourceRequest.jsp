@@ -46,8 +46,11 @@
                         </div>
                         <label for="note" class="form-label">Note:</label>
                         <textarea type="text" name="note" id="note" class="form-control form-control-sm"></textarea>
-                        <button type="submit" class="btn btn-primary">Send Outsource Request</button>
-                        <a href="WarrantyCard/Detail?ID=${warrantyCardID}" class="btn btn-secondary">Cancel</a>
+                        <div class="mt-2">
+                           <button type="submit" class="btn btn-primary">Send Outsource Request</button>
+                        <a href="WarrantyCard/Detail?ID=${warrantyCardID}" class="btn btn-secondary">Cancel</a> 
+                        </div>
+                        
                     </form>
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />
