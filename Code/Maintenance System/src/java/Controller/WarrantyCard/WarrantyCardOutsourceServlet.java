@@ -1,11 +1,13 @@
 package Controller.WarrantyCard;
 
 import DAO.ContractorCardDAO;
+import DAO.NotificationDAO;
 import DAO.StaffDAO;
 import DAO.WarrantyCardDAO;
 import DAO.WarrantyCardProcessDAO;
 import Model.Staff;
 import Model.ContractorCard;
+import Model.Notification;
 import Model.WarrantyCard;
 import Model.WarrantyCardProcess;
 import Utils.FormatUtils;
@@ -27,6 +29,8 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
     private final StaffDAO staffDAO = new StaffDAO();
     private final ContractorCardDAO contractorCardDAO = new ContractorCardDAO();
     private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
+        private final NotificationDAO notificationDAO = new NotificationDAO();
+
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -101,6 +105,15 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     contractorCard.setStaffID(staff.getStaffID());
                     contractorCard.setStatus("waiting");
                     contractorCardDAO.addContractorCard(contractorCard);
+                    String message = "A warranty request send to you " + (noteParam.isBlank()?"":(": "+noteParam));
+                            Notification notification = new Notification();
+                            notification.setRecipientType("Staff");
+                            notification.setRecipientID(contractorId);
+                            notification.setMessage(message);
+                            notification.setCreatedDate(new Date());
+                            notification.setIsRead(false);
+                            notification.setTarget(request.getContextPath() + "/warrantyCardDetailContractor?cardId=" + warrantyCardId); // URL chi tiết
+                            notificationDAO.addNotification(notification);
                     request.setAttribute("updateAlert1", "Outsource request sent successfully!");
                     response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + warrantyCardId);
                     return;
