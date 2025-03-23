@@ -24,7 +24,7 @@ public class Invoice {
     private int createdBy;
     private Integer receivedBy;
     private Integer customerID;
-
+    
     // Constructors
     public Invoice() {}
 
