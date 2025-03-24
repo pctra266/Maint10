@@ -22,9 +22,6 @@
             />
         <link rel="stylesheet" href="style.css">
         <style>
-            /* CSS chuyên dụng cho phần nội dung chính (main.content) */
-
-            /* Container của nội dung chính */
             main.content {
                 background-color: #fff;
                 padding: 30px 40px;
@@ -270,7 +267,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <h2>Create Warranty Card</h2>
+                    <h2 style="text-align: center">Create Warranty Card</h2>
                     <c:if test="${not empty errorMessage}">
                         <div class="alert alert-danger" style="height: 30px; align-items: center; padding: 2px;justify-content: center">
                             ${errorMessage}
