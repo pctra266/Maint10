@@ -22,6 +22,11 @@ public class Blog {
 
     public Blog() {
     }
+
+    public Blog(String staff, String title) {
+        this.staff = staff;
+        this.title = title;
+    }
     
     
     

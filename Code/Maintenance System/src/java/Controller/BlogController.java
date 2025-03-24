@@ -26,7 +26,7 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author ADMIN
  */
-@WebServlet(name="BlogController", urlPatterns={"/BlogController"})
+@WebServlet(name="BlogController", urlPatterns={"/BlogController/*"})
 public class BlogController extends HttpServlet {
    
     /** 
@@ -67,10 +67,34 @@ public class BlogController extends HttpServlet {
         BlogDAO dao = new BlogDAO();
         StaffDAO staffDAO = new StaffDAO();
         List<Blog> list ;
+        ArrayList<Blog> listrole;
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewAll";
         }
+        HttpSession session = request.getSession();
+        Staff staffOnSession = (Staff) session.getAttribute("staff");
+        if (staffOnSession == null) {
+            staffOnSession = new Staff();
+            staffOnSession.setStaffID(0); // ID mặc định, có thể là 0 hoặc -1
+        }else{
+            Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+        listrole = dao.getAllRole();
+        for (Blog role : listrole) {
+            if (role.getStaff().equals(String.valueOf(staffProfile.getRole()))) {
+                request.setAttribute("Create", "Duoc create");
+            }
+        }
+        }
+        String action1 = request.getPathInfo();
+
+    if (action1 != null && !action1.equals("/")) {
+        // Nếu có sự thay đổi (action1 khác "/" hoặc null)
+        request.setAttribute("errorMessage", "Đường dẫn không hợp lệ!");
+        request.getRequestDispatcher("BlogController").forward(request, response);
+        return;
+    }
+        
         
         switch(action){
             case "viewAll":                
@@ -168,13 +192,26 @@ public class BlogController extends HttpServlet {
         List<Blog> list ;
         List<Blog> info ;
         List<Blog> changeBlog ;
+        int id = 0;
         HttpSession session = request.getSession();
         Staff staffOnSession = (Staff) session.getAttribute("staff");
         String action = request.getParameter("action");
-        String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
-        Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+        
+        if (staffOnSession == null) {
+            
+            staffOnSession = new Staff();
+            staffOnSession.setStaffID(0); // ID mặc định, có thể là 0 hoặc -1
+        }else{
+            Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());   
+            request.setAttribute("staffProfile", staffProfile);
+            String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
+            id = staffProfile.getStaffID();
+        }
         String blogID = request.getParameter("blogID");
-        request.setAttribute("staffProfile", staffProfile);
+        
+        
+        
+        
         if (action == null) {
             action = "viewAll";
         }
@@ -267,9 +304,9 @@ public class BlogController extends HttpServlet {
             case "SubmitCreate":
                 String title = request.getParameter("title");
                 String content = request.getParameter("content");
-                int staffID = staffProfile.getStaffID();
-                String id = Integer.toString(staffID);
-                boolean insert = dao.InsertBlog(id, title, content);
+                int staffID = id;
+                String id1 = Integer.toString(staffID);
+                boolean insert = dao.InsertBlog(id1, title, content);
                 request.setAttribute("list", list);
                 request.getRequestDispatcher("Blog.jsp").forward(request, response);
                 break;

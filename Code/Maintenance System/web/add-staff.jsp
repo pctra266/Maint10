@@ -190,7 +190,7 @@
                             <option value="1">Admin</option>
                             <option value="2">Technician</option>
                             <option value="3">Inventory Manager</option>
-                            <option value="4">Customer</option>
+                            <option value="4">Inactive</option>
                             <option value="5">Repair Contractor</option>
                             <option value="6">Customer Service Agent</option>
                         </select>

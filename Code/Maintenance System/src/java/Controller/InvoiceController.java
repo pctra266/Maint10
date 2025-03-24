@@ -151,6 +151,7 @@ public class InvoiceController extends HttpServlet {
         AdminDAO dao = new AdminDAO();
         List<Admin> list;
         List<Admin> list1;
+        List<Admin> payment;
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewAll";
@@ -163,6 +164,7 @@ public class InvoiceController extends HttpServlet {
                 request.setAttribute("info", list);
                 request.setAttribute("cusID", cusID);
                 request.getRequestDispatcher("InvoiceS_I.jsp").forward(request, response);
+                break;
             case "Allinfor":
                 String staffID = request.getParameter("staffID");
                 cusID = request.getParameter("cusID");
@@ -172,6 +174,20 @@ public class InvoiceController extends HttpServlet {
                 request.setAttribute("allinfo", list1);
                 request.setAttribute("cusID", cusID);
                 request.getRequestDispatcher("InvoiceS_I.jsp").forward(request, response);
+                break;
+            case "Allinforpayment":
+                String invoiceID = request.getParameter("invoiceID");
+                staffID = request.getParameter("staffID");
+                cusID = request.getParameter("cusID");
+                list = dao.getAllInvoicesByID(cusID);
+                list1 = dao.getAllInvoicesInformationByID(staffID, cusID);
+                payment = dao.getAllInformationByPayment(staffID, cusID, invoiceID);
+                request.setAttribute("info1", list);
+                request.setAttribute("allinfo", list1);
+                request.setAttribute("cusID", cusID);
+                request.setAttribute("payment", payment);
+                request.getRequestDispatcher("InvoiceS_I.jsp").forward(request, response);
+                break;
             default:
                 break;
         } 

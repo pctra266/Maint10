@@ -155,16 +155,104 @@
                                                 <td>${wa.getImage()}</td>
                                                 <td>${wa.getGender()}</td>
                                                 <td>${wa.getAddress()}</td>
-                                                <td class="text-center">
-                                                    <button type="button" class="btn btn-primary">Chi tiết</button>
-                                                </td>
+                                                <c:if test="${wa.getAddress() eq 'paid'}">
+                                                
+                                                    <td class="text-center">
+                                                        <form action="InvoiceController" method="post">
+                                                            <input type="hidden" name="action" value="Allinforpayment">
+                                                            <input type="hidden" name="cusID" value="${cusID}">
+                                                            <input type="hidden" name="staffID" value="${wa.getStaffID()}">
+                                                            <input type="hidden" name="invoiceID" value="${wa.getCreatedBy()}">
+                                                            <button type="submit" class="btn btn-primary">Chi tiết</button>
+                                                        </form>
+                                                    </td>
+                                                
+                                                </c:if>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
                                 </table>
                             </div>
                         </div>
+                        <!-- PHẦN HIỂN THỊ PAYMENT ĐẸP HƠN -->
+<c:if test="${not empty payment}">
+    <div class="row">
+        <c:forEach var="wa" items="${payment}">
+            <div class="col-md-6 col-lg-4 mb-4">
+                <!-- Card hiển thị thông tin Payment -->
+                <div class="card h-100 border-0 shadow-sm">
+                    <!-- Header của card -->
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <!-- Invoice Number -->
+                        <h5 class="mb-0">Invoice #${wa.invoiceNumber}</h5>
+                        <!-- Trạng thái (status) dưới dạng badge -->
+                        <span class="badge 
+                            <c:choose>
+                                <c:when test="${wa.status eq 'paid'}">bg-success</c:when>
+                                <c:otherwise>bg-secondary</c:otherwise>
+                            </c:choose>
+                        ">
+                            ${wa.status}
+                        </span>
+                    </div>
+                    
+                    <!-- Body của card -->
+                    <div class="card-body">
+                        <!-- Số tiền (Amount) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Amount:</strong>
+                            <span>${wa.amount}</span>
+                        </div>
+                        <!-- Loại hóa đơn (Invoice Type) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Invoice Type:</strong>
+                            <span>${wa.invoiceType}</span>
+                        </div>
+                        <!-- Invoice ID -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Invoice ID:</strong>
+                            <span>${wa.invoiceID}</span>
+                        </div>
+                        <!-- Issue -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Issue:</strong>
+                            <span>${wa.issue}</span>
+                        </div>
+                        <!-- Tên nhân viên (Staff Name) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Staff Name:</strong>
+                            <span>${wa.staffName}</span>
+                        </div>
+                        <!-- Email nhân viên (Staff Email) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Staff Email:</strong>
+                            <span>${wa.staffEmail}</span>
+                        </div>
+                        <!-- Số điện thoại nhân viên (Staff Phone) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Staff Phone:</strong>
+                            <span>${wa.staffPhone}</span>
+                        </div>
+                        <!-- Ngày thanh toán (Payment Date) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Payment Date:</strong>
+                            <span>${wa.paymentDate}</span>
+                        </div>
+                        <!-- Phương thức thanh toán (Payment Method) -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <strong>Payment Method:</strong>
+                            <span>${wa.paymentMethod}</span>
+                        </div>
+                    </div> <!-- End card-body -->
+                </div> <!-- End card -->
+            </div> <!-- End col -->
+        </c:forEach>
+    </div> <!-- End row -->
+</c:if>
+
                     </c:if>
+                        
+                        
                 </div>
             </main>
             <jsp:include page="/includes/footer.jsp" />

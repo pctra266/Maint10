@@ -136,7 +136,62 @@ public class AdminDAO extends DBContext{
                 String gender = rs.getString("Amount");
                 String image = rs.getString("InvoiceType");
                 String address = rs.getString("Status");
-                list.add(new Admin(name, gender, address, image));
+                String createdBy = rs.getString("InvoiceID");
+                String ID = rs.getString("HandlerID");
+                list.add(new Admin(name, gender, address, image,createdBy,ID));
+                
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+    public List<Admin> getAllInformationByPayment(String staffID, String cusID, String invoiceID) {
+        List<Admin> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT \n" +
+                    "    Invoice.InvoiceNumber AS InvoiceNumber,\n" +
+                    "    Invoice.Amount AS Amount,\n" +
+                    "    Customer.Name AS CustomerName,\n" +
+                    "    Customer.Gender AS CustomerGender,\n" +
+                    "    Customer.Phone AS CustomerPhone,\n" +
+                    "    WarrantyCard.IssueDescription AS IssueDescription,\n" +
+                    "    Staff.Name AS StaffName,\n" +
+                    "    Staff.Email AS StaffEmail,\n" +
+                    "    Staff.Phone AS StaffPhone,\n" +
+                    "    Payment.PaymentDate AS PaymentDate,\n" +
+                    "    Payment.PaymentMethod AS PaymentMethod\n" +
+                    "FROM Invoice\n" +
+                    "JOIN Customer ON Customer.CustomerID = Invoice.CustomerID\n" +
+                    "JOIN WarrantyCard ON WarrantyCard.WarrantyCardID = Invoice.WarrantyCardID\n" +
+                    "JOIN Staff ON Staff.StaffID = Invoice.CreatedBy\n" +
+                    "JOIN Payment ON Payment.InvoiceID = Invoice.InvoiceID\n" +
+                    "WHERE Invoice.CreatedBy = ? \n" +
+                    "  AND Invoice.CustomerID = ? \n" +
+                    "  AND Invoice.InvoiceID = ?;";
+        
+        
+        try{
+            stm = connection.prepareStatement(sql);           
+            stm.setString(1, staffID);
+            stm.setString(2, cusID);
+            stm.setString(3, invoiceID);
+            rs = stm.executeQuery();
+            while (rs.next()) {
+                String invoice = rs.getString("InvoiceNumber");
+                String amount  = rs.getString("Amount");
+                String cusName = rs.getString("CustomerName");
+                String cusGender = rs.getString("CustomerGender");
+                String cusPhone = rs.getString("CustomerPhone");
+                String issue = rs.getString("IssueDescription");
+                String staffName  = rs.getString("StaffName");
+                String staffEmail = rs.getString("StaffEmail");
+                String staffPhone = rs.getString("StaffPhone");
+                String paymentDate = rs.getString("PaymentDate");
+                String paymentMethod = rs.getString("PaymentMethod");
+
+                list.add(new Admin(invoice, amount, invoice, staffID, invoiceID, issue, staffName, staffEmail, staffPhone, paymentDate, paymentMethod));
                 
             }
         } catch (SQLException e) {

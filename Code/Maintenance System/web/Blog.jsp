@@ -191,8 +191,9 @@
                         </form>  
                     </c:if>
                     <div class="left-frame blog-frame ">
-                        <c:if test="${not empty list}">
-                            <h2>Danh sách bài viết của Nhân Viên</h2>
+                        <h2>Danh sách bài viết của Nhân Viên</h2>
+                        <c:if test="${not empty Create}">
+                            
                             <form action="BlogController" method="post">
                                 <input type="hidden" name="action" value="Create">
                                 <button type="submit">Create</button>

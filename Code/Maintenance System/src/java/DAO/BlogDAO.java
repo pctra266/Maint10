@@ -205,6 +205,35 @@ public class BlogDAO extends DBContext{
         }
         return true;
     }
+    
+    public ArrayList<Blog> getAllRole() {
+        ArrayList<Blog> list = new ArrayList<>();
+        PreparedStatement stm = null;
+        ResultSet rs = null;
+        String sql = "SELECT*FROM Role";
+        
+        try{
+            stm = connection.prepareStatement(sql);
+            rs= stm.executeQuery();
+            while (rs.next()) {
+                String staff = rs.getString("RoleID");
+                String title = rs.getString("RoleName");             
+                list.add(new Blog(staff, title));
+            }
+            
+        }catch (SQLException e) {
+            System.out.println("Error: " + e.getMessage());
+        } finally {
+            try {
+                if (rs != null) rs.close();
+                if (stm != null) stm.close();
+            } catch (SQLException e) {
+                System.out.println("Error closing resources: " + e.getMessage());
+            }
+        }
+        return list;
+    }
+    
     public ArrayList<Blog> getBlogByID(String blogID) {
     ArrayList<Blog> list = new ArrayList<>();
     PreparedStatement stm = null;

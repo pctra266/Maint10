@@ -189,7 +189,7 @@ button:hover {
                                 <option value="1" ${staff.getRole() == '1' ? 'selected' : ''}>Admin</option>
                                 <option value="2" ${staff.getRole() == '2' ? 'selected' : ''}>Technician</option>
                                 <option value="3" ${staff.getRole() == '3' ? 'selected' : ''}>Inventory Manager</option>
-                                <option value="4" ${staff.getRole() == '4' ? 'selected' : ''}>Customer</option>
+                                <option value="4" ${staff.getRole() == '4' ? 'selected' : ''}>Inactive</option>
                                 <option value="5" ${staff.getRole() == '5' ? 'selected' : ''}>Repair Contractor</option>
                                 <option value="6" ${staff.getRole() == '6' ? 'selected' : ''}>Customer Service Agent</option>
                             </select>
