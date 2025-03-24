@@ -98,6 +98,7 @@ public class InvoiceDAO extends DBContext {
         }
         return invoices;
     }
+    
 
     public List<Invoice> getAllInvoicesOfCard(int card) {
         List<Invoice> invoices = new ArrayList<>();

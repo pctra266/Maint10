@@ -22,7 +22,9 @@ public class Blog {
 
     public Blog() {
     }
-
+    
+    
+    
     public Blog(int blogPostId, String staff,String staffID, String title, String content, String createdDate, String updatedDate) {
         this.blogPostId = blogPostId;
         this.staff = staff;
