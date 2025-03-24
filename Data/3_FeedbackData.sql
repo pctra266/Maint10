@@ -92,6 +92,29 @@ VALUES
 
 Insert into WarrantyCardProcess (WarrantyCardID, HandlerID, Action, ActionDate, Note)
 values
+(47,2,'create',GETDATE(),'create card'),
+(48,2,'create',GETDATE(),'create card'),
+(49,2,'create',GETDATE(),'create card'),
+(50,2,'create',GETDATE(),'create card'),
+(51,2,'create',GETDATE(),'create card'),
+(52,2,'create',GETDATE(),'create card'),
+(53,2,'create',GETDATE(),'create card'),
+(54,2,'create',GETDATE(),'create card'),
+(55,2,'create',GETDATE(),'create card'),
+(56,2,'create',GETDATE(),'create card'),
+(57,2,'create',GETDATE(),'create card'),
+(58,2,'create',GETDATE(),'create card'),
+(59,2,'create',GETDATE(),'create card'),
+(60,2,'create',GETDATE(),'create card'),
+(61,2,'create',GETDATE(),'create card'),
+(62,2,'create',GETDATE(),'create card'),
+(63,2,'create',GETDATE(),'create card'),
+(64,2,'create',GETDATE(),'create card'),
+(65,2,'create',GETDATE(),'create card'),
+(66,2,'create',GETDATE(),'create card'),
+(67,2,'create',GETDATE(),'create card'),
+(68,2,'create',GETDATE(),'create card'),
+(69,2,'create',GETDATE(),'create card'),
 (1,2,'create',GETDATE(),'create card'),
 (2,2,'create',GETDATE(),'create card'),
 (3,2,'create',GETDATE(),'create card'),
@@ -138,6 +161,7 @@ values
 (44,2,'create',GETDATE(),'create card'),
 (45,2,'create',GETDATE(),'create card'),
 (46,2,'create',GETDATE(),'create card');
+
 
 
 INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted ,ImageURL, VideoURL)
