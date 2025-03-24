@@ -16,10 +16,10 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>-->
-    <error-page>
+    <!--    <error-page>
         <error-code>404</error-code>
         <location>/404Page.jsp</location>
-    </error-page>
+    </error-page>-->
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -191,6 +191,18 @@
     <servlet>
         <servlet-name>RepairCreateInvoice</servlet-name>
         <servlet-class>Controller.WarrantyCard.RepairCreateInvoice</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListInvoiceRepair</servlet-name>
+        <servlet-class>Controller.Invoice.ListInvoiceRepair</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewInvoice</servlet-name>
+        <servlet-class>Controller.Invoice.ViewInvoice</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ExportInvoicePDF</servlet-name>
+        <servlet-class>Controller.Invoice.ExportInvoicePDF</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -415,5 +427,17 @@
     <servlet-mapping>
         <servlet-name>RepairCreateInvoice</servlet-name>
         <url-pattern>/repairCreateInvoice</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListInvoiceRepair</servlet-name>
+        <url-pattern>/listInvoiceRepair</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewInvoice</servlet-name>
+        <url-pattern>/invoiceDetail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ExportInvoicePDF</servlet-name>
+        <url-pattern>/exportInvoicePDF</url-pattern>
     </servlet-mapping>
 </web-app>

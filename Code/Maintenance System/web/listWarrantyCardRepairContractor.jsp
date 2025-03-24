@@ -297,6 +297,7 @@
 
                                 <button type="submit">Apply</button>
                                 <button type="submit">Search</button>
+                                <button type="button" onclick="window.location.href = 'listInvoiceRepair'">Invoice</button>
                             </div>                        
                         </div>
 

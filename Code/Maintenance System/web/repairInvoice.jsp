@@ -35,7 +35,7 @@
                 min-height: 100vh;
             }
 
-            /* Giả sử sidebar bên trái có width cố định */
+            /* Sidebar (giữ tông màu ban đầu) */
             .wrapper > .jspIncludeSidebar,
             .wrapper > .navbar-left {
                 width: 250px;
@@ -64,11 +64,11 @@
                 padding: 20px;
             }
 
-            /* Tiêu đề form */
+            /* Tiêu đề form với màu xanh dương chủ đạo */
             .content h2 {
                 margin-bottom: 20px;
                 font-size: 24px;
-                color: #2c3e50;
+                color: #007BFF;
             }
 
             /* Các thông báo lỗi và thành công */
@@ -96,14 +96,13 @@
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
 
-            /* Các label và input */
+            /* Label và input */
             form label {
                 display: block;
                 margin-bottom: 5px;
                 font-weight: 600;
                 color: #34495e;
             }
-
             form input[type="number"],
             form input[type="date"] {
                 width: 100%;
@@ -114,11 +113,11 @@
                 font-size: 16px;
             }
 
-            /* Button submit */
+            /* Button submit: sử dụng màu xanh dương chủ đạo */
             .btn {
                 display: inline-block;
                 padding: 10px 20px;
-                background-color: #27ae60;
+                background-color: #007BFF;
                 color: #fff;
                 border: none;
                 border-radius: 4px;
@@ -128,7 +127,7 @@
                 text-align: center;
             }
             .btn:hover {
-                background-color: #219150;
+                background-color: #0056b3;
             }
 
             /* Footer */
@@ -152,7 +151,25 @@
                     margin-left: 0;
                 }
             }
+            .btn-export {
+                display: inline-block;
+                padding: 10px 20px;
+                background-color: #007BFF; /* Màu xanh dương chủ đạo */
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                font-size: 16px;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
 
+            .btn-export i {
+                margin-right: 8px;
+            }
+
+            .btn-export:hover {
+                background-color: #0056b3;
+            }
 
         </style>
     </head>
@@ -173,7 +190,7 @@
                         </div>
                     </c:if>
 
-                    <h2>Create Invoice for Repair Contractor</h2>
+                    <h2 style="text-align: center">Create Invoice for Repair Contractor</h2>
                     <form action="repairCreateInvoice" method="get" onsubmit="return validateAmount();">
                         <label for="amount">Amount:</label>
                         <input type="number" id="amount" name="amount" step="0.01" required min="0" /><br/><br/>
@@ -189,17 +206,16 @@
                         <input type="hidden" name="contractorCardID" value="${param.code}" />
                         <input type="hidden" name="warrantyCardID" value="${param.cardId}" />
 
-
-
                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
+                    
                     </form>
+
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
         <script>
-                        // Kiểm tra nếu giá trị của amount chỉ toàn khoảng trắng (dù input type=number thường không cho phép)
                         function validateAmount() {
                             var amountInput = document.getElementById("amount");
                             if (amountInput.value.trim() === "") {

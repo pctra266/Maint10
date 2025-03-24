@@ -1,9 +1,10 @@
 package Controller.WarrantyCard;
 
+import DAO.ContractorCardDAO;
 import DAO.InvoiceDAO;
+import Model.ContractorCard;
 import Model.Invoice;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,14 +17,13 @@ import jakarta.servlet.http.HttpServletResponse;
 public class RepairCreateInvoice extends HttpServlet {
 
     private String generateRandomInvoiceNumber() {
-        int randomNum = (int) (Math.random() * 90000000) + 10000000; // Số ngẫu nhiên 8 chữ số
+        int randomNum = (int) (Math.random() * 90000000) + 10000000;
         return "INV" + randomNum;
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Lấy các tham số từ form
         String amountStr = request.getParameter("amount");
         String dueDateStr = request.getParameter("dueDate");
         String invoiceType = request.getParameter("invoiceType");
@@ -31,15 +31,17 @@ public class RepairCreateInvoice extends HttpServlet {
         String staffIdStr = request.getParameter("staffId");
         String contractorCardIDStr = request.getParameter("contractorCardID");
         String warrantyCardIDStr = request.getParameter("warrantyCardID");
+        ContractorCardDAO contractorDAO = new ContractorCardDAO();
+
+        ContractorCard c = contractorDAO.getContractorCardById(Integer.parseInt(contractorCardIDStr));
+        int contractorid = c.getContractorID();
 
         double amount = Double.parseDouble(amountStr);
         int warrantyCardID = Integer.parseInt(warrantyCardIDStr);
-        int contractorCardID = Integer.parseInt(contractorCardIDStr);
         int staffID = Integer.parseInt(staffIdStr);
 
         java.sql.Date dueDate = java.sql.Date.valueOf(dueDateStr);
 
-        // Tạo số hoá đơn ngẫu nhiên
         String invoiceNumber = generateRandomInvoiceNumber();
 
         Invoice invoice = new Invoice();
@@ -49,12 +51,9 @@ public class RepairCreateInvoice extends HttpServlet {
         invoice.setAmount(amount);
         invoice.setDueDate(dueDate);
         invoice.setStatus(status);
-        // Giả sử CreatedBy là contractorCardID, ReceivedBy là staffID
-        invoice.setCreatedBy(contractorCardID);
+        invoice.setCreatedBy(contractorid);
         invoice.setReceivedBy(staffID);
         invoice.setCustomerID(null);
-
-        // Sử dụng DAO để thêm invoice mới
         InvoiceDAO invoiceDAO = new InvoiceDAO();
         boolean result = invoiceDAO.addInvoice(invoice);
         if (result) {
@@ -62,17 +61,24 @@ public class RepairCreateInvoice extends HttpServlet {
         } else {
             request.setAttribute("errorMessage", "Error creating invoice.");
         }
+
+        request.setAttribute("amount", amountStr);
+        request.setAttribute("dueDate", dueDateStr);
+        request.setAttribute("invoiceType", invoiceType);
+        request.setAttribute("status", status);
+        request.setAttribute("staffId", staffIdStr);
+        request.setAttribute("contractorCardID", contractorCardIDStr);
+        request.setAttribute("warrantyCardID", warrantyCardIDStr);
+
         request.getRequestDispatcher("repairInvoice.jsp").forward(request, response);
     }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         String warrantyCardIDStr = request.getParameter("cardId");
         String contractorCardID = request.getParameter("code");
         String staffId = request.getParameter("staffId");
-        // Set các thuộc tính vào request để truyền sang trang JSP
         request.setAttribute("warrantyCardID", warrantyCardIDStr);
         request.setAttribute("contractorCardID", contractorCardID);
         request.setAttribute("staffId", staffId);
