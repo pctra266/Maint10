@@ -360,7 +360,6 @@ CREATE TABLE Payment (
 );
 
 
-
 CREATE TABLE FooterSetting (
     id INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     slogan VARCHAR(255) NOT NULL,

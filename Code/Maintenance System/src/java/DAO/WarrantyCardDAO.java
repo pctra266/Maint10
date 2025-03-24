@@ -61,12 +61,12 @@ public class WarrantyCardDAO extends DBContext {
 
         return warrantyCards;
     }
-    
+
     public boolean deleteWarrantyCard(WarrantyCard wc) {
         String sql = "DELETE FROM WarrantyCard where WarrantyCardID = ?";
-        try (PreparedStatement ps = connection.prepareStatement(sql)){
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
             ps.setInt(1, wc.getWarrantyCardID());
-            return ps.executeUpdate()>0;
+            return ps.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1132,7 +1132,7 @@ public class WarrantyCardDAO extends DBContext {
                 + "  wc.WarrantyCardID, "
                 + "  wc.WarrantyCardCode, "
                 + "  wc.IssueDescription, "
-                + "  s.StaffID, " // Thêm trường StaffID
+                + "  s.StaffID, "
                 + "  s.Name AS StaffName, "
                 + "  s.Phone AS StaffPhone, "
                 + "  s.Email AS StaffEmail, "
@@ -1145,7 +1145,8 @@ public class WarrantyCardDAO extends DBContext {
                 + "  up.Description AS UnknownProductDescription, "
                 + "  m.MediaURL, "
                 + "  cc.ContractorCardID, "
-                + "  cc.Status AS ContractorStatus "
+                + "  cc.Status AS ContractorStatus, "
+                + "  wcp.lastProcessStatus "
                 + "FROM WarrantyCard wc "
                 + "LEFT JOIN Staff s ON wc.HandlerID = s.StaffID "
                 + "LEFT JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID "
@@ -1156,6 +1157,16 @@ public class WarrantyCardDAO extends DBContext {
                 + "LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID "
                 + "LEFT JOIN Media m ON m.ObjectID = wc.WarrantyCardID AND m.ObjectType = 'WarrantyCard' "
                 + "LEFT JOIN ContractorCard cc ON cc.WarrantyCardID = wc.WarrantyCardID "
+                + "LEFT JOIN ( "
+                + "    SELECT WarrantyCardID, HandlerID, [Action] as lastProcessStatus "
+                + "    FROM warrantyCardProcess wcp1 "
+                + "    WHERE [Action] = 'send_outsource' AND ActionDate = ( "
+                + "         SELECT MAX(ActionDate) FROM warrantyCardProcess wcp2 "
+                + "         WHERE wcp2.WarrantyCardID = wcp1.WarrantyCardID "
+                + "           AND wcp2.HandlerID = wcp1.HandlerID "
+                + "           AND wcp2.[Action] = 'send_outsource' "
+                + "    ) "
+                + ") wcp ON wc.WarrantyCardID = wcp.WarrantyCardID AND s.StaffID = wcp.HandlerID "
                 + "WHERE wc.WarrantyCardID = ? "
                 + "ORDER BY m.MediaID, cc.ContractorCardID;";
 
@@ -1164,12 +1175,11 @@ public class WarrantyCardDAO extends DBContext {
 
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
-                    // Nếu map chưa có dữ liệu, khởi tạo các trường cơ bản
                     if (details.isEmpty()) {
                         details.put("warrantyCardID", rs.getInt("WarrantyCardID"));
                         details.put("warrantyCardCode", rs.getString("WarrantyCardCode"));
                         details.put("issueDescription", rs.getString("IssueDescription"));
-                        details.put("staffID", rs.getInt("StaffID")); // Thêm staffID vào map
+                        details.put("staffID", rs.getInt("StaffID"));
                         details.put("staffName", rs.getString("StaffName"));
                         details.put("staffPhone", rs.getString("StaffPhone"));
                         details.put("staffEmail", rs.getString("StaffEmail"));
@@ -1181,7 +1191,8 @@ public class WarrantyCardDAO extends DBContext {
                         details.put("unknownProductCode", rs.getString("UnknownProductCode"));
                         details.put("unknownProductDescription", rs.getString("UnknownProductDescription"));
                         details.put("contractorCardID", rs.getInt("ContractorCardID"));
-                        // Khởi tạo danh sách cho Media URLs và Contractor Statuses
+                        details.put("lastProcessStatus", rs.getString("lastProcessStatus"));
+
                         details.put("mediaUrls", new ArrayList<String>());
                         details.put("contractorStatuses", new ArrayList<String>());
                     }
@@ -1207,20 +1218,36 @@ public class WarrantyCardDAO extends DBContext {
             System.out.println(e);
         }
 
+        // Lấy danh sách các bản ghi quy trình (process) liên quan đến warrantyCardId
+        String processSql = "SELECT wcp.WarrantyCardProcessID, wcp.WarrantyCardID, wcp.HandlerID, wcp.[Action], "
+                + "wcp.ActionDate, wcp.Note "
+                + "FROM warrantyCardProcess wcp "
+                + "WHERE wcp.WarrantyCardID = ? "
+                + "ORDER BY wcp.ActionDate ASC;";
+        List<Map<String, Object>> processList = new ArrayList<>();
+        try (PreparedStatement ps2 = connection.prepareStatement(processSql)) {
+            ps2.setInt(1, warrantyCardId);
+            try (ResultSet rs2 = ps2.executeQuery()) {
+                while (rs2.next()) {
+                    Map<String, Object> process = new HashMap<>();
+                    process.put("WarrantyCardProcessID", rs2.getInt("WarrantyCardProcessID"));
+                    process.put("WarrantyCardID", rs2.getInt("WarrantyCardID"));
+                    process.put("HandlerID", rs2.getInt("HandlerID"));
+                    process.put("Action", rs2.getString("Action"));
+                    process.put("ActionDate", rs2.getTimestamp("ActionDate"));
+                    process.put("Note", rs2.getString("Note"));
+                    processList.add(process);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        details.put("processList", processList);
+
         return details;
     }
 
     public static void main(String[] args) {
-
-        WarrantyCardDAO d = new WarrantyCardDAO();
-        List<WarrantyCard> list = d.getWarrantyCardByCustomerID(2, "", "", "", "", "wc.CreatedDate", "ASC", 0, 10);
-        for (WarrantyCard wc : list) {
-            System.out.println(wc.getCreatedDate());
-        }
-        System.out.println(list.size());
-
-        WarrantyCardDAO dao = new WarrantyCardDAO();
-        System.out.println(dao.getPriceOfWarrantyCard(45));
 
     }
 

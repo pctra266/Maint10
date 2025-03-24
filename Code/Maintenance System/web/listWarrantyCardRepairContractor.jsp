@@ -4,194 +4,221 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>Danh sách Contractor Card</title>
+        <title>Contractor Card List</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
         <style>
-            /* Reset các thiết lập cơ bản */
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            /* Thiết lập chung cho trang */
-            body {
-                font-family: 'Inter', sans-serif;
-                background-color: #f0f2f5;
-                color: #333;
-            }
-
-            /* Wrapper chứa sidebar và nội dung chính */
-            .wrapper {
-                display: flex;
-                min-height: 100vh;
-            }
-
-            /* Phần main chứa nội dung chính */
-            .main {
-                flex: 1;
-                display: flex;
-                flex-direction: column;
-            }
-
-            /* Navbar trên */
-            .navbar-top {
-                background: #fff;
-                padding: 15px 20px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-
-            /* Khu vực nội dung chính */
-            .content {
-                padding: 30px;
-                background: #fff;
+            /*****************************/
+            /* Layout cho phần main.content */
+            /*****************************/
+            main.content {
+                background: #ffffff;
+                border-radius: 12px;
+                padding: 30px 40px;
+                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
                 margin: 20px;
-                border-radius: 8px;
-                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
 
-            /* Heading chính */
-            h2 {
-                font-weight: 600;
-                margin-bottom: 20px;
+            /* Tiêu đề */
+            main.content h2 {
+                text-align: center;
+                font-size: 28px;
+                font-weight: 700;
+                color: #1e3a8a;
+                margin-bottom: 30px;
+                text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.3);
             }
 
-            /* Form và các phần tử bên trong */
-            form {
-                margin-bottom: 20px;
-            }
-
-            .flex-container {
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-                align-items: center;
-            }
-
+            /*****************************/
+            /* Search form - single row */
+            /*****************************/
             .search-form {
                 display: flex;
+                /* Không cho xuống dòng */
                 flex-wrap: wrap;
-                gap: 15px;
+                /* Canh giữa theo chiều ngang */
+                justify-content: center;
+                /* Canh giữa theo chiều dọc */
                 align-items: center;
-                margin-bottom: 20px;
+                gap: 16px;
+                margin-bottom: 30px;
+
+                /* Cho phép cuộn ngang nếu quá hẹp (tùy chọn) */
+                overflow-x: auto;
             }
 
-            .search-form label {
-                font-weight: 500;
+            .form-group {
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
 
-            .search-form input,
-            .search-form select {
-                padding: 8px 10px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
+            .form-group label {
+                font-weight: 600;
+                color: #1e40af;
+                white-space: nowrap; /* Giữ label trên 1 dòng */
+
+                /* Nếu muốn, bạn có thể quy định min-width để label không bị co quá nhỏ */
+                /* min-width: 100px; text-align: right; */
+            }
+
+            .form-group input[type="text"],
+            .form-group input[type="date"],
+            .form-group select {
+                padding: 8px 12px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
                 font-size: 14px;
                 outline: none;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+                /* Giới hạn độ rộng tối đa, tránh phình quá to gây xuống dòng */
+                max-width: 150px;
+                /* Hoặc bạn có thể dùng width cố định: width: 150px; */
             }
 
-            .search-form input:focus,
-            .search-form select:focus {
-                border-color: #66afe9;
+            .form-group input[type="text"]:focus,
+            .form-group input[type="date"]:focus,
+            .form-group select:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
             }
 
-            /* Styling cho bảng */
+            /*****************************/
+            /* Form chọn pageSize & nút */
+            /*****************************/
+            .flex-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+
+            .flex-container label {
+                font-weight: 600;
+                color: #1e40af;
+                white-space: nowrap;
+            }
+
+            .flex-container select,
+            .flex-container input[type="number"] {
+                padding: 8px 12px;
+                border: 1px solid #cbd5e1;
+                border-radius: 6px;
+                font-size: 14px;
+                outline: none;
+                transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            }
+
+            .flex-container select:focus,
+            .flex-container input[type="number"]:focus {
+                border-color: #2563eb;
+                box-shadow: 0 0 6px rgba(37, 99, 235, 0.4);
+            }
+
+            .flex-container button {
+                padding: 8px 16px;
+                background: linear-gradient(135deg, #2563eb, #1e40af);
+                border: none;
+                border-radius: 6px;
+                color: #fff;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.3s ease, transform 0.3s ease;
+            }
+
+            .flex-container button:hover {
+                transform: translateY(-2px);
+                background: linear-gradient(135deg, #1e40af, #2563eb);
+            }
+
+            /*****************************/
+            /* Bảng danh sách */
+            /*****************************/
             table {
                 width: 100%;
                 border-collapse: collapse;
                 margin-top: 20px;
+                background: #fff;
             }
 
-            th, td {
-                padding: 12px 15px;
-                border: 1px solid #e0e0e0;
-                text-align: left;
-            }
-
-            th {
-                background-color: #f8f8f8;
-                font-weight: 600;
-            }
-
-            tr:nth-child(even) {
-                background-color: #fafafa;
-            }
-
-            /* Phân trang */
-            .pagination {
-                margin-top: 25px;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                gap: 10px;
-            }
-
-            .pagination button {
-                padding: 8px 16px;
-                background-color: #007bff;
+            table thead {
+                background: linear-gradient(135deg, #2563eb, #1e40af);
                 color: #fff;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.2s ease;
             }
 
-            .pagination button:hover {
-                background-color: #0056b3;
-            }
-
-            /* Các nút trong form */
-            form button {
-                padding: 10px 16px;
-                border: none;
-                background-color: #28a745;
-                color: #fff;
-                border-radius: 4px;
-                cursor: pointer;
+            table th,
+            table td {
+                padding: 14px 20px;
+                border: 1px solid #e2e8f0;
+                text-align: center;
                 font-size: 14px;
-                transition: background-color 0.2s ease;
             }
 
-            form button:hover {
-                background-color: #218838;
+            table tbody tr {
+                transition: background 0.3s ease;
+            }
+
+            table tbody tr:nth-child(even) {
+                background: #f9fafb;
+            }
+
+            table tbody tr:hover {
+                background: #eff6ff;
             }
 
             /* Nút chi tiết */
             .btn-detail {
+                display: inline-block;
                 padding: 6px 12px;
-                background-color: #17a2b8;
+                background: #2563eb;
                 color: #fff;
-                text-decoration: none;
                 border-radius: 4px;
-                transition: background-color 0.2s ease;
+                text-decoration: none;
+                font-weight: 500;
+                transition: background 0.3s ease, transform 0.3s ease;
             }
 
             .btn-detail:hover {
-                background-color: #138496;
+                background: #1e40af;
+                transform: translateY(-1px);
             }
 
-            /* Styling cho select và input custom page size */
-            #pageSize,
-            #customPageSize {
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                background-color: #fff;
+            /*****************************/
+            /* Phân trang */
+            /*****************************/
+            .pagination {
+                display: flex;
+                justify-content: center; /* Canh giữa pagination */
+                align-items: center;
+                gap: 10px;
+                margin-top: 30px;
+                flex-wrap: wrap;
             }
 
-            /* Responsive */
-            @media (max-width: 768px) {
-                .flex-container, .search-form {
-                    flex-direction: column;
-                    align-items: flex-start;
-                }
-                .pagination {
-                    flex-direction: column;
-                    gap: 5px;
-                }
+            .pagination button {
+                padding: 8px 14px;
+                background: #2563eb;
+                color: #fff;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 600;
+                transition: background 0.3s ease, transform 0.3s ease;
             }
 
+            .pagination button:hover {
+                background: #1e40af;
+                transform: translateY(-2px);
+            }
 
+            .pagination span {
+                font-size: 16px;
+                color: #1e3a8a;
+                font-weight: 600;
+            }
         </style>
     </head>
     <body>
@@ -201,9 +228,56 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
 
-                    <h2>List Warranty Card</h2>   
+                    <h2>List of Warranty Cards</h2>   
 
                     <form method="get" action="warrantyCardRepairContractor">
+
+                        <!-- Dùng .search-form để dàn ngang -->
+                        <div class="search-form">
+
+                            <div class="form-group">
+                                <label for="warrantyCardCode">Warranty Card Code:</label>
+                                <input type="text" name="warrantyCardCode" id="warrantyCardCode" 
+                                       value="${param.warrantyCardCode}" 
+                                       pattern="[A-Za-z]+" 
+                                       title="Only letters allowed (no spaces, digits or special characters)" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="staffName">Staff Name:</label>
+                                <input type="text" name="staffName" id="staffName" 
+                                       value="${param.staffName}" 
+                                       pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" 
+                                       title="Only letters, single space between words, no digits/special chars" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="date">Date (yyyy-MM-dd):</label>
+                                <input type="date" name="date" id="date" value="${param.date}" />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="status">Status:</label>
+                                <select name="status" id="status">
+                                    <option value="waiting" ${param.status eq 'waiting' ? "selected" : ""}>waiting</option>
+                                    <option value="receive" ${param.status eq 'receive' ? "selected" : ""}>receive</option>
+                                    <option value="cancel"  ${param.status eq 'cancel'  ? "selected" : ""}>cancel</option>
+                                    <option value="done"    ${param.status eq 'done'    ? "selected" : ""}>done</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="note">Note:</label>
+                                <input type="text" name="note" id="note" 
+                                       value="${param.note}" 
+                                       pattern="^(?!\s+$)[A-Za-z0-9 ]+$" 
+                                       title="No special characters, not all whitespace" />
+                            </div>
+
+                        </div><!-- /.search-form -->
+
+
+                        <!-- Chọn pageSize & nút -->
                         <div class="flex-container">
                             <div>
                                 <label for="pageSize">Products per page:</label>
@@ -222,47 +296,11 @@
                                            value="${param.customPageSize != null ? param.customPageSize : ''}" />
 
                                 <button type="submit">Apply</button>
-                                <div>
-                                    <button type="submit">Search</button>
-                                </div>
+                                <button type="submit">Search</button>
                             </div>                        
                         </div>
 
-                        <div class="search-form">
-                            <!-- Warranty Card Code: Chỉ cho phép chữ cái, không có dấu cách, số hay kí tự đặc biệt -->
-                            <label for="warrantyCardCode">Warranty Card Code:</label>
-                            <input type="text" name="warrantyCardCode" id="warrantyCardCode" 
-                                   value="${param.warrantyCardCode}" 
-                                   pattern="[A-Za-z]+" 
-                                   title="Chỉ được nhập chữ cái (không dấu cách, số hay kí tự đặc biệt)" />
-
-                            <!-- Staff Name: Cho phép chữ cái, các từ cách nhau đúng 1 dấu cách, không cho số, kí tự đặc biệt và không toàn khoảng trắng -->
-                            <label for="staffName">Staff Name:</label>
-                            <input type="text" name="staffName" id="staffName" 
-                                   value="${param.staffName}" 
-                                   pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" 
-                                   title="Nhập chữ cái, các từ cách nhau đúng 1 dấu cách, không nhập số hoặc kí tự đặc biệt và không toàn khoảng trắng" />
-
-                            <label for="date">Date (yyyy-MM-dd):</label>
-                            <input type="date" name="date" id="date" value="${param.date}" />
-
-                            <label for="status">Status:</label>
-                            <select name="status" id="status">
-                                <option value="waiting" ${param.status eq 'waiting' ? "selected" : ""}>waiting</option>
-                                <option value="receive" ${param.status eq 'receive' ? "selected" : ""}>receive</option>
-                                <option value="cancel"  ${param.status eq 'cancel'  ? "selected" : ""}>cancel</option>
-                                <option value="done"    ${param.status eq 'done'    ? "selected" : ""}>done</option>
-                            </select>
-
-                            <!-- Note: Không cho phép nhập kí tự đặc biệt và không toàn khoảng trắng -->
-                            <label for="note">Note:</label>
-                            <input type="text" name="note" id="note" 
-                                   value="${param.note}" 
-                                   pattern="^(?!\s+$)[A-Za-z0-9 ]+$" 
-                                   title="Không được nhập kí tự đặc biệt và không toàn khoảng trắng" />
-                        </div>
-                        <br/>
-                        <br/>
+                        <!-- Bảng danh sách -->
                         <table>
                             <thead>
                                 <tr>
@@ -291,7 +329,7 @@
                                 </c:forEach>
                                 <c:if test="${empty contractorCards}">
                                     <tr>
-                                        <td colspan="6">Không tìm thấy contractor card nào.</td>
+                                        <td colspan="6">No contractor card found.</td>
                                     </tr>
                                 </c:if>
                             </tbody>
@@ -300,31 +338,28 @@
                         <!-- Khu vực phân trang -->
                         <div class="pagination">
                             <c:if test="${totalPages > 1}">
-                                <button type="submit" name="currentPage" value="1">Start</button>
+                                <button type="submit" name="currentPage" value="1">First</button>
 
                                 <c:if test="${currentPage > 1}">
                                     <button type="submit" name="currentPage" value="${currentPage - 1}">Previous</button>
                                 </c:if>
 
-                                <span>Trang ${currentPage} / ${totalPages}</span>
+                                <span>Page ${currentPage} / ${totalPages}</span>
 
                                 <c:if test="${currentPage < totalPages}">
                                     <button type="submit" name="currentPage" value="${currentPage + 1}">Next</button>
                                 </c:if>
 
-                                <button type="submit" name="currentPage" value="${totalPages}">End</button>
+                                <button type="submit" name="currentPage" value="${totalPages}">Last</button>
                             </c:if>
                         </div>
                     </form>
-
-
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
 
         <script src="js/app.js"></script>
-
         <script>
                                     function toggleCustomPageSize() {
                                         const pageSizeSelect = document.getElementById("pageSize");
