@@ -21,7 +21,7 @@ import java.sql.Date;
         maxRequestSize = 50 * 1024 * 1024 // 50MB
 )
 public class Profile extends HttpServlet {
-
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,7 +30,7 @@ public class Profile extends HttpServlet {
         HttpSession session = request.getSession();
         Customer customerOnSession = (Customer) session.getAttribute("customer");
         Staff staffOnSession = (Staff) session.getAttribute("staff");
-
+        
         if (customerOnSession != null) {
             Customer customerProfile = customerDAO.getCustomerByID(customerOnSession.getCustomerID());
             request.setAttribute("customerProfile", customerProfile);
@@ -42,7 +42,7 @@ public class Profile extends HttpServlet {
         }
         request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -51,7 +51,7 @@ public class Profile extends HttpServlet {
         CustomerDAO customerDAO = new CustomerDAO();
         StaffDAO staffDAO = new StaffDAO();
         boolean isUpdated = false;
-
+        
         if ("customer".equals(userType)) {
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
@@ -62,7 +62,7 @@ public class Profile extends HttpServlet {
             String dateOfBirth = request.getParameter("dateOfBirth");
             Customer updatedCustomer = new Customer(id, name, gender, Date.valueOf(dateOfBirth), email, phone, address);
             isUpdated = customerDAO.updateCustomerWithNoImage(updatedCustomer);
-
+            
         } else if ("staff".equals(userType)) {
             int id = Integer.parseInt(request.getParameter("id"));
             String name = request.getParameter("name");
@@ -72,18 +72,18 @@ public class Profile extends HttpServlet {
             String address = request.getParameter("address");
             String dateOfBirth = request.getParameter("dateOfBirth");
             isUpdated = staffDAO.updateStaffWithNoImage(id, name, gender, dateOfBirth, email, phone, address);
-
+            
         } else if ("updateImage".equals(userType)) {
             int id = Integer.parseInt(request.getParameter("id"));
             Part imagePart = request.getPart("image");
-
+            
             String fileName = imagePart.getSubmittedFileName();
             if (fileName == null || fileName.isEmpty()) {
-                request.setAttribute("message", "Vui lòng tải lên ảnh sản phẩm.");
+                request.setAttribute("message", "");
                 doGet(request, response);
                 return;
             }
-
+            
             String lowerCaseFileName = fileName.toLowerCase();
             if (!(lowerCaseFileName.endsWith(".jpg") || lowerCaseFileName.endsWith(".jpeg") || lowerCaseFileName.endsWith(".png"))) {
                 request.setAttribute("message", "Ảnh phải có định dạng JPG, JPEG hoặc PNG.");
@@ -109,12 +109,25 @@ public class Profile extends HttpServlet {
                 }
             }
         }
-
-        if (isUpdated) {
-            session.setAttribute("message", "Profile updated successfully!");
-        } else {
-            session.setAttribute("message", "Update failed!");
+        
+        Customer customerOnSession = (Customer) session.getAttribute("customer");
+        Staff staffOnSession = (Staff) session.getAttribute("staff");
+        
+        if (customerOnSession != null) {
+            Customer customerProfile = customerDAO.getCustomerByID(customerOnSession.getCustomerID());
+            request.setAttribute("customerProfile", customerProfile);
+        } else if (staffOnSession != null) {
+            String roleName = staffDAO.getRoleNameByStaffID(staffOnSession.getStaffID());
+            Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+            request.setAttribute("staffProfile", staffProfile);
+            request.setAttribute("roleName", roleName);
         }
-        response.sendRedirect("profile");
+        
+        if (isUpdated) {
+            request.setAttribute("successMessage", "Profile updated successfully!");
+        } else {
+            request.setAttribute("errorMessage", "Update failed!");
+        }
+        request.getRequestDispatcher("profile.jsp").forward(request, response);
     }
 }
