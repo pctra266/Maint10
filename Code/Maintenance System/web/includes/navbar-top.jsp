@@ -53,7 +53,7 @@
                         <img src="${sessionScope.staff.image}" class="avatar img-fluid rounded" alt="${sessionScope.staff.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="Profile">Profile</a>
+                        <a class="dropdown-item" href="profile">Profile</a>
                         <a class="dropdown-item" href="ChangePasswordForm.jsp">Change Password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="logout">Log out</a>
