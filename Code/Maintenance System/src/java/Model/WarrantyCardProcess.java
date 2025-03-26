@@ -1,6 +1,8 @@
 package Model;
 
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class WarrantyCardProcess {
 
@@ -24,6 +26,27 @@ public class WarrantyCardProcess {
         this.actionDate = actionDate;
         this.note = note;
     }
+    
+    public String getFormattedDate() {
+        if (actionDate == null) {
+            return "Null";
+        }
+        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yyyy");
+        return format1.format(new Date(actionDate.getTime()));
+    }
+
+    public String getFormattedDate2() {
+    if (actionDate == null) {
+        return "Null";
+    }
+    SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm");
+    SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+    String hour = hourFormat.format(new Date(actionDate.getTime())) + "h";
+    String date = dateFormat.format(new Date(actionDate.getTime()));
+
+    return hour + " ngày " + date;
+}
 
     // Getters and Setters
     public int getWarrantyCardProcessID() {

@@ -76,15 +76,15 @@ public class BlogController extends HttpServlet {
         Staff staffOnSession = (Staff) session.getAttribute("staff");
         if (staffOnSession == null) {
             staffOnSession = new Staff();
-            staffOnSession.setStaffID(0); // ID mặc định, có thể là 0 hoặc -1
+            staffOnSession.setStaffID(0); 
         }else{
             Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
-        listrole = dao.getAllRole();
-        for (Blog role : listrole) {
-            if (role.getStaff().equals(String.valueOf(staffProfile.getRole()))) {
-                request.setAttribute("Create", "Duoc create");
+            listrole = dao.getAllRole();
+            for (Blog role : listrole) {
+                if (role.getStaff().equals(String.valueOf(staffProfile.getRole()))) {
+                    request.setAttribute("Create", "Duoc create");
+                }
             }
-        }
         }
         String action1 = request.getPathInfo();
 
@@ -129,10 +129,19 @@ public class BlogController extends HttpServlet {
                     }
                 }
                 int totalStaff;
+                int totalPageCount;
                 list = dao.getAllBlogs(name, search, pageIndex, pagesize, column, sortOrder);
-                totalStaff = dao.getAllBlogs(searchname, search, column, sortOrder).size();
-                int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                if(list.size()==0){
+                    request.setAttribute("nolist", "Khong co danh sach ma ban can tim!");
+                    name = "";
+                    list = dao.getAllBlogs(name, search, pageIndex, pagesize, column, sortOrder);
+                    totalStaff = dao.getAllBlogs(name, search, column, sortOrder).size();
+                    totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                }else{
                 
+                    totalStaff = dao.getAllBlogs(name, search, column, sortOrder).size();
+                    totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                }
                 Pagination pagination = new Pagination();
                 
                 pagination.setUrlPattern( "/BlogController");
@@ -247,9 +256,18 @@ public class BlogController extends HttpServlet {
         }
         int totalStaff;
         list = dao.getAllBlogs(name, search, pageIndex, pagesize, column, sortOrder);
-        totalStaff = dao.getAllBlogs(searchname, search, column, sortOrder).size();
-        int totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
-
+        int totalPageCount ;
+        if(list.size()==0){
+                    request.setAttribute("nolist", "Khong co danh sach ma ban can tim!");
+                    name = "";
+                    list = dao.getAllBlogs(name, search, pageIndex, pagesize, column, sortOrder);
+                    totalStaff = dao.getAllBlogs(searchname, search, column, sortOrder).size();
+                    totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                }else{
+                
+                    totalStaff = dao.getAllBlogs(searchname, search, column, sortOrder).size();
+                    totalPageCount = (int) Math.ceil((double) totalStaff / pagesize);
+                }
         Pagination pagination = new Pagination();
 
         pagination.setUrlPattern( "/BlogController");
@@ -277,6 +295,8 @@ public class BlogController extends HttpServlet {
         pagination.setSearchFields(searchFields.toArray(new String[searchFields.size()]));
         pagination.setSearchValues(searchValues.toArray(new String[searchValues.size()]));
 
+       
+        
         request.setAttribute("pagination", pagination);
 
         request.setAttribute("totalPageCount", totalPageCount);
@@ -286,7 +306,6 @@ public class BlogController extends HttpServlet {
         request.setAttribute("sortOrder", sortOrder);
         request.setAttribute("pageIndex", pageIndex);
         request.setAttribute("page_size", page_size);
-        
         
         switch(action){
             case "More":

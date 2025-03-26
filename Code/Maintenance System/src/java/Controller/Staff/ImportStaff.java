@@ -48,14 +48,20 @@ public class ImportStaff extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        Part filePart = request.getPart("file"); // Lấy file từ form
+        Part filePart = request.getPart("file"); 
         List<Staff> staffList = new ArrayList<>();
         List<Integer> allStaffIds = new ArrayList<>();
         List<Integer> duplicateIds = new ArrayList<>();
         List<Integer> empty = new ArrayList<>();
         List<Integer> emptyColum = new ArrayList<>(); 
+        
         if (filePart != null) {
             String fileName = filePart.getSubmittedFileName();
+            if (fileName == null || !fileName.toLowerCase().endsWith(".xlsx")) {
+                request.setAttribute("message", "Định dạng file không hợp lệ! Vui lòng chọn file Excel (.xlsx).");
+                request.getRequestDispatcher("Staff.jsp").forward(request, response);
+                return; // Dừng luôn, không đọc file nữa
+            }
             File file = new File(getServletContext().getRealPath("/") + fileName);
             filePart.write(file.getAbsolutePath()); // Lưu file tạm
             boolean rowerror = true;

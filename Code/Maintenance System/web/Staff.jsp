@@ -280,7 +280,10 @@
                                 <th>Date</th>
                                 <th>Email</th>                               
                                 <th>Change</th>
-                                <th>Delete</th>
+                                <c:if test="${not empty Delete}">
+                                    <th>Delete</th>
+                                </c:if>  
+                                
                             </tr>   
                         </thead>
                         <tbody>
@@ -304,14 +307,16 @@
                                             <i class="fas fa-edit"></i> Change
                                         </a>
                                     </td>
-                                    <td>
-                                        <a href="./StaffController?staffID=${List.getStaffID()}&action=Delete" 
-                                           class="btn btn-danger btn-sm text-white shadow" 
-                                           onclick="return confirm('Are you sure you want to delete this staff member?');">
-                                            <i class="fas fa-trash-alt"></i> Delete
-                                        </a>
-                                    </td>
-
+                                    
+                                    <c:if test="${not empty Delete}">
+                                        <td>
+                                            <a href="./StaffController?staffID=${List.getStaffID()}&action=Delete" 
+                                               class="btn btn-danger btn-sm text-white shadow" 
+                                               onclick="return confirm('Are you sure you want to delete this staff member?');">
+                                                <i class="fas fa-trash-alt"></i> Delete
+                                            </a>
+                                        </td>
+                                    </c:if>  
 
                                 </tr>
                             </c:forEach>

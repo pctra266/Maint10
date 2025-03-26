@@ -5,8 +5,10 @@
 
 package Controller;
 
+import DAO.BlogDAO;
 import DAO.StaffDAO;
 import DAO.StaffLogDAO;
+import Model.Blog;
 import Model.Staff;
 import Model.StaffLog;
 import Utils.Pagination;
@@ -59,10 +61,27 @@ public class StaffController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
         StaffDAO dao = new StaffDAO();
+        StaffDAO staffDAO = new StaffDAO();
+        BlogDAO blog = new BlogDAO();
+        List<Blog> listrole;
         List<Staff> list ;
         String action = request.getParameter("action");
         if (action == null) {
             action = "viewAll";
+        }
+        HttpSession session = request.getSession();
+        Staff staffOnSession = (Staff) session.getAttribute("staff");
+        if (staffOnSession == null) {
+            staffOnSession = new Staff();
+            staffOnSession.setStaffID(0); 
+        }else{
+            Staff staffProfile = staffDAO.getStaffById(staffOnSession.getStaffID());
+            listrole = blog.getAllRole();
+            for (Blog role : listrole) {
+                if (staffProfile.getRole() == 1 && role.getStaff().equals(String.valueOf(staffProfile.getRole()))) {
+                    request.setAttribute("Delete", "Duoc create");
+                }
+            }
         }
         
         switch(action){

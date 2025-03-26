@@ -15,138 +15,137 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
             body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        .wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-        .left-frame {
-            flex: 0 0 25%;
-            padding: 20px;
-            background: #fff;
-            border-right: 1px solid #ddd;
-        }
-        .right-frame {
-            flex: 0 0 75%;
-            padding: 20px;
-            background: #fff;
-            margin-top: -80px;
-        }
-        h2 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #444;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        .alert {
-                padding: 10px;
-                background-color: #009926; 
-                color: white;
-                margin-bottom: 15px;
-                border-radius: 5px;
-                display: block; 
+                font-family: 'Poppins', sans-serif;
+                background-color: #f4f6f9;
+                margin: 0;
+                padding: 0;
+                color: #333;
             }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background-color: #f9f9f9;
-        }
-        button {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .blog-post-detail {
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            padding: 20px;
-            background: #fff;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .blog-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 10px;
-        }
-        .blog-meta {
-            font-size: 14px;
-            color: #777;
-            margin-bottom: 20px;
-        }
-        .blog-content {
-            font-size: 16px;
-            line-height: 1.6;
-            color: #333;
-        }
-        .inputTitle, .textareaContent {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .btn-primary {
-            background-color: #007bff;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn-primary:hover {
-            background-color: #0056b3;
-        }
-        
-        /* Tổng thể form */
-        .form-container {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-            margin: 15px 0;
-        }
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+            .left-frame {
+                flex: 0 0 25%;
+                padding: 20px;
+                background: #fff;
+                border-right: 1px solid #ddd;
+            }
+            .right-frame {
+                flex: 0 0 75%;
+                padding: 20px;
+                background: #fff;
+                margin-top: -80px;
+            }
+            h2 {
+                font-size: 24px;
+                font-weight: 600;
+                color: #444;
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+            .alert {
+                    padding: 10px;
+                    background-color: #009926; 
+                    color: white;
+                    margin-bottom: 15px;
+                    border-radius: 5px;
+                    display: block; 
+                }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border: 1px solid #ddd;
+            }
+            .alert1 {
+                    padding: 10px;
+                    background-color: red; 
+                    color: white;
+                    margin-bottom: 15px;
+                    border-radius: 5px;
+                    display: block; 
+                }
+            th {
+                background-color: #007bff;
+                color: white;
+            }
+            tr:nth-child(even) {
+                background-color: #f9f9f9;
+            }
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: 0.3s;
+            }
+            button:hover {
+                background-color: #0056b3;
+            }
+            .blog-post-detail {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                background: #fff;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            }
+            .blog-title {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: 10px;
+            }
+            .blog-meta {
+                font-size: 14px;
+                color: #777;
+                margin-bottom: 20px;
+            }
+            .blog-content {
+                font-size: 16px;
+                line-height: 1.6;
+                color: #333;
+            }
+            .inputTitle, .textareaContent {
+                width: 100%;
+                padding: 10px;
+                margin: 10px 0;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+            .btn-primary {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
 
-        /* Input và Select */
-        .input-group, .form-select {
-            transition: all 0.3s ease-in-out;
-            border-radius: 8px;
-        }
-
-        .form-select:focus, 
-        .form-control:focus {
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
-            border-color: #007bff;
-        }
-
-
-
-        
-
-    </style>
+            .form-container {
+                background: #fff;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+                margin: 15px 0;
+            }
+            .input-group, .form-select {
+                transition: all 0.3s ease-in-out;
+                border-radius: 8px;
+            }
+            .form-select:focus, 
+            .form-control:focus {
+                box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+                border-color: #007bff;
+            }
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -155,7 +154,6 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <c:if test="${not empty list}">
                     <form class="row g-3 align-items-center form-container" action="BlogController" method="get">
-                            <!-- Search Section -->
                             <div class="col-md-6">
                                 <div class="input-group shadow-sm">
                                     <input class="form-control" type="text" name="searchname" placeholder="🔍 Search..." value="${param.searchname}">
@@ -165,10 +163,6 @@
                                     <button class="btn btn-primary" type="submit">Search</button>
                                 </div>
                             </div>
-
-                            <!-- Sort Section -->
-                            
-
                             <div class="col-md-3">
                                 <select onchange="this.form.submit()" name="sortOrder" id="sortOrder" class="form-select shadow-sm">
                                     <option value="">Sort Order</option>
@@ -189,6 +183,9 @@
                                 <label class="form-label ms-2">entries</label>
                             </div>
                         </form>  
+                </c:if>
+                    <c:if test="${not empty nolist}">
+                        <div class="alert1">${nolist}</div>
                     </c:if>
                     <div class="left-frame blog-frame ">
                         <h2>Danh sách bài viết của Nhân Viên</h2>
@@ -316,9 +313,7 @@
                         <button type="submit">Save</button>
                     </form>
                 </c:if>
-                <c:if test="${not empty totalPageCount and totalPageCount != 0 and not empty list}">
                     <jsp:include page="/includes/pagination.jsp" />
-                </c:if>                      
                     
             </main>
              <jsp:include page="/includes/footer.jsp" />
