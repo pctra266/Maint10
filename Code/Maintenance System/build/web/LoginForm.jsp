@@ -58,6 +58,7 @@
                                                 <button type="submit" class="btn btn-lg btn-primary">Sign in</button>
                                             </div>
                                             <a style="color: red">${requestScope.error}</a>
+                                             <a style="color: red">${notification}</a>
                                         </form>
                                     </div>
                                 </div>

@@ -21,7 +21,7 @@
 
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-        <title>Component Warehouse</title>
+        <title>Your Warranty Card</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -34,7 +34,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                         <c:if test="${not empty requestScope.warrantyCard}">
+                    <c:if test="${not empty requestScope.warrantyCard}">
                         <table class="table table-bordered">
                             <tr><th>Warranty Card ID:</th><td>${warrantyCard.warrantyCardID}</td></tr>
                             <tr><th>Warranty Card Code:</th><td>${warrantyCard.warrantyCardCode}</td></tr>
@@ -59,26 +59,26 @@
                                     </c:if>
                                 </td>
                             </tr>
-                            
+
                             <tr><th>Customer Name:</th><td>${warrantyCard.customerName}</td></tr>
                             <tr><th>Customer Phone:</th><td>${warrantyCard.customerPhone}</td></tr>
-                            
-                           
-                           
+
+
+
 
                         </table>
                     </c:if>
 
- 
-                    <button>Export PDF</button>
+
+
                     <button><a href="yourwarrantycard">Back to list</a></button>
-                    
-                    
-                    
-                    
+
+
+
+
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
-
+               
             </div>
 
         </div>

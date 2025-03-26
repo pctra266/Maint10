@@ -1,4 +1,4 @@
-﻿USE master
+﻿﻿USE master
 GO
 
 /*******************************************************************************
@@ -13,8 +13,7 @@ END
 GO
 CREATE DATABASE MaintainManagement
 GO
-USE MaintainManagement
-GO
+
 --('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
 CREATE TABLE [Role] (
     RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -349,8 +348,6 @@ CREATE TABLE Invoice (
 
 
 
-ALTER TABLE Payment
-ADD InvoiceID INT NULL REFERENCES Invoice(InvoiceID);
 
 -- Payment Table
 CREATE TABLE Payment (
@@ -421,7 +418,7 @@ CREATE TABLE StaffBlogPosts (
     FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
 );
 
-=======
+
 
 CREATE TABLE MarketingServiceSection (
     SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -484,7 +481,3 @@ BEGIN
     SELECT UnknownProductID FROM inserted WHERE UnknownProductID IS NOT NULL;
 END
 GO
-
-
-
-
