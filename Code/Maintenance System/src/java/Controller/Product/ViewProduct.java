@@ -325,7 +325,6 @@ public class ViewProduct extends HttpServlet {
                 uploadDir.mkdirs();
             }
 
-            // Duyệt qua các Part, chỉ xử lý các file từ input có name "image"
             for (Part part : parts) {
                 if (part.getName().equals("image") && part.getSize() > 0) {
                     String fileName = Paths.get(part.getSubmittedFileName()).getFileName().toString();

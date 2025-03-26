@@ -15,139 +15,263 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            /* CSS cho nội dung trong main */
-            main.content {
-                background-color: #ffffff;
+            /* Đặt font mặc định, reset cơ bản */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
                 font-family: 'Inter', sans-serif;
-                color: #333;
-                border-radius: 10px;
-                margin: 10px;
             }
+
+            body {
+                background-color: #F8FAFF; /* Nền xanh dương rất nhạt */
+                color: #333;
+            }
+
+            /* Layout tổng thể */
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+
+            /* Thanh điều hướng bên trái */
+            .navbar-left {
+                width: 220px;
+                background-color: #FFFFFF;
+                border-right: 1px solid #E0E0E0;
+                padding: 20px;
+            }
+
+            /* Khu vực chính */
+            .main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                background-color: #F8FAFF;
+            }
+
+            /* Thanh điều hướng trên */
+            .navbar-top {
+                background-color: #FFFFFF;
+                padding: 15px 20px;
+                border-bottom: 1px solid #E0E0E0;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            /* Nội dung chính */
+            main.content {
+                flex: 1;
+                padding: 20px 30px;
+            }
+
             /* Tiêu đề */
             main.content h2 {
-                font-size: 32px;
+                font-size: 24px;
                 font-weight: 600;
-                color: #2c3e50;
-                margin-bottom: 30px;
-                border-bottom: 2px solid #e1e1e1;
-                padding-bottom: 10px;
+                margin-bottom: 20px;
+                color: #2563EB; /* Xanh dương đậm */
             }
-            /* Form */
+
+            /* ------------ FORM TÌM KIẾM ------------ */
             main.content form {
                 display: flex;
                 flex-wrap: wrap;
-                gap: 15px;
-                align-items: center;
-                margin-bottom: 30px;
+                gap: 10px;
+                margin-bottom: 20px;
             }
 
+            /* Các input trong form tìm kiếm */
             main.content form input[type="text"],
             main.content form input[type="date"] {
-                flex: 1;
-                min-width: 180px;
-                padding: 12px 15px;
-                font-size: 16px;
-                border: 1px solid #ccc;
+                padding: 8px 12px;
+                border: 1px solid #CBD5E1;
                 border-radius: 6px;
-                transition: border-color 0.3s ease;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s;
             }
 
             main.content form input[type="text"]:focus,
             main.content form input[type="date"]:focus {
-                border-color: #3498db;
                 outline: none;
+                border-color: #2563EB; /* Xanh dương đậm */
             }
 
-            main.content form span {
-                font-size: 14px;
-                color: #e74c3c;
-                margin-top: 5px;
-            }
-
-            /* Nút */
-            main.content button {
-                background: linear-gradient(135deg, #7faaff, #8bc1ff);
+            /* Nút submit trong form tìm kiếm */
+            main.content form button[type="submit"] {
+                background-color: #2563EB;
                 color: #fff;
                 border: none;
-                padding: 12px 20px;
-                font-size: 16px;
+                padding: 8px 16px;
                 border-radius: 6px;
                 cursor: pointer;
-                transition: background 0.3s ease;
-                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.2s, transform 0.2s;
+            }
+
+            main.content form button[type="submit"]:hover {
+                background-color: #1E4FB8; /* Tông đậm hơn khi hover */
+                transform: translateY(-1px);
+            }
+
+            /* ------------ NÚT THÊM / ALL PRODUCT ------------ */
+            main.content button {
+                background-color: #2563EB;
+                color: #fff;
+                border: none;
+                padding: 8px 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.2s, transform 0.2s;
                 margin-right: 10px;
             }
 
             main.content button:hover {
-                background: linear-gradient(135deg, #0d47a1, #002171);
+                background-color: #1E4FB8;
+                transform: translateY(-1px);
             }
 
-            /* Nút riêng cho "search" */
-            main.content button.search {
-                background: linear-gradient(135deg, #7faaff, #8bc1ff);
+            /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
+
+            /* Form chọn số phần tử trên trang (cùng với hai nút) */
+            .page-size-form {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center; /* Canh giữa toàn bộ phần tử trong form */
+                gap: 8px;
+                margin: 20px 0; /* Thêm khoảng cách trên - dưới */
+            }
+            .page-size-form label {
+                font-size: 14px;
+                font-weight: 500;
             }
 
-            main.content button.search:hover {
-                background: linear-gradient(135deg, #0d47a1, #002171);
+            .page-size-form select,
+            .page-size-form input[type="number"] {
+                padding: 6px 10px;
+                border-radius: 6px;
+                border: 1px solid #CBD5E1;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s;
             }
 
-            /* Bảng */
+            .page-size-form select:focus,
+            .page-size-form input[type="number"]:focus {
+                outline: none;
+                border-color: #2563EB;
+            }
+
+            /* ------------ BẢNG DANH SÁCH SẢN PHẨM ------------ */
             main.content table {
                 width: 100%;
                 border-collapse: collapse;
-                margin-top: 30px;
-                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                margin-top: 20px;
+                background-color: #FFFFFF;
+                border-radius: 8px;
+                overflow: hidden; /* Để border-radius áp dụng cho thead, tbody */
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            }
+
+            main.content table thead {
+                background-color: #EFF6FF; /* Xanh dương nhạt cho header */
             }
 
             main.content table th,
             main.content table td {
-                padding: 15px 20px;
+                padding: 12px 15px;
                 text-align: left;
-                border-bottom: 1px solid #e0e0e0;
+                font-size: 14px;
+                border-bottom: 1px solid #E5E7EB;
             }
 
             main.content table th {
-                background-color: #f7f7f7;
                 font-weight: 600;
-                color: #2c3e50;
+                color: #334155;
             }
 
-            main.content table tr:nth-child(even) {
-                background-color: #fafafa;
+            main.content table tbody tr:last-child td {
+                border-bottom: none; /* Bỏ đường kẻ dưới cùng */
             }
 
-            /* CSS cho phân trang */
+            /* Hover trên từng hàng */
+            main.content table tbody tr:hover {
+                background-color: #F1F5F9;
+            }
+
+            /* ------------ PHÂN TRANG ------------ */
+
+            /* Phân trang (pagination) */
             .pagination {
+                margin-top: 20px;
                 display: flex;
-                justify-content: center;
+                gap: 6px;
                 align-items: center;
-                margin: 30px 0;
+                flex-wrap: wrap;
+                justify-content: center; /* Canh giữa pagination */
             }
 
             .pagination a {
-                margin: 0 8px;
-                padding: 10px 15px;
-                font-size: 16px;
-                color: #333;
-                background-color: #ffffff;
-                border: 1px solid #ccc;
+                display: inline-block;
+                padding: 8px 12px;
                 border-radius: 6px;
+                border: 1px solid #CBD5E1;
                 text-decoration: none;
-                transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+                color: #334155;
+                font-size: 14px;
+                transition: background-color 0.2s, color 0.2s, transform 0.2s;
             }
 
             .pagination a:hover {
-                background-color: #007bff;
+                background-color: #2563EB;
                 color: #fff;
-                transform: translateY(-3px);
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                border-color: #2563EB;
+                transform: translateY(-1px);
             }
 
             .pagination a.active {
-                background: linear-gradient(135deg, #007bff, #00c6ff);
+                background-color: #2563EB;
                 color: #fff;
-                border-color: #007bff;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                border-color: #2563EB;
+            }
+
+            /* ------------ CÁC THÔNG BÁO LỖI ------------ */
+            span[id$="Error"] {
+                display: block;
+                margin-top: -8px;
+                margin-bottom: 8px;
+                font-size: 12px;
+                color: #EF4444; /* Màu đỏ cảnh báo */
+            }
+
+            /* ------------ RESPONSIVE ------------ */
+            @media (max-width: 768px) {
+                .wrapper {
+                    flex-direction: column;
+                }
+
+                .navbar-left {
+                    width: 100%;
+                    border-right: none;
+                    border-bottom: 1px solid #E0E0E0;
+                }
+
+                .page-size-form {
+                    margin-left: 0;
+                    margin-top: 10px;
+                }
+
+                main.content table th,
+                main.content table td {
+                    font-size: 13px;
+                    padding: 10px;
+                }
             }
 
         </style>
@@ -159,7 +283,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                    <h2>List of Unknown Products</h2>
+                    <h2 style="text-align: center">List of Unknown Products</h2>
 
                     <!-- Form tìm kiếm -->
                     <form action="listUnknown" method="get">
@@ -200,12 +324,10 @@
                         <input type="hidden" name="pageSize" value="${pageSize}" />
 
                         <button type="submit">Search</button>
+
                     </form>
 
-                    <button onclick="location.href = 'addUnknown'">Add Unknown Product</button>
-                    <button class="search" onclick="window.location.href = 'listUnknown'">
-                        All Product
-                    </button>
+
 
                     <!-- Form chọn số phần tử trên mỗi trang -->
                     <form action="listUnknown" method="get" class="page-size-form">
@@ -239,6 +361,11 @@
                                style="display: none;" />
 
                         <button type="submit">Apply</button>
+
+                        <button style="align-items: end" onclick="location.href = 'addUnknown'">Add Unknown Product</button>
+                        <button class="search" onclick="window.location.href = 'listUnknown'">
+                            All Product
+                        </button>
                     </form>
 
                     <!-- Bảng danh sách sản phẩm -->

@@ -113,7 +113,7 @@
                                     </div>
                                     <div>
                                         <form action="searchwc" class="h-100" method="post">
-                                            <input type="hidden" id="warrantyCode" name="warrantyCode" value="${card.warrantyCardCode}" >
+                                            <input type="hidden" id="warrantyCardCode" name="warrantyCardCode" value="${card.warrantyCardCode}" >
                                             <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
                                         </form>
                                     </div>
@@ -151,7 +151,7 @@
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
                                     <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action !='completed' && latestProcess.action !='cancel' ? '' : 'disabled'}>Create Invoice</button>
                                 </form>
-                             
+
                                 <form action="WarrantyCard/Detail" method="post" class="d-inline">
                                     <input type="hidden" name="action" value="process">
                                     <input type="hidden" name="ID" value="${card.warrantyCardID}">
@@ -202,7 +202,7 @@
                                         </form>
 
                                     </div>
-                                    <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto">
+                                    <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto" target="blank">
                                         <input type="hidden" name="action" value="createComponentRequest" readonly> 
                                         <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
                                         <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
@@ -341,35 +341,38 @@
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-4" >
                             <h3>Component request:</h3>
                             <c:if test="${empty componentRequests}">
                                 <h4 class="text-center text-black-50">No component request created.</h4>
                             </c:if>
-                            <c:forEach var="request" items="${componentRequests.keySet()}">
-                                <table class="table table-bordered ">
-                                    <thead>
-                                        <tr>
-                                            <td width="60%">${request.componentRequestID}</td>
-                                            <td width="20%">Quantity</td>
-                                            <td width="20%">Status</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
+                            <div style="max-height:20rem; overflow-y: auto">
+                                <c:forEach var="request" items="${componentRequests.keySet()}">
+                                    <table class="table table-bordered " >
+                                        <thead>
                                             <tr>
-                                                <td>${requestDetail.componentName}</td>
-                                                <td>${requestDetail.quantity}</td>
-                                                <c:if test="${status.index==0}">
-                                                    <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
-                                                        ${request.status}
-                                                    </td>
-                                                </c:if>
-                                            </tr>   
-                                        </c:forEach>
-                                    </tbody>
-                                </table>
-                            </c:forEach>
+                                                <td width="60%">${request.componentRequestID}</td>
+                                                <td width="20%">Quantity</td>
+                                                <td width="20%">Status</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
+                                                <tr>
+                                                    <td>${requestDetail.componentName}</td>
+                                                    <td>${requestDetail.quantity}</td>
+                                                    <c:if test="${status.index==0}">
+                                                        <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
+                                                            ${request.status}
+                                                        </td>
+                                                    </c:if>
+                                                </tr>   
+                                            </c:forEach>
+                                        </tbody>
+                                    </table>
+                                </c:forEach> 
+                            </div>
+
                             <%--For showing images --%>
                             <h3 class="mt-2">Medias:</h3>
                             <c:set var="count" value="${fn:length(images)+fn:length(videos)}"/>
@@ -402,6 +405,7 @@
 
                     <div class="row ms-0">
                         <div class="col-md-8 row ">
+
                             <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
                                 <div class = "col-md-12 d-flex justify-content-center mt-2" >
                                     <form action="WarrantyCard/Detail" method="post" class="d-inline">
@@ -412,6 +416,7 @@
                                     </form>                    
                                 </div>
                             </c:if>
+
                         </div>
 
                 </main>
@@ -587,9 +592,9 @@
                                             input.files = dataTransfer.files;
                                             previewMedia({target: input});
                                         }
-                                 
+
 
             </script>
-          
+
     </body>
 </html>

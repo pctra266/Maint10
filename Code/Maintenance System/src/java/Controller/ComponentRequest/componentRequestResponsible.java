@@ -7,7 +7,7 @@ package Controller.ComponentRequest;
 
 import DAO.ComponentRequestResponsibleDAO;
 import Model.ComponentRequestResponsible;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;

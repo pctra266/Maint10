@@ -238,13 +238,20 @@ public class PermissionDAO extends DBContext {
     }
 //
 
-    public static void main(String[] args) {
-        PermissionDAO permissionDAO = new PermissionDAO();
-        ArrayList<Permissions> list = permissionDAO.getPermissionByRoleID(1);
-        for (Permissions p : list) {
-            System.out.println(p.getPermissionID());
-        }
+   public static void main(String[] args) {
+    PermissionDAO permissionDAO = new PermissionDAO();
+    List<Integer> permissions = permissionDAO.getPermissiIDonByRoleID(2);
 
+    // Kiểm tra danh sách có dữ liệu không
+    if (permissions.isEmpty()) {
+        System.out.println("Không có quyền nào được trả về!");
+    } else {
+        System.out.println("Danh sách quyền của roleId=1:");
+        for (Integer permId : permissions) {
+            System.out.println("Permission ID: " + permId);
+        }
     }
+}
+
 
 }

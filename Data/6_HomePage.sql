@@ -14,19 +14,7 @@ INSERT INTO MarketingServiceSection (Title, SubTitle)
 VALUES ('Our Services', 'We provide comprehensive repair and maintenance services for mobile phones and laptops.');
 
 INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Screen Replacement', 'Expert screen replacement services for smartphones and laptops using high-quality parts.', '/img/services/screen_replacement.jpg', 1);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Battery Replacement', 'Reliable battery replacement service ensuring longer device performance.', '/img/services/battery_replacement.jpg', 2);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Software Troubleshooting', 'Professional software troubleshooting and system updates for all mobile and laptop devices.', '/img/services/software_troubleshooting.jpg', 3);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Water Damage Repair', 'Specialized repair for water-damaged smartphones and laptops, restoring full functionality.', '/img/services/water_damage_repair.jpg', 4);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Hardware Diagnostics', 'Comprehensive hardware diagnostics and repair solutions for your devices.', '/img/services/hardware_diagnostics.jpg', 5);
-
-INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
-VALUES (1, 'Custom Upgrades', 'Upgrade your laptop or phone with the latest components for improved performance.', '/img/services/custom_upgrades.jpg', 6);
+VALUES (1, 'Software Troubleshooting', 'Professional software troubleshooting and system updates for all mobile and laptop devices.', '/img/serviceItems/service1.jpg', 1),
+(1, 'Water Damage Repair', 'Specialized repair for water-damaged smartphones and laptops, restoring full functionality.', '/img/serviceItems/service2.PNG', 2),
+(1, 'Hardware Diagnostics', 'Comprehensive hardware diagnostics and repair solutions for your devices.', '/img/serviceItems/service3.jpg', 3),
+(1, 'Custom Upgrades', 'Upgrade your laptop or phone with the latest components for improved performance.', '/img/serviceItems/service4.jpg', 4);

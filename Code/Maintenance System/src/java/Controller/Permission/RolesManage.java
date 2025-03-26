@@ -60,7 +60,7 @@ public class RolesManage extends HttpServlet {
       PermissionDAO permissionDao = new PermissionDAO();
       ArrayList<Roles> roleList = permissionDao.getAllRole();
       request.setAttribute("roleList", roleList);
-      request.getRequestDispatcher("Role.jsp").forward(request, response);
+      request.getRequestDispatcher("Permissions.jsp").forward(request, response);
     } 
 
     /** 

@@ -1,5 +1,7 @@
 package Model;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -55,6 +57,19 @@ public class Staff {
         this.address = address;
         this.image = image;
     }
+//    private String formatDate(String dateStr) {
+//        if (dateStr == null || dateStr.isEmpty()) {
+//            return "Null";
+//        }
+//        try {
+//            SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd"); // Định dạng gốc từ database
+//            SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy"); // Định dạng mong muốn
+//            Date date = inputFormat.parse(dateStr);
+//            return outputFormat.format(date);
+//        } catch (Exception e) {
+//            return "Invalid Date"; // Trả về lỗi nếu định dạng không đúng
+//        }
+//    }
 
       public Staff(int staffID, String name, String gender, String date, String email, String phone, String address) {
         this.staffID = staffID;

@@ -5,7 +5,7 @@
 package Controller.Permission;
 
 import DAO.PermissionDAO;
-import Model.Pagination;
+
 import Model.Permissions;
 import Model.RolePermission;
 import Model.Roles;
@@ -52,39 +52,35 @@ public class PermissionsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PermissionDAO permissionDao = new PermissionDAO();
+        
+ PermissionDAO permissionDao = new PermissionDAO();
+    String roleIdStr = request.getParameter("roleId");
 
-        // Lấy thông tin từ request
-        String roleID = request.getParameter("role");
-       
-        // Khai báo danh sách và biến tổng số trang
-        List<Permissions> allPermissions = new ArrayList<>();
-        int totalPermissions = 0;
-        int totalPages = 1;
+    if (roleIdStr == null || roleIdStr.trim().isEmpty()) {
+        request.setAttribute("message", "Vui lòng chọn một vai trò!");
+        request.getRequestDispatcher("Permissions.jsp").forward(request, response);
+        return;
+    }
 
-        try {
-            int roleid = Integer.parseInt(roleID);
+    try {
+        int roleId = Integer.parseInt(roleIdStr);
 
-            allPermissions = permissionDao.getAllPermission();
+        ArrayList<Permissions> permissionList = permissionDao.getAllPermission();
+        List<Integer> rolePermissions = permissionDao.getPermissiIDonByRoleID(roleId); // Sửa tên hàm
 
-         ;
+        request.setAttribute("permissionList", permissionList);
+        request.setAttribute("rolePermissions", new HashSet<>(rolePermissions));
+        request.setAttribute("roleId", roleId);
 
-            List<Integer> rolePermissions = permissionDao.getPermissiIDonByRoleID(roleid);
+        request.getRequestDispatcher("Permissions.jsp").forward(request, response);
 
-            // Gửi dữ liệu qua JSP
-            request.setAttribute("allPermissions", allPermissions);
-            request.setAttribute("rolePermissions", new HashSet<>(rolePermissions));
-            request.setAttribute("roleId", roleid);
-            
-
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            request.setAttribute("error", "Invalid Role ID");
-        }
-
-        // Chuyển hướng sang trang JSP
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
+        request.setAttribute("message", "Role ID không hợp lệ!");
         request.getRequestDispatcher("Permissions.jsp").forward(request, response);
     }
+    }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -100,8 +96,7 @@ public class PermissionsServlet extends HttpServlet {
         PermissionDAO permissionDao = new PermissionDAO();
         String role = request.getParameter("role_id");
 
-        String sort = request.getParameter("sort");
-     
+       
 
         if (role == null || role.trim().isEmpty()) {
             request.setAttribute("message", "Invalid role ID!");
@@ -110,7 +105,7 @@ public class PermissionsServlet extends HttpServlet {
         }
 
         try {
-        
+
             int roleId = Integer.parseInt(role);
 
             String[] selectedPermissions = request.getParameterValues("permissions");
@@ -137,14 +132,12 @@ public class PermissionsServlet extends HttpServlet {
                 }
             }
 
-          
+            response.sendRedirect("permissions?roleId=" + roleId);
 
-            response.sendRedirect("permissions?role=" + roleId);
-       
 
         } catch (NumberFormatException e) {
             request.setAttribute("message", "Role ID không hợp lệ!");
-      
+
         }
     }
 

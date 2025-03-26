@@ -24,6 +24,7 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center">List Component Request</h1>
+                     <div class="alert-primary">${mess}</div>
                     <div>
                         <form method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="viewListComponentRequest">

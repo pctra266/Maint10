@@ -44,7 +44,7 @@
                                                 <th>Issued Date</th>
                                                 <th>Due Date</th>
                                                 <th>Status</th>
-                                                <th>Created By</th>
+                                                <th>For</th>
                                                 <th>Customer</th>
                                                 <th>Action</>
                                             </tr>
@@ -54,30 +54,53 @@
                                                 <tr>
                                                     <td>${loop.index + 1}</td>
                                                     <td>${invoice.invoiceNumber}</td>
-                                                    <td>${invoice.amount}</td>
+                                                    <td>${invoice.getAmountFormat()} VND</td>
                                                     <td>${invoice.issuedDate}</td>
                                                     <td>${invoice.dueDate}</td>
                                                     <td>${invoice.status}</td>
-                                                    <td>${invoice.createdBy}</td>
+                                                    <c:choose>
+                                                    <c:when test="${invoice.customerID!=null}">
+                                                        <td>For customer</td>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <td>For company</td>
+                                                    </c:otherwise>
+                                                        
+                                                    </c:choose>
                                                     <td>${warrantyCard.customerName}</td>
-                                                    <td class="d-flex flex-column">
-                                                        <form action="vnpayajax" id="frmCreateOrder-${invoice.invoiceID}" method="post" >     
-                                                            <input type="hidden" name="ID" value="${invoice.invoiceID}">
-                                                            <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." 
-                                                                   data-val-required="The Amount field is required." id="amount-${invoice.invoiceID}"  
-                                                                   name="amount" type="number" value="${price}" />
-                                                            <input type="hidden" id="bankCode-${invoice.invoiceID}" name="bankCode" value="">
-                                                            <input type="hidden" id="language-${invoice.invoiceID}" name="language" value="en">
-                                                            <button type="submit" class="btn btn-success me-2 payment-btn" data-id="${invoice.invoiceID}" ${invoice.status == 'paid' ? 'disabled' : ''}>Bank</button>
-                                                        </form>
-                                                        <form action="Invoice/PayCash" method="post"  onsubmit="return confirm('Confirm cash payment for Invoice #${invoice.invoiceNumber}?');">
-                                                            <input type="hidden" name="invoiceID" value="${invoice.invoiceID}">
-                                                            <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
-                                                            <button type="submit" class="btn btn-primary mt-2" ${invoice.status == 'paid' ? 'disabled' : ''}>Cash</button>
-                                                        </form>
-                                                    </td>
+                                                    <c:choose>
+                                                    <c:when test="${invoice.customerID!=null}">
+                                                        <td class="d-flex flex-column">
+                                                            <form action="vnpayajax" id="frmCreateOrder-${invoice.invoiceID}" method="post" >     
+                                                                <input type="hidden" name="ID" value="${invoice.invoiceID}">
+                                                                <input type="hidden" data-val="true" data-val-number="The field Amount must be a number." 
+                                                                       data-val-required="The Amount field is required." id="amount-${invoice.invoiceID}"  
+                                                                       name="amount" type="number" value="${price}" />
+                                                                <input type="hidden" id="bankCode-${invoice.invoiceID}" name="bankCode" value="">
+                                                                <input type="hidden" id="language-${invoice.invoiceID}" name="language" value="en">
+                                                                <button type="submit" style="width:4rem" class="btn btn-success me-2 payment-btn" data-id="${invoice.invoiceID}" ${invoice.status == 'paid' ? 'disabled' : ''}>Bank</button>
+                                                            </form>
+                                                            <form action="Invoice/PayCash" method="post"  onsubmit="return confirm('Confirm cash payment for Invoice #${invoice.invoiceNumber}?');">
+                                                                <input type="hidden" name="invoiceID" value="${invoice.invoiceID}">
+                                                                <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
+                                                                <button type="submit" style="width:4rem" class="btn btn-primary mt-2" ${invoice.status == 'paid' || invoice.status == 'overdue' ? 'disabled' : ''}>Cash</button>
+                                                            </form>
+                                                        </td>                                                   
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <td>
+                                                            <form action="Invoice/PayOutsource" method="post"  onsubmit="return confirm('Confirm payment for Invoice (outsource) #${invoice.invoiceNumber}?');">
+                                                                <input type="hidden" name="invoiceID" value="${invoice.invoiceID}">
+                                                                <input type="hidden" name="warrantyCardID" value="${warrantyCard.warrantyCardID}">
+                                                                <button type="submit" style="width:4rem" class="btn btn-primary mt-2" ${invoice.status == 'paid' || invoice.status == 'overdue' ? 'disabled' : ''}>Pay</button>
+                                                            </form>
+                                                        </td>
+                                                    </c:otherwise>
+                                                    </c:choose>
+                                                    
 
-                                                </tr>
+
+                                                    </tr>
                                             </c:forEach>
                                         </tbody>
                                     </table>

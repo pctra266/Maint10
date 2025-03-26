@@ -7,7 +7,7 @@ package Controller.Staff;
 
 import DAO.StaffDAO;
 import Model.ReportStaff;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -151,7 +151,29 @@ public class reportStaffController extends HttpServlet {
                 request.setAttribute("count", count);
                 request.getRequestDispatcher("ReportStaff.jsp").forward(request, response);
                 break;
-            
+            case "Staffinfo":
+                String staffID = request.getParameter("staffID");
+                String ifelse = request.getParameter("ifelse");
+                String code ="" ;
+                if (ifelse == null) {
+                    ifelse = "viewAll";
+                }
+                if(ifelse.equals("Search")){
+                    code = request.getParameter("WACode");
+                    list = dao.getAllStaffRepairByCode(staffID, code);
+                    request.setAttribute("info", list);
+                    request.setAttribute("ifelse", "search");
+                    request.setAttribute("messa", "There is no product that the staff received with such code.");
+                    request.setAttribute("staffID", staffID); 
+                    request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response); 
+                }else{
+                    list = dao.getAllStaffRepairByID(staffID);
+                    request.setAttribute("info", list);
+                    request.setAttribute("staffID", staffID);   
+                    request.getRequestDispatcher("ReportStaffInfor.jsp").forward(request, response);    
+                }
+                   
+                break;
             default:
                 break;
         } 

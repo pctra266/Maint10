@@ -5,7 +5,13 @@
 
 package Controller.HomePage;
 
+import DAO.HomePage_ContactDAO;
 import DAO.HomePage_CoverDAO;
+import DAO.HomePage_FooterDAO;
+import DAO.HomePage_MarketingServiceItemDAO;
+import DAO.HomePage_MarketingServiceSectionDAO;
+import Model.MarketingServiceItem;
+import Model.MarketingServiceSection;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,6 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
+import java.util.List;
 
 /**
  *
@@ -28,6 +35,10 @@ import jakarta.servlet.http.Part;
 )
 public class UpdateCover extends HttpServlet {
    private final HomePage_CoverDAO coverDAO = new HomePage_CoverDAO();
+    private final HomePage_FooterDAO footerDao = new HomePage_FooterDAO();
+    private final HomePage_ContactDAO contactDao = new HomePage_ContactDAO();
+    private final HomePage_MarketingServiceSectionDAO sectionDAO = new HomePage_MarketingServiceSectionDAO();
+    private final HomePage_MarketingServiceItemDAO itemDAO = new HomePage_MarketingServiceItemDAO();
     /** 
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      * @param request servlet request
@@ -82,11 +93,9 @@ public class UpdateCover extends HttpServlet {
         String result = Utils.OtherUtils.saveImage(filePart, request, uploadPath);
 
         if (result == null) {
-            System.out.println("1111111111111111111");
             request.setAttribute("messBackground", "No file uploaded.");
             request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
         } else if (result.startsWith("Invalid") || result.startsWith("File is too large")) {
-            System.out.println("2222222222222222222222");
             request.setAttribute("messBackground", result);
             request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
         } else {
@@ -98,6 +107,14 @@ public class UpdateCover extends HttpServlet {
                 request.setAttribute("messBackground", "Failed to update background in database.");
             }
         }
+        request.setAttribute("contactText", contactDao.getContactText());
+        request.setAttribute("footer", footerDao.getFooter());
+        
+        MarketingServiceSection section = sectionDAO.getSectionByID(1);
+        request.setAttribute("section", section);
+        
+        List<MarketingServiceItem> items = itemDAO.getItemsBySectionID(1);
+        request.setAttribute("items", items);
         
         request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);
     }

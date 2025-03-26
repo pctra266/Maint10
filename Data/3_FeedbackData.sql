@@ -92,6 +92,29 @@ VALUES
 
 Insert into WarrantyCardProcess (WarrantyCardID, HandlerID, Action, ActionDate, Note)
 values
+(47,2,'create',GETDATE(),'create card'),
+(48,2,'create',GETDATE(),'create card'),
+(49,2,'create',GETDATE(),'create card'),
+(50,2,'create',GETDATE(),'create card'),
+(51,2,'create',GETDATE(),'create card'),
+(52,2,'create',GETDATE(),'create card'),
+(53,2,'create',GETDATE(),'create card'),
+(54,2,'create',GETDATE(),'create card'),
+(55,2,'create',GETDATE(),'create card'),
+(56,2,'create',GETDATE(),'create card'),
+(57,2,'create',GETDATE(),'create card'),
+(58,2,'create',GETDATE(),'create card'),
+(59,2,'create',GETDATE(),'create card'),
+(60,2,'create',GETDATE(),'create card'),
+(61,2,'create',GETDATE(),'create card'),
+(62,2,'create',GETDATE(),'create card'),
+(63,2,'create',GETDATE(),'create card'),
+(64,2,'create',GETDATE(),'create card'),
+(65,2,'create',GETDATE(),'create card'),
+(66,2,'create',GETDATE(),'create card'),
+(67,2,'create',GETDATE(),'create card'),
+(68,2,'create',GETDATE(),'create card'),
+(69,2,'create',GETDATE(),'create card'),
 (1,2,'create',GETDATE(),'create card'),
 (2,2,'create',GETDATE(),'create card'),
 (3,2,'create',GETDATE(),'create card'),
@@ -140,26 +163,27 @@ values
 (46,2,'create',GETDATE(),'create card');
 
 
-INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted)
+
+INSERT INTO Feedback (CustomerID, WarrantyCardID, Note, DateCreated, IsDeleted ,ImageURL, VideoURL)
 VALUES
-(1, 2, 'The repair process was quick and efficient.', '2024-02-14', 0 ),
-(2, 3, 'The staff was very helpful and resolved my issue completely.', '2024-02-14', 0 ),
-(3, 4, 'I was satisfied with the repair, but it took a bit longer than expected.', '2024-04-14', 0 ),
-(4, 5, 'The issue was resolved, but I had to visit the service center twice.', '2024-04-24', 0 ),
-(5, 1, 'The repair was excellent, and the product works like new.', '2024-03-04', 0 ),
-(6, 2, 'The staff explained everything clearly and provided great service.', '2024-03-11', 0 ),
-(7, 3, 'The process was smooth, but I had to wait for parts to arrive.', '2024-03-02', 0 ),
-(8, 4, 'I appreciate the service, but I feel the warranty coverage could be better.','2024-03-31', 0),
-(9, 5, 'I had a great experience with the service team.', '2024-03-25', 0),
-(1, null, 'The issue was fixed promptly, and I was kept informed throughout.', '2024-03-01', 0),
-(1, 1, 'The service was excellent, and the staff was very professional.', '2024-03-15', 0 ),
-(1, 2, 'I had to wait longer than expected, but the repair quality was good.', '2024-03-20', 0 ),
-(1, 3, 'The staff went above and beyond to assist me.', '2024-03-22', 0 ),
-(14, 4, 'I received clear communication throughout the process.', '2024-03-10', 0 ),
-(5, 5, 'The product repair was satisfactory, but follow-up could improve.', '2024-03-08', 0 ),
-(16, null, 'The repair team was friendly and answered all my questions.', '2024-03-12', 0 ),
-(7, 1, 'The replacement part was not in stock, causing a delay.', '2024-03-18', 0 ),
-(4, 2, 'I am impressed with how quickly the service was completed.', '2024-03-05', 0 ),
-(19, null, 'The service center was clean and well-organized.', '2024-03-14', 0 ),
-(2, 4, 'The technician was skilled and resolved the issue efficiently.', '2024-03-28', 0 );
+(1, 2, 'The repair process was quick and efficient.', '2024-02-14', 0 , NULL, NULL),
+(2, 3, 'The staff was very helpful and resolved my issue completely.', '2024-02-14', 0, NULL, NULL ),
+(3, 4, 'I was satisfied with the repair, but it took a bit longer than expected.', '2024-04-14', 0 , NULL, NULL),
+(4, 5, 'The issue was resolved, but I had to visit the service center twice.', '2024-04-24', 0 , NULL, NULL),
+(5, 1, 'The repair was excellent, and the product works like new.', '2024-03-04', 0, NULL, NULL ),
+(6, 2, 'The staff explained everything clearly and provided great service.', '2024-03-11', 0, NULL, NULL ),
+(7, 3, 'The process was smooth, but I had to wait for parts to arrive.', '2024-03-02', 0 , NULL, NULL),
+(8, 4, 'I appreciate the service, but I feel the warranty coverage could be better.','2024-03-31', 0, NULL, NULL),
+(9, 5, 'I had a great experience with the service team.', '2024-03-25', 0, NULL, NULL),
+(1, null, 'The issue was fixed promptly, and I was kept informed throughout.', '2024-03-01', 0, NULL, NULL),
+(1, 1, 'The service was excellent, and the staff was very professional.', '2024-03-15', 0 , NULL, NULL),
+(1, 2, 'I had to wait longer than expected, but the repair quality was good.', '2024-03-20', 0, NULL, NULL ),
+(1, 3, 'The staff went above and beyond to assist me.', '2024-03-22', 0, NULL, NULL ),
+(14, 4, 'I received clear communication throughout the process.', '2024-03-10', 0, NULL, NULL ),
+(5, 5, 'The product repair was satisfactory, but follow-up could improve.', '2024-03-08', 0 , NULL, NULL),
+(16, null, 'The repair team was friendly and answered all my questions.', '2024-03-12', 0 , NULL, NULL),
+(7, 1, 'The replacement part was not in stock, causing a delay.', '2024-03-18', 0 , NULL, NULL),
+(4, 2, 'I am impressed with how quickly the service was completed.', '2024-03-05', 0 , NULL, NULL),
+(19, null, 'The service center was clean and well-organized.', '2024-03-14', 0 , NULL, NULL),
+(2, 4, 'The technician was skilled and resolved the issue efficiently.', '2024-03-28', 0 , NULL, NULL);
 

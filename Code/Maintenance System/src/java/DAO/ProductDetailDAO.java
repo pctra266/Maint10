@@ -174,7 +174,7 @@ public class ProductDetailDAO extends DBContext {
         }
         return 0;
     }
-
+    
     public static void main(String[] args) {
         ProductDetailDAO p = new ProductDetailDAO();
         int a = p.getProductDetailByCustomerIDItems(2, "", "", "", "", 24);

@@ -8,7 +8,7 @@ package Controller.WarrantyPackage;
 import DAO.ExtendedWarrantyDAO;
 import DAO.PackageWarrantyDAO;
 import Model.PackageWarranty;
-import Model.Pagination;
+import Utils.Pagination;
 import Utils.FormatUtils;
 import Utils.SearchUtils;
 import java.io.IOException;
@@ -145,7 +145,7 @@ public class PackageWarrantyController extends HttpServlet {
         if(action.equals("edit")){
             PackageWarranty pkg = new PackageWarranty();
             pkg.setPackageWarrantyID(Integer.parseInt(request.getParameter("packageWarrantyID")));
-            pkg.setNote(request.getParameter("note"));
+            pkg.setNote(SearchUtils.preprocessSearchQuery(request.getParameter("note")) );
             boolean updated = pkgDao.updatePackageWarranty(pkg);
             String message = updated ? "Package warranty updated successfully." : "Update failed.";
             request.setAttribute("message", message);

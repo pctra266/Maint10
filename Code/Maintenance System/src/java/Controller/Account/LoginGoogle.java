@@ -3,9 +3,10 @@ package Controller.Account;
 import DAO.CustomerDAO;
 import DAO.StaffDAO;
 import Model.Customer;
-import Model.GoogleInformation;
+
 import Model.Staff;
 import Utils.Google;
+import Utils.GoogleInformation;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import java.io.IOException;

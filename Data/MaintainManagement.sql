@@ -1,4 +1,4 @@
-﻿﻿USE master
+﻿USE master
 GO
 
 /*******************************************************************************
@@ -13,7 +13,8 @@ END
 GO
 CREATE DATABASE MaintainManagement
 GO
-
+USE MaintainManagement
+GO
 --('Admin', 'Technician', 'Inventory Manager', 'Customer', 'Repair Contractor', 'Customer Service Agent', NULL)
 CREATE TABLE [Role] (
     RoleID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -41,6 +42,7 @@ CREATE TABLE StaffLog (
     StaffID INT REFERENCES Staff(StaffID) ON DELETE SET NULL,
     UsernameS NVARCHAR(50),
     PasswordS NVARCHAR(50),
+	RoleID INT REFERENCES [Role](RoleID),
     [Name] NVARCHAR(100),
     Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     DateOfBirth DATE,
@@ -87,6 +89,7 @@ CREATE TABLE ChatMessages (
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     PermissionName NVARCHAR(100) UNIQUE NOT NULL,
+	Link NVARCHAR(MAX),
     Description NVARCHAR(255)
 );
 
@@ -288,11 +291,11 @@ CREATE TABLE WarrantyCardDetail (
 );
 
 -- WarrantyCardProcess Table
-CREATE TABLE WarrantyCardProcess (
+CREATE TABLE WarrantyCardProcess (	
     WarrantyCardProcessID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     WarrantyCardID INT NOT NULL REFERENCES WarrantyCard(WarrantyCardID),
     HandlerID INT NOT NULL REFERENCES Staff(StaffID),
-    [Action] NVARCHAR(20) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
+    [Action] NVARCHAR(30) NOT NULL CHECK ([Action] IN ('create','receive', 'refuse', 'fixing','refix','wait_components', 'received_components',
 	'request_outsource', 'cancel_outsource', 'accept_outsource', 'refuse_outsource' , 'send_outsource','lost', 'receive_outsource', 'fixed_outsource', 
 	'unfixable_outsource', 'back_outsource', 'receive_from_outsource' ,'fixed', 'completed', 'cancel')),
     ActionDate DATETIME DEFAULT GETDATE(),
@@ -307,6 +310,8 @@ CREATE TABLE Feedback (
     Note NVARCHAR(MAX),
 	DateCreated DATETIME NOT NULL,
 	IsDeleted BIT DEFAULT 0 NOT NULL,
+	ImageURL NVARCHAR(500),
+	VideoURL NVARCHAR(500)
 );
 -- FeedbackLog Table
 CREATE TABLE FeedbackLog (
@@ -345,10 +350,6 @@ CREATE TABLE Invoice (
 );
 
 
-
-
-
-
 -- Payment Table
 CREATE TABLE Payment (
     PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -358,7 +359,6 @@ CREATE TABLE Payment (
     Status NVARCHAR(20) NOT NULL CHECK (Status IN ('pending', 'complete', 'fail')),
 	InvoiceID INT NULL REFERENCES Invoice(InvoiceID)
 );
-
 
 
 CREATE TABLE FooterSetting (
@@ -386,38 +386,6 @@ CREATE TABLE CustomerContact (
     Message NVARCHAR(MAX) NULL,
     CreatedAt DATETIME DEFAULT GETDATE()
 );
-
-
-CREATE TABLE MarketingServiceSection (
-    SectionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    Title NVARCHAR(255),
-    SubTitle NVARCHAR(255),
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE()
-);
-
-CREATE TABLE MarketingServiceItem (
-    ServiceID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
-    SectionID INT NOT NULL,
-    Title NVARCHAR(255) NOT NULL,
-    Description NVARCHAR(MAX),
-    ImageURL NVARCHAR(MAX),
-    SortOrder INT DEFAULT 1,
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME DEFAULT GETDATE(),
-    CONSTRAINT FK_MarketingServiceItem_SectionID
-        FOREIGN KEY (SectionID) REFERENCES MarketingServiceSection(SectionID)
-);
-CREATE TABLE StaffBlogPosts (
-    BlogPostID INT IDENTITY(1,1) PRIMARY KEY,
-    StaffID INT NOT NULL,
-    Title NVARCHAR(255) NOT NULL,
-    Content NVARCHAR(MAX) NOT NULL,
-    CreatedDate DATETIME DEFAULT GETDATE(),
-    UpdatedDate DATETIME NULL,
-    FOREIGN KEY (StaffID) REFERENCES Staff(StaffID)
-);
-
 
 
 CREATE TABLE MarketingServiceSection (
@@ -481,3 +449,15 @@ BEGIN
     SELECT UnknownProductID FROM inserted WHERE UnknownProductID IS NOT NULL;
 END
 GO
+
+CREATE PROCEDURE UpdateInvoiceStatus
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    UPDATE Invoice
+    SET Status = 'overdue'
+    WHERE DueDate IS NOT NULL 
+          AND DueDate < GETDATE()
+          AND Status = 'pending';
+END;

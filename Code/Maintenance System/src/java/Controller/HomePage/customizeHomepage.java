@@ -41,13 +41,14 @@ public class customizeHomepage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
+        String message = request.getParameter("message");
+        request.setAttribute("message", message);
         request.setAttribute("contactText", contactDao.getContactText());
         request.setAttribute("footer", footerDao.getFooter());
         
         MarketingServiceSection section = sectionDAO.getSectionByID(1);
         request.setAttribute("section", section);
         
-        // Tích hợp doGet của MarketingServiceItemController
         List<MarketingServiceItem> items = itemDAO.getItemsBySectionID(1);
         request.setAttribute("items", items);
         request.getRequestDispatcher("customizeHomepage.jsp").forward(request, response);

@@ -8,12 +8,14 @@ import DAO.ComponentDAO;
 import DAO.ComponentRequestDAO;
 import DAO.ComponentRequestResponsibleDAO;
 import DAO.NotificationDAO;
+import DAO.StaffDAO;
 import DAO.WarrantyCardProcessDAO;
+import Email.Email;
 import Model.Component;
 import Model.ComponentRequest;
 import Model.ComponentRequestDetail;
 import Model.Notification;
-import Model.Pagination;
+import Utils.Pagination;
 import Model.ProductDetail;
 import Model.Staff;
 import Model.WarrantyCardProcess;
@@ -42,9 +44,11 @@ public class ComponentRequestController extends HttpServlet {
     private static final int PAGE_SIZE = 5;
     private static final ComponentRequestDAO componentRequestDao = new ComponentRequestDAO();
     private static final ComponentRequestResponsibleDAO crrDao = new ComponentRequestResponsibleDAO();
-        private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
-        private final NotificationDAO notificationDAO = new NotificationDAO();
-
+    private static final ComponentDAO compoDao = new ComponentDAO();
+    private static final Email email = new Email();
+    private static final StaffDAO staffDao = new StaffDAO();
+    private final WarrantyCardProcessDAO wcpDao = new WarrantyCardProcessDAO();
+    private final NotificationDAO notificationDAO = new NotificationDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -101,7 +105,7 @@ public class ComponentRequestController extends HttpServlet {
 //            response.sendRedirect(request.getContextPath() + "/WarrantyCard");
 //            return;
 //        }
-        
+
         String warrantyCardCode = SearchUtils.searchValidateNonSapce(request.getParameter("warrantyCardCode"));
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
@@ -163,12 +167,12 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalComponentRequest(warrantyCardCode, componentRequestAction);
                 String currentStatus = componentRequestDao.getComponentRequestStatus(componentRequestID);
                 System.out.println("Curr stt: " + currentStatus);
-                
-                if (componentRequestAction != null && !componentRequestAction.trim().isEmpty() ) {
-                    if(!currentStatus.equalsIgnoreCase(componentStatus)){
+
+                if (componentRequestAction != null && !componentRequestAction.trim().isEmpty()) {
+                    if (!currentStatus.equalsIgnoreCase(componentStatus)) {
                         total--;
                     }
-                    
+
                 }
                 break;
         }
@@ -249,7 +253,10 @@ public class ComponentRequestController extends HttpServlet {
                     selectedComponents = new ArrayList<>();
                 }
                 String componentID = request.getParameter("componentID");
-                Component componentToAdd = getComponentById("", componentID);
+
+//                Component componentToAdd = getComponentById("", componentID);
+                Component componentToAdd = compoDao.getComponentByID(Integer.parseInt(componentID));
+
                 if (componentToAdd != null && !isComponentInList(selectedComponents, componentToAdd)) {
                     componentToAdd.setQuantity(1);
                     selectedComponents.add(componentToAdd);
@@ -295,7 +302,7 @@ public class ComponentRequestController extends HttpServlet {
 //                ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode,page, pageSize);
 //                request.setAttribute("listComponentRequest", listComponentRequest);
 //                request.getRequestDispatcher("viewListComponentRequest.jsp").forward(request, response);
-                this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+                this.viewListComponentRequest("", pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
 
                 break;
             case "detailComponentRequest":
@@ -308,10 +315,25 @@ public class ComponentRequestController extends HttpServlet {
                     staffId = "3";
                 }
                 crrDao.createComponentRequestResponsible(staffId, componentRequestID, componentStatus);
-                
+
                 componentRequestDao.updateStatusComponentRequest(componentRequestID, componentStatus);
-                componentRequestDao.updateStatusComponentRequestDetail(componentRequestID,componentStatus);
-                this.viewListComponentRequest(pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+                componentRequestDao.updateStatusComponentRequestDetail(componentRequestID, componentStatus);
+                //gui thong bao cho nhan vien
+                StaffDAO staffDAO = new StaffDAO();
+                for (Staff s : staffDAO.getStaffByRoleName("Technician")) {
+                    String message = "Component Request  " + componentRequestID + "has been " + componentStatus;
+                    Notification notification = new Notification();
+                    notification.setRecipientType("Staff");
+                    notification.setRecipientID(s.getStaffID());
+                    notification.setMessage(message);
+                    notification.setCreatedDate(new Date());
+                    notification.setIsRead(false);
+                    notification.setTarget("#");
+                    notificationDAO.addNotification(notification);
+                }
+
+                this.viewListComponentRequest(componentStatus + " successfully !", pagination, warrantyCardCode, componentRequestAction, page, pageSize, request, response);
+
                 break;
             case "listComponentRequestInStaffRole":
                 //======phan trang
@@ -391,11 +413,12 @@ public class ComponentRequestController extends HttpServlet {
         }
     }
 
-    private void viewListComponentRequest(Pagination pagination, String warrantyCardCode, String componentRequestAction, int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
+    private void viewListComponentRequest(String mess, Pagination pagination, String warrantyCardCode, String componentRequestAction, int page, int pageSize, HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //======phan trang
         pagination.setSearchFields(new String[]{"action", "warrantyCardCode", "componentRequestAction"});
         pagination.setSearchValues(new String[]{"viewListComponentRequest", warrantyCardCode, componentRequestAction});
+        request.setAttribute("mess", mess);
         request.setAttribute("pagination", pagination);
         //======end phan trang
         ArrayList<ComponentRequest> listComponentRequest = componentRequestDao.getAllComponentRequest(warrantyCardCode, componentRequestAction, page, pageSize);
@@ -415,7 +438,7 @@ public class ComponentRequestController extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //send notification
-         
+
         //action
         String action = request.getParameter("action");
 
@@ -478,17 +501,33 @@ public class ComponentRequestController extends HttpServlet {
                     } else {
                         mess = "Create Successfully !";
                         int componentRequestIDNum = componentRequestDao.getLastComponentRequestId();
-                        String message = "WCC so can them link kien" + componentRequestIDNum;
-                                    Notification notification = new Notification();
-                                    notification.setRecipientType("Staff");
-                                    notification.setRecipientID(3);
-                                    notification.setMessage(message);
-                                    notification.setCreatedDate(new Date());
-                                    notification.setIsRead(false);
-                                    notification.setTarget(request.getContextPath() + "/componentRequest?action=detailComponentRequest&noti=true&componentRequestID=" + componentRequestIDNum); // URL chi tiết
-                                    notificationDAO.addNotification(notification);
-                        
-                        
+                        String message = "Component Request " + componentRequestIDNum;
+                        Notification notification = new Notification();
+                        notification.setRecipientType("Staff");
+                        notification.setRecipientID(3);
+                        notification.setMessage(message);
+                        notification.setCreatedDate(new Date());
+                        notification.setIsRead(false);
+                        notification.setTarget(request.getContextPath() + "/componentRequest?action=detailComponentRequest&noti=true&componentRequestID=" + componentRequestIDNum); // URL chi tiết
+                        notificationDAO.addNotification(notification);
+
+//                        
+                        String gmail = staffDao.getStaffById(3).getEmail();
+                        String content = "";
+//                        // tao noi dung gui
+                        ArrayList<ComponentRequestDetail> listContent = componentRequestDao.getListComponentRequestDetailById(String.valueOf(componentRequestIDNum));
+                        content += "Please send total " + listContent.size() + " type of component for teachician including: \n";
+                        for (ComponentRequestDetail a : listContent) {
+                            Component x = compoDao.getComponentByID(a.getComponentID());
+                            if (x == null) {
+                                response.sendRedirect("componentRequest?action=viewComponentRequestDashboard&mess=" + mess);
+                                return;
+                            }
+                            content += "(" + x.getComponentCode() + ") Name:" + x.getComponentName() + "- Brand:" + x.getBrand() + " - Type:" + x.getType() + " - Quantity: " + a.getQuantity() + "\n";
+                        }
+//                        
+                        email.sendEmail(gmail, "Component Request", content);
+
                         if (componentRequestIDNum != 0) {
                             try {
                                 String componentRequestID = String.valueOf(componentRequestIDNum);

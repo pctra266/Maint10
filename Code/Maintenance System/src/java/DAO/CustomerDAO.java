@@ -765,8 +765,22 @@ public class CustomerDAO extends DBContext {
             return false;
         }
     }
+    
+        public boolean isCustomerHavingProduct(int cusId, String productCode){
+        String sql = "select count (*) from ProductDetail where CustomerID = ? and ProductCode = ?";
+        try(PreparedStatement ps = connection.prepareStatement(sql)){
+            ps.setInt(1, cusId);
+            ps.setString(2, productCode);
+            ResultSet rs = ps.executeQuery();
+            System.out.println(rs);
+            if(rs.next()) return rs.getInt(1)>0;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
 
-  
 
     public static void main(String[] args) {
         CustomerDAO dao = new CustomerDAO();

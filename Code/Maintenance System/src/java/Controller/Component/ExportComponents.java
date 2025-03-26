@@ -29,7 +29,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 @WebServlet(name = "ExportComponents", urlPatterns = {"/ExportComponents"})
 public class ExportComponents extends HttpServlet {
 
-    private static ComponentDAO componentDAO = new ComponentDAO();
+    private static final ComponentDAO componentDAO = new ComponentDAO();
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>

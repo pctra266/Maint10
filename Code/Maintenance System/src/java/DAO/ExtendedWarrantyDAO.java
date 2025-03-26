@@ -72,6 +72,65 @@ public class ExtendedWarrantyDAO {
         return ew;
     }
     
+    public ExtendedWarranty findByName(String name) {
+    ExtendedWarranty ew = null;
+    String query = """
+        SELECT ExtendedWarrantyID, ExtendedWarrantyName, ExtendedPeriodInMonths, Price, ExtendedWarrantyDescription, IsDelete
+        FROM ExtendedWarranty
+        WHERE ExtendedWarrantyName = ? AND IsDelete = 0
+        """;
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        ps.setString(1, name);
+        rs = ps.executeQuery();
+        if(rs.next()){
+            ew = new ExtendedWarranty();
+            ew.setExtendedWarrantyID(rs.getInt("ExtendedWarrantyID"));
+            ew.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+            ew.setExtendedPeriodInMonths(rs.getInt("ExtendedPeriodInMonths"));
+            ew.setPrice(rs.getDouble("Price"));
+            ew.setExtendedWarrantyDescription(rs.getString("ExtendedWarrantyDescription"));
+            ew.setIsDelete(rs.getBoolean("IsDelete"));
+        }
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+    return ew;
+}
+    
+    public ExtendedWarranty findByPriceAndPeriod(double price, int period) {
+    ExtendedWarranty ew = null;
+    String query = """
+        SELECT ExtendedWarrantyID, ExtendedWarrantyName, ExtendedPeriodInMonths, Price, ExtendedWarrantyDescription, IsDelete
+        FROM ExtendedWarranty
+        WHERE Price = ? 
+          AND ExtendedPeriodInMonths = ? 
+          AND IsDelete = 0
+        """;
+    try {
+        conn = new DBContext().connection;
+        ps = conn.prepareStatement(query);
+        ps.setDouble(1, price);
+        ps.setInt(2, period);
+        rs = ps.executeQuery();
+        if(rs.next()){
+            ew = new ExtendedWarranty();
+            ew.setExtendedWarrantyID(rs.getInt("ExtendedWarrantyID"));
+            ew.setExtendedWarrantyName(rs.getString("ExtendedWarrantyName"));
+            ew.setExtendedPeriodInMonths(rs.getInt("ExtendedPeriodInMonths"));
+            ew.setPrice(rs.getDouble("Price"));
+            ew.setExtendedWarrantyDescription(rs.getString("ExtendedWarrantyDescription"));
+            ew.setIsDelete(rs.getBoolean("IsDelete"));
+        }
+    } catch(Exception e) {
+        e.printStackTrace();
+    }
+    return ew;
+}
+
+
+    
     public boolean createExtendedWarranty(ExtendedWarranty ew) {
         String query = """
             INSERT INTO ExtendedWarranty (ExtendedWarrantyName, ExtendedPeriodInMonths, Price, ExtendedWarrantyDescription)

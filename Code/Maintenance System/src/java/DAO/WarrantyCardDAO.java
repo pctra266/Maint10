@@ -62,6 +62,17 @@ public class WarrantyCardDAO extends DBContext {
         return warrantyCards;
     }
 
+    public boolean deleteWarrantyCard(WarrantyCard wc) {
+        String sql = "DELETE FROM WarrantyCard where WarrantyCardID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, wc.getWarrantyCardID());
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     public boolean updateWarrantyCard(WarrantyCard wc) {
         String sql = "UPDATE WarrantyCard SET  WarrantyCardCode = ?, WarrantyProductID = ?, "
                 + "IssueDescription = ?, WarrantyStatus = ?, ReturnDate = ?, DoneDate = ?, "
@@ -341,7 +352,7 @@ public class WarrantyCardDAO extends DBContext {
         }
 
         query += " OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";  // Phân trang an toàn với SQL Server
-System.out.println("Final Query: " + query);
+        System.out.println("Final Query: " + query);
         try (PreparedStatement ps = connection.prepareStatement(query)) {
             int index = 1;
             ps.setInt(index++, customerID);
@@ -362,26 +373,25 @@ System.out.println("Final Query: " + query);
             ps.setInt(index++, fetch);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-        WarrantyCard warrantycard = new WarrantyCard();
-        warrantycard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-        
-        warrantycard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-        warrantycard.setIssueDescription(rs.getString("IssueDescription"));
-        warrantycard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-        warrantycard.setCreatedDate(rs.getDate("CreatedDate"));
-        warrantycard.setReturnDate(rs.getDate("ReturnDate"));
-        warrantycard.setDonedDate(rs.getDate("DoneDate"));
-        warrantycard.setHandlerID(rs.getInt("HandlerID"));
-        warrantycard.setCompletedDate(rs.getDate("CompleteDate"));
-        warrantycard.setCanceldDate(rs.getDate("CancelDate"));
-        warrantycard.setProductDetailCode(rs.getString("ProductCode"));
-        warrantycard.setCustomerID(rs.getInt("CustomerID"));
-      
+                WarrantyCard warrantycard = new WarrantyCard();
+                warrantycard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
 
-        warrantycard.setProductName(rs.getString("ProductName"));
-        warrantycard.setCustomerName(rs.getString("CustomerName"));
-        warrantycard.setCustomerPhone(rs.getString("CustomerPhone"));
-        listWarrantyCard.add(warrantycard);
+                warrantycard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                warrantycard.setIssueDescription(rs.getString("IssueDescription"));
+                warrantycard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                warrantycard.setCreatedDate(rs.getDate("CreatedDate"));
+                warrantycard.setReturnDate(rs.getDate("ReturnDate"));
+                warrantycard.setDonedDate(rs.getDate("DoneDate"));
+                warrantycard.setHandlerID(rs.getInt("HandlerID"));
+                warrantycard.setCompletedDate(rs.getDate("CompleteDate"));
+                warrantycard.setCanceldDate(rs.getDate("CancelDate"));
+                warrantycard.setProductDetailCode(rs.getString("ProductCode"));
+                warrantycard.setCustomerID(rs.getInt("CustomerID"));
+
+                warrantycard.setProductName(rs.getString("ProductName"));
+                warrantycard.setCustomerName(rs.getString("CustomerName"));
+                warrantycard.setCustomerPhone(rs.getString("CustomerPhone"));
+                listWarrantyCard.add(warrantycard);
             }
         } catch (SQLException e) {
         }
@@ -418,11 +428,11 @@ System.out.println("Final Query: " + query);
             query += " AND  wc.WarrantyStatus LIKE ?";
         }
 
-        try  {
-             int index = 1;
-            
-                    PreparedStatement ps = connection.prepareStatement(query);
-           
+        try {
+            int index = 1;
+
+            PreparedStatement ps = connection.prepareStatement(query);
+
             ps.setInt(index++, customerID);
             if (searchWarrantyCardCode != null && !searchWarrantyCardCode.trim().isEmpty()) {
                 ps.setString(index++, searchWarrantyCardCode);
@@ -437,12 +447,11 @@ System.out.println("Final Query: " + query);
             if (searchStatus != null && !searchStatus.trim().isEmpty()) {
                 ps.setString(index++, searchStatus);
             }
-           ResultSet rs = ps.executeQuery() ;
-                if (rs.next()) {
-                    return rs.getInt(1);
-                }
-        }
-        catch (SQLException e) {
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
         return 0;
@@ -583,7 +592,7 @@ System.out.println("Final Query: " + query);
         if (type != null && "myCard".equals(type)) {
             query.append(" AND wc.HandlerID = ?");
         }
-        if (type != null && !"myCard".equals(type)) {
+        if (type != null && !"myCard".equals(type) && !"all".equals(type)) {
             query.append(" AND wc.HandlerID is null");
         }
 
@@ -863,29 +872,60 @@ System.out.println("Final Query: " + query);
         }
     }
 
-    public boolean createWarrantyCard(
+    public WarrantyCard createWarrantyCard(
             int warrantyProductID,
-            String issueDescription, String warrantyStatus,
-            String returnDate, String doneDate, String completeDate, String cancelDate) {
-        String sql = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, "
+            String issueDescription,
+            String warrantyStatus,
+            String returnDate,
+            String doneDate,
+            String completeDate,
+            String cancelDate) {
+        // SQL chèn dữ liệu
+        String insertSql = "INSERT INTO WarrantyCard (WarrantyCardCode, WarrantyProductID, "
                 + "IssueDescription, WarrantyStatus, ReturnDate, DoneDate, CompleteDate, CancelDate, CreatedDate) "
                 + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, GETDATE())";
+        // Sinh mã cho WarrantyCard
         String warrantyCardCode = generateWarrantyCardCode();
-        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setString(1, warrantyCardCode);
-            stmt.setInt(2, warrantyProductID);
-            stmt.setString(3, issueDescription);
-            stmt.setString(4, warrantyStatus);
-            stmt.setTimestamp(5, parseDate(returnDate) != null ? parseDate(returnDate) : null);
-            stmt.setTimestamp(6, parseDate(doneDate) != null ? parseDate(doneDate) : null);
-            stmt.setTimestamp(7, parseDate(completeDate) != null ? parseDate(completeDate) : null);
-            stmt.setTimestamp(8, parseDate(cancelDate) != null ? parseDate(cancelDate) : null);
-            int rowsInserted = stmt.executeUpdate();
-            return rowsInserted > 0;
+
+        try (PreparedStatement insertStmt = connection.prepareStatement(insertSql)) {
+            insertStmt.setString(1, warrantyCardCode);
+            insertStmt.setInt(2, warrantyProductID);
+            insertStmt.setString(3, issueDescription);
+            insertStmt.setString(4, warrantyStatus);
+            insertStmt.setTimestamp(5, parseDate(returnDate) != null ? parseDate(returnDate) : null);
+            insertStmt.setTimestamp(6, parseDate(doneDate) != null ? parseDate(doneDate) : null);
+            insertStmt.setTimestamp(7, parseDate(completeDate) != null ? parseDate(completeDate) : null);
+            insertStmt.setTimestamp(8, parseDate(cancelDate) != null ? parseDate(cancelDate) : null);
+
+            int rowsInserted = insertStmt.executeUpdate();
+            if (rowsInserted > 0) {
+                // Nếu chèn thành công, thực hiện truy vấn để lấy lại WarrantyCard vừa tạo
+                String selectSql = "SELECT * FROM WarrantyCard WHERE WarrantyCardCode = ?";
+                try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
+                    selectStmt.setString(1, warrantyCardCode);
+                    try (ResultSet rs = selectStmt.executeQuery()) {
+                        if (rs.next()) {
+                            WarrantyCard warrantyCard = new WarrantyCard();
+                            warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+                            warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+                            warrantyCard.setWarrantyProductID(rs.getInt("WarrantyProductID"));
+                            warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
+                            warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+                            warrantyCard.setReturnDate(rs.getTimestamp("ReturnDate"));
+                            warrantyCard.setDonedDate(rs.getTimestamp("DoneDate"));
+                            warrantyCard.setCompletedDate(rs.getTimestamp("CompleteDate"));
+                            warrantyCard.setCanceldDate(rs.getTimestamp("CancelDate"));
+                            warrantyCard.setCreatedDate(rs.getTimestamp("CreatedDate"));
+                            return warrantyCard;
+                        }
+                    }
+                }
+            }
         } catch (SQLException e) {
             System.out.println(e);
-            return false;
         }
+        // Nếu chèn không thành công hoặc không tìm thấy record thì trả về null
+        return null;
     }
 
     public Integer getWarrantyCardID(int warrantyProductID) {
@@ -1085,17 +1125,129 @@ System.out.println("Final Query: " + query);
         return details;
     }
 
-    public static void main(String[] args) {
+    public Map<String, Object> getWarrantyCardDetailsMap(int warrantyCardId) {
+        Map<String, Object> details = new HashMap<>();
 
-        WarrantyCardDAO d = new WarrantyCardDAO();
-        List<WarrantyCard> list = d.getWarrantyCardByCustomerID(2, "", "", "", "", "wc.CreatedDate", "ASC", 0,10);
-        for(WarrantyCard wc : list) {
-            System.out.println(wc.getCreatedDate());
+        String sql = "SELECT "
+                + "  wc.WarrantyCardID, "
+                + "  wc.WarrantyCardCode, "
+                + "  wc.IssueDescription, "
+                + "  s.StaffID, "
+                + "  s.Name AS StaffName, "
+                + "  s.Phone AS StaffPhone, "
+                + "  s.Email AS StaffEmail, "
+                + "  pd.ProductCode, "
+                + "  p.ProductName, "
+                + "  b.BrandName, "
+                + "  pt.TypeName, "
+                + "  up.ProductName AS UnknownProductName, "
+                + "  up.ProductCode AS UnknownProductCode, "
+                + "  up.Description AS UnknownProductDescription, "
+                + "  m.MediaURL, "
+                + "  cc.ContractorCardID, "
+                + "  cc.Status AS ContractorStatus, "
+                + "  wcp.lastProcessStatus "
+                + "FROM WarrantyCard wc "
+                + "LEFT JOIN Staff s ON wc.HandlerID = s.StaffID "
+                + "LEFT JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID "
+                + "LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID "
+                + "LEFT JOIN Product p ON pd.ProductID = p.ProductID "
+                + "LEFT JOIN Brand b ON p.BrandID = b.BrandID "
+                + "LEFT JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
+                + "LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID "
+                + "LEFT JOIN Media m ON m.ObjectID = wc.WarrantyCardID AND m.ObjectType = 'WarrantyCard' "
+                + "LEFT JOIN ContractorCard cc ON cc.WarrantyCardID = wc.WarrantyCardID "
+                + "LEFT JOIN ( "
+                + "    SELECT WarrantyCardID, HandlerID, [Action] as lastProcessStatus "
+                + "    FROM warrantyCardProcess wcp1 "
+                + "    WHERE [Action] = 'send_outsource' AND ActionDate = ( "
+                + "         SELECT MAX(ActionDate) FROM warrantyCardProcess wcp2 "
+                + "         WHERE wcp2.WarrantyCardID = wcp1.WarrantyCardID "
+                + "           AND wcp2.HandlerID = wcp1.HandlerID "
+                + "           AND wcp2.[Action] = 'send_outsource' "
+                + "    ) "
+                + ") wcp ON wc.WarrantyCardID = wcp.WarrantyCardID AND s.StaffID = wcp.HandlerID "
+                + "WHERE wc.WarrantyCardID = ? "
+                + "ORDER BY m.MediaID, cc.ContractorCardID;";
+
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setInt(1, warrantyCardId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    if (details.isEmpty()) {
+                        details.put("warrantyCardID", rs.getInt("WarrantyCardID"));
+                        details.put("warrantyCardCode", rs.getString("WarrantyCardCode"));
+                        details.put("issueDescription", rs.getString("IssueDescription"));
+                        details.put("staffID", rs.getInt("StaffID"));
+                        details.put("staffName", rs.getString("StaffName"));
+                        details.put("staffPhone", rs.getString("StaffPhone"));
+                        details.put("staffEmail", rs.getString("StaffEmail"));
+                        details.put("productCode", rs.getString("ProductCode"));
+                        details.put("productName", rs.getString("ProductName"));
+                        details.put("brandName", rs.getString("BrandName"));
+                        details.put("typeName", rs.getString("TypeName"));
+                        details.put("unknownProductName", rs.getString("UnknownProductName"));
+                        details.put("unknownProductCode", rs.getString("UnknownProductCode"));
+                        details.put("unknownProductDescription", rs.getString("UnknownProductDescription"));
+                        details.put("contractorCardID", rs.getInt("ContractorCardID"));
+                        details.put("lastProcessStatus", rs.getString("lastProcessStatus"));
+
+                        details.put("mediaUrls", new ArrayList<String>());
+                        details.put("contractorStatuses", new ArrayList<String>());
+                    }
+
+                    String mediaUrl = rs.getString("MediaURL");
+                    if (mediaUrl != null && !mediaUrl.trim().isEmpty()) {
+                        List<String> mediaUrls = (List<String>) details.get("mediaUrls");
+                        if (!mediaUrls.contains(mediaUrl)) {
+                            mediaUrls.add(mediaUrl);
+                        }
+                    }
+
+                    String contractorStatus = rs.getString("ContractorStatus");
+                    if (contractorStatus != null && !contractorStatus.trim().isEmpty()) {
+                        List<String> contractorStatuses = (List<String>) details.get("contractorStatuses");
+                        if (!contractorStatuses.contains(contractorStatus)) {
+                            contractorStatuses.add(contractorStatus);
+                        }
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
         }
-        System.out.println(list.size());
 
-        WarrantyCardDAO dao = new WarrantyCardDAO();
-        System.out.println(dao.getPriceOfWarrantyCard(45));
+        // Lấy danh sách các bản ghi quy trình (process) liên quan đến warrantyCardId
+        String processSql = "SELECT wcp.WarrantyCardProcessID, wcp.WarrantyCardID, wcp.HandlerID, wcp.[Action], "
+                + "wcp.ActionDate, wcp.Note "
+                + "FROM warrantyCardProcess wcp "
+                + "WHERE wcp.WarrantyCardID = ? "
+                + "ORDER BY wcp.ActionDate ASC;";
+        List<Map<String, Object>> processList = new ArrayList<>();
+        try (PreparedStatement ps2 = connection.prepareStatement(processSql)) {
+            ps2.setInt(1, warrantyCardId);
+            try (ResultSet rs2 = ps2.executeQuery()) {
+                while (rs2.next()) {
+                    Map<String, Object> process = new HashMap<>();
+                    process.put("WarrantyCardProcessID", rs2.getInt("WarrantyCardProcessID"));
+                    process.put("WarrantyCardID", rs2.getInt("WarrantyCardID"));
+                    process.put("HandlerID", rs2.getInt("HandlerID"));
+                    process.put("Action", rs2.getString("Action"));
+                    process.put("ActionDate", rs2.getTimestamp("ActionDate"));
+                    process.put("Note", rs2.getString("Note"));
+                    processList.add(process);
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        details.put("processList", processList);
+
+        return details;
+    }
+
+    public static void main(String[] args) {
 
     }
 

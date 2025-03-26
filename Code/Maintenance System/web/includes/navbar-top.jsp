@@ -53,7 +53,7 @@
                         <img src="${sessionScope.staff.image}" class="avatar img-fluid rounded" alt="${sessionScope.staff.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="Profile">Profile</a>
+                        <a class="dropdown-item" href="profile">Profile</a>
                         <a class="dropdown-item" href="ChangePasswordForm.jsp">Change Password</a>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="logout">Log out</a>
@@ -98,7 +98,8 @@
 
         const notificationList = document.getElementById("notificationList");
         const notificationItem = document.createElement("a");
-        const date = new Date(Number(createdDate));
+        const date = new Date(Date.parse(createdDate));
+        console.log(date);
         notificationItem.className = "list-group-item";
         notificationItem.href = target;
         notificationItem.dataset.notificationId = notificationID;
@@ -122,7 +123,8 @@
 
         const timeSmall = document.createElement("small");
         timeSmall.className = "text-muted";
-        timeSmall.textContent = `${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+        const timeSmallContent = date.getHours().toString().padStart(2, '0') + ":" +date.getMinutes().toString().padStart(2, '0');
+        timeSmall.textContent = timeSmallContent;
 
                 // G?n các ph?n t?
                 contentDiv.appendChild(messageP);

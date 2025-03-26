@@ -88,6 +88,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("true".equals(request.getParameter("payment"))) {
             request.setAttribute("addAlert1", "Payment successfully!");
         }
+        if ("false".equals(request.getParameter("canChange"))) {
+            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
+        }
         if ("false".equals(request.getParameter("payment"))) {
             request.setAttribute("addAlert0", "Payment fail!");
         }
@@ -97,6 +100,9 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if ("false".equals(request.getParameter("invoiceCreate"))) {
             request.setAttribute("addAlert0", "Product isn't fixed!");
         }
+//        if ("false".equals(request.getParameter("canChange"))) {
+//            request.setAttribute("addAlert0", "You don't have permission to impact this card!");
+//        }
         request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
@@ -134,6 +140,11 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         if (staff == null) {
             request.setAttribute("updateAlert0", "You must be logged in to perform this action.");
             processRequest(request, response);
+            return;
+        }
+
+        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+            response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
         }
 
@@ -237,7 +248,14 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                             }
                             if (updated) {
                                 detail.setNote(noteParam);
-                                boolean success = wcdDao.updateWarrantyCardDetail(detail);
+                                boolean success;
+                                if (quantity > 0) {
+                                     success = wcdDao.updateWarrantyCardDetail(detail);
+                                }
+                                else {
+                                    success = wcdDao.deleteWarrantyCardDetail(warrantyCardDetailId);
+                                }
+
                                 if (success) {
                                     request.setAttribute("updateAlert1", "Update successful!");
                                 } else {
@@ -317,7 +335,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                 }
                                 if ("fixed".equals(processAction)) {
                                     //Thong bao
-                                    String message = "Your product " + wc.getProductName()+ " has been fixed!";
+                                    String message = "Your product " + wc.getProductName() + " has been fixed!";
                                     Notification notification = new Notification();
                                     notification.setRecipientType("Customer");
                                     notification.setRecipientID(wc.getCustomerID());
@@ -326,7 +344,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
                                     notification.setIsRead(false);
                                     notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?noti=true&ID=" + wc.getWarrantyCardID()); // URL chi tiết
                                     notificationDAO.addNotification(notification);
-                                    
+
                                     wc.setWarrantyStatus("done");
                                     wc.setDonedDate(Date.from(Instant.now()));
                                 }
@@ -389,5 +407,16 @@ public class WarrantyCardDetailServlet extends HttpServlet {
             }
         }
         return true;
+    }
+
+    private boolean checkRightHanderlerId(HttpServletRequest request, HttpServletResponse response, int warrantyCardId) throws IOException {
+        HttpSession session = request.getSession();
+        session.setAttribute("componentWarehouseFrom", request.getContextPath() + request.getServletPath() + "?ID=" + warrantyCardId);
+        Staff staff = (Staff) session.getAttribute("staff");
+        WarrantyCard card = warrantyCardDAO.getWarrantyCardById(warrantyCardId);
+        if (card.getHandlerID() == null || card.getHandlerID() == 0) {
+            return true;
+        }
+        return !(staff == null || card.getHandlerID() != staff.getStaffID());
     }
 }

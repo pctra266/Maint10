@@ -3,6 +3,7 @@
     Created on : Jan 17, 2025, 8:24:34 PM
     Author     : ADMIN
 --%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="coverDAO" class="DAO.HomePage_CoverDAO" scope="page" />
@@ -36,7 +37,7 @@
 
                     <ul class="navbar-nav d-none d-lg-flex"> <!-- start ul 1 -->
                         <li class="nav-item">
-                                <a class="nav-link d-flex align-items-center" href="#">
+                                <a class="nav-link d-flex align-items-center" href="Home">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home align-middle me-1">
                                         <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -44,7 +45,7 @@
                                     Home
                                 </a>
                         </li>
-                        <li class="nav-item ms-1">
+<!--                        <li class="nav-item ms-1">
                                 <a class="nav-link d-flex align-items-center" href="#"  >
                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-award align-middle">
                                    <circle cx="12" cy="8" r="7"></circle>
@@ -52,9 +53,9 @@
                                    </svg>
                                 About
                             </a>
-                        </li>
+                        </li>-->
                         <li class="nav-item ms-1">
-                                <a class="nav-link d-flex align-items-center" href="#"  >
+                                <a class="nav-link d-flex align-items-center" href="BlogController" >
                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book align-middle">
                                  <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                  <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -81,19 +82,19 @@
                         <div class="navbar-collapse collapse">
                             <li class="navbar-nav navbar-align m-xl-2">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
-                                    <a href="#">Back to dashboard</a>
+                                    <a class="btn btn-primary btn-sm" href="profile">Back to dashboard</a>
                                 </c:if>
                             </li>
                             
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${empty sessionScope.staff and empty sessionScope.customer}">
-                                    <a href="LoginForm.jsp">Login</a>
+                                    <a class="btn btn-primary btn-sm"  href="LoginForm.jsp">Login</a>
                                 </c:if>
                             </li>
                             
                             <li class="navbar-nav navbar-align">
                                 <c:if test="${not empty sessionScope.staff or not empty sessionScope.customer}">
-                                    <a href="logout">Logout</a>
+                                    <a class="btn btn-primary btn-sm"  href="logout">Logout</a>
                                 </c:if>
                             </li>
                         </div>
@@ -175,9 +176,19 @@
                         </div>
                     </div>
                         </div> <!-- end div 1 -->
+                       <c:set var="heightStyle" value="200vh" />
+                        <c:if test="${fn:length(serviceItems) <= 4}">
+                            <c:set var="heightStyle" value="100vh" />
+                        </c:if>
+                        <c:if test="${fn:length(serviceItems) > 4 and fn:length(serviceItems) <= 8}">
+                            <c:set var="heightStyle" value="150vh" />
+                        </c:if>
+                        <c:if test="${fn:length(serviceItems) == 0}">
+                            <c:set var="heightStyle" value="0vh" />
+                        </c:if>
+
                        
-                       
-                        <div style="height: 100vh" class="bg-white">
+                        <div style="height: ${heightStyle}" class="bg-white">
                             <div style="padding-bottom: 7%; padding-top: 5% " class="container">
                                 <div style="margin-bottom: 2%; margin-top: 1%;" class="row">
                                     <div class="col-6">
@@ -192,7 +203,7 @@
                                     <c:forEach var="item" items="${serviceItems}">
                                         <div style="margin-bottom:2% " class="col-12 col-md-6 col-lg-3">
                                             <div class="card h-100">
-                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}">
+                                                <img class="card-img-top" src="${pageContext.request.contextPath}${item.imageURL}" alt="${item.title}" style=" height: 150px; width: 276px; object-fit: cover;">
                                                 <div class="card-header px-4 pt-4">
                                                     <h5 class="card-title mb-0">${item.title}</h5>
                                                 </div>

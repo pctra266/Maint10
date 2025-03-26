@@ -20,9 +20,11 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center">List Component Request</h1>
+                    <a href="componentRequest?action=viewListComponentRequest">Back</a>
                     <div>
                         <form method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="detailComponentRequest">
+                            </form>
 <!--                        <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -33,6 +35,35 @@
                                 entries
                             </label>
                         </div>-->
+<div class="row" style="justify-content: end" >
+    <div class="col-md-1">
+        <form action="componentRequest" method="get">
+            <input type="hidden" name="action" value="updateStatusComponentRequest">
+
+            <input type="hidden" name="page-size" value="${pagination.pageSize}">
+            <input type="hidden" name="page" value="${pagination.currentPage}">
+
+            <input  type="hidden" name="componentRequestID" value="${componentRequestID}">
+            <input type="hidden" name="componentStatus" value="approved">
+            <input type="hidden" name="componentRequestAction" value="${componentRequestAction}">
+            <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
+            <button class="btn btn-primary" type="submit">Approve</button>
+        </form>
+    </div>
+    <div class="col-md-1">
+        <form action="componentRequest" method="get">
+            <input type="hidden" name="action" value="updateStatusComponentRequest">
+            <input type="hidden" name="page-size" value="${pagination.pageSize}">
+            <input type="hidden" name="page" value="${pagination.currentPage}">
+
+            <input  type="hidden" name="componentRequestID" value="${componentRequestID}">
+            <input type="hidden" name="warrantyCardCode" value="${warrantyCardCode}">
+            <input type="hidden" name="componentRequestAction" value="${componentRequestAction}">
+            <input type="hidden" name="componentStatus" value="cancel">
+            <button class="btn btn-danger" type="submit">Cancel</button>
+        </form>
+    </div>
+</div>
                                 <table  class="table table-hover my-0">
                                     <thead>
                                         <tr>
@@ -58,7 +89,7 @@
                                 </c:forEach> 
                                     </tbody>
                                 </table>
-                        </form>
+                        
                     </div>
                     <jsp:include page="/includes/pagination.jsp" />
                     

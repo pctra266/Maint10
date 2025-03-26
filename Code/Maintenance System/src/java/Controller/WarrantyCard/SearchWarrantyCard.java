@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,8 @@ public class SearchWarrantyCard extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String warrantyCardCode = request.getParameter("warrantyCode");
+        String warrantyCardCode = request.getParameter("warrantyCardCode");
         WarrantyCard wr = warrantyCardDAO.searchWarrantyCardByCode(warrantyCardCode);
-
         if (wr == null) {
             request.setAttribute("errorMessage", "Warranty card not found!");
         } else {
@@ -37,14 +37,10 @@ public class SearchWarrantyCard extends HttpServlet {
             Customer customer = warrantyCardDAO.getCustomerByWarrantyProductID(wr.getWarrantyProductID());
             Object product = warrantyCardDAO.getProductByWarrantyProductId(wr.getWarrantyProductID());
 
-            // Kiểm tra xem product là Product hay UnknownProduct
             boolean isUnknownProduct = product instanceof UnknownProduct;
-
             List<Map<String, Object>> component = warrantyCardDAO.getWarrantyCardDetails(wr.getWarrantyCardID());
 
-            // Lấy ngày hiện tại
             LocalDate today = LocalDate.now();
-            // Tách từng phần ngày, tháng, năm
             int day = today.getDayOfMonth();
             int month = today.getMonthValue();
             int year = today.getYear();

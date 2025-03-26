@@ -56,16 +56,29 @@
                 <jsp:include page="../../includes/navbar-top.jsp" />
                 <main class="content">
                     <form action="Redirect" enctype="multipart/form-data">
-                    <input type="hidden" name="target" value="${empty componentWarehouseFrom ? 'Home' : componentWarehouseFrom}">
-                    <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem">
-                        <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
-                    </button>
-                </form>
-                    <h2>Component Warehouse</h2>
+                        <input type="hidden" name="target" value="${empty componentWarehouseFrom ? 'Home' : componentWarehouseFrom}">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem">
+                            <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
+                        </button>
+                    </form>
                     <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2>Component Warehouse</h2>
+                        <a href="supplementRequest" class="btn btn-secondary">Supplement List </a>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
                         <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
                         </form>
+                        <form action="Brand" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Brand</button>
+                        </form>
+                        <form action="ComponentType" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Component Type</button>
+                        </form>     
+                        </div>
+                       
                         <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
                             <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
                         </form>
@@ -103,6 +116,17 @@
                                 </div>
                             </div>
                         </div>
+                        <c:if test="${not empty errorMessages}">
+                            <div class="alert alert-warning alert-dismissible mt-1" role="alert">
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <div class="alert-message">
+                                    <strong>${errorMessages}</strong>
+                                </div>
+                                <%
+                                    session.removeAttribute("errorMessages");
+                                %>
+                            </div>
+                        </c:if>
                         <c:if test="${not empty alertImportSuccess}">
                             <div class="alert alert-success alert-dismissible mt-1" role="alert">
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
