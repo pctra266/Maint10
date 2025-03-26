@@ -44,10 +44,6 @@
                                 <label class="form-label">Product Name:</label>
                                 <input type="text" class="form-control" value="${packageWarranty.productName}" readonly>
                             </div>
-                            <div class="mb-3">
-                                <label class="form-label">Extended Warranty Name:</label>
-                                <input type="text" class="form-control" value="${packageWarranty.extendedWarrantyName}" readonly>
-                            </div>
                             
                             <div class="mb-3">
                                 <label for="note" class="form-label">Note:</label>

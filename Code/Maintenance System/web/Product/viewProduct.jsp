@@ -395,8 +395,13 @@
                             </a>
                         </div>
 
+
                     </div>
              >
+
+                    </div>
+   
+
                     <div class="table-section">
                         <h1>Product List</h1>
                         <table>

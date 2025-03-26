@@ -22,9 +22,9 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center">Waiting Component Request</h1>
-                    <a href="componentRequest" >Back</a>
+                    <a class="btn btn-primary" href="componentRequest" >Back</a>
                     <div>
-                        <form method="get" action="componentRequest" >
+                        <form style="margin-top: 15px" method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="listComponentRequestInStaffRole">
                             <div  class="row"  style="justify-content: space-between" >
                                 <div class="col-sm-6 col-md-6">
