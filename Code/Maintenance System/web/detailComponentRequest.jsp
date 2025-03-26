@@ -91,7 +91,7 @@
                                 </table>
                         
                     </div>
-                    <jsp:include page="/includes/pagination.jsp" />
+                    <%--<jsp:include page="/includes/pagination.jsp" />--%>
                     
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
