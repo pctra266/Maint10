@@ -4,6 +4,8 @@
  */
 package Filter;
 
+import DAO.PermissionDAO;
+import Model.Permissions;
 import Model.Staff;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -18,12 +20,17 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  *
  * @author ADMIN
  */
 public class AuthenticationFilter implements Filter {
+
+    private PermissionDAO permissionDao = new PermissionDAO();
 
     private static final boolean debug = true;
 
@@ -108,40 +115,104 @@ public class AuthenticationFilter implements Filter {
         doBeforeProcessing(request, response);
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession();
-        String uri = req.getServletPath();
-        if (uri.equals("/WarrantyCard") && !hasPermission(session,"VIEW_WARRANTY_CARD_LIST")) {
-            res.sendRedirect("401Page.jsp");
+        HttpSession session = req.getSession(false); // Không tạo session mới nếu chưa có
+
+        PermissionDAO permissionDao = new PermissionDAO();
+        Integer roleId = (session != null) ? (Integer) session.getAttribute("roleId") : null;
+        Integer customerId = (session != null) ? (Integer) session.getAttribute("customerId") : null;
+
+        // Chỉ lấy đường dẫn chính, bỏ qua query string
+        String servletPath = req.getServletPath();
+        String action = req.getParameter("action");
+
+        // Danh sách URL không cần kiểm tra quyền
+        Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
+                "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
+                "/SearchWarrantyController","/customerContact?action=createCustomerContact",
+                "/BlogController","/BlogController?action=More","/changepassword");
+
+        // Danh sách URL mà Customer được phép truy cập
+        Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
+                
+                "/feedback?action=viewFeedbackDashboard",
+                "/feedback?action=createFeedback",
+                "/feedback?action=viewListFeedbackByCustomerId",
+                "/feedback?action=deleteFeedbackFromCustomer",
+                "/yourwarrantycard",
+                "/yourWarrantyCardDetail",
+                "/purchaseproduct",
+                "/WarrantyCard/Add"
+                
+                
+        );
+
+        System.out.println("Requested URL: " + servletPath);
+        System.out.println("Customer ID: " + customerId);
+        System.out.println("Role ID (staff): " + roleId);
+
+        if (EXCLUDED_URLS.contains(servletPath)) {
+            System.out.println("Skipping auth check for: " + servletPath);
+            chain.doFilter(request, response);
+            return;
         }
 
-            Throwable problem = null;
-            try {
+        if (customerId != null) {
+            if (!CUSTOMER_ALLOWED_URLS.contains((action == null) ? servletPath : servletPath + "?action=" + action)) {
+                System.out.println("Customer not allowed to access: " + servletPath);
+                res.sendRedirect(req.getContextPath() + "/401Page.jsp");
+                return;
+            } else {
+                System.out.println("Customer allowed to access: " + servletPath);
                 chain.doFilter(request, response);
-            } catch (Throwable t) {
-                // If an exception is thrown somewhere down the filter chain,
-                // we still want to execute our after processing, and then
-                // rethrow the problem after that.
-                problem = t;
-                t.printStackTrace();
-            }
-
-            doAfterProcessing(request, response);
-
-            // If there was a problem, we want to rethrow it if it is
-            // a known type, otherwise log it.
-            if (problem != null) {
-                if (problem instanceof ServletException) {
-                    throw (ServletException) problem;
-                }
-                if (problem instanceof IOException) {
-                    throw (IOException) problem;
-                }
-                sendProcessingError(problem, response);
+                return;
             }
         }
-        /**
-         * Return the filter configuration object for this filter.
-         */
+
+        if (roleId == null) {
+            System.out.println("User is not logged in, redirecting to login page.");
+            res.sendRedirect("LoginForm.jsp");
+            return;
+        }
+
+        String requiredPermission = (action == null) ? servletPath : servletPath + "?action=" + action;
+        System.out.println("Checking permission for: " + requiredPermission);
+
+        if (!permissionDao.checkRolePermission(roleId, requiredPermission)) {
+            System.out.println("Staff does not have permission for: " + requiredPermission);
+            res.sendRedirect(req.getContextPath() + "/401Page.jsp");
+            return;
+        }
+
+        Throwable problem = null;
+        try {
+            chain.doFilter(request, response);
+        } catch (Throwable t) {
+            // If an exception is thrown somewhere down the filter chain,
+            // we still want to execute our after processing, and then
+            // rethrow the problem after that.
+            problem = t;
+            t.printStackTrace();
+        }
+
+        doAfterProcessing(request, response);
+
+        // If there was a problem, we want to rethrow it if it is
+        // a known type, otherwise log it.
+        if (problem != null) {
+            if (problem instanceof ServletException) {
+                throw (ServletException) problem;
+            }
+            if (problem instanceof IOException) {
+                throw (IOException) problem;
+            }
+            sendProcessingError(problem, response);
+        }
+
+    }
+
+    /**
+     * Return the filter configuration object for this filter.
+     */
     public FilterConfig getFilterConfig() {
         return (this.filterConfig);
     }
@@ -234,15 +305,17 @@ public class AuthenticationFilter implements Filter {
     public void log(String msg) {
         filterConfig.getServletContext().log(msg);
     }
-    
-    public boolean hasPermission(HttpSession session, String per){
-        if(session.getAttribute("customer")!= null) return false;
-        if(session.getAttribute("staff")!=null){
+    /*
+    public boolean hasPermission(HttpSession session, String per) {
+        if (session.getAttribute("customer") != null) {
+            return false;
+        }
+        if (session.getAttribute("staff") != null) {
             System.out.println("check1");
             Staff staff = (Staff) session.getAttribute("staff");
             return staff.hasPermissions(per);
         }
         return false;
     }
-
+     */
 }

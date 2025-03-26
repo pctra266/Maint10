@@ -1,8 +1,10 @@
 package Controller.Account;
 
 import DAO.CustomerDAO;
+import DAO.PermissionDAO;
 import DAO.StaffDAO;
 import Model.Customer;
+import Model.Permissions;
 import Model.Staff;
 import Utils.Encryption;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Set;
 
 /**
  *
@@ -29,6 +32,7 @@ public class LoginServlet extends HttpServlet {
             throws ServletException, IOException {
         StaffDAO staffDao = new StaffDAO();
         CustomerDAO customerDao = new CustomerDAO();
+        PermissionDAO permissionDao = new PermissionDAO();
         HttpSession session = request.getSession();
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -39,7 +43,7 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("LoginForm.jsp").forward(request, response);
             return;
         }
-        
+
         String encryptionPassword = Encryption.EncryptionPassword(password);
         Staff staff = staffDao.getStaffByUsenamePassword(username, encryptionPassword);
         Customer customer = customerDao.getCustomerByUsenamePassword(username, encryptionPassword);
@@ -49,15 +53,17 @@ public class LoginServlet extends HttpServlet {
             request.getRequestDispatcher("LoginForm.jsp").forward(request, response);
             return;
         }
-                    session.removeAttribute("staff");
-                    session.removeAttribute("customer");
+        session.removeAttribute("staff");
+        session.removeAttribute("customer");
 
         if (staff != null) {
             session.setAttribute("staff", staff);
+            session.setAttribute("roleId", staff.getRole());
             saveCookies(response, username, password, rememberme);
             response.sendRedirect("profile");
         } else if (customer != null) {
             session.setAttribute("customer", customer);
+            session.setAttribute("customerId", customer.getCustomerID());
             saveCookies(response, username, password, rememberme);
             response.sendRedirect("profile");
         }
@@ -81,5 +87,5 @@ public class LoginServlet extends HttpServlet {
         response.addCookie(cusername);
         response.addCookie(cpassword);
         response.addCookie(crememberme);
-    }    
+    }
 }

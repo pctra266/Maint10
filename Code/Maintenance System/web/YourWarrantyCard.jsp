@@ -107,6 +107,7 @@
                     </table>
 
                     <jsp:include page="/includes/pagination.jsp" />  
+                     <jsp:include page="/chatBox.jsp"/>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

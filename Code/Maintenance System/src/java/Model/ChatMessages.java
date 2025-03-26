@@ -18,7 +18,8 @@ public class ChatMessages {
     private String receiverType;
     private String messageText;
     private Date timestamp;
-    
+    private String senderName;
+    private String receiverName;
    
 
     public ChatMessages() {
@@ -100,6 +101,22 @@ public class ChatMessages {
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getSenderName() {
+        return senderName;
+    }
+
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
+    }
+
+    public String getReceiverName() {
+        return receiverName;
+    }
+
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
     
     

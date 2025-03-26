@@ -89,6 +89,7 @@ CREATE TABLE ChatMessages (
 CREATE TABLE [Permissions] (
     PermissionID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     PermissionName NVARCHAR(100) UNIQUE NOT NULL,
+	Link NVARCHAR(MAX),
     Description NVARCHAR(255)
 );
 
@@ -454,6 +455,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+
+
     UPDATE Invoice
     SET Status = 'overdue'
     WHERE DueDate IS NOT NULL 
@@ -462,4 +465,9 @@ BEGIN
 END;
 
 
-
+    UPDATE Invoice
+    SET Status = 'overdue'
+    WHERE DueDate IS NOT NULL 
+          AND DueDate < GETDATE()
+          AND Status = 'pending';
+END;

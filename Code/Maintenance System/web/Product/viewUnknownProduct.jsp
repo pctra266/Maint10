@@ -134,6 +134,7 @@
             main.content button:hover {
                 background-color: #1E4FB8;
                 transform: translateY(-1px);
+
             }
 
             /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
@@ -167,6 +168,42 @@
                 outline: none;
                 border-color: #2563EB;
             }
+
+
+            }
+
+            /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
+
+            /* Form chọn số phần tử trên trang (cùng với hai nút) */
+            .page-size-form {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center; /* Canh giữa toàn bộ phần tử trong form */
+                gap: 8px;
+                margin: 20px 0; /* Thêm khoảng cách trên - dưới */
+            }
+            .page-size-form label {
+                font-size: 14px;
+                font-weight: 500;
+            }
+
+            .page-size-form select,
+            .page-size-form input[type="number"] {
+                padding: 6px 10px;
+                border-radius: 6px;
+                border: 1px solid #CBD5E1;
+                font-size: 14px;
+                background-color: #fff;
+                transition: border-color 0.2s;
+            }
+
+            .page-size-form select:focus,
+            .page-size-form input[type="number"]:focus {
+                outline: none;
+                border-color: #2563EB;
+            }
+
 
             /* ------------ BẢNG DANH SÁCH SẢN PHẨM ------------ */
             main.content table {
@@ -361,9 +398,14 @@
                                style="display: none;" />
 
                         <button type="submit">Apply</button>
+
+
+                        <button style="align-items: end" onclick="location.href = 'addUnknown'">Add Unknown Product</button>
+
                         <a href="addUnknown">
                             Add Unknown Product
                         </a>
+
                         <button class="search" onclick="window.location.href = 'listUnknown'">
                             All Product
                         </button>

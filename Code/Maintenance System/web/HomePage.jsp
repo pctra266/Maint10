@@ -243,9 +243,9 @@
                         </div>
                     </div>
                         </div> <!-- end div 3 -->
-                    
+                     
 <!--                   <div style="height: 50vh" class="bg-white">
-                       
+                      
                     </div> end div 4 -->
                 </main>
                       <footer class="footer bg-primary text-white text-center py-4 mt-auto">
@@ -262,13 +262,13 @@
                               </div>
                           </div>
                       </footer>
-
-
+                
+            
             </div>
         </div>
-
+      
         <script src="js/app.js"></script>
-
+    <jsp:include page="/chatBox.jsp"/>
     </body>
 
 </html>
