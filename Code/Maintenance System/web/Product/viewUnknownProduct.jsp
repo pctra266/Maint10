@@ -361,8 +361,9 @@
                                style="display: none;" />
 
                         <button type="submit">Apply</button>
-
-                        <button style="align-items: end" onclick="location.href = 'addUnknown'">Add Unknown Product</button>
+                        <a href="addUnknown">
+                            Add Unknown Product
+                        </a>
                         <button class="search" onclick="window.location.href = 'listUnknown'">
                             All Product
                         </button>

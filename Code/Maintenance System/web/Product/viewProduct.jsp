@@ -394,9 +394,8 @@
                                 <i class="fas fa-box-open"></i> External Product
                             </a>
                         </div>
-
                     </div>
-             >
+   
                     <div class="table-section">
                         <h1>Product List</h1>
                         <table>
