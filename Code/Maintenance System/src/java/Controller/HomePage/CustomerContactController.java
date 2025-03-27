@@ -59,9 +59,50 @@ public class CustomerContactController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
-        List<CustomerContact> contactList = contactDAO.getAllCustomerContacts();
-        request.setAttribute("contactList", contactList);
-        request.getRequestDispatcher("customerContactList.jsp").forward(request, response);
+        String action = request.getParameter("action");
+    try {
+        switch (action != null ? action : "") {
+            case "createCustomerContact":
+                String name = request.getParameter("Name");
+                String email = request.getParameter("Email");
+                String phone = request.getParameter("Phone");
+                String message = request.getParameter("Message");
+
+                if (name == null || phone == null || name.trim().isEmpty() || phone.trim().isEmpty()) {
+                    request.setAttribute("error", "Name and Phone are required!");
+                    request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+                    return;
+                }
+
+                CustomerContact contact = new CustomerContact();
+                contact.setName(name);
+                contact.setEmail(email);
+                contact.setPhone(phone);
+                contact.setMessage(message);
+
+                if (contactDAO.addCustomerContact(contact)) {
+                    request.setAttribute("success", "Contact request submitted successfully!");
+                    request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+                } else {
+                    request.setAttribute("error", "Failed to submit request. Please try again.");
+                    request.getRequestDispatcher("customerContactForm.jsp").forward(request, response);
+                }
+                
+                break;
+            case "":
+                List<CustomerContact> contactList = contactDAO.getAllCustomerContacts();
+                request.setAttribute("contactList", contactList);
+                request.getRequestDispatcher("customerContactList.jsp").forward(request, response);
+                break;
+
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.sendRedirect("404Page.jsp");
+        return ;
+    }
+    
+        
     } 
 
     /** 

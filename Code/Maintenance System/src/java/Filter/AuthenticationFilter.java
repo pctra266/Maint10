@@ -129,6 +129,7 @@ public class AuthenticationFilter implements Filter {
             chain.doFilter(request, response);
             return;
         }
+        
         // Danh sách URL không cần kiểm tra quyền
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
@@ -136,7 +137,7 @@ public class AuthenticationFilter implements Filter {
                 "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
                 "/BlogController", "/BlogController?action=More", "/changepassword",
                 "/img/serviceItems/","/Notification/GetUnread","/Notification/MarkRead","/Redirect",
-                "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
+                "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp","/customerContactForm.jsp");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
@@ -155,12 +156,17 @@ public class AuthenticationFilter implements Filter {
         System.out.println("Customer ID: " + customerId);
         System.out.println("Role ID (staff): " + roleId);
 
-        if (EXCLUDED_URLS.contains(servletPath)) {
+//        if (EXCLUDED_URLS.contains(servletPath)) {
+//            System.out.println("Skipping auth check for: " + servletPath);
+//            chain.doFilter(request, response);
+//            return;
+//        }
+        if(EXCLUDED_URLS.contains((action == null)? servletPath: servletPath+"?action="+ action)){
             System.out.println("Skipping auth check for: " + servletPath);
             chain.doFilter(request, response);
             return;
         }
-
+        
         if (customerId != null) {
             if (!CUSTOMER_ALLOWED_URLS.contains((action == null) ? servletPath : servletPath + "?action=" + action)) {
                 System.out.println("Customer not allowed to access: " + servletPath);
@@ -172,7 +178,7 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         }
-
+        
         if (roleId == null) {
             System.out.println("User is not logged in, redirecting to login page.");
             res.sendRedirect("LoginForm.jsp");
