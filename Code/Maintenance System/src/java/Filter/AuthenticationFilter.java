@@ -124,16 +124,19 @@ public class AuthenticationFilter implements Filter {
         // Chỉ lấy đường dẫn chính, bỏ qua query string
         String servletPath = req.getServletPath();
         String action = req.getParameter("action");
-
+        // Nêu la may cai file nmhu nay thi bo qua mong la noi chay
+        if (servletPath.matches(".*\\.(jpg|png|css|js|ico|gif|woff|woff2|ttf|svg)$")) {
+            chain.doFilter(request, response);
+            return;
+        }
         // Danh sách URL không cần kiểm tra quyền
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
-                "/SearchWarrantyController","/customerContact?action=createCustomerContact",
-                "/BlogController","/BlogController?action=More","/changepassword");
+                "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
+                "/BlogController", "/BlogController?action=More", "/changepassword");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
-                
                 "/feedback?action=viewFeedbackDashboard",
                 "/feedback?action=createFeedback",
                 "/feedback?action=viewListFeedbackByCustomerId",
@@ -142,8 +145,6 @@ public class AuthenticationFilter implements Filter {
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
                 "/WarrantyCard/Add"
-                
-                
         );
 
         System.out.println("Requested URL: " + servletPath);
