@@ -129,11 +129,11 @@ public class AuthenticationFilter implements Filter {
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
                 "/SearchWarrantyController","/customerContact?action=createCustomerContact",
-                "/BlogController","/BlogController?action=More","/changepassword");
+                "/BlogController","/BlogController?action=More","/changepassword","/img/serviceItems/",
+                "/css/light.css","/js/app.js");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
-                
                 "/feedback?action=viewFeedbackDashboard",
                 "/feedback?action=createFeedback",
                 "/feedback?action=viewListFeedbackByCustomerId",
@@ -143,8 +143,6 @@ public class AuthenticationFilter implements Filter {
                 "/purchaseproduct",
                 "/WarrantyCard/Add",
                 "/Redirect"
-                
-                
         );
 
         System.out.println("Requested URL: " + servletPath);
