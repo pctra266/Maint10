@@ -534,7 +534,7 @@
         </script>
         <script>
             function validateProductName(input) {
-                let errorMessage = document.getElementById("customerNameError");
+                let errorMessage = document.getElementById("productNameError");
 
                 // Lấy giá trị nhập vào
                 let value = input.value;

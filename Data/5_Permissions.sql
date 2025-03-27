@@ -1,4 +1,6 @@
-﻿INSERT INTO Permissions (PermissionName, Link, Description) VALUES
+﻿USE MaintainManagement
+
+INSERT INTO [Permissions] (PermissionName, Link, Description) VALUES
 ('VIEW_COMPONENTS_WAREHOUSE', '/ComponentWarehouse', NULL),
 ('DELETE_COMPONENT', '/ComponentWarehouse/Delete', NULL),
 ('VIEW_WARRANTY_CARD_LIST', '/Warehouse/WarrantyCard', NULL),
