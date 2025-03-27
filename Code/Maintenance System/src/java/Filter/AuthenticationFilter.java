@@ -130,7 +130,7 @@ public class AuthenticationFilter implements Filter {
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
                 "/SearchWarrantyController","/customerContact?action=createCustomerContact",
                 "/BlogController","/BlogController?action=More","/changepassword","/img/serviceItems/",
-                "/css/light.css","/js/app.js");
+                "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
