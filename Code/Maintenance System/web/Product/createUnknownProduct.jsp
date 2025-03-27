@@ -17,220 +17,326 @@
 
         <style>
             /* Tổng thể */
+            body {
+                font-family: 'Inter', sans-serif;
+                background-color: #f7f9fc;
+                margin: 0;
+                padding: 0;
+                color: #333;
+            }
+
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+
             .main {
                 display: flex;
                 flex-direction: column;
                 flex-grow: 1;
-                padding: 30px;
-                background-color: #f4f7f9;
+                padding: 40px;
+                background-color: #f7f9fc;
             }
 
-            /* Container chính */
+            /* Container chính: tăng chiều ngang */
             .container {
-                max-width: 600px;
+                max-width: 800px;
                 margin: 0 auto;
-                background: #ffffff;
-                padding: 25px;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                transition: transform 0.3s ease-in-out;
+                background: #fff;
+                padding: 30px 40px;
+                border-radius: 16px;
+                box-shadow: 0 6px 18px rgba(50, 106, 188, 0.15);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
             }
-
             .container:hover {
-                transform: translateY(-5px);
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgba(50, 106, 188, 0.25);
             }
 
             /* Tiêu đề */
             h2 {
                 text-align: center;
-                font-size: 26px;
-                font-weight: bold;
-                color: #333;
-                margin-bottom: 20px;
+                font-size: 28px;
+                font-weight: 600;
+                color: #326ABC;
+                margin-bottom: 25px;
             }
 
-            /* Form */
+            /* Form: chia thành 2 cột nếu đủ không gian */
             form {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            /* Mỗi group form */
+            .form-group {
+                flex: 1 1 48%;
                 display: flex;
                 flex-direction: column;
             }
 
             /* Nhãn */
-            label {
+            .form-group label {
                 font-weight: 600;
-                margin-top: 12px;
+                margin-bottom: 8px;
                 color: #444;
             }
 
             /* Input, Select và Textarea */
-            input, select, textarea {
-                width: 100%;
-                padding: 12px;
-                margin-top: 6px;
-                border: 1px solid #ced4da;
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 14px;
+                border: 1px solid #ccc;
                 border-radius: 8px;
-                font-size: 14px;
-                background-color: #f8f9fa;
+                font-size: 15px;
+                background-color: #fafafa;
                 transition: border-color 0.3s, box-shadow 0.3s;
             }
-
-            /* Focus hiệu ứng */
-            input:focus, select:focus, textarea:focus {
+            .form-group input:focus,
+            .form-group select:focus,
+            .form-group textarea:focus {
                 outline: none;
-                border-color: #007bff;
-                box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+                border-color: #326ABC;
+                box-shadow: 0 0 8px rgba(50, 106, 188, 0.3);
             }
-
-            /* Textarea */
-            textarea {
+            .form-group textarea {
                 resize: vertical;
-                min-height: 120px;
+                min-height: 140px;
             }
 
-            /* Button chính */
-            button {
-                margin-top: 20px;
-                padding: 12px;
-                background: linear-gradient(45deg, #007bff, #0056b3);
+            button.btn {
+                width: 100%;
+                padding: 14px;
+                background: #004085;
                 border: none;
                 color: #fff;
                 font-size: 16px;
-                font-weight: bold;
+                font-weight: 600;
                 border-radius: 8px;
                 cursor: pointer;
                 transition: background 0.3s, transform 0.2s;
+                margin-top: 10px;
+            }
+            button.btn:hover {
+                background: linear-gradient(45deg, #1E5AA8, #14457E);
+                transform: scale(1.03);
             }
 
-            button:hover {
-                background: linear-gradient(45deg, #0056b3, #004085);
-                transform: scale(1.05);
-            }
-
-            /* Nút quay lại */
             .btn-update {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin-top: 20px;
-                padding: 12px;
-                background: #6c757d;
+                display: block;
+                width: 100%;
+                text-align: center;
+                padding: 14px;
+                background: #326ABC;
                 color: #fff;
                 text-decoration: none;
                 border-radius: 8px;
-                font-weight: bold;
+                font-weight: 600;
                 transition: background 0.3s, transform 0.2s;
+                margin-top: 20px;
             }
-
             .btn-update:hover {
-                background: #5a6268;
-                transform: scale(1.05);
+                transform: scale(1.03);
             }
 
             /* Hiển thị thông báo */
             .message {
-                background: #d4edda;
-                color: #155724;
-                padding: 12px;
+                background: #e6f4ea;
+                color: #2d6a4f;
+                padding: 14px;
                 border-radius: 8px;
-                margin-bottom: 15px;
+                margin-bottom: 20px;
                 text-align: center;
-                font-weight: bold;
+                font-weight: 600;
             }
 
             /* Hiển thị lỗi */
             .error-message {
-                color: red;
+                color: #e63946;
                 font-size: 13px;
                 margin-top: 6px;
                 font-style: italic;
             }
 
+            /* Toolbox */
             .toolbox {
-                background-color: #f0f0f0; /* màu nền nhẹ */
-                border: 1px solid #ddd;    /* viền nhẹ */
-                border-radius: 5px;        /* bo góc */
-                padding: 15px;             /* khoảng cách bên trong */
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* tạo bóng nhẹ */
-                max-width: 2000px;          /* giới hạn chiều rộng nếu cần */
-                margin: 20px auto;         /* căn giữa container trên trang */
+                background-color: #f0f0f0;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                padding: 15px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                max-width: 100%;
+                margin: 20px auto;
             }
-
             .toolbox label {
                 display: block;
                 font-weight: bold;
                 margin-bottom: 8px;
             }
-
             .toolbox textarea {
-                width: 100%;
+                width: 200%;
                 min-height: 100px;
                 padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
-                resize: vertical; /* cho phép thay đổi kích thước theo chiều dọc */
+                resize: vertical;
             }
 
-            /* Tổng thể vùng editor */
+            /* Editor container */
             .editor-container {
-                width:100%;              /* Độ rộng mong muốn */
-                border: 1px solid #ccc;    /* Viền ngoài */
-                border-radius: 5px;        /* Bo góc */
-                margin: auto;         /* Căn giữa trang */
-                font-family: sans-serif;   /* Font chữ cơ bản */
-                background-color: #f9f9f9; /* Nền nhẹ */
+                width: 100%;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                margin: 15px 0;
+                background-color: #fff;
+                font-family: 'Inter', sans-serif;
             }
 
-            /* Thanh công cụ (toolbar) */
+            /* Toolbar */
             .editor-toolbar {
                 display: flex;
-                flex-wrap: wrap;           /* Nếu thiếu chỗ, icon sẽ xuống dòng */
+                flex-wrap: wrap;
                 border-bottom: 1px solid #ddd;
-                background-color: #fafafa;
-                padding: 5px 10px;
-                border-top-left-radius: 5px;
-                border-top-right-radius: 5px;
+                background-color: #f8f9fa;
+                padding: 8px;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
             }
-
-            /* Nút công cụ (tool-btn) */
             .tool-btn {
                 background: none;
                 border: none;
                 cursor: pointer;
-                margin-right: 8px;
-                font-size: 16px;
-                color: #555;
+                margin-right: 10px;
+                font-size: 18px;
+                color: #666;
                 padding: 6px;
-                transition: background-color 0.2s ease, color 0.2s ease;
+                transition: color 0.2s, background-color 0.2s;
             }
-
             .tool-btn:hover {
-                background-color: #e0e0e0;
-                color: #000;
+                background-color: #e9ecef;
+                color: #326ABC;
             }
-
             .tool-btn:focus {
-                outline: none; /* Tắt khung focus mặc định, tuỳ chọn */
+                outline: none;
             }
 
-            /* Vùng soạn thảo */
-            .editor-content {
-                min-height: 200px;         /* Chiều cao tối thiểu */
-                padding: 10px;
-                font-size: 14px;
-                line-height: 1.4;
+            /* Editor content */
+            .editor-content,
+            textarea#description {
+                min-height: 200px;
+                padding: 12px;
+                font-size: 15px;
+                line-height: 1.6;
                 background-color: #fff;
-                border-bottom-left-radius: 5px;
-                border-bottom-right-radius: 5px;
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
             }
-
-            /* Hiển thị placeholder khi contenteditable rỗng */
-            .editor-content:empty:before {
+            .editor-content:empty:before,
+            textarea#description:empty:before {
                 content: attr(data-placeholder);
                 color: #aaa;
             }
-            .editor-content:focus:before {
+            .editor-content:focus:before,
+            textarea#description:focus:before {
                 content: "";
             }
+
+            /* Căn chỉnh input và dropdown */
+            .form-group {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 15px;
+            }
+
+            .form-group label {
+                font-weight: 600;
+                min-width: 120px;
+                text-align: right;
+            }
+
+            .form-group input,
+            .form-group select {
+                flex: 1;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 14px;
+                background-color: #fff;
+            }
+
+            .form-group input:focus,
+            .form-group select:focus {
+                border-color: #326ABC;
+                outline: none;
+                box-shadow: 0 0 6px rgba(50, 106, 188, 0.2);
+            }
+
+            /* Căn chỉnh phần trình soạn thảo */
+            .editor-container {
+                width: 100%;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                background: #fff;
+                padding: 10px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            }
+
+            /* Toolbar của trình soạn thảo */
+            .editor-toolbar {
+                display: flex;
+                gap: 8px;
+                padding: 8px;
+                background-color: #f5f5f5;
+                border-bottom: 1px solid #ddd;
+                border-top-left-radius: 8px;
+                border-top-right-radius: 8px;
+            }
+
+            .editor-toolbar button {
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 6px;
+                color: #444;
+                transition: all 0.2s;
+            }
+
+            .editor-toolbar button:hover {
+                color: #326ABC;
+            }
+
+            /* Khu vực nhập nội dung */
+            .editor-content {
+                width: 100%;
+                min-height: 180px;
+                padding: 12px;
+                font-size: 14px;
+                border-bottom-left-radius: 8px;
+                border-bottom-right-radius: 8px;
+                background: #fff;
+                border: none;
+                outline: none;
+                resize: vertical;
+            }
+
+            /* Căn chỉnh ô nhập ngày */
+            .date-input {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .date-input input {
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                font-size: 14px;
+            }
+
         </style>
     </head>
 
@@ -269,6 +375,9 @@
                             <label for="customerPhone">Phone Number:</label>
                             <input type="text" id="customerPhone" name="customerPhone" readonly>
 
+                            <label for="receivedDate">Received Date:</label>
+                            <input type="datetime-local" id="receivedDate" name="receivedDate" value="${param.receivedDate}" required step="1">
+
                             <label for="description">Description:</label>
                             <div class="editor-container">
                                 <div class="editor-toolbar">
@@ -285,20 +394,14 @@
                                     <button type="button" class="tool-btn" title="Quote"><i class="fas fa-quote-right"></i></button>
                                     <button type="button" class="tool-btn" title="Source"><i class="fas fa-code"></i></button>
                                 </div>
-
-                                <!-- Vùng soạn thảo (contenteditable) -->
                                 <textarea id="description" name="description">${param.description}</textarea>
                             </div>
-
-
-                            <label for="receivedDate">Received Date:</label>
-                            <input type="datetime-local" id="receivedDate" name="receivedDate" value="${param.receivedDate}" required step="1">
 
                             <button type="submit" class="btn">Add Product</button>
                         </form>
 
                         <a href="listUnknown" class="btn-update">
-                            <i class="fas fa-backward  "></i>Back
+                            Back
                         </a>
                     </div>
                 </main>
@@ -343,7 +446,6 @@
                                         }
                                     });
 
-                                    // Xử lý sự kiện paste cho productCode: loại bỏ tất cả dấu cách
                                     productCode.addEventListener("paste", function (e) {
                                         e.preventDefault();
                                         let pasteData = (e.clipboardData || window.clipboardData).getData("text");
@@ -355,7 +457,6 @@
                                         productCode.setSelectionRange(start + pasteData.length, start + pasteData.length);
                                     });
 
-                                    // Sự kiện blur cho productName và description: loại bỏ khoảng trắng ở đầu và cuối
                                     productName.addEventListener("blur", function () {
                                         productName.value = productName.value.trim();
                                         updateSubmitButton();
@@ -500,12 +601,9 @@
                                     }
                                 }
 
-// Gọi lại hàm khi trang tải lại để giữ nguyên số điện thoại của khách hàng đã chọn trước đó
                                 document.addEventListener("DOMContentLoaded", function () {
                                     updatePhoneNumber();
                                 });
-
         </script>
     </body>
 </html>
-

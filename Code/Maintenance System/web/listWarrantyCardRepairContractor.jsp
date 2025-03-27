@@ -301,7 +301,6 @@
                             </div>                        
                         </div>
 
-                        <!-- Bảng danh sách -->
                         <table>
                             <thead>
                                 <tr>
@@ -336,7 +335,6 @@
                             </tbody>
                         </table>
 
-                        <!-- Khu vực phân trang -->
                         <div class="pagination">
                             <c:if test="${totalPages > 1}">
                                 <button type="submit" name="currentPage" value="1">First</button>

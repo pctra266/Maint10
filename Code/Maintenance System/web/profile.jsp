@@ -130,6 +130,7 @@
             .update-setting-button:hover,
             .blue-link-button:hover {
                 background: #2980b9;
+                text-decoration: none;
             }
 
             /* FORM STYLES (bên trong main) */
@@ -513,11 +514,9 @@
                                         </div>
                                     </div>
                                     <div class="btn-row">
-                                        <button type="submit" class="update-setting-button">Update Setting</button>
+                                        <button type="submit" class="update-setting-button">Update</button>
                                         <button type="button" class="update-setting-button" onclick="cancelEdit()">Cancel</button>
                                     </div>
-
-
                                 </form>
                             </div>
                         </div>
