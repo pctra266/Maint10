@@ -124,10 +124,18 @@ public class AuthenticationFilter implements Filter {
         // Chỉ lấy đường dẫn chính, bỏ qua query string
         String servletPath = req.getServletPath();
         String action = req.getParameter("action");
-
+        // Nêu la may cai file nmhu nay thi bo qua mong la noi chay
+        if (servletPath.matches(".*\\.(jpg|png|css|js|ico|gif|woff|woff2|ttf|svg)$")) {
+            chain.doFilter(request, response);
+            return;
+        }
         // Danh sách URL không cần kiểm tra quyền
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
+
+                "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
+                "/BlogController", "/BlogController?action=More", "/changepassword");
+
                 "/SearchWarrantyController","/customerContact?action=createCustomerContact",
                 "/BlogController","/BlogController?action=More","/changepassword","/img/serviceItems/",
                 "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
@@ -141,9 +149,13 @@ public class AuthenticationFilter implements Filter {
                 "/yourwarrantycard",
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
+
+                "/WarrantyCard/Add"
+
                 "/WarrantyCard/Add",
                 "/Redirect",
                 "/WarrantyCard/Add?action=create"
+
         );
 
         System.out.println("Requested URL: " + servletPath);
