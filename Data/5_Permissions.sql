@@ -46,10 +46,10 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CHANGE_PASSWORD_FORM_JSP', '/ChangePasswordForm.jsp'),
 ('CHANGE_PASSWORD', '/changepassword'),
 ('VIEW_PROFILE', '/profile'),
-('VIEW_FEEDBACK', '/feedback'),
+('VIEW_FEEDBACK', '/feedback?action=viewFeedback'),
 ('DELETE_FEEDBACK', '/feedback?action=deleteFeedback'),
-('UPDATE_FEEDBACK', '/feedback?&action=updateFeedback'),
-('VIEW_FEEDBACK_LOG', '/feedbacklog'),
+('UPDATE_FEEDBACK', '/feedback?action=updateFeedback'),
+('VIEW_FEEDBACK_LOG', '/feedbacklog?action=viewListFeedbackLog'),
 ('UNDO_FEEDBACK_LOG', '/feedbacklog?action=undoFeedback'),
 ('UPDATE_MAX_SIZE', '/updateMaxSize'),
 ('ADMIN_DASHBOARD_JSP', '/adminDashboard.jsp'),
@@ -200,5 +200,5 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,96),(2,96),(3,96),(4,96),(5,96),
 (1,97),(2,97),(3,97),(4,97),(5,97)
 
-DELETE FROM Permissions;
-DBCC CHECKIDENT ('Permissions', RESEED, 0);
+--DELETE FROM Permissions;
+--DBCC CHECKIDENT ('Permissions', RESEED, 0);

@@ -123,7 +123,7 @@
                         </tbody>
                     </table>
                     <jsp:include page="/includes/pagination.jsp" />
-                    <a href="feedback">Back</a>
+                    <a href="feedback?action=viewFeedback">Back</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
 

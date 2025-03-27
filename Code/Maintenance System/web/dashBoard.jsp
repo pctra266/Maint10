@@ -135,7 +135,7 @@
                                     <a href="InvoiceController">Invoice</a>
                                 </li>
                                 <li>
-                                    <a href="feedback?action=viewFeedbackDashboard">Feedback (Customer)</a>
+                                    <a href="feedback?action=viewFeedbackDashboard">Feedback </a>
                                 </li>
                                 <li>
                                     <a href="packageWarranty">List Package Warranty</a>
@@ -208,7 +208,7 @@
                                     <a href="InvoiceController">Invoice</a>
                                 </li>
                                 <li>
-                                    <a href="feedback">Feedback list</a>
+                                    <a href="feedback?action=viewFeedback">Feedback list</a>
                                 </li>
                                 <li>
                                     <a href="adminDashboard.jsp">Setting Max Size</a>

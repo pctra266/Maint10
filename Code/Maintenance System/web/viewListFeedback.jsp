@@ -138,7 +138,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td><a class="btn btn-primary" href="feedback?feedbackID=${o.feedbackID}&action=updateFeedback">Detail & Edit</a></td>
+                                    <td><a class="btn btn-primary" href="feedback?action=updateFeedback&feedbackID=${o.feedbackID}">Detail & Edit</a></td>
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -151,7 +151,7 @@
                         </ul>
                     </div> 
                     <jsp:include page="/includes/pagination.jsp" />
-                    <a href="feedbacklog">History</a>
+                    <a href="feedbacklog?action=viewListFeedbackLog">History</a>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

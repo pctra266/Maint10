@@ -134,10 +134,8 @@ public class AuthenticationFilter implements Filter {
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
 
                 "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
-                "/BlogController", "/BlogController?action=More", "/changepassword");
-
-                "/SearchWarrantyController","/customerContact?action=createCustomerContact",
-                "/BlogController","/BlogController?action=More","/changepassword","/img/serviceItems/",
+                "/BlogController", "/BlogController?action=More", "/changepassword",
+                "/img/serviceItems/",
                 "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
 
         // Danh sách URL mà Customer được phép truy cập
@@ -149,9 +147,6 @@ public class AuthenticationFilter implements Filter {
                 "/yourwarrantycard",
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
-
-                "/WarrantyCard/Add"
-
                 "/WarrantyCard/Add",
                 "/Redirect",
                 "/WarrantyCard/Add?action=create"

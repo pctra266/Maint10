@@ -451,7 +451,7 @@
                                         <button class="update-setting-button" onclick="toggleEditProfile()">Edit Profile</button>
                                         <!-- Dùng link kiểu nút xanh dương -->
                                         <a class="blue-link-button" href="ChangePasswordForm.jsp">Change Password</a>
-                                        <a class="blue-link-button" href="HomePage.jsp">Back to Home</a>
+                                        <a class="blue-link-button" href="Home">Back to Home</a>
                                     </div>
                                 </div>
 
