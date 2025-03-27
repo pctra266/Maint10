@@ -114,7 +114,9 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('COMPONENT_TYPE_DELETE', '/ComponentType?action=delete'),
 ('VIEW_PRODUCT_TYPE', '/ProductType'),
 ('ADD_PRODUCT_TYPE', '/ProductType?action=add'),
-('DELETE_PRODUCT_TYPE', '/ProductType?action=delete')
+('DELETE_PRODUCT_TYPE', '/ProductType?action=delete'),
+('IMPORT_COMPONENTS_2', '/ComponentWarehouse?action=clearErrorComponents'),
+('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -128,7 +130,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,9),(3,9),
 (1,10),(3,10),
 (1,11),(3,11),
-(1,12),(2,12),
+(1,12),(2,12),(5,12),
 (2,13),
 (1,14),(2,14),
 (1,15),(2,15),(3,15),(4,15),(5,15),
@@ -160,7 +162,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 
 (1,42),
 (1,43),(2,43),(3,43),(4,43),(5,43),
-(1,44),(2,44),(3,44),(4,44),
+(1,44),(2,44),(3,44),(4,44),(5,44),
 (1,45),(2,45),(3,45),(4,45),(5,45),
 (1,46),(5,46),
 (1,47),(5,47),
@@ -231,14 +233,16 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,112),(3,112),
 (1,113),(3,113),
 (1,114),(3,114),
-(1,115),(3,115)
+(1,115),(3,115),
+(1,116),(3,116),
+(1,117),(3,117)
 
-
+/*
 DELETE FROM Permissions;
 DBCC CHECKIDENT ('Permissions', RESEED, 0);
 DELETE FROM Role_Permissions
 
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
-
+('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update')
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
-
+(1,117),(2,117),(3,117),(5,117) */
