@@ -186,7 +186,7 @@
                                                 );
                                     });
                                 }
-                                setTimeout(checkNotifications, 0);
+                                setTimeout(checkNotifications, 5000);
                             },
                             error: function (xhr, status, error) {
                                 console.error("Error fetching notifications: ", status, error);
