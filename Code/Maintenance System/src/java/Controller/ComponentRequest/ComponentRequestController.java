@@ -91,7 +91,8 @@ public class ComponentRequestController extends HttpServlet {
         //action
         String action = request.getParameter("action");
         if (action == null) {
-            action = "viewComponentRequestDashboard";
+            response.sendRedirect("404Page.jsp");
+            return ;
         }
         System.out.println("action la: " + action);
         //parameter
@@ -199,7 +200,7 @@ public class ComponentRequestController extends HttpServlet {
         // Session
         HttpSession session = request.getSession();
         Staff currentStaff = (Staff) session.getAttribute("staff");
-
+        
         String staffId = "2";
         if (currentStaff != null) {
             staffId = String.valueOf(currentStaff.getStaffID());
@@ -372,6 +373,9 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("/listComponentRequestInStaffRole.jsp").forward(request, response);
 
                 break;
+            default:
+                 response.sendRedirect("404Page.jsp");
+            return ;
         }
     }
 
@@ -443,7 +447,8 @@ public class ComponentRequestController extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            action = "viewComponentRequestDashboard";
+             response.sendRedirect("404Page.jsp");
+            return ;
         }
 
         //parameter
@@ -546,6 +551,9 @@ public class ComponentRequestController extends HttpServlet {
                 }
                 response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardIDstr + "&productCode=" + productCode + "&mess=" + mess);
                 break;
+            default:
+                 response.sendRedirect("404Page.jsp");
+            return ;
         }
     }
 

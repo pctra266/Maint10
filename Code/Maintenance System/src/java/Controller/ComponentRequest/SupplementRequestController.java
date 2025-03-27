@@ -77,8 +77,8 @@ public class SupplementRequestController extends HttpServlet {
                 break;
 
             default:
-                showListSupplementRequest(request, response);
-                break;
+                 response.sendRedirect("404Page.jsp");
+            return ;
         }
     } catch (Exception e) {
         e.printStackTrace();

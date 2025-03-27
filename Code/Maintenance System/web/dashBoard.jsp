@@ -284,7 +284,7 @@
                                     <a href="BlogController">Blog</a>
                                 </li>
                                 <li>
-                                    <a href="componentRequest">Component Request</a>
+                                    <a href="componentRequest?action=viewComponentRequestDashboard">Component Request</a>
                                 </li>
                                 <li>
                                     <a href="componentRequest?action=viewListComponentRequest">List Component Request</a>
