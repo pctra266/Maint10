@@ -97,7 +97,9 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('WARRANTY_CARD_PROCESS_CONTROLLER', '/WarrantyCardProcessController'),
 ('REPORT_COMPONENT_JSP', '/ReportComponent.jsp'),
 ('REDIRECT (Cusomer)', '/Redirect'),
-('HOME (Cusomer)', '/Home')
+('HOME (Cusomer)', '/Home'),
+('BANK_PAY', '/vnpayajax'),
+('Pay_RETURN', '/Payment/Return')
 
 
 
@@ -198,7 +200,9 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,94),
 (1,95),(3,95),
 (1,96),(2,96),(3,96),(4,96),(5,96),
-(1,97),(2,97),(3,97),(4,97),(5,97)
+(1,97),(2,97),(3,97),(4,97),(5,97),
+(2,98),
+(2,99)
 
 --DELETE FROM Permissions;
 --DBCC CHECKIDENT ('Permissions', RESEED, 0);

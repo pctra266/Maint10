@@ -135,7 +135,7 @@ public class AuthenticationFilter implements Filter {
 
                 "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
                 "/BlogController", "/BlogController?action=More", "/changepassword",
-                "/img/serviceItems/",
+                "/img/serviceItems/","/Notification/GetUnread","/Notification/MarkRead","/Redirect",
                 "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
 
         // Danh sách URL mà Customer được phép truy cập
@@ -148,9 +148,7 @@ public class AuthenticationFilter implements Filter {
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
                 "/WarrantyCard/Add",
-                "/Redirect",
-                "/WarrantyCard/Add?action=create"
-
+                "/Redirect"
         );
 
         System.out.println("Requested URL: " + servletPath);
