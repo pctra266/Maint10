@@ -1,12 +1,11 @@
 ﻿USE MaintainManagement
-
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('VIEW_COMPONENTS_WAREHOUSE', ' /ComponentWarehouse'),
-('DELETE_COMPONENT', ' /ComponentWarehouse/Delete'),
-('VIEW_WARRANTY_CARD_LIST', ' /Warehouse/WarrantyCard '),
-('ADD_NEW_COMPONENT', ' /ComponentWarehouse/Add '),
-('SEARCH_ADVANCE_COMPONENT', ' /ComponentWarehouse/Search'),
-('VIEW_COMPONENT_DETAIL', ' /ComponentWarehouse/Detail'),
+('DELETE_COMPONENT', '/ComponentWarehouse/Delete'),
+('VIEW_WARRANTY_CARD_LIST', '/Warehouse/WarrantyCard '),
+('ADD_NEW_COMPONENT', '/ComponentWarehouse/Add '),
+('SEARCH_ADVANCE_COMPONENT', '/ComponentWarehouse/Search'),
+('VIEW_COMPONENT_DETAIL', '/ComponentWarehouse/Detail'),
 ('EDIT_COMPONENT', '/ComponentWarehouse/Edit'),
 ('ADD_COMPONENT_INTO_PRODUCT', '/ComponentWarehouse/AddProductToComponent'),
 ('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?ID=?&product=?'),
@@ -17,10 +16,10 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('DELETE_WARRANTY_CARD', '/WarrantyCard/Delete'),
 ('VIEW_WARRANTY_CARD_DETAIL', '/WarrantyCard/Detail'),
 ('PROCESSING_WARRANTY_CARD_INCOM', '/WarrantyCard/Detail?action=process'),
-('UPLOAD_IMAGES_WARRANTY_CARD', 'WarrantyCard/Detail?action=uploadImages'),
-('DELETE_IMAGES_WARRANTY_CARD', 'WarrantyCard/Detail?Id=?&action=deleteMedia'),
-('UPDATE_REPAIR_LIST_WARRANTY_CARD', 'WarrantyCard/Detail?Id=?&action=update'),
-('CREATE_CONTRACTOR_CARD', '/WarrantyCard/OutsourceRequest'),
+('UPLOAD_IMAGES_WARRANTY_CARD', '/WarrantyCard/Detail?action=uploadImages'),
+('DELETE_IMAGES_WARRANTY_CARD', '/WarrantyCard/Detail?action=deleteMedia'),
+('UPDATE_REPAIR_LIST_WARRANTY_CARD', '/WarrantyCard/Detail?action=update'),
+('CREATE_CONTRACTOR_CARD', '/WarrantyCard/OutsourceRequest?action=requestOutsource'),
 ('ADD_COMPONENT_INTO_WARRANTY_CARD', '/WarrantyCard/AddComponent'),
 ('CREATE_INVOICE_FOR_CUSTOMER', '/Invoice/Create'),
 ('VIEW_LIST_INVOICE_OF_CARD', '/Invoice/List'),
@@ -46,7 +45,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CHANGE_PASSWORD_FORM_JSP', '/ChangePasswordForm.jsp'),
 ('CHANGE_PASSWORD', '/changepassword'),
 ('VIEW_PROFILE', '/profile'),
-('VIEW_FEEDBACK', '/feedback?action=viewFeedback'),
+('VIEW_FEEDBACK', 'feedback?action=viewFeedback'),
 ('DELETE_FEEDBACK', '/feedback?action=deleteFeedback'),
 ('UPDATE_FEEDBACK', '/feedback?action=updateFeedback'),
 ('VIEW_FEEDBACK_LOG', '/feedbacklog?action=viewListFeedbackLog'),
@@ -99,9 +98,16 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('REDIRECT (Cusomer)', '/Redirect'),
 ('HOME (Cusomer)', '/Home'),
 ('BANK_PAY', '/vnpayajax'),
-('Pay_RETURN', '/Payment/Return')
-
-
+('Pay_RETURN', '/Payment/Return'),
+('ADD_WARRANTY_CARD_2', '/WarrantyCard/Add?action=create'),
+('ADD_WARRANTY_CARD_3', '/WarrantyCard/Add?action=receive '),
+('DELETE_COMPONENT_IN_REPAIR_LIST', '/WarrantyCard/Detail?action=delete'),
+('CREATE_CONTRACTOR_CARD_2', '/WarrantyCard/OutsourceRequest'),
+('WARRANTY_CARD_OUTSOURCE_PROCESS', '/WarrantyCard/OutsourceRequest?action=processOutsource'),
+('VIEW_COMPONENT_REQUEST_DASHBOARD', '/componentRequest?action=viewComponentRequestDashboard'),
+('SEARCH_WARRANTY_CARD_FOR_EXPORT', '/searchwc'),
+('EXPORT_WARRANTY_CARD', '/exportpdf'),
+('SEND_WARRANTY_CARD', '/sendWC')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -202,7 +208,22 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,96),(2,96),(3,96),(4,96),(5,96),
 (1,97),(2,97),(3,97),(4,97),(5,97),
 (2,98),
-(2,99)
+(2,99),
+(2,100),
+(2,101),
+(2,102),
+(2,103),
+(2,104),
+(2,105),(3,105),
+(1,106),(2,106),
+(1,107),(2,107),
+(1,108),(2,108)
 
 --DELETE FROM Permissions;
 --DBCC CHECKIDENT ('Permissions', RESEED, 0);
+--DELETE FROM Role_Permissions
+
+--INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
+--('SEND_WARRANTY_CARD', '/sendWC')
+--INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
+--(1,108),(2,108)

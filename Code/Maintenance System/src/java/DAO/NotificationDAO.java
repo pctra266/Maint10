@@ -58,7 +58,7 @@ public class NotificationDAO extends DBContext {
 
             // Đợi 1 giây trước khi kiểm tra lại
             try {
-                Thread.sleep(3000);
+                Thread.sleep(7000);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
                 return new ArrayList<>();
