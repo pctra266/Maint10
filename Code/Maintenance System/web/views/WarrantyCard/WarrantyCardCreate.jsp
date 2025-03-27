@@ -126,8 +126,6 @@
                                 <div class="row g-3 text-lg ms-7">
                                     <input type="hidden" name="productDetailID" value="${pd.productDetailID}">
 
-                                    <c:if test="staff!=null">
-
                                     <c:if test="${staff!=null}">
 
                                         <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
