@@ -468,10 +468,3 @@ BEGIN
           AND Status = 'pending';
 END;
 
-
-    UPDATE Invoice
-    SET Status = 'overdue'
-    WHERE DueDate IS NOT NULL 
-          AND DueDate < GETDATE()
-          AND Status = 'pending';
-END;

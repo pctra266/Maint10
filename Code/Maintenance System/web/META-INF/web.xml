@@ -463,6 +463,5 @@
     <servlet-mapping>
         <servlet-name>ExportInvoicePDF</servlet-name>
         <url-pattern>/exportInvoicePDF</url-pattern>
-
     </servlet-mapping>
 </web-app>
