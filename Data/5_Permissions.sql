@@ -1,6 +1,6 @@
 ﻿USE MaintainManagement
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
-('VIEW_COMPONENTS_WAREHOUSE', ' /ComponentWarehouse'),
+('VIEW_COMPONENTS_WAREHOUSE', '/ComponentWarehouse'),
 ('DELETE_COMPONENT', '/ComponentWarehouse/Delete'),
 ('VIEW_WARRANTY_CARD_LIST', '/Warehouse/WarrantyCard '),
 ('ADD_NEW_COMPONENT', '/ComponentWarehouse/Add '),
@@ -69,9 +69,9 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('GENERAL_DASHBOARD', '..dashboard'),
 ('LIST_UNKNOWN', '/listUnknown'),
 ('ADD_UNKNOWN', '/addUnknown'),
-('VIEW_COMPONENT_REQUEST', '/componentRequest'),
+('VIEW_COMPONENT_REQUEST', '/componentRequest?action=viewComponentRequestDashboard'),
 ('CREATE_SUPPLEMENT_REQUEST', '/supplementRequest?action=createSupplementRequest'),
-('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest'),
+('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest?action=listSupplementRequest'),
 ('CREATE_COMPONENT_REQUEST', '/componentRequest?action=createComponentRequest'),
 ('ADD_COMPONENT_IN_REQUEST', '/componentRequest?action=addComponent'),
 ('REMOVE_COMPONENT_FROM_REQUEST', '/componentRequest?action=removeComponent'),
@@ -88,7 +88,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CREATE_REPAIR_INVOICE', '/repairCreateInvoice'),
 ('VIEW_INVOICE_DETAIL', '/invoiceDetail'),
 ('CUSTOMER_CONTACT', '/customerContact'),
-('VIEW_PACKAGE_WARRANTY', '/packageWarranty'),
+('VIEW_PACKAGE_WARRANTY', '/packageWarranty?action=view'),
 ('EDIT_PACKAGE_WARRANTY', '/packageWarranty?action=edit'),
 ('EXTEND_WARRANTY_DEFAULT', '/extendWarranty?action=extendDefault'),
 ('EXTEND_WARRANTY_EXTENDED', '/extendWarranty?action=extendExtended'),
