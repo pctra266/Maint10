@@ -1,12 +1,12 @@
 ﻿USE MaintainManagement
 
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
-('VIEW_COMPONENTS_WAREHOUSE', ' /ComponentWarehouse'),
-('DELETE_COMPONENT', ' /ComponentWarehouse/Delete'),
-('VIEW_WARRANTY_CARD_LIST', ' /Warehouse/WarrantyCard '),
-('ADD_NEW_COMPONENT', ' /ComponentWarehouse/Add '),
-('SEARCH_ADVANCE_COMPONENT', ' /ComponentWarehouse/Search'),
-('VIEW_COMPONENT_DETAIL', ' /ComponentWarehouse/Detail'),
+('VIEW_COMPONENTS_WAREHOUSE', '/ComponentWarehouse'),
+('DELETE_COMPONENT', '/ComponentWarehouse/Delete'),
+('VIEW_WARRANTY_CARD_LIST', '/Warehouse/WarrantyCard '),
+('ADD_NEW_COMPONENT', '/ComponentWarehouse/Add '),
+('SEARCH_ADVANCE_COMPONENT', '/ComponentWarehouse/Search'),
+('VIEW_COMPONENT_DETAIL', '/ComponentWarehouse/Detail'),
 ('EDIT_COMPONENT', '/ComponentWarehouse/Edit'),
 ('ADD_COMPONENT_INTO_PRODUCT', '/ComponentWarehouse/AddProductToComponent'),
 ('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?ID=?&product=?'),
