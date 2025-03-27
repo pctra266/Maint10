@@ -30,11 +30,15 @@ CREATE TABLE Staff (
     RoleID INT REFERENCES [Role](RoleID), 
     Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     DateOfBirth DATE,
-    Email NVARCHAR(100),
-    Phone NVARCHAR(20),
+    Email NVARCHAR(100) UNIQUE,
+    Phone NVARCHAR(20) UNIQUE,
     [Address] NVARCHAR(255),
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
+-- Unique index for UsernameC (ignoring NULL values)
+CREATE UNIQUE INDEX UX_UsernameS ON Staff(UsernameS)
+WHERE UsernameS IS NOT NULL;
+
 
 -- StaffLog Table
 CREATE TABLE StaffLog (
@@ -62,8 +66,8 @@ CREATE TABLE Customer (
     [Name] NVARCHAR(100),
     Gender NVARCHAR(10) CHECK (Gender IN ('Male', 'Female', 'Other')),
     DateOfBirth DATE,
-    Email NVARCHAR(100),
-    Phone NVARCHAR(20),
+    Email NVARCHAR(100) UNIQUE,
+    Phone NVARCHAR(20) UNIQUE,
     [Address] NVARCHAR(255),
     Image NVARCHAR(MAX) 
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY];
