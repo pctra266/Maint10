@@ -132,8 +132,13 @@ public class AuthenticationFilter implements Filter {
         // Danh sách URL không cần kiểm tra quyền
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
+
                 "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
                 "/BlogController", "/BlogController?action=More", "/changepassword");
+
+                "/SearchWarrantyController","/customerContact?action=createCustomerContact",
+                "/BlogController","/BlogController?action=More","/changepassword","/img/serviceItems/",
+                "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(
@@ -144,7 +149,13 @@ public class AuthenticationFilter implements Filter {
                 "/yourwarrantycard",
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
+
                 "/WarrantyCard/Add"
+
+                "/WarrantyCard/Add",
+                "/Redirect",
+                "/WarrantyCard/Add?action=create"
+
         );
 
         System.out.println("Requested URL: " + servletPath);

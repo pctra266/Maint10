@@ -169,11 +169,6 @@
                 border-color: #2563EB;
             }
 
-
-            }
-
-            /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
-
             /* Form chọn số phần tử trên trang (cùng với hai nút) */
             .page-size-form {
                 display: flex;
@@ -539,7 +534,7 @@
         </script>
         <script>
             function validateProductName(input) {
-                let errorMessage = document.getElementById("customerNameError");
+                let errorMessage = document.getElementById("productNameError");
 
                 // Lấy giá trị nhập vào
                 let value = input.value;

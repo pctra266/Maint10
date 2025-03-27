@@ -16,19 +16,16 @@
         <filter-name>AuthenticationFilter</filter-name>
 
 
+
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
         
- 
 
     <error-page>
         <error-code>404</error-code>
         <location>/404Page.jsp</location>
     </error-page>
-
-
-
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -472,6 +469,5 @@
     <servlet-mapping>
         <servlet-name>ExportInvoicePDF</servlet-name>
         <url-pattern>/exportInvoicePDF</url-pattern>
-
     </servlet-mapping>
 </web-app>
