@@ -142,7 +142,8 @@ public class AuthenticationFilter implements Filter {
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
                 "/WarrantyCard/Add",
-                "/Redirect"
+                "/Redirect",
+                "/WarrantyCard/Add?action=create"
         );
 
         System.out.println("Requested URL: " + servletPath);
