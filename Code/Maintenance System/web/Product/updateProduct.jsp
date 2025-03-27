@@ -88,10 +88,11 @@
                 justify-content: center;
                 gap: 10px;
             }
+                 
             button {
                 padding: 10px 15px;
                 border: none;
-                background-color: #007bff;
+                background-color: #3b7ddd;
                 color: white;
                 cursor: pointer;
                 border-radius: 5px;

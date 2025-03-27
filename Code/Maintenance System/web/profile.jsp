@@ -11,11 +11,6 @@
 
 
         <style>
-            /* 
-             * CHỈ CSS CHO CÁC PHẦN TRONG main
-             */
-
-            /***** MAIN LAYOUT *****/
             main.content {
                 display: flex;
                 justify-content: center;
@@ -24,7 +19,6 @@
                 background: linear-gradient(135deg, #f7f7f7, #eaeaea);
             }
 
-            /* PROFILE CONTAINER BÊN TRONG MAIN */
             .profile-container {
                 background: #ffffff;
                 box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
@@ -35,14 +29,12 @@
                 margin: 20px;
             }
 
-            /* TOP SECTION: Avatar & Info */
             .top-section {
                 display: flex;
                 gap: 30px;
                 flex-wrap: wrap;
             }
 
-            /* AVATAR BOX */
             .avatar-box {
                 flex: 0 0 250px;
                 text-align: center;
@@ -117,7 +109,7 @@
                 flex-wrap: wrap;
             }
             .update-setting-button, .blue-link-button {
-                background: #3498db;
+                background: #3b7ddd ;
                 color: #fff;
                 border: none;
                 padding: 10px 25px;
@@ -130,6 +122,7 @@
             .update-setting-button:hover,
             .blue-link-button:hover {
                 background: #2980b9;
+                color: white;
                 text-decoration: none;
             }
 
@@ -178,7 +171,6 @@
                 outline: none;
             }
 
-            /* RESPONSIVE CHO main NẾU MUỐN */
             @media (max-width: 768px) {
                 .top-section {
                     flex-direction: column;
@@ -194,8 +186,6 @@
                     gap: 15px;
                 }
             }
-
-            /* CSS cho thông báo (alert) chỉ trong phần main */
 
             .alert {
                 padding: 15px 20px;
@@ -219,7 +209,6 @@
                 border: 1px solid #badbcc;
             }
 
-            /* Tạo dòng kẻ hồng dưới mỗi cặp (label + span) */
             .info-grid > div {
                 position: relative;
                 padding-bottom: 10px;
@@ -227,7 +216,6 @@
                 border-bottom: 1px solid #2778AE; /* màu hồng */
             }
 
-            /* Nếu không muốn dòng kẻ cho ô cuối cùng, bỏ border ở ô cuối */
             .info-grid > div:last-child {
                 border-bottom: none;
             }
@@ -250,8 +238,6 @@
                 margin-bottom: 20px;
                 position: relative;
             }
-
-
         </style>
         <script>
             function toggleEditProfile() {

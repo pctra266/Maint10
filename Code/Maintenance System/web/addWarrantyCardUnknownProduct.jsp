@@ -33,7 +33,7 @@
             /* Tiêu đề */
             main.content h2 {
                 font-size: 1.8rem;
-                color: #2c3e50;
+                color: #3b7ddd;
                 margin-bottom: 20px;
                 font-weight: 600;
             }
@@ -55,17 +55,16 @@
             main.content table th,
             main.content table td {
                 padding: 12px 15px;
-                border: 1px solid #ddd;
+                border: 1px solid gray;
                 text-align: left;
             }
 
             main.content table th {
-                background-color: #C4E8FE;
+                background-color: #3b7ddd;
                 font-weight: 600;
-                color: black;
+                color: white;
             }
 
-            /* Form và các thành phần trong form */
             main.content form {
                 margin-top: 20px;
             }
@@ -103,7 +102,6 @@
                 min-height: 80px;
             }
 
-            /* File input và xem trước hình ảnh */
             main.content form input[type="file"] {
                 margin-top: 10px;
             }
@@ -115,7 +113,6 @@
                 border-radius: 4px;
             }
 
-            /* Nút submit và link chuyển trang */
             main.content form input[type="submit"],
             main.content form a.btn-update {
                 display: inline-block;
@@ -158,8 +155,7 @@
 
             /* Cột th màu xám và có độ rộng nhất định */
             table.info-table th {
-                width: 200px; /* bạn có thể thay đổi tùy ý */
-                /* Nếu muốn chữ không xuống dòng: white-space: nowrap; */
+                width: 200px; 
             }
             /* Responsive cho màn hình nhỏ */
             @media (max-width: 768px) {
@@ -571,7 +567,6 @@
                     }
                 }
             }
-
         </script>
     </body>
 </html>
