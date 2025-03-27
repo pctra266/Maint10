@@ -130,7 +130,7 @@
 
 
 
-                        <div class="col-sm-6 col-md-6">
+                        <div class="col-sm-6 col-md-6 mt-2">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
                                     <c:forEach items="${pagination.listPageSize}" var="s">

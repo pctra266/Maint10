@@ -11,11 +11,12 @@
         <meta name="author" content="AdminKit">
         <meta name="keywords" content="adminkit, bootstrap, bootstrap 5, admin, dashboard, template, responsive, css, sass, html, theme, front-end, ui kit, web">
         <base href="${pageContext.request.contextPath}/">
+
         <link rel="preconnect" href="https://fonts.gstatic.com">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
 
-        <title>Brand Management</title>
+        <title>Product Type Management</title>
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
@@ -42,9 +43,9 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
 
-                    <h2>Brand List</h2>
+                    <h2>Product Type List</h2>
 
                     <!-- Thông báo -->
                     <c:if test="${not empty successMessage}">
@@ -66,15 +67,15 @@
 
                     <!-- Nút chức năng -->
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <form action="Brand" method="POST" style="display: inline;">
+                        <form action="ProductType" method="POST" style="display: inline;">
                             <button type="submit" class="btn btn-success" name="action" value="add">
-                                <i class="fas fa-plus"></i> Add Brand
+                                <i class="fas fa-plus"></i> Add Product Type
                             </button>
                         </form>
                     </div>
 
                     <!-- Form tìm kiếm và phân trang -->
-                    <form action="Brand" method="get" class="row align-items-center">
+                    <form action="ProductType" method="get" class="row align-items-center">
                         <input type="hidden" name="page" value="${pagination.currentPage}">
                         <input type="hidden" name="sort" value="${pagination.sort}">
                         <input type="hidden" name="order" value="${pagination.order}">
@@ -91,7 +92,7 @@
                         <div class="col-sm-6 col-md-6 text-end">
                             <div class="col-md-3 input-group d-flex justify-content-end">
                                 <input type="search" style="flex: 0.5 1 auto" name="search" class="form-control form-control-md" 
-                                       placeholder="Search by Brand Name" value="${pagination.searchValues[0]}" aria-controls="datatables-column-search-text-inputs">
+                                       placeholder="Search by Type Name" value="${pagination.searchValues[0]}" aria-controls="datatables-column-search-text-inputs">
                                 <button type="submit" class="btn btn-primary">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle">
                                     <circle cx="11" cy="11" r="8"></circle>
@@ -107,56 +108,56 @@
                         </c:if>
                     </form>
 
-                    <!-- Bảng danh sách Brand -->
+                    <!-- Bảng danh sách Product Type -->
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
                                 <th style="width:10%">
-                                    <form action="Brand" method="get">
+                                    <form action="ProductType" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
-                                        <input type="hidden" name="sort" value="brandId" />
-                                        <input type="hidden" name="order" value="${pagination.sort eq 'brandId' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <input type="hidden" name="sort" value="ProductTypeID" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'ProductTypeID' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${pagination.sort eq 'brandId' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'ProductTypeID' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
-                                        Brand ID
+                                        Product Type ID
                                     </form>
                                 </th>
                                 <th>
-                                    <form action="Brand" method="get">
+                                    <form action="ProductType" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="search" value="${pagination.searchValues[0]}" />
-                                        <input type="hidden" name="sort" value="BrandName" />
-                                        <input type="hidden" name="order" value="${pagination.sort eq 'BrandName' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
+                                        <input type="hidden" name="sort" value="TypeName" />
+                                        <input type="hidden" name="order" value="${pagination.sort eq 'TypeName' and pagination.order eq 'asc' ? 'desc' : 'asc'}" />
                                         <button type="submit" class="btn-sort">
                                             <i class="align-middle fas fa-fw
-                                               ${pagination.sort eq 'BrandName' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
+                                               ${pagination.sort eq 'TypeName' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
-                                        Brand Name
+                                        Type Name
                                     </form>
                                 </th>
                                 <th style="width:8%">Action
-                                    <a href="Brand?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
+                                    <a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
                                         <i class="fa fa-refresh ms-2"></i>
                                     </a>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="brand" items="${brandList}" varStatus="status">
+                            <c:forEach var="type" items="${typeList}" varStatus="status">
                                 <tr class="${status.index % 2 == 0 ? 'table-primary' : ''}">
                                     <td>${status.index + 1 + (pagination.currentPage - 1) * pagination.pageSize}</td>
-                                    <td>${brand.brandId}</td>
-                                    <td>${brand.brandName}</td>
+                                    <td>${type.productTypeId}</td>
+                                    <td>${type.typeName}</td>
                                     <td class="table-action">
-                                        <a data-bs-toggle="modal" data-bs-target="#deleteBrandModal_${brand.brandId}">
+                                        <a data-bs-toggle="modal" data-bs-target="#deleteTypeModal_${type.productTypeId}">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
                                             <polyline points="3 6 5 6 21 6"></polyline>
                                             <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -166,7 +167,7 @@
                                 </tr>
 
                                 <!-- Modal Xóa -->
-                            <div class="modal fade" id="deleteBrandModal_${brand.brandId}" tabindex="-1" aria-hidden="true">
+                            <div class="modal fade" id="deleteTypeModal_${type.productTypeId}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -174,11 +175,11 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body m-3">
-                                            <p class="mb-0">Confirm your action. Really want to delete brand "<strong>${brand.brandName}</strong>"?</p>
+                                            <p class="mb-0">Confirm your action. Really want to delete type "<strong>${type.typeName}</strong>"?</p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="Brand?action=delete&brandID=${brand.brandId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
+                                            <a href="ProductType?action=delete&productTypeID=${type.productTypeId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
                                                class="btn btn-primary">Delete</a>
                                         </div>
                                     </div>
@@ -189,32 +190,32 @@
                     </table>
 
                     <!-- Thông báo khi không có dữ liệu -->
-                    <c:if test="${totalBrands == 0}">
+                    <c:if test="${totalTypes == 0}">
                         <div class="alert alert-primary alert-dismissible" role="alert">
                             <div class="alert-message text-center">
-                                <strong style="font-size:1.6rem">No brands found in the filter</strong>
+                                <strong style="font-size:1.6rem">No product types found in the filter</strong>
                             </div>
                         </div>
                     </c:if>
 
                     <!-- Modal Thêm -->
-                    <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="addTypeModal" tabindex="-1" aria-labelledby="addTypeModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
-                                <form action="Brand" method="POST">
+                                <form action="ProductType" method="POST">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="addBrandModalLabel">Add New Brand</h5>
+                                        <h5 class="modal-title" id="addTypeModalLabel">Add New Product Type</h5>
                                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="brandName" class="form-label">Brand Name</label>
-                                            <input type="text" class="form-control" id="brandName" name="brandName" required>
+                                            <label for="typeName" class="form-label">Type Name</label>
+                                            <input type="text" class="form-control" id="typeName" name="typeName" required>
                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-primary" name="action" value="add">Add Brand</button>
+                                        <button type="submit" class="btn btn-primary" name="action" value="add">Add Product Type</button>
                                     </div>
                                 </form>
                             </div>
@@ -228,13 +229,12 @@
             </div>
         </div>
 
-        <script src="js/app.js"></script>
-
+        <script src="${pageContext.request.contextPath}/js/app.js"></script>
         <script>
-                                    // Mở modal thêm khi nhấn nút "Add Brand"
+                                    // Mở modal thêm khi nhấn nút "Add Product Type"
                                     document.querySelector('button[name="action"][value="add"]').addEventListener('click', function (e) {
                                         e.preventDefault();
-                                        new bootstrap.Modal(document.getElementById('addBrandModal')).show();
+                                        new bootstrap.Modal(document.getElementById('addTypeModal')).show();
                                     });
         </script>
     </body>
