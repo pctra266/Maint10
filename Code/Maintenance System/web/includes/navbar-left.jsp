@@ -496,7 +496,6 @@
                                     </li>
 
                                 </ul>
-
                             </c:if>
 
                             <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '3'}">
@@ -656,7 +655,6 @@
                             </c:if>
 
                             <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '5'}">
-
                                 <ul class="sidebar-nav">
 
                                     <li class="sidebar-item">
