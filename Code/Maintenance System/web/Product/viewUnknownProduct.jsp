@@ -71,7 +71,7 @@
                 font-size: 24px;
                 font-weight: 600;
                 margin-bottom: 20px;
-                color: #2563EB; /* Xanh dương đậm */
+                color: #3b7DDD; /* Màu chủ đạo */
             }
 
             /* ------------ FORM TÌM KIẾM ------------ */
@@ -96,12 +96,12 @@
             main.content form input[type="text"]:focus,
             main.content form input[type="date"]:focus {
                 outline: none;
-                border-color: #2563EB; /* Xanh dương đậm */
+                border-color: #3b7ddd;
             }
 
             /* Nút submit trong form tìm kiếm */
             main.content form button[type="submit"] {
-                background-color: #2563EB;
+                background-color: #3b7ddd;
                 color: #fff;
                 border: none;
                 padding: 8px 16px;
@@ -113,13 +113,13 @@
             }
 
             main.content form button[type="submit"]:hover {
-                background-color: #1E4FB8; /* Tông đậm hơn khi hover */
+                background-color: #27509C;
                 transform: translateY(-1px);
             }
 
             /* ------------ NÚT THÊM / ALL PRODUCT ------------ */
             main.content button {
-                background-color: #2563EB;
+                background-color: #3b7ddd;
                 color: #fff;
                 border: none;
                 padding: 8px 16px;
@@ -132,21 +132,36 @@
             }
 
             main.content button:hover {
-                background-color: #1E4FB8;
+                background-color: #27509C;
                 transform: translateY(-1px);
+            }
 
+            /* Kiểu cho thẻ <a> hiển thị như button */
+            main.content a.button {
+                background-color: #3b7ddd;
+                color: #fff;
+                text-decoration: none;
+                display: inline-block;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                transition: background-color 0.2s, transform 0.2s;
+                margin-right: 10px;
+            }
+            main.content a.button:hover {
+                background-color: #27509C;
+                transform: translateY(-1px);
             }
 
             /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
-
-            /* Form chọn số phần tử trên trang (cùng với hai nút) */
             .page-size-form {
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-                justify-content: center; /* Canh giữa toàn bộ phần tử trong form */
+                justify-content: center;
                 gap: 8px;
-                margin: 20px 0; /* Thêm khoảng cách trên - dưới */
+                margin: 20px 0;
             }
             .page-size-form label {
                 font-size: 14px;
@@ -166,44 +181,8 @@
             .page-size-form select:focus,
             .page-size-form input[type="number"]:focus {
                 outline: none;
-                border-color: #2563EB;
+                border-color: #3b7ddd;
             }
-
-
-            }
-
-            /* ------------ FORM CHỌN SỐ PHẦN TỬ TRÊN TRANG ------------ */
-
-            /* Form chọn số phần tử trên trang (cùng với hai nút) */
-            .page-size-form {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
-                justify-content: center; /* Canh giữa toàn bộ phần tử trong form */
-                gap: 8px;
-                margin: 20px 0; /* Thêm khoảng cách trên - dưới */
-            }
-            .page-size-form label {
-                font-size: 14px;
-                font-weight: 500;
-            }
-
-            .page-size-form select,
-            .page-size-form input[type="number"] {
-                padding: 6px 10px;
-                border-radius: 6px;
-                border: 1px solid #CBD5E1;
-                font-size: 14px;
-                background-color: #fff;
-                transition: border-color 0.2s;
-            }
-
-            .page-size-form select:focus,
-            .page-size-form input[type="number"]:focus {
-                outline: none;
-                border-color: #2563EB;
-            }
-
 
             /* ------------ BẢNG DANH SÁCH SẢN PHẨM ------------ */
             main.content table {
@@ -212,12 +191,13 @@
                 margin-top: 20px;
                 background-color: #FFFFFF;
                 border-radius: 8px;
-                overflow: hidden; /* Để border-radius áp dụng cho thead, tbody */
+                overflow: hidden;
                 box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             }
 
+            /* Đổi màu tiêu đề bảng */
             main.content table thead {
-                background-color: #EFF6FF; /* Xanh dương nhạt cho header */
+                background-color: #3b7ddd;
             }
 
             main.content table th,
@@ -228,13 +208,14 @@
                 border-bottom: 1px solid #E5E7EB;
             }
 
+            /* Chỉnh lại tiêu đề bảng */
             main.content table th {
                 font-weight: 600;
-                color: #334155;
+                color: #fff;
             }
 
             main.content table tbody tr:last-child td {
-                border-bottom: none; /* Bỏ đường kẻ dưới cùng */
+                border-bottom: none;
             }
 
             /* Hover trên từng hàng */
@@ -243,15 +224,13 @@
             }
 
             /* ------------ PHÂN TRANG ------------ */
-
-            /* Phân trang (pagination) */
             .pagination {
                 margin-top: 20px;
                 display: flex;
                 gap: 6px;
                 align-items: center;
                 flex-wrap: wrap;
-                justify-content: center; /* Canh giữa pagination */
+                justify-content: center;
             }
 
             .pagination a {
@@ -260,22 +239,22 @@
                 border-radius: 6px;
                 border: 1px solid #CBD5E1;
                 text-decoration: none;
-                color: #334155;
+                color: #3b7ddd;
                 font-size: 14px;
                 transition: background-color 0.2s, color 0.2s, transform 0.2s;
             }
 
             .pagination a:hover {
-                background-color: #2563EB;
+                background-color: #27509C;
                 color: #fff;
-                border-color: #2563EB;
+                border-color: #27509C;
                 transform: translateY(-1px);
             }
 
             .pagination a.active {
-                background-color: #2563EB;
+                background-color: #3b7ddd;
                 color: #fff;
-                border-color: #2563EB;
+                border-color: #3b7ddd;
             }
 
             /* ------------ CÁC THÔNG BÁO LỖI ------------ */
@@ -284,7 +263,7 @@
                 margin-top: -8px;
                 margin-bottom: 8px;
                 font-size: 12px;
-                color: #EF4444; /* Màu đỏ cảnh báo */
+                color: #EF4444;
             }
 
             /* ------------ RESPONSIVE ------------ */
@@ -310,7 +289,6 @@
                     padding: 10px;
                 }
             }
-
         </style>
     </head>
 
@@ -322,7 +300,6 @@
                 <main class="content">
                     <h2 style="text-align: center">List of Unknown Products</h2>
 
-                    <!-- Form tìm kiếm -->
                     <form action="listUnknown" method="get">
                         <input type="text" id="productCode" name="productCode" 
                                placeholder="Product Code" 
@@ -356,7 +333,6 @@
                                oninput="validatePhone(this)">
                         <span id="phoneError" style="color: red; font-size: 12px; margin-left: 5px;"></span>
 
-                        <!-- Giữ lại page và pageSize (nếu có) -->
                         <input type="hidden" name="page" value="${currentPage}" />
                         <input type="hidden" name="pageSize" value="${pageSize}" />
 
@@ -364,11 +340,7 @@
 
                     </form>
 
-
-
-                    <!-- Form chọn số phần tử trên mỗi trang -->
                     <form action="listUnknown" method="get" class="page-size-form">
-                        <!-- Giữ lại các tham số tìm kiếm -->
                         <input type="hidden" name="productCode" value="${param.productCode}" />
                         <input type="hidden" name="productName" value="${param.productName}" />
                         <input type="hidden" name="description" value="${param.description}" />
@@ -391,27 +363,26 @@
                                 >Custom</option>
                         </select>
 
-                        <!-- Ô nhập customPageSize, chỉ hiển thị khi dropdown = custom -->
                         <input type="number" name="customPageSize" id="customPageSizeInput" 
                                min="1"
                                value="<c:out value='${pageSize != 5 && pageSize != 10 && pageSize != 15 && pageSize != 20 && pageSize != 25 ? pageSize : ""}'/>"
                                style="display: none;" />
-
                         <button type="submit">Apply</button>
 
-
-                        <button style="align-items: end" onclick="location.href = 'addUnknown'">Add Unknown Product</button>
-
-                        <a href="addUnknown">
+                        <a href="addUnknown" class="button">
                             Add Unknown Product
                         </a>
 
                         <button class="search" onclick="window.location.href = 'listUnknown'">
                             All Product
                         </button>
+                        
+                         <a href="viewProduct" class="button">
+                           Back
+                        </a>
+                        
                     </form>
 
-                    <!-- Bảng danh sách sản phẩm -->
                     <table border="1">
                         <thead>
                             <tr>
@@ -446,7 +417,6 @@
                         </tbody>
                     </table>
 
-                    <!-- Phân trang sử dụng c:url để tránh khoảng trắng -->
                     <div class="pagination">
                         <c:if test="${totalPages > 1}">
                             <!-- First -->
@@ -475,7 +445,6 @@
                             </c:url>
                             <a href="${prevUrl}">Previous</a>
 
-                            <!-- Các số trang -->
                             <c:forEach var="i" begin="1" end="${totalPages}">
                                 <c:url var="pageUrl" value="listUnknown">
                                     <c:param name="page" value="${i}" />
@@ -521,9 +490,7 @@
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-
         <script src="js/app.js"></script>
-
         <script>
                             function validateProductCode(input) {
                                 let regex = /^[a-zA-Z0-9]*$/; // Chỉ cho phép chữ cái và số
@@ -539,7 +506,7 @@
         </script>
         <script>
             function validateProductName(input) {
-                let errorMessage = document.getElementById("customerNameError");
+                let errorMessage = document.getElementById("productNameError");
 
                 // Lấy giá trị nhập vào
                 let value = input.value;
@@ -584,7 +551,6 @@
                 }
             }
         </script>
-
         <script>
             function validateCustomerName(input) {
                 let errorMessage = document.getElementById("customerNameError");
@@ -651,7 +617,5 @@
                 toggleCustomInput(pageSizeSelect.value);
             };
         </script>
-
     </body>
 </html>
-

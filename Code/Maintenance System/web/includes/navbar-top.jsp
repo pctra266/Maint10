@@ -67,7 +67,7 @@
                         <img src="${sessionScope.customer.image}" class="avatar img-fluid rounded" alt="${sessionScope.customer.name}">
                     </a>
                     <div class="dropdown-menu dropdown-menu-end">
-                        <a class="dropdown-item" href="pages-profile.html">Profile</a>
+                        <a class="dropdown-item" href="profile">Profile</a>
                         <a class="dropdown-item" href="ChangePasswordForm.jsp">Change Password</a>
                         <a class="dropdown-item" href="#">Analytics</a>
                         <div class="dropdown-divider"></div>
@@ -186,7 +186,7 @@
                                                 );
                                     });
                                 }
-                                setTimeout(checkNotifications, 0);
+                                setTimeout(checkNotifications, 5000);
                             },
                             error: function (xhr, status, error) {
                                 console.error("Error fetching notifications: ", status, error);

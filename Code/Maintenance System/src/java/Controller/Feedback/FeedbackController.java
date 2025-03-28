@@ -112,7 +112,8 @@ public class FeedbackController extends HttpServlet {
         // end session customer
         String action = request.getParameter("action");
         if (action == null) {
-            action = "viewFeedback";
+            response.sendRedirect("404Page.jsp");
+            return ;
         }
 
         //lay tham so de phan trang
@@ -262,6 +263,7 @@ public class FeedbackController extends HttpServlet {
                 request.getRequestDispatcher("createFeedback.jsp").forward(request, response);
                 break;
             default:
+                response.sendRedirect("404Page.jsp");
                 break;
         }
 
@@ -329,7 +331,7 @@ public class FeedbackController extends HttpServlet {
         }
         System.out.println("Customer ID hien tai la : " + customerId);
         if (action == null) {
-            action = "viewListFeedback";
+            response.sendRedirect("404Page.jsp");
         }
         int total1 = 0;
         switch (action) {
@@ -353,44 +355,7 @@ public class FeedbackController extends HttpServlet {
         page = page < 1 ? 1 : page;
         switch (action) {
             case "viewListFeedback":
-//                String customerName = SearchUtils.preprocessSearchQuery(request.getParameter("customerName"));
-//                String imageAndVideo = request.getParameter("imageAndVideo");
-//                String column = request.getParameter("column");
-//                String sortOrder = request.getParameter("sortOrder");
-//                String customerEmail = SearchUtils.searchValidateNonSapce(request.getParameter("customerEmail"));
-//                String customerPhone = SearchUtils.searchValidateNonSapce(request.getParameter("customerPhone"));
-//                request.setAttribute("customerName", customerName);
-//                request.setAttribute("imageAndVideo", imageAndVideo);
-//                request.setAttribute("column", column);
-//                request.setAttribute("sortOrder", sortOrder);
-//                request.setAttribute("customerEmail", customerEmail);
-//                request.setAttribute("customerPhone", customerPhone);
-//                //phan trang
-//                int totalPages = daoFeedback.getTotalFeedback(customerName, customerEmail, customerPhone, imageAndVideo);
-//                int endPage = totalPages / 7;
-//                if (totalPages % 7 != 0) {
-//                    endPage++;
-//                }
-//                request.setAttribute("endPage", endPage);
-//                String indexStr = request.getParameter("index");
-//
-//                int index = 1;
-//                try {
-//                    index = Integer.parseInt(indexStr);
-//                    if (index == 0) {
-//                        index = 1;
-//                    }
-//                } catch (Exception e) {
-//                }
-//
-//                if (endPage < index && endPage != 0) {
-//                    index = endPage;
-//                }
-//                request.setAttribute("index", index);
-//                ArrayList<Feedback> listFeedback = daoFeedback.getAllFeedback(customerName, customerEmail, customerPhone, imageAndVideo, index, column, sortOrder);
-//                request.setAttribute("listFeedback", listFeedback);
-//                request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
-                response.sendRedirect("feedback");
+                response.sendRedirect("feedback?action=viewFeedback");
                
                  return ;
                 
@@ -406,7 +371,7 @@ public class FeedbackController extends HttpServlet {
                 }
                 //
                 daoFeedback.updateFeedback(feedbackId, note);
-                response.sendRedirect("feedback");
+                response.sendRedirect("feedback?action=viewFeedback");
                 break;
             case "createFeedback":
                 String noteCreate = SearchUtils.preprocessSearchQuery(request.getParameter("note"));
@@ -495,7 +460,7 @@ public class FeedbackController extends HttpServlet {
                 request.setAttribute("listFeedback", listFeedbackAfterDelete);
                 request.getRequestDispatcher("viewListFeedback.jsp").forward(request, response);
                 break;
-            default:response.sendRedirect("feedback");
+            default:response.sendRedirect("404Page.jsp");
                 break;
         }
 

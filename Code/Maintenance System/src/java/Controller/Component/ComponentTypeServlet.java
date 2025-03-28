@@ -16,6 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet(name = "ComponentTypeServlet", urlPatterns = {"/ComponentType"})
 public class ComponentTypeServlet extends HttpServlet {
+
     private final ComponentTypeDAO componentTypeDAO = new ComponentTypeDAO();
     private static final int PAGE_SIZE = 10;
 
@@ -30,7 +31,6 @@ public class ComponentTypeServlet extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
 
-        // Xử lý xóa
         if ("delete".equals(action)) {
             int typeID = Integer.parseInt(request.getParameter("typeID"));
             boolean success = componentTypeDAO.deleteComponentType(typeID);
@@ -41,24 +41,30 @@ public class ComponentTypeServlet extends HttpServlet {
             }
         }
 
-        // Xử lý thêm (POST từ modal)
         if ("add".equals(action) && "POST".equalsIgnoreCase(request.getMethod())) {
             String typeName = request.getParameter("typeName");
+            if (typeName == null || typeName.isBlank()) {
+                request.setAttribute("errorMessage", "Fail to add. Name should not be blank.");
+            }
+            else{
             ComponentType type = new ComponentType();
-            type.setTypeName(typeName);
+            type.setTypeName(typeName.trim());
             boolean success = componentTypeDAO.addComponentType(type);
             if (success) {
                 request.setAttribute("successMessage", "Component Type added successfully");
             } else {
                 request.setAttribute("errorMessage", "Failed to add component type. Name may already exist.");
-            }
+            }   
+            }    
         }
 
         // Lấy danh sách component type
         List<ComponentType> typeList = new ArrayList<>();
         int totalTypes = componentTypeDAO.getTotalComponentTypes(search);
         int totalPages = (int) Math.ceil((double) totalTypes / pageSize);
-        if (page > totalPages) page = totalPages;
+        if (page > totalPages) {
+            page = totalPages;
+        }
         page = page < 1 ? 1 : page;
         typeList = componentTypeDAO.getComponentTypes(page, pageSize, search, sort, order);
 

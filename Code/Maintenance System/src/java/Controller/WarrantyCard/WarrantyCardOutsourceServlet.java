@@ -123,7 +123,8 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
             } else {
                 request.setAttribute("updateAlert0", "Invalid Repair Contractor selected.");
             }
-        } //process outsource cua technician
+        } 
+        //process outsource cua technician
         else if ("processOutsource".equals(action)) {
 
             if (processAction != null && isValidProcessAction(processAction)) {

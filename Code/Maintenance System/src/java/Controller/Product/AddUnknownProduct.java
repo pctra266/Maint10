@@ -8,7 +8,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -38,24 +37,16 @@ public class AddUnknownProduct extends HttpServlet {
         String receivedDate = request.getParameter("receivedDate");
 
         int customerId = customerIdStr != null && !customerIdStr.isEmpty() ? Integer.parseInt(customerIdStr) : -1;
-
-        // Kiểm tra trùng productCode
         if (productDAO.isUnknownProductCodeExists(productCode)) {
             request.setAttribute("message", "Product Code đã tồn tại!");
-
-            // Giữ lại thông tin nhập vào form
             request.setAttribute("productCode", productCode);
             request.setAttribute("productName", productName);
             request.setAttribute("customerId", customerId);
             request.setAttribute("description", description);
             request.setAttribute("receivedDate", receivedDate);
-
-            // Load danh sách khách hàng để hiển thị lại form
             doGet(request, response);
             return;
         }
-
-        // Lưu vào database
         boolean success = productDAO.addUnknownProduct(customerId, productName, productCode, description, receivedDate);
 
         if (success) {

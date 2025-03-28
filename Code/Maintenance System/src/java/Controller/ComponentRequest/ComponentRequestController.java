@@ -91,7 +91,8 @@ public class ComponentRequestController extends HttpServlet {
         //action
         String action = request.getParameter("action");
         if (action == null) {
-            action = "viewComponentRequestDashboard";
+            response.sendRedirect("404Page.jsp");
+            return ;
         }
         System.out.println("action la: " + action);
         //parameter
@@ -110,12 +111,11 @@ public class ComponentRequestController extends HttpServlet {
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
         String warrantyStatus = request.getParameter("warrantyStatus");
-        if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
-            warrantyStatus = "fixing";
-        }
-        if (warrantyStatus.equalsIgnoreCase("all")) {
-            warrantyStatus = "";
-        }
+//        if (warrantyStatus != null && warrantyStatus.equalsIgnoreCase("all")) {
+//            warrantyStatus = "";
+//        } else if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
+//            warrantyStatus = "fixing";
+//        }
         String typeMaintain = request.getParameter("typeMaintain");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
@@ -151,10 +151,13 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalProductUnderMaintain(warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain);
                 break;
             case "createComponentRequest":
-                total = componentRequestDao.totalComponentByProductCode("", componentCode, componentName, typeID, brandID);
+                total = componentRequestDao.totalComponentByProductCode( componentCode, componentName, typeID, brandID);
+                System.out.println("total component: "+ total);
+                break;
+                 case "cancelComponentRequest":
+                     total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode, "waiting")-1;
                 break;
             case "listComponentRequestInStaffRole":
-            case "cancelComponentRequest":
             case "getRequestDetails":
                 total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode, "waiting");
                 break;
@@ -199,7 +202,7 @@ public class ComponentRequestController extends HttpServlet {
         // Session
         HttpSession session = request.getSession();
         Staff currentStaff = (Staff) session.getAttribute("staff");
-
+        
         String staffId = "2";
         if (currentStaff != null) {
             staffId = String.valueOf(currentStaff.getStaffID());
@@ -210,12 +213,12 @@ public class ComponentRequestController extends HttpServlet {
         switch (action) {
             case "viewComponentRequestDashboard":
                 //======phan trang
-                pagination.setSearchFields(new String[]{"action", "productCode", "unknownProductCode", "warrantyStatus", "typeMaintain"});
-                pagination.setSearchValues(new String[]{"viewComponentRequestDashboard", productCode, unknownProductCode, warrantyStatus, typeMaintain});
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode","productCode", "unknownProductCode", "warrantyStatus", "typeMaintain"});
+                pagination.setSearchValues(new String[]{"viewComponentRequestDashboard",warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain});
                 request.setAttribute("pagination", pagination);
                 //======end phan trang
                 ArrayList<ProductDetail> listProductUnderMaintain = componentRequestDao.getAllListProductUnderMaintain(warrantyCardCode, productCode,
-                        unknownProductCode, warrantyStatus, typeMaintain, sort, order, page, pageSize);
+                        "", warrantyStatus, typeMaintain, sort, order, page, pageSize);
                 request.setAttribute("listProductUnderMaintain", listProductUnderMaintain);
                 request.getRequestDispatcher("requestComponentDashboard.jsp").forward(request, response);
                 break;
@@ -346,9 +349,6 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("listComponentRequestInStaffRole.jsp").forward(request, response);
                 break;
             case "cancelComponentRequest":// technician side
-                if (currentStaff == null) {
-                    staffId = "2";
-                }
                 pagination.setSearchFields(new String[]{"action", "warrantyCardCode"});
                 pagination.setSearchValues(new String[]{"listComponentRequestInStaffRole", warrantyCardCode});
                 request.setAttribute("pagination", pagination);
@@ -372,6 +372,9 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("/listComponentRequestInStaffRole.jsp").forward(request, response);
 
                 break;
+            default:
+                 response.sendRedirect("404Page.jsp");
+            return ;
         }
     }
 
@@ -443,7 +446,8 @@ public class ComponentRequestController extends HttpServlet {
         String action = request.getParameter("action");
 
         if (action == null) {
-            action = "viewComponentRequestDashboard";
+             response.sendRedirect("404Page.jsp");
+            return ;
         }
 
         //parameter
@@ -546,6 +550,9 @@ public class ComponentRequestController extends HttpServlet {
                 }
                 response.sendRedirect("componentRequest?action=createComponentRequest&warrantyCardID=" + warrantyCardIDstr + "&productCode=" + productCode + "&mess=" + mess);
                 break;
+            default:
+                 response.sendRedirect("404Page.jsp");
+            return ;
         }
     }
 

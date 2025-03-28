@@ -63,7 +63,7 @@
                     </form>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2>Component Warehouse</h2>
-                        <a href="supplementRequest" class="btn btn-secondary">Supplement List </a>
+                        <a href="supplementRequest?action=listSupplementRequest" class="btn btn-secondary">Supplement List </a>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
@@ -72,10 +72,13 @@
                             <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
                         </form>
                         <form action="Brand" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Brand</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Brand</button>
                         </form>
                         <form action="ComponentType" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Add Component Type</button>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Component Type</button>
+                        </form>     
+                        <form action="ProductType" method="POST" enctype="multipart/form-data" style="display: inline;">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Product Type</button>
                         </form>     
                         </div>
                        

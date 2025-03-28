@@ -21,22 +21,21 @@
                             <h1 class="text-center">Customer Contact Form</h1>
                         </div>
                         
-                        <c:if test="${success eq 'true'}">
-                            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <c:if  test="${not empty success}">
+                            <div class="alert-success">
+                                ${success}
                             </div>
+                            
                         </c:if>
                         
-                        <c:if test="${error eq 'true'}">
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                
-                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <c:if  test="${not empty error}">
+                            <div class="alert-danger">
+                                 ${error}
                             </div>
                         </c:if>
                         
                         <div class="card-body">
-                            <form action="customerContact" method="POST">
+                            <form action="customerContact" method="get">
                                 <input type="hidden" name="action" value="createCustomerContact">
                                 <div class="row g-3">
                                     <div class="col-md-6">

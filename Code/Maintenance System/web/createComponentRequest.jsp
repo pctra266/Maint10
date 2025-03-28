@@ -25,7 +25,7 @@
                     <div class="alert-primary" >
                         ${param.mess}
                     </div>
-                    <a href="componentRequest" >Back</a>
+                    <a class="btn btn-primary" href="componentRequest?action=viewComponentRequestDashboard" >Back</a>
                     <form action="componentRequest" method="get">
                         <input type="hidden" name="action" value="createComponentRequest">
                         <input type="hidden" name="productCode" value="${productCode}"> 

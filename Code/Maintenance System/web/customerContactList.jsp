@@ -5,6 +5,7 @@
 --%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,6 +21,36 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    <h1 class="text-center ">List Customer Contact</h1>
+                    <form method="get" action="customerContact">
+            <input type="hidden" name="action" value="view">
+            <div class="row" style="justify-content: space-between">
+                <div class="col-md-6" style="width: 500px">
+                    <input style="margin-top: 15px"  type="search" name="searchName" class="form-control" placeholder="Name" value="${searchName}">
+                    
+                     <div style="margin-top: 15px" class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                    </c:forEach>
+                                </select> 
+                                entries
+                            </label>
+                        </div>
+                </div>
+                
+                <div class="col-md-6" style="width: 500px">
+                    <input style="margin-top: 15px"  type="search" name="searchPhone" class="form-control" placeholder="Phone" value="${searchPhone}">
+                    <input style="margin-top: 15px"  type="search" name="searchEmail" class="form-control" placeholder="Email" value="${searchEmail}">
+                    <div style="float: right">
+                                <button  class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                   </div>
+                </div>
+              
+            </div>
+        </form>
+                
 
                     <table class="table table-hover my-0">
                         <thead>
@@ -45,6 +76,7 @@
                             </c:forEach>
                         </tbody>
                     </table>
+                 <jsp:include page="/includes/pagination.jsp" />
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>

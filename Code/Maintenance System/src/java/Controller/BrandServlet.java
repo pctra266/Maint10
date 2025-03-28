@@ -40,7 +40,6 @@ public class BrandServlet extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
 
-        // Xử lý xóa
         if ("delete".equals(action)) {
             int brandID = Integer.parseInt(request.getParameter("brandID"));
             boolean success = brandDAO.deleteBrand(brandID);
@@ -51,16 +50,20 @@ public class BrandServlet extends HttpServlet {
             }
         }
 
-        // Xử lý thêm (sẽ hiển thị modal trong JSP, POST xử lý sau)
         if ("add".equals(action) && "POST".equalsIgnoreCase(request.getMethod())) {
             String brandName = request.getParameter("brandName");
+            if (brandName == null || brandName.isBlank()) {
+                request.setAttribute("errorMessage", "Failed to add. Name should not be blank.");
+            }
+            else{
             Brand brand = new Brand();
-            brand.setBrandName(brandName);
+            brand.setBrandName(brandName.trim());
             boolean success = brandDAO.addBrand(brand);
             if (success) {
                 request.setAttribute("successMessage", "Brand added successfully");
             } else {
                 request.setAttribute("errorMessage", "Failed to add brand. Name may already exist.");
+            }
             }
         }
 
@@ -68,7 +71,9 @@ public class BrandServlet extends HttpServlet {
         List<Brand> brandList = new ArrayList<>();
         int totalBrands = brandDAO.getTotalBrands(search);
         int totalPages = (int) Math.ceil((double) totalBrands / pageSize);
-        if (page > totalPages) page = totalPages;
+        if (page > totalPages) {
+            page = totalPages;
+        }
         page = page < 1 ? 1 : page;
         brandList = brandDAO.getBrands(page, pageSize, search, sort, order);
         // Thiết lập phân trang

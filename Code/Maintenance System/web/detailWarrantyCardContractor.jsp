@@ -340,17 +340,8 @@
 
                                 <div class="action-buttons">
                                     <c:choose>
-                                        <c:when test="${empty warrantyDetails.lastProcessStatus or warrantyDetails.lastProcessStatus ne 'send_outsource'}">
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="accept_outsource">
-                                                <input type="hidden" name="status" value="receive">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Accept Request</button>
-                                            </form>
-                                        </c:when>
-                                        <c:when test="${warrantyDetails.lastProcessStatus eq 'send_outsource'}">
+
+                                        <c:when test="${warrantyDetails.lastProcessStatus eq 'receive_outsource'}">
                                             <form action="warrantyCardDetailContractor" method="post">
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                                 <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
@@ -366,7 +357,7 @@
                                                 <input type="hidden" name="subStatus" value="lost">
                                                 <input type="hidden" name="status" value="cancel">
                                                 <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Lost</button>
+                                                <button type="submit" class="btn btn-dark">Lost</button>
                                             </form>
 
                                             <form action="warrantyCardDetailContractor" method="post">
@@ -381,10 +372,20 @@
                                             <form action="warrantyCardDetailContractor" method="post">
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                                 <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                                <input type="hidden" name="subStatus" value="back_outsource">
+                                                <input type="hidden" name="status" value="done">
+                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                                <button type="submit" class="btn btn-done">Back Product</button>
+                                            </form>
+                                        </c:when>
+                                        <c:when test="${warrantyDetails.lastProcessStatus eq 'send_outsource'}">
+                                            <form action="warrantyCardDetailContractor" method="post">
+                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                                 <input type="hidden" name="subStatus" value="receive_outsource">
                                                 <input type="hidden" name="status" value="receive">
                                                 <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-cancel">Receive Product</button>
+                                                <button type="submit" class="btn btn-cancel">Received Product</button>
                                             </form>
 
                                             <form action="warrantyCardDetailContractor" method="post">
@@ -396,9 +397,27 @@
                                                 <button type="submit" class="btn btn-done">Back Product</button>
                                             </form>
                                         </c:when>
+                                        <c:otherwise>
+                                            <form action="warrantyCardDetailContractor" method="post">
+                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                                <input type="hidden" name="subStatus" value="accept_outsource">
+                                                <input type="hidden" name="status" value="receive">
+                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                                <button type="submit" class="btn btn-done">Accept Request</button>
+                                            </form>
+
+                                            <form action="warrantyCardDetailContractor" method="post">
+                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                                <input type="hidden" name="subStatus" value="refuse_outsource">
+                                                <input type="hidden" name="status" value="cancel">
+                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                                <button type="submit" class="btn btn-danger">Refuse Request</button>
+                                            </form>
+                                        </c:otherwise>
                                     </c:choose>
 
-                                    <!-- Nút tạo hóa đơn luôn hiển thị -->
                                     <form action="repairCreateInvoice" method="post">
                                         <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                         <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
@@ -406,11 +425,11 @@
                                         <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
                                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
                                     </form>
-                                </div>
-
-
+                                    <div class="section">
+                                        <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
+                                    </div>
+                                </div>       
                             </div>
-
                         </div>
                     </div>
                 </main>
@@ -446,3 +465,5 @@
         </script>
     </body>
 </html>
+
+

@@ -59,15 +59,19 @@ public class LoginServlet extends HttpServlet {
         session.removeAttribute("customer");
 
         if (staff != null) {
+            session.removeAttribute("customerId");
+            
             session.setAttribute("staff", staff);
             session.setAttribute("roleId", staff.getRole());
             saveCookies(response, username, password, rememberme);
-            response.sendRedirect("profile");
+            response.sendRedirect("dashBoard");
         } else if (customer != null) {
+            session.removeAttribute("roleId");
+            
             session.setAttribute("customer", customer);
             session.setAttribute("customerId", customer.getCustomerID());
             saveCookies(response, username, password, rememberme);
-            response.sendRedirect("profile");
+            response.sendRedirect("dashBoard");
         }
     }
 

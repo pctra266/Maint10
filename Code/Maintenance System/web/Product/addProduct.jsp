@@ -175,7 +175,7 @@
             }
 
             .submit-btn {
-                background-color: #007bff;
+                background-color: #3b7ddd;
                 color: #fff;
             }
 

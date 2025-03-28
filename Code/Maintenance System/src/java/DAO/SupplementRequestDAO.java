@@ -56,7 +56,7 @@ public class SupplementRequestDAO {
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                 SupplementRequest request = new SupplementRequest(); // Constructor rỗng
+                 SupplementRequest request = new SupplementRequest(); 
 
                 request.setRequestID(rs.getInt("MissingComponentRequestID"));
                 request.setComponentName(rs.getString("ComponentName"));
@@ -70,12 +70,113 @@ public class SupplementRequestDAO {
                 request.setStatus(rs.getString("Status"));
                 request.setNote(rs.getString("Note"));
 
-                list.add(request); // Cuối cùng mới thêm vào list
+                list.add(request); 
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
+    }
+        public ArrayList<SupplementRequest> getMissingComponentRequests(String status, String typeID, String brandID, String componentName, int page, int pageSize) {
+        ArrayList<SupplementRequest> list = new ArrayList<>();
+        String query = "SELECT mcq.MissingComponentRequestID, mcq.ComponentName, mcq.ComponentType, mcq.TypeID, mcq.BrandID, mcq.RequestedBy, mcq.RequestDate, mcq.Status, mcq.Note, cb.BrandName, ct.TypeName " +
+                       "FROM MissingComponentRequest mcq " +
+                       "LEFT JOIN Brand cb ON mcq.BrandID = cb.BrandID " +
+                       "LEFT JOIN ComponentType ct ON mcq.TypeID = ct.TypeID " +
+                       "WHERE 1=1 ";
+        if(status != null && !status.trim().isEmpty()){
+            query += " AND mcq.Status LIKE ? ";
+        }
+        if(typeID != null && !typeID.trim().isEmpty()){
+            query += " AND mcq.TypeID = ? ";
+        }
+        if(brandID != null && !brandID.trim().isEmpty()){
+            query += " AND mcq.BrandID = ? ";
+        }
+        if(componentName != null && !componentName.trim().isEmpty()){
+            query += " AND mcq.ComponentName LIKE ? ";
+        }
+        query += " ORDER BY mcq.RequestDate DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if(status != null && !status.trim().isEmpty()){
+                ps.setString(count++, "%" + status.trim() + "%");
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                ps.setInt(count++, Integer.parseInt(typeID.trim()));
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                ps.setInt(count++, Integer.parseInt(brandID.trim()));
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+                ps.setString(count++, "%" + componentName.trim() + "%");
+            }
+            int offset = (page - 1) * pageSize;
+            ps.setInt(count++, offset);
+            ps.setInt(count++, pageSize);
+            rs = ps.executeQuery();
+            while(rs.next()){
+                SupplementRequest mcr = new SupplementRequest();
+                mcr.setRequestID(rs.getInt("MissingComponentRequestID"));
+                mcr.setComponentName(rs.getString("ComponentName"));
+                mcr.setComponentType(rs.getString("ComponentType"));
+                mcr.setTypeID(rs.getInt("TypeID"));
+                mcr.setBrandID(rs.getInt("BrandID"));
+                mcr.setRequestedBy(rs.getInt("RequestedBy"));
+                mcr.setRequestDate(rs.getDate("RequestDate"));
+                mcr.setStatus(rs.getString("Status"));
+                mcr.setNote(rs.getString("Note"));
+                mcr.setBrand(rs.getString("BrandName"));
+                mcr.setType(rs.getString("TypeName"));
+                list.add(mcr);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+        
+         public int totalMissingComponentRequests(String status, String typeID, String brandID, String componentName) {
+        String query = "SELECT COUNT(*) FROM MissingComponentRequest WHERE 1=1 ";
+        if(status != null && !status.trim().isEmpty()){
+            query += " AND Status LIKE ? ";
+        }
+        if(typeID != null && !typeID.trim().isEmpty()){
+            query += " AND TypeID = ? ";
+        }
+        if(brandID != null && !brandID.trim().isEmpty()){
+            query += " AND BrandID = ? ";
+        }
+        if(componentName != null && !componentName.trim().isEmpty()){
+            query += " AND ComponentName LIKE ? ";
+        }
+        try {
+            conn = new DBContext().connection;
+            ps = conn.prepareStatement(query);
+            int count = 1;
+            if(status != null && !status.trim().isEmpty()){
+                ps.setString(count++, "%" + status.trim() + "%");
+            }
+            if(typeID != null && !typeID.trim().isEmpty()){
+                ps.setInt(count++, Integer.parseInt(typeID.trim()));
+            }
+            if(brandID != null && !brandID.trim().isEmpty()){
+                ps.setInt(count++, Integer.parseInt(brandID.trim()));
+            }
+            if(componentName != null && !componentName.trim().isEmpty()){
+                ps.setString(count++, "%" + componentName.trim() + "%");
+            }
+            rs = ps.executeQuery();
+            if(rs.next()){
+                return rs.getInt(1);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     public SupplementRequest getSupplementRequestByID(int requestID) {

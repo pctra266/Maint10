@@ -30,15 +30,62 @@
                            ${param.success}
                        </div>
                    </c:if>
+                     <h1 class="text-center ">List Supplement Request</h1>
+                     
+                   <form method="get" action="supplementRequest">
+            <input type="hidden" name="action" value="listSupplementRequest">
+            <div class="row" style="justify-content: space-between">
+                <div class="col-md-6" style="width: 500px">
+                        <select  style="margin-top: 15px" class="form-select" name="status" onchange="this.form.submit()">
+                            <option ${(status=='')?"selected":""} value="" >Action </option>
+                            <option ${(status=='waiting')?"selected":""} value="waiting">Waiting</option>
+                            <option ${(status=='approved')?"selected":""} value="approved">Approved</option>
+                            <option ${(status=='cancel')?"selected":""} value="cancel">Cancel</option>
+                        </select>
+                                
+                    <input style="margin-top: 15px" type="search" name="componentName" class="form-control" placeholder="Component Name" value="${componentName}">
+                    <div style="margin-top: 15px" class="col-sm-6 col-md-6">
+                            <label>Show 
+                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                    <c:forEach items="${pagination.listPageSize}" var="s">
+                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                    </c:forEach>
+                                </select> 
+                                entries
+                            </label>
+                        </div>
+                </div>
+                
+                <div class="col-md-6" style="width: 500px">
+                    <select style="margin-top: 15px" class="form-select" name="typeID" onchange="this.form.submit()">
+                                     <option value="" >Component Type </option>
+                                    <c:forEach var="type" items="${typeList}">
+                                     <option value="${type.typeID}" ${type.typeID eq typeID ? "selected" : ""}>${type.typeName}</option>
+                                </c:forEach>
+                                </select>
+                    
+                     <select style="margin-top: 15px" class="form-select" name="brandID" onchange="this.form.submit()">
+                                    <option value="">Component Brand</option>
+                                    <c:forEach var="brand" items="${brandList}">
+                                    <option value="${brand.brandId}" ${brandID  eq brand.brandId ? "selected" : ""}>${brand.brandName}</option>
+                                </c:forEach>
+                                </select>
+                    
+                    <div style="float: right">
+                                <button  class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                </div>
+                </div>
+                
+        </form>
 
         <table class="table table-hover my-0">
     <thead>
         <tr>
-            <th>Supplement Request ID</th>
-            <th>Component Name</th>
-            <th>Component Source</th>
-            <th>Component Type</th>
-            <th>Component Brand</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Type</th>
+            <th>Brand</th>
             <th>Request Date</th>
             <th>Status</th>
             <th>Note</th>
@@ -95,7 +142,7 @@
         </c:forEach>
     </tbody>
 </table>
-
+<jsp:include page="/includes/pagination.jsp" />
                         </main>
 
 

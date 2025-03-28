@@ -22,7 +22,7 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <h1 class="text-center">Waiting Component Request</h1>
-                    <a class="btn btn-primary" href="componentRequest" >Back</a>
+                    <a class="btn btn-primary" href="componentRequest?action=viewComponentRequestDashboard" >Back</a>
                     <div>
                         <form style="margin-top: 15px" method="get" action="componentRequest" >
                             <input type="hidden" name="action" value="listComponentRequestInStaffRole">
