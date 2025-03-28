@@ -1,5 +1,3 @@
-
-
 <%-- 
     Document   : updateProduct1
     Created on : Feb 6, 2025, 5:07:44 AM
@@ -115,6 +113,99 @@
                     </div>
 
                     <div class="row">
+
+                        <c:if test="${not empty sessionScope.customer}">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
+                                <div class="card">
+                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">PROFILE</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">BLOG</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'InvoiceController';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/invoice.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">INVOICE</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'WarrantyCard';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/warranty-card.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">CREATE WARRANTY CARD</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/package-warranty.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">PACKAGE WARRANTY CARD</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'extendedWarranty';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/extended-warranty.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">EXTENDED WARRANTY</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'feedback?action=viewFeedbackDashboard';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/feedback.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">FEEDBACK</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'purchaseproduct';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/purchase-product.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">PURCHASED PRODUCT</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'yourwarrantycard';">
+                                <div class="card">
+                                    <img class="card-img-top" src="img/photos/your-wc.jpg" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">MY WARRANTY CARD</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+
+                        </c:if>
 
 
                         <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '2'}">
