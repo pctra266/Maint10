@@ -16,9 +16,10 @@
         <filter-name>AuthenticationFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-        
-
+    <servlet-mapping>
+        <servlet-name>DashBoard</servlet-name>
+        <url-pattern>/dashBoard</url-pattern>
+    </servlet-mapping>
     <error-page>
         <error-code>404</error-code>
         <location>/404Page.jsp</location>
@@ -184,18 +185,14 @@
         <servlet-class>Controller.WarrantyCard.SendWarrantyCard</servlet-class>
     </servlet>
     <servlet>
-
-
         <servlet-name>PermissionsServlet</servlet-name>
         <servlet-class>Controller.Permission.PermissionsServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Roles</servlet-name>
         <servlet-class>Controller.Permission.RolesManage</servlet-class>
-</servlet>
-<servlet>
-
-
+    </servlet>
+    <servlet>
         <servlet-name>WarrantyCardRepairContractor</servlet-name>
         <servlet-class>Controller.WarrantyCard.WarrantyCardRepairContractor</servlet-class>
     </servlet>
@@ -218,7 +215,10 @@
     <servlet>
         <servlet-name>ExportInvoicePDF</servlet-name>
         <servlet-class>Controller.Invoice.ExportInvoicePDF</servlet-class>
-
+    </servlet>
+    <servlet>
+        <servlet-name>DashBoard</servlet-name>
+        <servlet-class>Controller.DashBoard</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
@@ -433,8 +433,6 @@
         <url-pattern>/sendWC</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
-
         <servlet-name>PermissionsServlet</servlet-name>
         <url-pattern>/permissions</url-pattern>
     </servlet-mapping>
@@ -443,7 +441,6 @@
         <url-pattern>/roles</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-
         <servlet-name>WarrantyCardRepairContractor</servlet-name>
         <url-pattern>/warrantyCardRepairContractor</url-pattern>
     </servlet-mapping>

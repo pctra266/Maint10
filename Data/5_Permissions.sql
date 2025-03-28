@@ -66,7 +66,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('ADD_EXTENDED_WARRANTY', '/extendedWarranty?action=new'),
 ('EDIT_EXTENDED_WARRANTY', '/extendedWarranty?action=edit'),
 ('DELETE_EXTENDED_WARRANTY', '/extendedWarranty?action=delete'),
-('GENERAL_DASHBOARD', '..dashboard'),
+('GENERAL_DASHBOARD', '/dashboard'),
 ('LIST_UNKNOWN', '/listUnknown'),
 ('ADD_UNKNOWN', '/addUnknown'),
 ('VIEW_COMPONENT_REQUEST', '/componentRequest'),
