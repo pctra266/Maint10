@@ -111,11 +111,10 @@ public class ComponentRequestController extends HttpServlet {
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
         String warrantyStatus = request.getParameter("warrantyStatus");
-        if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
-            warrantyStatus = "fixing";
-        }
-        if (warrantyStatus.equalsIgnoreCase("all")) {
+        if (warrantyStatus != null && warrantyStatus.equalsIgnoreCase("all")) {
             warrantyStatus = "";
+        } else if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
+            warrantyStatus = "fixing";
         }
         String typeMaintain = request.getParameter("typeMaintain");
         String sort = request.getParameter("sort");
