@@ -86,7 +86,8 @@ public class componentRequestResponsible extends HttpServlet {
         
     
         if(action == null){
-            action = "viewComponentRequestResponsible";
+             response.sendRedirect("404Page.jsp");
+            return ;
         }
         int total = 0;
         switch(action){
@@ -127,6 +128,9 @@ public class componentRequestResponsible extends HttpServlet {
                 request.setAttribute("listComponentResquestResponsible", listComponentResquestResponsible);
                 request.getRequestDispatcher("componentRequestResponsible.jsp").forward(request, response);
                 break;
+                default:
+                     response.sendRedirect("404Page.jsp");
+            return ;
         }
     } 
 

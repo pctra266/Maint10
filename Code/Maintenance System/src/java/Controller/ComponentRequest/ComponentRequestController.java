@@ -154,8 +154,10 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalComponentByProductCode( componentCode, componentName, typeID, brandID);
                 System.out.println("total component: "+ total);
                 break;
+                 case "cancelComponentRequest":
+                     total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode, "waiting")-1;
+                break;
             case "listComponentRequestInStaffRole":
-            case "cancelComponentRequest":
             case "getRequestDetails":
                 total = componentRequestDao.totalComponentRequestInRoleStaff(warrantyCardCode, "waiting");
                 break;
@@ -347,9 +349,6 @@ public class ComponentRequestController extends HttpServlet {
                 request.getRequestDispatcher("listComponentRequestInStaffRole.jsp").forward(request, response);
                 break;
             case "cancelComponentRequest":// technician side
-                if (currentStaff == null) {
-                    staffId = "2";
-                }
                 pagination.setSearchFields(new String[]{"action", "warrantyCardCode"});
                 pagination.setSearchValues(new String[]{"listComponentRequestInStaffRole", warrantyCardCode});
                 request.setAttribute("pagination", pagination);

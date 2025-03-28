@@ -52,7 +52,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('UNDO_FEEDBACK_LOG', '/feedbacklog?action=undoFeedback'),
 ('UPDATE_MAX_SIZE', '/updateMaxSize'),
 ('ADMIN_DASHBOARD_JSP', '/adminDashboard.jsp'),
-('COMPONENT_REQUEST_RESPONSIBLE', '/componentRequestResponsible'),
+('COMPONENT_REQUEST_RESPONSIBLE', '/componentRequestResponsible?action=viewComponentRequestResponsible'),
 ('CUSTOMIZE_HOMEPAGE', '/customizeHomepage'),
 ('UPDATE_COVER', '/updateCover'),
 ('FOOTER_CONTROLLER', '/FooterController'),

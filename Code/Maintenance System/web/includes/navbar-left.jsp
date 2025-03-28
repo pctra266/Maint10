@@ -371,7 +371,15 @@
                                             <span class="align-middle">Component Type</span>
                                         </a>
                                     </li>
-
+                                     <li class="sidebar-item">
+                                        <a class="sidebar-link" href="componentRequestResponsible?action=viewComponentRequestResponsible">
+                                            <!-- ??i sang icon activity (Component Request Log) -->
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity align-middle">
+                                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                                            </svg> 
+                                            <span class="align-middle">Component Request Log</span>
+                                        </a>
+                                    </li>
 
 
 
@@ -571,7 +579,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="componentRequestResponsible">
+                                        <a class="sidebar-link" href="componentRequestResponsible?action=viewComponentRequestResponsible">
                                             <!-- ??i sang icon activity (Component Request Log) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-activity align-middle">
                                             <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
