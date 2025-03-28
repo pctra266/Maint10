@@ -37,6 +37,8 @@ public class LoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String rememberme = request.getParameter("remember-me");
+        request.setAttribute("username", username);
+        request.setAttribute("remember-me", rememberme);
 
         if (username == null || username.trim().isEmpty() || password == null || password.trim().isEmpty()) {
             request.setAttribute("error", "Username and Password must not be empty!");

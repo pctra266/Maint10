@@ -32,10 +32,9 @@ public class PermissionDAO extends DBContext {
                 + "FROM [dbo].[Permissions]\n"
                 + "WHERE 1 = 1";
 
-       
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-           
+
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 Permissions permission = new Permissions();
@@ -238,20 +237,69 @@ public class PermissionDAO extends DBContext {
     }
 //
 
-   public static void main(String[] args) {
-    PermissionDAO permissionDAO = new PermissionDAO();
-    List<Integer> permissions = permissionDAO.getPermissiIDonByRoleID(2);
+    /**
+     * Add permisstion in to permisson table
+     *
+     * @param permission
+     */
+    public void addPermissionII(Permissions permission) {
+        String sql = "INSERT INTO [dbo].[Permissions]\n"
+                + "           ([PermissionName]\n"
+                + "           ,[Link]\n"
+                + "           ,[Description])\n"
+                + "     VALUES\n"
+                + "           (?,?,?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, permission.getPermissionName());
+            ps.setString(2, permission.getLink());
+            ps.setString(3, permission.getDescription());
+            ps.executeUpdate();
 
-    // Kiểm tra danh sách có dữ liệu không
-    if (permissions.isEmpty()) {
-        System.out.println("Không có quyền nào được trả về!");
-    } else {
-        System.out.println("Danh sách quyền của roleId=1:");
-        for (Integer permId : permissions) {
-            System.out.println("Permission ID: " + permId);
+        } catch (SQLException e) {
+
         }
     }
-}
 
+    public Permissions getPermisstionByNameAndLink(String name, String link) {
+        String sql = "SELECT [PermissionID]\n"
+                + "      ,[PermissionName]\n"
+                + "      ,[Link]\n"
+                + "      ,[Description]\n"
+                + "  FROM [dbo].[Permissions]\n"
+                + "  WHERE PermissionName = ? AND Link =?";
+        try{
+            PreparedStatement ps = connection.prepareStatement(link);
+            ps.setString(1, name);
+            ps.setString(2, link);
+            ResultSet rs = ps.executeQuery();
+            if(rs.next()) {
+                Permissions permissions = new Permissions();
+                permissions.setPermissionID(rs.getInt("PermissionID"));
+                permissions.setPermissionName(rs.getString("PermissionName"));
+                permissions.setLink(rs.getString("Link"));
+                permissions.setDescription(rs.getString("Description"));
+                return  permissions;
+            }
+         } catch (SQLException e) {
+             
+         }
+        return null;
+    }
+
+    public static void main(String[] args) {
+        PermissionDAO permissionDAO = new PermissionDAO();
+        List<Integer> permissions = permissionDAO.getPermissiIDonByRoleID(2);
+
+        // Kiểm tra danh sách có dữ liệu không
+        if (permissions.isEmpty()) {
+            System.out.println("Không có quyền nào được trả về!");
+        } else {
+            System.out.println("Danh sách quyền của roleId=1:");
+            for (Integer permId : permissions) {
+                System.out.println("Permission ID: " + permId);
+            }
+        }
+    }
 
 }
