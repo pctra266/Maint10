@@ -71,7 +71,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('ADD_UNKNOWN', '/addUnknown'),
 ('VIEW_COMPONENT_REQUEST', '/componentRequest'),
 ('CREATE_SUPPLEMENT_REQUEST', '/supplementRequest?action=createSupplementRequest'),
-('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest'),
+('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest?action=listSupplementRequest'),
 ('CREATE_COMPONENT_REQUEST', '/componentRequest?action=createComponentRequest'),
 ('ADD_COMPONENT_IN_REQUEST', '/componentRequest?action=addComponent'),
 ('REMOVE_COMPONENT_FROM_REQUEST', '/componentRequest?action=removeComponent'),
@@ -88,7 +88,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CREATE_REPAIR_INVOICE', '/repairCreateInvoice'),
 ('VIEW_INVOICE_DETAIL', '/invoiceDetail'),
 ('CUSTOMER_CONTACT', '/customerContact'),
-('VIEW_PACKAGE_WARRANTY', '/packageWarranty'),
+('VIEW_PACKAGE_WARRANTY', '/packageWarranty?action=view'),
 ('EDIT_PACKAGE_WARRANTY', '/packageWarranty?action=edit'),
 ('EXTEND_WARRANTY_DEFAULT', '/extendWarranty?action=extendDefault'),
 ('EXTEND_WARRANTY_EXTENDED', '/extendWarranty?action=extendExtended'),
@@ -237,12 +237,15 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,116),(3,116),
 (1,117),(3,117)
 
-/*
-DELETE FROM Permissions;
-DBCC CHECKIDENT ('Permissions', RESEED, 0);
-DELETE FROM Role_Permissions
+
+
 
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update')
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
-(1,117),(2,117),(3,117),(5,117) */
+(1,117),(2,117),(3,117),(5,117) 
+
+
+--DELETE FROM Permissions;
+--DBCC CHECKIDENT ('Permissions', RESEED, 0);
+--DELETE FROM Role_Permissions

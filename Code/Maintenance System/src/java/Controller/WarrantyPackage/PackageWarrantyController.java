@@ -112,8 +112,8 @@ public class PackageWarrantyController extends HttpServlet {
         pagination.setOrder(order);
         pagination.setUrlPattern("/packageWarranty");
         // take list
-        pagination.setSearchFields(new String[]{"searchProductCode", "searchCustomerName", "searchEmail", "searchProductName","filterStatusPackage"});
-        pagination.setSearchValues(new String[]{searchProductCode, searchCustomerName, searchEmail, searchProductName, filterStatusPackage});
+        pagination.setSearchFields(new String[]{"searchProductCode","action", "searchCustomerName", "searchEmail", "searchProductName","filterStatusPackage"});
+        pagination.setSearchValues(new String[]{searchProductCode, action,searchCustomerName, searchEmail, searchProductName, filterStatusPackage});
         
 
         ArrayList<PackageWarranty> list = pkgDao.getAllPackageWarranties(searchProductCode, searchCustomerName, searchEmail, searchProductName, filterStatusPackage, sort, order, page, pageSize);

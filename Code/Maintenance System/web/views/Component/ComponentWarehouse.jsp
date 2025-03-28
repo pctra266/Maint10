@@ -63,7 +63,7 @@
                     </form>
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2>Component Warehouse</h2>
-                        <a href="supplementRequest" class="btn btn-secondary">Supplement List </a>
+                        <a href="supplementRequest?action=listSupplementRequest" class="btn btn-secondary">Supplement List </a>
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center mb-3">

@@ -16,7 +16,7 @@
             
             <main class="content">
                 <div class="card shadow-sm mb-4">
-                    <a href="packageWarranty" style="margin: 1%; width: 7%" class="btn btn-primary">Back</a>
+                    <a href="packageWarranty?action=view" style="margin: 1%; width: 7%" class="btn btn-primary">Back</a>
                     <div class="card-header">
                         <h2>Package Warranty</h2>
                     </div>
@@ -56,7 +56,7 @@
                             
                             <div class="mb-3">
                                 <button type="submit" class="btn btn-primary">Update Package Warranty</button>
-                                <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
+                                <a href="packageWarranty?action=view" class="btn btn-secondary">Cancel</a>
                             </div>
                         </form>
                     </div>
@@ -74,7 +74,7 @@
                             <input type="hidden" name="action" value="extendDefault">
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                             <button type="submit" class="btn btn-primary">Extend Default Warranty</button>
-                            <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
+                            <a href="packageWarranty?action=view" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>
@@ -143,7 +143,7 @@
                             <input type="hidden" name="packageWarrantyID" value="${packageWarranty.packageWarrantyID}">
                            
                             <button type="submit" class="btn btn-primary">Extend Extended Warranty</button>
-                            <a href="packageWarranty" class="btn btn-secondary">Cancel</a>
+                            <a href="packageWarranty?action=view" class="btn btn-secondary">Cancel</a>
                         </form>
                     </div>
                 </div>

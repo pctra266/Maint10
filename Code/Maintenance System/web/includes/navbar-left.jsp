@@ -127,7 +127,7 @@
 
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="packageWarranty">
+                                        <a class="sidebar-link" href="packageWarranty?action=view">
                                             <!-- ??i sang icon shield (List Package Warranty) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield align-middle">
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -272,7 +272,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="packageWarranty">
+                                        <a class="sidebar-link" href="packageWarranty?action=view">
                                             <!-- Dùng icon shield cho List Package Warranty -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield align-middle">
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -711,7 +711,7 @@
 
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="packageWarranty">
+                                        <a class="sidebar-link" href="packageWarranty?action=view">
                                             <!-- ??i sang icon shield (List Package Warranty) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield align-middle">
                                             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
