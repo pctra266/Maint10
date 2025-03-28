@@ -24,6 +24,13 @@ public class Permissions {
         this.link = link;
     }
 
+    public Permissions(String permissionName, String description, String link) {
+        this.permissionName = permissionName;
+        this.description = description;
+        this.link = link;
+    }
+    
+
     public int getPermissionID() {
         return permissionID;
     }

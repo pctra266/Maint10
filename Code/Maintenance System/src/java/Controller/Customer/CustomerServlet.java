@@ -44,17 +44,39 @@ public class CustomerServlet extends HttpServlet {
 
         switch (action != null ? action : "") {
             case "detail":
-                int customerId = Integer.parseInt(request.getParameter("id"));
-                Customer customer = customerDao.getCustomerByID(customerId);
-                request.setAttribute("customer", customer);
+                String iD = request.getParameter("id");
+                 if (iD == null || iD.isEmpty() || !iD.matches("\\d+")) {
+                      response.sendRedirect("customer");
+                    return;
+                }
+                try {
+                    int customerId = Integer.parseInt(iD);
+                    Customer customer = customerDao.getCustomerByID(customerId);
+                    request.setAttribute("customer", customer);
+                }catch(Exception e) {
+                     response.sendRedirect("customer");
+                }
+               
                 request.getRequestDispatcher("Customer/DetailCustomerForm.jsp").forward(request, response);
                 break;
             case "update":
-                int updateCustomerId = Integer.parseInt(request.getParameter("id"));
-                Customer updateCustomer = customerDao.getCustomerByID(updateCustomerId);
+                String id = request.getParameter("id");
+                // Check xem co phai la so hay ko
+                if (id == null || id.isEmpty() || !id.matches("\\d+")) {
+                      response.sendRedirect("customer");
+                    return;
+                }
+                try {
+                    int updateCustomerId = Integer.parseInt(id);
+                     Customer updateCustomer = customerDao.getCustomerByID(updateCustomerId);
                 request.setAttribute("customer", updateCustomer);
+                } catch(NumberFormatException e) {
+                      response.sendRedirect("customer");
+                }
+               
                 request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
                 break;
+
             case "add":
                 request.getRequestDispatcher("Customer/AddCustomer.jsp").forward(request, response);
                 break;
@@ -222,6 +244,13 @@ public class CustomerServlet extends HttpServlet {
         CustomerDAO customerDao = new CustomerDAO();
         // Lay thong tin tu form
         String id = request.getParameter("customerId");
+
+        // Check xem co phai la so hay ko
+        if (id == null || id.isEmpty() || !id.matches("\\d+")) {
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
+            return;
+        }
+
         try {
             int customerId = Integer.parseInt(id);
             String username = request.getParameter("username");
@@ -323,10 +352,9 @@ public class CustomerServlet extends HttpServlet {
             request.setAttribute("mess", "Update sucessfully!");
             request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
 
-        } catch (IOException | ServletException | NumberFormatException e) {
+        } catch (Exception e) {
 
-            request.setAttribute("error", "An error occurred while updating the customer: " + e.getMessage());
-            request.getRequestDispatcher("Customer/UpdateCustomerForm.jsp").forward(request, response);
+            request.getRequestDispatcher("Error.jsp").forward(request, response);
         }
     }
 
@@ -355,21 +383,13 @@ public class CustomerServlet extends HttpServlet {
         String pageSizeParam = request.getParameter("page-size");
 
         int page = (FormatUtils.tryParseInt(pageParam) != null) ? FormatUtils.tryParseInt(pageParam) : 1;
-         Integer pageSize;
+        Integer pageSize;
         pageSize = (FormatUtils.tryParseInt(pageSizeParam) != null) ? FormatUtils.tryParseInt(pageSizeParam) : 5;
-
-      
-       
-     
-
-       
-
-      
 
         ArrayList<Customer> listCustomer = new ArrayList<>();
         int totalCustomer = 0;
         int totalPages = 1;
-        int   offset = (page - 1) * pageSize;
+        int offset = (page - 1) * pageSize;
 
         // Kiểm tra nếu có điều kiện tìm kiếm
         if ((searchName
@@ -384,39 +404,39 @@ public class CustomerServlet extends HttpServlet {
             listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, pageSize);
             totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
             totalPages = (int) Math.ceil((double) totalCustomer / pageSize);
-            
+
             // Phan trnag moi
             Pagination pagination = new Pagination();
             pagination.setPageSize(pageSize);
             pagination.setCurrentPage(page);
-            pagination.setSearchFields(new String[] {"name","gender","email","phone","address","dateOfBirth"});
-            pagination.setSearchValues(new String[] {searchName,searchGender,searchEmail,searchPhone,searchAddress,dateOfBirth});
+            pagination.setSearchFields(new String[]{"name", "gender", "email", "phone", "address", "dateOfBirth"});
+            pagination.setSearchValues(new String[]{searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth});
             pagination.setSort(sortBy);
             pagination.setOrder(sortOrder);
             pagination.setTotalPagesToShow(5);
             pagination.setTotalPages(totalPages);
             pagination.setUrlPattern("/customer");
-            pagination.setListPageSize( totalCustomer);
+            pagination.setListPageSize(totalCustomer);
             request.setAttribute("pagination", pagination);
         } else {
-           listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, pageSize);
+            listCustomer = customerDao.advancedSearch(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth, sortBy, sortOrder, offset, pageSize);
             totalCustomer = customerDao.getCustomerAdvancedSearchPage(searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth);
             totalPages = (int) Math.ceil((double) totalCustomer / pageSize);
-            
+
             // Phan trnag moi
             Pagination pagination = new Pagination();
             pagination.setPageSize(pageSize);
             pagination.setCurrentPage(page);
-            pagination.setSearchFields(new String[] {"name","gender","email","phone","address","dateOfBirth"});
-            pagination.setSearchValues(new String[] {searchName,searchGender,searchEmail,searchPhone,searchAddress,dateOfBirth});
+            pagination.setSearchFields(new String[]{"name", "gender", "email", "phone", "address", "dateOfBirth"});
+            pagination.setSearchValues(new String[]{searchName, searchGender, searchEmail, searchPhone, searchAddress, dateOfBirth});
             pagination.setSort(sortBy);
             pagination.setOrder(sortOrder);
             pagination.setTotalPagesToShow(5);
             pagination.setTotalPages(totalPages);
             pagination.setUrlPattern("/customer");
-            pagination.setListPageSize( totalCustomer);
+            pagination.setListPageSize(totalCustomer);
             request.setAttribute("pagination", pagination);
-      
+
         }
 
         request.setAttribute("searchName", searchName);
@@ -425,7 +445,7 @@ public class CustomerServlet extends HttpServlet {
         request.setAttribute("searchPhone", searchPhone);
         request.setAttribute("searchAddress", searchAddress);
         request.setAttribute("dateOfBirth", dateOfBirth);
-         
+
         request.setAttribute("size", pageSize);
         request.setAttribute("sort", sortBy);
         request.setAttribute("order", sortOrder);
@@ -434,14 +454,6 @@ public class CustomerServlet extends HttpServlet {
 
         request.getRequestDispatcher("Customer/Customer.jsp").forward(request, response);
     }
-
-          
- 
-            
-
-       
-    
-
 
     /**
      * Returns a short description of the servlet.
@@ -454,6 +466,3 @@ public class CustomerServlet extends HttpServlet {
     }// </editor-fold>
 
 }
-
-    
-

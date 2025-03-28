@@ -9,6 +9,18 @@
 
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+        <style>
+           .search-box {
+                margin-bottom: 15px;
+                padding: 8px;
+                width: 100%;
+                max-width: 300px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            
+            </style>
     </head>
 
     <body>
@@ -22,17 +34,17 @@
 
                     <form action="customer"  method="get" style="text-align: center; margin-bottom: 20px;">
 
-                        <input type="text" name="name" placeholder="Search by name" value="${searchName}" />
-                        <select name="gender">
-                            <option value="">Search by gender</option>
+                        <input type="text" name="name" placeholder="Search by name" value="${searchName}"  class="search-box" />
+                        <select name="gender"  class="search-box">
+                            <option value="" >Search by gender</option>
                             <option value="Male" ${searchGender == 'Male' ? 'selected' : ''}>Male</option>
                             <option value="Female" ${searchGender == 'Female' ? 'selected' : ''}>Female</option>
                         </select>
-                        <input type="text" name="address" placeholder="Search by address" value="${searchAddress}" />
-                        <input type="text" name="phone" placeholder="Search by phone" value="${searchPhone}" />
-                        <input type="text" name="email" placeholder="Search by email" value="${searchEmail}" />
+                        <input type="text" name="address" placeholder="Search by address" value="${searchAddress}" class="search-box" />
+                        <input type="text" name="phone" placeholder="Search by phone" value="${searchPhone}"  class="search-box" />
+                        <input type="text" name="email" placeholder="Search by email" value="${searchEmail}"  class="search-box" />
 
-                        <input type="date" name="dateOfBirth" value="${dateOfBirth}"/>
+                        <input type="date" name="dateOfBirth" value="${dateOfBirth}"  class="search-box"/>
 
                         <!-- Dropdown để chọn số lượng khách hàng hiển thị mỗi trang -->
                         <div class="col-sm-6 col-md-6">
@@ -155,4 +167,4 @@
         </div>
         <script src="js/app.js"></script>
     </body>
-</html>
+</html> 
