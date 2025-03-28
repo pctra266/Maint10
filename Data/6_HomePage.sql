@@ -48,3 +48,32 @@ VALUES
     ('Sebastian Allen', 'sebastian.allen@example.com', '555-0125', 'I want to know about job opportunities at the company.'),
     ('Madison Young', 'madison.young@example.com', '555-0126', 'I am interested in your new product.');
 
+INSERT INTO MissingComponentRequest (ComponentName, ComponentType, TypeID, BrandID, RequestedBy, Status, Note)
+VALUES
+    ('Laptop Battery', 'product', 1, 3, 1, 'waiting', 'Urgent request for replacement battery.'),
+    ('Screen Panel', 'product', 2, 5, 1, 'approved', 'Approved for immediate replacement.'),
+    ('Motherboard', 'product', 3, 7, 1, 'waiting', 'Need verification for compatibility.'),
+    ('Power Adapter', 'product', 4, 9, 1, 'cancel', 'Request canceled by user.'),
+    ('Keyboard', 'product', 5, 11, 1, 'waiting', 'Broken keys, needs replacement.'),
+    ('Cooling Fan', 'product', 6, 13, 2, 'approved', 'Approved for purchase.'),
+    ('RAM Module', 'product', 7, 15, 2, 'waiting', 'Upgrade request for 16GB RAM.'),
+    ('Hard Drive', 'product', 8, 1, 2, 'cancel', 'Request duplicated, canceling this.'),
+    ('Solid State Drive', 'product', 1, 2, 2, 'waiting', 'Require 1TB SSD for upgrade.'),
+    ('Graphics Card', 'product', 2, 4, 2, 'approved', 'Urgent replacement for workstation.'),
+    ('Touchpad', 'product', 3, 6, 2, 'waiting', 'Touchpad malfunctioning, needs fix.'),
+    ('WiFi Module', 'product', 4, 8, 2, 'approved', 'Replace with a compatible model.'),
+    ('USB Port Module', 'product', 5, 10, 2, 'cancel', 'Incorrect component requested.'),
+    ('DVD Drive', 'product', 6, 12, 2, 'waiting', 'Require replacement for old model.'),
+    ('Battery Connector', 'product', 7, 14, 2, 'approved', 'Part is broken, needs fixing.'),
+    ('Laptop Casing', 'product', 8, 16, 2, 'waiting', 'Case damaged, needs replacement.'),
+    ('BIOS Chip', 'product', 1, 3, 2, 'approved', 'Need new BIOS chip for update.'),
+    ('Charging Port', 'product', 2, 5, 2, 'waiting', 'Loose connection, requires fix.'),
+    ('Heat Sink', 'product', 3, 7, 2, 'cancel', 'Not needed anymore.'),
+    ('Bluetooth Module', 'product', 4, 9, 2, 'waiting', 'Needs replacement due to malfunction.'),
+    ('Fingerprint Sensor', 'product', 5, 11, 2, 'approved', 'Request approved for security reasons.'),
+    ('Speakers', 'product', 6, 13, 2, 'waiting', 'Sound issues, requires new pair.'),
+    ('Webcam', 'product', 7, 15, 2, 'approved', 'Webcam faulty, needs immediate fix.'),
+    ('Cooling Pad', 'unknown product', NULL, NULL, 2, 'waiting', 'Requested additional cooling support.'),
+    ('Hinge Mechanism', 'unknown product', NULL, NULL, 2, 'approved', 'Hinge broken, needs repair.'),
+    ('Screw Set', 'unknown product', NULL, NULL, 2, 'waiting', 'Missing screws, needs replacement.');
+
