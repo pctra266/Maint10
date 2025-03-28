@@ -15,7 +15,7 @@ public class DashBoard extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendRedirect("dashBoard.jsp");
+        request.getRequestDispatcher("dashBoard.jsp").forward(request, response);
     }
 
     @Override

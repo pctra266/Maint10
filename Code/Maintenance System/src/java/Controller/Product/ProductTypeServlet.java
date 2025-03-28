@@ -30,7 +30,6 @@ public class ProductTypeServlet extends HttpServlet {
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
 
-        // Xử lý xóa
         if ("delete".equals(action)) {
             int productTypeID = Integer.parseInt(request.getParameter("productTypeID"));
             boolean success = productTypeDAO.deleteProductType(productTypeID);
@@ -41,16 +40,20 @@ public class ProductTypeServlet extends HttpServlet {
             }
         }
 
-        // Xử lý thêm (POST từ modal)
         if ("add".equals(action) && "POST".equalsIgnoreCase(request.getMethod())) {
             String typeName = request.getParameter("typeName");
+            if(typeName==null||typeName.isBlank()){
+                request.setAttribute("errorMessage", "Failed to add. Name should not be blank.");
+            }
+            else{
             ProductType type = new ProductType();
-            type.setTypeName(typeName);
+            type.setTypeName(typeName.trim());
             boolean success = productTypeDAO.addProductType(type);
             if (success) {
                 request.setAttribute("successMessage", "Product Type added successfully");
             } else {
                 request.setAttribute("errorMessage", "Failed to add product type. Name may already exist.");
+            }
             }
         }
 
