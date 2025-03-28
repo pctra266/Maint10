@@ -101,7 +101,10 @@
                     <div class="mb-3">
                         <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                             <div class="com-md-12 d-flex justify-content-between">
-                                <h2>Now process: ${latestProcess.action} </h2>
+                                <div class="d-flex align-items-center justify-content-center">
+                                    <h2>Now process: ${latestProcess.action} </h2>
+                                    <a href="WarrantyCard/Detail?ID=${card.warrantyCardID}" class="mb-1"><i class="fa fa-2x fa-refresh ms-2"></i></a>
+                                </div>
                                 <!-- Nút Show Invoices chuyển hướng đến trang mới -->
                                 <div class="d-flex ">
                                     <div>
