@@ -87,7 +87,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('LIST_INVOICE_REPAIR', '/listInvoiceRepair'),
 ('CREATE_REPAIR_INVOICE', '/repairCreateInvoice'),
 ('VIEW_INVOICE_DETAIL', '/invoiceDetail'),
-('CUSTOMER_CONTACT', '/customerContact'),
+('CUSTOMER_CONTACT', '/customerContact?action=view'),
 ('VIEW_PACKAGE_WARRANTY', '/packageWarranty?action=view'),
 ('EDIT_PACKAGE_WARRANTY', '/packageWarranty?action=edit'),
 ('EXTEND_WARRANTY_DEFAULT', '/extendWarranty?action=extendDefault'),

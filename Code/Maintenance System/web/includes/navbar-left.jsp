@@ -305,7 +305,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="customerContact">
+                                        <a class="sidebar-link" href="customerContact?action=view">
                                             <!-- Dùng icon phone cho list customer Contact -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone align-middle">
                                             <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72 13 13 0 0 0 .57 2.81 2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 13 13 0 0 0 2.81.57A2 2 0 0 1 22 16.92z"></path>
@@ -464,7 +464,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="customerContact">
+                                        <a class="sidebar-link" href="customerContact?action=view">
                                             <!-- ??i sang icon phone (List Customer Contact) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone align-middle">
                                             <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72 13 13 0 0 0 .57 2.81 2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 13 13 0 0 0 2.81.57A2 2 0 0 1 22 16.92z"></path>
@@ -732,7 +732,7 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="customerContact">
+                                        <a class="sidebar-link" href="customerContact?action=view">
                                             <!-- ??i sang icon phone (List Customer Contact) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone align-middle">
                                             <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.79 19.79 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72 13 13 0 0 0 .57 2.81 2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 13 13 0 0 0 2.81.57A2 2 0 0 1 22 16.92z"></path>
