@@ -342,36 +342,38 @@
                         </div>
 
                         <div class="col-md-4" >
+                            <c:if test="${staff!=null}">       
                             <h3>Component request:</h3>
                             <c:if test="${empty componentRequests}">
                                 <h4 class="text-center text-black-50">No component request created.</h4>
                             </c:if>
-                            <div style="max-height:20rem; overflow-y: auto">
-                                <c:forEach var="request" items="${componentRequests.keySet()}">
-                                    <table class="table table-bordered " >
-                                        <thead>
-                                            <tr>
-                                                <td width="60%">${request.componentRequestID}</td>
-                                                <td width="20%">Quantity</td>
-                                                <td width="20%">Status</td>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
-                                                <tr>
-                                                    <td>${requestDetail.componentName}</td>
-                                                    <td>${requestDetail.quantity}</td>
-                                                    <c:if test="${status.index==0}">
-                                                        <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
-                                                            ${request.status}
-                                                        </td>
-                                                    </c:if>
-                                                </tr>   
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </c:forEach> 
-                            </div>
+                                    <div style="max-height:20rem; overflow-y: auto">
+                                        <c:forEach var="request" items="${componentRequests.keySet()}">
+                                            <table class="table table-bordered " >
+                                                <thead>
+                                                    <tr>
+                                                        <td width="60%">${request.componentRequestID}</td>
+                                                        <td width="20%">Quantity</td>
+                                                        <td width="20%">Status</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
+                                                        <tr>
+                                                            <td>${requestDetail.componentName}</td>
+                                                            <td>${requestDetail.quantity}</td>
+                                                            <c:if test="${status.index==0}">
+                                                                <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
+                                                                    ${request.status}
+                                                                </td>
+                                                            </c:if>
+                                                        </tr>   
+                                                    </c:forEach>
+                                                </tbody>
+                                            </table>
+                                        </c:forEach> 
+                                    </div>
+                                </c:if>
 
                             <%--For showing images --%>
                             <h3 class="mt-2">Medias:</h3>

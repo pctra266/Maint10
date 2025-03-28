@@ -150,6 +150,7 @@ public class AuthenticationFilter implements Filter {
                 "/yourWarrantyCardDetail",
                 "/purchaseproduct",
                 "/WarrantyCard/Add",
+                "/WarrantyCard/Detail",
                 "/WarrantyCard/Add?action=create",
                 "/Redirect"
         );

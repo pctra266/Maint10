@@ -3,12 +3,14 @@ package Controller.WarrantyCard;
 import DAO.ContractorCardDAO;
 import DAO.WarrantyCardDAO;
 import Model.ContractorCard;
+import Model.Staff;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.Map;
 
 /**
@@ -79,6 +81,12 @@ public class WarrantyCardDetailContractor extends HttpServlet {
             note = "Technician " + staffIdStr + " has sent the product.";
         }
 
+        //process lay tu session
+        HttpSession session = request.getSession();
+        Staff currentStaff = (Staff) session.getAttribute("staff");
+        if(currentStaff!=null){
+            staffId = currentStaff.getStaffID();
+        }
         boolean processUpdated = warrantyCardDAO.addWarrantyCardProcess(warrantyCardId, staffId, subStatus, note);
 
         Map<String, Object> warrantyDetails = warrantyCardDAO.getWarrantyCardDetailsMap(warrantyCardId);
