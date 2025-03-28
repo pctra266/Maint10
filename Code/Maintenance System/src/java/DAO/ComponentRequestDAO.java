@@ -324,8 +324,8 @@ public class ComponentRequestDAO {
                            	from Product p 
                            	join ProductComponents pc on p.ProductID = pc.ProductID
                            	join Component c on pc.ComponentID = c.ComponentID
-                           	join Brand b on c.BrandID = b.BrandID
-                           	join ComponentType ct on c.TypeID = ct.TypeID
+                                                      join Brand b on c.BrandID = b.BrandID
+                                                      join ComponentType ct on c.TypeID = ct.TypeID
                            	where 1=1""";
             if(productCode != null && !productCode.trim().isEmpty()){
                 query += " and p.Code like ?";
@@ -388,18 +388,14 @@ public class ComponentRequestDAO {
         }
         return list;
     }
-    public int totalComponentByProductCode(String productCode, String componentCode, String componentName,
+    public int totalComponentByProductCode( String componentCode, String componentName,
             String typeID, String brandID){
         String query = """
-                           select count(*)
-                           	from Product p 
-                           	join ProductComponents pc on p.ProductID = pc.ProductID
-                           	join Component c on pc.ComponentID = c.ComponentID
+                          select count(*)
+                            from Component c 
+                                join Brand b on c.BrandID = b.BrandID
+                                join ComponentType ct on c.TypeID = ct.TypeID
                            	where 1=1""";
-            if(productCode != null && !productCode.trim().isEmpty()){
-                query += " and p.Code like ?";
-            }
-            
             if(componentCode != null && !componentCode.trim().isEmpty()){
                 query += " and c.ComponentCode like ?";
             }
@@ -416,9 +412,7 @@ public class ComponentRequestDAO {
             conn = new DBContext().connection;
             ps = conn.prepareStatement(query);
             int count = 1;
-            if(productCode != null && !productCode.trim().isEmpty()){
-                ps.setString(count++, productCode);
-            }
+            
             if(componentCode != null && !componentCode.trim().isEmpty()){
                 ps.setString(count++, "%"+ componentCode + "%");
             }

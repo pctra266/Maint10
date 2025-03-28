@@ -111,11 +111,11 @@ public class ComponentRequestController extends HttpServlet {
         String productCode = SearchUtils.searchValidateNonSapce(request.getParameter("productCode"));
         String unknownProductCode = SearchUtils.searchValidateNonSapce(request.getParameter("unknownProductCode"));
         String warrantyStatus = request.getParameter("warrantyStatus");
-        if (warrantyStatus != null && warrantyStatus.equalsIgnoreCase("all")) {
-            warrantyStatus = "";
-        } else if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
-            warrantyStatus = "fixing";
-        }
+//        if (warrantyStatus != null && warrantyStatus.equalsIgnoreCase("all")) {
+//            warrantyStatus = "";
+//        } else if (warrantyStatus == null || warrantyStatus.trim().isEmpty()) {
+//            warrantyStatus = "fixing";
+//        }
         String typeMaintain = request.getParameter("typeMaintain");
         String sort = request.getParameter("sort");
         String order = request.getParameter("order");
@@ -151,7 +151,8 @@ public class ComponentRequestController extends HttpServlet {
                 total = componentRequestDao.totalProductUnderMaintain(warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain);
                 break;
             case "createComponentRequest":
-                total = componentRequestDao.totalComponentByProductCode("", componentCode, componentName, typeID, brandID);
+                total = componentRequestDao.totalComponentByProductCode( componentCode, componentName, typeID, brandID);
+                System.out.println("total component: "+ total);
                 break;
             case "listComponentRequestInStaffRole":
             case "cancelComponentRequest":
@@ -210,12 +211,12 @@ public class ComponentRequestController extends HttpServlet {
         switch (action) {
             case "viewComponentRequestDashboard":
                 //======phan trang
-                pagination.setSearchFields(new String[]{"action", "productCode", "unknownProductCode", "warrantyStatus", "typeMaintain"});
-                pagination.setSearchValues(new String[]{"viewComponentRequestDashboard", productCode, unknownProductCode, warrantyStatus, typeMaintain});
+                pagination.setSearchFields(new String[]{"action","warrantyCardCode","productCode", "unknownProductCode", "warrantyStatus", "typeMaintain"});
+                pagination.setSearchValues(new String[]{"viewComponentRequestDashboard",warrantyCardCode, productCode, unknownProductCode, warrantyStatus, typeMaintain});
                 request.setAttribute("pagination", pagination);
                 //======end phan trang
                 ArrayList<ProductDetail> listProductUnderMaintain = componentRequestDao.getAllListProductUnderMaintain(warrantyCardCode, productCode,
-                        unknownProductCode, warrantyStatus, typeMaintain, sort, order, page, pageSize);
+                        "", warrantyStatus, typeMaintain, sort, order, page, pageSize);
                 request.setAttribute("listProductUnderMaintain", listProductUnderMaintain);
                 request.getRequestDispatcher("requestComponentDashboard.jsp").forward(request, response);
                 break;

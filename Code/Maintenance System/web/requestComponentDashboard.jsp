@@ -28,7 +28,9 @@
 
                     <div>
                          <form method="get" action="componentRequest" >
+                             
                             <input type="hidden" name="action" value="viewComponentRequestDashboard">
+                            
                             <div class="row"  style="justify-content: space-between">
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                            <input style="margin-top: 15px" class="form-control" type="search" name="warrantyCardCode" placeholder="Warranty Card Code"  value="${warrantyCardCode}" >
@@ -50,7 +52,7 @@
                         </div>
                         <div class="col-sm-6 col-md-6" style="width: 500px">
                                  <select style="margin-top: 15px" class="form-select" name="warrantyStatus" onchange="this.form.submit()">
-                                     <option ${(warrantyStatus=='')?"selected":""} value="all" >Warranty Status </option>
+                                     <option ${(warrantyStatus=='')?"selected":""} value="" >Warranty Status </option>
                                     <option ${(warrantyStatus=='waiting')?"selected":""} value="waiting">Waiting</option>
                                     <option ${(warrantyStatus=='fixing')?"selected":""} value="fixing">Fixing</option>
                                     <option ${(warrantyStatus=='refix')?"selected":""} value="refix">Refix</option>
@@ -68,13 +70,14 @@
                                 </div>
                         </div>
                                 </div>
-                                
+                                </form>
                         <table class="table table-hover my-0">
                             <thead>
                             <tr>
                                 <th>Warranty Card Code</th>
                                 <th>
-                                    <form action="feedbacklog" method="get">
+                                    <form action="componentRequest" method="get">
+                                        <input type="hidden" name="action" value="viewComponentRequestDashboard">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
                                         <input type="hidden" name="sort" value="CreatedDate" />
@@ -132,7 +135,7 @@
                         
                         
                         </table>
-                         </form>   
+                            
                     </div>
                    
                      <jsp:include page="/includes/pagination.jsp" />
