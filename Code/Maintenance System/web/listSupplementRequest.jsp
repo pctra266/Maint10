@@ -81,11 +81,11 @@
         <table class="table table-hover my-0">
     <thead>
         <tr>
-            <th>Supplement Request ID</th>
-            <th>Component Name</th>
-            <th>Component Source</th>
-            <th>Component Type</th>
-            <th>Component Brand</th>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Source</th>
+            <th>Type</th>
+            <th>Brand</th>
             <th>Request Date</th>
             <th>Status</th>
             <th>Note</th>
