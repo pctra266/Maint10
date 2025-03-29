@@ -131,7 +131,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp'),
 ('DELETE_PRODUCT', '/viewProduct?action=delete'),
 ('CHAT_HISTORY', '/chatHistory'),
-('UPDATE_UNKNOWN_PRODUCT', '/updateUnknownProduct')
+('UPDATE_UNKNOWN_PRODUCT', '/updateUnknown')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
