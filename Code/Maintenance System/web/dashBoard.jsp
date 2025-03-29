@@ -116,15 +116,6 @@
 
                         <c:if test="${not empty sessionScope.customer}">
 
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'WarrantyCard';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/warranty-card.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">CREATE WARRANTY CARD</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'feedback?action=viewFeedbackDashboard';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/feedback.jpg" alt="Unsplash">
@@ -237,7 +228,7 @@
                         </c:if>
                         <c:if test="${staff.hasPermissions('VIEW_PACKAGE_WARRANTY')}">
 
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty';">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty?action=view';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/package-warranty.jpg" alt="Unsplash">
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
@@ -259,7 +250,7 @@
                             </div>
                         </c:if>
                         <c:if test="${staff.hasPermissions('CUSTOMER_CONTACT')}">
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customerContact';">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customerContact?action=view';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/customer-contact.jpg" alt="Unsplash">
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
