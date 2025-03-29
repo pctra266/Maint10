@@ -30,17 +30,17 @@
 
                                 <input style="margin-top: 15px" class="form-control" type="search" name="customerName" placeholder="Customer Name"  value="${customerName}" >
                                 <input style="margin-top: 15px" class="form-control" type="search" name="customerEmail" placeholder="Customer Email"  value="${customerEmail}" >
-                        <div style="margin-top: 15px" class="col-sm-6 col-md-6">
-                            <label>Show 
-                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <c:forEach items="${pagination.listPageSize}" var="s">
-                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
-                                    </c:forEach>
-                                </select> 
-                                entries
-                            </label>
-                        </div>
-                                
+                                <div style="margin-top: 15px" class="col-sm-6 col-md-6">
+                                    <label>Show 
+                                        <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                            <c:forEach items="${pagination.listPageSize}" var="s">
+                                                <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                            </c:forEach>
+                                        </select> 
+                                        entries
+                                    </label>
+                                </div>
+
 
                             </div >
                             <div class="col-md-6" style="width: 500px">
@@ -51,12 +51,23 @@
                                     <option ${(imageAndVideo=='attached')?"selected":""} value="attached">Attached</option>
                                 </select>
                                 <div style="float: right">
-                                <button  class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                    <button  class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
                                 </div>
                             </div>        
                         </div>
-                        
+
                     </form>         
+                    <!-- Kiểm tra quyền -->
+                    <c:set var="canDeleteFeedback" value="false"/>
+                    <c:set var="canUpdateFeedback" value="false"/>
+                    <c:set var="canViewListFeedbackLog" value="false"/>
+                    <c:set var="canDetail" value="false"/>
+                    <c:forEach var="perm" items="${sessionScope.permissionIds}">
+                        <c:if test="${perm == 48}"><c:set var="canDeleteFeedback" value="true"/></c:if>
+                        <c:if test="${perm == 49}"><c:set var="canUpdateFeedback" value="true"/></c:if>
+                        <c:if test="${perm == 50}"><c:set var="canViewListFeedbackLog" value="true"/></c:if>
+                       
+                    </c:forEach>
                     <table class="table table-hover my-0">
                         <thead >
                             <tr>
@@ -72,14 +83,14 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                                Customer Name
-                                                <button type="submit" class="btn-sort btn-primary btn">
+                                        Customer Name
+                                        <button type="submit" class="btn-sort btn-primary btn">
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'CustomerName' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
-                                            
+
                                         </button>
-                                        
+
                                     </form>
                                 </th>
                                 <th>
@@ -94,15 +105,15 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                                Create Date
-                                                <button type="submit" class="btn-sort btn btn-primary">
-                                                     
+                                        Create Date
+                                        <button type="submit" class="btn-sort btn btn-primary">
+
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'DateCreated' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
-                                           
+
                                         </button>
-                                        
+
                                     </form>
                                 </th>
                                 <th>Feedback</th>
@@ -127,18 +138,26 @@
                                             <input type="hidden" name="feedbackID" value="${o.feedbackID}">
                                             <input type="hidden" name="sort" value="${pagination.sort}" />
                                             <input type="hidden" name="order" value="${pagination.order}" />
-                                            
+
                                             <c:if test="${fn:length(pagination.searchFields) > 0}">
                                                 <c:forEach var="i" begin="1" end="${fn:length(pagination.searchFields) - 1}">
                                                     <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                                 </c:forEach>
                                             </c:if>
-                                                    <button class="btn btn-primary" type="submit" onclick="confirmSubmit(event)" >
-                                                Delete
-                                            </button>
+                                            <c:if test="${canDeleteFeedback}">
+                                                <button class="btn btn-primary" type="submit" onclick="confirmSubmit(event)" >
+                                                    Delete
+                                                </button>
+                                            </c:if> 
+
+
                                         </form>
                                     </td>
-                                    <td><a class="btn btn-primary" href="feedback?action=updateFeedback&feedbackID=${o.feedbackID}">Detail & Edit</a></td>
+
+                                    <c:if test="${canUpdateFeedback}">
+                                        <td><a class="btn btn-primary" href="feedback?action=updateFeedback&feedbackID=${o.feedbackID}">Detail & Edit</a></td>
+                                    </c:if>
+
                                 </tr>
                             </c:forEach>
                         </tbody>
@@ -151,28 +170,32 @@
                         </ul>
                     </div> 
                     <jsp:include page="/includes/pagination.jsp" />
-                    <a href="feedbacklog?action=viewListFeedbackLog">History</a>
+                    <c:if test="${canViewListFeedbackLog}">
+                        <a href="feedbacklog?action=viewListFeedbackLog">History</a>
+                    </c:if> 
+
+                   
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
         <script src="js/app.js"></script>
         <script>
-            function doDelete(event) {
-                event.preventDefault();
+                                                    function doDelete(event) {
+                                                        event.preventDefault();
 
-                const url = event.currentTarget.getAttribute('data-url');
+                                                        const url = event.currentTarget.getAttribute('data-url');
 
-                if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                    window.location.href = url;
-                }
-            }
-            function confirmSubmit(event) {
-                event.preventDefault();
-                if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
-                    event.target.closest('form').submit();
-                }
-            }
+                                                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
+                                                            window.location.href = url;
+                                                        }
+                                                    }
+                                                    function confirmSubmit(event) {
+                                                        event.preventDefault();
+                                                        if (confirm("Bạn có chắc chắn muốn xóa feedback này không?")) {
+                                                            event.target.closest('form').submit();
+                                                        }
+                                                    }
         </script>
     </body>
 </html>

@@ -1,6 +1,7 @@
 package Controller.Account;
 
 import DAO.CustomerDAO;
+import DAO.PermissionDAO;
 import DAO.StaffDAO;
 import Model.Customer;
 
@@ -23,6 +24,7 @@ public class LoginGoogle extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        PermissionDAO permissionDao = new PermissionDAO();
         StaffDAO staffDao = new StaffDAO();
         CustomerDAO customerDao = new CustomerDAO();
         HttpSession session = request.getSession();

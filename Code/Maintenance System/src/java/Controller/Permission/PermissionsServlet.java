@@ -16,6 +16,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,8 +53,8 @@ public class PermissionsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
- PermissionDAO permissionDao = new PermissionDAO();
+       HttpSession session = request.getSession();
+     PermissionDAO permissionDao = new PermissionDAO();
     String roleIdStr = request.getParameter("roleId");
 
     if (roleIdStr == null || roleIdStr.trim().isEmpty()) {
@@ -67,10 +68,12 @@ public class PermissionsServlet extends HttpServlet {
 
         ArrayList<Permissions> permissionList = permissionDao.getAllPermission();
         List<Integer> rolePermissions = permissionDao.getPermissiIDonByRoleID(roleId); // Sửa tên hàm
-
+       
+      
         request.setAttribute("permissionList", permissionList);
         request.setAttribute("rolePermissions", new HashSet<>(rolePermissions));
         request.setAttribute("roleId", roleId);
+        
 
         request.getRequestDispatcher("Permissions.jsp").forward(request, response);
 

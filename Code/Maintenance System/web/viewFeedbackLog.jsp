@@ -30,28 +30,35 @@
                             <div class="col-md-6" style="width: 500px">
                                 <input style="margin-top: 15px" class="form-control" type="search" name="feedbackID" placeholder="Feedback ID"  value="${feedbackID}" >
                                 <div style="margin-top: 15px" class="col-sm-6 col-md-6">
-                            <label>Show 
-                                <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
-                                    <c:forEach items="${pagination.listPageSize}" var="s">
-                                        <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
-                                    </c:forEach>
-                                </select> 
-                                entries
-                            </label>
-                        </div>
+                                    <label>Show 
+                                        <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
+                                            <c:forEach items="${pagination.listPageSize}" var="s">
+                                                <option value="${s}" ${pagination.pageSize==s?"selected":""}>${s}</option>
+                                            </c:forEach>
+                                        </select> 
+                                        entries
+                                    </label>
+                                </div>
                             </div>
-                                <div class="col-md-6" style="width: 500px">
-                              <select style="margin-top: 15px" class="form-select" name="actionOfLog">
+                            <div class="col-md-6" style="width: 500px">
+                                <select style="margin-top: 15px" class="form-select" name="actionOfLog">
                                     <option value="">Action </option>
                                     <option ${(actionOfLog=='update')?"selected":""} value="update">Update</option>
                                     <option ${(actionOfLog=='delete')?"selected":""} value="delete">Delete</option>
                                 </select>
                                 <div style="float: right">
-                                <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
+                                    <button class="btn btn-primary" style="margin-top: 15px" type="submit">Search</button>
                                 </div>
-                                </div>   
+                            </div>   
                         </div>
                     </form>
+                    <c:set var="canUndoFeedback" value="false"/>
+
+                    <c:forEach var="perm" items="${sessionScope.permissionIds}">
+                        <c:if test="${perm == 51}"><c:set var="canUndoFeedback" value="true"/></c:if>
+                    </c:forEach>
+
+                   
                     <table class="table table-hover my-0">
                         <thead>
                             <tr>
@@ -67,13 +74,13 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                                Feedback ID
+                                        Feedback ID
                                         <button type="submit" class="btn-sort btn-primary btn">
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'FeedbackID' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
-                                        
+
                                     </form>
                                 </th>
                                 <th>
@@ -87,20 +94,20 @@
                                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                                             </c:forEach>
                                         </c:if>
-                                                Date Modified
+                                        Date Modified
                                         <button type="submit" class="btn-sort btn-primary btn">
                                             <i class="align-middle fas fa-fw
                                                ${pagination.sort eq 'DateModified' ? (pagination.order eq 'asc' ? 'fa-sort-up' : 'fa-sort-down') : 'fa-sort'}">
                                             </i>
                                         </button>
-                                        
+
                                     </form>
                                 </th>
                                 <th>Action</th>
                                 <th>Old Feedback Text</th>
                                 <th>New Feedback Text</th>
                                 <!--<th>Modified By</th>-->
-                                
+
                                 <th></th>
                             </tr>
                         </thead>
@@ -114,11 +121,14 @@
                                     <td>${o.oldFeedbackText}</td>
                                     <td>${o.newFeedbackText}</td>
                                     <!--<td>${o.modifiedBy}</td>-->
-                                    
+
                                     <c:if test="${o.action=='delete'}">
-                                        <td><a class="btn btn-primary" href="feedbacklog?feedbackLogID=${o.feedbackLogID}&action=undoFeedback">Undo</a></td>
+                                      
+                                    <c:if test="${canUndoFeedback}">
+                                         <td><a class="btn btn-primary" href="feedbacklog?feedbackLogID=${o.feedbackLogID}&action=undoFeedback">Undo</a></td>
                                     </c:if>
-                                </tr>
+                                    </c:if>
+                                </tr>  
                             </c:forEach>
                         </tbody>
                     </table>

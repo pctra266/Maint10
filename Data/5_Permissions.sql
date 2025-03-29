@@ -33,7 +33,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('MANAGE_BRAND', '/Brand'),
 ('MANAGE_COMPONENT_TYPE', '/ComponentType'),
 ('CREATE_CUSTOMER', '/customer?action=add'),
-('IMPORT_EXCEL_CUSTOMER', ''),
+('IMPORT_EXCEL_CUSTOMER', '/addCustomerExcel'),
 ('UPDATE_CUSTOMER', '/customer?action=update'),
 ('VIEW_LIST_CUSTOMER', '/customer'),
 ('VIEW_CUSTOMER_DETAIL', '/customer?action=detail'),
