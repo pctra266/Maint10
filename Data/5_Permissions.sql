@@ -138,6 +138,8 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 
 
 
+
+
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
 (1,2),(3,2),
