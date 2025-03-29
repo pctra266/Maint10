@@ -170,7 +170,7 @@
                             </div>
                         </c:if>
                         
-                        <c:if test="${staff.hasPermissions('VIEW_PRODUCT')}">
+                        <c:if test="${staff.hasPermissions('VIEW_PRODUCT_TYPE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ProductType';">
                                 <div class="card">
                                     <img class="card-img-top" src="" alt="Unsplash">
