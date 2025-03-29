@@ -295,7 +295,7 @@
 
         <c:forEach var="perm" items="${sessionScope.permissionIds}">
             <c:if test="${perm == 37}"><c:set var="canCreateProduct" value="true"/></c:if>
-            <c:if test="${perm == 0}"><c:set var="canImportProduct" value="true"/></c:if>
+            <c:if test="${perm == 127}"><c:set var="canImportProduct" value="true"/></c:if>
             <c:if test="${perm == 118}"><c:set var="canViewDetailProduct" value="true"/></c:if>
             <c:if test="${perm == 124}"><c:set var="canDeleteProduct" value="true"/></c:if>
             <c:if test="${perm == 69}"><c:set var="canExternalProduct" value="true"/></c:if>
@@ -363,15 +363,20 @@
                                 <option value="desc" ${sortWarranty == 'desc' ? 'selected' : ''}>Descending</option>
                             </select>
                         </div>
-
+                        
+                            
+                             <c:if test="${canImportProduct}">
+                                
+                                 <div class="controls-group">
+                                     <form action="importExcel" method="post" enctype="multipart/form-data" style="display: flex; gap: 8px; align-items: center;">
+                                         <label for="importExcel" style="white-space: nowrap;">Import Excel:</label>
+                                         <input id="importExcel" type="file" name="productExcel" required>
+                                         <button type="submit">Upload</button>
+                                     </form>
+                                 </div>
+                            </c:if>
                         <!-- NHÓM 3: IMPORT EXCEL -->
-                        <div class="controls-group">
-                            <form action="importExcel" method="post" enctype="multipart/form-data" style="display: flex; gap: 8px; align-items: center;">
-                                <label for="importExcel" style="white-space: nowrap;">Import Excel:</label>
-                                <input id="importExcel" type="file" name="productExcel" required>
-                                <button type="submit">Upload</button>
-                            </form>
-                        </div>
+                       
 
                         <!-- NHÓM 4: CHỌN SỐ LƯỢNG SP HIỂN THỊ + CUSTOM -->
                         <div class="controls-group">
@@ -411,7 +416,7 @@
 
                             </c:if>
 
-                          
+
                         </div>
                     </div>
 
@@ -429,7 +434,9 @@
                                     <th>Quantity</th>
                                     <th>Warranty</th>
                                     <th>Image</th>
-                                    <th>Action</th>
+                                        <c:if test="${canViewDetailProduct or canDeleteProduct}">
+                                        <th>Actions</th>
+                                        </c:if>
                                 </tr>
                             </thead>
                             <tbody>

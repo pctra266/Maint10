@@ -304,8 +304,9 @@
                     <c:set var="createRepairRequest" value="false"/>
 
                     <c:forEach var="perm" items="${sessionScope.permissionIds}">
-                        <c:if test="${perm == 0}"><c:set var="addUnknowProduct" value="true"/></c:if>
-                        <c:if test="${perm == 0}"><c:set var="createRepairRequest" value="true"/></c:if>
+                        <c:if test="${perm == 70}"><c:set var="addUnknowProduct" value="true"/></c:if>
+                        <c:if test="${perm == 126}"><c:set var="updateUnknowProduct" value="true"/></c:if>
+                        <c:if test="${perm == 128}"><c:set var="createRepairRequest" value="true"/></c:if>
 
                     </c:forEach>
                     <form action="listUnknown" method="get">
@@ -377,7 +378,7 @@
                                style="display: none;" />
                         <button type="submit">Apply</button>
                         <c:if test="${addUnknowProduct}">
-                            <a href="addUnknowProduct" class="button">
+                            <a href="addUnknown" class="button">
                                 Add Unknown Product
                             </a>                   
                         </c:if>
@@ -402,7 +403,8 @@
                                 <th>Customer Name</th>
                                 <th>Customer Phone</th>
 
-                                <c:if test="${createRepairRequest}">
+
+                                <c:if test="${updateUnknowProduct or createRepairRequest}">
                                     <th>Actions</th>
                                     </c:if>
 
@@ -419,21 +421,30 @@
                                     <td>${product.customerName}</td>
                                     <td>${product.customerPhone}</td>
                                     <td style="display: flex">
-                                        <form action="updateUnknown" method="get">
-                                            <input type="hidden" name="productId" value="${product.unknownProductId}">
-                                            <input type="hidden" name="customerId" value="${product.customerId}">
-                                            <button type="submit">Update</button>
-                                        </form>
-                                        <form action="listUnknown" method="post">
-                                            <input type="hidden" name="productId" value="${product.unknownProductId}">
-                                            <input type="hidden" name="customerId" value="${product.customerId}">
-                                            <input type="hidden" name="type" value="display">
-                                            <button type="submit">Create a Repair Request</button>
-                                        </form>
 
-                                    </td>
-                                </tr>
-                            </c:forEach>
+                                        <c:if test="${updateUnknowProduct }">
+                                            <form action="updateUnknown" method="get">
+                                                <input type="hidden" name="productId" value="${product.unknownProductId}">
+                                                <input type="hidden" name="customerId" value="${product.customerId}">
+                                                <button type="submit">Update</button>
+                                            </form>
+                                        </c:if>
+
+                         
+
+                            <c:if test="${ createRepairRequest}">
+                                <form action="listUnknown" method="post">
+                                    <input type="hidden" name="productId" value="${product.unknownProductId}">
+                                    <input type="hidden" name="customerId" value="${product.customerId}">
+                                    <input type="hidden" name="type" value="display">
+                                    <button type="submit">Create a Repair Request</button>
+                                </form>
+                                </c:if>
+                            
+
+                            </td>
+                            </tr>
+                        </c:forEach>
                         </tbody>
                     </table>
 
