@@ -36,7 +36,6 @@ public class ContractorCardDAO extends DBContext {
         return null;
     }
 
-
     public boolean addContractorCard(ContractorCard card) {
         String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status, Note) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {

@@ -12,7 +12,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Update Product</title>
         <link href="css/light.css" rel="stylesheet">
-                <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+        <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -211,40 +211,32 @@
                         <!-- Form search -->
                         <form class="search-form" method="get" action="listInvoiceRepair" onsubmit="return validateInvoiceNumber();">
                             <label for="invoiceNumber">Invoice Number:</label>
-                            <input type="text" name="invoiceNumber" id="invoiceNumber" 
-                                   value="${param.invoiceNumber}" 
-                                   placeholder="VD: INV12345" />
+                            <input type="text" name="invoiceNumber" id="invoiceNumber" value="${param.invoiceNumber}" placeholder="VD: INV12345" />
 
                             <label for="issueDate">Issue Date:</label>
-                            <input type="date" name="issueDate" id="issueDate" 
-                                   value="${param.issueDate}" />
+                            <input type="date" name="issueDate" id="issueDate" value="${param.issueDate}" />
 
                             <label for="dueDate">Due Date:</label>
-                            <input type="date" name="dueDate" id="dueDate" 
-                                   value="${param.dueDate}" />
+                            <input type="date" name="dueDate" id="dueDate" value="${param.dueDate}" />
 
                             <label for="pageSize">Products per page:</label>
                             <select name="pageSize" id="pageSize">
-                                <option value="5"  <c:if test="${param.pageSize == '5'}">selected</c:if>>5</option>
-                                <option value="10" <c:if test="${param.pageSize == '10'}">selected</c:if>>10</option>
-                                <option value="15" <c:if test="${param.pageSize == '15'}">selected</c:if>>15</option>
-                                <option value="20" <c:if test="${param.pageSize == '20'}">selected</c:if>>20</option>
-                                <option value="25" <c:if test="${param.pageSize == '25'}">selected</c:if>>25</option>
-                                <option value="Custom" <c:if test="${param.pageSize == 'Custom'}">selected</c:if>>Custom</option>
-                                </select>
+                                <option value="5" ${param.pageSize == '5' ? 'selected="selected"' : ''}>5</option>
+                                <option value="10" ${param.pageSize == '10' ? 'selected="selected"' : ''}>10</option>
+                                <option value="15" ${param.pageSize == '15' ? 'selected="selected"' : ''}>15</option>
+                                <option value="20" ${param.pageSize == '20' ? 'selected="selected"' : ''}>20</option>
+                                <option value="25" ${param.pageSize == '25' ? 'selected="selected"' : ''}>25</option>
+                                <option value="Custom" ${param.pageSize == 'Custom' ? 'selected="selected"' : ''}>Custom</option>
+                            </select>
 
-                                <div id="customPageSizeDiv">
-                                    <label for="customPageSize">Custom Page Size:</label>
-                                    <input type="number" name="customPageSize" id="customPageSize" 
-                                           min="1" 
-                                           placeholder="Enter number" 
-                                           value="${param.customPageSize}" />
+                            <div id="customPageSizeDiv">
+                                <label for="customPageSize">Custom Page Size:</label>
+                                <input type="number" name="customPageSize" id="customPageSize" min="1" placeholder="Enter number" value="${param.customPageSize}" />
                             </div>
 
                             <button type="submit">Apply</button>
                         </form>
 
-                        <!-- Bảng hiển thị -->
                         <table>
                             <thead>
                                 <tr>

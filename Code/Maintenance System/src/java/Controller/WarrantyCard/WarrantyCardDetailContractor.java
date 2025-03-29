@@ -5,7 +5,6 @@ import DAO.WarrantyCardDAO;
 import Model.ContractorCard;
 import Model.Staff;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +27,7 @@ public class WarrantyCardDetailContractor extends HttpServlet {
         if (idStr == null || idStr.trim().isEmpty() || !idStr.matches("\\d+")) {
             request.getRequestDispatcher("404Page.jsp").forward(request, response);
             return;
-        }
+        }   
 
         int warrantyCardId = Integer.parseInt(idStr);
         Map<String, Object> warrantyDetails = warrantyCardDAO.getWarrantyCardDetailsMap(warrantyCardId);

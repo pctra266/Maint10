@@ -12,6 +12,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public class SendWarrantyCard extends HttpServlet {
             request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
         }
 
-        Staff staff = staffDAO.getStaffById(wr.getHandlerID());
+        Staff staffH = staffDAO.getStaffById(wr.getHandlerID());
         Customer customer = warrantyCardDAO.getCustomerByWarrantyProductID(wr.getWarrantyProductID());
         Object product = warrantyCardDAO.getProductByWarrantyProductId(wr.getWarrantyProductID());
 
@@ -64,7 +65,7 @@ public class SendWarrantyCard extends HttpServlet {
         request.setAttribute("warrantyCard", wr);
         request.setAttribute("customer", customer);
         request.setAttribute("product", product);
-        request.setAttribute("staff", staff);
+        request.setAttribute("staffH", staffH);
         request.setAttribute("isUnknownProduct", isUnknownProduct);
 
         String customerEmail = request.getParameter("customerEmail");
@@ -79,21 +80,11 @@ public class SendWarrantyCard extends HttpServlet {
                 + "<p>Please find attached your warranty card with the code: <strong>"
                 + warrantyCardCode + "</strong>.</p>"
                 + "<p>Thank you for choosing our service.</p>";
-
-        // Nếu bạn đã tạo file PDF của phiếu bảo hành, cung cấp đường dẫn đến file đó.
-        // Ví dụ: file PDF được lưu tại server (chú ý: cần đảm bảo đường dẫn hợp lệ và quyền truy cập)
         String filePath = "C:/Users/sonNH/Downloads/WarrantyCard" + warrantyCardCode + ".pdf";
-
-        // Tạo instance của Email util
         Email emailUtil = new Email();
-
-        // Gửi email với nội dung HTML và đính kèm file PDF
         emailUtil.sendEmailWithHtmlAndAttachment(customerEmail, subject, htmlContent, filePath);
-
         request.setAttribute("successMessage", "Send To Customer Successfully");
-
         request.getRequestDispatcher("searchWarrantyCard.jsp").forward(request, response);
-
     }
 
 }

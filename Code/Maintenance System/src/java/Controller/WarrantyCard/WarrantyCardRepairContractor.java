@@ -31,17 +31,10 @@ public class WarrantyCardRepairContractor extends HttpServlet {
         String status = request.getParameter("status");
         String note = request.getParameter("note");
         PrintWriter out = response.getWriter();
-//
-//        out.print(warrantyCardCode);
-//        out.print(staffName);
-//        out.print(date);
-//        out.print(status);
-//        out.print(note);
-
-        // Lấy tham số pageSize (5,10,15,20,25, hoặc "custom") và customPageSize
-        String pageSizeParam = request.getParameter("pageSize"); // giá trị select
-        String customPageSizeParam = request.getParameter("customPageSize"); // nếu user nhập
-        int pageSize = 10; // default nếu không có tham số
+        
+        String pageSizeParam = request.getParameter("pageSize"); 
+        String customPageSizeParam = request.getParameter("customPageSize"); 
+        int pageSize = 10; 
 
         try {
             if ("custom".equals(pageSizeParam)) {
