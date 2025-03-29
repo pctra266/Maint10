@@ -358,14 +358,14 @@
                                                 <button type="submit" class="btn btn-done">Fixed</button>
                                             </form>
 
-                                            <form action="warrantyCardDetailContractor" method="post">
+<!--                                            <form action="warrantyCardDetailContractor" method="post">
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                                 <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
                                                 <input type="hidden" name="subStatus" value="lost">
                                                 <input type="hidden" name="status" value="cancel">
                                                 <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
                                                 <button type="submit" class="btn btn-dark">Lost</button>
-                                            </form>
+                                            </form>-->
 
                                             <form action="warrantyCardDetailContractor" method="post">
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
