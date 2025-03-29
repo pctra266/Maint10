@@ -84,9 +84,10 @@
 
             /* Container chính của form */
             .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                background-color: #e6f2ff;
+               max-width: 1200px;
+                margin-top: 20px;
+                margin-bottom: 20px;               
+                background-color: #FAFAFA ;
                 border-radius: 8px;
                 padding: 30px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -188,6 +189,8 @@
             .btn:hover,
             .btn-update:hover {
                 background-color: #244b8b;
+                color: white;
+                text-decoration: none;
             }
 
             .message {

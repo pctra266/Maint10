@@ -840,6 +840,47 @@ public class ProductDAO extends DBContext {
         return count;
     }
 
+    // Phương thức cập nhật UnknownProduct
+    public boolean updateUnknownProduct(int unknownProductId, int customerId, String productName, String productCode, String description, String receivedDate) throws SQLException {
+        String sql = "UPDATE UnknownProduct SET CustomerID = ?, ProductName = ?, ProductCode = ?, Description = ?, ReceivedDate = ? WHERE UnknownProductID = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, customerId);
+            stmt.setString(2, productName);
+            stmt.setString(3, productCode);
+            stmt.setString(4, description);
+
+            // Kiểm tra nếu receivedDate chứa 'T' thì thay thế bằng dấu cách
+            if (receivedDate.contains("T")) {
+                receivedDate = receivedDate.replace("T", " ");
+            }
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            LocalDateTime dateTime = LocalDateTime.parse(receivedDate, formatter);
+            stmt.setTimestamp(5, Timestamp.valueOf(dateTime));
+            stmt.setInt(6, unknownProductId);
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        }
+    }
+
+    public boolean isDuplicateUnknownProductCode(int unknownProductID, String productCode) {
+        String sql = "SELECT COUNT(*) FROM UnknownProduct WHERE ProductCode = ? AND UnknownProductID <> ?";
+        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+            ps.setString(1, productCode);
+            ps.setInt(2, unknownProductID);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    int count = rs.getInt(1);
+                    return count > 0;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Bạn có thể xử lý ngoại lệ hoặc ném ra ngoại lệ tùy ý
+        }
+        return false;
+    }
+
     public static void main(String[] args) {
         ProductDAO p = new ProductDAO();
         Product p1 = p.getProductById(1);

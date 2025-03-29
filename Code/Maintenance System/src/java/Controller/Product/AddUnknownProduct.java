@@ -37,8 +37,10 @@ public class AddUnknownProduct extends HttpServlet {
         String receivedDate = request.getParameter("receivedDate");
 
         int customerId = customerIdStr != null && !customerIdStr.isEmpty() ? Integer.parseInt(customerIdStr) : -1;
+        
+        // Check if the product code already exists for an unknown product
         if (productDAO.isUnknownProductCodeExists(productCode)) {
-            request.setAttribute("message", "Product Code đã tồn tại!");
+            request.setAttribute("message", "Product Code already exists!");
             request.setAttribute("productCode", productCode);
             request.setAttribute("productName", productName);
             request.setAttribute("customerId", customerId);
@@ -47,14 +49,14 @@ public class AddUnknownProduct extends HttpServlet {
             doGet(request, response);
             return;
         }
+        
         boolean success = productDAO.addUnknownProduct(customerId, productName, productCode, description, receivedDate);
 
         if (success) {
-            request.setAttribute("message", "Thêm sản phẩm thành công!");
+            request.setAttribute("message", "Product added successfully!");
         } else {
-            request.setAttribute("message", "Lỗi khi thêm sản phẩm!");
+            request.setAttribute("message", "Error adding product!");
         }
         doGet(request, response);
     }
-
 }

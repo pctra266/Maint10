@@ -298,6 +298,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                
                     <h2 style="text-align: center">List of Unknown Products</h2>
 
                     <form action="listUnknown" method="get">
@@ -376,11 +377,11 @@
                         <button class="search" onclick="window.location.href = 'listUnknown'">
                             All Product
                         </button>
-                        
-                         <a href="viewProduct" class="button">
-                           Back
+
+                        <a href="viewProduct" class="button">
+                            Back
                         </a>
-                        
+
                     </form>
 
                     <table border="1">
@@ -404,7 +405,12 @@
                                     <td>${product.receivedDate}</td>
                                     <td>${product.customerName}</td>
                                     <td>${product.customerPhone}</td>
-                                    <td>
+                                    <td style="display: flex">
+                                        <form action="updateUnknown" method="get">
+                                            <input type="hidden" name="productId" value="${product.unknownProductId}">
+                                            <input type="hidden" name="customerId" value="${product.customerId}">
+                                            <button type="submit">Update</button>
+                                        </form>
                                         <form action="listUnknown" method="post">
                                             <input type="hidden" name="productId" value="${product.unknownProductId}">
                                             <input type="hidden" name="customerId" value="${product.customerId}">

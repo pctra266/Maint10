@@ -130,7 +130,8 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('PERMISSION', '/permissions'),
 ('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp'),
 ('DELETE_PRODUCT', '/viewProduct?action=delete'),
-('CHAT_HISTORY', '/chatHistory')
+('CHAT_HISTORY', '/chatHistory'),
+('UPDATE_UNKNOWN_PRODUCT', '/updateUnknownProduct')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -257,6 +258,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,122),
 (1,123),(2,123),
 (1,124),(2,124),(3,124),
-(1,125)
+(1,125),
+(1,126),(2,126)
 
 

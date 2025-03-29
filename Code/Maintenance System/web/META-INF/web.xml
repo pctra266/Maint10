@@ -14,23 +14,34 @@
     </filter>
     <filter-mapping>
         <filter-name>AuthenticationFilter</filter-name>
-
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    
+    <servlet>
+        <servlet-name>UpdateUnknownProduct</servlet-name>
+        <servlet-class>Controller.Product.UpdateUnknownProduct</servlet-class>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>AddPermission</servlet-name>
         <url-pattern>/addPermission</url-pattern>
-
     </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>DashBoard</servlet-name>
         <url-pattern>/dashBoard</url-pattern>
-
     </servlet-mapping>
+    
+    <servlet-mapping>
+        <servlet-name>UpdateUnknownProduct</servlet-name>
+        <url-pattern>/updateUnknown</url-pattern>
+    </servlet-mapping>
+    
     <error-page>
         <error-code>404</error-code>
         <location>/404Page.jsp</location>
     </error-page>
+    
     <servlet>
         <servlet-name>StaffController</servlet-name>
         <servlet-class>Controller.StaffController</servlet-class>
@@ -224,14 +235,12 @@
         <servlet-class>Controller.Invoice.ExportInvoicePDF</servlet-class>
     </servlet>
     <servlet>
-
         <servlet-name>AddPermission</servlet-name>
         <servlet-class>Controller.Permission.AddPermission</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>DashBoard</servlet-name>
         <servlet-class>Controller.DashBoard</servlet-class>
-
     </servlet>
     <servlet-mapping>
         <servlet-name>StaffController</servlet-name>
