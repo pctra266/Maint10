@@ -128,8 +128,8 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('EXPORT_INVOICE_PDF_REPAIR', '/exportInvoicePDF'),
 ('VIEW_DETAIL_WARRANTYCARD_CONTRACTOR', '/warrantyCardDetailContractor'),
 ('PERMISSION ', '/permissions'),
-('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp')
-
+('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp'),
+('DELETE_PRODUCT', '/viewProduct?action=delete')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -254,7 +254,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (4,120),
 (4,121),
 (1,122),
-(1,123),(2,123)
-
+(1,123),(2,123),
+(1,124),(2,124),(3,124)
 
 
