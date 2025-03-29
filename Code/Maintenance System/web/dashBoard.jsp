@@ -125,11 +125,6 @@
                                     </div>                               
                                 </div>
                             </div>
-
-
-
-
-
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'feedback?action=viewFeedbackDashboard';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/feedback.jpg" alt="Unsplash">
@@ -139,7 +134,6 @@
                                     </div>                               
                                 </div>
                             </div>
-
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'purchaseproduct';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/purchase-product.jpg" alt="Unsplash">
