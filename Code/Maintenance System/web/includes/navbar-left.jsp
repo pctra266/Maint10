@@ -91,18 +91,6 @@
                                         </a>
                                     </li>
 
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- ??i sang icon file-text (bi?u t??ng cho Blog) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg> 
-                                            <span class="align-middle">Blog</span>
-                                        </a>
-                                    </li>
 
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="InvoiceController">
@@ -214,18 +202,6 @@
                                         </a>
                                     </li>
 
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- Dùng icon file-text cho Blog -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg>
-                                            <span class="align-middle">Blog</span>
-                                        </a>
-                                    </li>
 
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="StaffController">
@@ -445,19 +421,6 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- ??i sang icon file-text (bi?u t??ng cho Blog) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg> 
-                                            <span class="align-middle">Blog</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="sidebar-item">
                                         <a class="sidebar-link" href="InvoiceController">
                                             <!-- ??i sang icon file (bi?u t??ng cho Invoice) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file align-middle">
@@ -558,19 +521,6 @@
                                     </li>
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- ??i sang icon file-text (bi?u t??ng cho Blog) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg> 
-                                            <span class="align-middle">Blog</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="sidebar-item">
                                         <a class="sidebar-link" href="componentRequest?action=viewComponentRequestDashboard">
                                             <!-- ??i sang icon alert-circle (Component Request) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-alert-circle align-middle">
@@ -645,21 +595,6 @@
                                             <span class="align-middle">Profile</span>
                                         </a>
                                     </li>
-
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- ??i sang icon file-text (bi?u t??ng cho Blog) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg> 
-                                            <span class="align-middle">Blog</span>
-                                        </a>
-                                    </li>
-
-
                                     <li class="sidebar-item">
                                         <a class="sidebar-link" href="warrantyCardRepairContractor">
                                             <!-- ??i sang icon tool (Warranty Card Repair Contractor) -->
@@ -697,19 +632,6 @@
                                             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                                             </svg> 
                                             <span class="align-middle">Product</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="BlogController">
-                                            <!-- ??i sang icon file-text (bi?u t??ng cho Blog) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file-text align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                                            </svg> 
-                                            <span class="align-middle">Blog</span>
                                         </a>
                                     </li>
 

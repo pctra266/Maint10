@@ -123,7 +123,7 @@ public class LoginFilter implements Filter {
                     && !uri.endsWith(".css") && !uri.endsWith(".js")
                     && !uri.endsWith(".png") && !uri.endsWith(".jpg")
                     && !uri.contains("customerContactForm.jsp") && !uri.contains("SearchWarrantyController") 
-                    && !uri.contains("customerContact")
+                    && !uri.contains("customerContact") && !uri.contains("BlogController")
                     ) {
                 res.sendRedirect("/MaintenanceSystem/Home");
                 return;
