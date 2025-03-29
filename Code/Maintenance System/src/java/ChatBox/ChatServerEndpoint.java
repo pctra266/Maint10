@@ -48,7 +48,12 @@ public class ChatServerEndpoint {
             Staff staff = (Staff) httpSession.getAttribute("staff");
             String usernameS = staff.getUsernameS();
             int staffId = staff.getStaffID();
+            int roleID = staff.getRole();
 
+            if (roleID != 1 && roleID != 2 && roleID != 5) {
+                session.close(); 
+                return;
+            }
             userNames.put(session, usernameS);
             staffs.add(session);
 

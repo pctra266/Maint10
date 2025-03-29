@@ -53,37 +53,34 @@ public class PermissionsServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       HttpSession session = request.getSession();
-     PermissionDAO permissionDao = new PermissionDAO();
-    String roleIdStr = request.getParameter("roleId");
+        HttpSession session = request.getSession();
+        PermissionDAO permissionDao = new PermissionDAO();
+        String roleIdStr = request.getParameter("roleId");
 
-    if (roleIdStr == null || roleIdStr.trim().isEmpty()) {
-        request.setAttribute("message", "Vui lòng chọn một vai trò!");
-        request.getRequestDispatcher("Permissions.jsp").forward(request, response);
-        return;
+        if (roleIdStr == null || roleIdStr.trim().isEmpty()) {
+            request.setAttribute("message", "Vui lòng chọn một vai trò!");
+            request.getRequestDispatcher("Permissions.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            int roleId = Integer.parseInt(roleIdStr);
+
+            ArrayList<Permissions> permissionList = permissionDao.getAllPermission();
+            List<Integer> rolePermissions = permissionDao.getPermissiIDonByRoleID(roleId); // Sửa tên hàm
+
+            request.setAttribute("permissionList", permissionList);
+            request.setAttribute("rolePermissions", new HashSet<>(rolePermissions));
+            request.setAttribute("roleId", roleId);
+
+            request.getRequestDispatcher("Permissions.jsp").forward(request, response);
+
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            request.setAttribute("message", "Role ID không hợp lệ!");
+            request.getRequestDispatcher("Permissions.jsp").forward(request, response);
+        }
     }
-
-    try {
-        int roleId = Integer.parseInt(roleIdStr);
-
-        ArrayList<Permissions> permissionList = permissionDao.getAllPermission();
-        List<Integer> rolePermissions = permissionDao.getPermissiIDonByRoleID(roleId); // Sửa tên hàm
-       
-      
-        request.setAttribute("permissionList", permissionList);
-        request.setAttribute("rolePermissions", new HashSet<>(rolePermissions));
-        request.setAttribute("roleId", roleId);
-        
-
-        request.getRequestDispatcher("Permissions.jsp").forward(request, response);
-
-    } catch (NumberFormatException e) {
-        e.printStackTrace();
-        request.setAttribute("message", "Role ID không hợp lệ!");
-        request.getRequestDispatcher("Permissions.jsp").forward(request, response);
-    }
-    }
-    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -97,9 +94,9 @@ public class PermissionsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         PermissionDAO permissionDao = new PermissionDAO();
-        String role = request.getParameter("role_id");
+        HttpSession session = request.getSession();
 
-       
+        String role = request.getParameter("role_id");
 
         if (role == null || role.trim().isEmpty()) {
             request.setAttribute("message", "Invalid role ID!");
@@ -108,7 +105,6 @@ public class PermissionsServlet extends HttpServlet {
         }
 
         try {
-
             int roleId = Integer.parseInt(role);
 
             String[] selectedPermissions = request.getParameterValues("permissions");
@@ -135,12 +131,15 @@ public class PermissionsServlet extends HttpServlet {
                 }
             }
 
-            response.sendRedirect("permissions?roleId=" + roleId);
+            // 🔹 **Cập nhật session với danh sách quyền mới**
+            List<Integer> updatedPermissions = permissionDao.getPermissiIDonByRoleID(roleId);
+            session.setAttribute("permissionIds", updatedPermissions);
 
+            response.sendRedirect("permissions?roleId=" + roleId);
 
         } catch (NumberFormatException e) {
             request.setAttribute("message", "Role ID không hợp lệ!");
-
+            request.getRequestDispatcher("Permissions.jsp").forward(request, response);
         }
     }
 
