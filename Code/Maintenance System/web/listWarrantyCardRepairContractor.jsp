@@ -9,9 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
         <style>
-            /*****************************/
-            /* Layout cho phần main.content */
-            /*****************************/
+     
             main.content {
                 background: #ffffff;
                 border-radius: 12px;
@@ -20,12 +18,11 @@
                 margin: 20px;
             }
 
-            /* Tiêu đề */
             main.content h2 {
                 text-align: center;
                 font-size: 28px;
                 font-weight: 700;
-                color: #1e3a8a;
+                color: #326ABC;
                 margin-bottom: 30px;
                 text-shadow: 1px 1px 2px rgba(30, 58, 138, 0.3);
             }
@@ -35,16 +32,11 @@
             /*****************************/
             .search-form {
                 display: flex;
-                /* Không cho xuống dòng */
                 flex-wrap: wrap;
-                /* Canh giữa theo chiều ngang */
                 justify-content: center;
-                /* Canh giữa theo chiều dọc */
                 align-items: center;
                 gap: 16px;
                 margin-bottom: 30px;
-
-                /* Cho phép cuộn ngang nếu quá hẹp (tùy chọn) */
                 overflow-x: auto;
             }
 
@@ -56,11 +48,8 @@
 
             .form-group label {
                 font-weight: 600;
-                color: #1e40af;
-                white-space: nowrap; /* Giữ label trên 1 dòng */
-
-                /* Nếu muốn, bạn có thể quy định min-width để label không bị co quá nhỏ */
-                /* min-width: 100px; text-align: right; */
+                color: #326ABC;
+                white-space: nowrap; 
             }
 
             .form-group input[type="text"],
@@ -72,10 +61,7 @@
                 font-size: 14px;
                 outline: none;
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-                /* Giới hạn độ rộng tối đa, tránh phình quá to gây xuống dòng */
                 max-width: 150px;
-                /* Hoặc bạn có thể dùng width cố định: width: 150px; */
             }
 
             .form-group input[type="text"]:focus,
@@ -120,7 +106,7 @@
 
             .flex-container button {
                 padding: 8px 16px;
-                background: linear-gradient(135deg, #2563eb, #1e40af);
+                background: #326ABC;
                 border: none;
                 border-radius: 6px;
                 color: #fff;
@@ -145,7 +131,7 @@
             }
 
             table thead {
-                background: linear-gradient(135deg, #2563eb, #1e40af);
+                background: #326ABC;
                 color: #fff;
             }
 
@@ -169,11 +155,10 @@
                 background: #eff6ff;
             }
 
-            /* Nút chi tiết */
             .btn-detail {
                 display: inline-block;
                 padding: 6px 12px;
-                background: #2563eb;
+                background: #326ABC;
                 color: #fff;
                 border-radius: 4px;
                 text-decoration: none;
@@ -183,6 +168,8 @@
 
             .btn-detail:hover {
                 background: #1e40af;
+                color: white;
+                text-decoration: none;
                 transform: translateY(-1px);
             }
 
@@ -367,11 +354,9 @@
                                             customInput.style.display = "inline-block";
                                         } else {
                                             customInput.style.display = "none";
-                                            customInput.value = ""; // Xoá giá trị cũ nếu người dùng chọn lại
+                                            customInput.value = ""; 
                                         }
                                     }
-
-                                    // Gọi hàm khi trang load (để xử lý trường hợp đã chọn custom trước đó)
                                     window.onload = function () {
                                         toggleCustomPageSize();
                                     };

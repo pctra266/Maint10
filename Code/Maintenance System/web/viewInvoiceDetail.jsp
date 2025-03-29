@@ -153,9 +153,7 @@
                         <div class="center">
                             <a class="back-link" href="listInvoiceRepair">Back</a>
                             <a class="back-link" href="exportInvoicePDF?invoiceId=${invoiceDetail.InvoiceID}">Export PDF</a>
-
                         </div>
-S
                     </c:if>
                 </main>
                 <jsp:include page="/includes/footer.jsp" />

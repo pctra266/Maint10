@@ -411,7 +411,7 @@
 
                             </c:if>
 
-                          
+
                         </div>
                     </div>
 
@@ -444,7 +444,6 @@
                                         <td style="width:150px;">
                                             <c:if test="${not empty product.images}">
                                                 <div class="image-carousel" id="carousel-${product.productId}">
-                                                    <!-- Nút mũi tên trái -->
                                                     <button class="carousel-btn prev-btn"
                                                             onclick="prevImage('${product.productId}')">&#10094;</button>
                                                     <!-- Ảnh hiện tại -->
@@ -458,7 +457,7 @@
                                                 </div>
                                             </c:if>
                                         </td>
-                                        <!-- Cột Action -->
+
                                         <td style="width: 14%;">
                                             <!-- Bọc 2 nút vào .action-buttons -->
                                             <div class="action-buttons">
@@ -476,6 +475,7 @@
 
                                             </div>
                                         </td>
+                                        
                                     </tr>
                                 </c:forEach>
                             </tbody>

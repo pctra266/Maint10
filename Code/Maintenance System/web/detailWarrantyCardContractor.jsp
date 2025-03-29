@@ -54,13 +54,12 @@
             .left-panel h2,
             .right-panel h2 {
                 font-family: 'Inter', sans-serif;
-                color: #007BFF;  /* Màu xanh dương chủ đạo */
+                color: #326ABC;  /* Màu xanh dương chủ đạo */
                 border-bottom: 2px solid #cce5ff;
                 padding-bottom: 5px;
                 margin-bottom: 15px;
             }
 
-            /* Khoảng cách giữa các section */
             .section {
                 margin-bottom: 25px;
             }
@@ -196,6 +195,8 @@
             }
             .btn-waiting:hover {
                 background-color: #3399cc;
+                color: white;
+                text-decoration: none;
             }
 
             /* Nút nhận: sử dụng màu xanh dương chủ đạo */
@@ -204,6 +205,8 @@
             }
             .btn-receive:hover {
                 background-color: #0056b3;
+                color: white;
+                text-decoration: none;
             }
 
             /* Nút hủy: giữ màu đỏ để báo hiệu hành động quan trọng */
@@ -212,6 +215,8 @@
             }
             .btn-cancel:hover {
                 background-color: #c82333;
+                color: white;
+                text-decoration: none;
             }
 
             /* Nút hoàn thành: giữ màu xanh lá cây để báo hiệu thành công */
@@ -220,14 +225,18 @@
             }
             .btn-done:hover {
                 background-color: #218838;
+                color: white;
+                text-decoration: none;
             }
 
             /* Nút tạo hóa đơn: sử dụng màu xanh dương chủ đạo */
             .btn-invoice {
-                background-color: #007BFF;
+                background-color: #326ABC;
             }
             .btn-invoice:hover {
                 background-color: #0056b3;
+                color: white;
+                text-decoration: none;
             }
 
         </style>
@@ -240,10 +249,10 @@
                 <main class="content">
 
                     <c:if test="${not empty errorMessage}">
-                        <div class="alert alert-danger">${errorMessage}</div>
+                        <div style="padding: 10px; display: flex; justify-content: center" class="alert alert-danger">${errorMessage}</div>
                     </c:if>
                     <c:if test="${not empty successMessage}">
-                        <div class="alert alert-success">${successMessage}</div>
+                        <div style="padding: 10px; display: flex; justify-content: center" class="alert alert-success">${successMessage}</div>
                     </c:if>
 
                     <div class="container">
@@ -338,9 +347,9 @@
                             <div class="section">
                                 <h2>Actions</h2>
 
+                                <h2>${warrantyDetails.lastProcessStatus}</h2>
                                 <div class="action-buttons">
                                     <c:choose>
-
                                         <c:when test="${warrantyDetails.lastProcessStatus eq 'receive_outsource'}">
                                             <form action="warrantyCardDetailContractor" method="post">
                                                 <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
@@ -418,13 +427,17 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <form action="repairCreateInvoice" method="post">
-                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                        <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                        <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
-                                        <button type="submit" class="btn btn-invoice">Create Invoice</button>
-                                    </form>
+                                    <c:if test="${warrantyDetails.contractorStatus eq 'done'}">
+                                        <form action="repairCreateInvoice" method="post">
+                                            <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
+                                            <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
+                                            <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
+                                            <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
+                                            <button type="submit" class="btn btn-invoice">Create Invoice</button>
+                                        </form>
+                                    </c:if>
+
+
                                     <div class="section">
                                         <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
                                     </div>

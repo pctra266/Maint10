@@ -144,7 +144,6 @@ public class ViewListUnknownProduct extends HttpServlet {
             response.sendRedirect("error.jsp");
             return;
         }
-
         request.setAttribute("customer", customer);
         request.setAttribute("unknownProduct", unknownProduct);
         request.setAttribute("warrantyProductId", warrantyProductId);

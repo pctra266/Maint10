@@ -14,28 +14,22 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            /* Reset cơ bản */
             * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
             }
-
-            /* Phông chữ và màu nền chung */
             body {
                 font-family: 'Inter', sans-serif;
                 background-color: #f5f6fa;
                 color: #333;
                 line-height: 1.6;
             }
-
-            /* Layout chính với thanh sidebar và nội dung */
             .wrapper {
                 display: flex;
                 min-height: 100vh;
             }
 
-            /* Sidebar (giữ tông màu ban đầu) */
             .wrapper > .jspIncludeSidebar,
             .wrapper > .navbar-left {
                 width: 250px;
@@ -51,13 +45,6 @@
                 flex-direction: column;
             }
 
-            /* Thanh navbar top */
-            .navbar-top {
-                background-color: #fff;
-                padding: 15px 20px;
-                border-bottom: 1px solid #ddd;
-            }
-
             /* Nội dung chính */
             .content {
                 flex: 1;
@@ -68,7 +55,7 @@
             .content h2 {
                 margin-bottom: 20px;
                 font-size: 24px;
-                color: #007BFF;
+                color: #326ABC;
             }
 
             /* Các thông báo lỗi và thành công */
@@ -113,11 +100,10 @@
                 font-size: 16px;
             }
 
-            /* Button submit: sử dụng màu xanh dương chủ đạo */
             .btn {
                 display: inline-block;
                 padding: 10px 20px;
-                background-color: #007BFF;
+                background-color: #326ABC;
                 color: #fff;
                 border: none;
                 border-radius: 4px;
@@ -128,6 +114,8 @@
             }
             .btn:hover {
                 background-color: #0056b3;
+                color: white;
+                text-decoration: none;
             }
 
             /* Footer */
@@ -151,25 +139,7 @@
                     margin-left: 0;
                 }
             }
-            .btn-export {
-                display: inline-block;
-                padding: 10px 20px;
-                background-color: #007BFF; /* Màu xanh dương chủ đạo */
-                color: #fff;
-                border: none;
-                border-radius: 4px;
-                font-size: 16px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-            }
 
-            .btn-export i {
-                margin-right: 8px;
-            }
-
-            .btn-export:hover {
-                background-color: #0056b3;
-            }
 
         </style>
     </head>
@@ -207,7 +177,11 @@
                         <input type="hidden" name="warrantyCardID" value="${param.cardId}" />
 
                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
-                    
+                        <button type="button" class="btn" 
+                                style="background-color: #dc3545; margin-left: 10px;"
+                                onclick="window.history.back();">
+                            Cancel
+                        </button>
                     </form>
 
                 </main>
@@ -216,15 +190,15 @@
         </div>
         <script src="js/app.js"></script>
         <script>
-                        function validateAmount() {
-                            var amountInput = document.getElementById("amount");
-                            if (amountInput.value.trim() === "") {
-                                alert("Amount không được nhập toàn khoảng trắng.");
-                                amountInput.focus();
-                                return false;
-                            }
-                            return true;
-                        }
+                                    function validateAmount() {
+                                        var amountInput = document.getElementById("amount");
+                                        if (amountInput.value.trim() === "") {
+                                            alert("Amount không được nhập toàn khoảng trắng.");
+                                            amountInput.focus();
+                                            return false;
+                                        }
+                                        return true;
+                                    }
         </script>
 
     </body>

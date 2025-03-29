@@ -22,7 +22,6 @@ public class WarrantyCardDetailContractor extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        PrintWriter out = response.getWriter();
         WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
         String idStr = request.getParameter("cardId");
         if (idStr == null || idStr.trim().isEmpty()) {
