@@ -29,7 +29,6 @@
                 display: flex;
                 min-height: 100vh;
             }
-
             .wrapper > .jspIncludeSidebar,
             .wrapper > .navbar-left {
                 width: 250px;
@@ -37,27 +36,23 @@
                 color: #fff;
                 padding: 20px;
             }
-
             /* Phần main (nội dung chính) */
             .main {
                 flex: 1;
                 display: flex;
                 flex-direction: column;
             }
-
             /* Nội dung chính */
             .content {
                 flex: 1;
                 padding: 20px;
             }
-
             /* Tiêu đề form với màu xanh dương chủ đạo */
             .content h2 {
                 margin-bottom: 20px;
                 font-size: 24px;
                 color: #326ABC;
             }
-
             /* Các thông báo lỗi và thành công */
             .content .error,
             .content .success {
@@ -74,7 +69,6 @@
                 background-color: #d4edda;
                 color: #40754c;
             }
-
             /* Form */
             form {
                 background-color: #fff;
@@ -82,7 +76,6 @@
                 border-radius: 8px;
                 box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             }
-
             /* Label và input */
             form label {
                 display: block;
@@ -99,7 +92,6 @@
                 border-radius: 4px;
                 font-size: 16px;
             }
-
             .btn {
                 display: inline-block;
                 padding: 10px 20px;
@@ -117,7 +109,6 @@
                 color: white;
                 text-decoration: none;
             }
-
             /* Footer */
             footer {
                 background-color: #fff;
@@ -126,7 +117,6 @@
                 border-top: 1px solid #ddd;
                 margin-top: 20px;
             }
-
             /* Responsive cho màn hình nhỏ */
             @media (max-width: 768px) {
                 .wrapper {
@@ -139,8 +129,6 @@
                     margin-left: 0;
                 }
             }
-
-
         </style>
     </head>
     <body>
@@ -158,6 +146,12 @@
                         <div style="color: green; text-align: center; margin-bottom: 10px;">
                             ${successMessage}
                         </div>
+                        <!-- Chức năng chuyển hướng sau 3 giây -->
+                        <script>
+                            setTimeout(function () {
+                                window.location.href = 'warrantyCardRepairContractor'; // Thay đổi đường dẫn trang đích tại đây
+                            }, 3000);
+                        </script>
                     </c:if>
 
                     <h2 style="text-align: center">Create Invoice for Repair Contractor</h2>
@@ -166,8 +160,8 @@
                         <input type="number" id="amount" name="amount" step="0.01" required min="0" /><br/><br/>
 
                         <label for="dueDate">Due Date:</label>
-                        <input type="date" id="dueDate" name="dueDate" required 
-                               min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" /><br/><br/>
+                        <input type="date" id="dueDate" name="dueDate" required min="<%= new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date()) %>" />
+                        <br/><br/>
 
                         <input type="hidden" name="invoiceType" value="RepairContractorToTechnician" />
                         <input type="hidden" name="status" value="pending" />
@@ -177,9 +171,9 @@
                         <input type="hidden" name="warrantyCardID" value="${param.cardId}" />
 
                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
-                        
+
                         <button class="btn btn-invoice" type="button">
-                            <a style="color: white; text-decoration: none   " href="warrantyCardRepairContractor">Back</a>
+                            <a style="color: white; text-decoration: none" href="warrantyCardRepairContractor">Back</a>
                         </button>
                         <button type="button" class="btn" 
                                 style="background-color: #dc3545; margin-left: 10px;"

@@ -403,7 +403,7 @@
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                <!-- Danh sách linh kiện -->
+                                                
                                                 <table border="1">
                                                     <tr>
                                                         <th>Component Code</th>

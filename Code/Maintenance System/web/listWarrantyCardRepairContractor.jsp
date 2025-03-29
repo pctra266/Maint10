@@ -9,7 +9,7 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
         <style>
-     
+
             main.content {
                 background: #ffffff;
                 border-radius: 12px;
@@ -49,7 +49,7 @@
             .form-group label {
                 font-weight: 600;
                 color: #326ABC;
-                white-space: nowrap; 
+                white-space: nowrap;
             }
 
             .form-group input[type="text"],
@@ -218,24 +218,15 @@
                     <h2>List of Warranty Cards</h2>   
 
                     <form method="get" action="warrantyCardRepairContractor">
-
-                        <!-- Dùng .search-form để dàn ngang -->
                         <div class="search-form">
-
                             <div class="form-group">
                                 <label for="warrantyCardCode">Warranty Card Code:</label>
-                                <input type="text" name="warrantyCardCode" id="warrantyCardCode" 
-                                       value="${param.warrantyCardCode}" 
-                                       pattern="[A-Za-z]+" 
-                                       title="Only letters allowed (no spaces, digits or special characters)" />
+                                <input type="text" name="warrantyCardCode" id="warrantyCardCode" value="${param.warrantyCardCode}" pattern="[A-Za-z]+" title="Only letters allowed (no spaces, digits or special characters)" />
                             </div>
 
                             <div class="form-group">
                                 <label for="staffName">Staff Name:</label>
-                                <input type="text" name="staffName" id="staffName" 
-                                       value="${param.staffName}" 
-                                       pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" 
-                                       title="Only letters, single space between words, no digits/special chars" />
+                                <input type="text" name="staffName" id="staffName" value="${param.staffName}" pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" title="Only letters, single space between words, no digits/special chars" />
                             </div>
 
                             <div class="form-group">
@@ -354,7 +345,7 @@
                                             customInput.style.display = "inline-block";
                                         } else {
                                             customInput.style.display = "none";
-                                            customInput.value = ""; 
+                                            customInput.value = "";
                                         }
                                     }
                                     window.onload = function () {
