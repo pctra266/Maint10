@@ -115,78 +115,86 @@
 
                                     </div>
                                     <div>
-                                        <form action="searchwc" class="h-100" method="post">
-                                            <input type="hidden" id="warrantyCardCode" name="warrantyCardCode" value="${card.warrantyCardCode}" >
-                                            <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
-                                        </form>
+                                        <c:if test="${staff.hasPermissions('EXPORT_WARRANTY_CARD')}">
+                                            <form action="searchwc" class="h-100" method="post">
+                                                <input type="hidden" id="warrantyCardCode" name="warrantyCardCode" value="${card.warrantyCardCode}" >
+                                                <button type="submit" class="btn btn-primary me-4"><i class="fa fa-file-pdf me-2"></i>Export</button>
+                                            </form>   
+                                        </c:if>
+
+
                                     </div>
 
                                 </div>
 
                             </div>
-                            <h3>Process Actions</h3>
-                            <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="fixing">
-                                    <button type="submit" class="btn btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'receive' || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource')? '' : 'disabled'}>Fixing</button>
-                                </form>
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="refix">
-                                    <button type="submit" class="btn btn-warning me-2" ${latestProcess != null && (latestProcess.action == 'fixed' || latestProcess.action == 'completed' || latestProcess.action == 'cancel') ? '' : 'disabled'}>Refix</button>
-                                </form>
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="outsource">
-                                    <button type="submit" class="btn btn-info me-2" ${latestProcess != null  && (latestProcess.action == 'fixing'||latestProcess.action == 'refix') ? '' : 'disabled'}>Outsource</button>
-                                </form>
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="fixed">
-                                    <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
-                                </form>
-                                <form action="Invoice/Create" method="get" class="d-inline">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action !='completed' && latestProcess.action !='cancel' ? '' : 'disabled'}>Create Invoice</button>
-                                </form>
+                            <c:if test="${staff.hasPermissions('PROCESSING_WARRANTY_CARD_INCOM')}">
+                                <h3>Process Actions</h3>
 
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="cancel">
-                                    <button type="submit" class="btn btn-danger me-2" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' && latestProcess.action != 'cancel' ? '' : 'disabled'}>Cancel</button>
-                                </form>
-                                <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="process">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="refuse">
-                                    <button type="submit" class="btn btn-instagram" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' ? '' : 'disabled'}>Refuse</button>
-                                </form>
-                            </c:if>
-                            <c:if test="${latestProcess.action.endsWith('outsource') && latestProcess.action!='receive_from_outsource' && latestProcess.action!='refuse_outsource' && latestProcess.action!='cancel_outsource' }">
-                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="processOutsource">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="cancel_outsource">
-                                    <button type="submit" class="btn btn-instagram" ${latestProcess != null && (latestProcess.action == 'request_outsource' && latestProcess.action != 'accept_outsource')? '' : 'disabled'}>Cancel request</button>
-                                </form>
-                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="processOutsource">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="send_outsource">
-                                    <button type="submit" class="btn btn-primary" ${latestProcess != null && latestProcess.action == 'accept_outsource' ? '' : 'disabled'}>Hand over</button>
-                                </form>
-                                <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
-                                    <input type="hidden" name="action" value="processOutsource">
-                                    <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                    <input type="hidden" name="processAction" value="receive_from_outsource">
-                                    <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action == 'back_outsource'? '' : 'disabled'}>Receive</button>
-                                </form>
+
+                                <c:if test="${!latestProcess.action.endsWith('outsource') || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource'}">
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="fixing">
+                                        <button type="submit" class="btn btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'receive' || latestProcess.action=='receive_from_outsource' || latestProcess.action=='refuse_outsource' || latestProcess.action=='cancel_outsource')? '' : 'disabled'}>Fixing</button>
+                                    </form>
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="refix">
+                                        <button type="submit" class="btn btn-warning me-2" ${latestProcess != null && (latestProcess.action == 'fixed' || latestProcess.action == 'completed' || latestProcess.action == 'cancel') ? '' : 'disabled'}>Refix</button>
+                                    </form>
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="outsource">
+                                        <button type="submit" class="btn btn-info me-2" ${latestProcess != null  && (latestProcess.action == 'fixing'||latestProcess.action == 'refix') ? '' : 'disabled'}>Outsource</button>
+                                    </form>
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="fixed">
+                                        <button type="submit" class="btn btn-success me-2" ${latestProcess != null && (latestProcess.action == 'fixing'||latestProcess.action == 'refix'||latestProcess.action == 'outsource') ? '' : 'disabled'}>Fixed</button>
+                                    </form>
+                                    <form action="Invoice/Create" method="get" class="d-inline">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <button type="submit" class="btn btn-info me-2" ${latestProcess != null && latestProcess.action !='completed' && latestProcess.action !='cancel' ? '' : 'disabled'}>Create Invoice</button>
+                                    </form>
+
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="cancel">
+                                        <button type="submit" class="btn btn-danger me-2" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' && latestProcess.action != 'cancel' ? '' : 'disabled'}>Cancel</button>
+                                    </form>
+                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="process">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="refuse">
+                                        <button type="submit" class="btn btn-instagram" ${latestProcess != null && latestProcess.action != 'completed' && latestProcess.action != 'fixed' ? '' : 'disabled'}>Refuse</button>
+                                    </form>
+                                </c:if>
+                                <c:if test="${latestProcess.action.endsWith('outsource') && latestProcess.action!='receive_from_outsource' && latestProcess.action!='refuse_outsource' && latestProcess.action!='cancel_outsource' }">
+                                    <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="processOutsource">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="cancel_outsource">
+                                        <button type="submit" class="btn btn-instagram" ${latestProcess != null && (latestProcess.action == 'request_outsource' && latestProcess.action != 'accept_outsource')? '' : 'disabled'}>Cancel request</button>
+                                    </form>
+                                    <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="processOutsource">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="send_outsource">
+                                        <button type="submit" class="btn btn-primary" ${latestProcess != null && latestProcess.action == 'accept_outsource' ? '' : 'disabled'}>Hand over</button>
+                                    </form>
+                                    <form action="WarrantyCard/OutsourceRequest" method="post" class="d-inline">
+                                        <input type="hidden" name="action" value="processOutsource">
+                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                        <input type="hidden" name="processAction" value="receive_from_outsource">
+                                        <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action == 'back_outsource'? '' : 'disabled'}>Receive</button>
+                                    </form>
+                                </c:if>
                             </c:if>
                         </div>
                     </c:if>
@@ -196,21 +204,28 @@
                             <c:if test="${latestProcess!=null && !(latestProcess.action=='create'||latestProcess.action=='refuse')}">
                                 <h3>Repair List</h3>
                                 <div class="row">
-                                    <div class="mb-2 col-auto">
-                                        <form action="WarrantyCard/AddComponent">
-                                            <input type="hidden" name="ID" value="${card.warrantyCardID}"/>
-                                            <button  class="btn btn-primary" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}>
-                                                <i class="fas fa-plus"></i> Add New Component
-                                            </button>
-                                        </form>
+                                    <c:if test="${staff.hasPermissions('ADD_COMPONENT_INTO_WARRANTY_CARD')}"> 
+                                        <div class="mb-2 col-auto">
+                                            <form action="WarrantyCard/AddComponent">
+                                                <input type="hidden" name="ID" value="${card.warrantyCardID}"/>
+                                                <button  class="btn btn-primary" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}>
+                                                    <i class="fas fa-plus"></i> Add New Component
+                                                </button>
+                                            </form>
 
-                                    </div>
-                                    <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto" target="blank">
-                                        <input type="hidden" name="action" value="createComponentRequest" readonly> 
-                                        <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
-                                        <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
-                                        <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}><i class="fas fa-add"></i> Request Component</button>
-                                    </form>
+                                        </div>
+                                    </c:if>
+                                    <c:if test="${staff.hasPermissions('CREATE_COMPONENT_REQUEST')}"> 
+                                        <form action="/MaintenanceSystem/componentRequest" class="mb-2 col-auto" target="blank">
+                                            <input type="hidden" name="action" value="createComponentRequest" readonly> 
+                                            <input type="hidden" name="warrantyCardID" value="${card.warrantyCardID}" readonly>  
+                                            <input type="hidden" name="productCode" value="${card.productCode}" readonly>  
+                                            <button type="submit" class="btn btn-success" ${latestProcess != null && latestProcess.action != 'fixed' && latestProcess.action != 'completed' && latestProcess.action != 'cancel' ? "":"disabled"}><i class="fas fa-add"></i> Request Component</button>
+                                        </form>
+                                    </c:if>
+
+
+
                                 </div>
                                 <table class="table table-hover my-0 ">
                                     <thead>
@@ -221,7 +236,10 @@
                                             <th>Price</th>
                                             <th>Quantity</th>
                                             <th>Note</th>
-                                            <th>Action</th>
+                                                <c:if test="${staff.hasPermissions('UPDATE_REPAIR_LIST_WARRANTY_CARD')}">
+                                                <th>Action</th>
+                                                </c:if>
+
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -252,19 +270,24 @@
                                                     <textarea type="text" name="note" class="form-control form-control-sm">${detail.note}</textarea>
                                                     </form>
                                                 </td>
-                                                <td class="table-action">
-                                                    <button type="submit" form="updateForm-${status.index}" class="btn btn-sm me-1 save"  title="Save">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save align-middle"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-                                                    </button>
-                                                    <form action="WarrantyCard/Detail" method="post" class="d-inline" id="deleteForm-${status.index}">
-                                                        <input type="hidden" name="action" value="delete">
-                                                        <input type="hidden" name="warrantyCardDetailID" value="${detail.warrantyCardDetailID}">
-                                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                                        <button type="submit" class="btn btn-sm" onclick="return confirm('Are you sure you want to delete this component?');" title="Delete">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+
+                                                <c:if test="${staff.hasPermissions('UPDATE_REPAIR_LIST_WARRANTY_CARD')}">
+                                                    <td class="table-action">
+                                                        <button type="submit" form="updateForm-${status.index}" class="btn btn-sm me-1 save"  title="Save">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-save align-middle"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
                                                         </button>
-                                                    </form>
-                                                </td>
+                                                        <form action="WarrantyCard/Detail" method="post" class="d-inline" id="deleteForm-${status.index}">
+                                                            <input type="hidden" name="action" value="delete">
+                                                            <input type="hidden" name="warrantyCardDetailID" value="${detail.warrantyCardDetailID}">
+                                                            <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                                            <button type="submit" class="btn btn-sm" onclick="return confirm('Are you sure you want to delete this component?');" title="Delete">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                                                            </button>
+                                                        </form>
+                                                    </td>
+                                                </c:if>
+
+
                                             </tr>
                                         </c:forEach>
                                     </tbody>
@@ -292,18 +315,21 @@
                                         <div id="warrantyStatus"></div>
                                     </div>
                                     <!-- Upload file ảnh -->
-                                    <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
-                                        <input type="hidden" name="action" value="uploadImages">
-                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                        <div class="col-md-12">
-                                            <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
-                                            <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
-                                            <div id="previewContainer" class="media-preview mt-3"></div>   
-                                        </div>
-                                        <div class="col-md-3">
-                                            <button type="submit" class="btn btn-primary">Upload</button>
-                                        </div> 
-                                    </form>
+                                    <c:if test="${staff.hasPermissions('UPLOAD_IMAGES_WARRANTY_CARD')}">                                   
+                                        <form action="WarrantyCard/Detail"  method="POST" enctype="multipart/form-data">
+                                            <input type="hidden" name="action" value="uploadImages">
+                                            <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                            <div class="col-md-12">
+                                                <label for="mediaFiles" class="form-label">Upload Images/Videos:</label>
+                                                <input type="file" class="form-control" name="mediaFiles" id="mediaFiles" accept="image/*,video/*" multiple onchange="previewMedia(event)">
+                                                <div id="previewContainer" class="media-preview mt-3"></div>   
+                                            </div>
+                                            <div class="col-md-3">
+                                                <button type="submit" class="btn btn-primary">Upload</button>
+                                            </div> 
+                                        </form>
+                                    </c:if>
+
                                     <div class="col-md-12">
                                         <div>Issue Description:</div>
                                         <input type="hidden" class="form-control" value="${card.warrantyCardID}" readonly>  
@@ -346,37 +372,37 @@
 
                         <div class="col-md-4" >
                             <c:if test="${staff!=null}">       
-                            <h3>Component request:</h3>
-                            <c:if test="${empty componentRequests}">
-                                <h4 class="text-center text-black-50">No component request created.</h4>
-                            </c:if>
-                                    <div style="max-height:20rem; overflow-y: auto">
-                                        <c:forEach var="request" items="${componentRequests.keySet()}">
-                                            <table class="table table-bordered " >
-                                                <thead>
-                                                    <tr>
-                                                        <td width="60%">${request.componentRequestID}</td>
-                                                        <td width="20%">Quantity</td>
-                                                        <td width="20%">Status</td>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
-                                                        <tr>
-                                                            <td>${requestDetail.componentName}</td>
-                                                            <td>${requestDetail.quantity}</td>
-                                                            <c:if test="${status.index==0}">
-                                                                <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
-                                                                    ${request.status}
-                                                                </td>
-                                                            </c:if>
-                                                        </tr>   
-                                                    </c:forEach>
-                                                </tbody>
-                                            </table>
-                                        </c:forEach> 
-                                    </div>
+                                <h3>Component request:</h3>
+                                <c:if test="${empty componentRequests}">
+                                    <h4 class="text-center text-black-50">No component request created.</h4>
                                 </c:if>
+                                <div style="max-height:20rem; overflow-y: auto">
+                                    <c:forEach var="request" items="${componentRequests.keySet()}">
+                                        <table class="table table-bordered " >
+                                            <thead>
+                                                <tr>
+                                                    <td width="60%">${request.componentRequestID}</td>
+                                                    <td width="20%">Quantity</td>
+                                                    <td width="20%">Status</td>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <c:forEach var="requestDetail" varStatus="status" items="${componentRequests[request]}">
+                                                    <tr>
+                                                        <td>${requestDetail.componentName}</td>
+                                                        <td>${requestDetail.quantity}</td>
+                                                        <c:if test="${status.index==0}">
+                                                            <td rowspan="${componentRequests[request].size()}" class="text-center" style="color:${request.status eq 'approved'?"#12c700":request.status eq 'cancel'?"red":""}">
+                                                                ${request.status}
+                                                            </td>
+                                                        </c:if>
+                                                    </tr>   
+                                                </c:forEach>
+                                            </tbody>
+                                        </table>
+                                    </c:forEach> 
+                                </div>
+                            </c:if>
 
                             <%--For showing images --%>
                             <h3 class="mt-2">Medias:</h3>
@@ -399,30 +425,35 @@
                                 <div id="modalContent" class="modal-content" style="background-color: #333333"></div>
                                 <button type="button" id="prevButton" class="modal-nav prev" onclick="showPrevious()"><</button>
                                 <button type="button" id="nextButton" class="modal-nav next" onclick="showNext()">></button>
-                                <c:if test="${not empty card}">
-                                    <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
-                                        <i class="fa fa-trash"></i> 
-                                    </button>
+                                <c:if test="${staff.hasPermissions('DELETE_IMAGES_WARRANTY_CARD')}">
+                                    <c:if test="${not empty card}">
+                                        <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
+                                            <i class="fa fa-trash"></i> 
+                                        </button>
+                                    </c:if>  
                                 </c:if>
+
+
                             </div>
                         </div>
                     </div>
 
                     <div class="row ms-0">
-                        <div class="col-md-8 row ">
+                        <c:if test="${staff.hasPermissions('PROCESSING_WARRANTY_CARD_INCOM')}">
+                            <div class="col-md-8 row ">
+                                <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
+                                    <div class = "col-md-12 d-flex justify-content-center mt-2" >
+                                        <form action="WarrantyCard/Detail" method="post" class="d-inline">
+                                            <input type="hidden" name="action" value="process">
+                                            <input type="hidden" name="ID" value="${card.warrantyCardID}">
+                                            <input type="hidden" name="processAction" value="receive">
+                                            <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
+                                        </form>                    
+                                    </div>
+                                </c:if>
+                            </div>  
+                        </c:if>
 
-                            <c:if test="${latestProcess!=null && (latestProcess.action=='create' || latestProcess.action == 'refuse')}">
-                                <div class = "col-md-12 d-flex justify-content-center mt-2" >
-                                    <form action="WarrantyCard/Detail" method="post" class="d-inline">
-                                        <input type="hidden" name="action" value="process">
-                                        <input type="hidden" name="ID" value="${card.warrantyCardID}">
-                                        <input type="hidden" name="processAction" value="receive">
-                                        <button type="submit" class="btn-lg btn-primary me-2" ${latestProcess != null && (latestProcess.action == 'create'||latestProcess.action == 'cancel' || latestProcess.action == 'refuse' ) ? '' : 'disabled'}>RECEIVE</button>
-                                    </form>                    
-                                </div>
-                            </c:if>
-
-                        </div>
 
                 </main>
                 <jsp:include page="../../includes/footer.jsp" />

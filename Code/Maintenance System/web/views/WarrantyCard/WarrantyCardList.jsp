@@ -109,23 +109,28 @@
 
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <form action="searchwc" method="post">
-                            <button type="submit" class="btn btn-success">
-                                <i class="fa fa-file-pdf"></i> Export PDF
-                            </button>
-                        </form>
-                        <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
-                        </form>
-<!--                        <form action="WarrantyCard/Search" method="get" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
-                        </form>-->
+                        <c:if test="${staff.hasPermissions('EXPORT_WARRANTY_CARD')}">
+                            <form action="searchwc" method="post">
+                                <button type="submit" class="btn btn-success">
+                                    <i class="fa fa-file-pdf"></i> Export PDF
+                                </button>
+                            </form>
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('ADD_WARRANTY_CARD')}">
+                            <form action="WarrantyCard/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Create Card</button>
+                            </form>
+                        </c:if>
+
+                        <!--                        <form action="WarrantyCard/Search" method="get" style="display: inline;">
+                                                    <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
+                                                </form>-->
                     </div>
                     <form action="WarrantyCard" method="get" class="row align-items-center">
                         <input type="hidden" name="page" value="${pagination.currentPage}">
                         <input type="hidden" name="sort" value="${pagination.sort}">
                         <input type="hidden" name="order" value="${pagination.order}">
-                         
+
                         <div class="col-sm-6 col-md-6">
                             <label>Show 
                                 <select name="page-size" class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="this.form.submit()">
@@ -144,7 +149,7 @@
                                 </button>
                             </div>
                         </div>
-                                     <c:if test="${fn:length(pagination.searchFields) > 0}">
+                        <c:if test="${fn:length(pagination.searchFields) > 0}">
                             <c:forEach var="i" begin="0" end="${fn:length(pagination.searchFields) - 1}">
                                 <input type="hidden" name="${pagination.searchFields[i]}" value="${pagination.searchValues[i]}">
                             </c:forEach>
@@ -272,33 +277,37 @@
                                             <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                                             </svg>
                                         </a>
-                                        <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${card.warrantyCardID}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
+                                        <c:if test="${staff.hasPermissions('DELETE_WARRANTY_CARD')}">
+                                          <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${card.warrantyCardID}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </a>          
+                                        </c:if>
 
-                                <!-- Modal for each card -->
-                            <div class="modal fade" id="centeredModalPrimary_${card.warrantyCardID}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Delete Confirmation</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body m-3">
-                                            <p class="mb-0">Confirm your action. Really want to delete?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="WarrantyCard/Delete?ID=${card.warrantyCardID}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&status=${pagination.searchValues[1]}&sort=${pagination.sort}&order=${pagination.order}" class="btn btn-primary">Delete</a>
+                                            
+                                        </td>
+                                    </tr>
+
+                                    <!-- Modal for each card -->
+                                <div class="modal fade" id="centeredModalPrimary_${card.warrantyCardID}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete Confirmation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body m-3">
+                                                <p class="mb-0">Confirm your action. Really want to delete?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a href="WarrantyCard/Delete?ID=${card.warrantyCardID}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&status=${pagination.searchValues[1]}&sort=${pagination.sort}&order=${pagination.order}" class="btn btn-primary">Delete</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </c:forEach>
 
                         </tbody>

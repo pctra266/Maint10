@@ -43,7 +43,7 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
+                    <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
 
                     <h2>Component Type List</h2>
 
@@ -66,13 +66,17 @@
                     </c:if>
 
                     <!-- Nút chức năng -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <form action="ComponentType" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-success" name="action" value="add">
-                                <i class="fas fa-plus"></i> Add Component Type
-                            </button>
-                        </form>
-                    </div>
+                    <c:if test="${staff.hasPermissions('COMPONENT_TYPE_ADD')}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <form action="ComponentType" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-success" name="action" value="add">
+                                    <i class="fas fa-plus"></i> Add Component Type
+                                </button>
+                            </form>
+                        </div>
+                    </c:if>
+
+
 
                     <!-- Form tìm kiếm và phân trang -->
                     <form action="ComponentType" method="get" class="row align-items-center">
@@ -143,11 +147,15 @@
                                         Type Name
                                     </form>
                                 </th>
-                                <th style="width:8%">Action
-                                    <a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
-                                        <i class="fa fa-refresh ms-2"></i>
-                                    </a>
-                                </th>
+                                <c:if test="${staff.hasPermissions('COMPONENT_TYPE_DELETE')}">
+                                    <th style="width:8%">Action
+                                        <a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
+                                            <i class="fa fa-refresh ms-2"></i>
+                                        </a>
+                                    </th> 
+                                </c:if>
+
+
                             </tr>
                         </thead>
                         <tbody>
@@ -156,14 +164,17 @@
                                     <td>${status.index + 1 + (pagination.currentPage - 1) * pagination.pageSize}</td>
                                     <td>${type.typeID}</td>
                                     <td>${type.typeName}</td>
-                                    <td class="table-action">
-                                        <a data-bs-toggle="modal" data-bs-target="#deleteTypeModal_${type.typeID}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </a>
-                                    </td>
+                                    <c:if test="${staff.hasPermissions('COMPONENT_TYPE_DELETE')}">             
+                                        <td class="table-action">
+                                            <a data-bs-toggle="modal" data-bs-target="#deleteTypeModal_${type.typeID}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </a>
+                                        </td>
+                                    </c:if>
+
                                 </tr>
 
                                 <!-- Modal Xóa -->
