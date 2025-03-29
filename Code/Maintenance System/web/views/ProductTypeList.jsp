@@ -66,13 +66,16 @@
                     </c:if>
 
                     <!-- Nút chức năng -->
-                    <div class="d-flex justify-content-between align-items-center mb-3">
-                        <form action="ProductType" method="POST" style="display: inline;">
-                            <button type="submit" class="btn btn-success" name="action" value="add">
-                                <i class="fas fa-plus"></i> Add Product Type
-                            </button>
-                        </form>
-                    </div>
+                    <c:if test="${staff.hasPermissions('ADD_PRODUCT_TYPE')}">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <form action="ProductType" method="POST" style="display: inline;">
+                                <button type="submit" class="btn btn-success" name="action" value="add">
+                                    <i class="fas fa-plus"></i> Add Product Type
+                                </button>
+                            </form>
+                        </div>
+                    </c:if>
+
 
                     <!-- Form tìm kiếm và phân trang -->
                     <form action="ProductType" method="get" class="row align-items-center">
@@ -113,7 +116,7 @@
                         <thead>
                             <tr>
                                 <th style="width:3%">#</th>
-                                <th style="width:10%">
+                                <th style="width:12%">
                                     <form action="ProductType" method="get">
                                         <input type="hidden" name="page" value="${pagination.currentPage}" />                                  
                                         <input type="hidden" name="page-size" value="${pagination.pageSize}" />
@@ -143,11 +146,13 @@
                                         Type Name
                                     </form>
                                 </th>
-                                <th style="width:8%">Action
-                                    <a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
-                                        <i class="fa fa-refresh ms-2"></i>
-                                    </a>
-                                </th>
+                                <c:if test="${staff.hasPermissions('DELETE_PRODUCT_TYPE')}">    
+                                    <th style="width:8%">Action
+                                        <a href="?page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}">
+                                            <i class="fa fa-refresh ms-2"></i>
+                                        </a>
+                                    </th>
+                                </c:if>
                             </tr>
                         </thead>
                         <tbody>
@@ -156,35 +161,39 @@
                                     <td>${status.index + 1 + (pagination.currentPage - 1) * pagination.pageSize}</td>
                                     <td>${type.productTypeId}</td>
                                     <td>${type.typeName}</td>
-                                    <td class="table-action">
-                                        <a data-bs-toggle="modal" data-bs-target="#deleteTypeModal_${type.productTypeId}">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                                            <polyline points="3 6 5 6 21 6"></polyline>
-                                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                            </svg>
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <c:if test="${staff.hasPermissions('DELETE_PRODUCT_TYPE')}">
+                                        <td class="table-action">
+                                            <a data-bs-toggle="modal" data-bs-target="#deleteTypeModal_${type.productTypeId}">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                                <polyline points="3 6 5 6 21 6"></polyline>
+                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                </svg>
+                                            </a>
+                                        </td>  
+                                    </c:if>
 
-                                <!-- Modal Xóa -->
-                            <div class="modal fade" id="deleteTypeModal_${type.productTypeId}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title">Delete Confirmation</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body m-3">
-                                            <p class="mb-0">Confirm your action. Really want to delete type "<strong>${type.typeName}</strong>"?</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                            <a href="ProductType?action=delete&productTypeID=${type.productTypeId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
-                                               class="btn btn-primary">Delete</a>
+                                      
+                                    </tr>
+
+                                    <!-- Modal Xóa -->
+                                <div class="modal fade" id="deleteTypeModal_${type.productTypeId}" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Delete Confirmation</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body m-3">
+                                                <p class="mb-0">Confirm your action. Really want to delete type "<strong>${type.typeName}</strong>"?</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a href="ProductType?action=delete&productTypeID=${type.productTypeId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
+                                                   class="btn btn-primary">Delete</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </c:forEach>
                         </tbody>
                     </table>
@@ -231,11 +240,11 @@
 
         <script src="${pageContext.request.contextPath}/js/app.js"></script>
         <script>
-                                    // Mở modal thêm khi nhấn nút "Add Product Type"
-                                    document.querySelector('button[name="action"][value="add"]').addEventListener('click', function (e) {
-                                        e.preventDefault();
-                                        new bootstrap.Modal(document.getElementById('addTypeModal')).show();
-                                    });
+                                // Mở modal thêm khi nhấn nút "Add Product Type"
+                                document.querySelector('button[name="action"][value="add"]').addEventListener('click', function (e) {
+                                    e.preventDefault();
+                                    new bootstrap.Modal(document.getElementById('addTypeModal')).show();
+                                });
         </script>
     </body>
 </html>
