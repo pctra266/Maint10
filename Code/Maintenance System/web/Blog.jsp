@@ -149,9 +149,7 @@
     </head>
     <body>
         <div class="wrapper">
-            <jsp:include page="/includes/navbar-left.jsp" />
             <main class="main">
-                <jsp:include page="/includes/navbar-top.jsp" />
                 <c:if test="${not empty list}">
                     <form class="row g-3 align-items-center form-container" action="BlogController" method="get">
                             <div class="col-md-6">
@@ -188,7 +186,9 @@
                         <div class="alert1">${nolist}</div>
                     </c:if>
                     <div class="left-frame blog-frame ">
-                        <h2>Danh sách bài viết của Nhân Viên</h2>
+                        
+                        <h2 class="text-center">List Blog</h2>
+                        <a href="Home" class="btn btn-primary">Back to home page</a>
                         <c:if test="${not empty Create}">
                             
                             <form action="BlogController" method="post">

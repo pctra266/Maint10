@@ -105,45 +105,16 @@
                                 Admin
                             </c:if>
                         </h1>
-                        <a class="badge bg-primary ms-2" href="dashBoard" target="_blank">
+<!--                        <a class="badge bg-primary ms-2" href="dashBoard" target="_blank">
                             Dash Board
                             <i class="fas fa-fw fa-external-link-alt">
                             </i>
-                        </a>
+                        </a>-->
                     </div>
 
                     <div class="row">
 
                         <c:if test="${not empty sessionScope.customer}">
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'InvoiceController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/invoice.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">INVOICE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
 
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'WarrantyCard';">
                                 <div class="card">
@@ -154,27 +125,6 @@
                                     </div>                               
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/package-warranty.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PACKAGE WARRANTY CARD</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'extendedWarranty';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/extended-warranty.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">EXTENDED WARRANTY</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'feedback?action=viewFeedbackDashboard';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/feedback.jpg" alt="Unsplash">
@@ -184,7 +134,6 @@
                                     </div>                               
                                 </div>
                             </div>
-                            
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'purchaseproduct';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/purchase-product.jpg" alt="Unsplash">
@@ -194,7 +143,7 @@
                                     </div>                               
                                 </div>
                             </div>
-                            
+
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'yourwarrantycard';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/your-wc.jpg" alt="Unsplash">
@@ -207,28 +156,7 @@
 
                         </c:if>
 
-
-                        <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '2'}">
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
+                        <c:if test="${staff.hasPermissions('VIEW_COMPONENTS_WAREHOUSE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentWarehouse';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/component.jpg" alt="Unsplash">
@@ -238,7 +166,8 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('VIEW_PRODUCT')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'viewProduct';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/product.jpg" alt="Unsplash">
@@ -248,17 +177,21 @@
                                     </div>                               
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'InvoiceController';">
+                        </c:if>
+                        
+                        <c:if test="${staff.hasPermissions('VIEW_PRODUCT')}">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ProductType';">
                                 <div class="card">
-                                    <img class="card-img-top" src="img/photos/invoice.jpg" alt="Unsplash">
+                                    <img class="card-img-top" src="" alt="Unsplash">
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">INVOICE</h5>
+                                        <h5 class="card-title mb-0">PRODUCT TYPE</h5>
                                         <div class="badge bg-info my-2">In progress</div>
-                                    </div>
+                                    </div>                               
                                 </div>
                             </div>
-
+                        </c:if>
+                        
+                        <c:if test="${staff.hasPermissions('VIEW_WARRANTY_CARD')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'WarrantyCard';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/warranty-card.jpg" alt="Unsplash">
@@ -268,7 +201,8 @@
                                     </div>                               
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('VIEW_LIST_CUSTOMER')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customer';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/customer.jpg" alt="Unsplash">
@@ -278,7 +212,8 @@
                                     </div>                               
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('MANAGE_COMPONENT_TYPE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentType';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/component-type.jpg" alt="Unsplash">
@@ -288,7 +223,8 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('MANAGE_BRAND')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'Brand';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/brand.jpg" alt="Unsplash">
@@ -299,48 +235,7 @@
                                 </div>
                             </div>
                         </c:if>
-
-                        <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '5'}">
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'viewProduct';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/product.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PRODUCT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customer';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/customer.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">CUSTOMER</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
+                        <c:if test="${staff.hasPermissions('VIEW_PACKAGE_WARRANTY')}">
 
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty';">
                                 <div class="card">
@@ -351,7 +246,8 @@
                                     </div>                               
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('VIEW_EXTENDED_WARRANTY')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'extendedWarranty';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/extended-warranty.jpg" alt="Unsplash">
@@ -361,7 +257,8 @@
                                     </div>                               
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('CUSTOMER_CONTACT')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customerContact';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/customer-contact.jpg" alt="Unsplash">
@@ -372,53 +269,7 @@
                                 </div>
                             </div>
                         </c:if>
-
-                        <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '3'}">
-
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentWarehouse';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/component.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">COMPONENT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'viewProduct';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/product.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PRODUCT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-
+                        <c:if test="${staff.hasPermissions('VIEW_COMPONENT_REQUEST_DASHBOARD')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'componentRequest?action=viewComponentRequestDashboard';">
                                 <div class="card">
                                     <img class="card-img-top"  src="img/photos/component-request.jpg" alt="Unsplash">
@@ -428,8 +279,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('VIEW_LIST_COMPONENT_REQUEST')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'componentRequest?action=viewListComponentRequest';">
                                 <div class="card">
                                     <img class="card-img-top"  src="img/photos/listcomponent-request.jpg" alt="Unsplash">
@@ -439,8 +290,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('COMPONENT_REQUEST_RESPONSIBLE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'componentRequestResponsible';">
                                 <div class="card">
                                     <img class="card-img-top"  src="img/photos/component-requestlog.jpg" alt="Unsplash">
@@ -450,51 +301,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentType';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/component-type.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">COMPONENT TYPE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'Brand';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/brand.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BRAND</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
                         </c:if>
-                        <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '4'}">
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
+                        <c:if test="${staff.hasPermissions('WARRANTY_CARD_REPAIR_CONTRACTOR')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'warrantyCardRepairContractor';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/wcrepair-contractor.jpg" alt="Unsplash">
@@ -504,51 +312,8 @@
                                     </div>
                                 </div>
                             </div>
-
-
                         </c:if>
-                        <c:if test="${not empty sessionScope.staff and sessionScope.staff.role == '1'}">
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'profile';">
-                                <div class="card">
-                                    <img class="card-img-top"  src="img/photos/profile.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PROFILE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'BlogController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/blog.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BLOG</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentWarehouse';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/component.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">COMPONENT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'viewProduct';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/product.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PRODUCT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-
+                        <c:if test="${staff.hasPermissions('VIEW_STAFF')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'StaffController';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/staff.jpg" alt="Unsplash">
@@ -558,17 +323,8 @@
                                     </div>                               
                                 </div>
                             </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'InvoiceController';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/invoice.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">INVOICE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('VIEW_FEEDBACK')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'feedback?action=viewFeedback';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/feedback.jpg" alt="Unsplash">
@@ -578,7 +334,8 @@
                                     </div>
                                 </div>
                             </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('ADMIN_DASHBOARD_JSP')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'adminDashboard.jsp';">
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/setting-maxsie.jpg" alt="Unsplash">
@@ -589,97 +346,47 @@
                                 </div>
                             </div>
 
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'packageWarranty';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/package-warranty.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">PACKAGE WARRANTY CARD</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'extendedWarranty';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/extended-warranty.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">EXTENDED WARRANTY</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('CUSTOMIZE_HOMEPAGE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customizeHomepage';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/customize-homepage.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">CUSTOMIZE HOMEPAGE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
+                            <div class="card">
+                                <img class="card-img-top" src="img/photos/customize-homepage.jpg" alt="Unsplash">
+                                <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                    <h5 class="card-title mb-0">CUSTOMIZE HOMEPAGE</h5>
+                                    <div class="badge bg-info my-2">In progress</div>
+                                </div>                               
                             </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customerContact';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/customer-contact.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">CUSTOMER CONTACT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ReportComponent.jsp';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/component-report.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">COMPONENT REPORT</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'customer';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/customer.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">CUSTOMER</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'reportWarrantyCard.jsp';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/report-wc.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">REPORT WARRANTY CARD</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>                               
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ComponentType';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/component-type.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">COMPONENT TYPE</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'Brand';">
-                                <div class="card">
-                                    <img class="card-img-top" src="img/photos/brand.jpg" alt="Unsplash">
-                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">BRAND</h5>
-                                        <div class="badge bg-info my-2">In progress</div>
-                                    </div>
-                                </div>
-                            </div>
+                        </div>
 
                         </c:if>
+                        <c:if test="${staff.hasPermissions('REPORT_COMPONENT_JSP')}">
+                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ReportComponent.jsp';">
+                            <div class="card">
+                                <img class="card-img-top" src="img/photos/component-report.jpg" alt="Unsplash">
+                                <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                    <h5 class="card-title mb-0">COMPONENT REPORT</h5>
+                                    <div class="badge bg-info my-2">In progress</div>
+                                </div>                               
+                            </div>
+                        </div>
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('REPORT_WARRANTY_CARD_JSP')}">
+                                 <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'reportWarrantyCard.jsp';">
+                            <div class="card">
+                                <img class="card-img-top" src="img/photos/report-wc.jpg" alt="Unsplash">
+                                <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                    <h5 class="card-title mb-0">REPORT WARRANTY CARD</h5>
+                                    <div class="badge bg-info my-2">In progress</div>
+                                </div>                               
+                            </div>
+                        </div>
+
+                        </c:if>
+
+
+                  
+
+
                     </div>
                 </div>
 

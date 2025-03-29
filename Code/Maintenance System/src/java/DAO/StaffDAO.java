@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import Model.Staff;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -44,7 +46,7 @@ public class StaffDAO extends DBContext {
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
                 staff.setImage(rs.getString("Image"));
-                staff.setPermission(getPermissionsOfStaff(staff));
+                staff.setPermissions(getPermissionsOfStaff(staff));
                 return staff;
 
             }
@@ -54,8 +56,8 @@ public class StaffDAO extends DBContext {
         return null;
     }
 
-    public List<String> getPermissionsOfStaff(Staff staff) {
-        List<String> list = new ArrayList<>();
+    public Set<String> getPermissionsOfStaff(Staff staff) {
+        Set<String> list = new HashSet<>();
         String sql = """
                      select p.PermissionName from Staff s 
                      join Role_Permissions rp on s.RoleID=rp.RoleID

@@ -13,6 +13,7 @@
                 <div class="d-md-flex align-items-start justify-content-start">
                     <div class="dropdown-mega-list">
                         <a class="dropdown-item" href="LookUpOnline.jsp">Warranty Card</a>
+<<<<<<< HEAD
 
                     
                        
@@ -22,11 +23,19 @@
 
                       
 
+=======
+>>>>>>> 59a6da3c07fbb59d83f630676a0a4d46c22668f2
                     </div>
                 </div>
             </div>
         </li>
     </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link" href="dashBoard">Dashboard</a>
+    </li>
+</ul>
+
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">

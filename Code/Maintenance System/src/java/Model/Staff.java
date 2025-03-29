@@ -3,6 +3,7 @@ package Model;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -21,7 +22,7 @@ public class Staff {
     private String phone;
     private String address;
     private String image;
-    private List<String> permissions;
+    private Set<String> permissions;
     private int count;
     private String str;
     
@@ -33,13 +34,7 @@ public class Staff {
         this.count = count;
         this.str = str;
     }
-    public List<String> getPermission() {
-        return permissions;
-    }
 
-    public void setPermission(List<String> permissions) {
-        this.permissions = permissions;
-    }
 
     public Staff() {
     }
@@ -169,13 +164,15 @@ public class Staff {
         this.image = image;
     } 
 
-    public List<String> getPermissions() {
+    public Set<String> getPermissions() {
         return permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
+    public void setPermissions(Set<String> permissions) {
         this.permissions = permissions;
     }
+
+    
 
     public int getCount() {
         return count;
@@ -195,12 +192,8 @@ public class Staff {
     
     
     public boolean hasPermissions(String per){
-        for (String p : permissions) {
-            if(per.equals(p)){
-                return true;
-            }
-        }
-        return false;
+
+        return permissions.contains(per);
     }
 
     @Override

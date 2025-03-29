@@ -285,6 +285,22 @@
     </head>
 
     <body>
+        
+            <!-- Kiểm tra quyền -->
+                <c:set var="canCreateProduct" value="false"/>
+                <c:set var="canImportProduct" value="false"/>
+                <c:set var="canViewDetailProduct" value="false"/>
+                <c:set var="canDeleteProduct" value="false"/>
+                <c:set var="canDeleteProduct" value="false"/>
+                <c:set var="canDeleteProduct" value="false"/>
+                <c:forEach var="perm" items="${sessionScope.permissionIds}">
+                    <c:if test="${perm == 37}"><c:set var="canCreate" value="true"/></c:if>
+                    <c:if test="${perm == 28}"><c:set var="canImport" value="true"/></c:if>
+                    <c:if test="${perm == 118}"><c:set var="canUpdate" value="true"/></c:if>
+                    <c:if test="${perm == 31}"><c:set var="canDetail" value="true"/></c:if>
+                    <c:if test="${perm == 31}"><c:set var="canDetail" value="true"/></c:if>
+                    <c:if test="${perm == 31}"><c:set var="canDetail" value="true"/></c:if>
+                </c:forEach>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
             <div class="main">
