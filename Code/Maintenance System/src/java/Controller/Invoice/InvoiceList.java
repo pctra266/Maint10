@@ -47,12 +47,13 @@ public class InvoiceList extends HttpServlet {
             throws ServletException, IOException {
         String warrantyCardIDParam = request.getParameter("ID");
         Integer warrantyCardId = FormatUtils.tryParseInt(warrantyCardIDParam);
-
+        HttpSession session = request.getSession();
+        Staff staff = (Staff) session.getAttribute("staff");
         if (warrantyCardId == null || warrantyCardDAO.getWarrantyCardById(warrantyCardId) == null) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard");
             return;
         }
-        if (!checkRightHanderlerId(request, response, warrantyCardId)) {
+        if (!checkRightHanderlerId(request, response, warrantyCardId) && staff.getRole()!=1) {
             response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?canChange=false&ID=" + warrantyCardId);
             return;
         }
