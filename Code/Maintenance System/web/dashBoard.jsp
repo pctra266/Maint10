@@ -173,7 +173,11 @@
                         <c:if test="${staff.hasPermissions('VIEW_PRODUCT_TYPE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ProductType';">
                                 <div class="card">
-                                    <img class="card-img-top" src="" alt="Unsplash">
+
+                                    <!-- <img class="card-img-top" src="img/photos/product-type.png" alt="Unsplash"> -->
+
+                                    <img class="card-img-top" src="img/photos/product_type.jpg" alt="Unsplash">
+
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
                                         <h5 class="card-title mb-0">PRODUCT TYPE</h5>
                                         <div class="badge bg-info my-2">In progress</div>
@@ -283,11 +287,23 @@
                             </div>
                         </c:if>
                         <c:if test="${staff.hasPermissions('COMPONENT_REQUEST_RESPONSIBLE')}">
-                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'componentRequestResponsible';">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'componentRequestResponsible?action=viewComponentRequestResponsible';">
                                 <div class="card">
                                     <img class="card-img-top"  src="img/photos/component-requestlog.jpg" alt="Unsplash">
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
                                         <h5 class="card-title mb-0">COMPONENT REQUEST LOG</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:if>
+                        
+                        <c:if test="${staff.hasPermissions('CHAT_HISTORY')}">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'chatHistory';">
+                                <div class="card">
+                                    <img class="card-img-top"  src="img/photos/chat-history.png" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">CHAT HISTORY</h5>
                                         <div class="badge bg-info my-2">In progress</div>
                                     </div>
                                 </div>
@@ -331,7 +347,7 @@
                                 <div class="card">
                                     <img class="card-img-top" src="img/photos/setting-maxsie.jpg" alt="Unsplash">
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
-                                        <h5 class="card-title mb-0">SETTING</h5>
+                                        <h5 class="card-title mb-0">SETTING FILE SIZE LIMIT</h5>
                                         <div class="badge bg-info my-2">In progress</div>
                                     </div>
                                 </div>
@@ -344,6 +360,18 @@
                                 <img class="card-img-top" src="img/photos/customize-homepage.jpg" alt="Unsplash">
                                 <div class="card-header px-4 pt-4" style="text-align: center">                       
                                     <h5 class="card-title mb-0">CUSTOMIZE HOMEPAGE</h5>
+                                    <div class="badge bg-info my-2">In progress</div>
+                                </div>                               
+                            </div>
+                        </div>
+
+                        </c:if>
+                        <c:if test="${staff.hasPermissions('PERMISSION')}">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'permissions';">
+                            <div class="card">
+                                <img class="card-img-top" src="img/photos/profile.jpg" alt="Unsplash">
+                                <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                    <h5 class="card-title mb-0">PERMISSION</h5>
                                     <div class="badge bg-info my-2">In progress</div>
                                 </div>                               
                             </div>
@@ -373,10 +401,6 @@
                         </div>
 
                         </c:if>
-
-
-                  
-
 
                     </div>
                 </div>

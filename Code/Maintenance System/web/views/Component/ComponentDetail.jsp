@@ -268,7 +268,7 @@
 
                                 <c:if test="${not empty component}">
                                     <button type="button" id="deleteMediaButton" class="btn btn-danger" style="position: absolute; top: 60px; right: 20px;" onclick="deleteCurrentMedia()">
-                                        <i class="fa fa-trash"></i> Delete
+                                        <i class="fa fa-trash"></i>
                                     </button>
                                 </c:if>
                                 </c:if>

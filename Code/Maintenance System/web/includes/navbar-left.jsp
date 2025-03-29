@@ -17,10 +17,9 @@
                                                 ${sessionScope.staff.name}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-start">
-                                                <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                                                <a class="dropdown-item" href="profile"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
                                                 <a class="dropdown-item" href="ChangePasswordForm.jsp"><i class="align-middle me-1" data-feather="pie-chart"></i> Change Password</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="pages-settings.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
                                                 <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
                                                 <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="logout">Log out</a>
