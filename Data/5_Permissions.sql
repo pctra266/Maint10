@@ -45,14 +45,14 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CHANGE_PASSWORD_FORM_JSP', '/ChangePasswordForm.jsp'),
 ('CHANGE_PASSWORD', '/changepassword'),
 ('VIEW_PROFILE', '/profile'),
-('VIEW_FEEDBACK', 'feedback?action=viewFeedback'),
+('VIEW_FEEDBACK', '/feedback?action=viewFeedback'),
 ('DELETE_FEEDBACK', '/feedback?action=deleteFeedback'),
 ('UPDATE_FEEDBACK', '/feedback?action=updateFeedback'),
 ('VIEW_FEEDBACK_LOG', '/feedbacklog?action=viewListFeedbackLog'),
 ('UNDO_FEEDBACK_LOG', '/feedbacklog?action=undoFeedback'),
 ('UPDATE_MAX_SIZE', '/updateMaxSize'),
 ('ADMIN_DASHBOARD_JSP', '/adminDashboard.jsp'),
-('COMPONENT_REQUEST_RESPONSIBLE', '/componentRequestResponsible'),
+('COMPONENT_REQUEST_RESPONSIBLE', '/componentRequestResponsible?action=viewComponentRequestResponsible'),
 ('CUSTOMIZE_HOMEPAGE', '/customizeHomepage'),
 ('UPDATE_COVER', '/updateCover'),
 ('FOOTER_CONTROLLER', '/FooterController'),
@@ -69,9 +69,9 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('GENERAL_DASHBOARD', '/dashBoard'),
 ('LIST_UNKNOWN', '/listUnknown'),
 ('ADD_UNKNOWN', '/addUnknown'),
-('VIEW_COMPONENT_REQUEST', '/componentRequest'),
+('VIEW_COMPONENT_REQUEST', '/componentRequest?action=viewComponentRequestDashboard'),
 ('CREATE_SUPPLEMENT_REQUEST', '/supplementRequest?action=createSupplementRequest'),
-('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest'),
+('VIEW_SUPPLEMENT_REQUEST', '/supplementRequest?action=listSupplementRequest'),
 ('CREATE_COMPONENT_REQUEST', '/componentRequest?action=createComponentRequest'),
 ('ADD_COMPONENT_IN_REQUEST', '/componentRequest?action=addComponent'),
 ('REMOVE_COMPONENT_FROM_REQUEST', '/componentRequest?action=removeComponent'),
@@ -88,7 +88,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CREATE_REPAIR_INVOICE', '/repairCreateInvoice'),
 ('VIEW_INVOICE_DETAIL', '/invoiceDetail'),
 ('CUSTOMER_CONTACT', '/customerContact'),
-('VIEW_PACKAGE_WARRANTY', '/packageWarranty'),
+('VIEW_PACKAGE_WARRANTY', '/packageWarranty?action=view'),
 ('EDIT_PACKAGE_WARRANTY', '/packageWarranty?action=edit'),
 ('EXTEND_WARRANTY_DEFAULT', '/extendWarranty?action=extendDefault'),
 ('EXTEND_WARRANTY_EXTENDED', '/extendWarranty?action=extendExtended'),
@@ -118,6 +118,8 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('IMPORT_COMPONENTS_2', '/ComponentWarehouse?action=clearErrorComponents'),
 ('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update'),
 ('PAY_FOR_OUTSOURCE', '/Invoice/PayOutsource')
+
+
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -238,6 +240,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,116),(3,116),
 (1,117),(3,117),
 (1,118),(2,118)
+
 
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update')
