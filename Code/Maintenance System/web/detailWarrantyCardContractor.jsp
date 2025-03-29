@@ -346,8 +346,6 @@
 
                             <div class="section">
                                 <h2>Actions</h2>
-
-                                <h2>${warrantyDetails.lastProcessStatus}</h2>
                                 <div class="action-buttons">
                                     <c:choose>
                                         <c:when test="${warrantyDetails.lastProcessStatus eq 'receive_outsource'}">
@@ -427,7 +425,7 @@
                                         </c:otherwise>
                                     </c:choose>
 
-                                    <c:if test="${warrantyDetails.contractorStatus eq 'done'}">
+                                    <c:if test="${warrantyDetails.contractorStatuses eq '[done]'}">
                                         <form action="repairCreateInvoice" method="post">
                                             <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
                                             <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
