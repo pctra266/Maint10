@@ -655,68 +655,83 @@ public class WarrantyCardDAO extends DBContext {
      * @param code
      * @return
      */
-    public WarrantyCard getWarrantyCardByPhoneAndCode(String phone, String code) {
+  public WarrantyCard getWarrantyCardByPhoneAndCode(String phone, String code) {
+    String sql = "SELECT \n"
+            + "    wc.WarrantyCardID,\n"
+            + "    wc.WarrantyCardCode,\n"
+            + "    pd.ProductDetailID,\n"
+            + "    up.UnknownProductID,\n"
+            + "    p.Code,\n"
+            + "    wc.IssueDescription,\n"
+            + "    wc.WarrantyStatus,\n"
+            + "    wc.CreatedDate,\n"
+            + "    wc.ReturnDate,\n"
+            + "    wc.DoneDate,\n"
+            + "    wc.CompleteDate,\n"
+            + "    wc.CancelDate,\n"
+            + "    p.ProductName AS KnownProductName,\n"
+            + "    up.ProductName AS UnknownProductName,\n"
+            + "    COALESCE(c1.CustomerID, c2.CustomerID) AS CustomerID,\n"
+            + "    COALESCE(c1.Name, c2.Name) AS CustomerName,\n"
+            + "    COALESCE(c1.Phone, c2.Phone) AS CustomerPhone\n"
+            + "FROM WarrantyCard wc\n"
+            + "LEFT JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID\n"
+            + "LEFT JOIN ProductDetail pd ON pd.ProductDetailID = wp.ProductDetailID\n"
+            + "LEFT JOIN Product p ON p.ProductID = pd.ProductID\n"
+            + "LEFT JOIN Customer c1 ON pd.CustomerID = c1.CustomerID\n"
+            + "LEFT JOIN UnknownProduct up ON up.UnknownProductID = wp.UnknownProductID\n"
+            + "LEFT JOIN Customer c2 ON c2.CustomerID = up.CustomerID\n"
+            + "WHERE COALESCE(c1.Phone, c2.Phone) = ? AND wc.WarrantyCardCode = ?";
 
-        String sql = "SELECT wc.WarrantyCardID,\n"
-                + "       wc.WarrantyCardCode,\n"
-                + "	   pd.ProductDetailID,\n"
-                + "	   up.UnknownProductID,\n"
-                + "	   p.Code,\n"
-                + "	   wc.IssueDescription,\n"
-                + "	   wc.WarrantyStatus,\n"
-                + "	   wc.CreatedDate,\n"
-                + "	   wc.ReturnDate,\n"
-                + "	   wc.DoneDate,\n"
-                + "	   wc.CompleteDate,\n"
-                + "	   wc.CancelDate,\n"
-                + "	   p.ProductName,\n"
-                + "	   c.CustomerID,\n"
-                + "	   c.Name,\n"
-                + "	   c.Phone\n"
-                + "\n"
-                + "\n"
-                + "FROM WarrantyCard wc LEFT JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID\n"
-                + "                     \n"
-                + "                     LEFT JOIN ProductDetail pd ON pd.ProductDetailID = wp.ProductDetailID\n"
-                + "					 LEFT JOIN Product p ON p.ProductID = pd.ProductID\n"
-                + "					 LEFT JOIN Customer c ON c.CustomerID = pd.CustomerID\n"
-                + "					 LEFT JOIN UnknownProduct up ON up.CustomerID = c.CustomerID\n"
-                + "					 WHERE c.Phone = ? AND wc.WarrantyCardCode =?\n"
-                + "		 ";
+    try {
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, phone);
+        ps.setString(2, code);
+        ResultSet rs = ps.executeQuery();
 
-        try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setString(1, phone);
-            ps.setString(2, code);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                WarrantyCard warrantyCard = new WarrantyCard();
-                warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
-                warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
-                warrantyCard.setProductDetailID(rs.getInt("ProductDetailID"));
-                warrantyCard.setUnknownProductID(rs.getInt("UnknownProductID"));
-                warrantyCard.setProductCode(rs.getString("Code"));
-                warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
-                warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
-                warrantyCard.setCreatedDate(rs.getDate("CreatedDate"));
-                warrantyCard.setReturnDate(rs.getDate("ReturnDate"));
-                warrantyCard.setDonedDate(rs.getDate("DoneDate"));
-                warrantyCard.setCompletedDate(rs.getDate("CompleteDate"));
-                warrantyCard.setCanceldDate(rs.getDate("CancelDate"));
-                warrantyCard.setImages(getMediaURLs(warrantyCard.getWarrantyCardID(), "image"));
-                warrantyCard.setVideos(getMediaURLs(warrantyCard.getWarrantyCardID(), "video"));
-                warrantyCard.setProductName(rs.getString("ProductName"));
-                warrantyCard.setCustomerID(rs.getInt("CustomerID"));
-                warrantyCard.setCustomerName(rs.getString("Name"));
-                warrantyCard.setCustomerPhone(rs.getString("Phone"));
-                return warrantyCard;
+        if (rs.next()) {
+            WarrantyCard warrantyCard = new WarrantyCard();
+            warrantyCard.setWarrantyCardID(rs.getInt("WarrantyCardID"));
+            warrantyCard.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
+            warrantyCard.setProductDetailID(rs.getInt("ProductDetailID"));
 
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
+            // Xử lý UnknownProductID nếu NULL
+            int unknownProductID = rs.getInt("UnknownProductID");
+            if (rs.wasNull()) unknownProductID = -1;
+            warrantyCard.setUnknownProductID(unknownProductID);
+
+            warrantyCard.setProductCode(rs.getString("Code"));
+            warrantyCard.setIssueDescription(rs.getString("IssueDescription"));
+            warrantyCard.setWarrantyStatus(rs.getString("WarrantyStatus"));
+            warrantyCard.setCreatedDate(rs.getDate("CreatedDate"));
+            warrantyCard.setReturnDate(rs.getDate("ReturnDate"));
+            warrantyCard.setDonedDate(rs.getDate("DoneDate"));
+            warrantyCard.setCompletedDate(rs.getDate("CompleteDate"));
+            warrantyCard.setCanceldDate(rs.getDate("CancelDate"));
+
+            // Lấy danh sách hình ảnh & video
+            warrantyCard.setImages(getMediaURLs(warrantyCard.getWarrantyCardID(), "image"));
+            warrantyCard.setVideos(getMediaURLs(warrantyCard.getWarrantyCardID(), "video"));
+
+            // Sửa alias lấy ProductName
+            warrantyCard.setProductName(rs.getString("KnownProductName") != null ? 
+                                        rs.getString("KnownProductName") : rs.getString("UnknownProductName"));
+
+            // Lấy thông tin Customer
+            int customerID = rs.getInt("CustomerID");
+            if (rs.wasNull()) customerID = -1;
+            warrantyCard.setCustomerID(customerID);
+
+            warrantyCard.setCustomerName(rs.getString("CustomerName"));
+            warrantyCard.setCustomerPhone(rs.getString("CustomerPhone"));
+
+            return warrantyCard;
         }
-        return null;
+    } catch (SQLException e) {
+        e.printStackTrace(); // In lỗi chi tiết
     }
+    return null;
+}
 
     public WarrantyCard getWarrantyCardById(int id) {
         return getWarrantyCardByField("WarrantyCardID", id + "");

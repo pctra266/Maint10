@@ -138,7 +138,7 @@ public class AuthenticationFilter implements Filter {
                 "/BlogController", "/BlogController?action=More", "/changepassword",
                 "/img/serviceItems/","/Notification/GetUnread","/Notification/MarkRead","/Redirect",
                 "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp","/customerContactForm.jsp"
-                        ,"/dashBoard","/LookUpOnline.jsp","/lookuponline");
+                        ,"/dashBoard","/LookUpOnline.jsp","/lookuponline","/forgotpassword");
 
         // Danh sách URL mà Customer được phép truy cập
         Set<String> CUSTOMER_ALLOWED_URLS = Set.of(

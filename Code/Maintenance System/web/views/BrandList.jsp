@@ -45,7 +45,7 @@
                     <a href="ComponentWarehouse" class="btn btn-primary  d-flex align-items-center justify-content-center" style="transform:translate(-30%,-60%); height: 2.5rem; width: 5.2rem"><i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span> </a>
 
                     <h2>Brand List</h2>
-
+                    
                     <!-- Thông báo -->
                     <c:if test="${not empty successMessage}">
                         <div class="alert alert-success alert-dismissible" role="alert">
@@ -172,6 +172,25 @@
                                             </a>
                                         </td>
                                     </c:if>
+
+                                </tr>
+
+                                <!-- Modal Xóa -->
+                            <div class="modal fade" id="deleteBrandModal_${brand.brandId}" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Delete Confirmation</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body m-3">
+                                            <p class="mb-0">Confirm your action. Really want to delete brand "<strong>${brand.brandName}</strong>"?</p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                            <a href="Brand?action=delete&brandID=${brand.brandId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
+                                               class="btn btn-primary">Delete</a>
+
                                     </tr>
 
                                     <!-- Modal Xóa -->
@@ -190,6 +209,7 @@
                                                 <a href="Brand?action=delete&brandID=${brand.brandId}&page=${pagination.currentPage}&page-size=${pagination.pageSize}&search=${pagination.searchValues[0]}&sort=${pagination.sort}&order=${pagination.order}" 
                                                    class="btn btn-primary">Delete</a>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>

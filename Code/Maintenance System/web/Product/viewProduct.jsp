@@ -285,6 +285,22 @@
     </head>
 
     <body>
+
+        <!-- Kiểm tra quyền -->
+        <c:set var="canCreateProduct" value="false"/>
+        <c:set var="canImportProduct" value="false"/>
+        <c:set var="canViewDetailProduct" value="false"/>
+        <c:set var="canDeleteProduct" value="false"/>
+        <c:set var="canExternalProduct" value="false"/>
+
+        <c:forEach var="perm" items="${sessionScope.permissionIds}">
+            <c:if test="${perm == 37}"><c:set var="canCreateProduct" value="true"/></c:if>
+            <c:if test="${perm == 0}"><c:set var="canImportProduct" value="true"/></c:if>
+            <c:if test="${perm == 118}"><c:set var="canViewDetailProduct" value="true"/></c:if>
+            <c:if test="${perm == 124}"><c:set var="canDeleteProduct" value="true"/></c:if>
+            <c:if test="${perm == 69}"><c:set var="canExternalProduct" value="true"/></c:if>
+
+        </c:forEach>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
             <div class="main">
@@ -380,13 +396,22 @@
                                 <i class="fas fa-list"></i> All Product
                             </button>
 
-                            <a href="viewProduct?action=add" class="nut">
-                                <i class="fas fa-plus-square"></i> Add Product
-                            </a>
 
-                            <a href="listUnknown" class="nut">
-                                <i class="fas fa-box-open"></i> External Product
-                            </a>
+                            <c:if test="${canCreateProduct}">
+                                <a href="viewProduct?action=add" class="nut">
+                                    <i class="fas fa-plus-square"></i> Add Product
+                                </a>
+
+                            </c:if>
+
+                            <c:if test="${canExternalProduct}">
+                                <a href="listUnknown" class="nut">
+                                    <i class="fas fa-box-open"></i> External Product
+                                </a>
+
+                            </c:if>
+
+                          
                         </div>
                     </div>
 
@@ -437,12 +462,18 @@
                                         <td style="width: 14%;">
                                             <!-- Bọc 2 nút vào .action-buttons -->
                                             <div class="action-buttons">
-                                                <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
-                                                    <i class="fas fa-edit"></i> Update
-                                                </a>
-                                                <a href="viewProduct?action=delete&id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
-                                                    <i class="fas fa-trash-alt"></i> Delete
-                                                </a>
+                                                <c:if test="${canViewDetailProduct}">
+                                                    <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
+                                                        <i class="fas fa-edit"></i> Update
+                                                    </a>
+                                                </c:if>
+                                                <c:if test="${canDeleteProduct}">
+                                                    <a href="viewProduct?action=delete&id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
+                                                        <i class="fas fa-trash-alt"></i> Delete
+                                                    </a>
+
+                                                </c:if>
+
                                             </div>
                                         </td>
                                     </tr>
@@ -480,69 +511,69 @@
 
         <script src="js/app.js"></script>
         <script>
-                                                document.getElementById("sortQuantity").addEventListener("change", function () {
-                                                    let url = new URL(window.location.href);
-                                                    url.searchParams.set("sortQuantity", this.value);
-                                                    // Xoá sortWarranty để tránh xung đột
-                                                    url.searchParams.delete("sortWarranty");
-                                                    window.location.href = url;
-                                                });
+                                                        document.getElementById("sortQuantity").addEventListener("change", function () {
+                                                            let url = new URL(window.location.href);
+                                                            url.searchParams.set("sortQuantity", this.value);
+                                                            // Xoá sortWarranty để tránh xung đột
+                                                            url.searchParams.delete("sortWarranty");
+                                                            window.location.href = url;
+                                                        });
 
-                                                document.getElementById("sortWarranty").addEventListener("change", function () {
-                                                    let url = new URL(window.location.href);
-                                                    url.searchParams.set("sortWarranty", this.value);
-                                                    // Xoá sortQuantity để tránh xung đột
-                                                    url.searchParams.delete("sortQuantity");
-                                                    window.location.href = url;
-                                                });
+                                                        document.getElementById("sortWarranty").addEventListener("change", function () {
+                                                            let url = new URL(window.location.href);
+                                                            url.searchParams.set("sortWarranty", this.value);
+                                                            // Xoá sortQuantity để tránh xung đột
+                                                            url.searchParams.delete("sortQuantity");
+                                                            window.location.href = url;
+                                                        });
 
-                                                function validateCode() {
-                                                    let input = document.getElementById("searchCode");
-                                                    let value = input.value;
-                                                    if (!/^[a-zA-Z0-9]*$/.test(value)) {
-                                                        alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
-                                                        input.value = value.replace(/[^a-zA-Z0-9]/g, "");
-                                                    }
-                                                }
-
-                                                document.getElementById("importExcel").addEventListener("change", function () {
-                                                    let file = this.files[0];
-                                                    if (file) {
-                                                        let maxSize = 5 * 1024 * 1024; // 5MB
-                                                        if (file.size > maxSize) {
-                                                            alert("File không được vượt quá 5MB!");
-                                                            this.value = "";
+                                                        function validateCode() {
+                                                            let input = document.getElementById("searchCode");
+                                                            let value = input.value;
+                                                            if (!/^[a-zA-Z0-9]*$/.test(value)) {
+                                                                alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
+                                                                input.value = value.replace(/[^a-zA-Z0-9]/g, "");
+                                                            }
                                                         }
-                                                    }
-                                                });
 
-                                                function toggleCustomRecords() {
-                                                    var select = document.getElementById("recordsPerPageSelect");
-                                                    var customInput = document.getElementById("customRecordsPerPage");
-                                                    if (select.value === "custom") {
-                                                        customInput.style.display = "inline-block";
-                                                    } else {
-                                                        customInput.style.display = "none";
-                                                    }
-                                                }
+                                                        document.getElementById("importExcel").addEventListener("change", function () {
+                                                            let file = this.files[0];
+                                                            if (file) {
+                                                                let maxSize = 5 * 1024 * 1024; // 5MB
+                                                                if (file.size > maxSize) {
+                                                                    alert("File không được vượt quá 5MB!");
+                                                                    this.value = "";
+                                                                }
+                                                            }
+                                                        });
 
-                                                function applyRecordsPerPage() {
-                                                    var select = document.getElementById("recordsPerPageSelect");
-                                                    var recordsPerPage;
-                                                    if (select.value === "custom") {
-                                                        recordsPerPage = document.getElementById("customRecordsPerPage").value;
-                                                        if (recordsPerPage < 1) {
-                                                            alert("Number must be at least 1!");
-                                                            return;
+                                                        function toggleCustomRecords() {
+                                                            var select = document.getElementById("recordsPerPageSelect");
+                                                            var customInput = document.getElementById("customRecordsPerPage");
+                                                            if (select.value === "custom") {
+                                                                customInput.style.display = "inline-block";
+                                                            } else {
+                                                                customInput.style.display = "none";
+                                                            }
                                                         }
-                                                    } else {
-                                                        recordsPerPage = select.value;
-                                                    }
-                                                    let url = new URL(window.location.href);
-                                                    url.searchParams.set("recordsPerPage", recordsPerPage);
-                                                    url.searchParams.set("page", "1");
-                                                    window.location.href = url;
-                                                }
+
+                                                        function applyRecordsPerPage() {
+                                                            var select = document.getElementById("recordsPerPageSelect");
+                                                            var recordsPerPage;
+                                                            if (select.value === "custom") {
+                                                                recordsPerPage = document.getElementById("customRecordsPerPage").value;
+                                                                if (recordsPerPage < 1) {
+                                                                    alert("Number must be at least 1!");
+                                                                    return;
+                                                                }
+                                                            } else {
+                                                                recordsPerPage = select.value;
+                                                            }
+                                                            let url = new URL(window.location.href);
+                                                            url.searchParams.set("recordsPerPage", recordsPerPage);
+                                                            url.searchParams.set("page", "1");
+                                                            window.location.href = url;
+                                                        }
         </script>
 
         <!-- Carousel chuyển ảnh -->

@@ -7,6 +7,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Invoice List</title>
         <base href="${pageContext.request.contextPath}/">
+                <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+
         <link href="css/light.css" rel="stylesheet">
         <%--vnpay --%>
         <script src="js/jquery-1.11.3.min.js"></script>

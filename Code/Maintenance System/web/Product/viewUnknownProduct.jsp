@@ -298,9 +298,16 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
-                
-                    <h2 style="text-align: center">List of Unknown Products</h2>
 
+                    <h2 style="text-align: center">List of Unknown Products</h2>
+                    <c:set var="addUnknowProduct" value="false"/>
+                    <c:set var="createRepairRequest" value="false"/>
+
+                    <c:forEach var="perm" items="${sessionScope.permissionIds}">
+                        <c:if test="${perm == 0}"><c:set var="addUnknowProduct" value="true"/></c:if>
+                        <c:if test="${perm == 0}"><c:set var="createRepairRequest" value="true"/></c:if>
+
+                    </c:forEach>
                     <form action="listUnknown" method="get">
                         <input type="text" id="productCode" name="productCode" 
                                placeholder="Product Code" 
@@ -369,10 +376,11 @@
                                value="<c:out value='${pageSize != 5 && pageSize != 10 && pageSize != 15 && pageSize != 20 && pageSize != 25 ? pageSize : ""}'/>"
                                style="display: none;" />
                         <button type="submit">Apply</button>
-
-                        <a href="addUnknown" class="button">
-                            Add Unknown Product
-                        </a>
+                        <c:if test="${addUnknowProduct}">
+                            <a href="addUnknowProduct" class="button">
+                                Add Unknown Product
+                            </a>                   
+                        </c:if>
 
                         <button class="search" onclick="window.location.href = 'listUnknown'">
                             All Product
@@ -393,7 +401,12 @@
                                 <th>Received Date</th>
                                 <th>Customer Name</th>
                                 <th>Customer Phone</th>
-                                <th>Action</th>
+
+                                <c:if test="${createRepairRequest}">
+                                    <th>Actions</th>
+                                    </c:if>
+
+
                             </tr>
                         </thead>
                         <tbody>
@@ -417,6 +430,7 @@
                                             <input type="hidden" name="type" value="display">
                                             <button type="submit">Create a Repair Request</button>
                                         </form>
+
                                     </td>
                                 </tr>
                             </c:forEach>

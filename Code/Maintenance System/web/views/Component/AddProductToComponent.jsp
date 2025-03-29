@@ -8,6 +8,8 @@
     <title>Add Product to Component</title>
     <base href="${pageContext.request.contextPath}/">
     <link href="css/light.css" rel="stylesheet">
+            <link rel="shortcut icon" href="icons/icon-48x48.png" />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>

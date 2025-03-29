@@ -10,6 +10,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Add Extended Warranty</title>
+        <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
         <link rel="stylesheet" href="css/light.css">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">

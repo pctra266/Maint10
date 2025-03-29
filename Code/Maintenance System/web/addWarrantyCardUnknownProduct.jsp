@@ -13,7 +13,8 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-        <link
+               <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
+ <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
             integrity="sha512-ac6U9Cqcbn6K6q/73mITJGF0fjLWWZwUczEzKNnZHRrRLz63HJfiAgPRQd3kNn6BW9rBS71hbPkdoL7q2/EvWA=="
