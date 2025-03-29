@@ -51,16 +51,6 @@
                                                     Change Password
                                                 </a>
 
-                                                <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" href="pages-settings.html">
-                                                    <i class="align-middle me-1" data-feather="settings"></i> 
-                                                    Settings & Privacy
-                                                </a>
-                                                <a class="dropdown-item" href="#">
-                                                    <i class="align-middle me-1" data-feather="help-circle"></i> 
-                                                    Help Center
-                                                </a>
-                                                <div class="dropdown-divider"></div>
                                                 <a class="dropdown-item" href="logout">Log out</a>
                                             </div>
                                             <div class="sidebar-user-subtitle">Customer</div>
@@ -90,17 +80,6 @@
 
 
                                     <li class="sidebar-item">
-                                        <a class="sidebar-link" href="InvoiceController">
-                                            <!-- ??i sang icon file (bi?u t??ng cho Invoice) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file align-middle">
-                                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                                            <polyline points="14 2 14 8 20 8"></polyline>
-                                            </svg> 
-                                            <span class="align-middle">Invoice</span>
-                                        </a>
-                                    </li>
-
-                                    <li class="sidebar-item">
                                         <a class="sidebar-link" href="feedback?action=viewFeedbackDashboard">
                                             <!-- ??i sang icon message-circle (Feedback dành cho Customer) -->
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-message-circle align-middle">
@@ -111,26 +90,7 @@
                                     </li>
 
 
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="packageWarranty?action=view">
-                                            <!-- ??i sang icon shield (List Package Warranty) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield align-middle">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                            </svg> 
-                                            <span class="align-middle">List Package Warranty</span>
-                                        </a>
-                                    </li>
 
-                                    <li class="sidebar-item">
-                                        <a class="sidebar-link" href="extendedWarranty">
-                                            <!-- ??i sang icon shield-off (Extended Warranty List) -->
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-shield-off align-middle">
-                                            <path d="M3 3l18 18"></path>
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                                            </svg> 
-                                            <span class="align-middle">Extended Warranty List</span>
-                                        </a>
-                                    </li>
 
 
                                     <li class="sidebar-item">
