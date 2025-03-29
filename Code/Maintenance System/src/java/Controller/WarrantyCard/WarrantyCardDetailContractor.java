@@ -24,10 +24,12 @@ public class WarrantyCardDetailContractor extends HttpServlet {
             throws ServletException, IOException {
         WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
         String idStr = request.getParameter("cardId");
-        if (idStr == null || idStr.trim().isEmpty()) {
-            response.getWriter().write("Parameter warrantyCardId is required.");
+        // Kiểm tra nếu idStr không phải là số hợp lệ
+        if (idStr == null || idStr.trim().isEmpty() || !idStr.matches("\\d+")) {
+            request.getRequestDispatcher("404Page.jsp").forward(request, response);
             return;
         }
+
         int warrantyCardId = Integer.parseInt(idStr);
         Map<String, Object> warrantyDetails = warrantyCardDAO.getWarrantyCardDetailsMap(warrantyCardId);
         request.setAttribute("warrantyDetails", warrantyDetails);
@@ -83,7 +85,7 @@ public class WarrantyCardDetailContractor extends HttpServlet {
         //process lay tu session
         HttpSession session = request.getSession();
         Staff currentStaff = (Staff) session.getAttribute("staff");
-        if(currentStaff!=null){
+        if (currentStaff != null) {
             staffId = currentStaff.getStaffID();
         }
         boolean processUpdated = warrantyCardDAO.addWarrantyCardProcess(warrantyCardId, staffId, subStatus, note);

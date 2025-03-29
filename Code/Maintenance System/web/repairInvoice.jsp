@@ -177,6 +177,10 @@
                         <input type="hidden" name="warrantyCardID" value="${param.cardId}" />
 
                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
+                        
+                        <button class="btn btn-invoice" type="button">
+                            <a style="color: white; text-decoration: none   " href="warrantyCardRepairContractor">Back</a>
+                        </button>
                         <button type="button" class="btn" 
                                 style="background-color: #dc3545; margin-left: 10px;"
                                 onclick="window.history.back();">
