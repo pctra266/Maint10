@@ -203,16 +203,18 @@ public class CustomerServlet extends HttpServlet {
 
         String customerImage;
         if (fileName == null || fileName.isEmpty()) {
-            customerImage = "img/avatar/defaultavatar.jpg";
+            customerImage = "img/avatars/defaultavatar.jpg";
         } else {
 
-            String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
+            String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatars";
             File uploadDir = new File(uploadPath);
             if (!uploadDir.exists()) {
                 uploadDir.mkdirs();
             }
+            System.out.println("Upload Path: " + uploadPath);
+
             filePart.write(uploadPath + File.separator + fileName);
-            customerImage = "img/avatar/" + fileName;
+            customerImage = "img/avatars/" + fileName;
         }
 
         // Check image
@@ -284,13 +286,13 @@ public class CustomerServlet extends HttpServlet {
 
             } else {
 
-                String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatar";
+                String uploadPath = getServletContext().getRealPath("") + File.separator + "img" + File.separator + "avatars";
                 File uploadDir = new File(uploadPath);
                 if (!uploadDir.exists()) {
                     uploadDir.mkdirs();
                 }
                 filePart.write(uploadPath + File.separator + fileName);
-                customerImage = "img/avatar/" + fileName;
+                customerImage = "img/avatars/" + fileName;
             }
             if (username.isBlank() || password.isBlank() || customerName.isBlank()
                     || customerGender.isBlank() || customerEmail.isBlank() || customerPhone.isBlank()
