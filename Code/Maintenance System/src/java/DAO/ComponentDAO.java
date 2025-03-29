@@ -794,47 +794,6 @@ public class ComponentDAO extends DBContext {
         return false;  // Trả về false nếu có lỗi hoặc không tìm thấy
     }
 
-    public static void main(String arg[]) throws SQLException {
-        ComponentDAO d = new ComponentDAO();
-        String searchCode = "";
-        String searchName = "MA";
-        String searchQuantity = "";
-        String searchPrice = "";
-        int page = 1;
-        int pageSize = 5;
-        String sort = "ComponentCode";
-        String order = "asc";
-        String search = "MA";
-        Double minPrice = d.getPriceMin();
-        Double maxPrice = d.getPriceMax();
-        Integer maxQuantity = d.getQuantityMax();
-        Integer minQuantity = d.getQuantityMin();
-        System.out.println(d.getAllComponents());
-        System.out.println("--------------");
-        System.out.println(d.isComponentCodeExist("MB-LEN-X12"));
-        System.out.println(d.getListType());
-        System.out.println(d.getBrandID("Apple"));
-        System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));
-        System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, 1, 5, sort, order, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
-        System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
-        System.out.println("-----");
-        System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
-        System.out.println("-------------");
-        System.out.println(d.getComponentsByPageSorted(page, pageSize, sort, order));
-        System.out.println(d.getTotalSearchComponents(search));
-        System.out.println(d.searchComponentsByPage(search, page, pageSize));
-        System.out.println(d.getLast());
-        System.out.println(d.getComponentByID(2));
-        System.out.println(d.getTotalComponents());
-        System.out.println(d.getComponentsByPage(page, pageSize));
-        System.out.println(d.getAllComponents());
-        System.out.println(d.getProductsByComponentId(3));
-        System.out.println(d.getPriceMin());
-        System.out.println(d.getPriceMax());
-        System.out.println(d.getQuantityMax());
-        System.out.println(d.getQuantityMin());
-    }
-
     private Component mapComponent(ResultSet rs) throws SQLException {
         Component component = new Component();
         component.setComponentID(rs.getInt("ComponentID"));
@@ -882,5 +841,50 @@ public class ComponentDAO extends DBContext {
             return false;
         }
     }
+    
+    
+    public static void main(String arg[]) throws SQLException {
+        ComponentDAO d = new ComponentDAO();
+        String searchCode = "";
+        String searchName = "MA";
+        String searchQuantity = "";
+        String searchPrice = "";
+        int page = 1;
+        int pageSize = 5;
+        String sort = "ComponentCode";
+        String order = "asc";
+        String search = "MA";
+        Double minPrice = d.getPriceMin();
+        Double maxPrice = d.getPriceMax();
+        Integer maxQuantity = d.getQuantityMax();
+        Integer minQuantity = d.getQuantityMin();
+        System.out.println(d.getAllComponents());
+        System.out.println("--------------");
+        System.out.println(d.isComponentCodeExist("MB-LEN-X12"));
+        System.out.println(d.getListType());
+        System.out.println(d.getBrandID("Apple"));
+        System.out.println("______________----------_____________");
+        System.out.println(d.searchComponentsByFieldsPage("", "", page, pageSize, null, null, minQuantity, maxQuantity, minPrice, maxPrice));
+        System.out.println(d.searchComponentsByFieldsPageSorted(searchCode, searchName, 1, 5, sort, order, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
+        System.out.println(d.getTotalSearchComponentsByFields(searchCode, searchName, 1, 1, minQuantity, maxQuantity, minPrice, maxPrice));
+        System.out.println("-----");
+        System.out.println(d.searchComponentsByPageSorted(search, page, pageSize, sort, order));
+        System.out.println("-------------");
+        System.out.println(d.getComponentsByPageSorted(page, pageSize, sort, order));
+        System.out.println(d.getTotalSearchComponents(search));
+        System.out.println(d.searchComponentsByPage(search, page, pageSize));
+        System.out.println(d.getLast());
+        System.out.println(d.getComponentByID(2));
+        System.out.println(d.getTotalComponents());
+        System.out.println(d.getComponentsByPage(page, pageSize));
+        System.out.println(d.getAllComponents());
+        System.out.println(d.getProductsByComponentId(3));
+        System.out.println(d.getPriceMin());
+        System.out.println(d.getPriceMax());
+        System.out.println(d.getQuantityMax());
+        System.out.println(d.getQuantityMin());
+    }
 
+
+    
 }

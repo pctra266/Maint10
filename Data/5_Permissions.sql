@@ -14,7 +14,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('VIEW_COMPONENT_DETAIL', '/ComponentWarehouse/Detail'),
 ('EDIT_COMPONENT', '/ComponentWarehouse/Edit'),
 ('ADD_COMPONENT_INTO_PRODUCT', '/ComponentWarehouse/AddProductToComponent'),
-('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?ID=?&product=?'),
+('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?action=remove'),
 ('EXPORT_COMPONENTS', '/ExportComponents'),
 ('IMPORT_COMPONENTS', '/ImportComponents'),
 ('VIEW_WARRANTY_CARD', '/WarrantyCard'),
@@ -94,7 +94,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('LIST_INVOICE_REPAIR', '/listInvoiceRepair'),
 ('CREATE_REPAIR_INVOICE', '/repairCreateInvoice'),
 ('VIEW_INVOICE_DETAIL', '/invoiceDetail'),
-('CUSTOMER_CONTACT', '/customerContact'),
+('CUSTOMER_CONTACT', '/customerContact?action=view'),
 ('VIEW_PACKAGE_WARRANTY', '/packageWarranty?action=view'),
 ('EDIT_PACKAGE_WARRANTY', '/packageWarranty?action=edit'),
 ('EXTEND_WARRANTY_DEFAULT', '/extendWarranty?action=extendDefault'),
@@ -128,8 +128,8 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('EXPORT_INVOICE_PDF_REPAIR', '/exportInvoicePDF'),
 ('VIEW_DETAIL_WARRANTYCARD_CONTRACTOR', '/warrantyCardDetailContractor'),
 ('PERMISSION ', '/permissions'),
-('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp')
-
+('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp'),
+('DELETE_PRODUCT', '/viewProduct?action=delete')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -227,7 +227,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,93),(5,93),
 (1,94),(2,94),(3,94),(4,94),(5,94),
 (1,95),
-(1,96),(3,96),
+(1,96),
 (1,97),(2,97),(3,97),(4,97),(5,97),
 (1,98),(2,98),(3,98),(4,98),(5,98),
 (2,99),
@@ -237,7 +237,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (2,103),
 (2,104),
 (2,105),
-(2,106),(3,106),
+(2,106),
 (1,107),(2,107),
 (1,108),(2,108),
 (1,109),(2,109),
@@ -254,7 +254,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (4,120),
 (4,121),
 (1,122),
-(1,123),(2,123)
-
+(1,123),(2,123),
+(1,124),(2,124),(3,124)
 
 
