@@ -125,7 +125,7 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        <form action="supplementRequest" method="get">
+                                        <form action="supplementRequest" method="get" target="_blank">
                                             <input type="hidden" name="action" value="createSupplementRequest">
                                             <button class="btn btn-secondary" type="submit">Supplement Request</button>
                                         </form>

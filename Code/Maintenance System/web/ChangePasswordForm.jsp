@@ -55,7 +55,7 @@
                                             <div class="d-grid gap-2 mt-3">
                                                 <button type="submit" class="btn btn-lg btn-primary">Change Password</button>
                                             </div>
-                                            <a href="HomePage.jsp">Back</a>
+                                            <a href="Home">Back</a>
 
                                         </form>
                                     </div>
