@@ -133,8 +133,10 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('CHAT_HISTORY', '/chatHistory'),
 ('UPDATE_UNKNOWN_PRODUCT', '/updateUnknown'),
 ('IMPORT_PRODUCT_EXCEL', '/importExcel'),
-('CREATE_WARRANTY_CARD_UNKNOWN_PRODUCT', '/addWUP')
-
+('CREATE_WARRANTY_CARD_UNKNOWN_PRODUCT', '/addWUP'),
+('REPORT_REPAIR_STATUS', '/reportrepairstatus'),
+('REPORT_WARRANTY_BY_BRAND', '/reportwarrantybybrand'),
+('REPORT_WARRANTY_BY_TYPE', '/reportwarrantycardbytypename')
 
 
 
@@ -266,6 +268,9 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,125),
 (1,126),(2,126),
 (1,127),(2,127),(3,127),
-(1,128),(2,128)
+(1,128),(2,128),
+(1,129),
+(1,130),
+(1,131)
 
 
