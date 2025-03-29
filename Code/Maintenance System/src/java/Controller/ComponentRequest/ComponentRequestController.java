@@ -324,7 +324,7 @@ public class ComponentRequestController extends HttpServlet {
                 //gui thong bao cho nhan vien
                 StaffDAO staffDAO = new StaffDAO();
                 for (Staff s : staffDAO.getStaffByRoleName("Technician")) {
-                    String message = "Component Request  " + componentRequestID + "has been " + componentStatus;
+                    String message = "Component Request  " + componentRequestID + " has been " + componentStatus;
                     Notification notification = new Notification();
                     notification.setRecipientType("Staff");
                     notification.setRecipientID(s.getStaffID());
