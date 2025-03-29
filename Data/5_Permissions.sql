@@ -127,9 +127,10 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('PAY_FOR_OUTSOURCE', '/Invoice/PayOutsource'),
 ('EXPORT_INVOICE_PDF_REPAIR', '/exportInvoicePDF'),
 ('VIEW_DETAIL_WARRANTYCARD_CONTRACTOR', '/warrantyCardDetailContractor'),
-('PERMISSION ', '/permissions'),
+('PERMISSION', '/permissions'),
 ('SUPPLEMENT_REQUEST_JSP', '/supplementRequest.jsp'),
-('DELETE_PRODUCT', '/viewProduct?action=delete')
+('DELETE_PRODUCT', '/viewProduct?action=delete'),
+('CHAT_HISTORY', '/chatHistory')
 
 INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,1),(2,1),(3,1),
@@ -172,7 +173,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,38),
 (1,39),
 (1,40),
-
+(1,41),
 (1,42),
 (1,43),(2,43),(3,43),(4,43),(5,43),
 (1,44),(2,44),(3,44),(4,44),(5,44),
@@ -255,6 +256,7 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (4,121),
 (1,122),
 (1,123),(2,123),
-(1,124),(2,124),(3,124)
+(1,124),(2,124),(3,124),
+(1,125)
 
 
