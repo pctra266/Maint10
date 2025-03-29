@@ -368,9 +368,9 @@
                                                     <p><strong>Return Date:</strong> ${warrantyCard.completedDate}</p>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <p><strong>Staff In Charge:</strong> ${staff.name}</p>
-                                                    <p><strong>Staff Phone:</strong> ${staff.phone}</p>
-                                                    <p><strong>Staff Email:</strong> ${staff.email}</p>
+                                                    <p><strong>Staff In Charge:</strong> ${staffH.name}</p>
+                                                    <p><strong>Staff Phone:</strong> ${staffH.phone}</p>
+                                                    <p><strong>Staff Email:</strong> ${staffH.email}</p>
                                                 </div>
                                                 <hr>
                                                 <!-- Thông tin khách hàng và sản phẩm -->
