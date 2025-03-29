@@ -55,7 +55,7 @@ public class SearchWarrantyCard extends HttpServlet {
             request.setAttribute("warrantyCard", wr);
             request.setAttribute("customer", customer);
             request.setAttribute("product", product);
-            request.setAttribute("staff", staff);
+            request.setAttribute("staffH", staff);
             request.setAttribute("isUnknownProduct", isUnknownProduct);
 
         }
