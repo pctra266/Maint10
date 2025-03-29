@@ -13,14 +13,13 @@
         <title>Update Product</title>
         <link href="css/light.css" rel="stylesheet">
         <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
-
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <style>
-            /* CSS cho phần main */
+            /* CSS for main section */
             .main {
-                background-color: #f0f8ff; /* nền nhẹ nhàng */
+                background-color: #f0f8ff;
                 padding: 20px;
                 margin: auto;
                 font-family: 'Inter', sans-serif;
@@ -36,29 +35,40 @@
             }
 
             .container h2 {
-                color: #1e90ff; /* xanh dương chủ đạo */
+                color: #326ABC;
                 margin-bottom: 20px;
                 font-size: 24px;
                 font-weight: 600;
+                text-align: center;
             }
 
+            /* Search Form: labels sát ô nhập */
             .search-form {
                 display: flex;
-                flex-wrap: wrap;
+                flex-direction: column;
                 gap: 15px;
                 margin-bottom: 20px;
                 align-items: center;
             }
 
+            .search-form .input-row {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px;
+                justify-content: center;
+                align-items: center;
+            }
+
             .search-form label {
-                flex: 1 0 150px;
+                margin-right: 5px;
+                display: inline-block;
+                width: auto;
                 font-weight: bold;
                 color: #333;
             }
 
             .search-form input,
             .search-form select {
-                flex: 1 0 200px;
                 padding: 8px;
                 border: 1px solid #ccc;
                 border-radius: 4px;
@@ -68,11 +78,11 @@
 
             .search-form input:focus,
             .search-form select:focus {
-                border-color: #1e90ff;
+                border-color: #326ABC;
             }
 
             .search-form button {
-                background-color: #1e90ff;
+                background-color: #326ABC;
                 color: #fff;
                 border: none;
                 padding: 10px 20px;
@@ -83,7 +93,7 @@
             }
 
             .search-form button:hover {
-                background-color: #0f78d1;
+                background-color: #265a9e;
             }
 
             table {
@@ -93,7 +103,7 @@
             }
 
             table thead {
-                background-color: #1e90ff;
+                background-color: #326ABC;
                 color: #fff;
             }
 
@@ -118,76 +128,31 @@
             .pagination a,
             .pagination span {
                 padding: 8px 12px;
-                border: 1px solid #1e90ff;
+                border: 1px solid #326ABC;
                 border-radius: 4px;
                 text-decoration: none;
-                color: #1e90ff;
+                color: #326ABC;
                 transition: background-color 0.3s ease;
             }
 
             .pagination a:hover {
-                background-color: #1e90ff;
+                background-color: #326ABC;
                 color: #fff;
             }
 
             .pagination span.active {
-                background-color: #1e90ff;
+                background-color: #326ABC;
                 color: #fff;
                 font-weight: bold;
             }
 
-            /* Chỉ tác động vào khu vực form tìm kiếm (search-form) trong main */
-            .search-form {
-                display: flex;
-                flex-wrap: wrap;          /* Cho phép xuống hàng nếu màn hình hẹp */
-                align-items: center;      /* Căn giữa theo trục dọc */
-                gap: 10px;                /* Khoảng cách giữa các phần tử */
-                margin-bottom: 20px;
+            /* Custom style for custom page size div */
+            #customPageSizeDiv {
+                display: none;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 10px;
             }
-
-            /* Label chung */
-            .search-form label {
-                font-weight: bold;
-                color: #333;
-                margin-right: 5px;
-            }
-
-            /* Riêng label "Products per page" có thể thêm style tùy ý */
-            .search-form label[for="pageSize"] {
-                /* Ví dụ: màu chữ đậm hơn hoặc thêm margin, tùy thích */
-            }
-
-            /* Style cho select */
-            .search-form select {
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                padding: 8px;
-                outline: none;
-                transition: border-color 0.3s ease;
-                min-width: 80px; /* Đảm bảo có độ rộng nhất định */
-            }
-
-            .search-form select:focus {
-                border-color: #1e90ff;
-            }
-
-            /* Style cho button "Apply" */
-            .search-form button[type="submit"] {
-                background-color: #1e90ff;
-                color: #fff;
-                border: none;
-                padding: 10px 20px;
-                border-radius: 4px;
-                cursor: pointer;
-                transition: background-color 0.3s ease;
-                font-weight: 600;
-            }
-
-            .search-form button[type="submit"]:hover {
-                background-color: #0f78d1;
-            }
-
-
         </style>
     </head>
     <body>
@@ -199,7 +164,7 @@
 
                 <main class="content">
                     <div class="container">
-                        <h2 style="text-align: center">List of Invoices</h2>
+                        <h2>List of Invoices</h2>
 
                         <c:if test="${not empty errorMessage}">
                             <div style="color: red; margin-bottom: 10px;">${errorMessage}</div>
@@ -208,33 +173,41 @@
                             <div style="color: green; margin-bottom: 10px;">${successMessage}</div>
                         </c:if>
 
-                        <!-- Form search -->
+                        <!-- Search Form -->
                         <form class="search-form" method="get" action="listInvoiceRepair" onsubmit="return validateInvoiceNumber();">
-                            <label for="invoiceNumber">Invoice Number:</label>
-                            <input type="text" name="invoiceNumber" id="invoiceNumber" value="${param.invoiceNumber}" placeholder="VD: INV12345" />
+                            <div class="input-row">
+                                <label for="invoiceNumber">Invoice Number:</label>
+                                <input type="text" name="invoiceNumber" id="invoiceNumber" value="${param.invoiceNumber}" placeholder="e.g., INV12345" />
 
-                            <label for="issueDate">Issue Date:</label>
-                            <input type="date" name="issueDate" id="issueDate" value="${param.issueDate}" />
+                                <label for="issueDate">Issue Date:</label>
+                                <input type="date" name="issueDate" id="issueDate" value="${param.issueDate}" />
 
-                            <label for="dueDate">Due Date:</label>
-                            <input type="date" name="dueDate" id="dueDate" value="${param.dueDate}" />
-
-                            <label for="pageSize">Products per page:</label>
-                            <select name="pageSize" id="pageSize">
-                                <option value="5" ${param.pageSize == '5' ? 'selected="selected"' : ''}>5</option>
-                                <option value="10" ${param.pageSize == '10' ? 'selected="selected"' : ''}>10</option>
-                                <option value="15" ${param.pageSize == '15' ? 'selected="selected"' : ''}>15</option>
-                                <option value="20" ${param.pageSize == '20' ? 'selected="selected"' : ''}>20</option>
-                                <option value="25" ${param.pageSize == '25' ? 'selected="selected"' : ''}>25</option>
-                                <option value="Custom" ${param.pageSize == 'Custom' ? 'selected="selected"' : ''}>Custom</option>
-                            </select>
-
-                            <div id="customPageSizeDiv">
-                                <label for="customPageSize">Custom Page Size:</label>
-                                <input type="number" name="customPageSize" id="customPageSize" min="1" placeholder="Enter number" value="${param.customPageSize}" />
+                                <label for="dueDate">Due Date:</label>
+                                <input type="date" name="dueDate" id="dueDate" value="${param.dueDate}" />
                             </div>
 
-                            <button type="submit">Apply</button>
+                            <!-- Row for Products per page and buttons -->
+                            <div class="input-row">
+                                <label for="pageSize">Products per page:</label>
+                                <select name="pageSize" id="pageSize">
+                                    <option value="5" ${param.pageSize == '5' && empty param.customPageSize ? 'selected="selected"' : ''}>5</option>
+                                    <option value="10" ${param.pageSize == '10' ? 'selected="selected"' : ''}>10</option>
+                                    <option value="15" ${param.pageSize == '15' ? 'selected="selected"' : ''}>15</option>
+                                    <option value="20" ${param.pageSize == '20' ? 'selected="selected"' : ''}>20</option>
+                                    <option value="25" ${param.pageSize == '25' ? 'selected="selected"' : ''}>25</option>
+                                    <!-- Nếu có customPageSize thì hiển thị lựa chọn Custom -->
+                                    <option value="Custom" ${not empty param.customPageSize ? 'selected="selected"' : ''}>Custom</option>
+                                </select>
+
+                                <div id="customPageSizeDiv">
+                                    <label for="customPageSize">Custom Page Size:</label>
+                                    <input type="number" name="customPageSize" id="customPageSize" min="1" placeholder="Enter number" value="${param.customPageSize}" />
+                                </div>
+
+                                <button type="button" onclick="window.location.href = 'listInvoiceRepair'">All</button>
+                                <button type="button" onclick="window.location.href = 'warrantyCardRepairContractor'">Back</button>
+                                <button type="submit">Apply</button>
+                            </div>
                         </form>
 
                         <table>
@@ -258,10 +231,10 @@
                                             <tr>
                                                 <td>${invoice.invoiceNumber}</td>
                                                 <td>
-                                                    <fmt:formatDate value="${invoice.issuedDate}" pattern="yyyy-MM-dd"/>
+                                                    <fmt:formatDate value="${invoice.issuedDate}" pattern="dd-MM-yyyy"/>
                                                 </td>
                                                 <td>
-                                                    <fmt:formatDate value="${invoice.dueDate}" pattern="yyyy-MM-dd"/>
+                                                    <fmt:formatDate value="${invoice.dueDate}" pattern="dd-MM-yyyy"/>
                                                 </td>
                                                 <td>
                                                     <a href="invoiceDetail?invoiceId=${invoice.invoiceID}">View Detail</a>
@@ -273,16 +246,16 @@
                             </tbody>
                         </table>
 
-                        <!-- Phân trang -->
+                        <!-- Pagination -->
                         <div class="pagination">
                             <c:if test="${pageIndex > 1}">
-                                <a href="listInvoiceRepair?pageIndex=1&pageSize=${pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
+                                <a href="listInvoiceRepair?pageIndex=1&pageSize=${param.pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
                                     First
                                 </a>
                             </c:if>
 
                             <c:if test="${pageIndex > 1}">
-                                <a href="listInvoiceRepair?pageIndex=${pageIndex - 1}&pageSize=${pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
+                                <a href="listInvoiceRepair?pageIndex=${pageIndex - 1}&pageSize=${param.pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
                                     Previous
                                 </a>
                             </c:if>
@@ -293,7 +266,7 @@
                                         <span class="active">${i}</span>
                                     </c:when>
                                     <c:otherwise>
-                                        <a href="listInvoiceRepair?pageIndex=${i}&pageSize=${pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
+                                        <a href="listInvoiceRepair?pageIndex=${i}&pageSize=${param.pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
                                             ${i}
                                         </a>
                                     </c:otherwise>
@@ -301,13 +274,13 @@
                             </c:forEach>
 
                             <c:if test="${pageIndex < totalPage}">
-                                <a href="listInvoiceRepair?pageIndex=${pageIndex + 1}&pageSize=${pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
+                                <a href="listInvoiceRepair?pageIndex=${pageIndex + 1}&pageSize=${param.pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
                                     Next
                                 </a>
                             </c:if>
 
                             <c:if test="${pageIndex < totalPage}">
-                                <a href="listInvoiceRepair?pageIndex=${totalPage}&pageSize=${pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
+                                <a href="listInvoiceRepair?pageIndex=${totalPage}&pageSize=${param.pageSize}&invoiceNumber=${param.invoiceNumber}&issueDate=${param.issueDate}&dueDate=${param.dueDate}&customPageSize=${param.customPageSize}">
                                     Last
                                 </a>
                             </c:if>
@@ -319,7 +292,6 @@
         </div>
 
         <script>
-            // Ẩn/hiện ô nhập customPageSize khi select "Custom"
             const pageSizeSelect = document.getElementById("pageSize");
             const customPageSizeDiv = document.getElementById("customPageSizeDiv");
             function toggleCustomPageSize() {
@@ -329,23 +301,22 @@
                     customPageSizeDiv.style.display = "none";
                 }
             }
-            // Gọi ngay khi trang load
             toggleCustomPageSize();
-            // Lắng nghe sự kiện thay đổi
             pageSizeSelect.addEventListener("change", toggleCustomPageSize);
-            // Chỉ validate ô "Invoice Number"
+
             function validateInvoiceNumber() {
                 const invoiceInput = document.getElementById("invoiceNumber");
-                const invoiceVal = invoiceInput.value.trim();
-                // Cho phép để trống (nếu muốn bắt buộc nhập thì bỏ điều kiện này)
+                const invoiceVal = invoiceInput.value; // Lấy giá trị nguyên bản, không loại bỏ khoảng trắng
                 if (invoiceVal === "") {
                     return true;
                 }
-
-                // Nếu không để trống thì kiểm tra ký tự đặc biệt
-                const regex = /^[A-Za-z0-9\s]+$/;
-                if (!regex.test(invoiceVal)) {
-                    alert("Invoice Number chỉ được nhập chữ, số hoặc khoảng trắng (không chứa ký tự đặc biệt).");
+                // Kiểm tra nếu có bất kỳ ký tự khoảng trắng nào
+                if (invoiceVal.match(/\s/)) {
+                    alert("Invoice Number can only contain letters and numbers (no spaces allowed).");
+                    return false;
+                }
+                if (!invoiceVal.match(/^[A-Za-z0-9]+$/)) {
+                    alert("Invoice Number can only contain letters and numbers (no spaces allowed).");
                     return false;
                 }
                 return true;

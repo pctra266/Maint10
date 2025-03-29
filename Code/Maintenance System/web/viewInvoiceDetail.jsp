@@ -15,87 +15,157 @@
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
-            /* ======= MAIN WRAPPER ======= */
-            .main {
-                background: linear-gradient(135deg, #e0f7fa, #ffffff);
+            /* ======= RESET & GLOBAL ======= */
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
                 font-family: 'Inter', sans-serif;
             }
-
-            /* ======= MAIN CONTENT AREA ======= */
-            .content {
-                background: #ffffff;
-                border: none;
-                border-radius: 10px;
-                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-                padding: 30px;
+            body {
+                background: #f2f2f2;
+                color: #333;
+                line-height: 1.6;
             }
-
-            /* ======= HEADING ======= */
-            .content h2 {
-                color: #1565c0; /* Màu xanh dương đậm */
-                font-size: 28px;
-                font-weight: 700;
-                margin-bottom: 25px;
-                text-align: center;
-            }
-
-            /* ======= TABLE STYLING ======= */
-            .content table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-bottom: 25px;
-            }
-
-            .content table th,
-            .content table td {
-                padding: 14px 20px;
-                text-align: left;
-            }
-
-            .content table th {
-                background: linear-gradient(135deg, #2196f3, #1e88e5);
-                color: #fff;
-                font-size: 16px;
-                font-weight: 600;
-                border-bottom: 3px solid #1565c0;
-            }
-
-            .content table tr {
-                transition: background-color 0.3s ease;
-            }
-
-            .content table tr:hover {
-                background-color: #f1f8ff;
-            }
-
-            .content table tr:nth-child(even) td {
-                background-color: #f9f9f9;
-            }
-
-            /* ======= CENTERED ELEMENTS ======= */
-            .content .center {
-                text-align: center;
-                margin-top: 20px;
-            }
-
-            /* ======= BUTTON LINKS ======= */
-            .content a.back-link {
-                display: inline-block;
-                padding: 12px 25px;
-                margin: 0 10px;
-                background: linear-gradient(135deg, #2196f3, #1e88e5);
-                color: #fff;
+            a {
                 text-decoration: none;
+                color: inherit;
+            }
+
+            .wrapper {
+                display: flex;
+                min-height: 100vh;
+            }
+            .navbar-left,
+            .jspIncludeSidebar {
+                width: 250px;
+                background: #2c3e50;
+                color: #fff;
+                padding: 20px;
+            }
+            .main {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                padding: 20px;
+            }
+            .content {
+                background: #fff;
+                max-width: 800px;
+                margin:20px auto;
+                padding: 30px;
+                border-radius: 8px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            }
+
+            /* ======= HEADER & THÔNG TIN CHUNG ======= */
+            .invoice-header {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+            .invoice-header h1 {
+                font-size: 24px;
+                font-weight: 600;
+                text-transform: uppercase;
+                margin-bottom: 5px;
+            }
+            .invoice-header p {
+                font-size: 14px;
+                color: #666;
+            }
+            .invoice-info {
+                display: flex;
+                justify-content: space-between;
+            }
+            .invoice-info-left,
+            .invoice-info-right {
+                width: 48%;
+            }
+            .invoice-info-left h3,
+            .invoice-info-right h3 {
+                font-size: 16px;
+                margin-bottom: 8px;
+                text-transform: uppercase;
+                color: #333;
+            }
+            .invoice-info-left p,
+            .invoice-info-right p {
+                font-size: 14px;
+                line-height: 1.5;
+                color: #555;
+            }
+            .invoice-details {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            .invoice-detail-row {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 10px 0;
+                border-bottom: 1px dashed #ccc;
+            }
+            .invoice-detail-row:last-child {
+                border-bottom: none;
+            }
+            .detail-label {
+                font-weight: 600;
+                color: #333;
+                flex-basis: 40%;
+            }
+            .detail-value {
+                flex-basis: 60%;
+                text-align: right;
+                color: #555;
+            }
+            .center {
+                text-align: center;
+                margin-top: 30px;
+            }
+            .center a {
+                display: inline-block;
+                margin: 0 10px;
+                padding: 12px 25px;
+                background: #1565c0;
+                color: #fff;
                 border-radius: 30px;
                 font-weight: 600;
-                transition: transform 0.3s ease, box-shadow 0.3s ease;
+                transition: all 0.3s ease;
+            }
+            .center a:hover {
+                background: #0e3d7a;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             }
 
-            .content a.back-link:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 4px 8px rgba(21, 101, 192, 0.3);
+            /* ======= RESPONSIVE ======= */
+            @media (max-width: 768px) {
+                .content {
+                    padding: 20px;
+                    margin: 20px;
+                }
+                .invoice-info {
+                    flex-direction: column;
+                }
+                .invoice-info-left,
+                .invoice-info-right {
+                    width: 100%;
+                    margin-bottom: 15px;
+                }
+                .invoice-detail-row {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+                .detail-value {
+                    text-align: left;
+                    margin-top: 5px;
+                }
+                .center a {
+                    padding: 10px 20px;
+                    font-size: 14px;
+                }
             }
-
         </style>
     </head>
     <body>
@@ -104,55 +174,81 @@
             <div class="main">
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
+                    <!-- HEADER -->
+                    <div class="invoice-header">
+                        <h1>CÔNG TY NHS</h1>
+                        <p>123 Đường ABC, Thành phố DEF - (+84) 912 345 678</p>
+                    </div>
+                    <div class="invoice-info">
+                        <div class="invoice-info-left">
+                            <h3>Receiver</h3>
+                            <p>
+                                NHS<br>
+                                Số 123 Đường ABC, Thành phố DEF
+                            </p>
+                        </div>
+                        <div class="invoice-info-right">
+                            <h3>Invoice information</h3>
+                            <p>
+                                Hóa đơn số: <strong>12345</strong><br>
+                                Ngày: <strong>16/06/2025</strong>
+                            </p>
+                        </div>
+                    </div>
 
-                    <h2>Invoice</h2>
+                    <h2 style="text-align:center; margin-bottom: 10px;">Invoice</h2>
 
                     <c:if test="${not empty invoiceDetail}">
-                        <table>
-                            <tr>
-                                <th>Invoice Number</th>
-                                <td>${invoiceDetail.InvoiceNumber}</td>
-                            </tr>
-                            <tr>
-                                <th>Amount</th>
-                                <td>${invoiceDetail.Amount}</td>
-                            </tr>
-                            <tr>
-                                <th>Issued Date</th>
-                                <td>
+                        <div class="invoice-details">
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Invoice Number</div>
+                                <div class="detail-value">${invoiceDetail.InvoiceNumber}</div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Warranty Card Code</div>
+                                <div class="detail-value">${invoiceDetail.WarrantyCardCode}</div>
+                            </div>
+
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Issued Date</div>
+                                <div class="detail-value">
                                     <fmt:formatDate value="${invoiceDetail.IssuedDate}" pattern="yyyy-MM-dd"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Due Date</th>
-                                <td>
+                                </div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Due Date</div>
+                                <div class="detail-value">
                                     <fmt:formatDate value="${invoiceDetail.DueDate}" pattern="yyyy-MM-dd"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <td>${invoiceDetail.Status}</td>
-                            </tr>
-                            <tr>
-                                <th>Created By</th>
-                                <td>${invoiceDetail.CreatedByName}</td>
-                            </tr>
-                            <tr>
-                                <th>Received By</th>
-                                <td>${invoiceDetail.ReceivedByName}</td>
-                            </tr>
-                            <tr>
-                                <th>Warranty Card Code</th>
-                                <td>${invoiceDetail.WarrantyCardCode}</td>
-                            </tr>
-                            <tr>
-                                <th>Issue Description</th>
-                                <td>${invoiceDetail.IssueDescription}</td>
-                            </tr>
-                        </table>
+                                </div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Status</div>
+                                <div class="detail-value">${invoiceDetail.Status}</div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Created By</div>
+                                <div class="detail-value">${invoiceDetail.CreatedByName}</div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Received By</div>
+                                <div class="detail-value">${invoiceDetail.ReceivedByName}</div>
+                            </div>
+
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Issue Description</div>
+                                <div class="detail-value">${invoiceDetail.IssueDescription}</div>
+                            </div>
+                            <div class="invoice-detail-row">
+                                <div class="detail-label">Amount</div>
+                                <div class="detail-value">
+                                    <fmt:formatNumber value="${invoiceDetail.Amount}" maxFractionDigits="0" />
+                                    $
+                                </div>
+                            </div>
+                        </div>
                         <div class="center">
-                            <a class="back-link" href="listInvoiceRepair">Back</a>
-                            <a class="back-link" href="exportInvoicePDF?invoiceId=${invoiceDetail.InvoiceID}">Export PDF</a>
+                            <a style="text-decoration: none" class="back-link" href="listInvoiceRepair">Back</a>
+                            <a style="text-decoration: none" class="back-link" href="exportInvoicePDF?invoiceId=${invoiceDetail.InvoiceID}">Export PDF</a>
                         </div>
                     </c:if>
                 </main>

@@ -72,7 +72,7 @@
             }
 
             /*****************************/
-            /* Form chọn pageSize & nút */
+            /* Form select pageSize & buttons */
             /*****************************/
             .flex-container {
                 display: flex;
@@ -121,7 +121,7 @@
             }
 
             /*****************************/
-            /* Bảng danh sách */
+            /* Data Table */
             /*****************************/
             table {
                 width: 100%;
@@ -174,11 +174,11 @@
             }
 
             /*****************************/
-            /* Phân trang */
+            /* Pagination */
             /*****************************/
             .pagination {
                 display: flex;
-                justify-content: center; /* Canh giữa pagination */
+                justify-content: center;
                 align-items: center;
                 gap: 10px;
                 margin-top: 30px;
@@ -187,7 +187,7 @@
 
             .pagination button {
                 padding: 8px 14px;
-                background: #2563eb;
+                background: #326ABC;
                 color: #fff;
                 border: none;
                 border-radius: 6px;
@@ -221,12 +221,18 @@
                         <div class="search-form">
                             <div class="form-group">
                                 <label for="warrantyCardCode">Warranty Card Code:</label>
-                                <input type="text" name="warrantyCardCode" id="warrantyCardCode" value="${param.warrantyCardCode}" pattern="[A-Za-z]+" title="Only letters allowed (no spaces, digits or special characters)" />
+                                <input type="text" name="warrantyCardCode" id="warrantyCardCode" 
+                                       value="${param.warrantyCardCode}" 
+                                       pattern="^[A-Za-z0-9]*$" 
+                                       title="Only letters and numbers allowed, no spaces (can be left blank)" />
                             </div>
 
                             <div class="form-group">
                                 <label for="staffName">Staff Name:</label>
-                                <input type="text" name="staffName" id="staffName" value="${param.staffName}" pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" title="Only letters, single space between words, no digits/special chars" />
+                                <input type="text" name="staffName" id="staffName" 
+                                       value="${param.staffName}" 
+                                       pattern="^(?!\s+$)[A-Za-z]+(?:\s[A-Za-z]+)*$" 
+                                       title="Only letters, single space between words, no digits/special characters" />
                             </div>
 
                             <div class="form-group">
@@ -245,7 +251,6 @@
                                 </select>
                             </div>
 
-
                             <div class="form-group">
                                 <label for="note">Note:</label>
                                 <input type="text" name="note" id="note" 
@@ -253,11 +258,9 @@
                                        pattern="^(?!\s+$)[A-Za-z0-9 ]+$" 
                                        title="No special characters, not all whitespace" />
                             </div>
+                        </div>
 
-                        </div><!-- /.search-form -->
-
-
-                        <!-- Chọn pageSize & nút -->
+                        <!-- Select pageSize & buttons -->
                         <div class="flex-container">
                             <div>
                                 <label for="pageSize">Products per page:</label>
@@ -278,6 +281,7 @@
                                 <button type="submit">Apply</button>
                                 <button type="submit">Search</button>
                                 <button type="button" onclick="window.location.href = 'listInvoiceRepair'">Invoice</button>
+                                <button type="button" onclick="window.location.href = 'warrantyCardRepairContractor'">All</button>
                             </div>                        
                         </div>
 
