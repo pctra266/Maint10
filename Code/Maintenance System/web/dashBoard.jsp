@@ -173,7 +173,11 @@
                         <c:if test="${staff.hasPermissions('VIEW_PRODUCT_TYPE')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ProductType';">
                                 <div class="card">
-                                    <img class="card-img-top" src="img/photos/product-type.png" alt="Unsplash">
+
+                                    <!-- <img class="card-img-top" src="img/photos/product-type.png" alt="Unsplash"> -->
+
+                                    <img class="card-img-top" src="img/photos/product_type.jpg" alt="Unsplash">
+
                                     <div class="card-header px-4 pt-4" style="text-align: center">                       
                                         <h5 class="card-title mb-0">PRODUCT TYPE</h5>
                                         <div class="badge bg-info my-2">In progress</div>
@@ -397,10 +401,6 @@
                         </div>
 
                         </c:if>
-
-
-                  
-
 
                     </div>
                 </div>
