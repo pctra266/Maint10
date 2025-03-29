@@ -178,6 +178,19 @@
                                 </div>
                             </div>
                         </c:if>
+                        
+                        <c:if test="${staff.hasPermissions('VIEW_PRODUCT')}">
+                            <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'ProductType';">
+                                <div class="card">
+                                    <img class="card-img-top" src="" alt="Unsplash">
+                                    <div class="card-header px-4 pt-4" style="text-align: center">                       
+                                        <h5 class="card-title mb-0">PRODUCT TYPE</h5>
+                                        <div class="badge bg-info my-2">In progress</div>
+                                    </div>                               
+                                </div>
+                            </div>
+                        </c:if>
+                        
                         <c:if test="${staff.hasPermissions('VIEW_WARRANTY_CARD')}">
                             <div class="col-12 col-md-6 col-lg-3 clickable-card" onclick="window.location.href = 'WarrantyCard';">
                                 <div class="card">
