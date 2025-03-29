@@ -13,8 +13,7 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <style>
-           
-            /* Bọc toàn bộ form để chia layout 2 cột */
+            /* Wrap the entire form to split layout into two columns */
             .add-product-form {
                 display: flex;
                 justify-content: space-between;
@@ -24,7 +23,7 @@
                 margin-bottom: 1rem;
             }
 
-            /* Phần bên trái: form nhập thông tin */
+            /* Left side: input form */
             .form-container {
                 flex: 1;
                 max-width: 50%;
@@ -34,12 +33,12 @@
                 border-radius: 4px;
             }
 
-            /* Tiêu đề */
+            /* Heading */
             .form-container h3 {
                 margin-top: 0;
             }
 
-            /* Mỗi nhóm form (label + input) */
+            /* Each form group (label + input) */
             .form-group {
                 margin-bottom: 1rem;
             }
@@ -62,7 +61,7 @@
                 font-size: 1rem;
             }
 
-            /* Thông báo lỗi (nếu có) */
+            /* Error message (if any) */
             .error-message {
                 display: block;
                 margin-top: 0.3rem;
@@ -71,7 +70,7 @@
                 font-style: italic;
             }
 
-            /* Phần bên phải: hiển thị ảnh */
+            /* Right side: image display */
             .image-container {
                 flex: 1;
                 max-width: 50%;
@@ -82,7 +81,7 @@
                 text-align: center;
             }
 
-            /* Ô preview ảnh */
+            /* Image preview box */
             .preview-box {
                 position: relative;
                 width: 100%;
@@ -103,7 +102,7 @@
                 object-fit: contain;
             }
 
-            /* Mũi tên chuyển ảnh - đặt bên trong preview-box */
+            /* Navigation arrows inside the preview-box */
             .arrow {
                 cursor: pointer;
                 position: absolute;
@@ -130,12 +129,12 @@
                 right: 0.5rem;
             }
 
-            /* Input chọn ảnh */
+            /* File input for selecting images */
             #newImage {
                 margin-bottom: 1rem;
             }
 
-            /* Khu vực thumbnail */
+            /* Thumbnail area */
             .thumbnail-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -157,7 +156,7 @@
                 border-radius: 4px;
             }
 
-            /* Nút Submit và Back */
+            /* Submit and Back buttons */
             .button-container {
                 margin-top: 1rem;
                 display: flex;
@@ -184,7 +183,7 @@
                 color: #fff;
             }
 
-            /* Tùy chọn: hiển thị lỗi nếu chưa chọn ảnh */
+            /* Option: display error style if no image is selected */
             #newImage.error {
                 border-color: red;
             }
@@ -197,7 +196,7 @@
                 <jsp:include page="/includes/navbar-top.jsp" />
                 <main class="content">
                     <form id="productForm" class="add-product-form" action="viewProduct" method="post" enctype="multipart/form-data">
-                        <!-- Phần nhập thông tin sản phẩm -->
+                        <!-- Product information input section -->
                         <div class="form-container">
                             <c:if test="${not empty errorMessage}">
                                 <div style="color: red; font-weight: bold;">
@@ -247,18 +246,18 @@
                             </div>
                         </div>
 
-                        <!-- Phần chọn và preview ảnh -->
+                        <!-- Image selection and preview section -->
                         <div class="image-container">
-                            <!-- Preview box với mũi tên -->
+                            <!-- Preview box with navigation arrows -->
                             <div class="preview-box">
                                 <img id="currentImage" alt="Preview Image" src="${not empty uploadedImages ? uploadedImages[0] : ''}">
                                 <div class="arrow left-arrow" onclick="prevImage()">&#10094;</div>
                                 <div class="arrow right-arrow" onclick="nextImage()">&#10095;</div>
                             </div>
-                            <!-- Input chọn file -->
+                            <!-- File input -->
                             <input name="image" type="file" id="newImage" multiple accept="image/*">
 
-                            <!-- Danh sách thumbnail (với input ẩn giữ lại thông tin ảnh) -->
+                            <!-- Thumbnail list (with hidden input to keep image info) -->
                             <div class="thumbnail-container" id="thumbnailContainer">
                                 <c:if test="${not empty uploadedImages}">
                                     <c:forEach var="image" items="${uploadedImages}">
@@ -270,7 +269,7 @@
                                 </c:if>
                             </div>
 
-                            <!-- Nút submit và back nằm dưới phần chọn ảnh -->
+                            <!-- Submit and Back buttons below the image selection area -->
                             <div class="button-container">
                                 <button type="submit" class="submit-btn">Add Product</button>
                                 <button type="button" class="back-btn" onclick="location.href = 'viewProduct'">Back</button>
@@ -284,153 +283,153 @@
 
         <script src="js/app.js"></script>
         <script>
-                                    document.addEventListener("DOMContentLoaded", function () {
-                                        let form = document.querySelector(".add-product-form");
-                                        let codeInput = document.getElementById("code");
-                                        let nameInput = document.getElementById("name");
-                                        let brandInput = document.getElementById("brand");
-                                        let typeInput = document.getElementById("type");
-                                        let quantityInput = document.getElementById("quantity");
-                                        let warrantyInput = document.getElementById("warranty");
-                                        let imageInput = document.getElementById("newImage");
+            document.addEventListener("DOMContentLoaded", function () {
+                let form = document.querySelector(".add-product-form");
+                let codeInput = document.getElementById("code");
+                let nameInput = document.getElementById("name");
+                let brandInput = document.getElementById("brand");
+                let typeInput = document.getElementById("type");
+                let quantityInput = document.getElementById("quantity");
+                let warrantyInput = document.getElementById("warranty");
+                let imageInput = document.getElementById("newImage");
 
-                                        function showError(input, message) {
-                                            let errorSpan = input.parentNode.querySelector(".error-message");
-                                            if (!errorSpan) {
-                                                errorSpan = document.createElement("span");
-                                                errorSpan.className = "error-message";
-                                                input.parentNode.appendChild(errorSpan);
-                                            }
-                                            errorSpan.innerText = message;
-                                        }
-                                        function clearError(input) {
-                                            let errorSpan = input.parentNode.querySelector(".error-message");
-                                            if (errorSpan) {
-                                                errorSpan.remove();
-                                            }
-                                        }
+                function showError(input, message) {
+                    let errorSpan = input.parentNode.querySelector(".error-message");
+                    if (!errorSpan) {
+                        errorSpan = document.createElement("span");
+                        errorSpan.className = "error-message";
+                        input.parentNode.appendChild(errorSpan);
+                    }
+                    errorSpan.innerText = message;
+                }
+                function clearError(input) {
+                    let errorSpan = input.parentNode.querySelector(".error-message");
+                    if (errorSpan) {
+                        errorSpan.remove();
+                    }
+                }
 
-                                        // Chỉ cho chữ và số ở Product Code
-                                        codeInput.addEventListener("input", function () {
-                                            let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
-                                            if (this.value !== validValue) {
-                                                this.value = validValue;
-                                                showError(codeInput, "Only letters and numbers are allowed!");
-                                            } else {
-                                                clearError(codeInput);
-                                            }
-                                        });
+                // Allow only letters and numbers for Product Code
+                codeInput.addEventListener("input", function () {
+                    let validValue = this.value.replace(/[^a-zA-Z0-9]/g, '');
+                    if (this.value !== validValue) {
+                        this.value = validValue;
+                        showError(codeInput, "Only letters and numbers are allowed!");
+                    } else {
+                        clearError(codeInput);
+                    }
+                });
 
-                                        // Chỉ cho chữ, số và khoảng trắng ở Product Name
-                                        nameInput.addEventListener("input", function () {
-                                            let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, '');
-                                            validValue = validValue.replace(/\s{2,}/g, ' ');
-                                            if (this.value !== validValue) {
-                                                this.value = validValue;
-                                                showError(nameInput, "Only letters, numbers, and single spaces between words are allowed!");
-                                            } else if (this.value.trim() === "") {
-                                                showError(nameInput, "Product Name cannot be only spaces!");
-                                            } else {
-                                                clearError(nameInput);
-                                            }
-                                        });
+                // Allow only letters, numbers, and spaces for Product Name
+                nameInput.addEventListener("input", function () {
+                    let validValue = this.value.replace(/[^a-zA-Z0-9 ]/g, '');
+                    validValue = validValue.replace(/\s{2,}/g, ' ');
+                    if (this.value !== validValue) {
+                        this.value = validValue;
+                        showError(nameInput, "Only letters, numbers, and single spaces between words are allowed!");
+                    } else if (this.value.trim() === "") {
+                        showError(nameInput, "Product Name cannot be only spaces!");
+                    } else {
+                        clearError(nameInput);
+                    }
+                });
 
-                                        // Khi submit: kiểm tra các trường bắt buộc (không bắt kiểm tra file vì ảnh cũ đã được lưu lại)
-                                        form.addEventListener("submit", function (event) {
-                                            let isValid = true;
-                                            if (codeInput.value.trim() === "") {
-                                                showError(codeInput, "Product Code is required!");
-                                                isValid = false;
-                                            }
-                                            if (nameInput.value.trim() === "") {
-                                                showError(nameInput, "Product Name is required!");
-                                                isValid = false;
-                                            }
-                                            if (brandInput.value === "") {
-                                                showError(brandInput, "Please select a Brand!");
-                                                isValid = false;
-                                            }
-                                            if (typeInput.value.trim() === "") {
-                                                showError(typeInput, "Product Type is required!");
-                                                isValid = false;
-                                            }
-                                            if (quantityInput.value.trim() === "" || quantityInput.value <= 0) {
-                                                showError(quantityInput, "Quantity must be at least 1!");
-                                                isValid = false;
-                                            }
-                                            if (warrantyInput.value.trim() === "" || warrantyInput.value <= 0) {
-                                                showError(warrantyInput, "Warranty Period must be at least 1 month!");
-                                                isValid = false;
-                                            }
-                                            if (!isValid) {
-                                                event.preventDefault();
-                                            }
-                                        });
-                                    });
+                // On submit: check required fields (do not validate file input as old images are already saved)
+                form.addEventListener("submit", function (event) {
+                    let isValid = true;
+                    if (codeInput.value.trim() === "") {
+                        showError(codeInput, "Product Code is required!");
+                        isValid = false;
+                    }
+                    if (nameInput.value.trim() === "") {
+                        showError(nameInput, "Product Name is required!");
+                        isValid = false;
+                    }
+                    if (brandInput.value === "") {
+                        showError(brandInput, "Please select a Brand!");
+                        isValid = false;
+                    }
+                    if (typeInput.value.trim() === "") {
+                        showError(typeInput, "Product Type is required!");
+                        isValid = false;
+                    }
+                    if (quantityInput.value.trim() === "" || quantityInput.value <= 0) {
+                        showError(quantityInput, "Quantity must be at least 1!");
+                        isValid = false;
+                    }
+                    if (warrantyInput.value.trim() === "" || warrantyInput.value <= 0) {
+                        showError(warrantyInput, "Warranty Period must be at least 1 month!");
+                        isValid = false;
+                    }
+                    if (!isValid) {
+                        event.preventDefault();
+                    }
+                });
+            });
 
-                                    // Xử lý preview ảnh và mũi tên chuyển ảnh
-                                    let currentImageIndex = 0;
-                                    let imageFiles = [];
+            // Handle image preview and navigation arrows
+            let currentImageIndex = 0;
+            let imageFiles = [];
 
-                                    document.getElementById("newImage").addEventListener("change", function (event) {
-                                        let files = event.target.files;
-                                        let maxSize = 5 * 1024 * 1024; // 5MB
-                                        for (let i = 0; i < files.length; i++) {
-                                            if (files[i].size > maxSize) {
-                                                alert("File không được vượt quá 5MB!");
-                                                this.value = "";
-                                                return;
-                                            }
-                                        }
-                                        previewImages(event);
-                                    });
+            document.getElementById("newImage").addEventListener("change", function (event) {
+                let files = event.target.files;
+                let maxSize = 5 * 1024 * 1024; // 5MB
+                for (let i = 0; i < files.length; i++) {
+                    if (files[i].size > maxSize) {
+                        alert("File cannot exceed 5MB!");
+                        this.value = "";
+                        return;
+                    }
+                }
+                previewImages(event);
+            });
 
-                                    function previewImages(event) {
-                                        let files = event.target.files;
-                                        if (files.length === 0)
-                                            return;
-                                        imageFiles = [...files];
-                                        currentImageIndex = 0;
-                                        showImage(currentImageIndex);
+            function previewImages(event) {
+                let files = event.target.files;
+                if (files.length === 0)
+                    return;
+                imageFiles = [...files];
+                currentImageIndex = 0;
+                showImage(currentImageIndex);
 
-                                        let thumbnailContainer = document.getElementById("thumbnailContainer");
-                                        thumbnailContainer.innerHTML = "";
-                                        for (let i = 0; i < files.length; i++) {
-                                            let reader = new FileReader();
-                                            reader.onload = function (e) {
-                                                let img = document.createElement("img");
-                                                img.src = e.target.result;
-                                                img.onclick = function () {
-                                                    showImage(i);
-                                                };
-                                                thumbnailContainer.appendChild(img);
-                                            };
-                                            reader.readAsDataURL(files[i]);
-                                        }
-                                    }
+                let thumbnailContainer = document.getElementById("thumbnailContainer");
+                thumbnailContainer.innerHTML = "";
+                for (let i = 0; i < files.length; i++) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        let img = document.createElement("img");
+                        img.src = e.target.result;
+                        img.onclick = function () {
+                            showImage(i);
+                        };
+                        thumbnailContainer.appendChild(img);
+                    };
+                    reader.readAsDataURL(files[i]);
+                }
+            }
 
-                                    function showImage(index) {
-                                        if (index >= 0 && index < imageFiles.length) {
-                                            let reader = new FileReader();
-                                            reader.onload = function (e) {
-                                                document.getElementById("currentImage").src = e.target.result;
-                                            };
-                                            reader.readAsDataURL(imageFiles[index]);
-                                            currentImageIndex = index;
-                                        }
-                                    }
+            function showImage(index) {
+                if (index >= 0 && index < imageFiles.length) {
+                    let reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById("currentImage").src = e.target.result;
+                    };
+                    reader.readAsDataURL(imageFiles[index]);
+                    currentImageIndex = index;
+                }
+            }
 
-                                    function prevImage() {
-                                        if (currentImageIndex > 0) {
-                                            showImage(currentImageIndex - 1);
-                                        }
-                                    }
+            function prevImage() {
+                if (currentImageIndex > 0) {
+                    showImage(currentImageIndex - 1);
+                }
+            }
 
-                                    function nextImage() {
-                                        if (currentImageIndex < imageFiles.length - 1) {
-                                            showImage(currentImageIndex + 1);
-                                        }
-                                    }
+            function nextImage() {
+                if (currentImageIndex < imageFiles.length - 1) {
+                    showImage(currentImageIndex + 1);
+                }
+            }
         </script>
     </body>
 </html>

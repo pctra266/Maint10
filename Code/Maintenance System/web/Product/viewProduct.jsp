@@ -3,7 +3,6 @@
     Created on : Feb 21, 2025, 11:49:16 PM
     Author     : sonNH
 --%>
-
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -15,9 +14,8 @@
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
         <style>
-            /* Reset và cơ bản */
+            /* Reset and basic styles */
             * {
                 margin: 0;
                 padding: 0;
@@ -37,7 +35,7 @@
                 flex: 1;
                 display: flex;
                 flex-direction: column;
-                padding: 16px; /* Khoảng cách bên trong main */
+                padding: 16px; /* Padding inside main */
             }
             .content {
                 flex: 1;
@@ -58,7 +56,7 @@
                 color: #006400;
             }
 
-            /* KHU VỰC CHỨA TẤT CẢ CÁC NÚT & FORM: Search, Filter, Upload, Sort, ... */
+            /* SECTION CONTAINING ALL BUTTONS & FORMS: Search, Filter, Upload, Sort, ... */
             .controls-section {
                 background-color: #fff;
                 border-radius: 8px;
@@ -68,7 +66,7 @@
                 flex-wrap: wrap;
                 gap: 16px;
                 align-items: center;
-                justify-content: space-between;
+                justify-content: center;
             }
             .controls-group {
                 display: flex;
@@ -124,7 +122,7 @@
                 overflow: hidden;
             }
             .table-section thead {
-                background-color: #3b7ddd; /* Màu chủ đạo cho header */
+                background-color: #3b7ddd; /* Primary color for header */
             }
             .table-section thead th {
                 text-align: left;
@@ -142,21 +140,18 @@
 
             .action-buttons {
                 display: flex;
-                flex-direction: column; /* xếp dọc */
+                flex-direction: column; /* Stack vertically */
                 gap: 8px;
-                align-items: center;    /* canh giữa nếu muốn */
-            }
-            /* Nếu muốn xếp ngang, đổi flex-direction thành row */
-
-            /* Nút Update: dùng màu chủ đạo #B2D8F8 */
+                align-items: center;    /* Center align if needed */
+            }      
             .btn-update {
                 width: 93px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 gap: 4px;
-                background-color: #3b7ddd; /* Màu xanh nhạt */
-                color: white;           /* Màu chữ đậm hơn để tương phản */
+                background-color: #3b7ddd; /* Light blue */
+                color: white;           /* Darker text for contrast */
                 text-decoration: none;
                 padding: 6px 12px;
                 border-radius: 6px;
@@ -171,8 +166,8 @@
                 align-items: center;
                 justify-content: center;
                 gap: 4px;
-                background-color: #3b7ddd; /* Màu xanh nhạt */
-                color:white;           /* Màu chữ đậm hơn để tương phản */
+                background-color: #3b7ddd; /* Light blue */
+                color: white;           /* Darker text for contrast */
                 text-decoration: none;
                 padding: 6px 12px;
                 border-radius: 6px;
@@ -182,20 +177,19 @@
                 transition: all 0.2s ease;
             }
             .nut:hover {
-                background-color: #326ABC; /* Đậm hơn khi hover */
+                background-color: #326ABC; /* Darker on hover */
                 border-color: #87bbec;
                 color: #002537;
                 text-decoration: none;
             }
 
             .btn-update:hover {
-                background-color: #9cc7ee; /* Đậm hơn khi hover */
+                background-color: #9cc7ee; /* Darker on hover */
                 border-color: #87bbec;
                 color: #002537;
                 text-decoration: none;
             }
-
-            /* Nút Delete: dùng tông đỏ để cảnh báo */
+            /* Delete Button: using red tone for warning */
             .btn-delete {
                 width: 93px;
                 display: inline-flex;
@@ -213,12 +207,10 @@
                 transition: all 0.2s ease;
             }
             .btn-delete:hover {
-                background-color: #fa5252; /* Đậm hơn khi hover */
+                background-color: #fa5252; /* Darker on hover */
                 border-color: #B2D8F8;
                 text-decoration: none;
-
             }
-
             /* PAGINATION */
             .pagination {
                 margin-top: 16px;
@@ -249,7 +241,7 @@
                 border-color: #007bff;
             }
 
-            /* CAROUSEL ẢNH SẢN PHẨM */
+            /* PRODUCT IMAGE CAROUSEL */
             .image-carousel {
                 position: relative;
                 width: 80px;
@@ -286,7 +278,7 @@
 
     <body>
 
-        <!-- Kiểm tra quyền -->
+        <!-- Check Permissions -->
         <c:set var="canCreateProduct" value="false"/>
         <c:set var="canImportProduct" value="false"/>
         <c:set var="canViewDetailProduct" value="false"/>
@@ -299,7 +291,6 @@
             <c:if test="${perm == 118}"><c:set var="canViewDetailProduct" value="true"/></c:if>
             <c:if test="${perm == 124}"><c:set var="canDeleteProduct" value="true"/></c:if>
             <c:if test="${perm == 69}"><c:set var="canExternalProduct" value="true"/></c:if>
-
         </c:forEach>
         <div class="wrapper">
             <jsp:include page="/includes/navbar-left.jsp" />
@@ -321,7 +312,7 @@
 
                     <div class="controls-section">
 
-                        <!-- NHÓM 1: FORM SEARCH, FILTER BRAND/TYPE -->
+                        <!-- GROUP 1: SEARCH FORM, FILTER BRAND/TYPE -->
                         <div class="controls-group">
                             <form method="get" action="viewProduct" style="display: flex; gap: 8px; flex-wrap: wrap;">
                                 <input type="text" id="searchCode" name="searchCode" oninput="validateCode()" placeholder="Search by Code" value="${searchCode}">
@@ -344,12 +335,13 @@
                                         </option>
                                     </c:forEach>
                                 </select>
-
+                                <!-- Hidden input to keep recordsPerPage value -->
+                                <input type="hidden" name="recordsPerPage" value="${recordsPerPage}">
                                 <button class="search" type="submit">Search</button>
                             </form>
                         </div>
 
-                        <!-- NHÓM 2: SORT QUANTITY, SORT WARRANTY -->
+                        <!-- GROUP 2: SORT QUANTITY, SORT WARRANTY -->
                         <div class="controls-group">
                             <select id="sortQuantity">
                                 <option value="">Sort by Quantity</option>
@@ -363,22 +355,16 @@
                                 <option value="desc" ${sortWarranty == 'desc' ? 'selected' : ''}>Descending</option>
                             </select>
                         </div>
-                        
-                            
-                             <c:if test="${canImportProduct}">
-                                
-                                 <div class="controls-group">
-                                     <form action="importExcel" method="post" enctype="multipart/form-data" style="display: flex; gap: 8px; align-items: center;">
-                                         <label for="importExcel" style="white-space: nowrap;">Import Excel:</label>
-                                         <input id="importExcel" type="file" name="productExcel" required>
-                                         <button type="submit">Upload</button>
-                                     </form>
-                                 </div>
-                            </c:if>
-                        <!-- NHÓM 3: IMPORT EXCEL -->
-                       
-
-                        <!-- NHÓM 4: CHỌN SỐ LƯỢNG SP HIỂN THỊ + CUSTOM -->
+                        <c:if test="${canImportProduct}">
+                            <div class="controls-group">
+                                <form action="importExcel" method="post" enctype="multipart/form-data" style="display: flex; gap: 8px; align-items: center;">
+                                    <label for="importExcel" style="white-space: nowrap;">Import Excel:</label>
+                                    <input id="importExcel" type="file" name="productExcel" required>
+                                    <button type="submit">Upload</button>
+                                </form>
+                            </div>
+                        </c:if>
+                        <!-- GROUP 4: SELECT NUMBER OF PRODUCTS PER PAGE + CUSTOM -->
                         <div class="controls-group">
                             <label for="recordsPerPageSelect">Products per page:</label>
                             <select id="recordsPerPageSelect" onchange="toggleCustomRecords()">
@@ -398,29 +384,22 @@
 
                         <div class="controls-group">
                             <button class="search" onclick="window.location.href = 'viewProduct'">
-                                <i class="fas fa-list"></i> All Product
+                                <i class="fas fa-list"></i> All Products
                             </button>
-
 
                             <c:if test="${canCreateProduct}">
                                 <a href="viewProduct?action=add" class="nut">
                                     <i class="fas fa-plus-square"></i> Add Product
                                 </a>
-
                             </c:if>
 
                             <c:if test="${canExternalProduct}">
                                 <a href="listUnknown" class="nut">
                                     <i class="fas fa-box-open"></i> External Product
                                 </a>
-
                             </c:if>
-
-
                         </div>
                     </div>
-
-
 
                     <div class="table-section">
                         <h1>Product List</h1>
@@ -433,10 +412,10 @@
                                     <th>Type</th>
                                     <th>Quantity</th>
                                     <th>Warranty</th>
-                                    <th>Image</th>
-                                        <c:if test="${canViewDetailProduct or canDeleteProduct}">
-                                        <th>Actions</th>
-                                        </c:if>
+                                    <th style="text-align: center">Image</th>
+                                    <c:if test="${canViewDetailProduct or canDeleteProduct}">
+                                        <th style="text-align: center">Actions</th>
+                                    </c:if>
                                 </tr>
                             </thead>
                             <tbody>
@@ -453,12 +432,7 @@
                                                 <div class="image-carousel" id="carousel-${product.productId}">
                                                     <button class="carousel-btn prev-btn"
                                                             onclick="prevImage('${product.productId}')">&#10094;</button>
-                                                    <!-- Ảnh hiện tại -->
-                                                    <img id="carousel-img-${product.productId}" 
-                                                         src="${pageContext.request.contextPath}/${fn:replace(product.images[0], '\\', '/')}" 
-                                                         alt="Product Image">
-
-                                                    <!-- Nút mũi tên phải -->
+                                                    <img id="carousel-img-${product.productId}" src="${pageContext.request.contextPath}/${fn:replace(product.images[0], '\\', '/')}" alt="Product Image">
                                                     <button class="carousel-btn next-btn"
                                                             onclick="nextImage('${product.productId}')">&#10095;</button>
                                                 </div>
@@ -466,7 +440,7 @@
                                         </td>
 
                                         <td style="width: 14%;">
-                                            <!-- Bọc 2 nút vào .action-buttons -->
+                                            <!-- Wrap the two buttons in .action-buttons -->
                                             <div class="action-buttons">
                                                 <c:if test="${canViewDetailProduct}">
                                                     <a href="viewProduct?action=update&id=${product.productId}" class="btn-update">
@@ -477,124 +451,107 @@
                                                     <a href="viewProduct?action=delete&id=${product.productId}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this product?')">
                                                         <i class="fas fa-trash-alt"></i> Delete
                                                     </a>
-
                                                 </c:if>
-
                                             </div>
-                                        </td>
-                                        
+                                        </td>                                     
                                     </tr>
                                 </c:forEach>
                             </tbody>
                         </table>
-
-                        <!-- Phần phân trang -->
                         <div class="pagination">
                             <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=1&recordsPerPage=${recordsPerPage}"
                                class="${currentPage == 1 ? 'disabled' : ''}">First</a>
-
                             <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${currentPage > 1 ? currentPage - 1 : 1}&recordsPerPage=${recordsPerPage}"
                                class="${currentPage == 1 ? 'disabled' : ''}">Previous</a>
-
                             <c:forEach var="i" begin="1" end="${totalPages}">
                                 <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${i}&recordsPerPage=${recordsPerPage}"
                                    class="${i == currentPage ? 'active' : ''}">
                                     ${i}
                                 </a>
                             </c:forEach>
-
                             <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${currentPage < totalPages ? currentPage + 1 : totalPages}&recordsPerPage=${recordsPerPage}"
                                class="${currentPage == totalPages ? 'disabled' : ''}">Next</a>
-
                             <a href="viewProduct?searchCode=${searchCode}&searchName=${searchName}&brandId=${brandID}&type=${productTypeId}&sortQuantity=${sortQuantity}&sortWarranty=${sortWarranty}&page=${totalPages}&recordsPerPage=${recordsPerPage}"
                                class="${currentPage == totalPages ? 'disabled' : ''}">Last</a>
                         </div>
                     </div>
-
                 </main>
                 <jsp:include page="/includes/footer.jsp" />
             </div>
         </div>
-
         <script src="js/app.js"></script>
         <script>
-                                                        document.getElementById("sortQuantity").addEventListener("change", function () {
-                                                            let url = new URL(window.location.href);
-                                                            url.searchParams.set("sortQuantity", this.value);
-                                                            // Xoá sortWarranty để tránh xung đột
-                                                            url.searchParams.delete("sortWarranty");
-                                                            window.location.href = url;
-                                                        });
+            document.getElementById("sortQuantity").addEventListener("change", function () {
+                let url = new URL(window.location.href);
+                url.searchParams.set("sortQuantity", this.value);
+                // Remove sortWarranty to avoid conflict
+                url.searchParams.delete("sortWarranty");
+                window.location.href = url;
+            });
 
-                                                        document.getElementById("sortWarranty").addEventListener("change", function () {
-                                                            let url = new URL(window.location.href);
-                                                            url.searchParams.set("sortWarranty", this.value);
-                                                            // Xoá sortQuantity để tránh xung đột
-                                                            url.searchParams.delete("sortQuantity");
-                                                            window.location.href = url;
-                                                        });
+            document.getElementById("sortWarranty").addEventListener("change", function () {
+                let url = new URL(window.location.href);
+                url.searchParams.set("sortWarranty", this.value);
+                // Remove sortQuantity to avoid conflict
+                url.searchParams.delete("sortQuantity");
+                window.location.href = url;
+            });
 
-                                                        function validateCode() {
-                                                            let input = document.getElementById("searchCode");
-                                                            let value = input.value;
-                                                            if (!/^[a-zA-Z0-9]*$/.test(value)) {
-                                                                alert("Mã sản phẩm chỉ được chứa chữ cái và số, không chứa dấu cách hoặc ký tự đặc biệt.");
-                                                                input.value = value.replace(/[^a-zA-Z0-9]/g, "");
-                                                            }
-                                                        }
+            function validateCode() {
+                let input = document.getElementById("searchCode");
+                let value = input.value;
+                if (!/^[a-zA-Z0-9]*$/.test(value)) {
+                    alert("Product code can only contain letters and numbers, without spaces or special characters.");
+                    input.value = value.replace(/[^a-zA-Z0-9]/g, "");
+                }
+            }
 
-                                                        document.getElementById("importExcel").addEventListener("change", function () {
-                                                            let file = this.files[0];
-                                                            if (file) {
-                                                                let maxSize = 5 * 1024 * 1024; // 5MB
-                                                                if (file.size > maxSize) {
-                                                                    alert("File không được vượt quá 5MB!");
-                                                                    this.value = "";
-                                                                }
-                                                            }
-                                                        });
+            document.getElementById("importExcel").addEventListener("change", function () {
+                let file = this.files[0];
+                if (file) {
+                    let maxSize = 5 * 1024 * 1024; // 5MB
+                    if (file.size > maxSize) {
+                        alert("File must not exceed 5MB!");
+                        this.value = "";
+                    }
+                }
+            });
 
-                                                        function toggleCustomRecords() {
-                                                            var select = document.getElementById("recordsPerPageSelect");
-                                                            var customInput = document.getElementById("customRecordsPerPage");
-                                                            if (select.value === "custom") {
-                                                                customInput.style.display = "inline-block";
-                                                            } else {
-                                                                customInput.style.display = "none";
-                                                            }
-                                                        }
+            function toggleCustomRecords() {
+                var select = document.getElementById("recordsPerPageSelect");
+                var customInput = document.getElementById("customRecordsPerPage");
+                if (select.value === "custom") {
+                    customInput.style.display = "inline-block";
+                } else {
+                    customInput.style.display = "none";
+                }
+            }
 
-                                                        function applyRecordsPerPage() {
-                                                            var select = document.getElementById("recordsPerPageSelect");
-                                                            var recordsPerPage;
-                                                            if (select.value === "custom") {
-                                                                recordsPerPage = document.getElementById("customRecordsPerPage").value;
-                                                                if (recordsPerPage < 1) {
-                                                                    alert("Number must be at least 1!");
-                                                                    return;
-                                                                }
-                                                            } else {
-                                                                recordsPerPage = select.value;
-                                                            }
-                                                            let url = new URL(window.location.href);
-                                                            url.searchParams.set("recordsPerPage", recordsPerPage);
-                                                            url.searchParams.set("page", "1");
-                                                            window.location.href = url;
-                                                        }
+            function applyRecordsPerPage() {
+                var select = document.getElementById("recordsPerPageSelect");
+                var recordsPerPage;
+                if (select.value === "custom") {
+                    recordsPerPage = document.getElementById("customRecordsPerPage").value;
+                    if (recordsPerPage < 1) {
+                        alert("Number must be at least 1!");
+                        return;
+                    }
+                } else {
+                    recordsPerPage = select.value;
+                }
+                let url = new URL(window.location.href);
+                url.searchParams.set("recordsPerPage", recordsPerPage);
+                url.searchParams.set("page", "1");
+                window.location.href = url;
+            }
         </script>
-
-        <!-- Carousel chuyển ảnh -->
         <script>
             var contextPath = "${pageContext.request.contextPath}";
             var productImages = {};
             var currentIndex = {};
-
-            <c:forEach var="product" items="${productList}">
-            productImages["${product.productId}"] = [
-                <c:forEach var="img" items="${product.images}" varStatus="status">
-            "${fn:replace(img, '\\', '/')}"<c:if test="${!status.last}">,</c:if>
-                </c:forEach>
-            ];
+            <c:forEach var="product" items="${productList}"> productImages["${product.productId}"] = [
+                <c:forEach var="img" items="${product.images}" varStatus="status"> "${fn:replace(img, '\\', '/')}"<c:if test="${!status.last}">,</c:if>
+                </c:forEach>];
             currentIndex["${product.productId}"] = 0;
             </c:forEach>
 
