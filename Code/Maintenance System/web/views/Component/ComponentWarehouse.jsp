@@ -61,30 +61,44 @@
                             <i class="fas fa-arrow-left fa-4"></i> <span class="ms-2">Back</span>
                         </button>
                     </form>
+
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2>Component Warehouse</h2>
-                        <a href="supplementRequest?action=listSupplementRequest" class="btn btn-secondary">Supplement List </a>
-                    </div>
+                        <c:if test="${staff.hasPermissions('VIEW_SUPPLEMENT_REQUEST')}">
+                            <a href="supplementRequest?action=listSupplementRequest" class="btn btn-secondary">Supplement List </a>
+                        </c:if>
+                    </div>               
+
+
 
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <div>
-                        <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
-                        </form>
-                        <form action="Brand" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Brand</button>
-                        </form>
-                        <form action="ComponentType" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Component Type</button>
-                        </form>     
-                        <form action="ProductType" method="POST" enctype="multipart/form-data" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Product Type</button>
-                        </form>     
+                            <c:if test="${staff.hasPermissions('ADD_NEW_COMPONENT')}">
+                                <form action="ComponentWarehouse/Add" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                    <button type="submit" class="btn btn-success"><i class="fas fa-add"></i> Add Component</button>
+                                </form>                  
+                            </c:if>
+                            <c:if test="${staff.hasPermissions('MANAGE_BRAND')}">
+                                <form action="Brand" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Brand</button>
+                                </form>
+                            </c:if>
+                            <c:if test="${staff.hasPermissions('MANAGE_COMPONENT_TYPE')}">
+                                <form action="ComponentType" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Component Type</button>
+                                </form> 
+                            </c:if>
+                            <c:if test="${staff.hasPermissions('VIEW_PRODUCT_TYPE')}">
+                                <form action="ProductType" method="POST" enctype="multipart/form-data" style="display: inline;">
+                                    <button type="submit" class="btn btn-primary"><i class="fas fa-add"></i> Product Type</button>
+                                </form>   
+                            </c:if>
                         </div>
-                       
-                        <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
-                            <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
-                        </form>
+                        <c:if test="${staff.hasPermissions('SEARCH_ADVANCE_COMPONENT')}">
+                            <form action="ComponentWarehouse/Search" method="get" style="display: inline;">
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i> Advanced Search</button>
+                            </form>
+                        </c:if>
                     </div>
                     <form action="ComponentWarehouse" method="get" >
                         <div class="row align-items-center">
@@ -108,14 +122,20 @@
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-search align-middle"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                                     </button>
                                     </form>
+                                    <c:if test="${staff.hasPermissions('EXPORT_COMPONENTS')}">
                                     <form action="ExportComponents" method="get" class="ms-1">
                                         <button type="submit" class="btn btn-primary"><i class="fas fa-print"></i></button>
                                     </form>
+                                     </c:if>
+                                    
+                                     <c:if test="${staff.hasPermissions('IMPORT_COMPONENTS')}">
                                     <form action="ImportComponents" class="ms-1" id="importForm" method="post" enctype="multipart/form-data" >
                                         <input type="file" name="file" id="fileInput" style="display: none;" required>
                                         <button type="button" class="btn btn-primary" id="uploadBtn">
                                             <i class="fas fa-file-import"></i>
-                                        </button>                                </form>
+                                        </button>                                
+                                    </form>
+                                     </c:if>
                                 </div>
                             </div>
                         </div>
@@ -263,12 +283,15 @@
                                                 <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
                                                 </svg>
                                             </a>
-                                            <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
-                                                <polyline points="3 6 5 6 21 6"></polyline>
-                                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                                </svg>
-                                            </a>
+                                            <c:if test="${staff.hasPermissions('DELETE_COMPONENT')}">
+
+                                                <a data-bs-toggle="modal" data-bs-target="#centeredModalPrimary_${component.componentID}">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash align-middle">
+                                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                                    </svg>
+                                                </a>
+                                            </c:if>
                                         </td>
                                     </tr>
 
