@@ -434,7 +434,7 @@
                                             <button type="submit" class="btn btn-invoice">Create Invoice</button>
                                         </form>
                                     </c:if>
-
+                                    
                                     <div class="section">
                                         <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
                                     </div>

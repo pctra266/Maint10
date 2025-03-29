@@ -237,12 +237,14 @@
                             <div class="form-group">
                                 <label for="status">Status:</label>
                                 <select name="status" id="status">
+                                    <option value="" ${param.status eq '' ? "selected" : ""}>All</option>
                                     <option value="waiting" ${param.status eq 'waiting' ? "selected" : ""}>waiting</option>
                                     <option value="receive" ${param.status eq 'receive' ? "selected" : ""}>receive</option>
                                     <option value="cancel"  ${param.status eq 'cancel'  ? "selected" : ""}>cancel</option>
                                     <option value="done"    ${param.status eq 'done'    ? "selected" : ""}>done</option>
                                 </select>
                             </div>
+
 
                             <div class="form-group">
                                 <label for="note">Note:</label>
