@@ -92,7 +92,7 @@
                                             <td>${productDetail.warrantyPeriod}</td>
                                             <td><fmt:formatDate value="${productDetail.purchaseDate}" pattern="dd-MM-yyyy" /></td>
                                             <td>
-                                                <form action="WarrantyCard/Add" method="post">
+                                                <form action="WarrantyCard/Add" method="post" enctype="multipart/form-data">
                                                     <input type="hidden" name="productCode" value="${productDetail.productCode}">
                                                     <button type="submit"><i class="fas fa-add"></i> Create warranty card</button>
                                                 </form>

@@ -72,10 +72,10 @@ public class FeedbackDAO {
                 ps.setString(count++, "%" + customerName.trim() + "%");
             }
             if (customerEmail != null && !customerEmail.trim().isEmpty()) {
-                ps.setString(count++, customerEmail);
+                ps.setString(count++, "%" +customerEmail.trim()+ "%");
             }
             if (customerPhone != null && !customerPhone.trim().isEmpty()) {
-                ps.setString(count++, customerPhone);
+                ps.setString(count++, "%" +customerPhone.trim()+ "%");
             }
             int offset = (page - 1) * pageSize;
             ps.setInt(count++, offset);
