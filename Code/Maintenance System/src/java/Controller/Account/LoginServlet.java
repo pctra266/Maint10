@@ -14,6 +14,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -30,6 +32,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         StaffDAO staffDao = new StaffDAO();
         CustomerDAO customerDao = new CustomerDAO();
         PermissionDAO permissionDao = new PermissionDAO();
@@ -60,19 +63,22 @@ public class LoginServlet extends HttpServlet {
 
         if (staff != null) {
             session.removeAttribute("customerId");
-            
+
             session.setAttribute("staff", staff);
             session.setAttribute("roleId", staff.getRole());
+            List<Integer> permission = permissionDao.getPermissiIDonByRoleID(staff.getRole());
+            session.setAttribute("permissionIds", permission);
             saveCookies(response, username, password, rememberme);
             response.sendRedirect("dashBoard");
         } else if (customer != null) {
             session.removeAttribute("roleId");
-            
+
             session.setAttribute("customer", customer);
             session.setAttribute("customerId", customer.getCustomerID());
             saveCookies(response, username, password, rememberme);
             response.sendRedirect("dashBoard");
         }
+
     }
 
     private void saveCookies(HttpServletResponse response, String username, String password, String rememberme) {

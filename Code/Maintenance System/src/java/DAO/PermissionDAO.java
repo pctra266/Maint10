@@ -289,7 +289,7 @@ public class PermissionDAO extends DBContext {
 
     public static void main(String[] args) {
         PermissionDAO permissionDAO = new PermissionDAO();
-        List<Integer> permissions = permissionDAO.getPermissiIDonByRoleID(2);
+        List<Integer> permissions = permissionDAO.getPermissiIDonByRoleID(1);
 
         // Kiểm tra danh sách có dữ liệu không
         if (permissions.isEmpty()) {

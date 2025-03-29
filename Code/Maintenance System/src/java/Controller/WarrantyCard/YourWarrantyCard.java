@@ -70,7 +70,7 @@ public class YourWarrantyCard extends HttpServlet {
             response.sendRedirect("HomePage.jsp");
             return;
         }
-        
+         
        
         WarrantyCardDAO warrantyCardDao = new WarrantyCardDAO();
         String warrantyCardCode = request.getParameter("warrantyCardCode");

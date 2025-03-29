@@ -9,6 +9,45 @@
         <title>Your Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+         <style>
+            .search-box {
+                margin-bottom: 15px;
+                padding: 8px;
+                width: 100%;
+                max-width: 300px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                font-size: 14px;
+            }
+            
+            button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                font-size: 14px;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background-color 0.3s, transform 0.2s;
+                display: inline-flex;
+                align-items: center;
+                gap: 5px;
+            }
+
+            button:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+            }
+
+            button:active {
+                background-color: #004494;
+                transform: scale(0.98);
+            }
+
+            button i {
+                font-size: 16px;
+            }
+        </style>
     </head>
     <body>
         <div class="wrapper">
@@ -20,10 +59,10 @@
 
                     <!-- Form tìm kiếm -->
                     <form action="yourwarrantycard" method="get" style="text-align: center; margin-bottom: 20px;">
-                        <input type="text" name="warrantyCardCode" placeholder="Search by Warranty Card Code" value="${warrantyCardCode}" />
-                        <input type="text" name="productName" placeholder="Search by ProductName" value="${productName}" />
-                        <input type="text" name="warrantyStatus" placeholder="Search by Status" value="${warrantyStatus}" />
-                        <input type="date" name="createdDate" placeholder="Search by Create Date" value="${createdDate}" />
+                        <input type="text" name="warrantyCardCode" placeholder="Search by Warranty Card Code" value="${warrantyCardCode}" class="search-box"  />
+                        <input type="text" name="productName" placeholder="Search by ProductName" value="${productName}"  class="search-box" />
+                        <input type="text" name="warrantyStatus" placeholder="Search by Status" value="${warrantyStatus}" class="search-box" />
+                        <input type="date" name="createdDate" placeholder="Search by Create Date" value="${createdDate}" class="search-box" />
                         <button type="submit">Search</button>
 
                         <div class="col-sm-6 col-md-6">
@@ -96,7 +135,7 @@
                                                 ${warrantyCard.warrantyStatus}
                                             </td>
                                             <td>${warrantyCard.issueDescription}</td>
-                                            <td><a href="yourWarrantyCardDetail?warrantyCardID=${warrantyCard.warrantyCardID}">Detail</a></td>
+                                            <td><a href="http://localhost:9999/MaintenanceSystem/WarrantyCard/Detail?ID=${warrantyCard.warrantyCardID}">Detail</a></td>
                                         </tr>
 
 
