@@ -303,9 +303,9 @@
                                 <div class="col-md-6 ">
                                     <div class="row g-2 ms-2">
                                         <div class="col-md-12"><h3>CUSTOMER INFORMATION</h3></div>
-                                        <div class="col-md-12"><div>Name: ${customer.name}</div></div>
-                                        <div class="col-md-12"><div>Phone: ${customer.phone}</div></div>
-                                        <div class="col-md-12"><div>Email: ${customer.email}</div></div>
+                                        <div class="col-md-12"><div>Name: ${customerI.name}</div></div>
+                                        <div class="col-md-12"><div>Phone: ${customerI.phone}</div></div>
+                                        <div class="col-md-12"><div>Email: ${customerI.email}</div></div>
                                         <div class="col-md-12"><h3>HANDLER INFORMATION</h3></div>
                                         <div class="col-md-12"><div>Name: ${handler.name}</div></div>
                                         <div class="col-md-12"><div>Phone: ${handler.phone}</div></div>

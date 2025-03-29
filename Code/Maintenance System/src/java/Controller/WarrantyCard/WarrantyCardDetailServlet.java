@@ -106,7 +106,7 @@ public class WarrantyCardDetailServlet extends HttpServlet {
         request.setAttribute("price", warrantyCardDAO.getPriceOfWarrantyCard(id));
         request.setAttribute("componentRequests", componentRequests);
         request.setAttribute("pd", warrantyCardDAO.getProductDetailByCode(wc.getProductDetailCode()));
-        request.setAttribute("customer", customerDAO.getCustomerByID(wc.getCustomerID()));
+        request.setAttribute("customerI", customerDAO.getCustomerByID(wc.getCustomerID()));
         request.setAttribute("handler", staffDAO.getStaffById(wc.getHandlerID()));
         request.setAttribute("cardDetails", cardDetails);
         request.setAttribute("card", wc);

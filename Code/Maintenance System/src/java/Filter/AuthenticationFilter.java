@@ -125,21 +125,20 @@ public class AuthenticationFilter implements Filter {
         String servletPath = req.getServletPath();
         String action = req.getParameter("action");
         // Nêu la may cai file nmhu nay thi bo qua mong la noi chay
-        if (servletPath.matches(".*\\.(jpg|png|css|js|ico|gif|woff|woff2|ttf|svg)$")) {
+        if (servletPath.matches(".*\\.(jpg|png|css|js|ico|gif|woff|woff2|ttf|svg|mp4|avi|mov|wmv|flv|mkv|webm)$")) {
             chain.doFilter(request, response);
             return;
         }
-        
+
         // Danh sách URL không cần kiểm tra quyền
         Set<String> EXCLUDED_URLS = Set.of("/401Page.jsp", "/login", "/logout", "/ForgotPasswordForm.jsp",
                 "/LoginForm.jsp", "/profile", "/Home", "/chatBox.jsp", "/chatRoomServer", "/login-google",
-
                 "/SearchWarrantyController", "/customerContact?action=createCustomerContact",
                 "/BlogController", "/BlogController?action=More", "/changepassword",
-                "/img/serviceItems/","/Notification/GetUnread","/Notification/MarkRead","/Redirect",
-                "/css/light.css","/js/app.js","/ChangePasswordForm.jsp","/dashBoard.jsp","/customerContactForm.jsp"
-                        ,"/dashBoard","/LookUpOnline.jsp","/lookuponline","/forgotpassword","/importExcelCustomer.jsp",
-        "/reportWarrantyCard.jsp"
+                "/img/serviceItems/", "/Notification/GetUnread", "/Notification/MarkRead", "/Redirect",
+                "/css/light.css", "/js/app.js", "/ChangePasswordForm.jsp", "/dashBoard.jsp", "/customerContactForm.jsp",
+                 "/dashBoard", "/LookUpOnline.jsp", "/lookuponline", "/forgotpassword", "/importExcelCustomer.jsp",
+                "/reportWarrantyCard.jsp"
         );
 
         // Danh sách URL mà Customer được phép truy cập
@@ -166,12 +165,12 @@ public class AuthenticationFilter implements Filter {
 //            chain.doFilter(request, response);
 //            return;
 //        }
-        if(EXCLUDED_URLS.contains((action == null)? servletPath: servletPath+"?action="+ action)){
+        if (EXCLUDED_URLS.contains((action == null) ? servletPath : servletPath + "?action=" + action)) {
             System.out.println("Skipping auth check for: " + servletPath);
             chain.doFilter(request, response);
             return;
         }
-        
+
         if (customerId != null) {
             if (!CUSTOMER_ALLOWED_URLS.contains((action == null) ? servletPath : servletPath + "?action=" + action)) {
                 System.out.println("Customer not allowed to access: " + servletPath);
@@ -183,7 +182,7 @@ public class AuthenticationFilter implements Filter {
                 return;
             }
         }
-        
+
         if (roleId == null) {
             System.out.println("User is not logged in, redirecting to login page.");
             res.sendRedirect("LoginForm.jsp");

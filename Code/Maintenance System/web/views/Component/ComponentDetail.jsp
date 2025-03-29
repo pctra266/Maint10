@@ -192,7 +192,7 @@
                                                 <div class="alert-message text-center"><strong>${addSuccess}</strong></div>
                                             </div>
                                         </c:if>
-                                        <c:if test="${staff.hasPermissions('DELETE_COMPONENT_IN_PRODUCT')}">
+                                        <c:if test="${staff.hasPermissions('ADD_COMPONENT_INTO_PRODUCT')}">
 
                                             <a href="ComponentWarehouse/AddProductToComponent?ID=${component.componentID}" class="btn btn-success mb-3 w-25">
                                                 <i class="fas fa-plus"></i> Add Product
