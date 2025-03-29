@@ -15,7 +15,7 @@ VALUES ('Our Services', 'We provide comprehensive repair and maintenance service
 
 INSERT INTO MarketingServiceItem (SectionID, Title, Description, ImageURL, SortOrder)
 VALUES (1, 'Software Troubleshooting', 'Professional software troubleshooting and system updates for all mobile and laptop devices.', '/img/serviceItems/service1.jpg', 1),
-(1, 'Water Damage Repair', 'Specialized repair for water-damaged smartphones and laptops, restoring full functionality.', '/img/serviceItems/service2.PNG', 2),
+(1, 'Water Damage Repair', 'Specialized repair for water-damaged smartphones and laptops, restoring full functionality.', '/img/serviceItems/service2.jpg', 2),
 (1, 'Hardware Diagnostics', 'Comprehensive hardware diagnostics and repair solutions for your devices.', '/img/serviceItems/service3.jpg', 3),
 (1, 'Custom Upgrades', 'Upgrade your laptop or phone with the latest components for improved performance.', '/img/serviceItems/service4.jpg', 4);
 
