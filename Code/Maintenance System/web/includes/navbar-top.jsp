@@ -18,6 +18,12 @@
             </div>
         </li>
     </ul>
+    <ul class="navbar-nav">
+    <li class="nav-item">
+        <a class="nav-link" href="dashBoard">Dashboard</a>
+    </li>
+</ul>
+
 
     <div class="navbar-collapse collapse">
         <ul class="navbar-nav navbar-align">
