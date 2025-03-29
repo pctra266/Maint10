@@ -117,7 +117,11 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('DELETE_PRODUCT_TYPE', '/ProductType?action=delete'),
 ('IMPORT_COMPONENTS_2', '/ComponentWarehouse?action=clearErrorComponents'),
 ('VIEW_DETAIL_PRODUCT', '/viewProduct?action=update'),
-('PAY_FOR_OUTSOURCE', '/Invoice/PayOutsource')
+('PAY_FOR_OUTSOURCE', '/Invoice/PayOutsource'),
+('EXPORT_INVOICE_PDF_REPAIR', '/exportInvoicePDF'),
+('VIEW_DETAIL_WARRANTYCARD_CONTRACTOR', '/warrantyCardDetailContractor')
+
+
 
 
 
@@ -239,7 +243,10 @@ INSERT INTO [dbo].[Role_Permissions] ([RoleID], [PermissionID] ) VALUES
 (1,115),(3,115),
 (1,116),(3,116),
 (1,117),(3,117),
-(1,118),(2,118)
+(1,118),(2,118),
+(4,120),
+(4,121)
+
 
 
 INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
