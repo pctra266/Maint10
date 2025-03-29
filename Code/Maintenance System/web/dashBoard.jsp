@@ -105,11 +105,11 @@
                                 Admin
                             </c:if>
                         </h1>
-<!--                        <a class="badge bg-primary ms-2" href="dashBoard" target="_blank">
+                        <a class="badge bg-primary ms-2" href="dashBoard" target="_blank">
                             Dash Board
                             <i class="fas fa-fw fa-external-link-alt">
                             </i>
-                        </a>-->
+                        </a>
                     </div>
 
                     <div class="row">
