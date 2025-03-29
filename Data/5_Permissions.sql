@@ -14,7 +14,7 @@ INSERT INTO [dbo].[Permissions] ([PermissionName], [Link]) VALUES
 ('VIEW_COMPONENT_DETAIL', '/ComponentWarehouse/Detail'),
 ('EDIT_COMPONENT', '/ComponentWarehouse/Edit'),
 ('ADD_COMPONENT_INTO_PRODUCT', '/ComponentWarehouse/AddProductToComponent'),
-('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?ID=?&product=?'),
+('DELETE_COMPONENT_IN_PRODUCT', '/ComponentWarehouse/Detail?action=remove'),
 ('EXPORT_COMPONENTS', '/ExportComponents'),
 ('IMPORT_COMPONENTS', '/ImportComponents'),
 ('VIEW_WARRANTY_CARD', '/WarrantyCard'),

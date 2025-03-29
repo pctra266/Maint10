@@ -42,7 +42,7 @@ public class ComponentSearch extends HttpServlet {
             throws ServletException, IOException {
         //Xu ly nut back quay ve
         HttpSession session = request.getSession();
-        if(session.getAttribute("detailComponentFrom")!=null) session.removeAttribute("from");
+        session.setAttribute("detailComponentFrom", request.getContextPath()+request.getServletPath());
         //
         String pageParam = request.getParameter("page");
         String paraSearchCode = SearchUtils.preprocessSearchQuery( request.getParameter("searchCode"));
@@ -106,7 +106,7 @@ public class ComponentSearch extends HttpServlet {
             request.setAttribute("deleteStatus", deleteStatus);
         }
                 //Phan trang
-         Pagination pagination = new Pagination();
+        Pagination pagination = new Pagination();
         pagination.setListPageSize(totalComponents);
         pagination.setCurrentPage(page);
         pagination.setTotalPages(totalPages);
