@@ -140,7 +140,7 @@ public class AddCustomerExcel extends HttpServlet {
                 } else {
                     throw new IllegalArgumentException("Date cell is empty!");
                 }
-            } catch (Exception e) {
+            } catch (IllegalArgumentException | ParseException e) {
                 e.printStackTrace();
                 request.setAttribute("error", "Invalid date format in Excel!");
                 request.getRequestDispatcher("importExcelCustomer.jsp").forward(request, response);
