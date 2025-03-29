@@ -14,6 +14,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +76,10 @@ public class NotificationMarkRead extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-
+        HttpSession session = request.getSession();
+        if(session.getAttribute("customer")!=null){
+            session.setAttribute("detailWarrantyCardFrom", "dashBoard");
+        }
         int notificationID = Integer.parseInt(request.getParameter("notificationID"));
         String recipientType = request.getParameter("recipientType");
         int recipientID = Integer.parseInt(request.getParameter("recipientID"));
