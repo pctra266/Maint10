@@ -42,7 +42,7 @@
                                                 ${sessionScope.customer.name}
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-start">
-                                                <a class="dropdown-item" href="pages-profile.html">
+                                                <a class="dropdown-item" href="profile">
                                                     <i class="align-middle me-1" data-feather="user"></i> 
                                                     Profile
                                                 </a>

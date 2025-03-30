@@ -247,13 +247,13 @@
                             <c:set var="count" value="${fn:length(images)+fn:length(videos)}"/>
                             <div class="row" id="mediaListContainer">
                                 <c:forEach var="image" items="${images}">
-                                    <div class="media-item-show col-md-${count<3?12/count:4}">
+                                    <div class="media-item-show col-md-${count<2?12/count:6}">
                                         <img src="${pageContext.request.contextPath}/${image}" alt="Warranty Image" onclick="showModal('${image}', 'image')">
                                     </div>
                                 </c:forEach>
                                 <c:forEach var="video" items="${videos}">
-                                    <div class="media-item-show col-md-${count<3?12/count:4}">
-                                        <video src="${pageContext.request.contextPath}/${video}" controls onclick="showModal('${video}', 'video')"></video>
+                                    <div class="media-item-show col-md-${count<2?12/count:6}">
+                                        <video src="${pageContext.request.contextPath}/${video}" controls="false" onclick="showModal('${video}', 'video')"></video>
                                     </div>
                                 </c:forEach>
                             </div>
@@ -328,6 +328,16 @@
                         }
                         let allImgs = document.querySelectorAll('img');
                         allImgs.forEach(img => {
+                            console.log(img.src + " " + mediaToDelete);
+                            if (img.src.endsWith(mediaToDelete)) {
+                                let parent = img.parentElement;
+                                if (parent) {
+                                    parent.remove();
+                                }
+                            }
+                        });
+                        let allVids = document.querySelectorAll('video');
+                        allVids.forEach(img => {
                             console.log(img.src + " " + mediaToDelete);
                             if (img.src.endsWith(mediaToDelete)) {
                                 let parent = img.parentElement;

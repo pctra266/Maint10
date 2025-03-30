@@ -403,7 +403,7 @@
                                                     </div>
                                                 </div>
                                                 <hr>
-                                                
+
                                                 <table border="1">
                                                     <tr>
                                                         <th>Component Code</th>
@@ -487,6 +487,12 @@
                                                     <p><strong>Technical Staff:</strong></p>
                                                     <div class="signature-box"></div>
                                                 </div>
+                                                <div style="text-align: left; color: red; font-style: italic; margin-top: 20px;">
+                                                    <p>- All your personal information will be kept strictly confidential. If any misconduct occurs on our part, we fully assume all responsibilities.</p>
+                                                    <p>- Your personal data is used solely for warranty service purposes and will not be disclosed to any third party without your consent.</p>
+                                                    <p>- You have the right to access, review, and request corrections for your personal data at any time.</p>
+                                                </div>
+
                                             </div>
                                         </c:if>
                                     </div>

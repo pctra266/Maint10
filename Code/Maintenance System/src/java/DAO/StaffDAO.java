@@ -119,6 +119,7 @@ public class StaffDAO extends DBContext {
                 staff.setPhone(rs.getString("Phone"));
                 staff.setAddress(rs.getString("Address"));
                 staff.setImage(rs.getString("Image"));
+                staff.setPermissions(getPermissionsOfStaff(staff));
                 return staff;
             }
         } catch (SQLException e) {
@@ -378,6 +379,8 @@ public class StaffDAO extends DBContext {
 //                    image = "default-image.jpg"; // Đặt ảnh mặc định nếu không có ảnh trong DB
 //                }
                 staff = new Staff(staffID, usernameS, passwordS, role, name, gender, date, email, phone, address, image);
+                                staff.setPermissions(getPermissionsOfStaff(staff));
+
             }
         } catch (SQLException e) {
             System.out.println(e);
@@ -517,7 +520,7 @@ public class StaffDAO extends DBContext {
             ps.setInt(1, staffId);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    return new Staff(
+                    Staff staff = new Staff(
                             rs.getInt("StaffID"),
                             rs.getString("UsernameS"),
                             rs.getString("PasswordS"),
@@ -530,6 +533,8 @@ public class StaffDAO extends DBContext {
                             rs.getString("Address"),
                             rs.getString("Image")
                     );
+                                    staff.setPermissions(getPermissionsOfStaff(staff));
+                                    return staff;
                 }
             }
         } catch (SQLException e) {

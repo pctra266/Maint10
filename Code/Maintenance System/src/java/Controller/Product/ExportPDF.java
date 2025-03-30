@@ -438,6 +438,32 @@ public class ExportPDF extends HttpServlet {
 
             document.add(signatureMainTable); // Thêm bảng chữ ký vào tài liệu PDF
 
+               // Thêm dòng điều khoản bảo mật thông tin dưới hai ô chữ ký
+// Điều khoản 1 :
+            Paragraph clause1 = new Paragraph(
+                    "- All your personal information will be kept strictly confidential. "
+                    + "If any misconduct occurs on our part, we fully assume all responsibilities.",
+                    FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 10, Font.ITALIC, BaseColor.RED)
+            );
+            clause1.setAlignment(Element.ALIGN_LEFT);
+            document.add(clause1);
+
+// Điều khoản 2:
+            Paragraph clause2 = new Paragraph(
+                    "- Your personal data is used solely for warranty service purposes and will not be disclosed to any third party without your consent.",
+                    FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 10, Font.ITALIC, BaseColor.RED)
+            );
+            clause2.setAlignment(Element.ALIGN_LEFT);
+            document.add(clause2);
+
+// Điều khoản 3:
+            Paragraph clause3 = new Paragraph(
+                    "- You have the right to access, review, and request corrections for your personal data at any time.",
+                    FontFactory.getFont(FontFactory.HELVETICA_OBLIQUE, 10, Font.ITALIC, BaseColor.RED)
+            );
+            clause3.setAlignment(Element.ALIGN_LEFT);
+            document.add(clause3);
+            
         } catch (DocumentException e) { // Nếu có ngoại lệ trong quá trình tạo PDF
             throw new IOException("Error while creating PDF: " + e.getMessage()); // Ném ra IOException với thông báo lỗi
         } finally {
