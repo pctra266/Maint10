@@ -82,7 +82,7 @@
             .container {
                 max-width: 1200px;
                 margin-top: 20px;
-                margin-bottom: 20px;               
+                margin-bottom: 20px;
                 background-color: #FAFAFA ;
                 border-radius: 8px;
                 padding: 30px;
@@ -369,10 +369,10 @@
                     return false;
                 }
 
-                // Validate product name: không chứa ký tự đặc biệt, giữa các từ chỉ được phép có 1 khoảng trắng, không nhập toàn khoảng trắng
-                var productNameRegex = /^[A-Za-z]+(?: [A-Za-z]+)*$/;
+                // Validate product name: cho phép chữ cái, số, giữa các từ chỉ được phép có 1 khoảng trắng, không nhập toàn khoảng trắng
+                var productNameRegex = /^[A-Za-z0-9]+(?: [A-Za-z0-9]+)*$/;
                 if (!productNameRegex.test(productName.trim())) {
-                    alert("Product Name must contain only letters with a single space between words and cannot be only spaces.");
+                    alert("Product Name must contain only letters and numbers with a single space between words and cannot be only spaces.");
                     return false;
                 }
 
@@ -385,6 +385,7 @@
 
                 return true;
             }
+
         </script>
 
     </body>

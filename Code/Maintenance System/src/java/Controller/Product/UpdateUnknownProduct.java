@@ -5,15 +5,12 @@ import DAO.ProductDAO;
 import Model.Customer;
 import Model.UnknownProduct;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -26,14 +23,43 @@ public class UpdateUnknownProduct extends HttpServlet {
             throws ServletException, IOException {
         CustomerDAO customerDao = new CustomerDAO();
         ProductDAO productDAO = new ProductDAO();
-        String productId = request.getParameter("productId");
-        UnknownProduct product = productDAO.getUnknownProductById(Integer.parseInt(productId));
+
+        String productIdParam = request.getParameter("productId");
+        String customerIdParam = request.getParameter("customerId");
+
+        int productId;
+        // Validate productId: kiểm tra nếu không thể chuyển đổi sang số
+        try {
+            productId = Integer.parseInt(productIdParam);
+        } catch (NumberFormatException e) {
+            request.getRequestDispatcher("404Page.jsp").forward(request, response);
+            return;
+        }
+
+        // Lấy sản phẩm UnknownProduct từ CSDL dựa theo productId
+        UnknownProduct product = productDAO.getUnknownProductById(productId);
+        if (product == null) {
+            request.getRequestDispatcher("404Page.jsp").forward(request, response);
+            return;
+        }
+
+        // Nếu cần validate customerId, có thể thêm phần tương tự
+        // Ví dụ: nếu customerId không hợp lệ, chuyển sang 404
+        if (customerIdParam != null) {
+            try {
+                Integer.parseInt(customerIdParam);
+            } catch (NumberFormatException e) {
+                request.getRequestDispatcher("404Page.jsp").forward(request, response);
+                return;
+            }
+        }
+
         List<Customer> customerList = customerDao.getAllCustomer();
         request.setAttribute("unknownProduct", product);
         request.setAttribute("customerList", customerList);
         request.getRequestDispatcher("Product/updateUnknownProduct.jsp").forward(request, response);
     }
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -76,7 +102,7 @@ public class UpdateUnknownProduct extends HttpServlet {
                 request.setAttribute("errorMessage", "Error updating product!");
             }
         } catch (SQLException ex) {
-           
+
         }
         UnknownProduct updatedProduct = productDAO.getUnknownProductById(productId);
         request.setAttribute("unknownProduct", updatedProduct);

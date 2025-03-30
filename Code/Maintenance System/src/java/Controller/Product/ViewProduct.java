@@ -307,25 +307,41 @@ public class ViewProduct extends HttpServlet {
     // ========== [3] Display product update information ==========
     private void loadProductForUpdate(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int productId = Integer.parseInt(request.getParameter("id"));
+        String idParam = request.getParameter("id");
+        int productId;
+        try {
+            // Kiểm tra id có phải là số hay không
+            productId = Integer.parseInt(idParam);
+        } catch (NumberFormatException e) {
+            // Nếu id không hợp lệ -> chuyển hướng tới trang 404
+            request.getRequestDispatcher("404Page.jsp").forward(request, response);
+            return;
+        }
+
+        // Lấy thông tin sản phẩm từ CSDL
         Product product = productDAO.getProductById(productId);
+        // Nếu sản phẩm không tồn tại hoặc id vượt quá giá trị cho phép
+        if (product == null) {
+            request.getRequestDispatcher("404Page.jsp").forward(request, response);
+            return;
+        }
+
         request.setAttribute("product", product);
         request.setAttribute("listBrand", productDAO.getAllBrands());
         request.setAttribute("listType", productDAO.getAllProductTypes());
-
         request.getRequestDispatcher("Product/updateProduct.jsp").forward(request, response);
     }
-
     // ========== [5] Update product ==========
     private void updateProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         try {
             int productId = Integer.parseInt(request.getParameter("pid"));
             String productCode = request.getParameter("productCode");
             String productName = request.getParameter("productName");
             int brandId = Integer.parseInt(request.getParameter("brandId"));
             int productTypeId = Integer.parseInt(request.getParameter("type")); // 'type' field from JSP
-            
+
             // ========== [Validate quantity and warranty period] ==========
             int quantity = 0;
             int warrantyPeriod = 0;
