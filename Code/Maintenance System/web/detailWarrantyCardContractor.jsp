@@ -251,7 +251,11 @@
 
                     <div class="container">
                         <div class="left-panel">
-                            <h1>Warranty Card Details</h1>
+                            <div class="d-flex">
+                                <h1>Warranty Card Details</h1>
+                                <a href="warrantyCardDetailContractor?cardId=${warrantyDetails.contractorCard.ContractorCardID}&warrantyId=${warrantyDetails.contractorCard.WarrantyCardID}" class="mb-1"><i class="fa fa-2x fa-refresh ms-2 mt-1"></i></a>
+                            </div>
+
                             <div class="section">
                                 <p><strong>Warranty Card Code:</strong> ${warrantyDetails.warrantyCard.WarrantyCardCode}</p>
                                 <p><strong>Issue Description:</strong> ${warrantyDetails.warrantyCard.IssueDescription}</p>
