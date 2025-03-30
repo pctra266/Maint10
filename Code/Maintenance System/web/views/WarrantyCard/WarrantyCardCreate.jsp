@@ -12,7 +12,7 @@
         <base href="${pageContext.request.contextPath}/">
 
         <link rel="preconnect" href="https://fonts.gstatic.com">
-        <link rel="shortcut icon" href="icons/icon-48x48.png" />
+        <link rel="shortcut icon" href="/MaintenanceSystem/img/icons/icon-48x48.png" />
         <link rel="canonical" href="https://demo-basic.adminkit.io/" />
         <title>Warranty Card</title>
         <link href="css/light.css" rel="stylesheet">

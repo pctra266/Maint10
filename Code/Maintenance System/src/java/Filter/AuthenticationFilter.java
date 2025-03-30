@@ -125,7 +125,7 @@ public class AuthenticationFilter implements Filter {
         String servletPath = req.getServletPath();
         String action = req.getParameter("action");
         // Nêu la may cai file nmhu nay thi bo qua mong la noi chay
-        if (servletPath.matches(".*\\.(jpg|png|css|js|ico|gif|woff|woff2|ttf|svg|mp4|avi|mov|wmv|flv|mkv|webm)$")) {
+        if (servletPath.matches(".*\\.(jpg|JPG|png|PNG|css|CSS|js|JS|ico|ICO|gif|GIF|woff|woff2|ttf|svg|SVG|mp4|MP4|avi|AVI|mov|MOV|wmv|WMV|flv|mkv|MKV|webm|WEBM)$")) {
             chain.doFilter(request, response);
             return;
         }

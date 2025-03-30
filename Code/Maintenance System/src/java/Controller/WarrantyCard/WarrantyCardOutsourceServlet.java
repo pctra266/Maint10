@@ -103,7 +103,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     contractorCard.setNote(noteParam);
                     contractorCard.setStaffID(staff.getStaffID());
                     contractorCard.setStatus("waiting");
-                    contractorCardDAO.addContractorCard(contractorCard);
+                    int addContractorCardId = contractorCardDAO.addContractorCard(contractorCard);
                     String message = "A warranty request send to you " + (noteParam.isBlank() ? "" : (": " + noteParam));
                     Notification notification = new Notification();
                     notification.setRecipientType("Staff");
@@ -111,7 +111,7 @@ public class WarrantyCardOutsourceServlet extends HttpServlet {
                     notification.setMessage(message);
                     notification.setCreatedDate(new Date());
                     notification.setIsRead(false);
-                    notification.setTarget(request.getContextPath() + "/warrantyCardDetailContractor?cardId=" + warrantyCardId); // URL chi tiết
+                    notification.setTarget(request.getContextPath() + "/warrantyCardDetailContractor?cardId=" +addContractorCardId+"&warrantyId="+ warrantyCardId); // URL chi tiết
                     notificationDAO.addNotification(notification);
                     request.setAttribute("updateAlert1", "Outsource request sent successfully!");
                     response.sendRedirect(request.getContextPath() + "/WarrantyCard/Detail?ID=" + warrantyCardId);

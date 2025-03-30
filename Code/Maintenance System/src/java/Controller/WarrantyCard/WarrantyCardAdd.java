@@ -126,7 +126,7 @@ public class WarrantyCardAdd extends HttpServlet {
                             notification.setMessage(message);
                             notification.setCreatedDate(new Date());
                             notification.setIsRead(false);
-                            notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?noti=true&ID=" + wc.getWarrantyCardID()); // URL chi tiết
+                            notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?ID=" + wc.getWarrantyCardID()); // URL chi tiết
                             notificationDAO.addNotification(notification);
                         }
                     }

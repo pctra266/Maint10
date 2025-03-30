@@ -331,7 +331,7 @@ public class ComponentRequestController extends HttpServlet {
                     notification.setMessage(message);
                     notification.setCreatedDate(new Date());
                     notification.setIsRead(false);
-                    notification.setTarget("#");
+                    notification.setTarget(request.getContextPath() + "/WarrantyCard/Detail?ID="+warrantyCardID);
                     notificationDAO.addNotification(notification);
                 }
 

@@ -36,28 +36,31 @@ public class ContractorCardDAO extends DBContext {
         return null;
     }
 
-    public boolean addContractorCard(ContractorCard card) {
-        String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status, Note) VALUES (?, ?, ?, ?, ?)";
-        try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            stmt.setInt(1, card.getWarrantyCardID());
-            stmt.setInt(2, card.getStaffID());
-            stmt.setInt(3, card.getContractorID());
-            stmt.setString(4, card.getStatus());
-            stmt.setString(5, card.getNote());
+public int addContractorCard(ContractorCard card) {
+    String sql = "INSERT INTO ContractorCard (WarrantyCardID, StaffID, ContractorID, Status, Note) VALUES (?, ?, ?, ?, ?)";
+    try (PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        stmt.setInt(1, card.getWarrantyCardID());
+        stmt.setInt(2, card.getStaffID());
+        stmt.setInt(3, card.getContractorID());
+        stmt.setString(4, card.getStatus());
+        stmt.setString(5, card.getNote());
 
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows > 0) {
-                ResultSet generatedKeys = stmt.getGeneratedKeys();
+        int affectedRows = stmt.executeUpdate();
+        if (affectedRows > 0) {
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
-                    card.setContractorCardID(generatedKeys.getInt(1));
+                    int generatedId = generatedKeys.getInt(1);
+                    card.setContractorCardID(generatedId);
+                    return generatedId; // Trả về ID vừa được tạo
                 }
-                return true;
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-        return false;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return -1; // Trả về -1 nếu có lỗi
+}
+
 
     public boolean updateContractorCard(ContractorCard card) {
         String sql = "UPDATE ContractorCard SET WarrantyCardID = ?, StaffID = ?, ContractorID = ?, Status = ? WHERE ContractorCardID = ?";
