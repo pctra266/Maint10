@@ -14,8 +14,8 @@ import java.sql.Statement;
  * @author ADMIN
  */
 public class ContractorCardDAO extends DBContext {
-    
-       public ContractorCard getLastContractorCardOfWarrantyCard(int id) {
+
+    public ContractorCard getLastContractorCardOfWarrantyCard(int id) {
         String sql = "SELECT TOP 1 * FROM ContractorCard WHERE WarrantyCardID = ? order by Date desc";
         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, id);
@@ -140,10 +140,16 @@ public class ContractorCardDAO extends DBContext {
 
         List<ContractorCard> contractorCards = new ArrayList<>();
         StringBuilder sql = new StringBuilder(
-                "SELECT wc.WarrantyCardID, wc.WarrantyCardCode, s.[Name] AS StaffName, cc.[Date], cc.[Status], cc.Note "
-                + "FROM ContractorCard cc "
-                + "INNER JOIN WarrantyCard wc ON cc.WarrantyCardID = wc.WarrantyCardID "
-                + "INNER JOIN Staff s ON cc.StaffID = s.StaffID "
+                "SELECT cc.ContractorCardId, \n"
+                + "       wc.WarrantyCardID, \n"
+                + "       wc.WarrantyCardCode, \n"
+                + "       s.[Name] AS StaffName, \n"
+                + "       cc.[Date], \n"
+                + "       cc.[Status], \n"
+                + "       cc.Note\n"
+                + "FROM ContractorCard cc\n"
+                + "INNER JOIN WarrantyCard wc ON cc.WarrantyCardID = wc.WarrantyCardID\n"
+                + "INNER JOIN Staff s ON cc.StaffID = s.StaffID\n"
                 + "WHERE cc.ContractorID = ?"
         );
 
@@ -192,6 +198,7 @@ public class ContractorCardDAO extends DBContext {
             try (ResultSet rs = ps.executeQuery()) {
                 while (rs.next()) {
                     ContractorCard dto = new ContractorCard();
+                    dto.setContractorCardID(rs.getInt("ContractorCardID"));
                     dto.setWarrantyCardID(rs.getInt("WarrantyCardID"));
                     dto.setWarrantyCardCode(rs.getString("WarrantyCardCode"));
                     dto.setStaffName(rs.getString("StaffName"));
@@ -286,4 +293,13 @@ public class ContractorCardDAO extends DBContext {
         }
     }
 
+    public static void main(String[] args) {
+        ContractorCardDAO dao = new ContractorCardDAO();
+        List<ContractorCard> contractorCards = dao.searchContractorCards(
+                5, null, null, null, null, null, 1, 2);
+        for (ContractorCard c : contractorCards) {
+            System.out.println(c.getContractorCardID()
+            );
+        }
+    }
 }

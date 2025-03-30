@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  *
@@ -31,6 +32,16 @@ public class RepairCreateInvoice extends HttpServlet {
         String staffIdStr = request.getParameter("staffId");
         String contractorCardIDStr = request.getParameter("contractorCardID");
         String warrantyCardIDStr = request.getParameter("warrantyCardID");
+
+        PrintWriter out = response.getWriter();
+        out.println("warrantyCardIDStr: " + warrantyCardIDStr);
+        out.println("contractorCardIDStr: " + contractorCardIDStr);
+        out.println("staffIdStr: " + staffIdStr);
+        out.println("amountStr: " + amountStr);
+        out.println("dueDateStr: " + dueDateStr);
+        out.println("invoiceType: " + invoiceType);
+        out.println("status: " + status);
+
         ContractorCardDAO contractorDAO = new ContractorCardDAO();
 
         ContractorCard c = contractorDAO.getContractorCardById(Integer.parseInt(contractorCardIDStr));
@@ -76,12 +87,14 @@ public class RepairCreateInvoice extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String warrantyCardIDStr = request.getParameter("cardId");
+        String warrantyCardIDStr = request.getParameter("warrantyCardId");
         String contractorCardID = request.getParameter("code");
         String staffId = request.getParameter("staffId");
+        
         request.setAttribute("warrantyCardID", warrantyCardIDStr);
         request.setAttribute("contractorCardID", contractorCardID);
         request.setAttribute("staffId", staffId);
+
         request.getRequestDispatcher("repairInvoice.jsp").forward(request, response);
     }
 

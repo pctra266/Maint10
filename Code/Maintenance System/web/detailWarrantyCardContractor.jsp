@@ -1,19 +1,15 @@
-<%-- 
-    Document   : updateProduct1
-    Created on : Feb 6, 2025, 5:07:44 AM
-    Author     : sonNH
---%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Update Product</title>
+        <title>Warranty Card Details</title>
         <link href="css/light.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
         <style>
+
             /* Định dạng chung cho body */
             body {
                 font-family: 'Inter', sans-serif;
@@ -208,8 +204,6 @@
                 color: white;
                 text-decoration: none;
             }
-
-            /* Nút hủy: giữ màu đỏ để báo hiệu hành động quan trọng */
             .btn-cancel {
                 background-color: #dc3545;
             }
@@ -218,8 +212,6 @@
                 color: white;
                 text-decoration: none;
             }
-
-            /* Nút hoàn thành: giữ màu xanh lá cây để báo hiệu thành công */
             .btn-done {
                 background-color: #28a745;
             }
@@ -228,8 +220,6 @@
                 color: white;
                 text-decoration: none;
             }
-
-            /* Nút tạo hóa đơn: sử dụng màu xanh dương chủ đạo */
             .btn-invoice {
                 background-color: #326ABC;
             }
@@ -249,45 +239,50 @@
                 <main class="content">
 
                     <c:if test="${not empty errorMessage}">
-                        <div style="padding: 10px; display: flex; justify-content: center" class="alert alert-danger">${errorMessage}</div>
+                        <div style="padding: 10px; text-align:center" class="alert alert-danger">
+                            ${errorMessage}
+                        </div>
                     </c:if>
                     <c:if test="${not empty successMessage}">
-                        <div style="padding: 10px; display: flex; justify-content: center" class="alert alert-success">${successMessage}</div>
+                        <div style="padding: 10px; text-align:center" class="alert alert-success">
+                            ${successMessage}
+                        </div>
                     </c:if>
 
                     <div class="container">
                         <div class="left-panel">
                             <h1>Warranty Card Details</h1>
                             <div class="section">
-                                <p><strong>Warranty Card Code:</strong> ${warrantyDetails.warrantyCardCode}</p>
-                                <p><strong>Issue Description:</strong> ${warrantyDetails.issueDescription}</p>
+                                <p><strong>Warranty Card Code:</strong> ${warrantyDetails.warrantyCard.WarrantyCardCode}</p>
+                                <p><strong>Issue Description:</strong> ${warrantyDetails.warrantyCard.IssueDescription}</p>
                             </div>
                             <div class="section">
                                 <h2>Staff</h2>
-                                <p><strong>Name:</strong> ${warrantyDetails.staffName}</p>
-                                <p><strong>Phone:</strong> ${warrantyDetails.staffPhone}</p>
-                                <p><strong>Email:</strong> ${warrantyDetails.staffEmail}</p>
+                                <p><strong>Name:</strong> ${warrantyDetails.staffInfo.Name}</p>
+                                <p><strong>Phone:</strong> ${warrantyDetails.staffInfo.Phone}</p>
+                                <p><strong>Email:</strong> ${warrantyDetails.staffInfo.Email}</p>
                             </div>
+
                             <div class="section">
                                 <h2>Product Information</h2>
                                 <c:choose>
-                                    <c:when test="${not empty warrantyDetails.productCode}">
-                                        <p><strong>Product Code:</strong> ${warrantyDetails.productCode}</p>
-                                        <p><strong>Product Name:</strong> ${warrantyDetails.productName}</p>
-                                        <p><strong>Brand:</strong> ${warrantyDetails.brandName}</p>
-                                        <p><strong>Product Type:</strong> ${warrantyDetails.typeName}</p>
+                                    <c:when test="${not empty warrantyDetails.productInfo.BrandName}">
+                                        <p><strong>Product Code:</strong> ${warrantyDetails.productInfo.ProductCode}</p>
+                                        <p><strong>Product Name:</strong> ${warrantyDetails.productInfo.ProductName}</p>
+                                        <p><strong>Brand:</strong> ${warrantyDetails.productInfo.BrandName}</p>
+                                        <p><strong>Product Type:</strong> ${warrantyDetails.productInfo.TypeName}</p>
                                     </c:when>
                                     <c:otherwise>
-                                        <p><strong>Product Name:</strong> ${warrantyDetails.unknownProductName}</p>
-                                        <p><strong>Product Code:</strong> ${warrantyDetails.unknownProductCode}</p>
-                                        <p><strong>Description:</strong> ${warrantyDetails.unknownProductDescription}</p>
+                                        <p><strong>Product Name:</strong> ${warrantyDetails.productInfo.ProductName}</p>
+                                        <p><strong>Product Code:</strong> ${warrantyDetails.productInfo.ProductCode}</p>
+                                        <p><strong>Description:</strong> ${warrantyDetails.productInfo.Description}</p>
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                            <!-- Phần hiển thị Process History -->
+
                             <div class="section process-history-container">
                                 <h2>Process History</h2>
-                                <c:if test="${not empty warrantyDetails.processList}">
+                                <c:if test="${not empty warrantyDetails.warrantyCardProcessList}">
                                     <table border="1" cellpadding="5" cellspacing="0">
                                         <thead>
                                             <tr>
@@ -298,9 +293,9 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <c:forEach var="process" items="${warrantyDetails.processList}">
+                                            <c:forEach var="process" items="${warrantyDetails.warrantyCardProcessList}">
                                                 <tr>
-                                                    <td>${warrantyDetails.staffName}</td>
+                                                    <td>${warrantyDetails.staffInfo.Name}</td>
                                                     <td>${process.Action}</td>
                                                     <td>${process.ActionDate}</td>
                                                     <td>${process.Note}</td>
@@ -309,33 +304,29 @@
                                         </tbody>
                                     </table>
                                 </c:if>
-                                <c:if test="${empty warrantyDetails.processList}">
+                                <c:if test="${empty warrantyDetails.warrantyCardProcessList}">
                                     <p>No process history available.</p>
                                 </c:if>
                             </div>
 
                             <div class="section">
                                 <h2>Contractor Status</h2>
-                                <c:if test="${not empty warrantyDetails.contractorStatuses}">
-                                    <ul>
-                                        <c:forEach var="status" items="${warrantyDetails.contractorStatuses}">
-                                            <li>${status}</li>
-                                            </c:forEach>
-                                    </ul>
-                                </c:if>
+                                <h3>${warrantyDetails.contractorCard.ContractorStatus}</h3>
                             </div>
+
                         </div>
 
                         <div class="right-panel">
+
                             <div class="section">
                                 <h2>Related Images</h2>
-                                <c:if test="${not empty warrantyDetails.mediaUrls}">
+                                <c:if test="${not empty warrantyDetails.warrantyCardMedia}">
                                     <div class="image-container">
                                         <button class="arrow-btn left" onclick="prevImage()">&#9664;</button>
                                         <ul class="image-list" id="imageList">
-                                            <c:forEach var="url" items="${warrantyDetails.mediaUrls}" varStatus="loop">
+                                            <c:forEach var="media" items="${warrantyDetails.warrantyCardMedia}" varStatus="loop">
                                                 <li class="${loop.index == 0 ? 'active' : ''}">
-                                                    <img src="${url}" alt="Warranty Card Image"/>
+                                                    <img src="${media.MediaURL}" alt="Warranty Card Image"/>
                                                 </li>
                                             </c:forEach>
                                         </ul>
@@ -348,97 +339,95 @@
                                 <h2>Actions</h2>
                                 <div class="action-buttons">
                                     <c:choose>
-                                        <c:when test="${warrantyDetails.lastProcessStatus eq 'receive_outsource'}">
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="fixed_outsource">
-                                                <input type="hidden" name="status" value="done">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Fixed</button>
-                                            </form>
-
-<!--                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="lost">
-                                                <input type="hidden" name="status" value="cancel">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-dark">Lost</button>
-                                            </form>-->
-
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="unfixable_outsource">
-                                                <input type="hidden" name="status" value="cancel">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-cancel">Unfixed</button>
-                                            </form>
-
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="back_outsource">
-                                                <input type="hidden" name="status" value="done">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Back Product</button>
-                                            </form>
+                                        <c:when test="${action eq 'refuse_outsource'}">
+                                            <div class="section">
+                                                <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
+                                            </div>
                                         </c:when>
-                                        <c:when test="${warrantyDetails.lastProcessStatus eq 'send_outsource'}">
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="receive_outsource">
-                                                <input type="hidden" name="status" value="receive">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-cancel">Received Product</button>
-                                            </form>
-
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="back_outsource">
-                                                <input type="hidden" name="status" value="done">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Back Product</button>
+                                        <c:when test="${action eq 'fixed_outsource' or action eq 'back_outsource'}">
+                                            <form action="repairCreateInvoice" method="post">
+                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                <button type="submit" class="btn btn-invoice">Create Invoice</button>
                                             </form>
                                         </c:when>
                                         <c:otherwise>
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="accept_outsource">
-                                                <input type="hidden" name="status" value="receive">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-done">Accept Request</button>
-                                            </form>
+                                            <c:choose>
+                                                <c:when test="${action eq 'receive_outsource'}">
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="fixed_outsource">
+                                                        <input type="hidden" name="status" value="done">
+                                                        <button type="submit" class="btn btn-done">Fixed</button>
+                                                    </form>
 
-                                            <form action="warrantyCardDetailContractor" method="post">
-                                                <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                                <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                                <input type="hidden" name="subStatus" value="refuse_outsource">
-                                                <input type="hidden" name="status" value="cancel">
-                                                <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                                <button type="submit" class="btn btn-danger">Refuse Request</button>
-                                            </form>
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="unfixable_outsource">
+                                                        <input type="hidden" name="status" value="cancel">
+                                                        <button type="submit" class="btn btn-cancel">Unfixed</button>
+                                                    </form>
+
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="back_outsource">
+                                                        <input type="hidden" name="status" value="done">
+                                                        <button type="submit" class="btn btn-done">Back Product</button>
+                                                    </form>
+                                                </c:when>
+                                                <c:when test="${action eq 'send_outsource'}">
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="receive_outsource">
+                                                        <input type="hidden" name="status" value="receive">
+                                                        <button type="submit" class="btn btn-cancel">Received Product</button>
+                                                    </form>
+
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="back_outsource">
+                                                        <input type="hidden" name="status" value="done">
+                                                        <button type="submit" class="btn btn-done">Back Product</button>
+                                                    </form>
+                                                </c:when>
+                                                <c:otherwise>
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="accept_outsource">
+                                                        <input type="hidden" name="status" value="receive">
+                                                        <button type="submit" class="btn btn-done">Accept Request</button>
+                                                    </form>
+
+                                                    <form action="warrantyCardDetailContractor" method="post">
+                                                        <input type="hidden" name="code" value="${warrantyDetails.contractorCard.ContractorCardID}">
+                                                        <input type="hidden" name="warrantyCardId" value="${warrantyDetails.contractorCard.WarrantyCardID}">
+                                                        <input type="hidden" name="staffId" value="${warrantyDetails.staffInfo.StaffID}">
+                                                        <input type="hidden" name="subStatus" value="refuse_outsource">
+                                                        <input type="hidden" name="status" value="cancel">
+                                                        <button type="submit" class="btn btn-danger">Refuse Request</button>
+                                                    </form>
+                                                </c:otherwise>
+                                            </c:choose>
+                                            <div class="section">
+                                                <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
+                                            </div>
                                         </c:otherwise>
                                     </c:choose>
+                                </div>
 
-                                    <c:if test="${warrantyDetails.contractorStatuses eq '[done]'}">
-                                        <form action="repairCreateInvoice" method="post">
-                                            <input type="hidden" name="code" value="${warrantyDetails.contractorCardID}">
-                                            <input type="hidden" name="cardId" value="${warrantyDetails.warrantyCardID}">
-                                            <input type="hidden" name="staffId" value="${warrantyDetails.staffID}">
-                                            <input type="hidden" name="code1" value="${warrantyDetails.warrantyCardCode}">
-                                            <button type="submit" class="btn btn-invoice">Create Invoice</button>
-                                        </form>
-                                    </c:if>
-                                    
-                                    <div class="section">
-                                        <a href="warrantyCardRepairContractor" class="btn btn-facebook" style="text-decoration: none;">Back</a>
-                                    </div>
-                                </div>       
                             </div>
                         </div>
                     </div>
@@ -475,5 +464,3 @@
         </script>
     </body>
 </html>
-
-

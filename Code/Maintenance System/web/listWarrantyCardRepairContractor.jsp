@@ -305,7 +305,7 @@
                                         <td>${card.status}</td>
                                         <td>${card.note}</td>
                                         <td>
-                                            <a class="btn-detail" href="warrantyCardDetailContractor?cardId=${card.warrantyCardID}">
+                                            <a class="btn-detail" href="warrantyCardDetailContractor?cardId=${card.contractorCardID}&warrantyId=${card.warrantyCardID}">
                                                 View Detail
                                             </a>
                                         </td>
@@ -318,6 +318,7 @@
                                 </c:if>
                             </tbody>
                         </table>
+
 
                         <div class="pagination">
                             <c:if test="${totalPages > 1}">

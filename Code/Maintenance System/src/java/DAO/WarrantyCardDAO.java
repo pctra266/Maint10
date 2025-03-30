@@ -1078,7 +1078,6 @@ public class WarrantyCardDAO extends DBContext {
             LEFT JOIN Customer c ON (pd.CustomerID = c.CustomerID OR up.CustomerID = c.CustomerID)
             WHERE wp.WarrantyProductID = ?;
         """;
-
         try (PreparedStatement stmt = connection.prepareStatement(query)) {
             stmt.setInt(1, warrantyProductID);
             ResultSet rs = stmt.executeQuery();
@@ -1144,132 +1143,219 @@ public class WarrantyCardDAO extends DBContext {
         return details;
     }
 
-    public Map<String, Object> getWarrantyCardDetailsMap(int warrantyCardId) {
+    public Map<String, Object> getContractorCardWarrantyDetails(int contractorCardId) {
         Map<String, Object> details = new HashMap<>();
-        String sql = "SELECT \n"
-                + "  wc.WarrantyCardID, \n"
-                + "  wc.WarrantyCardCode, \n"
-                + "  wc.IssueDescription, \n"
-                + "  s.StaffID, \n"
-                + "  s.Name AS StaffName, \n"
-                + "  s.Phone AS StaffPhone, \n"
-                + "  s.Email AS StaffEmail, \n"
-                + "  pd.ProductCode, \n"
-                + "  p.ProductName, \n"
-                + "  b.BrandName, \n"
-                + "  pt.TypeName, \n"
-                + "  up.ProductName AS UnknownProductName, \n"
-                + "  up.ProductCode AS UnknownProductCode, \n"
-                + "  up.Description AS UnknownProductDescription, \n"
-                + "  m.MediaURL, \n"
-                + "  cc.ContractorCardID, \n"
-                + "  cc.Status AS ContractorStatus, \n"
-                + "  wcp.lastProcessStatus \n"
-                + "FROM WarrantyCard wc \n"
-                + "LEFT JOIN Staff s ON wc.HandlerID = s.StaffID \n"
-                + "LEFT JOIN WarrantyProduct wp ON wc.WarrantyProductID = wp.WarrantyProductID \n"
-                + "LEFT JOIN ProductDetail pd ON wp.ProductDetailID = pd.ProductDetailID \n"
-                + "LEFT JOIN Product p ON pd.ProductID = p.ProductID \n"
-                + "LEFT JOIN Brand b ON p.BrandID = b.BrandID \n"
-                + "LEFT JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID \n"
-                + "LEFT JOIN UnknownProduct up ON wp.UnknownProductID = up.UnknownProductID \n"
-                + "LEFT JOIN Media m ON m.ObjectID = wc.WarrantyCardID AND m.ObjectType = 'WarrantyCard' \n"
-                + "LEFT JOIN ContractorCard cc ON cc.WarrantyCardID = wc.WarrantyCardID \n"
-                + "LEFT JOIN ( \n"
-                + "    SELECT wcp1.WarrantyCardID, wcp1.HandlerID, wcp1.[Action] AS lastProcessStatus \n"
-                + "    FROM warrantyCardProcess wcp1 \n"
-                + "    JOIN ContractorCard cc ON cc.WarrantyCardID = wcp1.WarrantyCardID \n"
-                + "         AND wcp1.HandlerID IN (cc.StaffID, cc.ContractorID) \n"
-                + "    WHERE wcp1.[Action] IN ('send_outsource', 'receive_outsource') \n"
-                + "      AND wcp1.ActionDate = ( \n"
-                + "         SELECT MAX(wcp2.ActionDate) \n"
-                + "         FROM warrantyCardProcess wcp2 \n"
-                + "         JOIN ContractorCard cc2 ON cc2.WarrantyCardID = wcp2.WarrantyCardID \n"
-                + "              AND wcp2.HandlerID IN (cc2.StaffID, cc2.ContractorID) \n"
-                + "         WHERE wcp2.WarrantyCardID = wcp1.WarrantyCardID \n"
-                + "           AND wcp2.[Action] IN ('send_outsource', 'receive_outsource') \n"
-                + "    ) \n"
-                + ") wcp ON wc.WarrantyCardID = wcp.WarrantyCardID \n"
-                + "WHERE wc.WarrantyCardID = ? \n"
-                + "ORDER BY m.MediaID, cc.ContractorCardID;";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, warrantyCardId);
-
+        String contractorCardSql = "SELECT cc.ContractorCardID, cc.WarrantyCardID, cc.StaffID, cc.ContractorID, cc.[Date], cc.[Status] AS ContractorStatus, cc.Note, "
+                + "       wc.WarrantyCardCode, wc.IssueDescription, wc.WarrantyProductID "
+                + "FROM ContractorCard cc "
+                + "LEFT JOIN WarrantyCard wc ON cc.WarrantyCardID = wc.WarrantyCardID "
+                + "WHERE cc.ContractorCardID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(contractorCardSql)) {
+            ps.setInt(1, contractorCardId);
             try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    if (details.isEmpty()) {
-                        details.put("warrantyCardID", rs.getInt("WarrantyCardID"));
-                        details.put("warrantyCardCode", rs.getString("WarrantyCardCode"));
-                        details.put("issueDescription", rs.getString("IssueDescription"));
-                        details.put("staffID", rs.getInt("StaffID"));
-                        details.put("staffName", rs.getString("StaffName"));
-                        details.put("staffPhone", rs.getString("StaffPhone"));
-                        details.put("staffEmail", rs.getString("StaffEmail"));
-                        details.put("productCode", rs.getString("ProductCode"));
-                        details.put("productName", rs.getString("ProductName"));
-                        details.put("brandName", rs.getString("BrandName"));
-                        details.put("typeName", rs.getString("TypeName"));
-                        details.put("unknownProductName", rs.getString("UnknownProductName"));
-                        details.put("unknownProductCode", rs.getString("UnknownProductCode"));
-                        details.put("unknownProductDescription", rs.getString("UnknownProductDescription"));
-                        details.put("contractorCardID", rs.getInt("ContractorCardID"));
-                        details.put("lastProcessStatus", rs.getString("lastProcessStatus"));
-                        details.put("mediaUrls", new ArrayList<String>());
-                        details.put("contractorStatuses", new ArrayList<String>());
+                if (rs.next()) {
+                    Map<String, Object> contractorCardInfo = new HashMap<>();
+                    contractorCardInfo.put("ContractorCardID", rs.getInt("ContractorCardID"));
+                    contractorCardInfo.put("WarrantyCardID", rs.getInt("WarrantyCardID"));
+                    contractorCardInfo.put("StaffID", rs.getInt("StaffID"));
+                    contractorCardInfo.put("ContractorID", rs.getInt("ContractorID"));
+                    contractorCardInfo.put("Date", rs.getTimestamp("Date"));
+                    contractorCardInfo.put("ContractorStatus", rs.getString("ContractorStatus"));
+                    contractorCardInfo.put("Note", rs.getString("Note"));
+                    details.put("contractorCard", contractorCardInfo);
+
+                    // Đồng thời lưu các thông tin của WarrantyCard
+                    Map<String, Object> warrantyCardInfo = new HashMap<>();
+                    warrantyCardInfo.put("WarrantyCardCode", rs.getString("WarrantyCardCode"));
+                    warrantyCardInfo.put("IssueDescription", rs.getString("IssueDescription"));
+                    int warrantyProductId = rs.getInt("WarrantyProductID");
+                    warrantyCardInfo.put("WarrantyProductID", warrantyProductId);
+                    details.put("warrantyCard", warrantyCardInfo);
+
+                    // Thêm phần lấy thông tin Media của WarrantyCard
+                    String mediaSql = "SELECT MediaID, MediaURL, MediaType, UploadedDate "
+                            + "FROM Media "
+                            + "WHERE ObjectID = ? AND ObjectType = 'WarrantyCard'";
+                    try (PreparedStatement psMedia = connection.prepareStatement(mediaSql)) {
+                        // Dùng WarrantyCardID để lấy media
+                        psMedia.setInt(1, rs.getInt("WarrantyCardID"));
+                        try (ResultSet rsMedia = psMedia.executeQuery()) {
+                            List<Map<String, Object>> mediaList = new ArrayList<>();
+                            while (rsMedia.next()) {
+                                Map<String, Object> media = new HashMap<>();
+                                media.put("MediaID", rsMedia.getInt("MediaID"));
+                                media.put("MediaURL", rsMedia.getString("MediaURL"));
+                                media.put("MediaType", rsMedia.getString("MediaType"));
+                                media.put("UploadedDate", rsMedia.getTimestamp("UploadedDate"));
+                                mediaList.add(media);
+                            }
+                            details.put("warrantyCardMedia", mediaList);
+                        }
+                    } catch (SQLException e) {
+                        System.out.println("Error in getContractorCardWarrantyDetails - Media: " + e.getMessage());
                     }
 
-                    String mediaUrl = rs.getString("MediaURL");
-                    if (mediaUrl != null && !mediaUrl.trim().isEmpty()) {
-                        List<String> mediaUrls = (List<String>) details.get("mediaUrls");
-                        if (!mediaUrls.contains(mediaUrl)) {
-                            mediaUrls.add(mediaUrl);
+                    // 2. Tùy theo WarrantyProductID, lấy thông tin của bảng ProductDetail (nếu tồn tại)
+                    if (warrantyProductId > 0) {
+                        String warrantyProductSql = "SELECT WarrantyProductID, ProductDetailID, UnknownProductID "
+                                + "FROM WarrantyProduct WHERE WarrantyProductID = ?";
+                        try (PreparedStatement psWP = connection.prepareStatement(warrantyProductSql)) {
+                            psWP.setInt(1, warrantyProductId);
+                            try (ResultSet rsWP = psWP.executeQuery()) {
+                                if (rsWP.next()) {
+                                    Integer productDetailId = rsWP.getObject("ProductDetailID") != null
+                                            ? rsWP.getInt("ProductDetailID") : null;
+                                    Integer unknownProductId = rsWP.getObject("UnknownProductID") != null
+                                            ? rsWP.getInt("UnknownProductID") : null;
+                                    Map<String, Object> productInfo = new HashMap<>();
+                                    if (productDetailId != null) {
+                                        // Lấy thông tin ProductDetail và các thông tin liên quan từ bảng Product, Brand, ProductType.
+                                        String productDetailSql = "SELECT pd.ProductDetailID, pd.ProductCode, pd.PurchaseDate, pd.PackageWarrantyID, "
+                                                + "       p.ProductID, p.ProductName, p.Quantity, p.WarrantyPeriod, p.[Status], p.BrandID, p.ProductTypeID, "
+                                                + "       b.BrandName, pt.TypeName "
+                                                + "FROM ProductDetail pd "
+                                                + "JOIN Product p ON pd.ProductID = p.ProductID "
+                                                + "JOIN Brand b ON p.BrandID = b.BrandID "
+                                                + "JOIN ProductType pt ON p.ProductTypeID = pt.ProductTypeID "
+                                                + "WHERE pd.ProductDetailID = ?";
+                                        try (PreparedStatement psPD = connection.prepareStatement(productDetailSql)) {
+                                            psPD.setInt(1, productDetailId);
+                                            try (ResultSet rsPD = psPD.executeQuery()) {
+                                                if (rsPD.next()) {
+                                                    productInfo.put("ProductDetailID", rsPD.getInt("ProductDetailID"));
+                                                    productInfo.put("ProductCode", rsPD.getString("ProductCode"));
+                                                    productInfo.put("PurchaseDate", rsPD.getTimestamp("PurchaseDate"));
+                                                    productInfo.put("PackageWarrantyID", rsPD.getInt("PackageWarrantyID"));
+                                                    productInfo.put("ProductID", rsPD.getInt("ProductID"));
+                                                    productInfo.put("ProductName", rsPD.getString("ProductName"));
+                                                    productInfo.put("Quantity", rsPD.getInt("Quantity"));
+                                                    productInfo.put("WarrantyPeriod", rsPD.getInt("WarrantyPeriod"));
+                                                    productInfo.put("Status", rsPD.getString("Status"));
+                                                    productInfo.put("BrandID", rsPD.getInt("BrandID"));
+                                                    productInfo.put("ProductTypeID", rsPD.getInt("ProductTypeID"));
+                                                    productInfo.put("BrandName", rsPD.getString("BrandName"));
+                                                    productInfo.put("TypeName", rsPD.getString("TypeName"));
+                                                }
+                                            }
+                                        }
+                                    } else if (unknownProductId != null) {
+                                        // Lấy thông tin UnknownProduct
+                                        String unknownProductSql = "SELECT UnknownProductID, ProductName, ProductCode, Description, ReceivedDate "
+                                                + "FROM UnknownProduct WHERE UnknownProductID = ?";
+                                        try (PreparedStatement psUP = connection.prepareStatement(unknownProductSql)) {
+                                            psUP.setInt(1, unknownProductId);
+                                            try (ResultSet rsUP = psUP.executeQuery()) {
+                                                if (rsUP.next()) {
+                                                    productInfo.put("UnknownProductID", rsUP.getInt("UnknownProductID"));
+                                                    productInfo.put("ProductName", rsUP.getString("ProductName"));
+                                                    productInfo.put("ProductCode", rsUP.getString("ProductCode"));
+                                                    productInfo.put("Description", rsUP.getString("Description"));
+                                                    productInfo.put("ReceivedDate", rsUP.getTimestamp("ReceivedDate"));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    details.put("productInfo", productInfo);
+                                }
+                            }
                         }
                     }
-
-                    String contractorStatus = rs.getString("ContractorStatus");
-                    if (contractorStatus != null && !contractorStatus.trim().isEmpty()) {
-                        List<String> contractorStatuses = (List<String>) details.get("contractorStatuses");
-                        if (!contractorStatuses.contains(contractorStatus)) {
-                            contractorStatuses.add(contractorStatus);
+                    // 3. Lấy thông tin Staff dựa trên StaffID có trong ContractorCard.
+                    int staffId = rs.getInt("StaffID");
+                    String staffSql = "SELECT StaffID, UsernameS, [Name], Gender, DateOfBirth, Email, Phone, [Address], Image "
+                            + "FROM Staff WHERE StaffID = ?";
+                    try (PreparedStatement psStaff = connection.prepareStatement(staffSql)) {
+                        psStaff.setInt(1, staffId);
+                        try (ResultSet rsStaff = psStaff.executeQuery()) {
+                            if (rsStaff.next()) {
+                                Map<String, Object> staffInfo = new HashMap<>();
+                                staffInfo.put("StaffID", rsStaff.getInt("StaffID"));
+                                staffInfo.put("UsernameS", rsStaff.getString("UsernameS"));
+                                staffInfo.put("Name", rsStaff.getString("Name"));
+                                staffInfo.put("Gender", rsStaff.getString("Gender"));
+                                staffInfo.put("DateOfBirth", rsStaff.getDate("DateOfBirth"));
+                                staffInfo.put("Email", rsStaff.getString("Email"));
+                                staffInfo.put("Phone", rsStaff.getString("Phone"));
+                                staffInfo.put("Address", rsStaff.getString("Address"));
+                                staffInfo.put("Image", rsStaff.getString("Image"));
+                                details.put("staffInfo", staffInfo);
+                            }
                         }
                     }
+                    // 4. Lấy tất cả thông tin WarrantyCardProcess dựa trên WarrantyCardID lấy được từ ContractorCard.
+                    int warrantyCardId = rs.getInt("WarrantyCardID");
+                    String processSql = "SELECT WarrantyCardProcessID, WarrantyCardID, HandlerID, [Action], ActionDate, Note "
+                            + "FROM WarrantyCardProcess "
+                            + "WHERE WarrantyCardID = ? "
+                            + "ORDER BY ActionDate ASC";
+                    List<Map<String, Object>> processList = new ArrayList<>();
+                    try (PreparedStatement psProcess = connection.prepareStatement(processSql)) {
+                        psProcess.setInt(1, warrantyCardId);
+                        try (ResultSet rsProcess = psProcess.executeQuery()) {
+                            while (rsProcess.next()) {
+                                Map<String, Object> process = new HashMap<>();
+                                process.put("WarrantyCardProcessID", rsProcess.getInt("WarrantyCardProcessID"));
+                                process.put("WarrantyCardID", rsProcess.getInt("WarrantyCardID"));
+                                process.put("HandlerID", rsProcess.getInt("HandlerID"));
+                                process.put("Action", rsProcess.getString("Action"));
+                                process.put("ActionDate", rsProcess.getTimestamp("ActionDate"));
+                                process.put("Note", rsProcess.getString("Note"));
+                                processList.add(process);
+                            }
+                        }
+                    }
+                    details.put("warrantyCardProcessList", processList);
                 }
             }
         } catch (SQLException e) {
-            System.out.println(e);
+            System.out.println("Error in getContractorCardWarrantyDetails: " + e.getMessage());
         }
-
-        String processSql = "SELECT wcp.WarrantyCardProcessID, wcp.WarrantyCardID, wcp.HandlerID, wcp.[Action], "
-                + "wcp.ActionDate, wcp.Note "
-                + "FROM warrantyCardProcess wcp "
-                + "WHERE wcp.WarrantyCardID = ? "
-                + "ORDER BY wcp.ActionDate ASC;";
-        List<Map<String, Object>> processList = new ArrayList<>();
-        try (PreparedStatement ps2 = connection.prepareStatement(processSql)) {
-            ps2.setInt(1, warrantyCardId);
-            try (ResultSet rs2 = ps2.executeQuery()) {
-                while (rs2.next()) {
-                    Map<String, Object> process = new HashMap<>();
-                    process.put("WarrantyCardProcessID", rs2.getInt("WarrantyCardProcessID"));
-                    process.put("WarrantyCardID", rs2.getInt("WarrantyCardID"));
-                    process.put("HandlerID", rs2.getInt("HandlerID"));
-                    process.put("Action", rs2.getString("Action"));
-                    process.put("ActionDate", rs2.getTimestamp("ActionDate"));
-                    process.put("Note", rs2.getString("Note"));
-                    processList.add(process);
-                }
-            }
-        } catch (SQLException e) {
-            System.out.println(e);
-        }
-        details.put("processList", processList);
-
         return details;
     }
 
-    public static void main(String[] args) {
+    public String getLatestAction(int warrantyCardId, int contractorCardId) throws SQLException {
+        int staffId = 0;
+        int contractorId = 0;
+        String contractorQuery = "SELECT StaffID, ContractorID FROM ContractorCard WHERE ContractorCardID = ?";
+        try (PreparedStatement ps = connection.prepareStatement(contractorQuery)) {
 
+            ps.setInt(1, contractorCardId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    staffId = rs.getInt("StaffID");
+                    contractorId = rs.getInt("ContractorID");
+                }
+            }
+        }
+
+        if (staffId == 0 && contractorId == 0) {
+            return null;
+        }
+
+        String latestAction = null;
+        String processQuery = "SELECT TOP 1 [Action] FROM WarrantyCardProcess "
+                + "WHERE WarrantyCardID = ? AND HandlerID IN (?,?) "
+                + "ORDER BY ActionDate DESC";
+        try (PreparedStatement ps = connection.prepareStatement(processQuery)) {
+
+            ps.setInt(1, warrantyCardId);
+            ps.setInt(2, staffId);
+            ps.setInt(3, contractorId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    latestAction = rs.getString("Action");
+                }
+            }
+        }
+        return latestAction;
+    }
+
+    public static void main(String[] args) throws SQLException {
+        
+                WarrantyCardDAO warrantyCardDAO = new WarrantyCardDAO();
+String action = warrantyCardDAO.getLatestAction(28, 7);
+        System.out.println(action);
     }
 
 }

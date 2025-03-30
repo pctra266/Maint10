@@ -146,7 +146,6 @@
                         <div style="color: green; text-align: center; margin-bottom: 10px;">
                             ${successMessage}
                         </div>
-                        <!-- Chức năng chuyển hướng sau 3 giây -->
                         <script>
                             setTimeout(function () {
                                 window.location.href = 'warrantyCardRepairContractor'; // Thay đổi đường dẫn trang đích tại đây
@@ -156,6 +155,7 @@
 
                     <h2 style="text-align: center">Create Invoice for Repair Contractor</h2>
                     <form action="repairCreateInvoice" method="get" onsubmit="return validateAmount();">
+
                         <label for="amount">Amount:</label>
                         <input type="number" id="amount" name="amount" step="0.01" required min="0" /><br/><br/>
 
@@ -167,13 +167,15 @@
                         <input type="hidden" name="status" value="pending" />
 
                         <input type="hidden" name="staffId" value="${param.staffId}" />
-                        <input type="hidden" name="contractorCardID" value="${param.code}" />
-                        <input type="hidden" name="warrantyCardID" value="${param.cardId}" />
+                        <input type="hidden" name="contractorCardID" value="${contractorCardID}" />
+                        <input type="hidden" name="warrantyCardID" value="${warrantyCardID}" />
 
                         <button type="submit" class="btn btn-invoice">Create Invoice</button>
 
                         <button class="btn btn-invoice" type="button">
-                            <a style="color: white; text-decoration: none" href="warrantyCardRepairContractor">Back</a>
+                            <a style="color: white; text-decoration: none" href="warrantyCardRepairContractor">
+                                Back
+                            </a>
                         </button>
                         <button type="button" class="btn" 
                                 style="background-color: #dc3545; margin-left: 10px;"

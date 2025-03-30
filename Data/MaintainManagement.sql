@@ -353,7 +353,6 @@ CREATE TABLE Invoice (
     CustomerID INT NULL REFERENCES Customer(CustomerID)  -- Áp dụng cho hóa đơn TechnicianToCustomer
 );
 
-
 -- Payment Table
 CREATE TABLE Payment (
     PaymentID INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
@@ -458,9 +457,6 @@ CREATE PROCEDURE UpdateInvoiceStatus
 AS
 BEGIN
     SET NOCOUNT ON;
-
-
-
     UPDATE Invoice
     SET Status = 'overdue'
     WHERE DueDate IS NOT NULL 
